@@ -1,25 +1,36 @@
 import type { Config } from "tailwindcss";
 
 const config: Config = {
-  content: ["./src/**/*.{ts,tsx}", "./app/**/*.{ts,tsx}"],
+  content: ["./app/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}", "./lib/**/*.{ts,tsx}"],
   theme: {
     extend: {
       colors: {
-        ink: "#f6f2e8",
-        soot: "#0a0d10",
-        panel: "#111820",
-        line: "rgba(246, 242, 232, 0.14)",
-        gold: "#d9b66f",
-        cyan: "#5bd3d8",
-        orange: "#f28a45",
-        muted: "#aeb6bc"
+        bg: "var(--bg)",
+        bg2: "var(--bg2)",
+        panel: "var(--panel)",
+        panel2: "var(--panel2)",
+        slate: "var(--slate)",
+        gold: "var(--gold)",
+        cyan: "var(--cyan)",
+        magenta: "var(--magenta)",
+        orange: "var(--orange)",
+        text: "var(--text)",
+        dim: "var(--dim)",
+        faint: "var(--faint)",
+        glow: "var(--glow)",
       },
       fontFamily: {
-        sans: ["var(--font-inter)", "Inter", "system-ui", "sans-serif"]
-      }
-    }
+        display: ["var(--font-sora)", "sans-serif"],
+        sans: ["var(--font-inter)", "sans-serif"],
+        mono: ["var(--font-mono)", "monospace"],
+      },
+      boxShadow: {
+        glow: "0 40px 80px -40px color-mix(in srgb, var(--glow) 40%, transparent)",
+      },
+    },
   },
-  plugins: []
+  plugins: [],
 };
 
 export default config;
+

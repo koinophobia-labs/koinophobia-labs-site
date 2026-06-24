@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="Koinophobia Labs social image">
+  <defs>
+    <linearGradient id="g" x1="0" x2="1">
+      <stop offset="0" stop-color="#d4af37"/>
+      <stop offset="1" stop-color="#f6df8b"/>
+    </linearGradient>
+    <pattern id="grid" width="56" height="56" patternUnits="userSpaceOnUse">
+      <path d="M56 0H0v56" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="1"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="630" fill="#0d0f14"/>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+  <circle cx="994" cy="76" r="250" fill="#00e5ff" opacity=".16"/>
+  <circle cx="102" cy="560" r="220" fill="#d4af37" opacity=".14"/>
+  <circle cx="138" cy="142" r="58" fill="none" stroke="#d4af37" stroke-width="8"/>
+  <text x="220" y="154" fill="url(#g)" font-family="Arial, sans-serif" font-size="36" font-weight="700" letter-spacing="8">KOINOPHOBIA</text>
+  <text x="220" y="194" fill="#5c6675" font-family="Arial, sans-serif" font-size="18" font-weight="700" letter-spacing="8">LABS</text>
+  <text x="88" y="352" fill="#f2f5fa" font-family="Arial, sans-serif" font-size="82" font-weight="700" letter-spacing="-3">I build systems,</text>
+  <text x="88" y="448" fill="#f2f5fa" font-family="Arial, sans-serif" font-size="82" font-weight="700" letter-spacing="-3">products, and proof.</text>
+  <text x="88" y="535" fill="#99a2b2" font-family="Arial, sans-serif" font-size="28">Founder-led AI product lab. Built, tested, shipped.</text>
+</svg>
+

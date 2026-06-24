@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="1280" viewBox="0 0 720 1280" role="img" aria-label="You Know Ball placeholder">
+  <rect width="720" height="1280" fill="#0d0f14"/>
+  <rect x="48" y="64" width="624" height="1152" rx="58" fill="#171a21" stroke="#ff6a2b" stroke-width="4"/>
+  <circle cx="142" cy="170" r="38" fill="#ff6a2b"/>
+  <text x="206" y="168" fill="#f2f5fa" font-family="Arial" font-size="42" font-weight="700">You Know Ball</text>
+  <text x="206" y="210" fill="#ff6a2b" font-family="Arial" font-size="20" letter-spacing="4">BANTER BOT ONLINE</text>
+  <rect x="96" y="300" width="440" height="132" rx="28" fill="#232733"/>
+  <text x="126" y="356" fill="#f2f5fa" font-family="Arial" font-size="30">Drop a take.</text>
+  <text x="126" y="396" fill="#99a2b2" font-family="Arial" font-size="24">Defend your argument.</text>
+  <rect x="186" y="500" width="438" height="142" rx="28" fill="#ff6a2b"/>
+  <text x="222" y="558" fill="#130905" font-family="Arial" font-size="30" font-weight="700">Your move:</text>
+  <text x="222" y="602" fill="#130905" font-family="Arial" font-size="24">Bring receipts.</text>
+  <rect x="96" y="900" width="528" height="120" rx="28" fill="#0d0f14" stroke="#ff6a2b"/>
+  <text x="132" y="975" fill="#ff6a2b" font-family="Arial" font-size="28" letter-spacing="4">KB SCORE · ALL-STAR</text>
+</svg>
+

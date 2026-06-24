@@ -1,60 +1,36 @@
-# Koinophobia Labs Site
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-Source repo for the Koinophobia Labs portfolio and services site.
+## Getting Started
 
-## Summary
-
-Koinophobia Labs is a founder-led product and build studio for AI tools, creator systems, service websites, and practical workflow products.
-
-This rebuilt source project preserves the public positioning of the existing live site while creating a maintainable GitHub-backed Next.js codebase.
-
-## Features
-
-- Responsive landing page
-- Product Lab section
-- Shipped Tools section
-- Career Forge Lite link card
-- Services and concepts sections
-- Contact CTA
-- No backend or database
-- No fake metrics or inflated claims
-
-## Tech Stack
-
-- Next.js
-- TypeScript
-- Tailwind CSS
-- App Router
-
-## Local Setup
+First, run the development server:
 
 ```bash
-npm install
 npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
 ```
 
-Open `http://localhost:3000`.
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-## Verification
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-```bash
-npm run lint
-npm run typecheck
-npm run build
-```
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-## Deployment
+## Learn More
 
-Push this repo to GitHub as `koinophobia-labs-site`, then connect it to the Vercel project currently serving:
+To learn more about Next.js, take a look at the following resources:
 
-`https://koinophobia-labs.vercel.app`
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-Use the Vercel dashboard to set the production branch and redeploy.
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-## Current Limitations
+## Deploy on Vercel
 
-- Static site only
-- No CMS
-- No backend contact form
-- No analytics added
-- No source migration from the existing live site was possible because the original source repo was not found
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
