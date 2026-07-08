@@ -259,7 +259,7 @@ export const whyKoinophobia = [
     body: "No handoffs, vague ticket chains, or agency phone tag.",
   },
   {
-    title: "No outsourcing",
+    title: "Founder-led decisions",
     body: "Build decisions stay inside Koinophobia Labs.",
   },
   {
@@ -371,6 +371,7 @@ export const contactOptions = [
   "Community automation",
   "MVP / prototype build",
   "You Know Ball — tester access",
+  "Career Forge — Resume Rebuild ($149)",
   "Something else",
 ];
 
