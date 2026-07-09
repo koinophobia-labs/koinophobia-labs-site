@@ -1,0 +1,16 @@
+{
+  "redirects": [
+    {
+      "source": "/",
+      "has": [{ "type": "host", "value": "koinophobia.dev" }],
+      "destination": "/connect",
+      "permanent": false
+    },
+    {
+      "source": "/",
+      "has": [{ "type": "host", "value": "www.koinophobia.dev" }],
+      "destination": "/connect",
+      "permanent": false
+    }
+  ]
+}

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, JetBrains_Mono, Sora } from "next/font/google";
 import "./globals.css";
+import "./founder.css";
 
 const sora = Sora({
   variable: "--font-sora",
