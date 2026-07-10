@@ -63,11 +63,13 @@ export async function POST(request: NextRequest) {
   const parsed=validateIntake(form);
   if (!parsed.input) { log("validation_failed",requestId,{fields:Object.keys(parsed.errors||{})}); return failure("Please correct the highlighted information and try again.",422,requestId,{errors:parsed.errors}); }
   const input=parsed.input;
-  let saved=false;
-  try { saved=Boolean(await storeLead(input)); } catch { log("lead_storage_failed",requestId); }
+  let saved=false, created=false;
+  try { const result=await storeLead(input); saved=Boolean(result.lead); created=result.created; }
+  catch { log("lead_storage_failed",requestId); }
   const delivery=await sendLeadEmail(input);
+  if (!saved) { log("persistence_failed",requestId,{providerAccepted:delivery.ok}); return failure("We could not safely record your intake right now. Please retry or use the email fallback.",503,requestId,{mailto:mailto(input)}); }
   if (!delivery.ok) { log("provider_failed",requestId,{reason:delivery.reason,status:"status" in delivery?delivery.status:undefined,saved}); return failure("We could not deliver your intake right now. Please retry or use the email fallback.",503,requestId,{mailto:mailto(input)}); }
   const offer=offers.find((item)=>item.name===input.serviceInterest);
-  log("accepted",requestId,{providerAccepted:true,providerId:delivery.providerId,saved});
+  log("accepted",requestId,{providerAccepted:true,providerId:delivery.providerId,saved,created});
   return NextResponse.json({ok:true,requestId,emailSent:true,suggestedOffer:offer&&getOffer(offer.key)?.priceEnv?offer.key:undefined,message:"Intake received and emailed to Blake. He will review fit, scope, and the next practical step."},{headers:{"x-request-id":requestId}});
 }
