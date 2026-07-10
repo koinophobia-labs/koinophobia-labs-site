@@ -2,17 +2,16 @@
 
 import { useSearchParams } from "next/navigation";
 import { FormEvent, Suspense, useState } from "react";
-import CheckoutButton from "@/components/acquisition/CheckoutButton";
-import { serviceInterestOptions, type OfferKey } from "@/lib/acquisition/offers";
 
 type SubmitState =
   | { status: "idle" }
   | { status: "submitting" }
-  | { status: "success"; message: string; suggestedOffer?: OfferKey }
+  | { status: "success"; message: string }
   | { status: "error"; message: string; mailto: string; requestId?: string };
 
 const timelines = ["This week", "This month", "1-2 months", "Just researching"];
 const budgets = ["Under $500", "$500-$1,500", "$1,500-$3,500", "$3,500+", "Not sure yet"];
+const serviceInterestOptions = ["Website audit", "Website design", "Website redesign", "SEO", "Other"];
 
 function IntakeFormInner() {
   const searchParams = useSearchParams();
@@ -34,7 +33,6 @@ function IntakeFormInner() {
       setState({
         status: "success",
         message: payload.message || "Intake received. Blake will review and reply with the practical next step.",
-        suggestedOffer: payload.suggestedOffer,
       });
       return;
     }
@@ -53,9 +51,6 @@ function IntakeFormInner() {
           <strong>Intake received.</strong>
           <p>{state.message}</p>
           <p>Next: Blake reviews fit, scope, and the smallest useful first step. If payment is appropriate, he will confirm the right checkout/deposit path.</p>
-          {state.suggestedOffer ? (
-            <CheckoutButton offerKey={state.suggestedOffer}>Open matching checkout</CheckoutButton>
-          ) : null}
         </div>
       ) : null}
       {state.status === "error" ? (
