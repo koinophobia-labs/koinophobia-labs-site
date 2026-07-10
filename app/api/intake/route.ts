@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getOffer, offers } from "@/lib/acquisition/offers";
 import { type LeadInput, storeLead } from "@/lib/acquisition/leads";
 
 const requiredFields = ["name", "businessName", "email", "websiteOrSocial", "industry", "serviceInterest", "timeline", "biggestProblem"] as const;
@@ -71,7 +70,6 @@ export async function POST(request: NextRequest) {
   const delivery=await sendLeadEmail(input);
   if (!saved) { log("persistence_failed",requestId,{providerAccepted:delivery.ok}); return failure("We could not safely record your intake right now. Please retry or use the email fallback.",503,requestId,{mailto:mailto(input)}); }
   if (!delivery.ok) { log("provider_failed",requestId,{reason:delivery.reason,status:"status" in delivery?delivery.status:undefined,saved}); return failure("We could not deliver your intake right now. Please retry or use the email fallback.",503,requestId,{mailto:mailto(input)}); }
-  const offer=offers.find((item)=>item.name===input.serviceInterest);
   log("accepted",requestId,{providerAccepted:true,providerId:delivery.providerId,saved,created});
-  return NextResponse.json({ok:true,requestId,emailSent:true,suggestedOffer:offer&&getOffer(offer.key)?.priceEnv?offer.key:undefined,message:"Intake received and emailed to Blake. He will review fit, scope, and the next practical step."},{headers:{"x-request-id":requestId}});
+  return NextResponse.json({ok:true,requestId,emailSent:true,message:"Intake received and emailed to Blake. He will review fit, scope, and the next practical step."},{headers:{"x-request-id":requestId}});
 }
