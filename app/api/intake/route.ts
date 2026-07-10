@@ -56,6 +56,8 @@ function failure(message:string,status:number,requestId:string,extra:Record<stri
 
 export async function POST(request: NextRequest) {
   const requestId=crypto.randomUUID();
+  const suppliedIdempotencyKey=request.headers.get("idempotency-key")?.trim();
+  const idempotencyKey=suppliedIdempotencyKey && suppliedIdempotencyKey.length<=200 ? suppliedIdempotencyKey : requestId;
   if (checkRateLimit(clientKey(request))) { log("rate_limited",requestId); return failure("Too many attempts. Please wait 10 minutes and try again.",429,requestId); }
   let form: FormData;
   try { form=await request.formData(); } catch { log("malformed_request",requestId); return failure("The submission format was invalid. Please refresh and try again.",400,requestId); }
@@ -64,7 +66,7 @@ export async function POST(request: NextRequest) {
   if (!parsed.input) { log("validation_failed",requestId,{fields:Object.keys(parsed.errors||{})}); return failure("Please correct the highlighted information and try again.",422,requestId,{errors:parsed.errors}); }
   const input=parsed.input;
   let saved=false, created=false;
-  try { const result=await storeLead(input); saved=Boolean(result.lead); created=result.created; }
+  try { const result=await storeLead(input,idempotencyKey); saved=Boolean(result.lead); created=result.created; }
   catch { log("lead_storage_failed",requestId); }
   const delivery=await sendLeadEmail(input);
   if (!saved) { log("persistence_failed",requestId,{providerAccepted:delivery.ok}); return failure("We could not safely record your intake right now. Please retry or use the email fallback.",503,requestId,{mailto:mailto(input)}); }

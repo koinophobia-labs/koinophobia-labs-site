@@ -46,19 +46,18 @@ function map(row: QueryResultRow): LeadRecord {
   };
 }
 
-export function leadDedupeKey(input: LeadInput) {
-  const normalized = [input.email.trim().toLowerCase(), input.businessName.trim().toLowerCase(), input.websiteOrSocial.trim().toLowerCase()].join("|");
-  return Buffer.from(normalized).toString("base64url");
+export function leadDedupeKey(idempotencyKey: string) {
+  return Buffer.from(idempotencyKey.trim()).toString("base64url");
 }
 
-export async function storeLead(input: LeadInput, db: Queryable = database()): Promise<{ lead: LeadRecord; created: boolean }> {
+export async function storeLead(input: LeadInput, idempotencyKey = crypto.randomUUID(), db: Queryable = database()): Promise<{ lead: LeadRecord; created: boolean }> {
   const id = crypto.randomUUID();
   const result = await db.query(`
     insert into crm_leads (id, dedupe_key, source, name, business_name, email, phone, website_or_social, industry, service_interest, budget_range, timeline, biggest_problem, notes)
     values ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14)
     on conflict (dedupe_key) do update set updated_at = crm_leads.updated_at
     returning *, (xmax = 0) as created
-  `, [id, leadDedupeKey(input), input.source || "website intake", input.name, input.businessName, input.email.toLowerCase(), input.phone || "", input.websiteOrSocial, input.industry, input.serviceInterest, input.budgetRange || "", input.timeline, input.biggestProblem, input.notes || ""]);
+  `, [id, leadDedupeKey(idempotencyKey), input.source || "website intake", input.name, input.businessName, input.email.toLowerCase(), input.phone || "", input.websiteOrSocial, input.industry, input.serviceInterest, input.budgetRange || "", input.timeline, input.biggestProblem, input.notes || ""]);
   return { lead: map(result.rows[0]), created: Boolean(result.rows[0].created) };
 }
 
