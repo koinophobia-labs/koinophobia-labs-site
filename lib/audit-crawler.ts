@@ -1,22 +1,513 @@
-import {load} from "cheerio";
-import type {NewFinding,MeasurementRecord} from "@/lib/audits";
-import type {ScoreCategory} from "@/lib/audit-scoring";
-import {assertPublicUrl} from "@/lib/audit-engine";
+import { load } from "cheerio";
+import type { NewFinding, MeasurementRecord } from "@/lib/audits";
+import type { ScoreCategory } from "@/lib/audit-scoring";
+import { assertPublicUrl } from "@/lib/audit-engine";
 
-const MAX_HTML=2_000_000,MAX_REDIRECTS=4,TIMEOUT=10_000;
-export type CrawlPage={url:string;status:number;html:string;headers:Record<string,string>;responseMs:number};
-export type CrawlResult={finalUrl:string;pages:CrawlPage[];measurements:Array<Omit<MeasurementRecord,"id"|"auditId"|"capturedAt">>;findings:NewFinding[];availability:Partial<Record<ScoreCategory,boolean>>;linksChecked:number};
-export type CrawlOptions={pagesRequested:number;fetcher?:typeof fetch;validateUrl?:(url:string)=>Promise<URL>;onProgress?:(current:number,total:number,message:string)=>Promise<void>|void};
-const sameSite=(a:URL,b:URL)=>a.hostname===b.hostname||a.hostname===`www.${b.hostname}`||b.hostname===`www.${a.hostname}`;
-async function fetchPage(input:URL,root:URL,fetcher:typeof fetch,validate:(url:string)=>Promise<URL>){let url=input;for(let redirects=0;redirects<=MAX_REDIRECTS;redirects++){url=await validate(url.href);if(!sameSite(url,root))throw Error("REDIRECT_LEFT_TARGET");const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),TIMEOUT),started=Date.now();try{const response=await fetcher(url,{redirect:"manual",signal:controller.signal,headers:{"user-agent":"KoinophobiaLabsAudit/2.0 (+https://koinophobialabs.com)"}});if(response.status>=300&&response.status<400){const location=response.headers.get("location");if(!location)throw Error("REDIRECT_WITHOUT_LOCATION");url=new URL(location,url);continue}if(!response.ok)throw Error(`HTTP_${response.status}`);if(!(response.headers.get("content-type")||"").includes("text/html"))throw Error("NOT_HTML");const bytes=new Uint8Array(await response.arrayBuffer());if(bytes.length>MAX_HTML)throw Error("HTML_TOO_LARGE");return{url:url.href,status:response.status,html:new TextDecoder().decode(bytes),headers:Object.fromEntries(response.headers.entries()),responseMs:Date.now()-started}}finally{clearTimeout(timer)}}throw Error("TOO_MANY_REDIRECTS")}
-const measurement=(pageUrl:string,category:string,metricKey:string,value:unknown,available=true)=>({pageUrl,category,metricKey,value,available});
-const finding=(category:NewFinding["category"],severity:NewFinding["severity"],title:string,description:string,evidence:string,impact:string,recommendation:string,pageUrl:string,provenance:NewFinding["provenance"]="measured"):NewFinding=>({category,severity,title,description,evidence,impact,recommendation,pageUrl,provenance,clientVisible:true,selectedForProposal:["critical","high"].includes(severity)});
-export function analyzePage(page:CrawlPage){const $=load(page.html),url=page.url,title=$("title").first().text().trim(),description=$("meta[name=description]").attr("content")?.trim()||"",canonical=$("link[rel=canonical]").attr("href")||"",h1=$("h1").length,viewport=$("meta[name=viewport]").attr("content")||"",images=$("img").length,missingAlt=$("img").filter((_,e)=>$(e).attr("alt")===undefined).length,lang=$("html").attr("lang")||"",forms=$("form").length,fields=$("input:not([type=hidden]),select,textarea").toArray(),unlabeled=fields.filter(e=>{const id=$(e).attr("id"),aria=$(e).attr("aria-label")||$(e).attr("aria-labelledby");return!aria&&!(id&&$(`label[for="${id.replaceAll('"','')}"]`).length)&&!$(e).closest("label").length}).length,emptyLinks=$("a[href]").filter((_,e)=>!$(e).text().trim()&&!$(e).attr("aria-label")&&!$(e).find("img[alt]").length).length,contactLinks=$("a[href^='tel:'],a[href^='mailto:']").length,contactPage=$("a[href]").filter((_,e)=>/contact/i.test($(e).text())).length,ctas=$("a,button").filter((_,e)=>/(contact|book|quote|start|buy|schedule|call)/i.test($(e).text())).length,robots=$("meta[name=robots]").attr("content")||"",structured=$("script[type='application/ld+json']").length,ogTitle=$("meta[property='og:title']").attr("content")||"";
- const measurements=[measurement(url,"performance","response_ms",page.responseMs),measurement(url,"performance","html_bytes",Buffer.byteLength(page.html)),measurement(url,"seo","title",{present:!!title,length:title.length,value:title}),measurement(url,"seo","meta_description",{present:!!description,length:description.length}),measurement(url,"seo","canonical",{present:!!canonical,value:canonical}),measurement(url,"seo","h1_count",h1),measurement(url,"seo","robots",robots),measurement(url,"seo","structured_data_count",structured),measurement(url,"seo","open_graph_title",!!ogTitle),measurement(url,"mobile","viewport",viewport),measurement(url,"accessibility","images_missing_alt",{missing:missingAlt,total:images}),measurement(url,"accessibility","unlabeled_fields",{unlabeled,total:fields.length}),measurement(url,"accessibility","document_language",lang),measurement(url,"accessibility","empty_links",emptyLinks),measurement(url,"contact_visibility","contact_signals",{contactLinks,contactPage,forms}),measurement(url,"conversion","cta_count",ctas),measurement(url,"security","headers",{https:new URL(url).protocol==="https:",hsts:!!page.headers["strict-transport-security"],csp:!!page.headers["content-security-policy"],frame:!!page.headers["x-frame-options"]})],findings:NewFinding[]=[];
- if(!title)findings.push(finding("seo","high","Page title is missing","No non-empty title element was found.","title.present=false","Search engines and visitors lack a clear page label.","Add a unique descriptive title.",url));else if(title.length<30||title.length>60)findings.push(finding("seo","medium","Page title length needs review","The title is outside the usual snippet range.",`${title.length} characters`,"Search snippets may be unclear or truncated.","Use a specific title around 30–60 characters.",url));
- if(!description)findings.push(finding("seo","high","Meta description is missing","No meta description was found.","meta_description.present=false","Search results lack a controlled summary.","Add a unique page summary.",url));if(h1!==1)findings.push(finding("content_clarity",h1===0?"high":"medium","Primary heading structure needs attention",`Measured ${h1} H1 elements.`,`h1_count=${h1}`,"The page purpose may be unclear.","Use one clear primary heading.",url));if(!canonical)findings.push(finding("seo","low","Canonical URL is missing","No canonical link was found.","canonical.present=false","Duplicate URL variants may be harder to consolidate.","Add a self-referencing canonical URL.",url));
- if(!viewport.toLowerCase().includes("width=device-width"))findings.push(finding("mobile","high","Mobile viewport declaration is missing","The responsive viewport signal was absent.",viewport||"not present","Mobile layout may render at a desktop width.","Add width=device-width and test real devices.",url));if(missingAlt)findings.push(finding("accessibility",missingAlt/images>.25?"high":"medium","Images lack alt attributes",`${missingAlt} of ${images} images lack alt attributes.`,`missing=${missingAlt};total=${images}`,"Screen-reader users may miss image meaning.","Add appropriate alt attributes.",url));if(unlabeled)findings.push(finding("accessibility","high","Form fields lack detectable labels",`${unlabeled} of ${fields.length} controls lack labels.`,`unlabeled=${unlabeled}`,"Forms may be unusable with assistive technology.","Associate every field with a label.",url));if(!lang)findings.push(finding("accessibility","medium","Document language is missing","The html element has no lang attribute.","lang not present","Assistive technology may pronounce content incorrectly.","Set the document language.",url));if(emptyLinks)findings.push(finding("accessibility","medium","Links lack accessible names",`${emptyLinks} links have no detectable name.`,`empty_links=${emptyLinks}`,"Link purpose is unavailable to assistive technology.","Give every link an accessible name.",url));
- if(new URL(url).protocol!=="https:")findings.push(finding("security","critical","HTTPS is not active","The page was served over HTTP.",url,"Traffic can be intercepted or altered.","Serve and redirect the site over HTTPS.",url));if(!page.headers["content-security-policy"])findings.push(finding("security","low","Content Security Policy header is absent","No CSP response header was observed.","content-security-policy absent","A browser-side defense layer is missing.","Define and test a suitable CSP.",url));if(!contactLinks&&!contactPage&&!forms)findings.push(finding("contact_visibility","high","No clear contact path detected","No phone/email link, contact link, or form was detected.","contact signals=0","Visitors may abandon instead of contacting the business.","Add a clear contact route and CTA.",url,"heuristic"));if(!ctas)findings.push(finding("conversion","medium","No action-oriented CTA detected","No common action phrase was found in links or buttons.","cta_count=0","Visitors may not know the next step.","Add a specific primary call to action.",url,"heuristic"));
- return{measurements,findings,links:[...new Set($("a[href]").toArray().flatMap(e=>{try{const u=new URL($(e).attr("href")!,url);u.hash="";return[ u.href ]}catch{return[]}}))]};
+const MAX_HTML = 2_000_000,
+  MAX_REDIRECTS = 4,
+  TIMEOUT = 10_000;
+export type CrawlPage = {
+  url: string;
+  status: number;
+  html: string;
+  headers: Record<string, string>;
+  responseMs: number;
+};
+export type CrawlResult = {
+  finalUrl: string;
+  pages: CrawlPage[];
+  measurements: Array<Omit<MeasurementRecord, "id" | "auditId" | "capturedAt">>;
+  findings: NewFinding[];
+  availability: Partial<Record<ScoreCategory, boolean>>;
+  linksChecked: number;
+};
+export type CrawlOptions = {
+  pagesRequested: number;
+  fetcher?: typeof fetch;
+  validateUrl?: (url: string) => Promise<URL>;
+  onProgress?: (
+    current: number,
+    total: number,
+    message: string,
+  ) => Promise<void> | void;
+};
+const sameSite = (a: URL, b: URL) =>
+  a.hostname === b.hostname ||
+  a.hostname === `www.${b.hostname}` ||
+  b.hostname === `www.${a.hostname}`;
+async function fetchPage(
+  input: URL,
+  root: URL,
+  fetcher: typeof fetch,
+  validate: (url: string) => Promise<URL>,
+) {
+  let url = input;
+  for (let redirects = 0; redirects <= MAX_REDIRECTS; redirects++) {
+    url = await validate(url.href);
+    if (!sameSite(url, root)) throw Error("REDIRECT_LEFT_TARGET");
+    const controller = new AbortController(),
+      timer = setTimeout(() => controller.abort(), TIMEOUT),
+      started = Date.now();
+    try {
+      const response = await fetcher(url, {
+        redirect: "manual",
+        signal: controller.signal,
+        headers: {
+          "user-agent":
+            "KoinophobiaLabsAudit/2.0 (+https://koinophobialabs.com)",
+        },
+      });
+      if (response.status >= 300 && response.status < 400) {
+        const location = response.headers.get("location");
+        if (!location) throw Error("REDIRECT_WITHOUT_LOCATION");
+        url = new URL(location, url);
+        continue;
+      }
+      if (!response.ok) throw Error(`HTTP_${response.status}`);
+      if (!(response.headers.get("content-type") || "").includes("text/html"))
+        throw Error("NOT_HTML");
+      const bytes = new Uint8Array(await response.arrayBuffer());
+      if (bytes.length > MAX_HTML) throw Error("HTML_TOO_LARGE");
+      return {
+        url: url.href,
+        status: response.status,
+        html: new TextDecoder().decode(bytes),
+        headers: Object.fromEntries(response.headers.entries()),
+        responseMs: Date.now() - started,
+      };
+    } finally {
+      clearTimeout(timer);
+    }
+  }
+  throw Error("TOO_MANY_REDIRECTS");
 }
-export async function crawlWebsite(raw:string,options:CrawlOptions):Promise<CrawlResult>{if(!Number.isInteger(options.pagesRequested)||options.pagesRequested<1||options.pagesRequested>10)throw Error("INVALID_PAGE_LIMIT");const validate=options.validateUrl??assertPublicUrl,fetcher=options.fetcher??fetch,root=await validate(raw),queue=[root.href],seen=new Set<string>(),pages:CrawlPage[]=[],measurements:CrawlResult["measurements"]=[],findings:NewFinding[]=[],availability:Partial<Record<ScoreCategory,boolean>>={};let linksChecked=0;while(queue.length&&pages.length<options.pagesRequested){const href=queue.shift()!;if(seen.has(href))continue;seen.add(href);let page:CrawlPage;try{page=await fetchPage(new URL(href),root,fetcher,validate)}catch(error){if(!pages.length)throw error;const detail=error instanceof Error?error.message:"request failed";measurements.push(measurement(href,"broken_links","link_status",detail));findings.push(finding("broken_links","high","Internal page could not be loaded","A discovered same-site URL failed during the bounded crawl.",`${detail}: ${href}`,"Visitors and search crawlers may reach an error.","Repair, redirect, or remove the failing internal link.",href));availability.broken_links=true;await options.onProgress?.(pages.length,options.pagesRequested,`Failed to scan ${href}`);continue}const analysis=analyzePage(page);pages.push(page);measurements.push(...analysis.measurements);findings.push(...analysis.findings);for(const m of analysis.measurements)availability[m.category as ScoreCategory]=true;availability.broken_links=true;availability.content_clarity=true;for(const link of analysis.links){linksChecked++;const u=new URL(link);if(sameSite(u,root)&&!seen.has(u.href)&&queue.length+pages.length<options.pagesRequested)queue.push(u.href)}await options.onProgress?.(pages.length,options.pagesRequested,`Scanned ${pages.length} of up to ${options.pagesRequested} pages`)}const titles=new Map<string,string[]>();for(const item of measurements.filter(m=>m.metricKey==="title")){const value=item.value as{value?:string},key=value.value?.trim().toLowerCase();if(key)titles.set(key,[...(titles.get(key)??[]),item.pageUrl])}for(const [title,urls]of titles)if(urls.length>1)findings.push(finding("seo","medium","Duplicate page titles detected",`${urls.length} scanned pages share the same title.`,`Title "${title}" on ${urls.join(", ")}`,"Search engines and visitors may have difficulty distinguishing pages.","Give each indexable page a unique descriptive title.",urls[0]));return{finalUrl:pages.at(-1)?.url??root.href,pages,measurements,findings,availability,linksChecked}}
+const measurement = (
+  pageUrl: string,
+  category: string,
+  metricKey: string,
+  value: unknown,
+  available = true,
+) => ({ pageUrl, category, metricKey, value, available });
+const finding = (
+  category: NewFinding["category"],
+  severity: NewFinding["severity"],
+  title: string,
+  description: string,
+  evidence: string,
+  impact: string,
+  recommendation: string,
+  pageUrl: string,
+  provenance: NewFinding["provenance"] = "measured",
+): NewFinding => ({
+  category,
+  severity,
+  title,
+  description,
+  evidence,
+  impact,
+  recommendation,
+  pageUrl,
+  provenance,
+  clientVisible: true,
+  selectedForProposal: ["critical", "high"].includes(severity),
+});
+export function analyzePage(page: CrawlPage) {
+  const $ = load(page.html),
+    url = page.url,
+    title = $("title").first().text().trim(),
+    description = $("meta[name=description]").attr("content")?.trim() || "",
+    canonical = $("link[rel=canonical]").attr("href") || "",
+    h1 = $("h1").length,
+    viewport = $("meta[name=viewport]").attr("content") || "",
+    images = $("img").length,
+    missingAlt = $("img").filter(
+      (_, e) => $(e).attr("alt") === undefined,
+    ).length,
+    lang = $("html").attr("lang") || "",
+    forms = $("form").length,
+    fields = $("input:not([type=hidden]),select,textarea").toArray(),
+    unlabeled = fields.filter((e) => {
+      const id = $(e).attr("id"),
+        aria = $(e).attr("aria-label") || $(e).attr("aria-labelledby");
+      return (
+        !aria &&
+        !(id && $(`label[for="${id.replaceAll('"', "")}"]`).length) &&
+        !$(e).closest("label").length
+      );
+    }).length,
+    emptyLinks = $("a[href]").filter(
+      (_, e) =>
+        !$(e).text().trim() &&
+        !$(e).attr("aria-label") &&
+        !$(e).find("img[alt]").length,
+    ).length,
+    contactLinks = $("a[href^='tel:'],a[href^='mailto:']").length,
+    contactPage = $("a[href]").filter((_, e) =>
+      /contact/i.test($(e).text()),
+    ).length,
+    ctas = $("a,button").filter((_, e) =>
+      /(contact|book|quote|start|buy|schedule|call)/i.test($(e).text()),
+    ).length,
+    robots = $("meta[name=robots]").attr("content") || "",
+    structured = $("script[type='application/ld+json']").length,
+    ogTitle = $("meta[property='og:title']").attr("content") || "";
+  const measurements = [
+      measurement(url, "performance", "response_ms", page.responseMs),
+      measurement(
+        url,
+        "performance",
+        "html_bytes",
+        Buffer.byteLength(page.html),
+      ),
+      measurement(url, "seo", "title", {
+        present: !!title,
+        length: title.length,
+        value: title,
+      }),
+      measurement(url, "seo", "meta_description", {
+        present: !!description,
+        length: description.length,
+      }),
+      measurement(url, "seo", "canonical", {
+        present: !!canonical,
+        value: canonical,
+      }),
+      measurement(url, "seo", "h1_count", h1),
+      measurement(url, "seo", "robots", robots),
+      measurement(url, "seo", "structured_data_count", structured),
+      measurement(url, "seo", "open_graph_title", !!ogTitle),
+      measurement(url, "mobile", "viewport", viewport),
+      measurement(url, "accessibility", "images_missing_alt", {
+        missing: missingAlt,
+        total: images,
+      }),
+      measurement(url, "accessibility", "unlabeled_fields", {
+        unlabeled,
+        total: fields.length,
+      }),
+      measurement(url, "accessibility", "document_language", lang),
+      measurement(url, "accessibility", "empty_links", emptyLinks),
+      measurement(url, "contact_visibility", "contact_signals", {
+        contactLinks,
+        contactPage,
+        forms,
+      }),
+      measurement(url, "conversion", "cta_count", ctas),
+      measurement(url, "security", "headers", {
+        https: new URL(url).protocol === "https:",
+        hsts: !!page.headers["strict-transport-security"],
+        csp: !!page.headers["content-security-policy"],
+        frame: !!page.headers["x-frame-options"],
+      }),
+    ],
+    findings: NewFinding[] = [];
+  if (!title)
+    findings.push(
+      finding(
+        "seo",
+        "high",
+        "Page title is missing",
+        "No non-empty title element was found.",
+        "title.present=false",
+        "Search engines and visitors lack a clear page label.",
+        "Add a unique descriptive title.",
+        url,
+      ),
+    );
+  else if (title.length < 30 || title.length > 60)
+    findings.push(
+      finding(
+        "seo",
+        "medium",
+        "Page title length needs review",
+        "The title is outside the usual snippet range.",
+        `${title.length} characters`,
+        "Search snippets may be unclear or truncated.",
+        "Use a specific title around 30–60 characters.",
+        url,
+      ),
+    );
+  if (!description)
+    findings.push(
+      finding(
+        "seo",
+        "high",
+        "Meta description is missing",
+        "No meta description was found.",
+        "meta_description.present=false",
+        "Search results lack a controlled summary.",
+        "Add a unique page summary.",
+        url,
+      ),
+    );
+  if (h1 !== 1)
+    findings.push(
+      finding(
+        "content_clarity",
+        h1 === 0 ? "high" : "medium",
+        "Primary heading structure needs attention",
+        `Measured ${h1} H1 elements.`,
+        `h1_count=${h1}`,
+        "The page purpose may be unclear.",
+        "Use one clear primary heading.",
+        url,
+      ),
+    );
+  if (!canonical)
+    findings.push(
+      finding(
+        "seo",
+        "low",
+        "Canonical URL is missing",
+        "No canonical link was found.",
+        "canonical.present=false",
+        "Duplicate URL variants may be harder to consolidate.",
+        "Add a self-referencing canonical URL.",
+        url,
+      ),
+    );
+  if (!viewport.toLowerCase().includes("width=device-width"))
+    findings.push(
+      finding(
+        "mobile",
+        "high",
+        "Mobile viewport declaration is missing",
+        "The responsive viewport signal was absent.",
+        viewport || "not present",
+        "Mobile layout may render at a desktop width.",
+        "Add width=device-width and test real devices.",
+        url,
+      ),
+    );
+  if (missingAlt)
+    findings.push(
+      finding(
+        "accessibility",
+        missingAlt / images > 0.25 ? "high" : "medium",
+        "Images lack alt attributes",
+        `${missingAlt} of ${images} images lack alt attributes.`,
+        `missing=${missingAlt};total=${images}`,
+        "Screen-reader users may miss image meaning.",
+        "Add appropriate alt attributes.",
+        url,
+      ),
+    );
+  if (unlabeled)
+    findings.push(
+      finding(
+        "accessibility",
+        "high",
+        "Form fields lack detectable labels",
+        `${unlabeled} of ${fields.length} controls lack labels.`,
+        `unlabeled=${unlabeled}`,
+        "Forms may be unusable with assistive technology.",
+        "Associate every field with a label.",
+        url,
+      ),
+    );
+  if (!lang)
+    findings.push(
+      finding(
+        "accessibility",
+        "medium",
+        "Document language is missing",
+        "The html element has no lang attribute.",
+        "lang not present",
+        "Assistive technology may pronounce content incorrectly.",
+        "Set the document language.",
+        url,
+      ),
+    );
+  if (emptyLinks)
+    findings.push(
+      finding(
+        "accessibility",
+        "medium",
+        "Links lack accessible names",
+        `${emptyLinks} links have no detectable name.`,
+        `empty_links=${emptyLinks}`,
+        "Link purpose is unavailable to assistive technology.",
+        "Give every link an accessible name.",
+        url,
+      ),
+    );
+  if (new URL(url).protocol !== "https:")
+    findings.push(
+      finding(
+        "security",
+        "critical",
+        "HTTPS is not active",
+        "The page was served over HTTP.",
+        url,
+        "Traffic can be intercepted or altered.",
+        "Serve and redirect the site over HTTPS.",
+        url,
+      ),
+    );
+  if (!page.headers["content-security-policy"])
+    findings.push(
+      finding(
+        "security",
+        "low",
+        "Content Security Policy header is absent",
+        "No CSP response header was observed.",
+        "content-security-policy absent",
+        "A browser-side defense layer is missing.",
+        "Define and test a suitable CSP.",
+        url,
+      ),
+    );
+  if (!contactLinks && !contactPage && !forms)
+    findings.push(
+      finding(
+        "contact_visibility",
+        "high",
+        "No clear contact path detected",
+        "No phone/email link, contact link, or form was detected.",
+        "contact signals=0",
+        "Visitors may abandon instead of contacting the business.",
+        "Add a clear contact route and CTA.",
+        url,
+        "heuristic",
+      ),
+    );
+  if (!ctas)
+    findings.push(
+      finding(
+        "conversion",
+        "medium",
+        "No action-oriented CTA detected",
+        "No common action phrase was found in links or buttons.",
+        "cta_count=0",
+        "Visitors may not know the next step.",
+        "Add a specific primary call to action.",
+        url,
+        "heuristic",
+      ),
+    );
+  return {
+    measurements,
+    findings,
+    links: [
+      ...new Set(
+        $("a[href]")
+          .toArray()
+          .flatMap((e) => {
+            try {
+              const u = new URL($(e).attr("href")!, url);
+              u.hash = "";
+              return [u.href];
+            } catch {
+              return [];
+            }
+          }),
+      ),
+    ],
+  };
+}
+export async function crawlWebsite(
+  raw: string,
+  options: CrawlOptions,
+): Promise<CrawlResult> {
+  if (
+    !Number.isInteger(options.pagesRequested) ||
+    options.pagesRequested < 1 ||
+    options.pagesRequested > 10
+  )
+    throw Error("INVALID_PAGE_LIMIT");
+  const validate = options.validateUrl ?? assertPublicUrl,
+    fetcher = options.fetcher ?? fetch,
+    root = await validate(raw),
+    queue = [root.href],
+    seen = new Set<string>(),
+    pages: CrawlPage[] = [],
+    measurements: CrawlResult["measurements"] = [],
+    findings: NewFinding[] = [],
+    availability: Partial<Record<ScoreCategory, boolean>> = {};
+  let linksChecked = 0;
+  while (queue.length && pages.length < options.pagesRequested) {
+    const href = queue.shift()!;
+    if (seen.has(href)) continue;
+    seen.add(href);
+    let page: CrawlPage;
+    try {
+      page = await fetchPage(new URL(href), root, fetcher, validate);
+    } catch (error) {
+      if (!pages.length) throw error;
+      const detail = error instanceof Error ? error.message : "request failed";
+      measurements.push(
+        measurement(href, "broken_links", "link_status", detail),
+      );
+      findings.push(
+        finding(
+          "broken_links",
+          "high",
+          "Internal page could not be loaded",
+          "A discovered same-site URL failed during the bounded crawl.",
+          `${detail}: ${href}`,
+          "Visitors and search crawlers may reach an error.",
+          "Repair, redirect, or remove the failing internal link.",
+          href,
+        ),
+      );
+      availability.broken_links = true;
+      await options.onProgress?.(
+        pages.length,
+        options.pagesRequested,
+        `Failed to scan ${href}`,
+      );
+      continue;
+    }
+    const analysis = analyzePage(page);
+    pages.push(page);
+    measurements.push(...analysis.measurements);
+    findings.push(...analysis.findings);
+    for (const m of analysis.measurements)
+      availability[m.category as ScoreCategory] = true;
+    availability.broken_links = true;
+    availability.content_clarity = true;
+    for (const link of analysis.links) {
+      linksChecked++;
+      const u = new URL(link);
+      if (
+        sameSite(u, root) &&
+        !seen.has(u.href) &&
+        queue.length + pages.length < options.pagesRequested
+      )
+        queue.push(u.href);
+    }
+    await options.onProgress?.(
+      pages.length,
+      options.pagesRequested,
+      `Scanned ${pages.length} of up to ${options.pagesRequested} pages`,
+    );
+  }
+  const titles = new Map<string, string[]>();
+  for (const item of measurements.filter((m) => m.metricKey === "title")) {
+    const value = item.value as { value?: string },
+      key = value.value?.trim().toLowerCase();
+    if (key) titles.set(key, [...(titles.get(key) ?? []), item.pageUrl]);
+  }
+  for (const [title, urls] of titles)
+    if (urls.length > 1)
+      findings.push(
+        finding(
+          "seo",
+          "medium",
+          "Duplicate page titles detected",
+          `${urls.length} scanned pages share the same title.`,
+          `Title "${title}" on ${urls.join(", ")}`,
+          "Search engines and visitors may have difficulty distinguishing pages.",
+          "Give each indexable page a unique descriptive title.",
+          urls[0],
+        ),
+      );
+  return {
+    finalUrl: pages[0]?.url ?? root.href,
+    pages,
+    measurements,
+    findings,
+    availability,
+    linksChecked,
+  };
+}
