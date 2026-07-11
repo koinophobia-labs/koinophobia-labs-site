@@ -8,7 +8,7 @@
     "start": "next start",
     "screenshots": "node scripts/capture-screenshots.mjs",
     "lint": "eslint",
-    "test:crm": "tsx --test tests/crm.test.ts tests/crm-routes.test.ts",
+    "test:crm": "tsx --test tests/crm.test.ts tests/crm-routes.test.ts tests/proposals.test.ts",
     "db:migrate-crm": "node scripts/migrate-crm.mjs",
     "vercel-build": "node scripts/migrate-crm.mjs && next build"
   },
@@ -17,6 +17,7 @@
     "framer-motion": "^12.40.0",
     "lucide-react": "^1.17.0",
     "next": "16.2.7",
+    "pdf-lib": "^1.17.1",
     "pg": "^8.22.0",
     "react": "19.2.4",
     "react-dom": "19.2.4"
