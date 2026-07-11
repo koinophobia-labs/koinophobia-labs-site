@@ -77,6 +77,9 @@ export type AuditRecord = {
   progressTotal?: number;
   progressMessage?: string;
   reportVersion?: number;
+  scores?: unknown;
+  scoringInputs?: unknown;
+  scoringVersion?: string;
 };
 export type Queryable = {
   query(sql: string, values?: unknown[]): Promise<{ rows: QueryResultRow[]; rowCount?: number | null }>;
@@ -120,6 +123,9 @@ const map = (r: QueryResultRow): AuditRecord => ({
   progressTotal: r.progress_total ?? 1,
   progressMessage: r.progress_message ?? "Queued",
   reportVersion: r.report_version ?? 2,
+  scores: r.scores ?? {},
+  scoringInputs: r.scoring_inputs ?? {},
+  scoringVersion: r.scoring_version ?? "audit-score-v1",
 });
 export async function createAudit(
   leadId: string,
@@ -297,6 +303,7 @@ export async function updateFinding(id:string,edit:Partial<Pick<NormalizedFindin
  const allowed={title:"title",description:"description",evidence:"evidence",impact:"impact",recommendation:"recommendation",severity:"severity",clientVisible:"client_visible",selectedForProposal:"selected_for_proposal"} as const,entries=Object.entries(edit).filter(([k])=>k in allowed);if(!entries.length)throw Error("EMPTY_FINDING_EDIT");const values=entries.map(([,v])=>v),sets=entries.map(([k],i)=>`${allowed[k as keyof typeof allowed]}=$${i+1}`).join(",");const r=await q.query(`update crm_audit_findings set ${sets},updated_at=now() where id=$${values.length+1} returning *`,[...values,id]);return r.rows[0]?mapFinding(r.rows[0]):null;
 }
 export async function reorderFindings(auditId:string,orderedIds:string[],client:PoolClient){await client.query("begin");try{for(let i=0;i<orderedIds.length;i++){const r=await client.query("update crm_audit_findings set sort_order=$1,updated_at=now() where id=$2 and audit_id=$3",[i,orderedIds[i],auditId]);if(r.rowCount!==1)throw Error("INVALID_FINDING_ORDER")}await client.query("commit")}catch(e){await client.query("rollback");throw e}}
+export async function reorderFindingsAtomic(auditId:string,orderedIds:string[],q:Queryable=db()){if(!orderedIds.length||new Set(orderedIds).size!==orderedIds.length)throw Error("INVALID_FINDING_ORDER");const r=await q.query("with requested as (select id,ord-1 as sort_order from unnest($2::uuid[]) with ordinality as x(id,ord)), updated as (update crm_audit_findings f set sort_order=requested.sort_order,updated_at=now() from requested where f.audit_id=$1 and f.id=requested.id returning f.id) select count(*)::int as count from updated",[auditId,orderedIds]);if(Number(r.rows[0]?.count)!==orderedIds.length)throw Error("INVALID_FINDING_ORDER")}
 export async function listFindings(auditId:string,filter:{severity?:NormalizedFindingRecord["severity"];clientVisible?:boolean;selectedForProposal?:boolean}={},q:Queryable=db()){const values:unknown[]=[auditId],where=["audit_id=$1"];for(const [column,value] of [["severity",filter.severity],["client_visible",filter.clientVisible],["selected_for_proposal",filter.selectedForProposal]] as const)if(value!==undefined){values.push(value);where.push(`${column}=$${values.length}`)}const r=await q.query(`select * from crm_audit_findings where ${where.join(" and ")} order by sort_order,created_at`,values);return r.rows.map(mapFinding)}
 
 export async function consumeAuditRateLimit(input:{actorKey:string;limit:number;windowSeconds:number;now?:Date},q:Queryable=db()){
@@ -306,3 +313,5 @@ export async function consumeAuditRateLimit(input:{actorKey:string;limit:number;
 export async function persistAuditScoring(id:string,input:{scores:unknown;scoringInputs:unknown;scoringVersion:string;finalUrl:string;summary:string;pagesChecked:number;linksChecked:number},q:Queryable=db()){
  const r=await q.query("update crm_audits set scores=$1,scoring_inputs=$2,scoring_version=$3,final_url=$4,summary=$5,pages_checked=$6,links_checked=$7,updated_at=now() where id=$8 and status='running' returning *",[JSON.stringify(input.scores),JSON.stringify(input.scoringInputs),input.scoringVersion,input.finalUrl,input.summary,input.pagesChecked,input.linksChecked,id]);if(!r.rows[0])throw Error("AUDIT_NOT_RUNNING");return map(r.rows[0]);
 }
+export async function getAuditPackage(id:string,q:Queryable=db()){const audit=await getAudit(id,q);if(!audit)return null;return{audit,findings:await listFindings(id,{},q),measurements:await listMeasurements(id,undefined,q)}}
+export async function linkProposalFindings(proposalId:string,auditId:string,findingIds:string[],q:Queryable=db()){for(const findingId of findingIds)await q.query("insert into crm_proposal_audit_findings(proposal_id,audit_id,finding_id) values($1,$2,$3) on conflict do nothing",[proposalId,auditId,findingId])}
