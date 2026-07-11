@@ -18,7 +18,7 @@ export type LeadRecord = LeadInput & {
   auditCompleted: boolean; proposalSentAt: string | null;
   outcome: LeadOutcome; internalNotes: string;
   /** Compatibility aliases for the pre-existing internal acquisition pages. */
-  paymentStatus: "not started"; lastContacted?: string; nextFollowUpDate?: string;
+  paymentStatus: "not_started"|"deposit_pending"|"deposit_paid"|"balance_pending"|"paid"|"failed"|"refunded"; lastContacted?: string; nextFollowUpDate?: string;
 };
 
 export type LeadUpdate = Partial<Pick<LeadRecord, "status" | "lastContactedAt" | "followUpAt" | "auditCompleted" | "proposalSentAt" | "outcome" | "internalNotes">>;
@@ -40,7 +40,7 @@ function map(row: QueryResultRow): LeadRecord {
     lastContactedAt: row.last_contacted_at ? new Date(row.last_contacted_at).toISOString() : null,
     followUpAt: row.follow_up_at ? new Date(row.follow_up_at).toISOString() : null,
     auditCompleted: row.audit_completed, proposalSentAt: row.proposal_sent_at ? new Date(row.proposal_sent_at).toISOString() : null,
-    outcome: row.outcome, internalNotes: row.internal_notes || "", paymentStatus:"not started",
+    outcome: row.outcome, internalNotes: row.internal_notes || "", paymentStatus:row.payment_status||"not_started",
     lastContacted: row.last_contacted_at ? new Date(row.last_contacted_at).toISOString() : undefined,
     nextFollowUpDate: row.follow_up_at ? new Date(row.follow_up_at).toISOString() : undefined,
   };
