@@ -65,7 +65,42 @@
 }
 
 .founder-hero {
+  display: flex;
+  gap: clamp(20px, 4vw, 46px);
+  align-items: flex-start;
+  justify-content: space-between;
   margin: clamp(44px, 10vh, 110px) 0 30px;
+}
+
+.founder-hero-text {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.founder-portrait {
+  flex: 0 0 auto;
+  width: clamp(118px, 14vw, 176px);
+  margin: 6px 0 0;
+}
+
+.founder-portrait img,
+.resume-portrait img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid rgba(212, 175, 55, 0.42);
+  border-radius: 10px;
+  box-shadow: 0 26px 60px -32px rgba(212, 175, 55, 0.6);
+}
+
+.founder-portrait figcaption {
+  margin-top: 8px;
+  color: var(--gold);
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-align: center;
+  text-transform: uppercase;
 }
 
 .founder-hero h1,
@@ -382,7 +417,16 @@
   }
 
   .founder-hero {
+    gap: 16px;
     margin: 32px 0 24px;
+  }
+
+  .founder-portrait {
+    width: 112px;
+  }
+
+  .resume-portrait {
+    width: 92px;
   }
 
   .founder-hero h1 {
@@ -406,6 +450,24 @@
 
 .resume-header {
   min-height: 0;
+}
+
+.resume-head-row {
+  display: flex;
+  gap: clamp(18px, 4vw, 40px);
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.resume-head-text {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.resume-portrait {
+  flex: 0 0 auto;
+  width: clamp(96px, 11vw, 136px);
+  margin: 4px 0 0;
 }
 
 .resume-positioning {
@@ -612,7 +674,8 @@
   }
 
   .resume-page .back-link,
-  .resume-page .cta-row {
+  .resume-page .cta-row,
+  .resume-page .resume-portrait {
     display: none;
   }
 

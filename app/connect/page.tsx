@@ -13,13 +13,13 @@ export const metadata: Metadata = {
     title: "Blake Taylor — Founder, Koinophobia Labs",
     description: "Blake builds AI products, websites, and automation systems in Chicago.",
     url: "https://koinophobia.dev/connect",
-    images: [{ url: "/og.png", width: 1200, height: 630 }],
+    images: [{ url: "/og-founder.png", width: 1200, height: 630 }],
   },
   twitter: {
     card: "summary_large_image",
     title: "Blake Taylor — Founder, Koinophobia Labs",
     description: "Blake builds AI products, websites, and automation systems in Chicago.",
-    images: ["/og.png"],
+    images: ["/og-founder.png"],
   },
 };
 
@@ -44,16 +44,28 @@ export default function ConnectPage() {
             </header>
 
             <div className="founder-hero">
-              <p className="kicker kicker-gold">Founder · builder</p>
-              <h1 id="connect-title">Blake Taylor</h1>
-              <p className="founder-role">Founder, Koinophobia Labs</p>
-              <p className="founder-sub">
-                I build AI products, websites, and automation systems in Chicago.
-              </p>
-              <p className="founder-intro">
-                Founder-led work focused on turning real problems and messy workflows into useful,
-                shipped software.
-              </p>
+              <div className="founder-hero-text">
+                <p className="kicker kicker-gold">Founder · builder</p>
+                <h1 id="connect-title">Blake Taylor</h1>
+                <p className="founder-role">Founder, Koinophobia Labs</p>
+                <p className="founder-sub">
+                  I build AI products, websites, and automation systems in Chicago.
+                </p>
+                <p className="founder-intro">
+                  Founder-led work focused on turning real problems and messy workflows into
+                  useful, shipped software.
+                </p>
+              </div>
+              <figure className="founder-portrait">
+                <Image
+                  src="/blake-portrait.jpg"
+                  width={640}
+                  height={800}
+                  priority
+                  alt="Blake Taylor, founder of Koinophobia Labs"
+                />
+                <figcaption aria-hidden="true">Operator · Founder · Builder</figcaption>
+              </figure>
             </div>
 
             <nav className="founder-actions" aria-label="Connect with Blake">

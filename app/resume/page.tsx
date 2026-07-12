@@ -7,6 +7,7 @@ import {
   IdCard,
   Mail,
 } from "lucide-react";
+import Image from "next/image";
 import resume from "@/lib/resume.json";
 
 export const metadata: Metadata = {
@@ -15,6 +16,18 @@ export const metadata: Metadata = {
     "Résumé for Blake Taylor: AI product builder with a customer-experience and trust & safety background. Founder of Koinophobia Labs, formerly DraftKings.",
   alternates: {
     canonical: "https://koinophobia.dev/resume",
+  },
+  openGraph: {
+    title: "Blake Taylor — Résumé",
+    description:
+      "AI product builder with a customer-experience and trust & safety background.",
+    url: "https://koinophobia.dev/resume",
+    images: [{ url: "/og-founder.png", width: 1200, height: 630 }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Blake Taylor — Résumé",
+    images: ["/og-founder.png"],
   },
 };
 
@@ -31,9 +44,22 @@ export default function ResumePage() {
         </a>
 
         <header className="mini-hero resume-header" aria-labelledby="resume-title">
-          <p className="kicker kicker-gold">Career · Résumé</p>
-          <h1 id="resume-title">{resume.name}</h1>
-          <p className="resume-positioning">{resume.headline}</p>
+          <div className="resume-head-row">
+            <div className="resume-head-text">
+              <p className="kicker kicker-gold">Career · Résumé</p>
+              <h1 id="resume-title">{resume.name}</h1>
+              <p className="resume-positioning">{resume.headline}</p>
+            </div>
+            <figure className="resume-portrait">
+              <Image
+                src="/blake-portrait.jpg"
+                width={640}
+                height={800}
+                priority
+                alt="Blake Taylor, founder of Koinophobia Labs"
+              />
+            </figure>
+          </div>
           <div className="chip-row resume-chips" aria-label="Status">
             <span className="chip chip-gray">BASE · CHICAGO, IL</span>
             <span className="chip chip-cyan">LANE · CUSTOMER EXPERIENCE AI</span>
