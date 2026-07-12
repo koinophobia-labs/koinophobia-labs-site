@@ -2,6 +2,11 @@
 
 import { useSearchParams } from "next/navigation";
 import { FormEvent, Suspense, useState } from "react";
+import {
+  intakeBudgets as budgets,
+  intakeServiceOptions as serviceInterestOptions,
+  intakeTimelines as timelines,
+} from "@/lib/acquisition/intake-options";
 
 type SubmitState =
   | { status: "idle" }
@@ -9,13 +14,9 @@ type SubmitState =
   | { status: "success"; message: string }
   | { status: "error"; message: string; mailto: string; requestId?: string };
 
-const timelines = ["This week", "This month", "1-2 months", "Just researching"];
-const budgets = ["Under $500", "$500-$1,500", "$1,500-$3,500", "$3,500+", "Not sure yet"];
-const serviceInterestOptions = ["Website audit", "Website design", "Website redesign", "SEO", "Other"];
-
-function IntakeFormInner() {
+function IntakeFormInner({ defaultService = "" }: { defaultService?: string }) {
   const searchParams = useSearchParams();
-  const requestedService = searchParams.get("service") || "";
+  const requestedService = searchParams.get("service") || defaultService;
   const [state, setState] = useState<SubmitState>({ status: "idle" });
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
@@ -137,10 +138,10 @@ function IntakeFormInner() {
   );
 }
 
-export default function IntakeForm() {
+export default function IntakeForm({ defaultService }: { defaultService?: string }) {
   return (
     <Suspense fallback={<div className="panel form-loading">Loading intake...</div>}>
-      <IntakeFormInner />
+      <IntakeFormInner defaultService={defaultService} />
     </Suspense>
   );
 }

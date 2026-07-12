@@ -220,6 +220,9 @@ export default async function DemoPage({ params }: { params: Promise<{ slug: str
                 <CalendarCheck size={18} />
                 Request a build estimate
               </Button>
+              <Button href="/audit" tone="cyan">
+                Get the $250 site audit
+              </Button>
               <a href="mailto:koinophobia999@gmail.com?subject=Website%20review%20request">
                 Send your current site or Instagram
               </a>
