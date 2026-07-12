@@ -417,28 +417,29 @@
   line-height: 1.2;
 }
 
-.resume-meta {
-  display: flex;
-  gap: 6px;
-  align-items: center;
-  margin: 10px 0 0;
-  color: var(--dim);
-  font-size: 14px;
-}
 
 .resume-summary {
   margin-top: 16px;
   max-width: 720px;
 }
 
-.resume-open-to {
-  max-width: 720px;
-  color: var(--dim);
-  font-size: 15px;
+
+.resume-section .kicker {
+  margin-bottom: 6px;
 }
 
 .resume-section h2 {
   margin-bottom: 18px;
+}
+
+.resume-chips {
+  margin: 16px 0 0;
+}
+
+.resume-chips .chip,
+.resume-skill-group .chip {
+  font-family: var(--font-mono);
+  letter-spacing: 0.08em;
 }
 
 .resume-role-head {
@@ -461,6 +462,12 @@
   letter-spacing: 0.08em;
 }
 
+.resume-role + .resume-role {
+  margin-top: 24px;
+  border-top: 1px solid var(--line);
+  padding-top: 22px;
+}
+
 .resume-role ul {
   display: grid;
   gap: 9px;
@@ -478,25 +485,6 @@
   color: var(--gold);
 }
 
-.resume-background {
-  margin-top: 26px;
-  border-top: 1px solid var(--line);
-  padding-top: 18px;
-}
-
-.resume-background h3 {
-  font-size: 15px;
-  color: var(--gold);
-  font-family: var(--font-mono);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
-
-.resume-background p {
-  margin: 10px 0 0;
-  max-width: 720px;
-  font-size: 15px;
-}
 
 .resume-work-grid {
   display: grid;
@@ -513,7 +501,21 @@
   background: rgba(255, 255, 255, 0.035);
 }
 
+.resume-work-tag {
+  display: block;
+  color: var(--gold);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.resume-work-tag-orange {
+  color: var(--orange);
+}
+
 .resume-work-card h3 {
+  margin-top: 12px;
   font-size: 17px;
 }
 
@@ -556,9 +558,20 @@
 }
 
 .resume-skill-group dd {
-  margin: 6px 0 0;
+  margin: 10px 0 0;
   font-size: 15px;
   line-height: 1.6;
+}
+
+.resume-skill-group .chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 0;
+}
+
+.resume-education h3 {
+  font-size: 18px;
 }
 
 .resume-footer {
@@ -628,10 +641,16 @@
 
   .resume-page .resume-work-card,
   .resume-page .resume-work-card a,
-  .resume-page .resume-footer a {
+  .resume-page .resume-footer a,
+  .resume-page .chip {
     color: #16181d;
     border-color: #d8d3c4;
     background: #ffffff;
+  }
+
+  .resume-page .resume-work-tag,
+  .resume-page .resume-work-tag-orange {
+    color: #8a6d1f;
   }
 
   .resume-page .mini-panel {

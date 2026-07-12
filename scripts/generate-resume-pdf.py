@@ -21,7 +21,7 @@ OUT = os.path.join(ROOT, "public", "resume", "Blake-Taylor-Resume.pdf")
 os.makedirs(os.path.dirname(OUT), exist_ok=True)
 
 PW, PH = letter
-MARGIN = 0.75 * inch
+MARGIN = 0.7 * inch
 BODY_W = PW - 2 * MARGIN
 INK = HexColor("#16181d")
 MUTED = HexColor("#4a4f58")
@@ -31,7 +31,7 @@ RULE = HexColor("#d8d3c4")
 c = canvas.Canvas(OUT, pagesize=letter)
 c.setTitle("Blake Taylor — Résumé")
 c.setAuthor("Blake Taylor")
-c.setSubject(DATA["positioning"])
+c.setSubject(DATA["headline"])
 c.setCreator("koinophobia.dev")
 
 y = PH - MARGIN
@@ -63,7 +63,7 @@ def para(text, font, size, leading, color=INK, width=BODY_W, x=MARGIN):
 
 def section(title):
     global y
-    y -= 6
+    y -= 3
     c.setFillColor(GOLD)
     c.setFont("Helvetica-Bold", 9.5)
     c.drawString(MARGIN, y, title.upper())
@@ -71,7 +71,7 @@ def section(title):
     c.setStrokeColor(RULE)
     c.setLineWidth(0.8)
     c.line(MARGIN, y, PW - MARGIN, y)
-    y -= 12
+    y -= 10
 
 
 def link_row(items):
@@ -93,18 +93,18 @@ def link_row(items):
             c.setFillColor(MUTED)
             c.drawString(x, y, sep)
             x += c.stringWidth(sep, font, size)
-    y -= 16
+    y -= 14
 
 
 # ---- Header ----
 c.setFillColor(INK)
 c.setFont("Helvetica-Bold", 24)
 c.drawCentredString(PW / 2, y - 8, DATA["name"].upper())
-y -= 28
+y -= 26
 c.setFillColor(GOLD)
 c.setFont("Helvetica-Bold", 12)
-c.drawCentredString(PW / 2, y, DATA["positioning"])
-y -= 20
+c.drawCentredString(PW / 2, y, DATA["headline"])
+y -= 18
 
 contact = DATA["contact"]
 link_row([
@@ -117,9 +117,7 @@ link_row([
 
 # ---- Summary ----
 section("Summary")
-para(DATA["summary"], "Helvetica", 10, 14)
-y -= 2
-para(DATA["openTo"], "Helvetica-Oblique", 9.5, 13, color=MUTED)
+para(DATA["summary"], "Helvetica", 10, 12.8)
 
 # ---- Experience ----
 section("Experience")
@@ -129,8 +127,8 @@ for role in DATA["experience"]:
     c.drawString(MARGIN, y, f"{role['title']} — {role['org']}")
     c.setFont("Helvetica", 9.5)
     c.setFillColor(MUTED)
-    c.drawRightString(PW - MARGIN, y, role["dates"])
-    y -= 14
+    c.drawRightString(PW - MARGIN, y, f"{role['location']} · {role['dates']}")
+    y -= 13
     for b in role["bullets"]:
         c.setFillColor(INK)
         c.setFont("Helvetica", 10)
@@ -140,16 +138,12 @@ for role in DATA["experience"]:
             if first:
                 c.circle(MARGIN + 5, y + 3, 1.2, stroke=0, fill=1)
                 first = False
-            y -= 12.4
-        y -= 0.6
-    y -= 6
+            y -= 12
+        y -= 0.4
+    y -= 5
 
-# ---- Background ----
-section("Background")
-para(DATA["background"], "Helvetica", 10, 14)
-
-# ---- Selected products ----
-section("Selected Shipped Work")
+# ---- Projects ----
+section("Projects")
 for p in DATA["projects"]:
     c.setFillColor(INK)
     c.setFont("Helvetica-Bold", 10.5)
@@ -161,9 +155,20 @@ for p in DATA["projects"]:
         c.setFillColor(GOLD)
         c.setFont("Helvetica", 8.5)
         c.drawString(MARGIN + w + 8, y + 0.5, p["url"].replace("https://", ""))
+    y -= 11
+    para(p["blurb"], "Helvetica", 9.5, 11.5)
+    y -= 3
+
+# ---- Education ----
+section("Education")
+for ed in DATA["education"]:
+    c.setFillColor(INK)
+    c.setFont("Helvetica-Bold", 10.5)
+    c.drawString(MARGIN, y, f"{ed['degree']} — {ed['school']}")
+    c.setFont("Helvetica", 9.5)
+    c.setFillColor(MUTED)
+    c.drawRightString(PW - MARGIN, y, ed["year"])
     y -= 12
-    para(p["blurb"], "Helvetica", 9.5, 12)
-    y -= 4
 
 # ---- Skills ----
 section("Skills")
@@ -176,7 +181,7 @@ for group in DATA["skills"]:
     c.setFont("Helvetica", 10)
     for ln in wrap(", ".join(group["items"]), "Helvetica", 10, BODY_W - lw):
         c.drawString(MARGIN + lw, y, ln)
-        y -= 12.4
+        y -= 12
     y -= 1
 
 c.showPage()

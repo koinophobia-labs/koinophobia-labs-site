@@ -1,8 +1,7 @@
 {
   "name": "Blake Taylor",
-  "positioning": "AI Product Builder · Technical Founder · Operator",
-  "summary": "Founder of Koinophobia Labs, a one-person AI product studio in Chicago. Ships end to end: native iOS and Next.js web products, LLM-backed features, and automation systems — designed, built, tested, deployed, and verified in production. Background in high-tempo sports and gaming operations, with an operator's eye for where real systems break.",
-  "openTo": "Open to conversations around product, AI tools, operations, support, startups, and technical customer-facing work.",
+  "headline": "AI Product Builder · Customer Experience AI · Trust & Safety",
+  "summary": "AI product builder and systems operator with experience shipping customer-facing AI products, workflow automations, guardrail systems, and production web and iOS tools. Founder of Koinophobia Labs, with a professional background in high-volume customer operations at DraftKings and a B.A. in Global Management. Strongest at translating real customer friction into structured products, approval workflows, escalation systems, and tested user experiences.",
   "contact": {
     "location": "Chicago, IL",
     "email": "koinophobia999@gmail.com",
@@ -13,67 +12,108 @@
   },
   "experience": [
     {
-      "title": "Founder",
+      "title": "Founder & Product Builder",
       "org": "Koinophobia Labs",
-      "dates": "2026 – Present",
+      "dates": "2025 – Present",
+      "location": "Chicago, IL",
       "bullets": [
-        "Built and shipped Trendi, a native SwiftUI iOS creator app with an LLM-backed coaching pipeline, distributed through TestFlight.",
-        "Built and launched live web products: You Know Ball (sports-debate MVP) and Career Forge (local-first career and résumé tool).",
-        "Designed and runs the studio's production platform on Next.js: CRM, website-audit, intake, and proposal systems behind authenticated server APIs, with database migrations wired into the deploy pipeline.",
-        "Operates a productized website revenue-leak audit offer for local businesses, from crawling and scoring through client-ready reporting.",
-        "Owns the full product lifecycle solo: architecture, implementation, adversarial QA, deployment (Vercel, App Store Connect), production verification, and documentation."
+        "Built and operate an independent AI product studio; designed and shipped four AI-powered products and their supporting web systems.",
+        "Own product strategy, roadmap planning, testing, documentation, deployment, and release cycles end to end.",
+        "Build AI workflows around human-in-the-loop approval gates rather than uncontrolled automation, with swappable Claude and OpenAI model adapters for generation and utility tasks.",
+        "Built operational dashboards, CRM workflows, lead intake, payments infrastructure, and internal tooling.",
+        "Run structured QA, adversarial testing, and production verification across web and iOS — including an 80-prompt adversarial evaluation with zero hard guardrail violations and 50+ documented development and iteration cycles.",
+        "Authored a Responsible Gaming community framework (CLEAR model) with escalation paths."
+      ]
+    },
+    {
+      "title": "Associate Sportsbook Writer",
+      "org": "DraftKings",
+      "dates": "2023 – July 2026",
+      "location": "Chicago, IL",
+      "bullets": [
+        "Operated in a high-volume retail environment serving hundreds of daily customers; served as a primary contact for complex product inquiries.",
+        "Managed live product questions, customer escalations, account and transaction concerns, and real-time problem resolution under pressure.",
+        "Translated product rules, policies, promotions, and operational procedures into clear customer guidance.",
+        "Balanced speed, accuracy, compliance, and customer experience in a regulated environment, recognizing situations requiring escalation and routing them through the appropriate support or responsible-gaming process.",
+        "Developed firsthand understanding of customer friction, product confusion, trust, and escalation design — experience now applied to AI product and workflow development."
       ]
     }
   ],
-  "background": "Before founding Koinophobia Labs: sports and gaming operations — high-tempo, high-pressure, customer-facing environments including sportsbook operations, plus community, content, and product work. That operating experience is the foundation of the studio's approach: build from real problems, and test where systems actually break.",
   "projects": [
     {
       "name": "Trendi",
+      "tag": "AI PRODUCT",
       "url": "https://koinophobia.dev/trendi",
-      "blurb": "Creator consistency app that turns a rough thought into clear words to say on camera. Native SwiftUI iOS product with a two-pipeline LLM coaching architecture."
-    },
-    {
-      "name": "Career Forge",
-      "url": "https://career-forge-lite.vercel.app",
-      "blurb": "Local-first command center for positioning, résumés, applications, outreach, and interview prep. Live web tool; nothing uploaded, everything on-device."
+      "blurb": "iOS creator execution product that turns rough ideas into recordable content. SwiftUI; shipped through TestFlight."
     },
     {
       "name": "You Know Ball",
+      "tag": "SPORTS GAME",
       "url": "https://you-know-ball-orpin.vercel.app",
-      "blurb": "Sports-debate game where users defend takes and get judged. Live web MVP and product-proof asset."
+      "blurb": "Sports-debate game with deterministic gameplay, guardrails, scoring, and shareable outcomes; TestFlight + live web MVP.",
+      "tone": "orange"
     },
     {
-      "name": "Koinophobia Labs platform",
+      "name": "Career Forge",
+      "tag": "LIVE TOOL",
+      "url": "https://career-forge-lite.vercel.app",
+      "blurb": "Live Next.js/TypeScript résumé and job-search product."
+    },
+    {
+      "name": "Koinophobia Labs systems",
+      "tag": "PRODUCTION",
       "url": "https://koinophobialabs.com",
-      "blurb": "The studio's production site and business system: Next.js server app with CRM, audits, intake, and proposal generation running live."
+      "blurb": "Public product site with revenue audit, lead intake, CRM, outreach, Stripe infrastructure, and deploy workflows."
+    }
+  ],
+  "education": [
+    {
+      "school": "Earlham College",
+      "degree": "B.A., Global Management",
+      "year": "2024"
     }
   ],
   "skills": [
     {
-      "label": "Product & AI",
+      "label": "AI & Product",
       "items": [
-        "LLM integration and agent workflow design",
-        "AI-assisted product development",
-        "product operations"
+        "AI Product Development",
+        "Prompt & System Design",
+        "LLM Evaluation",
+        "Adversarial Testing",
+        "Guardrail Design",
+        "Human-in-the-Loop Workflows",
+        "Product Strategy",
+        "Product QA",
+        "Release Verification"
       ]
     },
     {
-      "label": "Engineering",
+      "label": "Technical",
       "items": [
-        "Next.js / React / TypeScript",
-        "SwiftUI / iOS",
-        "REST API integration",
-        "PostgreSQL",
-        "Vercel deployment and production verification"
+        "Next.js",
+        "TypeScript",
+        "SwiftUI",
+        "REST APIs",
+        "OpenAI & Anthropic Integrations",
+        "Git & GitHub",
+        "Vercel",
+        "Railway",
+        "Stripe Integration",
+        "CRM & Workflow Automation"
       ]
     },
     {
-      "label": "Operations",
+      "label": "Operations & CX",
       "items": [
-        "customer experience",
-        "QA and adversarial testing",
-        "documentation",
-        "community and content operations"
+        "Customer Experience",
+        "Product Support",
+        "Escalation Management",
+        "Responsible Gaming",
+        "Trust & Safety",
+        "Process Improvement",
+        "Documentation",
+        "Community Operations"
       ]
     }
   ]

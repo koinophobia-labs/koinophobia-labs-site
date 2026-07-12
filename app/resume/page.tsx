@@ -6,14 +6,13 @@ import {
   GitBranch,
   IdCard,
   Mail,
-  MapPin,
 } from "lucide-react";
 import resume from "@/lib/resume.json";
 
 export const metadata: Metadata = {
   title: "Blake Taylor — Résumé",
   description:
-    "Public résumé for Blake Taylor: AI product builder, technical founder, and operator in Chicago.",
+    "Résumé for Blake Taylor: AI product builder with a customer-experience and trust & safety background. Founder of Koinophobia Labs, formerly DraftKings.",
   alternates: {
     canonical: "https://koinophobia.dev/resume",
   },
@@ -34,13 +33,13 @@ export default function ResumePage() {
         <header className="mini-hero resume-header" aria-labelledby="resume-title">
           <p className="kicker kicker-gold">Career · Résumé</p>
           <h1 id="resume-title">{resume.name}</h1>
-          <p className="resume-positioning">{resume.positioning}</p>
-          <p className="resume-meta">
-            <MapPin size={14} aria-hidden="true" />
-            {resume.contact.location}
-          </p>
+          <p className="resume-positioning">{resume.headline}</p>
+          <div className="chip-row resume-chips" aria-label="Status">
+            <span className="chip chip-gray">BASE · CHICAGO, IL</span>
+            <span className="chip chip-cyan">LANE · CUSTOMER EXPERIENCE AI</span>
+            <span className="chip chip-gold">STATUS · OPEN TO WORK</span>
+          </div>
           <p className="resume-summary">{resume.summary}</p>
-          <p className="resume-open-to">{resume.openTo}</p>
           <div className="cta-row">
             <a
               className="btn btn-gold"
@@ -83,6 +82,7 @@ export default function ResumePage() {
         </header>
 
         <section className="mini-panel resume-section" aria-labelledby="experience-title">
+          <p className="kicker kicker-gold">Proof of work</p>
           <h2 id="experience-title">Experience</h2>
           {resume.experience.map((role) => (
             <article className="resume-role" key={`${role.title}-${role.org}`}>
@@ -90,7 +90,9 @@ export default function ResumePage() {
                 <h3>
                   {role.title} — {role.org}
                 </h3>
-                <p className="resume-dates">{role.dates}</p>
+                <p className="resume-dates">
+                  {role.location} · {role.dates}
+                </p>
               </div>
               <ul>
                 {role.bullets.map((bullet) => (
@@ -99,17 +101,19 @@ export default function ResumePage() {
               </ul>
             </article>
           ))}
-          <div className="resume-background">
-            <h3>Background</h3>
-            <p>{resume.background}</p>
-          </div>
         </section>
 
         <section className="mini-panel resume-section" aria-labelledby="work-title">
+          <p className="kicker kicker-cyan">Shipped</p>
           <h2 id="work-title">Selected shipped work</h2>
           <div className="resume-work-grid">
             {resume.projects.map((project) => (
               <article className="resume-work-card" key={project.name}>
+                <span
+                  className={`resume-work-tag${"tone" in project && project.tone === "orange" ? " resume-work-tag-orange" : ""}`}
+                >
+                  {project.tag}
+                </span>
                 <h3>{project.name}</h3>
                 <p>{project.blurb}</p>
                 <a
@@ -126,13 +130,35 @@ export default function ResumePage() {
           </div>
         </section>
 
+        <section className="mini-panel resume-section" aria-labelledby="education-title">
+          <p className="kicker kicker-gold">Credentials</p>
+          <h2 id="education-title">Education</h2>
+          {resume.education.map((entry) => (
+            <div className="resume-role-head resume-education" key={entry.school}>
+              <h3>
+                {entry.degree} — {entry.school}
+              </h3>
+              <p className="resume-dates">{entry.year}</p>
+            </div>
+          ))}
+        </section>
+
         <section className="mini-panel resume-section" aria-labelledby="skills-title">
+          <p className="kicker kicker-cyan">Stack</p>
           <h2 id="skills-title">Skills</h2>
           <dl className="resume-skills">
             {resume.skills.map((group) => (
               <div className="resume-skill-group" key={group.label}>
                 <dt>{group.label}</dt>
-                <dd>{group.items.join(" · ")}</dd>
+                <dd>
+                  <span className="chip-row">
+                    {group.items.map((item) => (
+                      <span className="chip chip-gray" key={item}>
+                        {item}
+                      </span>
+                    ))}
+                  </span>
+                </dd>
               </div>
             ))}
           </dl>
@@ -142,7 +168,8 @@ export default function ResumePage() {
           <p>
             {resume.name} · {resume.contact.location} ·{" "}
             <a href={`mailto:${resume.contact.email}`}>{resume.contact.email}</a> ·{" "}
-            <a href={resume.contact.site}>koinophobia.dev</a>
+            <a href={resume.contact.site}>koinophobia.dev</a> ·{" "}
+            <a href={resume.contact.company}>koinophobialabs.com</a>
           </p>
         </footer>
       </main>
