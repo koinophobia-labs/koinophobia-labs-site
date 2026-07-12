@@ -13,6 +13,7 @@ import {
   Workflow,
   Zap,
 } from "lucide-react";
+import { LINKS } from "@/lib/links";
 
 export const navItems = [
   { id: "products", label: "Products" },
@@ -137,7 +138,7 @@ export const productModules = [
       "transforms everyday work experience into recruiter-friendly language and ATS-safe career documents.",
     receipts: ["Live MVP", "ATS-focused", "Resume package", "LinkedIn headline"],
     cta: "Open Tool",
-    href: "https://career-forge-lite.vercel.app",
+    href: LINKS.careerForge,
     secondaryCta: "GitHub",
     secondaryHref: "https://github.com/koinophobia-labs/career-forge-lite",
   },
