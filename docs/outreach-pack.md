@@ -1,6 +1,38 @@
 # Koinophobia Labs Concepts Outreach Pack
 
+## Landing path
+
+Every outreach email should give the prospect one place to land that continues the
+conversation: `https://koinophobialabs.com/audit` — the $250 Website Revenue Leak
+Audit page. It restates the low-risk offer, shows exactly what gets measured and
+what happens next, and has a two-minute intake form that feeds the CRM directly.
+Demo links are supporting proof; the audit page is the next step.
+
 ## Tattoo Shops
+
+### Problem-first (preferred when you found a real issue)
+
+Subject: [The specific problem — e.g. "Your booking form stops one step early"]
+
+Hey [Name],
+
+I was looking at [shop site] and noticed [the one concrete problem: conflicting
+hours between the site and Instagram / a booking form that never says what happens
+next / five different ways to contact you and no clear one].
+
+That one is visible from outside. I run a flat $250 audit that measures the whole
+site — booking path, mobile flow, trust gaps, broken links — and puts every issue
+in one prioritized report. It is credited toward the fix if you want me to build it.
+
+What it covers and how it works: https://koinophobialabs.com/audit
+
+If you would rather just see an example of my work first:
+https://koinophobialabs.com/demos/tattoo-studio
+
+- Blake  
+Koinophobia Labs
+
+### Concept-first (when you have no specific finding yet)
 
 Subject: Quick website concept for your tattoo studio
 
@@ -8,9 +40,9 @@ Hey [Name],
 
 I put together a short tattoo studio website concept showing how a site can pre-qualify consults, show healed work, explain booking rules, and make deposits feel normal before someone DMs you.
 
-Demo: https://koinophobia-labs.vercel.app/demos/tattoo-studio
+Demo: https://koinophobialabs.com/demos/tattoo-studio
 
-If useful, I can build something like this around your actual work, style, and booking process.
+If useful, I can build something like this around your actual work, style, and booking process. If you want to know what your current site is costing you first, I do a flat $250 audit credited toward any build: https://koinophobialabs.com/audit
 
 - Blake  
 Koinophobia Labs

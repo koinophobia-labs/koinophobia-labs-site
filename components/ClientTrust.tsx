@@ -79,6 +79,7 @@ export default function ClientTrust() {
               <Button href="#contact" tone="gold">
                 Request a build estimate
               </Button>
+              <a href="/audit">Start with the $250 site audit</a>
               <a href="#contact">Send your current site or Instagram</a>
             </div>
           </article>
