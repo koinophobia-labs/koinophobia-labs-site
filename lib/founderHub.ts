@@ -1,5 +1,5 @@
 import type { LucideIcon } from "lucide-react";
-import { Building2, GitBranch, IdCard, Mail } from "lucide-react";
+import { BriefcaseBusiness, Building2, GitBranch, IdCard, Mail } from "lucide-react";
 import { LINKS } from "@/lib/links";
 
 export const founderLinks = {
@@ -19,7 +19,7 @@ export const primaryActions: Array<{
   label: string;
   href: string;
   icon: LucideIcon;
-  tone: "gold" | "cyan" | "orange" | "ghost";
+  tone: "gold" | "outline-gold" | "cyan" | "orange" | "ghost";
   external?: boolean;
 }> = [
   {
@@ -28,6 +28,12 @@ export const primaryActions: Array<{
     icon: IdCard,
     tone: "gold",
     external: true,
+  },
+  {
+    label: "View Résumé",
+    href: founderLinks.resume,
+    icon: BriefcaseBusiness,
+    tone: "outline-gold",
   },
   {
     label: "Email Blake",

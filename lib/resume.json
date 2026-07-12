@@ -1,0 +1,80 @@
+{
+  "name": "Blake Taylor",
+  "positioning": "AI Product Builder · Technical Founder · Operator",
+  "summary": "Founder of Koinophobia Labs, a one-person AI product studio in Chicago. Ships end to end: native iOS and Next.js web products, LLM-backed features, and automation systems — designed, built, tested, deployed, and verified in production. Background in high-tempo sports and gaming operations, with an operator's eye for where real systems break.",
+  "openTo": "Open to conversations around product, AI tools, operations, support, startups, and technical customer-facing work.",
+  "contact": {
+    "location": "Chicago, IL",
+    "email": "koinophobia999@gmail.com",
+    "linkedin": "https://linkedin.com/in/bt77",
+    "github": "https://github.com/koinophobia-labs",
+    "site": "https://koinophobia.dev",
+    "company": "https://koinophobialabs.com"
+  },
+  "experience": [
+    {
+      "title": "Founder",
+      "org": "Koinophobia Labs",
+      "dates": "2026 – Present",
+      "bullets": [
+        "Built and shipped Trendi, a native SwiftUI iOS creator app with an LLM-backed coaching pipeline, distributed through TestFlight.",
+        "Built and launched live web products: You Know Ball (sports-debate MVP) and Career Forge (local-first career and résumé tool).",
+        "Designed and runs the studio's production platform on Next.js: CRM, website-audit, intake, and proposal systems behind authenticated server APIs, with database migrations wired into the deploy pipeline.",
+        "Operates a productized website revenue-leak audit offer for local businesses, from crawling and scoring through client-ready reporting.",
+        "Owns the full product lifecycle solo: architecture, implementation, adversarial QA, deployment (Vercel, App Store Connect), production verification, and documentation."
+      ]
+    }
+  ],
+  "background": "Before founding Koinophobia Labs: sports and gaming operations — high-tempo, high-pressure, customer-facing environments including sportsbook operations, plus community, content, and product work. That operating experience is the foundation of the studio's approach: build from real problems, and test where systems actually break.",
+  "projects": [
+    {
+      "name": "Trendi",
+      "url": "https://koinophobia.dev/trendi",
+      "blurb": "Creator consistency app that turns a rough thought into clear words to say on camera. Native SwiftUI iOS product with a two-pipeline LLM coaching architecture."
+    },
+    {
+      "name": "Career Forge",
+      "url": "https://career-forge-lite.vercel.app",
+      "blurb": "Local-first command center for positioning, résumés, applications, outreach, and interview prep. Live web tool; nothing uploaded, everything on-device."
+    },
+    {
+      "name": "You Know Ball",
+      "url": "https://you-know-ball-orpin.vercel.app",
+      "blurb": "Sports-debate game where users defend takes and get judged. Live web MVP and product-proof asset."
+    },
+    {
+      "name": "Koinophobia Labs platform",
+      "url": "https://koinophobialabs.com",
+      "blurb": "The studio's production site and business system: Next.js server app with CRM, audits, intake, and proposal generation running live."
+    }
+  ],
+  "skills": [
+    {
+      "label": "Product & AI",
+      "items": [
+        "LLM integration and agent workflow design",
+        "AI-assisted product development",
+        "product operations"
+      ]
+    },
+    {
+      "label": "Engineering",
+      "items": [
+        "Next.js / React / TypeScript",
+        "SwiftUI / iOS",
+        "REST API integration",
+        "PostgreSQL",
+        "Vercel deployment and production verification"
+      ]
+    },
+    {
+      "label": "Operations",
+      "items": [
+        "customer experience",
+        "QA and adversarial testing",
+        "documentation",
+        "community and content operations"
+      ]
+    }
+  ]
+}

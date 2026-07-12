@@ -141,6 +141,15 @@
   color: var(--gold);
 }
 
+.founder-action-outline-gold {
+  border-color: rgba(212, 175, 55, 0.44);
+  background: rgba(212, 175, 55, 0.05);
+}
+
+.founder-action-outline-gold svg:first-child {
+  color: var(--gold);
+}
+
 .founder-action-orange {
   border-color: rgba(255, 106, 43, 0.42);
   background: rgba(255, 106, 43, 0.09);
@@ -386,5 +395,252 @@
 
   .founder-proof-card {
     min-height: 0;
+  }
+}
+
+/* ---- Résumé page ---- */
+
+.resume-page {
+  max-width: 880px;
+}
+
+.resume-header {
+  min-height: 0;
+}
+
+.resume-positioning {
+  margin: 10px 0 0;
+  color: var(--gold);
+  font-family: var(--font-sora);
+  font-size: clamp(17px, 2.6vw, 24px);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.resume-meta {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  margin: 10px 0 0;
+  color: var(--dim);
+  font-size: 14px;
+}
+
+.resume-summary {
+  margin-top: 16px;
+  max-width: 720px;
+}
+
+.resume-open-to {
+  max-width: 720px;
+  color: var(--dim);
+  font-size: 15px;
+}
+
+.resume-section h2 {
+  margin-bottom: 18px;
+}
+
+.resume-role-head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.resume-role-head h3 {
+  font-size: 19px;
+}
+
+.resume-dates {
+  margin: 0;
+  color: var(--gold);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+}
+
+.resume-role ul {
+  display: grid;
+  gap: 9px;
+  margin: 14px 0 0;
+  padding-left: 20px;
+  list-style: disc outside;
+}
+
+.resume-role li {
+  font-size: 15px;
+  line-height: 1.55;
+}
+
+.resume-role li::marker {
+  color: var(--gold);
+}
+
+.resume-background {
+  margin-top: 26px;
+  border-top: 1px solid var(--line);
+  padding-top: 18px;
+}
+
+.resume-background h3 {
+  font-size: 15px;
+  color: var(--gold);
+  font-family: var(--font-mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.resume-background p {
+  margin: 10px 0 0;
+  max-width: 720px;
+  font-size: 15px;
+}
+
+.resume-work-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.resume-work-card {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.resume-work-card h3 {
+  font-size: 17px;
+}
+
+.resume-work-card p {
+  flex: 1;
+  margin: 8px 0 10px;
+  font-size: 14px;
+}
+
+.resume-work-card a {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+  min-height: 44px;
+  color: var(--cyan);
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  font-weight: 700;
+}
+
+.resume-work-card a:focus-visible,
+.resume-footer a:focus-visible,
+.back-link:focus-visible {
+  outline: 3px solid var(--cyan);
+  outline-offset: 4px;
+}
+
+.resume-skills {
+  display: grid;
+  gap: 14px;
+  margin: 0;
+}
+
+.resume-skill-group dt {
+  color: var(--gold);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.resume-skill-group dd {
+  margin: 6px 0 0;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.resume-footer {
+  margin-top: 20px;
+  padding: 4px 2px 0;
+  color: var(--dim);
+  font-size: 13.5px;
+}
+
+.resume-footer a {
+  color: var(--text);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+@media (max-width: 620px) {
+  .resume-work-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .resume-page .cta-row .btn {
+    width: 100%;
+  }
+}
+
+@media print {
+  .resume-page,
+  .resume-page .mini-hero,
+  .resume-page .mini-panel {
+    color: #16181d;
+    background: #ffffff;
+    border: none;
+    box-shadow: none;
+  }
+
+  body:has(.resume-page) {
+    background: #ffffff;
+  }
+
+  .resume-page .back-link,
+  .resume-page .cta-row {
+    display: none;
+  }
+
+  .resume-page h1,
+  .resume-page h2,
+  .resume-page h3,
+  .resume-page p,
+  .resume-page li,
+  .resume-page dd {
+    color: #16181d;
+  }
+
+  .resume-page .kicker,
+  .resume-page .resume-positioning,
+  .resume-page .resume-dates,
+  .resume-page .resume-background h3,
+  .resume-page .resume-skill-group dt {
+    color: #8a6d1f;
+  }
+
+  .resume-page .resume-meta,
+  .resume-page .resume-open-to,
+  .resume-page .resume-footer {
+    color: #4a4f58;
+  }
+
+  .resume-page .resume-work-card,
+  .resume-page .resume-work-card a,
+  .resume-page .resume-footer a {
+    color: #16181d;
+    border-color: #d8d3c4;
+    background: #ffffff;
+  }
+
+  .resume-page .mini-panel {
+    margin-top: 8px;
+    padding: 12px 0;
+  }
+
+  .resume-page .mini-hero {
+    min-height: 0;
+    padding: 0 0 8px;
   }
 }
