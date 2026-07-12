@@ -5,15 +5,13 @@
       "source": "/",
       "has": [{ "type": "host", "value": "koinophobia.dev" }],
       "destination": "/connect",
-      "permanent": false,
-      "preserveQueryParams": true
+      "permanent": false
     },
     {
       "source": "/:path*",
       "has": [{ "type": "host", "value": "www.koinophobia.dev" }],
       "destination": "https://koinophobia.dev/:path*",
-      "permanent": true,
-      "preserveQueryParams": true
+      "permanent": true
     }
   ]
 }
