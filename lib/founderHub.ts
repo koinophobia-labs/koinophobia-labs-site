@@ -1,21 +1,18 @@
 import type { LucideIcon } from "lucide-react";
-import {
-  BriefcaseBusiness,
-  Building2,
-  CircleDollarSign,
-  GitBranch,
-  IdCard,
-  Mail,
-  Rocket,
-} from "lucide-react";
+import { Building2, GitBranch, IdCard, Mail } from "lucide-react";
+import { LINKS } from "@/lib/links";
 
 export const founderLinks = {
-  email: "mailto:koinophobia999@gmail.com",
+  audit: "/audit",
+  careerForge: LINKS.careerForge,
+  email: LINKS.email,
   emailWithContext:
     "mailto:koinophobia999@gmail.com?subject=Following%20up%20with%20Blake&body=Where%20we%20met%3A%0AWhat%20I%27m%20building%3A%0ALooking%20for%3A%20website%20audit%20%2F%20product%20help%20%2F%20career%20or%20startup%20conversation%0A",
-  github: "https://github.com/koinophobia-labs",
-  linkedin: "https://linkedin.com/in/bt77",
-  labs: "https://koinophobialabs.com/#contact",
+  github: LINKS.github,
+  labs: LINKS.labs,
+  linkedin: LINKS.linkedin,
+  resume: "/resume",
+  trendi: "/trendi",
 } as const;
 
 export const primaryActions: Array<{
@@ -26,34 +23,22 @@ export const primaryActions: Array<{
   external?: boolean;
 }> = [
   {
-    label: "Get a $250 Website Revenue Leak Audit",
-    href: "/audit",
-    icon: CircleDollarSign,
+    label: "Connect on LinkedIn",
+    href: founderLinks.linkedin,
+    icon: IdCard,
     tone: "gold",
-  },
-  {
-    label: "Work with Koinophobia Labs",
-    href: founderLinks.labs,
-    icon: Building2,
-    tone: "cyan",
     external: true,
   },
   {
-    label: "See Trendi",
-    href: "/trendi",
-    icon: Rocket,
-    tone: "orange",
+    label: "Email Blake",
+    href: founderLinks.emailWithContext,
+    icon: Mail,
+    tone: "cyan",
   },
   {
-    label: "View Career / Resume",
-    href: "/resume",
-    icon: BriefcaseBusiness,
-    tone: "ghost",
-  },
-  {
-    label: "LinkedIn",
-    href: founderLinks.linkedin,
-    icon: IdCard,
+    label: "Koinophobia Labs",
+    href: founderLinks.labs,
+    icon: Building2,
     tone: "ghost",
     external: true,
   },
@@ -64,56 +49,55 @@ export const primaryActions: Array<{
     tone: "ghost",
     external: true,
   },
-  {
-    label: "Email Blake",
-    href: founderLinks.emailWithContext,
-    icon: Mail,
-    tone: "ghost",
-  },
 ];
 
-export const buildCards = [
+export const buildCards: Array<{
+  title: string;
+  tag: string;
+  body: string;
+  href: string;
+  cta: string;
+  external?: boolean;
+}> = [
   {
     title: "Trendi",
-    tag: "PRODUCT PROOF",
+    tag: "AI PRODUCT",
     body:
-      "Creator consistency app helping people figure out what to post, draft content, and stay consistent. Current public page treats it as product proof, not a public launch claim.",
-    href: "/trendi",
-  },
-  {
-    title: "Koinophobia Labs Revenue Leak Audit",
-    tag: "$250 OFFER",
-    body:
-      "A focused website audit for local businesses that finds trust gaps, mobile friction, unclear CTAs, booking or inquiry problems, and missed conversion paths.",
-    href: "/audit",
-  },
-  {
-    title: "You Know Ball",
-    tag: "WEB MVP",
-    body:
-      "Sports debate game and proof asset where users defend takes, get judged, and prove they know ball. Treated here as an MVP and product proof asset.",
-    href: "https://you-know-ball-orpin.vercel.app",
+      "A creator tool that turns a rough thought into clear words to say on camera.",
+    href: founderLinks.trendi,
+    cta: "View Trendi",
   },
   {
     title: "Career Forge",
-    tag: "CAREER TOOL",
+    tag: "LIVE TOOL",
     body:
-      "Career, resume, and product-positioning tool focused on turning real experience into clearer role language without invented credentials.",
-    href: "/resume",
+      "A local-first command center for positioning, resumes, applications, outreach, and interview prep.",
+    href: founderLinks.careerForge,
+    cta: "Open Career Forge",
+    external: true,
   },
   {
-    title: "Koi Cave",
-    tag: "SYSTEMS PROOF",
+    title: "Website Audit",
+    tag: "CLIENT WORK",
     body:
-      "Founder operating system and agent command center for approvals, memory, receipts, and execution. Proof of systems thinking, not a public SaaS claim.",
+      "A focused review of trust, mobile friction, unclear calls to action, and missed inquiry paths.",
+    href: founderLinks.audit,
+    cta: "View the audit",
+  },
+  {
+    title: "Career / Résumé",
+    tag: "BACKGROUND",
+    body:
+      "A concise view of Blake’s experience, target role lanes, LinkedIn, GitHub, and contact details.",
+    href: founderLinks.resume,
+    cta: "View résumé",
   },
 ];
 
 export const reachOutReasons = [
-  "You run a local business and want your website to convert better.",
-  "You are a founder or creator who needs a sharper launch system.",
-  "You are hiring for product, AI, community, operations, support, or startup roles.",
-  "We met at a Chicago tech/startup event and should keep the thread alive.",
+  "AI products and practical automation",
+  "Websites and conversion-focused systems",
+  "Product, operations, and technical customer work",
 ];
 
 export const auditReviewAreas = [

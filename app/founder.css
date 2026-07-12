@@ -61,6 +61,7 @@
   gap: 7px;
   color: var(--dim);
   font-size: 13px;
+  white-space: nowrap;
 }
 
 .founder-hero {
@@ -85,6 +86,11 @@
 .mini-hero > p {
   max-width: 780px;
   font-size: clamp(16px, 2.2vw, 20px);
+}
+
+.founder-intro {
+  max-width: 690px;
+  margin-bottom: 0;
 }
 
 .founder-actions {
@@ -113,13 +119,22 @@
   background: rgba(255, 255, 255, 0.06);
 }
 
+.founder-action:focus-visible,
+.founder-proof-card a:focus-visible,
+.founder-brand:focus-visible {
+  outline: 3px solid var(--cyan);
+  outline-offset: 4px;
+}
+
 .founder-action svg:first-child {
   color: var(--cyan);
 }
 
 .founder-action-gold {
-  border-color: rgba(212, 175, 55, 0.46);
-  background: rgba(212, 175, 55, 0.12);
+  border-color: rgba(212, 175, 55, 0.7);
+  background: linear-gradient(90deg, rgba(212, 175, 55, 0.23), rgba(212, 175, 55, 0.11));
+  box-shadow: 0 16px 38px -28px rgba(212, 175, 55, 0.95);
+  font-size: 17px;
 }
 
 .founder-action-gold svg:first-child {
@@ -159,6 +174,38 @@
   color: var(--gold);
 }
 
+.founder-focus-list {
+  display: grid;
+  gap: 10px;
+  margin: 18px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.founder-focus-list li {
+  position: relative;
+  min-height: 44px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 12px 14px 12px 34px;
+  background: rgba(255, 255, 255, 0.035);
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.founder-focus-list li::before {
+  position: absolute;
+  top: 17px;
+  left: 14px;
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: var(--cyan);
+  box-shadow: 0 0 14px rgba(0, 229, 255, 0.72);
+  content: "";
+}
+
 .signal-card h2,
 .event-card h2,
 .founder-section-head h2,
@@ -179,12 +226,14 @@
 
 .founder-proof-grid {
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 12px;
 }
 
 .founder-proof-card {
+  display: flex;
   min-height: 260px;
+  flex-direction: column;
   padding: 18px;
 }
 
@@ -204,12 +253,14 @@
 }
 
 .founder-proof-card p {
+  flex: 1;
   font-size: 14px;
 }
 
 .founder-proof-card a {
   display: inline-flex;
   min-height: 44px;
+  gap: 7px;
   align-items: center;
   color: var(--cyan);
   font-weight: 800;
@@ -309,13 +360,24 @@
     padding-bottom: 68px;
   }
 
+  .founder-page {
+    padding-top: 10px;
+  }
+
+  .founder-shell {
+    padding-top: 0;
+  }
+
   .mini-hero .btn {
     width: 100%;
   }
 
-  .founder-header {
-    align-items: flex-start;
-    flex-direction: column;
+  .founder-hero {
+    margin: 32px 0 24px;
+  }
+
+  .founder-hero h1 {
+    font-size: clamp(48px, 16vw, 66px);
   }
 
   .founder-action {

@@ -4,20 +4,21 @@ import { ArrowUpRight, MapPin, MessageSquareText, Sparkles } from "lucide-react"
 import { buildCards, founderLinks, primaryActions, reachOutReasons } from "@/lib/founderHub";
 
 export const metadata: Metadata = {
-  title: "Blake Taylor | Founder, Koinophobia Labs",
-  description:
-    "Chicago-based product builder creating AI-powered tools, websites, and systems for creators, local businesses, and founders.",
+  title: "Blake Taylor — Founder, Koinophobia Labs",
+  description: "Blake builds AI products, websites, and automation systems in Chicago.",
+  alternates: {
+    canonical: "https://koinophobia.dev/connect",
+  },
   openGraph: {
-    title: "Blake Taylor | Founder, Koinophobia Labs",
-    description:
-      "Chicago-based product builder creating AI-powered tools, websites, and systems for creators, local businesses, and founders.",
+    title: "Blake Taylor — Founder, Koinophobia Labs",
+    description: "Blake builds AI products, websites, and automation systems in Chicago.",
+    url: "https://koinophobia.dev/connect",
     images: [{ url: "/og.png", width: 1200, height: 630 }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Blake Taylor | Founder, Koinophobia Labs",
-    description:
-      "Chicago-based product builder creating AI-powered tools, websites, and systems for creators, local businesses, and founders.",
+    title: "Blake Taylor — Founder, Koinophobia Labs",
+    description: "Blake builds AI products, websites, and automation systems in Chicago.",
     images: ["/og.png"],
   },
 };
@@ -43,18 +44,15 @@ export default function ConnectPage() {
             </header>
 
             <div className="founder-hero">
-              <p className="kicker kicker-gold">Founder command card</p>
+              <p className="kicker kicker-gold">Founder · builder</p>
               <h1 id="connect-title">Blake Taylor</h1>
               <p className="founder-role">Founder, Koinophobia Labs</p>
               <p className="founder-sub">
-                Chicago-based product builder creating AI-powered tools, websites, and systems
-                for creators, local businesses, and founders trying to move faster.
+                I build AI products, websites, and automation systems in Chicago.
               </p>
-              <p>
-                I build practical AI tools, websites, automations, and launch systems through
-                Koinophobia Labs. Right now I&apos;m focused on helping Chicago-area businesses
-                find revenue leaks in their websites, while building products like Trendi,
-                You Know Ball, Career Forge, and Koi Cave.
+              <p className="founder-intro">
+                Founder-led work focused on turning real problems and messy workflows into useful,
+                shipped software.
               </p>
             </div>
 
@@ -67,7 +65,10 @@ export default function ConnectPage() {
                     className={`founder-action founder-action-${action.tone}`}
                     href={action.href}
                     target={action.external ? "_blank" : undefined}
-                    rel={action.external ? "noreferrer" : undefined}
+                    rel={action.external ? "noopener noreferrer" : undefined}
+                    aria-label={
+                      action.external ? `${action.label} (opens in a new tab)` : action.label
+                    }
                   >
                     <Icon size={19} aria-hidden="true" />
                     <span>{action.label}</span>
@@ -81,20 +82,23 @@ export default function ConnectPage() {
           <aside className="founder-side" aria-label="Fast context">
             <div className="signal-card">
               <Sparkles size={20} aria-hidden="true" />
-              <p className="kicker kicker-cyan">Current priority</p>
-              <h2>Audit sales, useful products, career runway.</h2>
+              <p className="kicker kicker-cyan">Fast context</p>
+              <h2>Useful software, built from real problems.</h2>
               <p>
-                The best first thread is practical: a website audit, product help, or a role where
-                product sense, AI tools, operations, support, and community work matter.
+                Blake works across product, AI, web, operations, and customer-facing systems.
               </p>
+              <ul className="founder-focus-list">
+                {reachOutReasons.map((reason) => (
+                  <li key={reason}>{reason}</li>
+                ))}
+              </ul>
             </div>
             <div className="event-card">
               <MessageSquareText size={20} aria-hidden="true" />
-              <h2>Met me at an event?</h2>
+              <p className="kicker kicker-gold">Start a conversation</p>
+              <h2>Have a role, product, or collaboration in mind?</h2>
               <p>
-                Send me a note with where we met, what you&apos;re building, and whether
-                you&apos;re looking for a website audit, product help, or a career/startup
-                conversation.
+                Send a quick note with what you&apos;re building, hiring for, or trying to improve.
               </p>
               <a className="btn btn-gold" href={founderLinks.emailWithContext}>
                 <span>Email Blake</span>
@@ -105,8 +109,8 @@ export default function ConnectPage() {
 
         <section className="founder-section" aria-labelledby="building-title">
           <div className="founder-section-head">
-            <p className="kicker kicker-cyan">What I&apos;m building</p>
-            <h2 id="building-title">Proof assets with a cash-priority funnel.</h2>
+            <p className="kicker kicker-cyan">Selected work</p>
+            <h2 id="building-title">See what Blake is building.</h2>
           </div>
           <div className="founder-proof-grid">
             {buildCards.map((card) => (
@@ -114,22 +118,19 @@ export default function ConnectPage() {
                 <span>{card.tag}</span>
                 <h3>{card.title}</h3>
                 <p>{card.body}</p>
-                {card.href ? <a href={card.href}>Open →</a> : null}
+                <a
+                  href={card.href}
+                  target={card.external ? "_blank" : undefined}
+                  rel={card.external ? "noopener noreferrer" : undefined}
+                  aria-label={
+                    card.external ? `${card.cta} (opens in a new tab)` : card.cta
+                  }
+                >
+                  {card.cta} <ArrowUpRight size={15} aria-hidden="true" />
+                </a>
               </article>
             ))}
           </div>
-        </section>
-
-        <section className="founder-section founder-reasons" aria-labelledby="reasons-title">
-          <div className="founder-section-head">
-            <p className="kicker kicker-gold">Best reasons to reach out</p>
-            <h2 id="reasons-title">Clear asks beat vague networking.</h2>
-          </div>
-          <ul>
-            {reachOutReasons.map((reason) => (
-              <li key={reason}>{reason}</li>
-            ))}
-          </ul>
         </section>
       </main>
     </>
