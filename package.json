@@ -7,25 +7,33 @@
     "build": "next build",
     "start": "next start",
     "screenshots": "node scripts/capture-screenshots.mjs",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test:crm": "tsx --test tests/crm.test.ts tests/crm-routes.test.ts tests/proposals.test.ts tests/audits.test.ts tests/audit-persistence.test.ts tests/audit-crawler.test.ts",
+    "db:migrate-crm": "node scripts/migrate-crm.mjs",
+    "vercel-build": "node scripts/migrate-crm.mjs && next build"
   },
   "dependencies": {
+    "cheerio": "^1.2.0",
     "clsx": "^2.1.1",
     "framer-motion": "^12.40.0",
     "lucide-react": "^1.17.0",
     "next": "16.2.7",
+    "pdf-lib": "^1.17.1",
+    "pg": "^8.22.0",
     "react": "19.2.4",
     "react-dom": "19.2.4"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
+    "@types/pg": "^8.20.0",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.2.7",
-    "tailwindcss": "^4",
     "playwright": "^1.57.0",
+    "tailwindcss": "^4",
+    "tsx": "^4.23.0",
     "typescript": "^5"
   }
 }
