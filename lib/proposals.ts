@@ -54,6 +54,8 @@ export type ProposalRecord = ProposalInput & {
   sentAt: string | null;
   subtotal: number;
   total: number;
+  paymentStatus: "not_started"|"deposit_pending"|"deposit_paid"|"balance_pending"|"paid"|"failed"|"refunded";
+  amountPaid: number;
 };
 type Queryable = Pick<Pool, "query"> | Pick<PoolClient, "query">;
 let pool: Pool | undefined;
@@ -198,6 +200,8 @@ function map(r: QueryResultRow): ProposalRecord {
     revisionPolicy: r.revision_policy,
     nextSteps: r.next_steps,
     internalNotes: r.internal_notes,
+    paymentStatus:r.payment_status||"not_started",
+    amountPaid:r.amount_paid||0,
   };
 }
 const cols =

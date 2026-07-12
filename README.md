@@ -1,5 +1,13 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+## Stripe payment collection
+
+Payment collection uses Stripe-hosted Checkout and is available only for accepted CRM proposals. Configure encrypted test-mode `STRIPE_SECRET_KEY` and `STRIPE_WEBHOOK_SECRET` variables before deploying.
+
+Register `https://koinophobialabs.com/api/stripe/webhook` for `checkout.session.completed`, `checkout.session.async_payment_succeeded`, `checkout.session.async_payment_failed`, `checkout.session.expired`, and `charge.refunded`.
+
+The webhook verifies Stripe's signature against the raw request body. Migration `006_stripe_payments.sql` stores Checkout attempts, payment state, proposal and lead summaries, and processed webhook event IDs. Verify the deposit and balance workflow in Stripe test mode before adding live-mode keys.
+
 ## Getting Started
 
 First, run the development server:

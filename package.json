@@ -8,7 +8,7 @@
     "start": "next start",
     "screenshots": "node scripts/capture-screenshots.mjs",
     "lint": "eslint",
-    "test:crm": "tsx --test tests/crm.test.ts tests/crm-routes.test.ts tests/proposals.test.ts tests/audits.test.ts tests/audit-persistence.test.ts tests/audit-crawler.test.ts",
+    "test:crm": "tsx --test tests/crm.test.ts tests/crm-routes.test.ts tests/proposals.test.ts tests/audits.test.ts tests/audit-persistence.test.ts tests/audit-crawler.test.ts tests/payments.test.ts",
     "db:migrate-crm": "node scripts/migrate-crm.mjs",
     "vercel-build": "node scripts/migrate-crm.mjs && next build"
   },
@@ -21,7 +21,8 @@
     "pdf-lib": "^1.17.1",
     "pg": "^8.22.0",
     "react": "19.2.4",
-    "react-dom": "19.2.4"
+    "react-dom": "19.2.4",
+    "stripe": "^18.5.0"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
