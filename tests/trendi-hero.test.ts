@@ -106,9 +106,9 @@ test("the idle peek loop is smaller and skips wordmark/CTA moments", () => {
   assert.ok(minX(peek.d) > minX(opening.d), "peek stays near the phone");
 });
 
-test("re-swims happen every 15–25 seconds, and only when nothing interferes", () => {
+test("re-swims happen every 15 seconds, and only when nothing interferes", () => {
   assert.equal(computeReswimDelay(() => 0), 15000);
-  assert.equal(computeReswimDelay(() => 1), 25000);
+  assert.equal(computeReswimDelay(() => 1), 15000);
   const clear = {
     reducedMotion: false,
     documentHidden: false,
