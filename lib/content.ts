@@ -16,7 +16,8 @@ import {
 import { LINKS } from "@/lib/links";
 
 export const navItems = [
-  { id: "products", label: "Products" },
+  { id: "products", label: "Trendi" },
+  { id: "work", label: "Play" },
   { id: "proof", label: "Proof" },
   { id: "concepts", label: "Concepts" },
   { id: "services", label: "Services" },
@@ -25,9 +26,9 @@ export const navItems = [
 ];
 
 export const heroProof = [
-  "iOS archive ready for upload",
-  "Vercel web MVP shipped",
-  "Red-team: 80 prompts · 0 violations",
+  "Trendi creator workflow demo",
+  "You Know Ball playable spotlight",
+  "Founder-built product proof",
 ];
 
 export const ykbFeatures = [
@@ -71,6 +72,17 @@ export const ykbReceipts = [
 
 export const productModules = [
   {
+    name: "Trendi",
+    status: "FEATURED",
+    tone: "gold",
+    what: "a focused creator workflow for deciding what to post, turning the idea into a draft, and staying consistent.",
+    who: "creators who need a practical path from blank page to usable post.",
+    why: "the featured product proof: a real workflow shown through the demo and mobile interface.",
+    receipts: ["Demo video", "Mobile workflow", "Creator-first", "Product proof"],
+    cta: "View Trendi",
+    href: "/trendi",
+  },
+  {
     name: "You Know Ball",
     status: "LIVE",
     tone: "orange",
@@ -88,19 +100,7 @@ export const productModules = [
       "Answer First",
     ],
     cta: "View product",
-    href: "#products",
-  },
-  {
-    name: "Creator AI Command Center",
-    status: "BUILD",
-    tone: "cyan",
-    what:
-      "a control room for creators — repurposing, prompt systems, content pipelines, scheduling logic in one operating system.",
-    who: "creators & operators drowning in scattered content workflow.",
-    why: "turns chaos into leverage you run on autopilot.",
-    receipts: ["Private product", "In active dev", "Creator ops"],
-    cta: "Get early access",
-    href: "#contact",
+    href: "#work",
   },
   {
     name: "KOI Cave",
@@ -351,8 +351,8 @@ export const bootLines = [
   "operator ........ BLAKE TAYLOR",
   "studio .......... AI PRODUCT LAB",
   "mounting product modules [5]",
+  "trendi .................... LIVE",
   "you-know-ball ............. LIVE",
-  "creator-command-center .... BUILD",
   "koi-cave .................. LOCAL",
   "client-builds ............. OPEN",
   "career-forge-lite ......... LIVE",
