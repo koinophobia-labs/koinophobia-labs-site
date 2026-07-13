@@ -1,0 +1,20 @@
+/* Keep the embedded You Know Ball product surface legible inside the cream homepage.
+   These rules intentionally load after home.css so the dark game panel wins over
+   the surrounding editorial heading and paragraph colors. */
+
+.kl-home .ykb-static-preview h3,
+.kl-home .ykb-game .ykb-prompt-title {
+  color: #f6f3ef;
+}
+
+.kl-home .ykb-static-preview p:not(.ykb-overline) {
+  color: #b8b2aa;
+}
+
+.kl-home .ykb-static-preview > a {
+  color: #c5beb5;
+}
+
+.kl-home .ykb-static-preview > a:hover {
+  color: #ffffff;
+}
