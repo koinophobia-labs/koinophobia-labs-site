@@ -1036,19 +1036,57 @@ body:has(.kl-home) {
    and the existing lazy-loaded playable card takes over. Motion is CSS
    (transform/opacity) only; the SVG is decorative (aria-hidden, no pointer).
    ════════════════════════════════════════════════════════════════════════ */
+/* The YKB world is now a full-bleed dark band (.kl-band--arena) that flows
+   straight out of the Trendi flagship above — no white gap, no floating card.
+   Trendi's rose/violet melts down into YKB's near-black + orange via a soft
+   full-bleed glow at the seam. */
+.kl-home .kl-band--arena {
+  position: relative;
+  overflow: hidden;
+  border: 0;
+  background: linear-gradient(180deg, #180f1d 0%, #100b16 30%, #0a0b0d 68%);
+}
+.kl-home .kl-band--arena::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: clamp(220px, 30vw, 420px);
+  pointer-events: none;
+  background: radial-gradient(
+    140% 100% at 50% -22%,
+    rgba(255, 76, 139, 0.36) 0%,
+    rgba(134, 72, 255, 0.22) 34%,
+    rgba(255, 106, 43, 0.1) 56%,
+    transparent 74%
+  );
+}
 .kl-home .ykb-arena {
-  --ykb-ink: #0b0c0f;
   --ykb-cream: #f4f1ea;
   --ykb-orange: #ff6a2b;
   position: relative;
-  margin-top: 40px;
-  padding: clamp(116px, 15vw, 188px) clamp(20px, 5vw, 56px) clamp(28px, 4vw, 44px);
-  border-radius: 22px;
-  overflow: hidden;
+  z-index: 1;
+  padding: clamp(52px, 8vw, 96px) 0 clamp(20px, 3vw, 36px);
+  background: transparent;
   isolation: isolate;
-  background:
-    radial-gradient(120% 78% at 50% -12%, rgba(255, 106, 43, 0.15), transparent 46%),
-    linear-gradient(180deg, #150f24 0%, #100c1b 20%, var(--ykb-ink) 58%);
+}
+/* Koi Cave case now sits on the dark arena band, not a white surface */
+.kl-home .kl-band--arena .koi-case {
+  position: relative;
+  z-index: 1;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.kl-home .kl-band--arena .koi-case span {
+  color: #c79a34;
+}
+.kl-home .kl-band--arena .koi-case h3 {
+  color: #f4f1ea;
+}
+.kl-home .kl-band--arena .koi-case p {
+  color: #cbc4b6;
+}
+.kl-home .kl-band--arena .koi-case a {
+  color: #8fd8e8;
 }
 
 /* Decorative sweep + court geometry */

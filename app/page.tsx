@@ -42,7 +42,7 @@ export default function Home() {
         <HomeHero />
         <HomeServices />
         <TrendiFeature />
-        <div className="kl-band kl-band--white">
+        <div className="kl-band kl-band--arena">
           <YouKnowBall />
         </div>
         <HomeProof />
