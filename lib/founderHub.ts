@@ -22,39 +22,11 @@ export const primaryActions: Array<{
   tone: "gold" | "outline-gold" | "cyan" | "orange" | "ghost";
   external?: boolean;
 }> = [
-  {
-    label: "Connect on LinkedIn",
-    href: founderLinks.linkedin,
-    icon: IdCard,
-    tone: "gold",
-    external: true,
-  },
-  {
-    label: "View Résumé",
-    href: founderLinks.resume,
-    icon: BriefcaseBusiness,
-    tone: "outline-gold",
-  },
-  {
-    label: "Email Blake",
-    href: founderLinks.emailWithContext,
-    icon: Mail,
-    tone: "cyan",
-  },
-  {
-    label: "Koinophobia Labs",
-    href: founderLinks.labs,
-    icon: Building2,
-    tone: "ghost",
-    external: true,
-  },
-  {
-    label: "GitHub",
-    href: founderLinks.github,
-    icon: GitBranch,
-    tone: "ghost",
-    external: true,
-  },
+  { label: "Connect on LinkedIn", href: founderLinks.linkedin, icon: IdCard, tone: "gold", external: true },
+  { label: "View Résumé", href: founderLinks.resume, icon: BriefcaseBusiness, tone: "outline-gold" },
+  { label: "Email Blake", href: founderLinks.emailWithContext, icon: Mail, tone: "cyan" },
+  { label: "Koinophobia Labs", href: founderLinks.labs, icon: Building2, tone: "ghost", external: true },
+  { label: "GitHub", href: founderLinks.github, icon: GitBranch, tone: "ghost", external: true },
 ];
 
 export const buildCards: Array<{
@@ -67,43 +39,39 @@ export const buildCards: Array<{
 }> = [
   {
     title: "Trendi",
-    tag: "AI PRODUCT",
-    body:
-      "A creator tool that turns a rough thought into clear words to say on camera.",
+    tag: "LEVERAGE FOR CREATORS",
+    body: "Turns a rough thought into clear words to say on camera, reducing the friction between having an idea and publishing it.",
     href: founderLinks.trendi,
     cta: "View Trendi",
   },
   {
     title: "Career Forge",
-    tag: "LIVE TOOL",
-    body:
-      "A local-first command center for positioning, resumes, applications, outreach, and interview prep.",
+    tag: "LEVERAGE FOR JOB SEEKERS",
+    body: "Turns a scattered career transition into a repeatable operation for positioning, applications, outreach, and interviews.",
     href: founderLinks.careerForge,
     cta: "Open Career Forge",
     external: true,
   },
   {
-    title: "Website Audit",
-    tag: "CLIENT WORK",
-    body:
-      "A focused review of trust, mobile friction, unclear calls to action, and missed inquiry paths.",
+    title: "Website Revenue Leak Audit",
+    tag: "LEVERAGE FOR BUSINESSES",
+    body: "Turns vague website problems into a prioritized map of trust gaps, mobile friction, and missed inquiry paths.",
     href: founderLinks.audit,
     cta: "View the audit",
   },
   {
     title: "Career / Résumé",
-    tag: "BACKGROUND",
-    body:
-      "A concise view of Blake’s experience, target role lanes, LinkedIn, GitHub, and contact details.",
+    tag: "THE OPERATOR BEHIND THE SYSTEMS",
+    body: "The operations, customer experience, trust and safety, and product background behind the studio’s systems mindset.",
     href: founderLinks.resume,
     cta: "View résumé",
   },
 ];
 
 export const reachOutReasons = [
-  "AI products and practical automation",
-  "Websites and conversion-focused systems",
-  "Product, operations, and technical customer work",
+  "Turn a messy workflow into a repeatable system",
+  "Build a product or website that removes friction",
+  "Solve product, operations, or customer-experience problems",
 ];
 
 export const auditReviewAreas = [
