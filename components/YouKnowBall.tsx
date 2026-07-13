@@ -10,7 +10,7 @@ export default function YouKnowBall() {
           <div>
             <h2 id="ykb-title">You Know <span>Ball</span></h2>
             <p className="ykb-tagline">One take. One counter. Your move.</p>
-            <p className="product-status"><strong>WEB MVP</strong> Play locally in your browser. No account required.</p>
+            <p className="product-status"><strong>LIVE</strong> Play locally in your browser. No account required.</p>
           </div>
           <p>A contained taste of the sports debate game: make the case, get pushed back, and see how the take scores.</p>
         </div>
