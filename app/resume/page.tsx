@@ -160,13 +160,42 @@ export default function ResumePage() {
           <p className="kicker kicker-gold">Credentials</p>
           <h2 id="education-title">Education</h2>
           {resume.education.map((entry) => (
-            <div className="resume-role-head resume-education" key={entry.school}>
-              <h3>
-                {entry.degree} — {entry.school}
-              </h3>
-              <p className="resume-dates">{entry.year}</p>
-            </div>
+            <article className="resume-education" key={entry.school}>
+              <div className="resume-role-head">
+                <div>
+                  <h3>{entry.school}</h3>
+                  <p className="resume-education-degree">{entry.degree}</p>
+                </div>
+                <p className="resume-dates">{entry.graduation}</p>
+              </div>
+              <dl className="resume-education-details">
+                <div>
+                  <dt>Track</dt>
+                  <dd>{entry.track}</dd>
+                </div>
+                <div>
+                  <dt>Minors</dt>
+                  <dd>{entry.minors.join(" · ")}</dd>
+                </div>
+              </dl>
+            </article>
           ))}
+        </section>
+
+        <section className="mini-panel resume-section" aria-labelledby="publication-title">
+          <p className="kicker kicker-gold">Research</p>
+          <h2 id="publication-title">Research &amp; Publication</h2>
+          <div className="resume-publications">
+            {resume.publications.map((publication) => (
+              <article className="resume-publication" key={publication.title}>
+                <h3>{publication.title}</h3>
+                <p className="resume-publication-author">{publication.author}</p>
+                <p className="resume-publication-meta">
+                  {publication.institution} · {publication.date}
+                </p>
+              </article>
+            ))}
+          </div>
         </section>
 
         <section className="mini-panel resume-section" aria-labelledby="skills-title">

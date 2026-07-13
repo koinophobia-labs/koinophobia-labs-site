@@ -74,6 +74,19 @@ def section(title):
     y -= 10
 
 
+def continuation_page():
+    global y
+    c.showPage()
+    y = PH - MARGIN
+    c.setFillColor(INK)
+    c.setFont("Helvetica-Bold", 11)
+    c.drawString(MARGIN, y, "BLAKE TAYLOR")
+    c.setFillColor(MUTED)
+    c.setFont("Helvetica", 9)
+    c.drawRightString(PW - MARGIN, y, "RESUME · PAGE 2")
+    y -= 18
+
+
 def link_row(items):
     """Centered row of clickable links separated by dots."""
     global y
@@ -160,15 +173,27 @@ for p in DATA["projects"]:
     y -= 3
 
 # ---- Education ----
+continuation_page()
 section("Education")
 for ed in DATA["education"]:
     c.setFillColor(INK)
-    c.setFont("Helvetica-Bold", 10.5)
-    c.drawString(MARGIN, y, f"{ed['degree']} — {ed['school']}")
+    c.setFont("Helvetica-Bold", 12)
+    c.drawString(MARGIN, y, ed["school"])
     c.setFont("Helvetica", 9.5)
     c.setFillColor(MUTED)
-    c.drawRightString(PW - MARGIN, y, ed["year"])
-    y -= 12
+    c.drawRightString(PW - MARGIN, y, ed["graduation"])
+    y -= 15
+    para(ed["degree"], "Helvetica-Bold", 10.5, 13)
+    para(f"Track: {ed['track']}", "Helvetica", 10, 13)
+    para(f"Minors: {', '.join(ed['minors'])}", "Helvetica", 10, 13)
+
+# ---- Research & Publication ----
+section("Research & Publication")
+for publication in DATA["publications"]:
+    para(publication["title"], "Helvetica-Bold", 11, 14)
+    para(publication["author"], "Helvetica-Bold", 10, 13)
+    para(f"{publication['institution']} · {publication['date']}", "Helvetica", 9.5, 12, MUTED)
+    y -= 3
 
 # ---- Skills ----
 section("Skills")
@@ -186,4 +211,4 @@ for group in DATA["skills"]:
 
 c.showPage()
 c.save()
-print(f"wrote {OUT}  (y ended at {y:.0f}pt — must stay > {MARGIN:.0f} for one page)")
+print(f"wrote {OUT}  (page 2 y ended at {y:.0f}pt — must stay > {MARGIN:.0f})")

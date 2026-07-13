@@ -69,8 +69,22 @@
   "education": [
     {
       "school": "Earlham College",
-      "degree": "B.A., Global Management",
-      "year": "2024"
+      "degree": "B.A. in Global Management",
+      "graduation": "May 2024",
+      "track": "Social Entrepreneurship",
+      "minors": [
+        "Political Science",
+        "Leadership",
+        "Philosophy"
+      ]
+    }
+  ],
+  "publications": [
+    {
+      "author": "Blake Taylor",
+      "title": "“How does socioeconomic status affect the trajectory and livelihood of a low-economic child?”",
+      "institution": "Earlham College",
+      "date": "May 2024"
     }
   ],
   "skills": [
