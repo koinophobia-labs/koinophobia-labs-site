@@ -11,6 +11,13 @@ import {
   auditSteps,
 } from "../lib/audit-offer";
 import { scoreCategories } from "../lib/audit-scoring";
+import { metadata as auditMetadata } from "../app/audit/page";
+import { metadata as homeMetadata } from "../app/page";
+
+test("business funnel pages publish authoritative production canonicals", () => {
+  assert.equal(homeMetadata.alternates?.canonical, "https://koinophobialabs.com/");
+  assert.equal(auditMetadata.alternates?.canonical, "https://koinophobialabs.com/audit");
+});
 
 test("a saved lead is a success even when the notification email is unconfigured", () => {
   const outcome = intakeOutcome(true, false);

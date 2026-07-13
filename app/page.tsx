@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import About from "@/components/About";
 import ClientTrust from "@/components/ClientTrust";
 import Contact from "@/components/Contact";
@@ -9,6 +10,10 @@ import ProductLab from "@/components/ProductLab";
 import ProofOfWork from "@/components/ProofOfWork";
 import Services from "@/components/Services";
 import YouKnowBall from "@/components/YouKnowBall";
+
+export const metadata: Metadata = {
+  alternates: { canonical: "https://koinophobialabs.com/" },
+};
 
 export default function Home() {
   return (

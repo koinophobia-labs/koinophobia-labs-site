@@ -18,6 +18,7 @@ export const metadata: Metadata = {
   title: "$250 Website Revenue Leak Audit | Koinophobia Labs",
   description:
     "A flat-fee website audit for Chicago and Chicagoland businesses. A scored report on trust, mobile flow, booking paths, and missed inquiries — credited toward a build if you hire Koinophobia Labs.",
+  alternates: { canonical: "https://koinophobialabs.com/audit" },
 };
 
 export default function AuditPage() {
