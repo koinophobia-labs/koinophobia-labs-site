@@ -24,8 +24,8 @@ export const metadata: Metadata = {
 export default function AuditPage() {
   return (
     <>
-      <div className="page-field" aria-hidden="true" />
-      <main className="mini-page">
+      <div className="page-field founder-field" aria-hidden="true" />
+      <main className="mini-page audit-page">
         <Link className="back-link" href="/">
           <ArrowLeft size={18} aria-hidden="true" />
           Koinophobia Labs
