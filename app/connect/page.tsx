@@ -26,16 +26,20 @@ export const metadata: Metadata = {
 export default function ConnectPage() {
   return (
     <>
-      <div className="page-field" aria-hidden="true" />
+      <div className="page-field founder-field" aria-hidden="true" />
       <main className="founder-page">
         <section className="founder-shell" aria-labelledby="connect-title">
           <div className="founder-card">
+            <div className="founder-ambient-koi" aria-hidden="true">
+              <Image src="/koi-mark.png" alt="" width={320} height={320} priority />
+            </div>
+
             <header className="founder-header">
               <a className="founder-brand" href="https://koinophobialabs.com">
                 <span className="brand-mark">
                   <Image src="/koi-mark.png" alt="" width={32} height={32} priority />
                 </span>
-                <span>Koinophobia Labs</span>
+                <span>Koinophobia Labs / Blake Taylor</span>
               </a>
               <span className="founder-location">
                 <MapPin size={15} aria-hidden="true" />
@@ -45,7 +49,7 @@ export default function ConnectPage() {
 
             <div className="founder-hero">
               <div className="founder-hero-text">
-                <p className="kicker kicker-gold">Founder · builder</p>
+                <p className="kicker kicker-gold">Founder · product builder</p>
                 <h1 id="connect-title">Blake Taylor</h1>
                 <p className="founder-role">Founder, Koinophobia Labs</p>
                 <p className="founder-sub">
