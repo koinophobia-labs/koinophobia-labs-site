@@ -24,20 +24,19 @@ export default function TrendiMedia() {
         <figure className="trendiLaunch_videoFrame">
           {failed ? (
             <div className="trendiLaunch_videoFallback" role="status">
-              <Image src="/trendi/trendi-mobile.jpg" alt="Trendi mobile interface showing the creator workflow" width={660} height={1434} sizes="(max-width: 900px) 90vw, 700px" />
+              <Image src="/trendi/trendi-final-start.jpg" alt="Trendi home screen ready to capture a messy thought" width={886} height={1802} sizes="(max-width: 900px) 90vw, 700px" />
               <p>The demo video is unavailable. The product screenshot remains available.</p>
             </div>
           ) : (
-            <video ref={videoRef} controls muted preload="none" playsInline poster="/trendi/trendi-mobile.jpg" aria-label="Trendi product demo" onError={() => setFailed(true)}>
-              <source src="/trendi/trendi-demo-web.mp4" type="video/mp4" />
-              <source src="/trendi/trendi-demo.mp4" type="video/mp4; codecs=hevc" />
+            <video ref={videoRef} controls muted preload="none" playsInline poster="/trendi/trendi-final-start.jpg" aria-label="Trendi product demo showing a messy thought become a recordable creator plan" onError={() => setFailed(true)}>
+              <source src="/trendi/trendi-final-demo.mp4" type="video/mp4" />
             </video>
           )}
-          <figcaption><strong>Watch the thought become recordable words</strong><span>Real product flow · press play to load</span></figcaption>
+          <figcaption><strong>From messy thought to a full coach pack</strong><span>Real product flow · press play to load</span></figcaption>
         </figure>
         <figure className="trendiLaunch_phoneShot">
-          <Image src="/trendi/trendi-home-clean.png" alt="Trendi home screen before a creator captures a messy idea" width={1320} height={2868} sizes="(max-width: 900px) 90vw, 480px" />
-          <figcaption><strong>Start here: one messy idea</strong><span>Real TestFlight starting state</span></figcaption>
+          <Image src="/trendi/trendi-final-output.jpg" alt="Trendi coach pack showing an angle, hooks, and a recordable script generated from a messy thought" width={886} height={1802} sizes="(max-width: 900px) 90vw, 480px" />
+          <figcaption><strong>A finishable draft, ready to say on camera</strong><span>Real generated output</span></figcaption>
         </figure>
       </div>
     </div>

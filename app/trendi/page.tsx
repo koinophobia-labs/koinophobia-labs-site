@@ -28,10 +28,10 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "/trendi/trendi-home-clean.png",
-        width: 1320,
-        height: 2868,
-        alt: "Trendi creator workflow home screen",
+        url: "/trendi/trendi-final-output.jpg",
+        width: 886,
+        height: 1802,
+        alt: "Trendi coach pack with an angle, hooks, and recordable script",
       },
     ],
   },
@@ -40,7 +40,7 @@ export const metadata: Metadata = {
     title: "Trendi | From messy thought to recordable words",
     description:
       "Say it messy. Trendi shapes the thought into a finishable draft in your voice.",
-    images: ["/trendi/trendi-home-clean.png"],
+    images: ["/trendi/trendi-final-output.jpg"],
   },
 };
 
