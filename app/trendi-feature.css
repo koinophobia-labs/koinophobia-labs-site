@@ -13,12 +13,12 @@
 .trendiLaunch_world::after { content: ""; position: absolute; z-index: -1; pointer-events: none; }
 .trendiLaunch_world::before { inset: 0; opacity: .22; background-image: linear-gradient(rgba(255,255,255,.08) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.08) 1px, transparent 1px); background-size: 72px 72px; mask-image: linear-gradient(to bottom, #000, transparent 65%); }
 .trendiLaunch_world::after { width: 42rem; height: 42rem; right: -24rem; top: -16rem; border: 1px solid rgba(255, 116, 177, .25); border-radius: 50%; box-shadow: 0 0 100px rgba(201, 79, 255, .14); }
-.trendiLaunch_shell { width: min(1180px, calc(100% - 32px)); margin: 0 auto; padding: clamp(88px, 11vw, 150px) 0; }
+.trendiLaunch_shell { width: min(1680px, calc(100% - clamp(32px, 5vw, 96px))); margin: 0 auto; padding: clamp(88px, 9vw, 138px) 0; }
 .trendiLaunch_eyebrow { margin: 0 0 24px; color: #ff8fbd; font: 600 11px var(--font-ibm-plex-mono), monospace; letter-spacing: .15em; text-transform: uppercase; }
-.trendiLaunch_intro { display: grid; grid-template-columns: minmax(0, 1fr) 170px; gap: clamp(32px, 7vw, 90px); align-items: end; }
-.trendiLaunch_copy { max-width: 900px; }
+.trendiLaunch_intro { display: grid; grid-template-columns: minmax(0, 1fr) clamp(180px, 12vw, 220px); gap: clamp(36px, 5vw, 88px); align-items: stretch; }
+.trendiLaunch_copy { max-width: 1280px; }
 .trendiLaunch_wordmark { margin: 0 0 18px; color: #fff; font: 800 clamp(54px, 11vw, 126px)/.78 var(--font-archivo), sans-serif; letter-spacing: -.075em; }
-.trendiLaunch_copy h2 { max-width: 900px; color: #fff7fb; font: 700 clamp(36px, 6.2vw, 76px)/.98 var(--font-archivo), sans-serif; letter-spacing: -.055em; text-wrap: balance; }
+.trendiLaunch_copy h2 { max-width: 1240px; color: #fff7fb; font: 700 clamp(40px, 5.25vw, 82px)/.98 var(--font-archivo), sans-serif; letter-spacing: -.055em; text-wrap: balance; }
 .trendiLaunch_lede { max-width: 720px; margin: 26px 0 0; color: #d9cbd7; font-size: clamp(16px, 2vw, 20px); line-height: 1.65; }
 .trendiLaunch_status { display: flex; flex-wrap: wrap; gap: 10px 14px; align-items: center; margin: 26px 0 0; color: #cabcc9; font-size: 13px; }
 .trendiLaunch_status strong { border: 1px solid rgba(255, 137, 187, .55); border-radius: 999px; padding: 6px 10px; color: #ff9bc5; font: 600 10px var(--font-ibm-plex-mono), monospace; letter-spacing: .11em; }
@@ -28,11 +28,11 @@
 .trendiLaunch_secondary { border: 1px solid rgba(255,255,255,.28); color: #fff7fb; background: rgba(255,255,255,.055); backdrop-filter: blur(10px); }
 .trendiLaunch_primary:hover, .trendiLaunch_secondary:hover { transform: translateY(-2px); }
 .trendiLaunch_primary:focus-visible, .trendiLaunch_secondary:focus-visible { outline: 3px solid #ffb4d2; outline-offset: 4px; }
-.trendiLaunch_sideNote { margin: 0; border-left: 1px solid rgba(255,255,255,.22); padding-left: 18px; color: #a995a5; font: 500 10px/1.6 var(--font-ibm-plex-mono), monospace; letter-spacing: .08em; text-transform: uppercase; }
+.trendiLaunch_sideNote { display: flex; align-self: stretch; flex-direction: column; justify-content: flex-end; margin: 0; border-left: 1px solid rgba(255,255,255,.28); padding: 0 0 8px 24px; color: #c0afbd; font: 500 11px/1.65 var(--font-ibm-plex-mono), monospace; letter-spacing: .08em; text-transform: uppercase; }
 .trendiLaunch_sideNote span { display: block; margin-bottom: 12px; color: #ff8fbd; font-size: 28px; }
-.trendiLaunch_proof { display: flex; flex-wrap: wrap; gap: 0; margin: clamp(50px, 8vw, 86px) 0 34px; border-block: 1px solid rgba(255,255,255,.14); padding: 0; list-style: none; }
-.trendiLaunch_proof li { flex: 1 1 190px; padding: 17px 20px; color: #d8cad6; font-size: 12px; text-align: center; }
-.trendiLaunch_proof li + li { border-left: 1px solid rgba(255,255,255,.14); }
+.trendiLaunch_proof { display: flex; flex-wrap: wrap; gap: 0; margin: clamp(34px, 4vw, 52px) 0 20px; border-block: 1px solid rgba(255,255,255,.22); padding: 0; list-style: none; }
+.trendiLaunch_proof li { flex: 1 1 210px; padding: 22px 24px; color: #f1e6ef; font-size: 14px; font-weight: 600; line-height: 1.35; text-align: center; }
+.trendiLaunch_proof li + li { border-left: 1px solid rgba(255,255,255,.22); }
 .trendiLaunch_stage { overflow: hidden; border: 1px solid rgba(255,255,255,.2); border-radius: 24px; background: rgba(11,5,13,.68); box-shadow: 0 42px 100px rgba(0,0,0,.42), 0 0 80px rgba(222,74,255,.11); backdrop-filter: blur(18px); scroll-margin-top: 100px; }
 .trendiLaunch_stageBar { display: flex; min-height: 48px; align-items: center; gap: 12px; border-bottom: 1px solid rgba(255,255,255,.13); padding: 0 18px; color: #bcaabb; font: 500 9px var(--font-ibm-plex-mono), monospace; letter-spacing: .12em; }
 .trendiLaunch_stageBar i { width: 7px; height: 7px; margin-right: auto; border-radius: 50%; background: #ff729f; box-shadow: 0 0 14px #ff729f; }
@@ -58,7 +58,8 @@
   .trendiLaunch_actions { display: grid; }
   .trendiLaunch_primary, .trendiLaunch_secondary { width: 100%; }
   .trendiLaunch_proof { display: grid; grid-template-columns: 1fr 1fr; }
-  .trendiLaunch_proof li { padding: 14px 8px; }
+  .trendiLaunch_proof { margin-top: 30px; margin-bottom: 16px; }
+  .trendiLaunch_proof li { padding: 17px 10px; font-size: 13px; }
   .trendiLaunch_proof li + li { border-left: 0; }
   .trendiLaunch_proof li:nth-child(even) { border-left: 1px solid rgba(255,255,255,.14); }
   .trendiLaunch_proof li:nth-child(n+3) { border-top: 1px solid rgba(255,255,255,.14); }
@@ -68,6 +69,13 @@
   .trendiLaunch_phoneShot img { max-height: none; object-fit: contain; background: #120a12; }
   .trendiLaunch_videoFrame figcaption, .trendiLaunch_phoneShot figcaption { align-items: flex-start; flex-direction: column; gap: 5px; }
   .trendiLaunch_videoFrame figcaption span, .trendiLaunch_phoneShot figcaption span { text-align: left; }
+}
+
+@media (min-width: 1800px) {
+  .trendiLaunch_copy h2 { font-size: 86px; }
+  .trendiLaunch_stage { border-radius: 28px; }
+  .trendiLaunch_videoFrame,
+  .trendiLaunch_phoneShot { grid-template-rows: minmax(520px, 72vh) auto; }
 }
 
 @media (prefers-reduced-motion: reduce) {

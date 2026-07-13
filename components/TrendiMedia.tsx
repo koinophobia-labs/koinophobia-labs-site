@@ -33,11 +33,11 @@ export default function TrendiMedia() {
               <source src="/trendi/trendi-demo.mp4" type="video/mp4; codecs=hevc" />
             </video>
           )}
-          <figcaption><strong>See the full thought-to-script flow</strong><span>Loads when you press play · pauses offscreen</span></figcaption>
+          <figcaption><strong>Watch the thought become recordable words</strong><span>Real product flow · press play to load</span></figcaption>
         </figure>
         <figure className="trendiLaunch_phoneShot">
-          <Image src="/trendi/trendi-mobile.jpg" alt="Trendi mobile interface showing the creator workflow" width={660} height={1434} sizes="(max-width: 900px) 65vw, 300px" />
-          <figcaption><strong>The product, on device</strong><span>Real TestFlight interface</span></figcaption>
+          <Image src="/trendi/trendi-home-clean.png" alt="Trendi home screen before a creator captures a messy idea" width={1320} height={2868} sizes="(max-width: 900px) 90vw, 480px" />
+          <figcaption><strong>Start here: one messy idea</strong><span>Real TestFlight starting state</span></figcaption>
         </figure>
       </div>
     </div>
