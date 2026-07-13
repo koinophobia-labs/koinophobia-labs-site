@@ -22,7 +22,7 @@ const jetbrains = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://koinophobia-labs.vercel.app"),
+  metadataBase: new URL("https://koinophobia.dev"),
   title: "Koinophobia Labs — AI Products, Creator Systems, and Proof",
   description:
     "Koinophobia Labs is Blake Taylor’s product studio for AI tools, creator systems, sports debate products, and command-center interfaces. Built, tested, shipped.",
