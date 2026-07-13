@@ -1882,30 +1882,20 @@ p {
 
 .portrait {
   position: relative;
-  display: grid;
+  width: min(100%, 360px);
   aspect-ratio: 4 / 5;
-  place-items: center;
+  justify-self: center;
+  margin: 0;
   border: 1px solid var(--line2);
   border-radius: 12px;
   overflow: hidden;
-  background:
-    repeating-linear-gradient(-45deg, rgba(255, 255, 255, 0.04) 0 12px, transparent 12px 24px),
-    linear-gradient(180deg, #171a21, #10131a);
+  background: #10131a;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.28);
 }
 
 .portrait img {
-  width: 96px;
-  height: 96px;
-  border-radius: 999px;
-}
-
-.portrait strong {
-  position: absolute;
-  bottom: 22px;
-  color: var(--gold);
-  font-family: var(--font-mono);
-  font-size: 12px;
-  letter-spacing: 0.14em;
+  object-fit: cover;
+  object-position: 50% 34%;
 }
 
 .corner {
