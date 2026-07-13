@@ -4,6 +4,7 @@ import "./globals.css";
 import "./founder.css";
 import "./home.css";
 import "./you-know-ball-home-fix.css";
+import "./trendi-feature.css";
 
 const sora = Sora({
   variable: "--font-sora",

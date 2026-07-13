@@ -1,25 +1,45 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { Kicker, Reveal } from "@/components/ui";
+import { Reveal } from "@/components/ui";
 import TrendiMedia from "@/components/TrendiMedia";
+
+const proof = [
+  "Voice-first capture",
+  "Creator-specific output",
+  "Recordable scripts",
+  "For solo creators & founders",
+  "TestFlight beta",
+];
 
 export default function TrendiFeature() {
   return (
-    <section id="products" className="section trendi-feature" aria-labelledby="trendi-feature-title">
-      <Reveal>
-        <Kicker tone="gold">Featured product · 01</Kicker>
-        <div className="trendi-head">
-          <div>
-            <h2 id="trendi-feature-title">Trendi</h2>
-            <p className="trendi-lede">From “what should I post?” to a usable draft—without the content chaos.</p>
-            <p className="product-status"><strong>TESTFLIGHT</strong> Available in TestFlight beta. Not yet publicly released on the App Store.</p>
+    <section id="products" className="trendiLaunch_world" aria-labelledby="trendi-feature-title">
+      <div className="trendiLaunch_shell">
+        <Reveal>
+          <p className="trendiLaunch_eyebrow">Featured product</p>
+          <div className="trendiLaunch_intro">
+            <div className="trendiLaunch_copy">
+              <p className="trendiLaunch_wordmark" aria-label="Trendi">TRENDI</p>
+              <h2 id="trendi-feature-title">Turn the thought in your head into words you can actually record.</h2>
+              <p className="trendiLaunch_lede">Type it or say it messy. Trendi shapes the idea into creator-specific, usable words—without adding more generic content sludge to the feed.</p>
+              <p className="trendiLaunch_status"><strong>TESTFLIGHT BETA</strong><span>Available through TestFlight. Not yet publicly released on the App Store.</span></p>
+              <div className="trendiLaunch_actions">
+                <Link className="trendiLaunch_primary" href="/trendi">View Trendi <ArrowRight size={17} aria-hidden="true" /></Link>
+                <a className="trendiLaunch_secondary" href="#trendi-demo">Watch the real demo</a>
+              </div>
+            </div>
+            <p className="trendiLaunch_sideNote"><span>01</span>Flagship product from Koinophobia Labs</p>
           </div>
-          <Link className="trendi-link" href="/trendi">View product proof <ArrowRight size={16} /></Link>
-        </div>
-      </Reveal>
-      <Reveal>
-        <TrendiMedia />
-      </Reveal>
+        </Reveal>
+        <Reveal>
+          <ul className="trendiLaunch_proof" aria-label="Trendi product qualities">
+            {proof.map((item) => <li key={item}>{item}</li>)}
+          </ul>
+        </Reveal>
+        <Reveal>
+          <TrendiMedia />
+        </Reveal>
+      </div>
     </section>
   );
 }
