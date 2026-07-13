@@ -137,37 +137,43 @@ export function buildSwimPath(input: SwimPathInput): SwimPath {
     return { d, exit, entry, wordmarkAt: -1, ctaAt: 0.82 };
   }
 
-  // Desktop: copy on the left, phone on the right. Exit the left edge of the
-  // screen, sweep left beneath the wordmark, dip toward the CTA row, then
-  // arc back to the phone on a lower line.
+  // Desktop: copy on the left, phone on the right. One counterclockwise lap
+  // that only travels through empty space: the baseline gap beneath the
+  // wordmark, up past its first glyph, across the open band above the copy,
+  // then down the right gutter to the CTA's level and home. The fish never
+  // crosses the h1 or the lede.
   const exit = { x: cx(screen.left + 6), y: cy(screen.cy - screen.height * 0.08) };
-  // Hug the wordmark's baseline: TRENDI has no descenders, so the fish can
-  // ride its underline without ever touching the h1 below it.
-  const underWordmarkY = wordmark
-    ? cy(wordmark.bottom + 8)
-    : cy(hero.height * 0.36);
-  const wordmarkRightX = wordmark ? cx(wordmark.right + 30) : cx(hero.width * 0.5);
-  const wordmarkLeftX = wordmark ? cx(wordmark.left + wordmark.width * 0.12) : cx(hero.width * 0.16);
-  const ctaX = cta ? cx(cta.right + 46) : cx(hero.width * 0.3);
-  const ctaY = cta ? cy(cta.top - 26) : cy(hero.height * 0.72);
+  const wmTop = wordmark ? wordmark.top : hero.height * 0.24;
+  const underY = wordmark ? cy(wordmark.bottom + 8) : cy(hero.height * 0.36);
+  const wmRightX = wordmark ? cx(wordmark.right + 24) : cx(hero.width * 0.5);
+  const wmLeftX = wordmark ? cx(wordmark.left + wordmark.width * 0.1) : cx(hero.width * 0.16);
+  const sweepSpan = Math.max(1, wmRightX - wmLeftX);
+  // The clear band between the nav rule and the eyebrow row.
+  const topY = cy(Math.max(40, wmTop - 120));
+  // The open gutter between the copy column and the phone.
+  const gutterX = cx(screen.left - Math.max(120, screen.width * 0.75));
+  const ctaNearX = cta ? cx(cta.right + 42) : cx(hero.width * 0.32);
+  const ctaNearY = cta ? cy(cta.top - 22) : cy(hero.height * 0.74);
   const entry = { x: cx(screen.left + 6), y: cy(screen.cy + screen.height * 0.16) };
-  const returnY = cy(Math.max(ctaY - 8, entry.y + 60));
-
-  const sweepSpan = Math.max(1, wordmarkRightX - wordmarkLeftX);
 
   const d = [
     `M ${pt(exit.x, exit.y)}`,
-    // Glide out and settle beneath the wordmark's right edge.
-    `C ${pt(exit.x - 120, exit.y - 30)}, ${pt(wordmarkRightX + 130, underWordmarkY - 44)}, ${pt(wordmarkRightX, underWordmarkY)}`,
-    // The light-sweep pass under the wordmark.
-    `C ${pt(cx(wordmarkRightX - sweepSpan * 0.4), underWordmarkY + 16)}, ${pt(wordmarkLeftX + 90, underWordmarkY - 10)}, ${pt(wordmarkLeftX, cy(underWordmarkY + 22))}`,
-    // Bank down toward the CTA row.
-    `C ${pt(cx(wordmarkLeftX - 70), cy(underWordmarkY + 90))}, ${pt(cx(ctaX - 130), cy(ctaY - 60))}, ${pt(ctaX, ctaY)}`,
-    // Come home on a relaxed lower arc.
-    `C ${pt(cx(ctaX + 170), cy(returnY + 40))}, ${pt(entry.x - 150, entry.y + 46)}, ${pt(entry.x, entry.y)}`,
+    // Glide out into the baseline gap beneath the wordmark's right edge.
+    `C ${pt(exit.x - 130, exit.y - 34)}, ${pt(wmRightX + 140, underY - 40)}, ${pt(wmRightX, underY)}`,
+    // The light-sweep pass under the wordmark, right to left.
+    `C ${pt(cx(wmRightX - sweepSpan * 0.42), underY + 14)}, ${pt(wmLeftX + 110, underY + 4)}, ${pt(wmLeftX, cy(underY - 14))}`,
+    // Rise past the first glyph into the clear band above the copy.
+    `C ${pt(cx(wmLeftX - 96), cy(underY - 60))}, ${pt(cx(wmLeftX - 60), cy(topY + 26))}, ${pt(cx(wmLeftX + 60), topY)}`,
+    // Cruise right across the open band.
+    `C ${pt(cx(wmLeftX + sweepSpan * 0.55), cy(topY - 18))}, ${pt(cx(wmRightX - 40), cy(topY - 12))}, ${pt(cx(wmRightX + 60), cy(topY + 16))}`,
+    // Descend the gutter between the copy and the phone.
+    `C ${pt(cx(wmRightX + 210), cy(topY + 66))}, ${pt(cx(gutterX + 130), cy(ctaNearY - 190))}, ${pt(gutterX, cy(ctaNearY - 70))}`,
+    // Drift toward the CTA row, glow, and come home on a low arc.
+    `C ${pt(cx(gutterX - 110), cy(ctaNearY + 6))}, ${pt(cx(ctaNearX + 130), cy(ctaNearY + 18))}, ${pt(ctaNearX, ctaNearY)}`,
+    `C ${pt(cx(ctaNearX + 220), cy(ctaNearY - 10))}, ${pt(entry.x - 160, entry.y + 60)}, ${pt(entry.x, entry.y)}`,
   ].join(" ");
 
-  return { d, exit, entry, wordmarkAt: 0.38, ctaAt: 0.68 };
+  return { d, exit, entry, wordmarkAt: 0.22, ctaAt: 0.78 };
 }
 
 /**

@@ -28,7 +28,12 @@ import {
   trackTrendiHero,
   type SwimPath,
 } from "@/lib/trendiHero";
-import { FISH_VIEW, TrendiFishBody, TrendiFishDefs } from "./TrendiFish";
+import {
+  FISH_VIEW,
+  TrendiFishBody,
+  TrendiFishBodyHeadRight,
+  TrendiFishDefs,
+} from "./TrendiFish";
 
 type Variant = "full" | "ambient";
 
@@ -46,9 +51,10 @@ type Props = {
 
 const PHONE_VIEW = { w: 280, h: 560 } as const;
 const SCREEN = { x: 14, y: 14, w: 252, h: 532, r: 38 } as const;
-const FISH_SCALE = 0.62;
-const FISH_REST = { x: 140, y: 308 } as const;
-const SWIM_SECONDS = 3.1;
+// The koi rests in its native upward pose (like the logo), ~205px tall.
+const FISH_SCALE = 0.345;
+const FISH_REST = { x: 140, y: 316 } as const;
+const SWIM_SECONDS = 3.4;
 
 const rectOf = (el: Element | null) => {
   if (!el) return null;
@@ -71,7 +77,6 @@ export default function TrendiHeroVisual({
 
   const rootRef = useRef<HTMLDivElement>(null);
   const innerFishRef = useRef<SVGGElement>(null);
-  const innerFishPoseRef = useRef<SVGGElement>(null);
   const rippleARef = useRef<SVGCircleElement>(null);
   const rippleBRef = useRef<SVGCircleElement>(null);
   const screenGlowRef = useRef<SVGEllipseElement>(null);
@@ -154,7 +159,6 @@ export default function TrendiHeroVisual({
       await nextFrame();
       await nextFrame();
       const innerFish = innerFishRef.current;
-      const innerPose = innerFishPoseRef.current;
       const freeFish = freeFishRef.current;
       const freeInner = freeFishInnerRef.current;
       const trail = trailRef.current;
@@ -162,7 +166,7 @@ export default function TrendiHeroVisual({
       const rippleB = rippleBRef.current;
       const sweep = sweepRef.current;
       const ctaGlow = ctaGlowRef.current;
-      if (!innerFish || !freeFish || !trail || !innerPose || !freeInner) return false;
+      if (!innerFish || !freeFish || !trail || !freeInner) return false;
 
       runningRef.current = true;
       const dur = opts.peek ? 2.3 : SWIM_SECONDS;
@@ -196,10 +200,10 @@ export default function TrendiHeroVisual({
           ]);
       }
 
-      // Glide to the screen edge and hand off to the free fish.
+      // Turn from the upward resting pose and glide to the screen edge.
       sequence.push([
         innerFish,
-        { x: [0, -(FISH_REST.x - SCREEN.x) - 30] },
+        { x: [0, -(FISH_REST.x - SCREEN.x) - 40], rotate: [0, -78] },
         { duration: 0.7, ease: [0.5, 0, 0.9, 0.6], at: wake },
       ]);
       sequence.push([innerFish, { opacity: [1, 0] }, { duration: 0.16, at: exitAt - 0.06 }]);
@@ -211,39 +215,43 @@ export default function TrendiHeroVisual({
         ]);
       sequence.push([freeFish, { opacity: [0, 1] }, { duration: 0.16, at: exitAt - 0.02 }]);
 
-      // While the free fish is out, quietly turn the hidden resident pose so
-      // re-entry (travelling rightward) reads with the correct facing.
-      sequence.push([innerPose, { scaleX: [-1, 1] }, { duration: 0.02, at: swimAt + 0.4 }]);
-
       // The swim: eased distance, depth scale, and the banking roll at the
       // turn (scaleY through 0 reads as the fish rolling over, not flipping).
       sequence.push([
         freeFish,
-        { offsetDistance: ["0%", "36%", "60%", "100%"] },
+        { offsetDistance: ["0%", "26%", "58%", "100%"] },
         {
           duration: dur,
-          times: [0, 0.4, 0.62, 1],
+          times: [0, 0.3, 0.58, 1],
           ease: ["easeOut", "easeInOut", "easeInOut"],
           at: swimAt,
         },
       ]);
+      // The koi rolls upright at each change of travel direction: after the
+      // rise past the wordmark's first glyph, and again at the CTA turn.
       sequence.push([
         freeInner,
-        { scaleY: opts.peek ? [-1, -1, 1, 1] : [-1, -1, -1, 1, 1] },
+        {
+          scaleY: opts.peek
+            ? [-1, -1, 1, 1]
+            : [-1, -1, 1, 1, -1, -1, 1, 1],
+        },
         {
           duration: dur,
-          times: opts.peek ? [0, 0.45, 0.75, 1] : [0, 0.42, 0.56, 0.74, 1],
+          times: opts.peek
+            ? [0, 0.45, 0.75, 1]
+            : [0, 0.3, 0.42, 0.56, 0.66, 0.76, 0.88, 1],
           ease: "easeInOut",
           at: swimAt,
         },
       ]);
       sequence.push([
         freeInner,
-        // Smallest while passing the wordmark, largest at the CTA turn.
-        { scale: opts.peek ? [0.92, 0.98, 0.92] : [1, 1.0, 1.14, 1] },
+        // Smallest while passing the wordmark, largest on the gutter descent.
+        { scale: opts.peek ? [0.92, 0.98, 0.92] : [1, 0.98, 1.14, 1] },
         {
           duration: dur,
-          times: opts.peek ? [0, 0.5, 1] : [0, 0.38, 0.66, 1],
+          times: opts.peek ? [0, 0.5, 1] : [0, 0.24, 0.66, 1],
           ease: "easeInOut",
           at: swimAt,
         },
@@ -253,12 +261,13 @@ export default function TrendiHeroVisual({
       sequence.push([
         trail,
         {
-          strokeDashoffset: [1.02, 0.6, 0.32, -0.14],
+          // Dash window ends exactly at the fish: offset = 0.14 - distance.
+          strokeDashoffset: [0.14, -0.12, -0.44, -0.86],
           opacity: opts.peek ? [0, 0.22, 0.18, 0] : [0, 0.4, 0.34, 0],
         },
         {
           duration: dur,
-          times: [0, 0.42, 0.62, 1],
+          times: [0, 0.3, 0.58, 1],
           ease: ["easeOut", "easeInOut", "easeInOut"],
           at: swimAt,
         },
@@ -287,29 +296,32 @@ export default function TrendiHeroVisual({
           { scale: [0.3, 1.5], opacity: [0.45, 0] },
           { duration: 0.7, ease: "easeOut", at: backAt },
         ]);
+      // The koi glides in travelling rightward (rotate 90 from its upward
+      // pose) and swings back upright as it settles home.
       sequence.push([
         innerFish,
-        { opacity: [0, 1], x: [-(FISH_REST.x - SCREEN.x) - 10, 0], y: [26, 0] },
-        { duration: 0.62, ease: [0.16, 0.8, 0.3, 1], at: backAt + 0.04 },
+        {
+          opacity: [0, 1, 1],
+          x: [-(FISH_REST.x - SCREEN.x) - 10, -30, 0],
+          y: [30, 12, 0],
+          rotate: [86, 40, 0],
+        },
+        {
+          duration: 0.85,
+          times: [0, 0.42, 1],
+          ease: [0.16, 0.8, 0.3, 1],
+          at: backAt + 0.04,
+        },
       ]);
 
       const controls = animate(sequence);
       controlsRef.current = [controls];
       controls.then(() => {
-        // A soft turn back to the resting pose (facing the copy).
-        const turn = animate(
-          innerFishPoseRef.current ?? innerPose,
-          { scaleX: [1, 0.14, -1] },
-          { duration: 0.5, ease: "easeInOut" }
-        );
-        controlsRef.current = [turn];
-        turn.then(() => {
-          window.setTimeout(() => {
-            runningRef.current = false;
-            controlsRef.current = [];
-            opts.onDone?.();
-          }, 900);
-        });
+        window.setTimeout(() => {
+          runningRef.current = false;
+          controlsRef.current = [];
+          opts.onDone?.();
+        }, 900);
       });
       return true;
     },
@@ -332,9 +344,6 @@ export default function TrendiHeroVisual({
       if (!runningRef.current && canReswim(gate)) {
         const path = measure(true);
         if (path) {
-          // Reset pose for the next lap (fish rests facing the copy).
-          if (innerFishPoseRef.current)
-            animate(innerFishPoseRef.current, { scaleX: -1 }, { duration: 0.3 });
           runSwim(path, { peek: true, onDone: () => scheduleReswimRef.current() });
           return;
         }
@@ -452,7 +461,6 @@ export default function TrendiHeroVisual({
         innerFishRef.current.style.opacity = "1";
         innerFishRef.current.style.transform = "none";
       }
-      if (innerFishPoseRef.current) innerFishPoseRef.current.style.transform = "scaleX(-1)";
       const path = measure(false);
       if (path)
         runSwim(path, {
@@ -549,13 +557,13 @@ export default function TrendiHeroVisual({
             <div ref={freeFishRef} className="trendiHV_freeFish">
               <svg
                 ref={freeFishInnerRef}
-                viewBox={`0 0 ${FISH_VIEW.width} ${FISH_VIEW.height}`}
+                viewBox={`0 0 ${FISH_VIEW.height} ${FISH_VIEW.width}`}
                 className="trendiHV_freeFishSvg"
               >
                 <defs>
                   <TrendiFishDefs id={`${uid}f`} />
                 </defs>
-                <TrendiFishBody id={`${uid}f`} />
+                <TrendiFishBodyHeadRight id={`${uid}f`} />
               </svg>
             </div>
 
@@ -673,21 +681,15 @@ export default function TrendiHeroVisual({
             {/* An occasional tiny bubble */}
             <circle className="trendiHV_bubble" cx="176" cy="380" r="3" />
 
-            {/* The resident fish (faces the copy at rest) */}
-            <g ref={innerFishRef} className="trendiHV_fishMove">
+            {/* The resident koi, in the logo's upward swimming pose */}
+            <g
+              ref={innerFishRef}
+              className="trendiHV_fishMove"
+              style={{ transformBox: "fill-box", transformOrigin: "50% 50%" }}
+            >
               <g className="trendiHV_fishIdle">
-                <g
-                  ref={innerFishPoseRef}
-                  className="trendiHV_fishPose"
-                  style={{
-                    transformBox: "fill-box",
-                    transformOrigin: "50% 50%",
-                    transform: "scaleX(-1)",
-                  }}
-                >
-                  <g transform={fishTransform}>
-                    <TrendiFishBody id={`${uid}p`} />
-                  </g>
+                <g transform={fishTransform}>
+                  <TrendiFishBody id={`${uid}p`} />
                 </g>
               </g>
             </g>

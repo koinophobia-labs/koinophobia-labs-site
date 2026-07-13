@@ -45,10 +45,8 @@
 
 .trendiHV_fishIdle {
   animation: trendiHV-drift 5.4s ease-in-out infinite alternate;
-}
-
-.trendiHV [data-trendi-fish-tail=""] {
-  animation: trendiHV-tail 2.9s ease-in-out infinite alternate;
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
 }
 
 .trendiHV_caustic {
@@ -64,19 +62,10 @@
 
 @keyframes trendiHV-drift {
   from {
-    transform: translateY(-4px) rotate(-0.6deg);
+    transform: translateY(-5px) rotate(-1.6deg);
   }
   to {
-    transform: translateY(5px) rotate(0.8deg);
-  }
-}
-
-@keyframes trendiHV-tail {
-  from {
-    transform: rotate(-6deg);
-  }
-  to {
-    transform: rotate(7deg);
+    transform: translateY(6px) rotate(1.8deg);
   }
 }
 
@@ -111,7 +100,6 @@
 
 /* Offscreen or hidden tab: everything freezes. */
 .trendiHV[data-paused="true"] .trendiHV_fishIdle,
-.trendiHV[data-paused="true"] [data-trendi-fish-tail=""],
 .trendiHV[data-paused="true"] .trendiHV_caustic,
 .trendiHV[data-paused="true"] .trendiHV_bubble {
   animation-play-state: paused;
@@ -179,7 +167,6 @@
 
 @media (prefers-reduced-motion: reduce) {
   .trendiHV_fishIdle,
-  .trendiHV [data-trendi-fish-tail=""],
   .trendiHV_caustic,
   .trendiHV_bubble {
     animation: none !important;

@@ -1,99 +1,65 @@
-// The Trendi fish, reconstructed as minimal vector paths from the approved
-// app-icon reference (coral → magenta → violet, softly emissive glass).
-// Drawn pointing toward +x in a 200×120 box centred near (100, 60).
+// The Trendi koi — traced 1:1 from the approved logo artwork
+// (creator-command-center-transparent-logo-v1.png, the hand/phone/koi mark),
+// so the silhouette is exactly the brand fish. Drawn in its native pose:
+// swimming upward (head top-left), in a 307×596 box. Gradient runs
+// coral (head) → magenta → violet (tail), matching the approved reference.
+// The potrace group transform (translate/scale with y-flip) is part of the
+// traced output and must stay with the path.
 
-export const FISH_VIEW = { width: 200, height: 120, cx: 104, cy: 60 } as const;
+export const FISH_VIEW = { width: 307, height: 596, cx: 153, cy: 298 } as const;
 
-const BODY_D =
-  "M178 58c-6-14-26-24-48-25-20-1-38 6-48 17-4 5-5 12-1 17 9 12 26 20 46 20 22 0 44-9 51-23 1-2 1-4 0-6z";
+const KOI_D =
+  "M540 5893 c-377 -30 -479 -131 -480 -471 0 -248 77 -475 245 -723 41 -60 75 -112 75 -115 0 -3 -13 -24 -29 -47 -179 -261 -212 -644 -81 -933 45 -101 117 -203 199 -285 106 -106 105 -106 180 -61 164 97 310 296 359 490 10 39 21 74 24 78 8 8 81 -119 134 -231 184 -394 203 -791 53 -1125 -43 -96 -111 -192 -129 -184 -340 149 -683 112 -891 -95 -97 -98 -123 -151 -104 -213 59 -197 241 -373 448 -433 45 -13 57 -20 53 -33 -42 -150 -44 -483 -4 -634 114 -421 435 -737 826 -814 141 -27 337 -13 422 31 l30 15 -84 83 c-98 97 -173 232 -183 330 l-6 55 54 -14 c181 -48 366 -41 580 22 327 97 473 105 685 39 114 -35 108 -39 101 58 -22 349 -343 651 -777 732 -161 30 -235 47 -286 66 -120 45 -194 132 -194 229 0 69 2 71 146 212 193 187 305 338 414 556 315 632 269 1408 -126 2125 -36 66 -64 120 -62 121 2 1 37 10 78 19 173 40 336 151 408 277 40 69 40 88 1 160 -97 182 -319 332 -582 392 -114 27 -368 29 -486 5 l-74 -14 -86 62 c-261 190 -578 290 -851 268z m259 -268 c565 -108 1170 -867 1325 -1662 120 -617 2 -1123 -395 -1691 -183 -261 -245 -449 -210 -634 44 -226 216 -369 521 -433 302 -63 415 -108 528 -210 34 -31 62 -60 62 -64 0 -4 -55 -14 -122 -24 -68 -9 -172 -32 -233 -51 -326 -100 -576 -91 -819 31 -57 29 -56 30 -82 -76 -25 -102 -26 -287 0 -394 10 -43 16 -81 13 -83 -19 -19 -221 95 -308 173 -102 92 -208 272 -251 428 -33 123 -32 363 4 495 51 189 126 315 308 520 229 256 315 408 381 666 93 371 40 767 -156 1161 -126 255 -242 411 -523 706 -333 348 -461 538 -524 782 -32 125 -15 292 35 333 47 39 299 54 446 27z m1111 -286 c165 -20 324 -89 426 -185 54 -49 53 -52 -29 -105 -71 -46 -155 -74 -252 -84 l-70 -7 -45 69 c-25 37 -89 123 -142 190 -95 119 -97 122 -70 126 52 8 98 7 182 -4z m-1312 -981 c15 -18 63 -72 106 -121 88 -99 95 -116 96 -253 0 -147 -59 -314 -146 -411 l-44 -48 -30 35 c-46 53 -119 206 -135 285 -36 171 0 367 92 506 31 47 28 47 61 7z m270 -2263 c58 -18 61 -23 32 -50 -29 -26 -142 -181 -170 -232 -27 -50 -36 -51 -123 -22 -101 34 -192 101 -239 177 l-21 35 24 20 c36 29 112 66 172 82 66 19 250 13 325 -10z M819 5107 c-94 -63 -89 -187 10 -254 117 -79 262 57 203 191 -37 83 -138 113 -213 63z";
 
 export function TrendiFishDefs({ id }: { id: string }) {
   return (
     <>
-      <linearGradient id={`${id}-body`} x1="30" y1="60" x2="188" y2="60" gradientUnits="userSpaceOnUse">
-        <stop offset="0" stopColor="#8a5cff" />
-        <stop offset="0.42" stopColor="#d94fe0" />
-        <stop offset="0.78" stopColor="#ff5f9e" />
-        <stop offset="1" stopColor="#ffa07d" />
+      {/* Inner (pre-transform) coordinates: y 5960 = head, y 0 = tail. */}
+      <linearGradient
+        id={`${id}-body`}
+        x1="1530"
+        y1="5960"
+        x2="1530"
+        y2="0"
+        gradientUnits="userSpaceOnUse"
+      >
+        <stop offset="0" stopColor="#ffa07d" />
+        <stop offset="0.34" stopColor="#ff5f9e" />
+        <stop offset="0.72" stopColor="#d94fe0" />
+        <stop offset="1" stopColor="#8a5cff" />
       </linearGradient>
-      <linearGradient id={`${id}-fin`} x1="20" y1="60" x2="120" y2="60" gradientUnits="userSpaceOnUse">
-        <stop offset="0" stopColor="#8a5cff" stopOpacity="0.85" />
-        <stop offset="1" stopColor="#ff5f9e" stopOpacity="0.9" />
-      </linearGradient>
-      <radialGradient id={`${id}-sheen`} cx="0.62" cy="0.3" r="0.55">
-        <stop offset="0" stopColor="#fff" stopOpacity="0.5" />
-        <stop offset="1" stopColor="#fff" stopOpacity="0" />
-      </radialGradient>
-      <filter id={`${id}-soft`} x="-60%" y="-60%" width="220%" height="220%">
-        <feGaussianBlur stdDeviation="7" />
+      <filter id={`${id}-soft`} x="-40%" y="-40%" width="180%" height="180%">
+        <feGaussianBlur stdDeviation="90" />
       </filter>
-      <clipPath id={`${id}-bodyclip`}>
-        <path d={BODY_D} />
-      </clipPath>
     </>
   );
 }
 
 /**
- * One fish instance. `id` must match the id passed to TrendiFishDefs within
- * the same <svg>. The tail is a separate group so idle CSS can sway it.
+ * One koi instance in its native upward-swimming pose (307×596).
+ * `id` must match the id passed to TrendiFishDefs within the same <svg>.
  */
 export function TrendiFishBody({ id, className }: { id: string; className?: string }) {
   return (
     <g className={className} data-trendi-fish-body="">
-      {/* Soft emissive halo behind the whole fish */}
-      <g filter={`url(#${id}-soft)`} opacity="0.45" data-trendi-fish-halo="">
-        <path
-          d="M176 62c-8-16-28-27-52-28-22-1-40 8-50 20-3 4-3 9 0 13 10 12 28 21 50 20 24-1 44-11 52-25z"
-          fill={`url(#${id}-body)`}
-        />
+      <g transform="translate(0,596) scale(0.1,-0.1)">
+        {/* Soft emissive halo behind the line work */}
+        <path d={KOI_D} fill={`url(#${id}-body)`} filter={`url(#${id}-soft)`} opacity="0.5" />
+        {/* The koi itself */}
+        <path d={KOI_D} fill={`url(#${id}-body)`} />
       </g>
+    </g>
+  );
+}
 
-      {/* Tail — flowing twin veil, pivots at its base (right edge of its box) */}
-      <g data-trendi-fish-tail="" style={{ transformBox: "fill-box", transformOrigin: "100% 50%" }}>
-        <path
-          d="M80 52C66 36 48 26 24 26c11 10 16 20 17 30-2 2-2 6 0 8-1 10-6 20-17 30 24 0 42-10 56-26 3-4 3-12 0-16z"
-          fill={`url(#${id}-fin)`}
-          opacity="0.9"
-        />
-        <path
-          d="M80 56C70 48 58 44 44 45c7 5 11 10 13 16 2 5 8 8 14 6 4-2 6-6 9-11z"
-          fill={`url(#${id}-body)`}
-          opacity="0.45"
-        />
-      </g>
-
-      {/* Dorsal fin, tucked behind the back line */}
-      <path
-        d="M92 46c6-16 20-26 38-28-6 9-9 18-9 27z"
-        fill={`url(#${id}-fin)`}
-        opacity="0.95"
-      />
-      {/* Pectoral fin, behind the belly line */}
-      <path
-        d="M124 76c0 9 5 17 13 22-11 2-20-2-26-10 4-5 8-9 13-12z"
-        fill={`url(#${id}-fin)`}
-        opacity="0.7"
-      />
-
-      {/* Body — koi teardrop, blunt rounded head */}
-      <path d={BODY_D} fill={`url(#${id}-body)`} />
-
-      {/* Glass sheen, clipped to the body */}
-      <g clipPath={`url(#${id}-bodyclip)`}>
-        <ellipse
-          cx="130"
-          cy="48"
-          rx="42"
-          ry="16"
-          fill={`url(#${id}-sheen)`}
-          transform="rotate(-6 130 48)"
-        />
-      </g>
-
-      {/* Eye — small, calm */}
-      <circle cx="160" cy="55" r="4.2" fill="#1c0716" />
-      <circle cx="161.3" cy="53.7" r="1.3" fill="#ffd9ec" opacity="0.9" />
+/**
+ * The koi rotated to point head-first along +x (for motion paths), in a
+ * 596×307 box. offset-rotate: auto then orients it along the swim path.
+ */
+export function TrendiFishBodyHeadRight({ id, className }: { id: string; className?: string }) {
+  return (
+    <g transform="rotate(90) translate(0 -596)">
+      <TrendiFishBody id={id} className={className} />
     </g>
   );
 }
