@@ -21,9 +21,8 @@ export default function TrendiPage() {
           <p className="kicker kicker-orange">Product proof</p>
           <h1 id="trendi-title">Trendi</h1>
           <p>
-            Trendi helps creators figure out what to post, draft content, and stay consistent. This
-            page is a public proof point for the product direction, not a claim of App Store launch,
-            user count, revenue, or public TestFlight availability.
+            Trendi helps creators figure out what to post, draft content, and stay consistent.
+            Available in TestFlight beta. Not yet publicly released on the App Store.
           </p>
           <div className="cta-row">
             <a className="btn btn-gold" href={founderLinks.emailWithContext}>

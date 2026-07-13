@@ -2365,6 +2365,11 @@ p {
 }
 
 /* Product hierarchy: Trendi leads; sports styling stays inside YKB surfaces. */
+.blake-in-person-home { --gold: #b68b2f; --cyan: #18a4b8; --text: #f5f0e6; --dim: #c9c1b3; --faint: #938b7f; background: #11110f; color: var(--text); font-family: var(--font-archivo), sans-serif; }
+.blake-in-person-home h1, .blake-in-person-home h2, .blake-in-person-home h3 { font-family: var(--font-newsreader), serif; }
+.blake-in-person-home .kicker, .blake-in-person-home figcaption, .blake-in-person-home .product-status strong { font-family: var(--font-ibm-plex-mono), monospace; }
+.product-status { max-width: 680px; margin: 16px 0 0; color: var(--dim); font-size: 14px; }
+.product-status strong { display: inline-block; margin-right: 9px; border: 1px solid currentColor; border-radius: 999px; padding: 3px 8px; color: var(--gold); font-size: 10px; letter-spacing: .1em; }
 .trendi-feature { padding-bottom: 72px; }
 .trendi-head { display: flex; justify-content: space-between; gap: 32px; align-items: end; }
 .trendi-lede { max-width: 720px; margin: 18px 0 0; color: var(--text); font: 600 clamp(20px, 3vw, 32px)/1.2 var(--font-sora); }
@@ -2373,6 +2378,9 @@ p {
 .trendi-video-frame, .trendi-shot { margin: 0; overflow: hidden; border: 1px solid var(--line2); border-radius: 18px; background: #090b0e; }
 .trendi-video-frame { display: grid; grid-template-rows: 1fr auto; min-height: 560px; }
 .trendi-video-frame video { width: 100%; height: 100%; max-height: 650px; object-fit: contain; background: #07080a; }
+.trendi-video-fallback { min-height: 520px; display: grid; place-items: center; align-content: center; gap: 14px; padding: 24px; text-align: center; }
+.trendi-video-fallback img { width: min(280px, 72%); height: auto; max-height: 500px; object-fit: contain; }
+.trendi-video-fallback p { margin: 0; color: var(--dim); font-size: 13px; }
 .trendi-shot { display: grid; grid-template-rows: 1fr auto; }
 .trendi-shot img { width: 100%; height: 100%; max-height: 650px; object-fit: cover; object-position: top; }
 .trendi-video-frame figcaption, .trendi-shot figcaption { padding: 12px 14px; border-top: 1px solid var(--line); color: var(--faint); font: 10px var(--font-mono); letter-spacing: .12em; text-transform: uppercase; }

@@ -77,7 +77,7 @@ export default function ProductLab() {
         <div className="lab-console panel">
           <div className="module-list" role="list">
             {productModules.map((item, index) => (
-              <div key={item.name} className="module-wrap">
+              <div key={item.name} className="module-wrap" role="listitem">
                 <button
                   type="button"
                   className={clsx("module-row", selected === index && "active")}

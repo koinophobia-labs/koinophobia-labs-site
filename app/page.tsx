@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 
 export default function Home() {
   return (
-    <>
+    <div className="blake-in-person-home">
       <div className="page-field" aria-hidden="true" />
       <Nav />
       <main>
@@ -34,6 +34,6 @@ export default function Home() {
         <Contact />
       </main>
       <Footer />
-    </>
+    </div>
   );
 }
