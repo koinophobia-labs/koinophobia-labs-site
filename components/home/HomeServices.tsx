@@ -1,30 +1,26 @@
 const SERVICES = [
   {
-    title: "Websites that convert",
-    body: "Built to turn visits into conversations — a visible path from first screen to action.",
+    title: "Build leverage in your business",
+    body: "Conversion-focused websites that replace unclear browsing with a visible path from first screen to inquiry.",
   },
   {
-    title: "Workflows & automation",
-    body: "Practical systems that quietly remove hours of real work from small teams every week.",
+    title: "Build leverage in your operations",
+    body: "Practical workflows and automation that replace repetitive decisions with reliable, repeatable systems.",
   },
   {
-    title: "Prototypes & tools",
-    body: "Working software in weeks — internal tools, MVPs, and proofs that earn their next step.",
+    title: "Build leverage through software",
+    body: "Products, internal tools, and prototypes that turn high-friction work into something faster, clearer, and easier to use.",
   },
 ];
 
-// Note: the 3a mock shows a "How it works →" link per service. Those point to
-// service-detail pages that do not exist in this project, so they are omitted
-// here to avoid dead links (per the design assistant's own caveat). Add them
-// back when detail routes ship.
 export default function HomeServices() {
   return (
     <section id="services" className="kl-section kl-on-white">
       <div className="kl-inner">
         <div className="kl-sec-head">
-          <h2 className="kl-h2">What the studio does</h2>
+          <h2 className="kl-h2">Different outputs. One operating idea.</h2>
           <p className="kl-sec-head__note">
-            Scoped honestly. Shipped fast. Made to be used.
+            Find the friction. Build the system. Give people their time and judgment back.
           </p>
         </div>
         <div className="kl-grid-3">
