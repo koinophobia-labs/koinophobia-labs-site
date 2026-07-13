@@ -4,6 +4,7 @@ import "./globals.css";
 import "./founder.css";
 import "./founder-brand-refresh.css";
 import "./founder-polish.css";
+import "./ecosystem-pages-refresh.css";
 import "./home.css";
 import "./you-know-ball-home-fix.css";
 import "./trendi-feature.css";
