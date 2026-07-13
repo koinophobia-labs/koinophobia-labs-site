@@ -3,6 +3,7 @@ import { Archivo, IBM_Plex_Mono, Inter, JetBrains_Mono, Newsreader, Sora } from 
 import "./globals.css";
 import "./founder.css";
 import "./home.css";
+import "./you-know-ball-home-fix.css";
 
 const sora = Sora({
   variable: "--font-sora",
