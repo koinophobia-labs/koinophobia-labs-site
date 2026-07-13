@@ -10,6 +10,7 @@ import ProductLab from "@/components/ProductLab";
 import ProofOfWork from "@/components/ProofOfWork";
 import Services from "@/components/Services";
 import YouKnowBall from "@/components/YouKnowBall";
+import TrendiFeature from "@/components/TrendiFeature";
 
 export const metadata: Metadata = {
   alternates: { canonical: "https://koinophobialabs.com/" },
@@ -22,6 +23,7 @@ export default function Home() {
       <Nav />
       <main>
         <Hero />
+        <TrendiFeature />
         <YouKnowBall />
         <ProductLab />
         <ProofOfWork />

@@ -2364,6 +2364,94 @@ p {
   }
 }
 
+/* Product hierarchy: Trendi leads; sports styling stays inside YKB surfaces. */
+.trendi-feature { padding-bottom: 72px; }
+.trendi-head { display: flex; justify-content: space-between; gap: 32px; align-items: end; }
+.trendi-lede { max-width: 720px; margin: 18px 0 0; color: var(--text); font: 600 clamp(20px, 3vw, 32px)/1.2 var(--font-sora); }
+.trendi-link { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; color: var(--gold); font-weight: 700; white-space: nowrap; }
+.trendi-media-grid { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 22px; margin-top: 38px; align-items: stretch; }
+.trendi-video-frame, .trendi-shot { margin: 0; overflow: hidden; border: 1px solid var(--line2); border-radius: 18px; background: #090b0e; }
+.trendi-video-frame { display: grid; grid-template-rows: 1fr auto; min-height: 560px; }
+.trendi-video-frame video { width: 100%; height: 100%; max-height: 650px; object-fit: contain; background: #07080a; }
+.trendi-shot { display: grid; grid-template-rows: 1fr auto; }
+.trendi-shot img { width: 100%; height: 100%; max-height: 650px; object-fit: cover; object-position: top; }
+.trendi-video-frame figcaption, .trendi-shot figcaption { padding: 12px 14px; border-top: 1px solid var(--line); color: var(--faint); font: 10px var(--font-mono); letter-spacing: .12em; text-transform: uppercase; }
+
+.ykb-home { padding-top: 72px; }
+.ykb-home-head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(280px, 440px); gap: 36px; align-items: end; }
+.ykb-home-head > p { margin: 0 0 7px; }
+.ykb-spotlight-shell { margin-top: 36px; border: 1px solid rgba(255,106,43,.4); border-radius: 20px; overflow: hidden; background: radial-gradient(circle at 80% 0, rgba(255,106,43,.16), transparent 35%), #0b0c0f; box-shadow: 0 40px 90px -58px var(--orange); }
+.ykb-static-preview { min-height: 390px; display: flex; flex-direction: column; justify-content: flex-end; align-items: flex-start; padding: clamp(28px, 6vw, 64px); background: linear-gradient(90deg, rgba(8,9,11,.98), rgba(8,9,11,.7)), repeating-linear-gradient(90deg, transparent 0 72px, rgba(255,106,43,.08) 73px 74px); }
+.ykb-static-preview > div { max-width: 720px; }
+.ykb-static-preview h3 { font-size: clamp(28px, 4vw, 50px); line-height: 1.05; }
+.ykb-static-preview p:not(.ykb-overline) { max-width: 620px; }
+.ykb-static-preview button, .ykb-submit { display: inline-flex; align-items: center; gap: 9px; min-height: 48px; border: 0; border-radius: 8px; padding: 12px 18px; color: #160b05; background: var(--orange); font-weight: 800; cursor: pointer; }
+.ykb-static-preview > a { display: inline-flex; align-items: center; gap: 6px; margin-top: 17px; color: var(--dim); font-size: 13px; }
+.ykb-loading { min-height: 390px; display: grid; place-items: center; margin: 0; }
+.ykb-overline { margin: 0 0 12px; color: var(--orange); font: 700 11px var(--font-mono); letter-spacing: .15em; text-transform: uppercase; }
+
+.ykb-game { --court: #ff6a2b; color: #f6f3ef; background: #0a0b0d; }
+.ykb-scoreboard { display: grid; grid-template-columns: 100px 1fr 100px; align-items: center; gap: 16px; padding: 13px 20px; border-bottom: 1px solid rgba(255,106,43,.35); background: #111214; font-family: var(--font-mono); text-align: center; }
+.ykb-scoreboard > div { display: grid; gap: 4px; }
+.ykb-scoreboard span, .ykb-scoreboard small { color: #9b948d; font-size: 8px; letter-spacing: .14em; }
+.ykb-scoreboard strong { color: var(--court); font-size: 15px; }
+.ykb-scoreboard p { margin: 0; color: #fff; font: 800 15px var(--font-sora); letter-spacing: .08em; }
+.ykb-scoreboard p small { display: block; margin-top: 3px; }
+.ykb-possession, .ykb-result { padding: clamp(24px, 5vw, 52px); }
+.ykb-prompt-title { max-width: 780px; font-size: clamp(26px, 4vw, 44px); line-height: 1.08; }
+.ykb-possession fieldset { margin: 28px 0 0; padding: 0; border: 0; }
+.ykb-possession legend, .ykb-take-label > span { margin-bottom: 10px; color: #aba49c; font: 700 10px var(--font-mono); letter-spacing: .12em; text-transform: uppercase; }
+.ykb-side-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 10px; }
+.ykb-side-grid button { min-height: 62px; display: flex; align-items: center; gap: 12px; border: 1px solid #343536; border-radius: 9px; padding: 12px 15px; color: #eee; background: #151618; text-align: left; cursor: pointer; }
+.ykb-side-grid button span { color: var(--court); font: 700 10px var(--font-mono); }
+.ykb-side-grid button.selected { border-color: var(--court); background: rgba(255,106,43,.12); box-shadow: inset 0 0 0 1px rgba(255,106,43,.2); }
+.ykb-take-label { display: grid; margin-top: 20px; }
+.ykb-take-label small { color: #6f6b67; }
+.ykb-take-label textarea { resize: vertical; width: 100%; border: 1px solid #343536; border-radius: 9px; padding: 14px; color: #fff; background: #121315; line-height: 1.5; }
+.ykb-take-label em { justify-self: end; margin-top: 6px; color: #77736f; font: 9px var(--font-mono); font-style: normal; letter-spacing: .08em; }
+.ykb-submit { margin-top: 17px; }
+.ykb-submit:disabled { opacity: .38; cursor: not-allowed; }
+.ykb-result blockquote { max-width: 840px; margin: 0; color: #f3eee8; font: 600 clamp(19px, 2.8vw, 28px)/1.5 var(--font-sora); }
+.ykb-verdict { display: grid; grid-template-columns: 1.2fr 1fr 1fr; gap: 1px; margin-top: 32px; border: 1px solid #302d2a; background: #302d2a; }
+.ykb-verdict > div { padding: 17px; background: #111214; }
+.ykb-verdict span { display: block; margin-bottom: 7px; color: #88817a; font: 9px var(--font-mono); letter-spacing: .12em; }
+.ykb-verdict strong { color: var(--court); font: 800 clamp(18px, 2.5vw, 27px) var(--font-sora); }
+.ykb-verdict small { margin-left: 3px; color: #777; }
+.ykb-score-note { margin-bottom: 0; font-size: 12px; }
+.ykb-result-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
+.ykb-result-actions button, .ykb-result-actions a { min-height: 44px; display: inline-flex; align-items: center; gap: 8px; border: 1px solid rgba(255,106,43,.48); border-radius: 8px; padding: 10px 14px; color: #fff; background: rgba(255,106,43,.07); font-weight: 700; cursor: pointer; }
+.koi-case { display: grid; grid-template-columns: 210px 1fr auto; gap: 28px; align-items: center; margin-top: 28px; padding: 23px 26px; border: 1px solid var(--line); border-radius: 12px; background: rgba(255,255,255,.02); }
+.koi-case span { color: var(--faint); font: 9px var(--font-mono); letter-spacing: .12em; text-transform: uppercase; }
+.koi-case h3 { margin-top: 7px; font-size: 21px; }
+.koi-case p { margin: 0; font-size: 13px; }
+.koi-case a { color: var(--dim); font-size: 13px; white-space: nowrap; }
+
+.ykb-play-page { min-height: 100vh; overflow: auto; background: radial-gradient(circle at 50% -10%, rgba(255,106,43,.22), transparent 35%), #07080a; }
+.ykb-play-wrap { width: min(980px, calc(100% - 28px)); margin: 0 auto; padding: 28px 0 48px; }
+.ykb-play-wrap nav a { display: inline-flex; align-items: center; gap: 7px; min-height: 44px; color: #aaa39c; font-size: 13px; }
+.ykb-play-head { padding: 55px 0 32px; }
+.ykb-play-head h1 { font-size: clamp(50px, 10vw, 106px); text-transform: uppercase; }
+.ykb-play-head > p:last-child { max-width: 690px; font-size: 17px; }
+.ykb-game-full { overflow: hidden; border: 1px solid rgba(255,106,43,.45); border-radius: 17px; box-shadow: 0 50px 100px -65px var(--orange); }
+.ykb-play-wrap > footer { display: flex; flex-wrap: wrap; gap: 9px 22px; justify-content: center; padding-top: 22px; color: #716c67; font: 9px var(--font-mono); letter-spacing: .1em; text-transform: uppercase; }
+
+@media (max-width: 760px) {
+  .trendi-head, .ykb-home-head { display: grid; align-items: start; }
+  .trendi-media-grid { grid-template-columns: 1fr; }
+  .trendi-video-frame { min-height: 430px; }
+  .trendi-shot { width: min(78%, 330px); justify-self: center; }
+  .ykb-scoreboard { grid-template-columns: 65px 1fr 65px; gap: 7px; padding: 11px 10px; }
+  .ykb-scoreboard p { font-size: 12px; }
+  .ykb-side-grid, .ykb-verdict { grid-template-columns: 1fr; }
+  .ykb-side-grid button { min-height: 54px; }
+  .koi-case { grid-template-columns: 1fr; gap: 12px; }
+  .ykb-play-head { padding-top: 32px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ykb-game *, .ykb-spotlight-shell *, .trendi-feature * { scroll-behavior: auto !important; animation: none !important; transition: none !important; }
+}
+
 @media print {
   .site-nav,
   .page-field,

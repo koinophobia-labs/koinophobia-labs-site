@@ -15,7 +15,7 @@ export default function Hero() {
           <p className="hero-sub">
             Koinophobia Labs is a founder-led AI product lab — building AI
             products, creator systems, and command centers for real workflows.
-            Built, tested, shipped. Flagship: You Know Ball.
+            Built, tested, shipped. Featured product: Trendi.
           </p>
           <div className="cta-row">
             <Button href="#products" tone="gold">
@@ -48,4 +48,3 @@ export default function Hero() {
     </section>
   );
 }
-
