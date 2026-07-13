@@ -56,6 +56,9 @@ export default function AuditPage() {
           <h2 id="audit-includes-title">What gets measured</h2>
           <ul className="audit-areas">{auditMeasuredAreas.map((area) => <li key={area}>{area}</li>)}</ul>
           <h2>What you receive</h2>
+          <p className="audit-receive-lead">
+            You receive a practical system for deciding what to fix first — not a pile of disconnected opinions.
+          </p>
           <ul className="audit-deliverables">
             {auditDeliverables.map((item) => <li key={item}><CheckCircle2 size={16} aria-hidden="true" />{item}</li>)}
           </ul>

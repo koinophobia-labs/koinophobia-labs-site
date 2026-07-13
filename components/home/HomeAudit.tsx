@@ -18,8 +18,9 @@ export default function HomeAudit() {
           </h2>
           <p className="kl-audit__body">
             A close read of where your site loses people, and the fixes in
-            priority order. You leave with a leak map and a plan you can act on —
-            with the studio or without it.
+            priority order — the same method behind every Koinophobia Labs
+            product. You leave with a leak map and a plan you can act on, with
+            the studio or without it.
           </p>
           <div className="kl-audit__cta">
             <Link className="kl-btn kl-btn--light" href="/audit">
