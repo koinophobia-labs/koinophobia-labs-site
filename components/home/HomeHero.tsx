@@ -9,18 +9,19 @@ export default function HomeHero() {
           <p className="kl-eyebrow">
             Koinophobia Labs — a founder-led studio in Chicago.
           </p>
-          <h1 className="kl-hero__h1">Tools that give people leverage.</h1>
+          <h1 className="kl-hero__h1">We build systems that give people leverage.</h1>
           <p className="kl-hero__sub">
-            Websites that convert, workflows that remove real work, and products
-            people actually use — for founders, creators, and small teams.
-            Founder-led: you work directly with the person who builds and ships.
+            Most people do not need more noise or more repetitive decisions. We build software,
+            workflows, and websites that turn messy work into clear, repeatable action — for
+            creators, job seekers, founders, and small teams. Founder-led means you work directly
+            with the person who designs, builds, tests, and ships.
           </p>
           <div className="kl-cta-row">
             <Link className="kl-btn kl-btn--primary" href="/audit">
-              Get a Revenue Leak Audit
+              Build leverage in your business
             </Link>
             <a className="kl-link" href="#work">
-              See the work →
+              See the systems →
             </a>
           </div>
           <div className="kl-signature">
