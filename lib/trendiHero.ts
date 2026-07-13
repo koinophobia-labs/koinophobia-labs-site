@@ -210,9 +210,9 @@ export function buildPeekPath(input: Pick<SwimPathInput, "hero" | "screen">): Sw
   return { d, exit, entry, wordmarkAt: -1, ctaAt: -1 };
 }
 
-/** Delay before an occasional, quieter re-swim (ms). */
-export function computeReswimDelay(random: () => number = Math.random): number {
-  return Math.round(15000 + random() * 10000);
+/** Fixed delay before each quiet re-swim (ms). */
+export function computeReswimDelay(_random: () => number = Math.random): number {
+  return 15000;
 }
 
 export type ReswimGate = {
