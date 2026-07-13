@@ -3,7 +3,7 @@ import axe from "axe-core";
 
 const base = process.env.QA_BASE_URL || "http://127.0.0.1:3000";
 const widths = [320, 375, 390, 430, 768, 1440, 1920];
-const browser = await chromium.launch();
+const browser = await chromium.launch(process.env.CHROMIUM_PATH ? { executablePath: process.env.CHROMIUM_PATH } : {});
 const failures = [];
 const checks = [];
 const check = (condition, label, detail = "") => {

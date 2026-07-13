@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Archivo, IBM_Plex_Mono, Inter, JetBrains_Mono, Newsreader, Sora } from "next/font/google";
 import "./globals.css";
 import "./founder.css";
+import "./home.css";
 
 const sora = Sora({
   variable: "--font-sora",
