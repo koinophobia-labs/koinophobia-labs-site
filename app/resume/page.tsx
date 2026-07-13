@@ -49,6 +49,9 @@ export default function ResumePage() {
               <p className="kicker kicker-gold">Career · Résumé</p>
               <h1 id="resume-title">{resume.name}</h1>
               <p className="resume-positioning">{resume.headline}</p>
+              <p className="resume-operator">
+                I build practical systems that turn repeated friction into clear, reliable action.
+              </p>
             </div>
             <figure className="resume-portrait">
               <Image

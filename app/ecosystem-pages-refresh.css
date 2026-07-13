@@ -92,6 +92,23 @@
   letter-spacing: -.04em;
 }
 
+.resume-operator {
+  margin-top: 10px;
+  max-width: 46ch;
+  color: #d8c7d4;
+  font-size: clamp(14px, 1.6vw, 16px);
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.audit-receive-lead {
+  margin: 6px 0 14px;
+  max-width: 58ch;
+  color: #d8c7d4;
+  font-size: clamp(14px, 1.6vw, 16px);
+  line-height: 1.5;
+}
+
 .resume-portrait {
   width: clamp(140px, 18vw, 220px);
   padding: 1px;
