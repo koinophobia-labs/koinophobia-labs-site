@@ -70,11 +70,21 @@
   position: relative;
   display: grid;
   min-height: min(850px, calc(100svh - 80px));
-  grid-template-columns: minmax(0, 1fr) clamp(210px, 16vw, 270px);
-  gap: clamp(44px, 7vw, 130px);
+  grid-template-columns: minmax(0, 1fr) clamp(240px, 19vw, 320px);
+  gap: clamp(44px, 6vw, 110px);
   align-items: center;
   padding: clamp(80px, 10vh, 130px) 0;
 }
+
+/* Right rail: the living phone above the premise note. */
+.trendiPage_heroSide {
+  display: grid;
+  gap: 30px;
+  align-self: center;
+  justify-items: stretch;
+}
+.trendiPage_heroSide .trendiHV_phoneWrap { max-width: 320px; margin-inline: auto; }
+.trendiPage_heroCopy { position: relative; z-index: 4; }
 
 .trendiPage_heroGlow {
   position: absolute;
@@ -160,6 +170,8 @@
 @media (max-width: 900px) {
   .trendiPage_hero { grid-template-columns: 1fr; min-height: auto; }
   .trendiPage_heroNote { display: none; }
+  .trendiPage_heroSide { margin-top: 64px; }
+  .trendiPage_heroSide .trendiHV_phoneWrap { max-width: min(250px, 62vw); }
   .trendiPage_sectionLead { grid-template-columns: 1fr; gap: 22px; }
   .trendiPage_steps, .trendiPage_audienceGrid { grid-template-columns: 1fr; }
   .trendiPage_steps h3, .trendiPage_audienceGrid h3 { margin-top: 55px; }

@@ -9,15 +9,17 @@ import {
   Sparkles,
   Video,
 } from "lucide-react";
+import TrendiCtaLink from "@/components/trendi/TrendiCtaLink";
+import TrendiHeroVisual from "@/components/trendi/TrendiHeroVisual";
 import TrendiMedia from "@/components/TrendiMedia";
 
 const betaHref =
   "mailto:koinophobia999@gmail.com?subject=Trendi%20beta%20access&body=Hi%20Blake%2C%0A%0AI%27d%20like%20to%20ask%20about%20the%20Trendi%20beta.%0A%0AI%20create%3A%0AWhat%20I%27d%20like%20help%20recording%3A%0A";
 
 export const metadata: Metadata = {
-  title: "Trendi | Turn Rough Thoughts Into Words You Can Record",
+  title: "Trendi | Your AI Content Manager",
   description:
-    "Trendi is a voice-first creator tool that turns a rough thought into clear, creator-specific words you can actually record. Currently in TestFlight beta.",
+    "Trendi is your AI Content Manager. Type the thought, get words to say on camera—hooks, a recordable script, a caption, and a simple shot plan. In TestFlight beta.",
   alternates: { canonical: "https://koinophobialabs.com/trendi" },
   openGraph: {
     title: "Trendi | From messy thought to recordable words",
@@ -95,24 +97,25 @@ export default function TrendiPage() {
         </a>
       </header>
 
-      <section className="trendiPage_hero" aria-labelledby="trendi-title">
+      <section id="trendi-hero" className="trendiPage_hero" aria-labelledby="trendi-title">
         <div className="trendiPage_heroGlow" aria-hidden="true" />
         <div className="trendiPage_heroCopy">
           <p className="trendiPage_eyebrow">
-            Trendi <span>TestFlight beta</span> A voice-first creator tool
+            Trendi <span>TestFlight beta</span> Your AI Content Manager
           </p>
-          <p className="trendiPage_identity" aria-hidden="true">TRENDI</p>
+          <p id="trendi-identity" className="trendiPage_identity" aria-hidden="true">TRENDI</p>
           <h1 id="trendi-title">
-            Turn the thought in your head into words you can actually record.
+            Type the thought. Get words to say on camera.
           </h1>
           <p className="trendiPage_lede">
-            Type it or say it messy. Trendi shapes the idea into clear, creator-specific
-            words—so you can stop circling the thought and start recording it.
+            Say it messy. Trendi turns a rough idea into hooks, a recordable script, a
+            caption, and a simple shot plan—so you can stop circling the thought and
+            start recording it.
           </p>
           <div className="trendiPage_actions">
-            <a className="trendiPage_primary" href={betaHref}>
+            <TrendiCtaLink id="trendi-hero-cta" className="trendiPage_primary" href={betaHref}>
               Request beta access <ArrowRight size={17} aria-hidden="true" />
-            </a>
+            </TrendiCtaLink>
             <a className="trendiPage_secondary" href="#real-product">
               Watch the real product <ArrowDown size={17} aria-hidden="true" />
             </a>
@@ -121,10 +124,18 @@ export default function TrendiPage() {
             Available through TestFlight. Not yet publicly released on the App Store.
           </p>
         </div>
-        <aside className="trendiPage_heroNote" aria-label="Product premise">
-          <span>THE PREMISE</span>
-          <p>Your best ideas should not die between the voice note and the record button.</p>
-        </aside>
+        <div className="trendiPage_heroSide">
+          <TrendiHeroVisual
+            variant="full"
+            heroId="trendi-hero"
+            wordmarkId="trendi-identity"
+            ctaId="trendi-hero-cta"
+          />
+          <aside className="trendiPage_heroNote" aria-label="Product premise">
+            <span>THE PREMISE</span>
+            <p>Your best ideas should not die between the voice note and the record button.</p>
+          </aside>
+        </div>
       </section>
 
       <section id="real-product" className="trendiPage_product" aria-labelledby="real-product-title">

@@ -1,0 +1,193 @@
+/* Trendi hero visual — phone + fish. Shared by the /trendi hero (full
+   animation) and the homepage Trendi feature (ambient idle only). */
+
+.trendiHV {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+}
+
+.trendiHV_phoneWrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 280 / 560; /* fixed ratio — no layout shift, ever */
+  filter: drop-shadow(0 30px 60px rgba(0, 0, 0, 0.45))
+    drop-shadow(0 0 46px rgba(222, 74, 255, 0.13));
+}
+
+.trendiHV_phone {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.trendiHV_screenMark {
+  fill: #fff7fb;
+  font: 800 27px var(--font-archivo), sans-serif;
+  letter-spacing: 0.22em;
+}
+
+.trendiHV_screenTag {
+  fill: #c9a9c6;
+  font: 500 10.5px var(--font-ibm-plex-mono), monospace;
+  letter-spacing: 0.05em;
+}
+
+.trendiHV_ripple {
+  fill: none;
+  stroke: rgba(255, 155, 197, 0.65);
+  stroke-width: 1.5;
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+}
+
+/* ——— Idle life (CSS-driven so the browser can pause it cheaply) ——— */
+
+.trendiHV_fishIdle {
+  animation: trendiHV-drift 5.4s ease-in-out infinite alternate;
+}
+
+.trendiHV [data-trendi-fish-tail=""] {
+  animation: trendiHV-tail 2.9s ease-in-out infinite alternate;
+}
+
+.trendiHV_caustic {
+  animation: trendiHV-breathe 7s ease-in-out infinite alternate;
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+}
+
+.trendiHV_bubble {
+  fill: rgba(255, 182, 216, 0.5);
+  animation: trendiHV-bubble 9.5s ease-in 2s infinite;
+}
+
+@keyframes trendiHV-drift {
+  from {
+    transform: translateY(-4px) rotate(-0.6deg);
+  }
+  to {
+    transform: translateY(5px) rotate(0.8deg);
+  }
+}
+
+@keyframes trendiHV-tail {
+  from {
+    transform: rotate(-6deg);
+  }
+  to {
+    transform: rotate(7deg);
+  }
+}
+
+@keyframes trendiHV-breathe {
+  from {
+    opacity: 0.75;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes trendiHV-bubble {
+  0% {
+    opacity: 0;
+    transform: translateY(0);
+  }
+  4% {
+    opacity: 0.55;
+  }
+  26% {
+    opacity: 0;
+    transform: translateY(-150px);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-150px);
+  }
+}
+
+/* Offscreen or hidden tab: everything freezes. */
+.trendiHV[data-paused="true"] .trendiHV_fishIdle,
+.trendiHV[data-paused="true"] [data-trendi-fish-tail=""],
+.trendiHV[data-paused="true"] .trendiHV_caustic,
+.trendiHV[data-paused="true"] .trendiHV_bubble {
+  animation-play-state: paused;
+}
+
+/* ——— Overlay (full variant): trail, free fish, sweep, CTA accent ——— */
+
+.trendiHV_overlay {
+  position: absolute;
+  z-index: 3;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.trendiHV_trailSvg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.trendiHV_trail {
+  filter: blur(2px);
+}
+
+.trendiHV_freeFish {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: clamp(72px, 8.5vw, 118px);
+  opacity: 0;
+  offset-rotate: auto;
+  offset-distance: 0%;
+  will-change: offset-distance, transform;
+  filter: drop-shadow(0 0 18px rgba(255, 95, 158, 0.35));
+}
+
+.trendiHV_freeFishSvg {
+  display: block;
+  width: 100%;
+  height: auto;
+  /* Leftward travel + offset-rotate:auto would read upside down; the swim
+     starts flipped and rolls upright through the turn. */
+  transform: scaleY(-1);
+}
+
+.trendiHV_sweep {
+  position: absolute;
+  height: 12px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, transparent, #ff5f9e 30%, #ff9a77 70%, transparent);
+  filter: blur(7px);
+  opacity: 0;
+}
+
+.trendiHV_ctaGlow {
+  position: absolute;
+  border-radius: 999px;
+  box-shadow: 0 0 34px 8px rgba(255, 118, 175, 0.4);
+  opacity: 0;
+}
+
+/* ——— Reduced motion: a polished still. No swims, no loops, no pulsing. ——— */
+
+@media (prefers-reduced-motion: reduce) {
+  .trendiHV_fishIdle,
+  .trendiHV [data-trendi-fish-tail=""],
+  .trendiHV_caustic,
+  .trendiHV_bubble {
+    animation: none !important;
+  }
+  .trendiHV_bubble {
+    opacity: 0;
+  }
+  .trendiHV_overlay {
+    display: none;
+  }
+}

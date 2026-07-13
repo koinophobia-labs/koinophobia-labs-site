@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { Reveal } from "@/components/ui";
+import TrendiHeroVisual from "@/components/trendi/TrendiHeroVisual";
 import TrendiMedia from "@/components/TrendiMedia";
 
 const proof = [
@@ -28,7 +29,10 @@ export default function TrendiFeature() {
                 <a className="trendiLaunch_secondary" href="#trendi-demo">Watch the real demo</a>
               </div>
             </div>
-            <p className="trendiLaunch_sideNote"><span>01</span>Flagship product from Koinophobia Labs</p>
+            <div className="trendiLaunch_side">
+              <TrendiHeroVisual variant="ambient" />
+              <p className="trendiLaunch_sideNote"><span>01</span>Flagship product from Koinophobia Labs</p>
+            </div>
           </div>
         </Reveal>
         <Reveal>

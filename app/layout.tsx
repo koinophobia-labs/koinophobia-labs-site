@@ -5,6 +5,7 @@ import "./founder.css";
 import "./home.css";
 import "./you-know-ball-home-fix.css";
 import "./trendi-feature.css";
+import "./trendi-hero-visual.css";
 
 const sora = Sora({
   variable: "--font-sora",

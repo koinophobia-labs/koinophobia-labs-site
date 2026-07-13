@@ -82,3 +82,11 @@
   .trendiLaunch_primary, .trendiLaunch_secondary { transition: none; }
   .trendiLaunch_primary:hover, .trendiLaunch_secondary:hover { transform: none; }
 }
+
+/* Ambient phone + fish beside the intro copy (idle only on the homepage). */
+.trendiLaunch_side { display: flex; flex-direction: column; justify-content: flex-end; gap: 26px; min-width: 0; }
+.trendiLaunch_side .trendiHV_phoneWrap { max-width: 230px; margin-inline: auto; }
+
+@media (max-width: 760px) {
+  .trendiLaunch_side { display: none; }
+}
