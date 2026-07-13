@@ -2,7 +2,16 @@
 // Kept free of React/DOM imports so it can be unit tested with node:test,
 // mirroring the conventions in lib/youKnowBall.ts.
 
-export const TRENDI_HERO_SESSION_KEY = "trendi_hero_opening_played";
+export const TRENDI_HERO_SESSION_KEY = "trendi_hero_opening_played_v2";
+
+/**
+ * Scope the one-time opening to the current page. The homepage and /trendi
+ * each deserve their own first swim, even during client-side navigation.
+ */
+function openingSessionKey(): string {
+  if (typeof window === "undefined") return TRENDI_HERO_SESSION_KEY;
+  return `${TRENDI_HERO_SESSION_KEY}:${window.location.pathname}`;
+}
 
 /** Opening sequence timing (seconds). Total must stay under ~7s. */
 export const OPENING_TIMING = {
@@ -40,10 +49,10 @@ export function trackTrendiHero(event: TrendiHeroEvent) {
 
 type SessionStore = Pick<Storage, "getItem" | "setItem">;
 
-/** Whether the opening sequence already ran in this browser session. */
+/** Whether the opening sequence already ran on this page in this browser session. */
 export function hasOpeningPlayed(store: SessionStore | null | undefined): boolean {
   try {
-    return store?.getItem(TRENDI_HERO_SESSION_KEY) === "1";
+    return store?.getItem(openingSessionKey()) === "1";
   } catch {
     return false;
   }
@@ -51,7 +60,7 @@ export function hasOpeningPlayed(store: SessionStore | null | undefined): boolea
 
 export function markOpeningPlayed(store: SessionStore | null | undefined) {
   try {
-    store?.setItem(TRENDI_HERO_SESSION_KEY, "1");
+    store?.setItem(openingSessionKey(), "1");
   } catch {
     // Private-mode storage failures fall back to replaying next visit.
   }
