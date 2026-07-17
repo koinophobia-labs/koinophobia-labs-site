@@ -2,14 +2,14 @@ import type { Metadata } from "next";
 import { Archivo, IBM_Plex_Mono, Inter, JetBrains_Mono, Newsreader, Sora } from "next/font/google";
 import "./globals.css";
 import "./founder.css";
-import "./founder-brand-refresh.css";
-import "./founder-polish.css";
+import "./founder-editorial.css";
 import "./ecosystem-pages-refresh.css";
 import "./home.css";
 import "./career-forge-home.css";
 import "./you-know-ball-home-fix.css";
 import "./trendi-feature.css";
 import "./trendi-hero-visual.css";
+import "./product-worlds.css";
 
 const sora = Sora({
   variable: "--font-sora",
