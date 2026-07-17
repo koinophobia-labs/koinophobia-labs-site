@@ -8,7 +8,6 @@ const LINKS = [
   { label: "Career Forge", href: "#career-forge" },
   { label: "Work", href: "#products" },
   { label: "About", href: "#about" },
-  { label: "Contact", href: "#audit" },
 ];
 
 export default function HomeNav() {
