@@ -1,0 +1,118 @@
+/* Product-specific worlds on the studio homepage.
+   Shared craft stays consistent; atmosphere belongs to the product. */
+
+/* Career Forge: evidence ledger */
+.kl-home .kl-career {
+  border-bottom-color: #c8d0ca;
+  background: #e8ede9;
+}
+
+.kl-home .kl-career::before {
+  background-image:
+    repeating-linear-gradient(
+      180deg,
+      transparent 0 43px,
+      rgba(20, 21, 22, 0.045) 43px 44px
+    );
+  background-size: auto;
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.7), transparent 88%);
+}
+
+.kl-home .kl-career__system {
+  border-color: rgba(238, 235, 222, 0.18);
+  border-radius: 4px;
+  background: #18211e;
+  box-shadow: 0 24px 54px rgba(22, 31, 28, 0.16);
+}
+
+.kl-home .kl-career__system::after {
+  display: none;
+}
+
+.kl-home .kl-career__step > .kl-mono,
+.kl-home .kl-career__pack,
+.kl-home .kl-career__pack li,
+.kl-home .kl-career__service {
+  border-radius: 2px;
+}
+
+.kl-home .kl-career__service {
+  backdrop-filter: none;
+}
+
+/* Trendi: warm creator editorial */
+.kl-home .trendiHV_phoneWrap {
+  filter: drop-shadow(0 28px 46px rgba(0, 0, 0, 0.42));
+}
+
+.kl-home .trendiHV_freeFish {
+  filter: drop-shadow(0 0 12px rgba(200, 95, 72, 0.22));
+}
+
+.kl-home .trendiHV_sweep {
+  background: linear-gradient(90deg, transparent, #c85f48 34%, #dfa087 70%, transparent);
+}
+
+.kl-home .trendiHV_ctaGlow {
+  box-shadow: 0 0 24px 4px rgba(200, 95, 72, 0.24);
+}
+
+/* You Know Ball: hard cut into a broadcast arena, no violet handoff */
+.kl-home .kl-band--arena {
+  border: 0;
+  background: #08090b;
+}
+
+.kl-home .kl-band--arena::before {
+  height: clamp(180px, 24vw, 340px);
+  background:
+    linear-gradient(90deg, transparent, rgba(255, 106, 43, 0.07) 50%, transparent),
+    repeating-linear-gradient(
+      90deg,
+      transparent 0 79px,
+      rgba(255, 106, 43, 0.055) 79px 80px
+    );
+  mask-image: linear-gradient(to bottom, #000, transparent 88%);
+}
+
+.kl-home .ykb-court {
+  -webkit-mask-image: linear-gradient(180deg, #000 0, #000 74%, transparent 100%);
+  mask-image: linear-gradient(180deg, #000 0, #000 74%, transparent 100%);
+}
+
+.kl-home .ykb-spotlight-shell,
+.kl-home .ykb-game-full,
+.kl-home .koi-case {
+  border-radius: 4px;
+  box-shadow: none;
+}
+
+.kl-home .ykb-static-preview,
+.kl-home .ykb-side-grid button,
+.kl-home .ykb-take-label textarea,
+.kl-home .ykb-result-actions button,
+.kl-home .ykb-result-actions a {
+  border-radius: 3px;
+}
+
+.kl-home .ykb-scoreboard {
+  border-top: 3px solid var(--orange);
+  background: #0e0f11;
+}
+
+.kl-home .ykb-scoreboard p,
+.kl-home .ykb-play-head h1,
+.kl-home .ykb-challenge__title {
+  letter-spacing: -0.035em;
+}
+
+.kl-home .ykb-side-grid button.selected {
+  box-shadow: inset 4px 0 0 var(--court);
+}
+
+@media (max-width: 760px) {
+  .kl-home .kl-band--arena::before {
+    background:
+      linear-gradient(90deg, transparent, rgba(255, 106, 43, 0.06) 50%, transparent);
+  }
+}
