@@ -20,14 +20,22 @@ export const metadata: Metadata = {
     description:
       "Career Forge public beta for job seekers, Trendi for creators, and founder-led software, workflows, and websites that turn messy work into repeatable action.",
     url: "https://koinophobialabs.com/",
-    images: [{ url: "/og.png", width: 1200, height: 630 }],
+    siteName: "Koinophobia Labs",
+    images: [
+      {
+        url: "/brand/social-card",
+        width: 1200,
+        height: 630,
+        alt: "Koinophobia Labs official logo with two cybernetic koi and a violet pulse",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Koinophobia Labs | Career Forge beta and founder-led systems",
     description:
       "Career Forge public beta for job seekers, Trendi for creators, and founder-led systems for messy work.",
-    images: ["/og.png"],
+    images: ["/brand/social-card"],
   },
 };
 
