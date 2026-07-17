@@ -6,6 +6,7 @@ import "./founder-brand-refresh.css";
 import "./founder-polish.css";
 import "./ecosystem-pages-refresh.css";
 import "./home.css";
+import "./career-forge-home.css";
 import "./you-know-ball-home-fix.css";
 import "./trendi-feature.css";
 import "./trendi-hero-visual.css";
