@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import BrandLogo from "@/components/brand/BrandLogo";
 
 const LINKS = [
   { label: "Services", href: "#services" },
@@ -17,10 +18,19 @@ export default function HomeNav() {
     <nav className="kl-nav" data-open={open} aria-label="Primary">
       <div className="kl-nav__inner">
         <div className="kl-nav__brand">
-          <Link href="/" className="kl-nav__word">
-            Koinophobia Labs
+          <Link href="/" className="kl-nav__brand-link" aria-label="Koinophobia Labs home">
+            <BrandLogo
+              variant="emblem"
+              className="kl-nav__emblem"
+              priority
+              animated
+              decorative
+            />
+            <span className="kl-nav__brand-copy">
+              <span className="kl-nav__word">Koinophobia Labs</span>
+              <span className="kl-nav__place">Chicago</span>
+            </span>
           </Link>
-          <span className="kl-nav__place">Chicago</span>
         </div>
 
         <div className="kl-nav__links">
