@@ -1,4 +1,4 @@
-import Image from "next/image";
+import BrandLogo from "@/components/brand/BrandLogo";
 import { footerTags, navItems } from "@/lib/content";
 import { hasLink, link, LINKS } from "@/lib/links";
 import { Chip } from "@/components/ui";
@@ -15,14 +15,16 @@ export default function Footer() {
   return (
     <footer className="site-footer">
       <div>
-        <a className="brand" href="#top" aria-label="Koinophobia Labs home">
-          <span className="brand-mark">
-            <Image src="/koi-mark.png" alt="" width={34} height={34} />
-          </span>
-          <span>
-            <strong>KOINOPHOBIA</strong>
-            <em>LABS</em>
-          </span>
+        <a
+          className="brand brand--footer"
+          href="#top"
+          aria-label="Koinophobia Labs home"
+        >
+          <BrandLogo
+            variant="lockup"
+            className="site-footer__lockup"
+            decorative
+          />
         </a>
         <p>
           A software and automation lab building <strong>useful systems for messy work.</strong>
