@@ -9,12 +9,12 @@ export default function HomeHero() {
           <p className="kl-eyebrow">
             Koinophobia Labs — a founder-led studio in Chicago.
           </p>
-          <h1 className="kl-hero__h1">We build systems that give people leverage.</h1>
+          <h1 className="kl-hero__h1">I build systems that give people leverage.</h1>
           <p className="kl-hero__sub">
-            Most people do not need more noise or more repetitive decisions. We build software,
-            workflows, and websites that turn messy work into clear, repeatable action — for
-            creators, job seekers, founders, and small teams. Founder-led means you work directly
-            with the person who designs, builds, tests, and ships.
+            Most people do not need more noise or repetitive decisions. I build software, workflows,
+            and websites that turn messy work into clear, repeatable action for creators, job
+            seekers, founders, and small teams. You work directly with me from design through
+            testing and launch.
           </p>
           <div className="kl-cta-row">
             <Link className="kl-btn kl-btn--primary" href="/audit">
