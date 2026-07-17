@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import HomeNav from "@/components/home/HomeNav";
 import HomeHero from "@/components/home/HomeHero";
 import HomeServices from "@/components/home/HomeServices";
+import HomeCareerForge from "@/components/home/HomeCareerForge";
 import HomeProof from "@/components/home/HomeProof";
 import HomeFounder from "@/components/home/HomeFounder";
 import HomeAudit from "@/components/home/HomeAudit";
@@ -10,22 +11,22 @@ import TrendiFeature from "@/components/TrendiFeature";
 import YouKnowBall from "@/components/YouKnowBall";
 
 export const metadata: Metadata = {
-  title: "Koinophobia Labs — A founder-led studio in Chicago",
+  title: "Koinophobia Labs | Career Forge and founder-led systems",
   description:
-    "Koinophobia Labs is Blake Taylor's founder-led studio in Chicago. Websites that convert, workflows that remove real work, and products people actually use — for founders, creators, and small teams.",
+    "Koinophobia Labs is Blake Taylor's founder-led studio in Chicago. Career Forge gives job seekers a truthful career system, while Trendi, software, workflows, and websites turn messy work into repeatable action.",
   alternates: { canonical: "https://koinophobialabs.com/" },
   openGraph: {
-    title: "Koinophobia Labs — A founder-led studio in Chicago",
+    title: "Koinophobia Labs | Career Forge and founder-led systems",
     description:
-      "Websites that convert, workflows that remove real work, and products people actually use — for founders, creators, and small teams.",
+      "Career Forge for job seekers, Trendi for creators, and founder-led software, workflows, and websites that turn messy work into repeatable action.",
     url: "https://koinophobialabs.com/",
     images: [{ url: "/og.png", width: 1200, height: 630 }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Koinophobia Labs — A founder-led studio in Chicago",
+    title: "Koinophobia Labs | Career Forge and founder-led systems",
     description:
-      "Websites that convert, workflows that remove real work, and products people actually use.",
+      "Career Forge for job seekers, Trendi for creators, and founder-led systems for messy work.",
     images: ["/og.png"],
   },
 };
@@ -41,6 +42,7 @@ export default function Home() {
       <main>
         <HomeHero />
         <HomeServices />
+        <HomeCareerForge />
         <TrendiFeature />
         <div className="kl-band kl-band--arena">
           <YouKnowBall />
