@@ -16,7 +16,7 @@ const ASSETS: Record<
   { src: string; width: number; height: number }
 > = {
   emblem: {
-    src: "/brand/koi-emblem.svg",
+    src: "/brand/koi-emblem.svg?v=2",
     width: 800,
     height: 800,
   },
