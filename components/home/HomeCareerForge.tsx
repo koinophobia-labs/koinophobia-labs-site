@@ -5,26 +5,26 @@ const STEPS = [
   {
     number: "01",
     title: "Import the history",
-    body: "Bring old resumes, projects, and work history into one local career dossier.",
+    body: "Bring old résumés, projects, and work history into one local career dossier.",
   },
   {
     number: "02",
-    title: "Approve the truth",
-    body: "Every imported fact stays a proposal until you confirm it. Unsupported gaps stay gaps.",
+    title: "Review the evidence",
+    body: "Confirm professional claims and keep goals, gaps, constraints, and uncertainty out of generated materials.",
   },
   {
     number: "03",
-    title: "Compile the pack",
-    body: "Build distinct ATS, recruiter, and job-specific resumes from the right role lane.",
+    title: "Create draft packs",
+    body: "Build ATS, recruiter, and job-specific drafts from the role lane that fits the approved evidence.",
   },
 ];
 
 const PACK = [
   "Career Dossier",
   "Up to 3 role lanes",
-  "ATS resume per lane",
-  "Recruiter resume per lane",
-  "LinkedIn positioning",
+  "ATS résumé draft per lane",
+  "Recruiter résumé draft per lane",
+  "LinkedIn positioning drafts",
   "Evidence receipt",
   "Job-specific tailoring",
   "PDF and DOCX bundle",
@@ -40,16 +40,16 @@ export default function HomeCareerForge() {
         <div className="kl-career__copy">
           <div className="kl-career__kicker">
             <span className="kl-rule-gold" aria-hidden="true" />
-            <span className="kl-mono">CAREER FORGE · LIVE PRODUCT</span>
+            <span className="kl-mono">CAREER FORGE · PUBLIC BETA</span>
           </div>
           <p className="kl-career__eyebrow">Leverage for job seekers</p>
-          <h2 id="career-forge-title">One career history. A complete resume pack.</h2>
-          <p className="kl-career__lede">Your career is bigger than your last resume.</p>
+          <h2 id="career-forge-title">Build a reusable career evidence system.</h2>
+          <p className="kl-career__lede">Your career is bigger than your last résumé.</p>
           <p className="kl-career__body">
-            Career Forge turns scattered jobs, projects, and old resumes into an approved evidence
-            system, then compiles truthful application packs for every credible direction. No
-            account is required. Files process locally, and nothing enters the output until you
-            approve it.
+            Career Forge organizes scattered jobs, projects, and old résumés into a local career
+            dossier, then creates role-specific résumé and application drafts from the evidence you
+            review. The product is in public beta. Every generated claim, date, heading, and export
+            requires careful review before use.
           </p>
           <div className="kl-career__actions">
             <a
@@ -58,33 +58,33 @@ export default function HomeCareerForge() {
               target="_blank"
               rel="noreferrer"
             >
-              Open Career Forge
+              Try the Career Forge beta
               <ArrowUpRight size={16} aria-hidden="true" />
             </a>
             <a className="kl-link" href="#career-forge-pack">
-              See what the pack includes ↓
+              See what the draft pack includes ↓
             </a>
           </div>
-          <ul className="kl-career__trust" aria-label="Career Forge safeguards">
+          <ul className="kl-career__trust" aria-label="Career Forge beta qualities">
             <li>
               <ShieldCheck size={17} aria-hidden="true" />
-              Approval-gated evidence
+              Local-first workspace
             </li>
             <li>
               <FileCheck2 size={17} aria-hidden="true" />
-              No invented claims
+              Reviewable source evidence
             </li>
             <li>
               <Layers3 size={17} aria-hidden="true" />
-              Multiple role lanes
+              Reusable role lanes
             </li>
           </ul>
         </div>
 
-        <div className="kl-career__system" aria-label="How Career Forge turns career evidence into resume packs">
+        <div className="kl-career__system" aria-label="How the Career Forge beta turns career evidence into draft résumé packs">
           <div className="kl-career__system-head">
-            <span className="kl-mono">career://truth-system</span>
-            <span className="kl-career__live"><i aria-hidden="true" /> LIVE</span>
+            <span className="kl-mono">career://beta-workspace</span>
+            <span className="kl-career__live"><i aria-hidden="true" /> PUBLIC BETA</span>
           </div>
           <div className="kl-career__flow">
             {STEPS.map((step) => (
@@ -99,8 +99,8 @@ export default function HomeCareerForge() {
           </div>
           <div id="career-forge-pack" className="kl-career__pack">
             <div className="kl-career__pack-head">
-              <span className="kl-mono">THE OUTPUT</span>
-              <strong>A reusable dossier, not one generic document.</strong>
+              <span className="kl-mono">DRAFT OUTPUT</span>
+              <strong>A reusable dossier and role-specific drafts, not one generic document.</strong>
             </div>
             <ul>
               {PACK.map((item) => (
@@ -115,15 +115,17 @@ export default function HomeCareerForge() {
 
         <aside className="kl-career__service" aria-labelledby="career-forge-rebuild-title">
           <div>
-            <p className="kl-mono">DONE-FOR-YOU OPTION</p>
-            <h3 id="career-forge-rebuild-title">Career Forge Resume Rebuild: $149 flat.</h3>
+            <p className="kl-mono">HUMAN SERVICE · SEPARATE FROM THE BETA</p>
+            <h3 id="career-forge-rebuild-title">Career Forge Résumé Rebuild: $149 flat.</h3>
             <p>
-              A diagnostic, rebuilt resume, LinkedIn headline, three target-role directions, a Loom
-              walkthrough, and one revision. Turnaround is 48 hours after payment and intake.
+              Blake completes and reviews this done-for-you service directly: a diagnostic, rebuilt
+              résumé, LinkedIn headline, three target-role directions, a Loom walkthrough, and one
+              revision. It is not an automated beta output. Turnaround is 48 hours after payment and
+              intake.
             </p>
           </div>
           <a className="kl-link" href={REBUILD_HREF}>
-            Request a rebuild →
+            Request a human rebuild →
           </a>
         </aside>
       </div>
