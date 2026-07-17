@@ -11,22 +11,22 @@ import TrendiFeature from "@/components/TrendiFeature";
 import YouKnowBall from "@/components/YouKnowBall";
 
 export const metadata: Metadata = {
-  title: "Koinophobia Labs | Career Forge and founder-led systems",
+  title: "Koinophobia Labs | Career Forge beta and founder-led systems",
   description:
-    "Koinophobia Labs is Blake Taylor's founder-led studio in Chicago. Career Forge gives job seekers a truthful career system, while Trendi, software, workflows, and websites turn messy work into repeatable action.",
+    "Koinophobia Labs is Blake Taylor's founder-led studio in Chicago. Career Forge is a public beta for organizing career evidence and creating reviewable drafts; Trendi, software, workflows, and websites turn messy work into repeatable action.",
   alternates: { canonical: "https://koinophobialabs.com/" },
   openGraph: {
-    title: "Koinophobia Labs | Career Forge and founder-led systems",
+    title: "Koinophobia Labs | Career Forge beta and founder-led systems",
     description:
-      "Career Forge for job seekers, Trendi for creators, and founder-led software, workflows, and websites that turn messy work into repeatable action.",
+      "Career Forge public beta for job seekers, Trendi for creators, and founder-led software, workflows, and websites that turn messy work into repeatable action.",
     url: "https://koinophobialabs.com/",
     images: [{ url: "/og.png", width: 1200, height: 630 }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Koinophobia Labs | Career Forge and founder-led systems",
+    title: "Koinophobia Labs | Career Forge beta and founder-led systems",
     description:
-      "Career Forge for job seekers, Trendi for creators, and founder-led systems for messy work.",
+      "Career Forge public beta for job seekers, Trendi for creators, and founder-led systems for messy work.",
     images: ["/og.png"],
   },
 };
