@@ -3,8 +3,6 @@ import { Archivo, IBM_Plex_Mono, Inter, JetBrains_Mono, Newsreader, Sora } from 
 import BrandIntro from "@/components/brand/BrandIntro";
 import "./globals.css";
 import "./founder.css";
-import "./founder-brand-refresh.css";
-import "./founder-polish.css";
 import "./ecosystem-pages-refresh.css";
 import "./home.css";
 import "./career-forge-home.css";
@@ -13,6 +11,8 @@ import "./trendi-feature.css";
 import "./trendi-hero-visual.css";
 import "./brand.css";
 import "./brand-intro-fix.css";
+import "./founder-editorial.css";
+import "./product-worlds.css";
 
 const sora = Sora({
   variable: "--font-sora",
