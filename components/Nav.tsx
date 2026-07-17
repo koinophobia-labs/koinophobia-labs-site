@@ -2,8 +2,8 @@
 
 import clsx from "clsx";
 import { Menu, X } from "lucide-react";
-import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
+import BrandLogo from "@/components/brand/BrandLogo";
 import { navItems } from "@/lib/content";
 import { useHasScrolled, useScrollSpy } from "@/lib/hooks";
 import { Button } from "@/components/ui";
@@ -48,7 +48,13 @@ export default function Nav() {
     <nav className={clsx("site-nav", hasScrolled && "site-nav-scrolled")}>
       <a className="brand" href="#top" aria-label="Koinophobia Labs home">
         <span className="brand-mark">
-          <Image src="/koi-mark.png" alt="" width={32} height={32} priority />
+          <BrandLogo
+            variant="emblem"
+            className="brand__emblem"
+            priority
+            animated
+            decorative
+          />
         </span>
         <span>
           <strong>KOINOPHOBIA</strong>

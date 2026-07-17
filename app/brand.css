@@ -1,0 +1,387 @@
+/* Official Koinophobia Labs logo system.
+   Display assets are generated from the approved dark cyberpunk koi artwork. */
+
+:root {
+  --brand-ink: #05060a;
+  --brand-violet: #9447ff;
+  --brand-violet-hot: #b15cff;
+  --brand-silver: #eef1ff;
+}
+
+.brand-logo {
+  position: relative;
+  display: inline-flex;
+  flex: 0 0 auto;
+  isolation: isolate;
+  vertical-align: middle;
+}
+
+.brand-logo::before {
+  position: absolute;
+  inset: 10%;
+  z-index: -1;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(148, 71, 255, 0.34), transparent 68%);
+  filter: blur(12px);
+  opacity: 0.45;
+  content: "";
+  pointer-events: none;
+}
+
+.brand-logo img {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.brand-logo--emblem {
+  width: 44px;
+  aspect-ratio: 1;
+  border-radius: 12px;
+}
+
+.brand-logo--emblem img {
+  border-radius: inherit;
+}
+
+.brand-logo--lockup {
+  width: clamp(190px, 22vw, 320px);
+  aspect-ratio: 1600 / 420;
+}
+
+.brand-logo--pulse::before {
+  animation: brand-koi-halo 3.1s ease-in-out infinite;
+}
+
+.brand-logo--pulse img {
+  animation: brand-koi-light 3.1s ease-in-out infinite;
+  transform-origin: center;
+}
+
+/* Entry animation: shown once per browser session and skipped for reduced motion. */
+.brand-intro {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 50% 42%, rgba(105, 40, 255, 0.24), transparent 34rem),
+    linear-gradient(145deg, #020307, #080511 58%, #020307);
+  opacity: 0;
+  transition: opacity 520ms ease;
+}
+
+.brand-intro[data-phase="visible"] {
+  opacity: 1;
+}
+
+.brand-intro[data-phase="leaving"] {
+  opacity: 0;
+}
+
+.brand-intro__field {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(148, 71, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(148, 71, 255, 0.05) 1px, transparent 1px);
+  background-size: 62px 62px;
+  mask-image: radial-gradient(circle at center, #000, transparent 72%);
+}
+
+.brand-intro__panel {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  width: min(92vw, 780px);
+  transform: translateY(10px) scale(0.985);
+  opacity: 0;
+  transition: transform 720ms cubic-bezier(0.2, 0.72, 0.2, 1), opacity 520ms ease;
+}
+
+.brand-intro[data-phase="visible"] .brand-intro__panel {
+  transform: none;
+  opacity: 1;
+}
+
+.brand-intro__emblem {
+  width: clamp(190px, 31vw, 340px);
+}
+
+.brand-intro__lockup {
+  width: min(88vw, 720px);
+  margin-top: clamp(-24px, -2vw, -10px);
+}
+
+.brand-intro__panel p {
+  margin: 12px 0 0;
+  color: #a99bbf;
+  font-family: var(--font-ibm-plex-mono), var(--font-mono), monospace;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+}
+
+/* Homepage editorial chrome */
+.kl-nav__brand {
+  align-items: center;
+}
+
+.kl-nav__brand-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 11px;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.kl-nav__emblem {
+  width: 42px;
+  box-shadow: 0 8px 22px rgba(65, 29, 122, 0.16);
+}
+
+.kl-nav__brand-copy {
+  display: grid;
+  gap: 1px;
+}
+
+.kl-nav__word {
+  display: block;
+  line-height: 1.1;
+}
+
+.kl-nav__place {
+  display: block;
+  line-height: 1.2;
+}
+
+.kl-footer__brand {
+  align-items: center;
+  gap: 14px;
+}
+
+.kl-footer__brand-link {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+}
+
+.kl-footer__lockup {
+  width: clamp(190px, 20vw, 252px);
+}
+
+.kl-footer__brand > span {
+  white-space: nowrap;
+}
+
+/* Original dark site chrome */
+.brand-mark {
+  width: 46px;
+  height: 46px;
+  border-color: rgba(148, 71, 255, 0.52);
+  border-radius: 13px;
+  background: var(--brand-ink);
+  box-shadow: 0 0 28px rgba(148, 71, 255, 0.2);
+}
+
+.brand-mark .brand-logo {
+  width: 42px;
+}
+
+.brand-mark .brand-logo img {
+  width: 100%;
+  height: 100%;
+}
+
+.brand strong {
+  background: linear-gradient(90deg, var(--brand-silver), #b778ff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.brand--footer {
+  width: fit-content;
+}
+
+.site-footer__lockup {
+  width: clamp(220px, 24vw, 320px);
+}
+
+/* Replace the legacy founder-page fish without disturbing its layout. */
+.founder-ambient-koi {
+  background: center / contain no-repeat url("/brand/koi-emblem.svg");
+}
+
+.founder-ambient-koi > img {
+  opacity: 0;
+}
+
+.founder-brand .brand-mark {
+  background:
+    center / 34px 34px no-repeat url("/brand/koi-emblem.svg"),
+    var(--brand-ink);
+  border-color: rgba(148, 71, 255, 0.56);
+  box-shadow: 0 0 30px rgba(148, 71, 255, 0.22);
+}
+
+.founder-brand .brand-mark > img {
+  opacity: 0;
+}
+
+/* Branded route breadcrumbs. Existing arrow icons remain useful navigation cues. */
+.back-link::before,
+.trendiPage_back::before,
+.ykb-play-page nav a::before {
+  width: 27px;
+  height: 27px;
+  flex: 0 0 auto;
+  border: 1px solid rgba(148, 71, 255, 0.4);
+  border-radius: 8px;
+  background:
+    center / cover no-repeat url("/brand/koi-emblem.svg"),
+    var(--brand-ink);
+  box-shadow: 0 0 18px rgba(148, 71, 255, 0.15);
+  content: "";
+}
+
+.trendiPage_back {
+  gap: 8px;
+}
+
+.ykb-play-page nav a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Simple system pages and payment confirmations get a clear parent-brand stamp. */
+.simple-page::before {
+  display: block;
+  width: 92px;
+  height: 92px;
+  margin: 0 0 24px;
+  border: 1px solid rgba(148, 71, 255, 0.35);
+  border-radius: 20px;
+  background:
+    center / cover no-repeat url("/brand/koi-emblem.svg"),
+    var(--brand-ink);
+  box-shadow: 0 18px 55px -28px rgba(148, 71, 255, 0.9);
+  content: "";
+}
+
+.crm-shell .simple-page::before {
+  display: none;
+}
+
+.crm-shell {
+  min-height: 100vh;
+}
+
+.crm-brandbar {
+  display: flex;
+  width: min(1180px, calc(100% - 32px));
+  min-height: 74px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  margin: 0 auto;
+  border-bottom: 1px solid var(--line2);
+}
+
+.crm-brandbar a {
+  display: inline-flex;
+  align-items: center;
+}
+
+.crm-brandbar__logo {
+  width: clamp(210px, 24vw, 300px);
+}
+
+.crm-brandbar > span {
+  color: var(--faint);
+  font-family: var(--font-mono), monospace;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+@keyframes brand-koi-halo {
+  0%,
+  100% {
+    opacity: 0.34;
+    transform: scale(0.92);
+    filter: blur(11px);
+  }
+  50% {
+    opacity: 0.82;
+    transform: scale(1.12);
+    filter: blur(17px);
+  }
+}
+
+@keyframes brand-koi-light {
+  0%,
+  100% {
+    filter: brightness(0.96) saturate(1);
+    transform: scale(1);
+  }
+  50% {
+    filter: brightness(1.18) saturate(1.22);
+    transform: scale(1.012);
+  }
+}
+
+@media (max-width: 620px) {
+  .kl-nav__emblem {
+    width: 37px;
+  }
+
+  .kl-nav__brand-link {
+    gap: 8px;
+  }
+
+  .kl-nav__place {
+    display: none;
+  }
+
+  .kl-footer__brand {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 7px;
+  }
+
+  .crm-brandbar {
+    min-height: 68px;
+  }
+
+  .crm-brandbar__logo {
+    width: 188px;
+  }
+
+  .crm-brandbar > span {
+    display: none;
+  }
+
+  .brand-intro__panel p {
+    font-size: 8px;
+    letter-spacing: 0.14em;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .brand-logo--pulse::before,
+  .brand-logo--pulse img {
+    animation: none !important;
+  }
+
+  .brand-intro {
+    display: none !important;
+  }
+}
