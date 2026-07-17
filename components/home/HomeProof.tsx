@@ -1,9 +1,9 @@
 // Condensed editorial evidence. Real receipts only, with no invented clients,
-// numbers, or outcomes.
+// numbers, outcomes, or product-readiness claims.
 const RECEIPTS = [
   {
-    title: "Evidence before eloquence",
-    body: "Career Forge traces generated claims back to career evidence the user approved, and leaves unsupported gaps unclaimed.",
+    title: "Reviewable evidence workflow",
+    body: "Career Forge keeps source evidence reviewable and separates goals, gaps, constraints, and uncertainty from professional claims. The product remains in public beta, and every generated material requires review.",
   },
   {
     title: "Red-teamed before launch",
