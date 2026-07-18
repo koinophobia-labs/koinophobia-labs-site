@@ -24,9 +24,9 @@
 }
 
 .koi-companion-presence {
-  display: grid;
-  justify-items: inherit;
-  gap: 10px;
+  position: relative;
+  width: 70px;
+  height: 88px;
   will-change: transform;
 }
 
@@ -82,6 +82,9 @@
 .koi-companion[data-paused="true"] *, .koi-companion[data-paused="true"] *::before, .koi-companion[data-paused="true"] *::after { animation-play-state: paused !important; }
 
 .koi-companion-invitation {
+  position: absolute;
+  right: 0;
+  bottom: 98px;
   width: min(284px, calc(100vw - 28px));
   display: grid;
   grid-template-columns: 1fr 36px;
@@ -94,6 +97,9 @@
   pointer-events: auto;
   animation: koi-companion-bubble-in .32s cubic-bezier(.22,.8,.22,1) both;
 }
+
+.koi-companion-presence[data-bubble-side="left"] .koi-companion-invitation { right: auto; left: 0; }
+.koi-companion-presence[data-bubble-vertical="below"] .koi-companion-invitation { top: 98px; bottom: auto; }
 
 .koi-companion-invitation__message, .koi-companion-invitation__dismiss { border: 0; background: transparent; color: inherit; cursor: pointer; }
 .koi-companion-invitation__message { min-height: 62px; display: grid; gap: 4px; padding: 13px 10px 13px 16px; text-align: left; font: 650 13px/1.45 var(--font-inter), sans-serif; }
@@ -228,6 +234,7 @@
   .koi-companion { right: max(10px, env(safe-area-inset-right)); bottom: max(10px, env(safe-area-inset-bottom)); }
   .koi-companion--left { right: auto; left: max(10px, env(safe-area-inset-left)); }
   .koi-companion-trigger { width: 62px; height: 78px; padding: 8px 14px; }
+  .koi-companion-presence { width: 62px; height: 78px; }
   .koi-companion-trigger__koi { width: 34px; height: 61px; }
   .koi-companion-invitation { width: min(270px, calc(100vw - 20px)); }
   .koi-companion-backdrop { align-items: flex-end; padding: 10px 0 0; background: rgba(4,2,8,.72); }

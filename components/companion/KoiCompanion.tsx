@@ -155,11 +155,15 @@ export default function KoiCompanion() {
       const side = context.preferredSide;
       const anchorX = side === "right" ? window.innerWidth - 53 : 53;
       const anchorY = window.innerHeight - 62;
-      const horizontalReach = Math.min(420, window.innerWidth * 0.44);
-      const verticalReach = Math.min(430, window.innerHeight * 0.52);
-      const desiredX = event.clientX - anchorX + (side === "right" ? -118 : 118);
-      targetX = side === "right" ? Math.max(-horizontalReach, Math.min(0, desiredX)) : Math.min(horizontalReach, Math.max(0, desiredX));
-      targetY = Math.max(-verticalReach, Math.min(0, event.clientY - anchorY + 34));
+      const pointerOffsetX = event.clientX < window.innerWidth / 2 ? 52 : -52;
+      const desiredCenterX = Math.max(44, Math.min(window.innerWidth - 44, event.clientX + pointerOffsetX));
+      const desiredCenterY = Math.max(52, Math.min(window.innerHeight - 50, event.clientY + 42));
+      targetX = desiredCenterX - anchorX;
+      targetY = desiredCenterY - anchorY;
+      if (presence) {
+        presence.dataset.bubbleSide = desiredCenterX < window.innerWidth / 2 ? "left" : "right";
+        presence.dataset.bubbleVertical = desiredCenterY < 190 ? "below" : "above";
+      }
       if (!frame) frame = window.requestAnimationFrame(render);
       setMotionState("noticing");
       if (noticeTimerRef.current) window.clearTimeout(noticeTimerRef.current);
@@ -272,7 +276,7 @@ export default function KoiCompanion() {
       data-reduced-motion={reducedMotion ? "true" : "false"}
       data-paused={paused ? "true" : "false"}
     >
-      <div ref={presenceRef} className="koi-companion-presence">
+      <div ref={presenceRef} className="koi-companion-presence" data-bubble-side={context.preferredSide} data-bubble-vertical="above">
         {invitationVisible && context.invitation ? (
           <div className="koi-companion-invitation" role="status">
             <button className="koi-companion-invitation__message" type="button" onClick={() => openPanel("invitation")}>{context.invitation}<small>Ask me about this site or find the right service.</small></button>

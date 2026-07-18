@@ -20,7 +20,7 @@ The living koi companion is ready for review as a draft pull request. It adds a 
 - Keyboard operable trigger, dialog semantics, focus trap, Escape close, and focus restoration.
 - Desktop side drawer and mobile bottom sheet respect viewport and safe-area boundaries.
 - Runtime collision detection prevents the fixed koi from covering interactive page controls.
-- Fine-pointer desktop movement follows the visitor within a bounded lower-page pond and stops during typing, dialogs, touch input, or reduced motion.
+- Fine-pointer desktop movement follows the visitor across the full viewport, flips the speech bubble at viewport edges, and stops during typing, dialogs, touch input, or reduced motion.
 - Basic site questions resolve through reviewed deterministic topics and source links; raw questions are not sent to analytics or an AI provider.
 - Motion pauses when hidden, settles after inactivity, and removes repeated swimming under reduced motion.
 - Automated WCAG 2 A/AA checks pass for the open mobile experience.
@@ -73,7 +73,7 @@ Final local results on 2026-07-18:
 
 Routes visually inspected: `/`, `/services`, `/work`, `/products`, `/audit`, and `/intake`. Suppression was exercised on `/concierge`, `/crm`, `/crm/login`, `/crm/leads/example`, `/payment/success`, `/trendi`, and `/you-know-ball/play`. Host tests also cover the Labs production domain, localhost, and suppression on `koinophobia.dev`.
 
-Visual states inspected: active pointer following, resting, invitation speech bubble, site-question answer, contextual menu, long question, focused mobile free-text input, and reduced motion. Desktop drawer and mobile bottom-sheet results passed without viewport overflow. The deterministic AI-unavailable journey completed with its fallback disclosure, and a draft resumed after minimizing, route navigation, refresh, and continuation to `/concierge`.
+Visual states inspected: free full-viewport pointer following, resting, edge-aware invitation speech bubble, site-question answer, contextual menu, long question, focused mobile free-text input, and reduced motion. Desktop drawer and mobile bottom-sheet results passed without viewport overflow. The deterministic AI-unavailable journey completed with its fallback disclosure, and a draft resumed after minimizing, route navigation, refresh, and continuation to `/concierge`.
 
 ## Remaining blockers and recommendation
 

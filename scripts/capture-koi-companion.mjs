@@ -24,7 +24,7 @@ async function capture(path, width, height, name, options = {}) {
     await page.waitForTimeout(420);
   }
   if (options.pointerFollow) {
-    await page.mouse.move(Math.round(width * 0.72), Math.round(height * 0.68));
+    await page.mouse.move(Math.round(width * 0.58), Math.round(height * 0.72));
     await page.waitForTimeout(850);
   }
   if (options.siteHelp) {

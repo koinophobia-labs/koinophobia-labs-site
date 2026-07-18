@@ -80,10 +80,10 @@ try {
     await trigger.waitFor();
     check(await trigger.getAttribute("aria-label") === "Open Koinophobia Labs site guide", "homepage renders semantic active site guide");
     const initialKoiBox = await trigger.boundingBox();
-    await page.mouse.move(1110, 710);
+    await page.mouse.move(420, 420);
     await page.waitForTimeout(850);
     const followedKoiBox = await trigger.boundingBox();
-    check(Boolean(initialKoiBox && followedKoiBox && Math.abs(followedKoiBox.x - initialKoiBox.x) > 30), "desktop koi actively follows the pointer within its bounded pond", JSON.stringify({ initialKoiBox, followedKoiBox }));
+    check(Boolean(initialKoiBox && followedKoiBox && Math.abs(followedKoiBox.x - initialKoiBox.x) > 500 && followedKoiBox.x < 600), "desktop koi freely follows the pointer across the viewport", JSON.stringify({ initialKoiBox, followedKoiBox }));
     const collision = await page.evaluate(() => {
       const triggerRect = document.querySelector("[data-testid='koi-companion-trigger']")?.getBoundingClientRect();
       const navRect = document.querySelector(".studio-nav")?.getBoundingClientRect();
