@@ -40,7 +40,7 @@ The implementation, deterministic fallback, regression suite, production build, 
 | `npm run test:crm` | PASS — 58/58 |
 | `npm run test:commercial` | PASS — 6/6 |
 | Combined unit/integration assertions | PASS — 99/99 |
-| `npm run test:dev-routing` after merging current `main` | PASS — 9/9 |
+| `npm run test:dev-routing` after merging current `main` | PASS — 12/12 |
 | `npm run test:concierge:e2e` against `next start` | PASS — 12/12 |
 | `npm run test:release-qa` against `next start` | PASS — 50/50 |
 | `npm run build` | PASS — Next.js 16.2.7 Turbopack, 38 static pages generated |
