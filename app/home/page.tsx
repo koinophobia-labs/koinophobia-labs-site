@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
+import Link from "next/link";
 import { ArrowUpRight, GitBranch, IdCard, Mail, QrCode } from "lucide-react";
 import { LINKS } from "@/lib/links";
 
@@ -65,7 +66,7 @@ const systems = [
     name: "Career Forge",
     origin: "Started from my own layoff.",
     body: "When my DraftKings role ended, the job search in front of me looked like pure chaos: scattered applications, no feedback loops, advice too generic to act on. I built the system I needed — positioning, applications, outreach, and interview prep as one repeatable operation. Then I kept building it for the next person in that seat.",
-    status: "Live · paid beta",
+    status: "Live · beta",
     href: LINKS.careerForge,
     cta: "Open Career Forge",
     external: true,
@@ -83,8 +84,8 @@ const systems = [
     origin: "Started from a lifetime of sports arguments.",
     body: "Sports takes are the most passionate opinions most of us hold, and they usually evaporate into group-chat noise. You Know Ball turns them into an actual game: stake a claim, defend it against a debate engine that knows ball, and get scored honestly — no participation trophies.",
     status: "iOS · in development",
-    href: "/you-know-ball",
-    cta: "See You Know Ball",
+    href: "/you-know-ball/play",
+    cta: "Play the web demo",
   },
   {
     name: "Koinophobia Labs",
@@ -121,8 +122,8 @@ export default function DevHomePage() {
         <nav className="devhome__nav" aria-label="Site">
           <a href="#systems">Work</a>
           <a href="#now">Now</a>
-          <a href="/resume">Résumé</a>
-          <a href="/connect">Connect</a>
+          <Link href="/resume">Résumé</Link>
+          <Link href="/connect">Connect</Link>
         </nav>
       </header>
 
@@ -134,10 +135,10 @@ export default function DevHomePage() {
               I build systems that turn <span>chaos into leverage.</span>
             </h1>
             <p className="devhome__lede">
-              I&apos;m a founder and product builder. I spent three years inside high-volume customer
-              operations at DraftKings, where small process failures get expensive fast. In 2025 I
-              started building my own products around that lesson, and in 2026 — after my role was
-              eliminated — I stopped building around a job and went all in.
+              I&apos;m a founder and product builder. I spent three years inside high-volume
+              sportsbook operations at DraftKings, where small process failures get expensive fast.
+              In 2025 I started building my own products around that lesson, and in 2026 — after my
+              role was eliminated — I stopped building around a job and went all in.
             </p>
             <p className="devhome__lede devhome__lede--secondary">
               Everything on this page started as a real problem in my own life. This site is where I
@@ -147,9 +148,9 @@ export default function DevHomePage() {
               <a className="devhome__btn" href="#systems">
                 See what I&apos;m building
               </a>
-              <a className="devhome__btn devhome__btn--ghost" href="/connect">
+              <Link className="devhome__btn devhome__btn--ghost" href="/connect">
                 Connect with me
-              </a>
+              </Link>
             </div>
           </div>
           <figure className="devhome__portrait">
@@ -198,15 +199,21 @@ export default function DevHomePage() {
                   <h3>{system.name}</h3>
                   <p className="devhome__system-origin">{system.origin}</p>
                   <p>{system.body}</p>
-                  <a
-                    className="devhome__system-link"
-                    href={system.href}
-                    target={system.external ? "_blank" : undefined}
-                    rel={system.external ? "noopener noreferrer" : undefined}
-                    aria-label={system.external ? `${system.cta} (opens in a new tab)` : system.cta}
-                  >
-                    {system.cta} <ArrowUpRight size={15} aria-hidden="true" />
-                  </a>
+                  {system.external ? (
+                    <a
+                      className="devhome__system-link"
+                      href={system.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={`${system.cta} (opens in a new tab)`}
+                    >
+                      {system.cta} <ArrowUpRight size={15} aria-hidden="true" />
+                    </a>
+                  ) : (
+                    <Link className="devhome__system-link" href={system.href} aria-label={system.cta}>
+                      {system.cta} <ArrowUpRight size={15} aria-hidden="true" />
+                    </Link>
+                  )}
                 </div>
               </article>
             ))}
@@ -260,9 +267,9 @@ export default function DevHomePage() {
               >
                 <GitBranch size={17} aria-hidden="true" /> GitHub
               </a>
-              <a className="devhome__btn devhome__btn--ghost" href="/connect">
+              <Link className="devhome__btn devhome__btn--ghost" href="/connect">
                 <QrCode size={17} aria-hidden="true" /> The fast card
-              </a>
+              </Link>
             </div>
           </div>
         </section>

@@ -12,6 +12,7 @@
     "test:ykb": "tsx --test tests/you-know-ball.test.ts",
     "test:trendi": "tsx --test tests/trendi-hero.test.ts",
     "test:commercial": "tsx --test tests/commercial.test.ts",
+    "test:dev-routing": "tsx --test tests/dev-home-routing.test.ts",
     "test:release-qa": "node scripts/blake-release-qa.mjs",
     "db:migrate-crm": "node scripts/migrate-crm.mjs",
     "vercel-build": "node scripts/migrate-crm.mjs && next build"
