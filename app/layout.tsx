@@ -11,7 +11,7 @@ import "./you-know-ball-home-fix.css";
 import "./trendi-feature.css";
 import "./trendi-hero-visual.css";
 import "./brand.css";
-import "./brand-intro-fix.css";
+import "./brand-intro.css";
 import "./founder-editorial.css";
 import "./product-worlds.css";
 import "./commercial.css";

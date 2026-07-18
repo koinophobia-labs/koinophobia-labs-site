@@ -61,73 +61,6 @@
   transform-origin: center;
 }
 
-/* Entry animation: shown once per browser session and skipped for reduced motion. */
-.brand-intro {
-  position: fixed;
-  inset: 0;
-  z-index: 9999;
-  display: grid;
-  place-items: center;
-  overflow: hidden;
-  pointer-events: none;
-  background:
-    radial-gradient(circle at 50% 42%, rgba(105, 40, 255, 0.24), transparent 34rem),
-    linear-gradient(145deg, #020307, #080511 58%, #020307);
-  opacity: 0;
-  transition: opacity 520ms ease;
-}
-
-.brand-intro[data-phase="visible"] {
-  opacity: 1;
-}
-
-.brand-intro[data-phase="leaving"] {
-  opacity: 0;
-}
-
-.brand-intro__field {
-  position: absolute;
-  inset: 0;
-  background-image:
-    linear-gradient(rgba(148, 71, 255, 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(148, 71, 255, 0.05) 1px, transparent 1px);
-  background-size: 62px 62px;
-  mask-image: radial-gradient(circle at center, #000, transparent 72%);
-}
-
-.brand-intro__panel {
-  position: relative;
-  display: grid;
-  justify-items: center;
-  width: min(92vw, 780px);
-  transform: translateY(10px) scale(0.985);
-  opacity: 0;
-  transition: transform 720ms cubic-bezier(0.2, 0.72, 0.2, 1), opacity 520ms ease;
-}
-
-.brand-intro[data-phase="visible"] .brand-intro__panel {
-  transform: none;
-  opacity: 1;
-}
-
-.brand-intro__emblem {
-  width: clamp(190px, 31vw, 340px);
-}
-
-.brand-intro__lockup {
-  width: min(88vw, 720px);
-  margin-top: clamp(-24px, -2vw, -10px);
-}
-
-.brand-intro__panel p {
-  margin: 12px 0 0;
-  color: #a99bbf;
-  font-family: var(--font-ibm-plex-mono), var(--font-mono), monospace;
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.2em;
-}
-
 /* Homepage editorial chrome */
 .kl-nav__brand {
   align-items: center;
@@ -368,20 +301,11 @@
   .crm-brandbar > span {
     display: none;
   }
-
-  .brand-intro__panel p {
-    font-size: 8px;
-    letter-spacing: 0.14em;
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .brand-logo--pulse::before,
   .brand-logo--pulse img {
     animation: none !important;
-  }
-
-  .brand-intro {
-    display: none !important;
   }
 }

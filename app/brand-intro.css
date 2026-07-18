@@ -1,0 +1,280 @@
+/* Koinophobia Labs opening sequence — the koi emblem wakes, presents, dissolves.
+   Driven by [data-phase] set from components/brand/BrandIntro.tsx.
+   Phases: boot → enter → live → exit (component unmounts at "done"). */
+
+.brand-intro {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  pointer-events: none;
+  background: transparent;
+  contain: layout style;
+  perspective: 1400px;
+  perspective-origin: 50% 46%;
+}
+
+/* Opaque field behind the emblem: black from first paint (it is part of the
+   server-rendered boot state, so the page never flashes before the intro),
+   held through the sequence, then dissolved slightly after the emblem starts
+   fading so the site emerges as the logo vanishes. */
+.brand-intro__backdrop {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 50% 46%, rgba(105, 40, 255, 0.14), transparent 42rem),
+    #05060a;
+  opacity: 1;
+  will-change: opacity;
+  /* JS-dead failsafe: if hydration never happens, this fades the black field
+     away on its own. On a normal run the overlay unmounts long before the
+     delay elapses, so the animation never fires. */
+  animation: brand-intro-backdrop-failsafe 700ms ease 4600ms forwards;
+}
+
+.brand-intro[data-phase="exit"] .brand-intro__backdrop {
+  opacity: 0;
+  transition: opacity 650ms cubic-bezier(0.33, 0, 0.2, 1) 100ms;
+}
+
+@keyframes brand-intro-backdrop-failsafe {
+  to {
+    opacity: 0;
+  }
+}
+
+/* The stage owns the entrance/exit transition; the inner motion layer owns
+   the continuous drift so the two transforms never fight. */
+.brand-intro__stage {
+  position: relative;
+  width: min(42vw, 560px);
+  aspect-ratio: 1;
+  opacity: 0;
+  transform: translateZ(-180px) rotateX(16deg) scale(0.9);
+  filter: blur(14px);
+  transition:
+    opacity 620ms cubic-bezier(0.33, 0, 0.2, 1),
+    transform 720ms cubic-bezier(0.22, 0.61, 0.21, 1),
+    filter 650ms cubic-bezier(0.33, 0, 0.2, 1);
+  will-change: opacity, transform, filter;
+}
+
+/* Settles onto a slight resting tilt so the emblem reads as an object in
+   space rather than a flat sticker. */
+.brand-intro[data-phase="enter"] .brand-intro__stage,
+.brand-intro[data-phase="live"] .brand-intro__stage {
+  opacity: 1;
+  transform: translateZ(0) rotateX(4.5deg) scale(1);
+  filter: blur(0px);
+}
+
+/* Exit: the emblem levels out with a restrained settle toward the viewer and
+   dissolves into the site — no surge. The fade trails the movement slightly
+   so the motion reads as settling, then disappearing. */
+.brand-intro[data-phase="exit"] .brand-intro__stage {
+  opacity: 0;
+  transform: translateZ(28px) rotateX(0deg) scale(1.03);
+  filter: blur(1.5px);
+  transition:
+    opacity 680ms cubic-bezier(0.4, 0, 0.2, 1) 140ms,
+    transform 780ms cubic-bezier(0.3, 0, 0.24, 1),
+    filter 780ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.brand-intro__motion {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-origin: center;
+  transform-style: preserve-3d;
+}
+
+.brand-intro[data-phase="enter"] .brand-intro__motion,
+.brand-intro[data-phase="live"] .brand-intro__motion,
+.brand-intro[data-phase="exit"] .brand-intro__motion {
+  animation: brand-intro-drift 5600ms cubic-bezier(0.37, 0, 0.63, 1) both;
+}
+
+/* A slow partial orbit around the center, a breathing scale that steadily
+   carries the emblem toward the viewer, and a faint 3D float (rotateX/Y under
+   the container's perspective) — the emblem swims in place and approaches,
+   rather than spinning. Orbit radius ≈ 0.55% of stage width. */
+@keyframes brand-intro-drift {
+  0% {
+    transform: translate3d(0.55%, 0%, 0) rotateX(0.8deg) rotateY(-1.3deg)
+      scale(0.988);
+  }
+  30% {
+    transform: translate3d(0.17%, 0.52%, 0) rotateX(-0.7deg) rotateY(0.5deg)
+      scale(1.014);
+  }
+  60% {
+    transform: translate3d(-0.44%, 0.33%, 0) rotateX(0.4deg) rotateY(1.3deg)
+      scale(1.045);
+  }
+  100% {
+    transform: translate3d(-0.52%, -0.18%, 0) rotateX(-0.3deg) rotateY(-0.4deg)
+      scale(1.075);
+  }
+}
+
+.brand-intro__emblem {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  user-select: none;
+}
+
+/* Applied through exit as well so the breath completes instead of snapping
+   back when the phase changes. The animation shorthand is identical in both
+   phases, so the phase change does not restart it. */
+.brand-intro[data-phase="live"] .brand-intro__emblem,
+.brand-intro[data-phase="exit"] .brand-intro__emblem {
+  animation: brand-intro-energy 1900ms ease-in-out both;
+}
+
+/* The purple energy and eyes breathe once while the emblem presents. */
+@keyframes brand-intro-energy {
+  0%,
+  100% {
+    filter: brightness(1) saturate(1);
+  }
+  40% {
+    filter: brightness(1.09) saturate(1.12);
+  }
+}
+
+/* Energy sweep: a soft violet highlight travels once around the outer sigil
+   ring. Masked to an annulus so it reads as current in the ring, not a flare
+   over the artwork. */
+.brand-intro__sweep {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg,
+    rgba(148, 71, 255, 0.0) 300deg,
+    rgba(177, 92, 255, 0.5) 330deg,
+    rgba(238, 226, 255, 0.32) 342deg,
+    transparent 356deg,
+    transparent 360deg
+  );
+  mask-image: radial-gradient(
+    circle closest-side,
+    transparent 74%,
+    #000 81%,
+    #000 93%,
+    transparent 97%
+  );
+  -webkit-mask-image: radial-gradient(
+    circle closest-side,
+    transparent 74%,
+    #000 81%,
+    #000 93%,
+    transparent 97%
+  );
+  mix-blend-mode: screen;
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+/* Runs through exit so the sweep finishes its lap (ends at live+1700ms,
+   inside the exit window) instead of being cut mid-travel. */
+.brand-intro[data-phase="live"] .brand-intro__sweep,
+.brand-intro[data-phase="exit"] .brand-intro__sweep {
+  animation: brand-intro-sweep 1700ms cubic-bezier(0.45, 0, 0.3, 1) both;
+}
+
+@keyframes brand-intro-sweep {
+  0% {
+    opacity: 0;
+    transform: rotate(0deg);
+  }
+  18% {
+    opacity: 1;
+  }
+  82% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: rotate(300deg);
+  }
+}
+
+/* One central pulse as the sequence reaches its brightest moment. */
+.brand-intro__pulse {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at center,
+    rgba(190, 130, 255, 0.42),
+    rgba(148, 71, 255, 0.16) 16%,
+    transparent 30%
+  );
+  mix-blend-mode: screen;
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+.brand-intro[data-phase="live"] .brand-intro__pulse,
+.brand-intro[data-phase="exit"] .brand-intro__pulse {
+  animation: brand-intro-pulse 950ms cubic-bezier(0.3, 0, 0.35, 1) 260ms both;
+}
+
+@keyframes brand-intro-pulse {
+  0% {
+    opacity: 0;
+    transform: scale(0.72);
+  }
+  45% {
+    opacity: 0.85;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.22);
+  }
+}
+
+@media (max-width: 1024px) {
+  .brand-intro__stage {
+    width: min(60vw, 480px);
+  }
+}
+
+@media (max-width: 640px) {
+  .brand-intro__stage {
+    width: min(82vw, 400px);
+  }
+}
+
+/* Reduced motion: quick fade in, brief hold, fade out. No orbit, no sweep,
+   no pulse, no blur or scale. The component also shortens the timeline. */
+@media (prefers-reduced-motion: reduce) {
+  .brand-intro .brand-intro__stage {
+    transform: none !important;
+    filter: none !important;
+    transition: opacity 420ms ease;
+  }
+
+  .brand-intro .brand-intro__motion,
+  .brand-intro .brand-intro__emblem {
+    animation: none !important;
+  }
+
+  /* Shorter backdrop fade so it completes inside the reduced timeline. */
+  .brand-intro[data-phase="exit"] .brand-intro__backdrop {
+    transition: opacity 420ms ease 0ms;
+  }
+
+  .brand-intro .brand-intro__sweep,
+  .brand-intro .brand-intro__pulse {
+    display: none;
+  }
+}
