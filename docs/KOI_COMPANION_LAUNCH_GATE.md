@@ -6,7 +6,7 @@ The living koi companion is ready for review as a draft pull request. It adds a 
 
 ## Architecture gate
 
-- One root-mounted companion, governed by a deterministic route and host allowlist.
+- One root-mounted companion, governed by a deterministic route and host allowlist that includes Labs-owned Vercel previews for review.
 - One shared `ConciergeFlow` for the companion and `/concierge`.
 - One shared versioned draft, evaluation endpoint, intake handoff, CRM record, and Resend notification path.
 - Deterministic recommendation remains authoritative; `OPENAI_API_KEY` remains optional.

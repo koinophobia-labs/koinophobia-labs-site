@@ -20,7 +20,7 @@ The concierge is also available as a restrained, contextual koi companion on the
 
 The trigger can invite at most twice per browser session, observes a ten-minute invitation cooldown, and honors a 30-minute dismissal. It never chases the cursor. Page visibility, inactivity, and `prefers-reduced-motion` constrain animation. On narrow screens, a runtime collision guard hides the trigger whenever its fixed corner would cover an interactive page control and restores it when the corner is clear.
 
-The companion is mounted once in the root layout but is eligible only on the canonical Labs host, localhost, and a route allowlist. It does not appear on CRM, API, payment, campaign, game, full-page concierge, or unknown routes, and it is suppressed on the separate `koinophobia.dev` site.
+The companion is mounted once in the root layout but is eligible only on the canonical Labs host, Labs-owned Vercel preview deployments, localhost, and a route allowlist. Preview support keeps draft PRs visually reviewable without enabling the companion on the separate `koinophobia.dev` site. It does not appear on CRM, API, payment, campaign, game, full-page concierge, or unknown routes.
 
 Opening the workflow uses the same `ConciergeFlow`, deterministic evaluation endpoint, draft key, signed handoff, intake prefill, CRM persistence, and notification path as `/concierge`. Every answer edit is saved immediately to the existing 24-hour local draft. Minimizing, refreshing, or continuing on the full page therefore preserves progress without creating a parallel source of truth.
 

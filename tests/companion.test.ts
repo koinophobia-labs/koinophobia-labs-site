@@ -46,8 +46,11 @@ test("internal, personal, payment, product-demo, and dedicated concierge routes 
 test("the studio host is explicit and local QA remains possible", () => {
   assert.equal(companionHostAllowed("koinophobialabs.com"), true);
   assert.equal(companionHostAllowed("www.koinophobialabs.com"), true);
+  assert.equal(companionHostAllowed("koinophobia-labs-git-codex-196e0a-koinophobia999-8829s-projects.vercel.app"), true);
+  assert.equal(companionHostAllowed("koinophobia-labs.vercel.app"), true);
   assert.equal(companionHostAllowed("localhost"), true);
   assert.equal(companionHostAllowed("koinophobia.dev"), false);
+  assert.equal(companionHostAllowed("koinophobia-dev-git-main-example.vercel.app"), false);
   assert.equal(companionHostAllowed("example.com"), false);
 });
 

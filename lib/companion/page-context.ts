@@ -138,5 +138,7 @@ export function resolveCompanionPageContext(pathname: string): CompanionPageCont
 }
 
 export function companionHostAllowed(hostname: string) {
-  return hostname === "koinophobialabs.com" || hostname === "www.koinophobialabs.com" || hostname === "localhost" || hostname === "127.0.0.1";
+  const normalized = hostname.toLowerCase();
+  const labsVercelDeployment = /^koinophobia-labs(?:-[a-z0-9-]+)?\.vercel\.app$/.test(normalized);
+  return normalized === "koinophobialabs.com" || normalized === "www.koinophobialabs.com" || normalized === "localhost" || normalized === "127.0.0.1" || labsVercelDeployment;
 }
