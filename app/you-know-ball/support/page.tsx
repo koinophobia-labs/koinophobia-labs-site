@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "You Know Ball Support | Koinophobia Labs",
+  title: "You Know Ball Support",
   description: "Support and troubleshooting for You Know Ball.",
 };
 

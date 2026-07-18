@@ -15,7 +15,7 @@ import {
 import { founderLinks } from "@/lib/founderHub";
 
 export const metadata: Metadata = {
-  title: "$250 Website Revenue Leak Audit | Koinophobia Labs",
+  title: "$250 Website Revenue Leak Audit",
   description:
     "A flat-fee website audit that turns scattered conversion problems into a prioritized system for clearer trust, mobile flow, booking paths, and inquiries.",
   alternates: { canonical: "https://koinophobialabs.com/audit" },

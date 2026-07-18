@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "You Know Ball Privacy Policy | Koinophobia Labs",
+  title: "You Know Ball Privacy Policy",
   description:
     "Launch-draft privacy policy for You Know Ball, the sports debate game from Koinophobia Labs.",
 };

@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   if (!demo) return {};
 
   return {
-    title: `${demo.name} - Website Concept by Koinophobia Labs`,
+    title: `${demo.name} - Website Concept`,
     description: demo.subhead,
   };
 }
