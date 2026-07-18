@@ -1,0 +1,53 @@
+name: Founding funnel production probe
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Verify both production aliases
+        shell: bash
+        run: |
+          set -euo pipefail
+          nonce="${GITHUB_SHA}-$(date +%s)"
+          career="$(mktemp)"
+          labs="$(mktemp)"
+          career_status="$(curl --retry 8 --retry-all-errors --retry-delay 4 -sS -o "$career" -w '%{http_code}' "https://career-forge-lite.vercel.app/founding-beta?probe=$nonce")"
+          labs_status="$(curl --retry 8 --retry-all-errors --retry-delay 4 -sS -o "$labs" -w '%{http_code}' "https://koinophobialabs.com/?probe=$nonce")"
+          CAREER_FILE="$career" LABS_FILE="$labs" CAREER_STATUS="$career_status" LABS_STATUS="$labs_status" python - <<'PY'
+          import json, os, pathlib
+          career = pathlib.Path(os.environ['CAREER_FILE']).read_text(errors='replace')
+          labs = pathlib.Path(os.environ['LABS_FILE']).read_text(errors='replace')
+          result = {
+              'career_status': int(os.environ['CAREER_STATUS']),
+              'career_cohort_marker': 'Founding paid beta' in career and 'Five seats' in career,
+              'career_price_marker': '$49' in career and 'no subscription' in career,
+              'labs_status': int(os.environ['LABS_STATUS']),
+              'labs_cohort_cta': 'Apply for one of 5 founding seats' in labs,
+          }
+          print(json.dumps(result, sort_keys=True))
+          pathlib.Path('founding-funnel-production-probe.json').write_text(json.dumps(result, indent=2) + '\n')
+          if not all([
+              result['career_status'] == 200,
+              result['career_cohort_marker'],
+              result['career_price_marker'],
+              result['labs_status'] == 200,
+              result['labs_cohort_cta'],
+          ]):
+              raise SystemExit('One or both production aliases are not serving the founding funnel.')
+          PY
+
+      - name: Preserve result
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: founding-funnel-production-probe
+          path: founding-funnel-production-probe.json
+          if-no-files-found: warn
