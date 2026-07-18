@@ -2,6 +2,7 @@ import { chromium } from "playwright";
 import axe from "axe-core";
 
 const base = process.env.QA_BASE_URL || "http://127.0.0.1:3000";
+const isLocalQa = ["localhost", "127.0.0.1", "::1"].includes(new URL(base).hostname);
 const widths = [320, 375, 390, 430, 768, 1440, 1920];
 const browser = await chromium.launch(process.env.CHROMIUM_PATH ? { executablePath: process.env.CHROMIUM_PATH } : {});
 const failures = [];
@@ -15,7 +16,10 @@ try {
   for (const width of widths) {
     const page = await browser.newPage({ viewport: { width, height: width < 768 ? 900 : 1000 } });
     const errors = [];
-    page.on("console", (message) => { if (message.type() === "error") errors.push(message.text()); });
+    page.on("console", (message) => {
+      const isLocalVercelAnalytics = isLocalQa && new URL(message.location().url || base).pathname === "/_vercel/insights/script.js";
+      if (message.type() === "error" && !isLocalVercelAnalytics) errors.push(message.text());
+    });
     page.on("pageerror", (error) => errors.push(error.message));
     await page.goto(base, { waitUntil: "networkidle" });
     check(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth), `homepage no overflow ${width}px`);
@@ -50,8 +54,14 @@ try {
 
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.reload({ waitUntil: "networkidle" });
-  check(await page.evaluate(() => getComputedStyle(document.querySelector(".reveal")).transform === "none"), "reduced motion disables reveal transform");
+  check(await page.evaluate(() => {
+    const target = document.querySelector(".studio-button");
+    if (!target) return false;
+    const style = getComputedStyle(target);
+    return style.transitionDuration.split(",").every((duration) => Number.parseFloat(duration) <= 0.001);
+  }), "reduced motion disables commercial transitions");
 
+  await page.goto(`${base}/trendi`, { waitUntil: "networkidle" });
   await page.locator("video").dispatchEvent("error");
   check(await page.getByText(/demo video is unavailable/i).isVisible(), "failed video shows screenshot fallback");
   await page.close();

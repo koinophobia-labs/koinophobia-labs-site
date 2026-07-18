@@ -12,6 +12,8 @@
     "test:ykb": "tsx --test tests/you-know-ball.test.ts",
     "test:trendi": "tsx --test tests/trendi-hero.test.ts",
     "test:commercial": "tsx --test tests/commercial.test.ts",
+    "test:concierge": "tsx --test tests/concierge-routing.test.ts tests/concierge-api.test.ts tests/concierge-intake.test.ts tests/concierge-ui.test.ts",
+    "test:concierge:e2e": "node scripts/qa-concierge.mjs",
     "test:release-qa": "node scripts/blake-release-qa.mjs",
     "db:migrate-crm": "node scripts/migrate-crm.mjs",
     "vercel-build": "node scripts/migrate-crm.mjs && next build"
@@ -41,5 +43,8 @@
     "tailwindcss": "^4",
     "tsx": "^4.23.0",
     "typescript": "^5"
+  },
+  "overrides": {
+    "postcss": "8.5.15"
   }
 }

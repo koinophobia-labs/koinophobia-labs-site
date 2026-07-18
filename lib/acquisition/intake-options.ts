@@ -19,6 +19,7 @@ export const intakeServiceOptions = [
   "Landing Page Rebuild",
   "Small-Business Website",
   "AI Workflow or Front Office",
+  "Custom Product Development",
   "Not sure yet",
   "Other",
 ];

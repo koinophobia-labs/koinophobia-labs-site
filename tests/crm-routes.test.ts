@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { NextRequest } from "next/server";
 import { GET as listLeads } from "../app/api/crm/leads/route";
 import { PATCH as updateLead } from "../app/api/crm/leads/[id]/route";
-import { validateIntake } from "../app/api/intake/route";
+import { validateIntake } from "../lib/acquisition/intake";
 
 process.env.CRM_ADMIN_SECRET = "test-admin-secret-with-enough-entropy";
 

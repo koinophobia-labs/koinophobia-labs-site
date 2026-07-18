@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
-import { POST, formatLeadEmailHtml, formatLeadEmailText } from "../app/api/intake/route";
+import { POST } from "../app/api/intake/route";
+import { formatLeadEmailHtml, formatLeadEmailText } from "../lib/acquisition/intake";
 
 const originalFetch=global.fetch;
 const originalEnv={...process.env};

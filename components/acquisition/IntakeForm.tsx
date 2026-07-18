@@ -1,13 +1,15 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { FormEvent, Suspense, useState } from "react";
+import { FormEvent, Suspense, useEffect, useRef, useState } from "react";
 import {
   intakeBudgets as budgets,
   intakeServiceOptions as serviceInterestOptions,
   intakeTimelines as timelines,
 } from "@/lib/acquisition/intake-options";
 import { trackStudioEvent } from "@/components/studio/AnalyticsBridge";
+import { intakeServiceFor } from "@/lib/concierge/questions";
+import { CONCIERGE_STORAGE_KEY, parseConciergeDraft } from "@/lib/concierge/session";
 
 type SubmitState =
   | { status: "idle" }
@@ -18,8 +20,41 @@ type SubmitState =
 function IntakeFormInner({ defaultService = "" }: { defaultService?: string }) {
   const searchParams = useSearchParams();
   const requestedService = searchParams.get("service") || defaultService;
+  const requestedConciergeSession = searchParams.get("concierge") || "";
   const [state, setState] = useState<SubmitState>({ status: "idle" });
   const [started, setStarted] = useState(false);
+  const [conciergeHandoff, setConciergeHandoff] = useState<{ sessionId: string; answers: string; token: string } | null>(null);
+  const formRef = useRef<HTMLFormElement>(null);
+
+  useEffect(() => {
+    if (!requestedConciergeSession || !formRef.current) return;
+    const timer = window.setTimeout(() => {
+      let draft;
+      try { draft = parseConciergeDraft(window.localStorage.getItem(CONCIERGE_STORAGE_KEY)); } catch { return; }
+      if (!draft || draft.sessionId !== requestedConciergeSession || !draft.evaluation || !formRef.current) return;
+      const form = formRef.current;
+      const prefill: Record<string, string> = {
+        name: draft.answers.name || "",
+        businessName: draft.answers.businessName || "",
+        email: draft.answers.email || "",
+        websiteOrSocial: draft.answers.websiteUrl || "",
+        industry: draft.answers.industry || "",
+        serviceInterest: requestedService || intakeServiceFor(draft.evaluation.recommendation.service),
+        budgetRange: draft.answers.budgetRange || "",
+        timeline: draft.answers.timeline || "",
+        biggestProblem: draft.answers.primaryProblem || "",
+        desiredOutcome: draft.answers.desiredOutcome || "",
+        currentTools: draft.answers.currentTools || "",
+      };
+      for (const [name, value] of Object.entries(prefill)) {
+        const control = form.elements.namedItem(name);
+        if (control instanceof HTMLInputElement || control instanceof HTMLTextAreaElement || control instanceof HTMLSelectElement) control.value = value;
+      }
+      setConciergeHandoff({ sessionId: draft.sessionId, answers: JSON.stringify(draft.answers), token: draft.evaluation.evaluationToken || "" });
+      trackStudioEvent("concierge_intake_prefilled", { recommended_service: draft.evaluation.recommendation.service });
+    }, 0);
+    return () => window.clearTimeout(timer);
+  }, [requestedConciergeSession, requestedService]);
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -28,7 +63,7 @@ function IntakeFormInner({ defaultService = "" }: { defaultService?: string }) {
     const formData = new FormData(form);
     setState({ status: "submitting" });
     let response: Response;
-    try { response = await fetch("/api/intake", { method: "POST", body: formData }); }
+    try { response = await fetch("/api/intake", { method: "POST", body: formData, ...(conciergeHandoff ? { headers: { "idempotency-key": `concierge:${conciergeHandoff.sessionId}` } } : {}) }); }
     catch { setState({ status:"error", message:"The network request failed. Check your connection and try again.", mailto:"mailto:koinophobia999@gmail.com" }); return; }
     const payload = await response.json().catch(() => ({}));
     if (response.ok && payload.ok) {
@@ -38,6 +73,10 @@ function IntakeFormInner({ defaultService = "" }: { defaultService?: string }) {
         message: payload.message || "Intake received. Blake will review and reply with the practical next step.",
       });
       trackStudioEvent("intake_form_completion");
+      if (conciergeHandoff) {
+        trackStudioEvent("concierge_intake_submitted", { completion_status: "success" });
+        try { window.localStorage.removeItem(CONCIERGE_STORAGE_KEY); } catch { /* Optional cleanup. */ }
+      }
       return;
     }
     setState({
@@ -49,7 +88,11 @@ function IntakeFormInner({ defaultService = "" }: { defaultService?: string }) {
   }
 
   return (
-    <form className="intake-form panel" onSubmit={onSubmit} onFocus={() => { if (!started) { setStarted(true); trackStudioEvent("intake_form_start"); } }}>
+    <form ref={formRef} className="intake-form panel" onSubmit={onSubmit} onFocus={() => { if (!started) { setStarted(true); trackStudioEvent("intake_form_start"); } }}>
+      {conciergeHandoff ? <div className="intake-prefill-note" role="status"><strong>Concierge details loaded.</strong><span>Review and edit every field before submitting. The service route is verified again on the server.</span></div> : null}
+      <input type="hidden" name="conciergeSessionId" value={conciergeHandoff?.sessionId || ""} />
+      <input type="hidden" name="conciergeAnswers" value={conciergeHandoff?.answers || ""} />
+      <input type="hidden" name="conciergeEvaluationToken" value={conciergeHandoff?.token || ""} />
       {state.status === "success" ? (
         <div className="success-state" role="status">
           <strong>Intake received.</strong>

@@ -38,9 +38,9 @@ export default function Home() {
               <p className="studio-hero__lede">Koinophobia Labs helps small businesses losing time or revenue to outdated websites, messy inquiries, manual follow-up, and disconnected tools. You work directly with Blake from diagnosis through launch.</p>
               <div className="studio-hero__actions">
                 <Link className="studio-button" href="/audit" data-analytics="audit_cta_click">Start With an Audit</Link>
-                <Link className="studio-button studio-button--secondary" href="/work" data-analytics="client_work_view">View Client Work</Link>
+                <Link className="studio-button studio-button--secondary" href="/concierge?entry=home" data-analytics="concierge_entry_click">Help Me Figure Out What I Need</Link>
               </div>
-              <Link className="studio-hero__tertiary" href="/products">Explore Koinophobia Labs products →</Link>
+              <div className="studio-hero__tertiary-row"><Link className="studio-hero__tertiary" href="/intake" data-analytics="project_inquiry_cta_click">Already know what you need? Start a project →</Link><Link className="studio-hero__tertiary" href="/work" data-analytics="client_work_view">View client work →</Link></div>
             </div>
             <div className="studio-hero__system" aria-label="Example business system flow">
               <span className="studio-system-label">A practical system, end to end</span>
