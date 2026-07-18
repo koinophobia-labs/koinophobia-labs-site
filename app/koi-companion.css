@@ -55,9 +55,10 @@
 }
 
 .koi-companion--collision .koi-companion-trigger { visibility: hidden; opacity: 0; pointer-events: none; }
-.koi-companion-trigger__koi { display: block; width: 38px; height: 70px; overflow: visible; transform-origin: 50% 58%; filter: drop-shadow(0 0 8px rgba(166, 108, 255, .55)); animation: koi-companion-swim 1.9s cubic-bezier(.42,0,.58,1) infinite; }
+.koi-companion-trigger__steer { position: absolute; left: 16px; top: 8px; width: 38px; height: 70px; pointer-events: none; transform: rotate(var(--koi-heading, 0deg)); transform-origin: 50% 50%; will-change: transform; }
+.koi-companion-trigger__koi { display: block; width: 100%; height: 100%; overflow: visible; transform-origin: 50% 58%; filter: drop-shadow(0 0 8px rgba(166, 108, 255, .55)); animation: koi-companion-swim 1.9s cubic-bezier(.42,0,.58,1) infinite; }
 .koi-companion-art__body { transform-box: fill-box; transform-origin: 50% 72%; animation: koi-companion-tail 1s ease-in-out infinite alternate; }
-.koi-companion-trigger__water { position: absolute; inset: auto 12px 4px; height: 10px; z-index: -1; opacity: .7; }
+.koi-companion-trigger__water { position: absolute; inset: auto 0 -3px; height: 10px; z-index: -1; opacity: .7; }
 .koi-companion-trigger__water::before, .koi-companion-trigger__water::after { content: ""; position: absolute; right: 0; height: 1px; border-radius: 999px; background: linear-gradient(90deg, transparent, rgba(110,231,242,.7)); transform-origin: right center; animation: koi-companion-wake 1.25s ease-out infinite; }
 .koi-companion-trigger__water::before { top: 2px; width: 34px; }
 .koi-companion-trigger__water::after { top: 7px; width: 24px; animation-delay: -.62s; }
@@ -228,7 +229,7 @@
   .koi-companion--left { right: auto; left: max(10px, env(safe-area-inset-left)); }
   .koi-companion-trigger { width: 62px; height: 78px; padding: 8px 14px; }
   .koi-companion-presence { width: 62px; height: 78px; }
-  .koi-companion-trigger__koi { width: 34px; height: 61px; }
+  .koi-companion-trigger__steer { left: 14px; width: 34px; height: 61px; }
   .koi-companion-invitation { width: min(270px, calc(100vw - 20px)); }
   .koi-companion-backdrop { align-items: flex-end; padding: 10px 0 0; background: rgba(4,2,8,.72); }
   .koi-companion-panel { width: 100%; height: calc(100dvh - 10px); border-radius: 20px 20px 0 0; border-bottom: 0; animation-name: koi-companion-sheet-in; padding-bottom: env(safe-area-inset-bottom); }
@@ -248,6 +249,7 @@
 @media (prefers-reduced-motion: reduce) {
   .koi-companion *, .koi-companion *::before, .koi-companion *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
   .koi-companion-trigger__koi { transform: none !important; filter: drop-shadow(0 0 5px rgba(166,108,255,.25)); }
+  .koi-companion-trigger__steer { transform: none !important; }
   .koi-companion-trigger__water { opacity: .28; transform: none !important; }
   .koi-companion-presence { transform: none !important; }
 }

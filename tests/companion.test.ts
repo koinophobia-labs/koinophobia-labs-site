@@ -124,9 +124,14 @@ test("keyboard, focus, dismissal, reduced-motion, print, and safe-area protectio
   assert.match(companion, /translate3d/);
   assert.match(companion, /selectionLocked/);
   assert.match(companion, /data-selectable/);
+  assert.match(companion, /Math\.atan2/);
+  assert.match(companion, /shortestTurn/);
+  assert.match(companion, /--koi-heading/);
+  assert.match(companion, /koi-companion-trigger__steer/);
   assert.doesNotMatch(css, /koi-companion-trigger::before/);
   assert.match(css, /koi-companion-swim/);
   assert.match(css, /koi-companion-tail/);
+  assert.match(css, /rotate\(var\(--koi-heading/);
   assert.match(companion, /aria-haspopup="dialog"/);
   assert.match(panel, /event\.key === "Escape"/);
   assert.match(panel, /event\.key !== "Tab"/);

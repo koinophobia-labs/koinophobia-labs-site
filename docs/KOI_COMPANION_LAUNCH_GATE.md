@@ -23,6 +23,7 @@ The living koi companion is ready for review as a draft pull request. It adds a 
 - Fine-pointer desktop movement follows the visitor across the full viewport, flips the speech bubble at viewport edges, and stops during typing, dialogs, touch input, or reduced motion.
 - A 280ms pointer pause locks the koi in place for selection; entering its hit target keeps it still until the pointer leaves the selection radius.
 - The trigger uses the fish silhouette, tail/body swimming cycle, and wake strokes without a circular widget background.
+- The fish and wake steer toward the live movement vector along the shortest turn while the bubble and click target stay upright.
 - Basic site questions resolve through reviewed deterministic topics and source links; raw questions are not sent to analytics or an AI provider.
 - Motion pauses when hidden, settles after inactivity, and removes repeated swimming under reduced motion.
 - Automated WCAG 2 A/AA checks pass for the open mobile experience.
@@ -68,7 +69,7 @@ Final local results on 2026-07-18:
 | `/now` regressions | 11/11 pass |
 | Release browser QA | 50/50 pass |
 | Existing concierge Chromium E2E | 12/12 pass |
-| Companion Chromium/WebKit E2E | 36/36 pass |
+| Companion Chromium/WebKit E2E | 38/38 pass |
 | TypeScript | pass |
 | ESLint | 0 errors; one pre-existing `_random` warning in `lib/trendiHero.ts` |
 | Next.js production build | pass; 39 pages generated |

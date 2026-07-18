@@ -137,12 +137,24 @@ export default function KoiCompanion() {
     let lastCollisionCheck = 0;
     let selectionLocked = false;
     let settleTimer = 0;
+    let headingDegrees = 0;
     const triggerElement = triggerRef.current;
 
     const render = (timestamp: number) => {
       currentX += (targetX - currentX) * 0.16;
       currentY += (targetY - currentY) * 0.16;
-      presence?.style.setProperty("transform", `translate3d(${currentX.toFixed(2)}px, ${currentY.toFixed(2)}px, 0)`);
+      const remainingX = targetX - currentX;
+      const remainingY = targetY - currentY;
+      if (Math.hypot(remainingX, remainingY) > 1.5) {
+        const desiredHeading = Math.atan2(remainingY, remainingX) * (180 / Math.PI) + 90;
+        const shortestTurn = ((desiredHeading - headingDegrees + 540) % 360) - 180;
+        headingDegrees += shortestTurn * 0.2;
+      }
+      if (presence) {
+        presence.style.setProperty("transform", `translate3d(${currentX.toFixed(2)}px, ${currentY.toFixed(2)}px, 0)`);
+        presence.style.setProperty("--koi-heading", `${headingDegrees.toFixed(2)}deg`);
+        presence.dataset.headingDegrees = headingDegrees.toFixed(1);
+      }
       if (timestamp - lastCollisionCheck > 120 && triggerRef.current) {
         lastCollisionCheck = timestamp;
         const blocked = triggerOverlapsInteractiveControl(triggerRef.current);
@@ -202,7 +214,11 @@ export default function KoiCompanion() {
       window.removeEventListener("pointermove", follow);
       triggerElement?.removeEventListener("pointerenter", lockForSelection);
       presence?.style.removeProperty("transform");
-      if (presence) presence.dataset.selectable = "false";
+      presence?.style.removeProperty("--koi-heading");
+      if (presence) {
+        presence.dataset.selectable = "false";
+        delete presence.dataset.headingDegrees;
+      }
     };
   }, [context.enabled, context.preferredSide, hostAllowed, hydrated, open, reducedMotion]);
 
@@ -324,8 +340,10 @@ export default function KoiCompanion() {
           onPointerEnter={notice}
           data-testid="koi-companion-trigger"
         >
-          <span className="koi-companion-trigger__water" aria-hidden="true" />
-          <CompanionKoiArt id="living-koi-trigger" className="koi-companion-trigger__koi" />
+          <span className="koi-companion-trigger__steer" aria-hidden="true">
+            <span className="koi-companion-trigger__water" />
+            <CompanionKoiArt id="living-koi-trigger" className="koi-companion-trigger__koi" />
+          </span>
           <span className="koi-companion-trigger__signal" aria-hidden="true" />
         </button>
       </div>
