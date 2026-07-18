@@ -14,9 +14,39 @@
   contain: layout style;
 }
 
+/* Opaque field behind the emblem: black from first paint (it is part of the
+   server-rendered boot state, so the page never flashes before the intro),
+   held through the sequence, then dissolved slightly after the emblem starts
+   fading so the site emerges as the logo vanishes. */
+.brand-intro__backdrop {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 50% 46%, rgba(105, 40, 255, 0.14), transparent 42rem),
+    #05060a;
+  opacity: 1;
+  will-change: opacity;
+  /* JS-dead failsafe: if hydration never happens, this fades the black field
+     away on its own. On a normal run the overlay unmounts long before the
+     delay elapses, so the animation never fires. */
+  animation: brand-intro-backdrop-failsafe 700ms ease 4600ms forwards;
+}
+
+.brand-intro[data-phase="exit"] .brand-intro__backdrop {
+  opacity: 0;
+  transition: opacity 700ms cubic-bezier(0.33, 0, 0.2, 1) 150ms;
+}
+
+@keyframes brand-intro-backdrop-failsafe {
+  to {
+    opacity: 0;
+  }
+}
+
 /* The stage owns the entrance/exit transition; the inner motion layer owns
    the continuous drift so the two transforms never fight. */
 .brand-intro__stage {
+  position: relative;
   width: min(42vw, 560px);
   aspect-ratio: 1;
   opacity: 0;
@@ -214,6 +244,11 @@
   .brand-intro .brand-intro__motion,
   .brand-intro .brand-intro__emblem {
     animation: none !important;
+  }
+
+  /* Shorter backdrop fade so it completes inside the reduced timeline. */
+  .brand-intro[data-phase="exit"] .brand-intro__backdrop {
+    transition: opacity 420ms ease 0ms;
   }
 
   .brand-intro .brand-intro__sweep,

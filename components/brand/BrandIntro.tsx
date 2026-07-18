@@ -16,7 +16,7 @@ const TIMELINE: ReadonlyArray<readonly [Phase, number]> = [
   ["enter", 0],
   ["live", 850],
   ["exit", 1950],
-  ["done", 2800],
+  ["done", 2900],
 ];
 const REDUCED_TIMELINE: ReadonlyArray<readonly [Phase, number]> = [
   ["enter", 0],
@@ -52,9 +52,12 @@ export default function BrandIntro() {
         timers.push(window.setTimeout(() => setPhase(next), at));
       }
     };
+    /* Skipping still routes through "exit" so the black backdrop dissolves
+       into the page instead of hard-cutting. */
     const skip = () => {
       startedRef.current = true;
-      setPhase("done");
+      setPhase("exit");
+      timers.push(window.setTimeout(() => setPhase("done"), 950));
     };
 
     const img = imgRef.current;
@@ -87,6 +90,7 @@ export default function BrandIntro() {
 
   return (
     <div className="brand-intro" data-phase={phase} aria-hidden="true">
+      <div className="brand-intro__backdrop" />
       <div className="brand-intro__stage">
         <div className="brand-intro__motion">
           {/* Static, pre-optimized brand asset with an explicit srcset;
