@@ -4,7 +4,7 @@ import { ArrowLeft } from "lucide-react";
 import YouKnowBallGame from "@/components/YouKnowBallGame";
 
 export const metadata: Metadata = {
-  title: "Play You Know Ball | Koinophobia Labs",
+  title: "Play You Know Ball",
   description: "Drop a sports take, face a BanterBot counterargument, and see how your take scores.",
 };
 

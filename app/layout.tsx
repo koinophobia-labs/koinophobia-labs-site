@@ -13,6 +13,8 @@ import "./brand.css";
 import "./brand-intro-fix.css";
 import "./founder-editorial.css";
 import "./product-worlds.css";
+import "./commercial.css";
+import AnalyticsBridge from "@/components/studio/AnalyticsBridge";
 
 const sora = Sora({
   variable: "--font-sora",
@@ -49,9 +51,12 @@ const socialImage = {
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://koinophobialabs.com"),
-  title: "Koinophobia Labs — AI Products, Creator Systems, and Proof",
+  title: {
+    default: "Koinophobia Labs | Websites, AI Workflows and Business Systems",
+    template: "%s | Koinophobia Labs",
+  },
   description:
-    "Koinophobia Labs is Blake Taylor’s product studio for AI tools, creator systems, sports debate products, and command-center interfaces. Built, tested, shipped.",
+    "Founder-led websites, AI workflows, booking systems, and conversion improvements for small businesses. Start with a practical Revenue Leak Audit.",
   manifest: "/manifest.webmanifest",
   icons: {
     icon: [{ url: "/brand/koi-emblem.svg", type: "image/svg+xml" }],
@@ -59,18 +64,18 @@ export const metadata: Metadata = {
     apple: [{ url: "/brand/apple-icon", type: "image/png", sizes: "256x256" }],
   },
   openGraph: {
-    title: "Koinophobia Labs — AI Products, Creator Systems, and Proof",
-    description:
-      "Koinophobia Labs is Blake Taylor’s product studio for AI tools, creator systems, sports debate products, and command-center interfaces. Built, tested, shipped.",
-    siteName: "Koinophobia Labs",
     type: "website",
+    siteName: "Koinophobia Labs",
+    title: "Koinophobia Labs | Websites, AI Workflows and Business Systems",
+    description:
+      "Founder-led websites, AI workflows, booking systems, and conversion improvements for small businesses.",
     images: [socialImage],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Koinophobia Labs — AI Products, Creator Systems, and Proof",
+    title: "Koinophobia Labs | Websites, AI Workflows and Business Systems",
     description:
-      "Koinophobia Labs is Blake Taylor’s product studio for AI tools, creator systems, sports debate products, and command-center interfaces. Built, tested, shipped.",
+      "Founder-led websites, AI workflows, booking systems, and conversion improvements for small businesses.",
     images: ["/brand/social-card"],
   },
 };
@@ -88,10 +93,12 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      data-scroll-behavior="smooth"
       className={`${sora.variable} ${inter.variable} ${jetbrains.variable} ${archivo.variable} ${newsreader.variable} ${ibmPlexMono.variable}`}
     >
       <body>
         <BrandIntro />
+        <AnalyticsBridge />
         {children}
       </body>
     </html>

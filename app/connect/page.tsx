@@ -4,7 +4,7 @@ import { ArrowUpRight, MapPin, MessageSquareText, Sparkles } from "lucide-react"
 import { buildCards, founderLinks, primaryActions, reachOutReasons } from "@/lib/founderHub";
 
 export const metadata: Metadata = {
-  title: "Blake Taylor — Founder, Koinophobia Labs",
+  title: "Blake Taylor — Founder",
   description: "Blake builds systems that turn messy, high-friction work into clear, repeatable leverage.",
   alternates: { canonical: "https://koinophobia.dev/connect" },
   openGraph: {

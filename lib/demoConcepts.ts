@@ -7,11 +7,6 @@ type ShowcaseItem = {
   body: string;
 };
 
-type Testimonial = {
-  quote: string;
-  name: string;
-};
-
 export type DemoConcept = {
   slug: string;
   label: string;
@@ -57,7 +52,6 @@ export type DemoConcept = {
     body: string;
     items: string[];
   };
-  testimonials: Testimonial[];
   bookingTitle: string;
   bookingCopy: string;
   outreach: {
@@ -169,16 +163,6 @@ export const demoConcepts: DemoConcept[] = [
         "This section makes boundaries feel professional: deposits, reschedules, design changes, and aftercare expectations.",
       items: ["$100 non-refundable deposit", "One reschedule with 72-hour notice", "Final design shown at appointment", "Aftercare sent after session"],
     },
-    testimonials: [
-      {
-        quote: "The consult form filtered everything. I only got serious requests with enough detail to reply fast.",
-        name: "Private studio owner",
-      },
-      {
-        quote: "This feels like a studio people would wait for, not a generic portfolio page.",
-        name: "Blackwork artist",
-      },
-    ],
     bookingTitle: "Ready to book the right clients, not every client?",
     bookingCopy:
       "A studio site like this gives artists a premium front door and cleaner consultation requests.",
@@ -290,16 +274,6 @@ export const demoConcepts: DemoConcept[] = [
         "The page separates trial, small-group, and 1:1 coaching so visitors can self-select quickly.",
       items: ["Trial week: $49", "Small group: 3 sessions/week", "1:1 coaching: limited spots", "Nutrition habit check-ins included"],
     },
-    testimonials: [
-      {
-        quote: "I knew exactly what the trial week included before I filled out the form.",
-        name: "New member",
-      },
-      {
-        quote: "This presents coaching like a real program, not random workouts.",
-        name: "Local strength coach",
-      },
-    ],
     bookingTitle: "Make the first session feel like the obvious move.",
     bookingCopy:
       "A coach site should sell clarity and confidence before it sells memberships.",
@@ -411,16 +385,6 @@ export const demoConcepts: DemoConcept[] = [
         "The about section gives the cafe a point of view: local ingredients, warm service, and repeat visits.",
       items: ["Roasted with regional partners", "Small pastry case, baked daily", "Walk-ins welcome", "Catering and events by inquiry"],
     },
-    testimonials: [
-      {
-        quote: "The site makes me want to visit before I even open the menu.",
-        name: "Neighborhood regular",
-      },
-      {
-        quote: "This feels like a real cafe brand, not a restaurant template.",
-        name: "Local operator",
-      },
-    ],
     bookingTitle: "Give locals one place to choose you.",
     bookingCopy:
       "A restaurant site should make ordering, visiting, and booking feel immediate.",
