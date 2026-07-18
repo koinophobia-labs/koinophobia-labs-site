@@ -48,20 +48,21 @@ const pairs = [
   // for transparency, not gated.
   ["#B08A2E", CREAM, "decorative", "gold signature rule on cream (decorative, exempt)"],
 
-  // ---- koinophobia.dev personal home (.devhome dark palette) ----
+  // ---- koinophobia.dev dark personal palette (.devhome home + .connectcard) ----
   // Surfaces: ink #05060A (page), panel #0A0B12, panel-2 #0D0E17.
   // Status-chip text sits on the violet-soft fill blended over panel: ~#201538.
-  ["#E8E6F0", DH_INK, "normal", "dev-home primary text on ink"],
-  ["#E8E6F0", DH_PANEL, "normal", "dev-home primary text on panel"],
-  ["#A7A3B8", DH_INK, "normal", "dev-home body on ink"],
-  ["#A7A3B8", DH_PANEL, "normal", "dev-home body on panel"],
-  ["#807C94", DH_INK, "normal", "dev-home muted (caption/footer/texture) on ink"],
-  ["#807C94", DH_PANEL, "normal", "dev-home muted on panel"],
-  ["#807C94", DH_PANEL2, "normal", "dev-home muted on panel-2 (hover)"],
-  ["#B15CFF", DH_INK, "normal", "dev-home violet-hot kicker/origin on ink"],
-  ["#B15CFF", DH_PANEL, "normal", "dev-home violet-hot on panel"],
-  ["#B15CFF", "#201538", "normal", "dev-home violet-hot status-chip text on violet-soft fill"],
-  ["#FFFFFF", "#9447FF", "normal", "dev-home white button label on violet"],
+  ["#E8E6F0", DH_INK, "normal", "dark: primary text on ink"],
+  ["#E8E6F0", DH_PANEL, "normal", "dark: primary text on panel (cards/actions)"],
+  ["#A7A3B8", DH_INK, "normal", "dark: body on ink"],
+  ["#A7A3B8", DH_PANEL, "normal", "dark: body on panel (work-note/sub)"],
+  ["#807C94", DH_INK, "normal", "dark: muted (caption/footer/label) on ink"],
+  ["#807C94", DH_PANEL, "normal", "dark: muted on panel"],
+  ["#807C94", DH_PANEL2, "normal", "dark: muted on panel-2 (hover)"],
+  ["#B15CFF", DH_INK, "normal", "dark: violet-hot kicker/role on ink"],
+  ["#B15CFF", DH_PANEL, "normal", "dark: violet-hot icon on panel"],
+  ["#B15CFF", DH_PANEL2, "normal", "dark: violet-hot arrow/icon on panel-2 (hover)"],
+  ["#B15CFF", "#201538", "normal", "dark: violet-hot status-chip text on violet-soft fill"],
+  ["#FFFFFF", "#9447FF", "normal", "dark: white button label on violet"],
 ];
 
 let fail = 0;
