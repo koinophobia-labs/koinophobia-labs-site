@@ -30,6 +30,8 @@ const PACK = [
   "PDF and DOCX bundle",
 ];
 
+const FOUNDING_COHORT_HREF = `${founderLinks.careerForge}/founding-beta`;
+
 const REBUILD_HREF =
   "mailto:koinophobia999@gmail.com?subject=Career%20Forge%20Resume%20Rebuild&body=Name%3A%0ACurrent%20role%20or%20background%3A%0ATarget%20roles%3A%0AWhat%20is%20not%20working%20in%20your%20current%20resume%3A%0A";
 
@@ -60,6 +62,9 @@ export default function HomeCareerForge() {
             >
               Try the Career Forge beta
               <ArrowUpRight size={16} aria-hidden="true" />
+            </a>
+            <a className="kl-link" href={FOUNDING_COHORT_HREF} target="_blank" rel="noreferrer">
+              Apply for one of 5 founding seats ($49) →
             </a>
             <a className="kl-link" href="#career-forge-pack">
               See what the draft pack includes ↓
