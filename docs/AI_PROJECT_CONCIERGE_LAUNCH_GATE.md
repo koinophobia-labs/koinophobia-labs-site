@@ -6,7 +6,7 @@ Updated: 2026-07-18
 
 **Code release candidate: PASS. Production launch: READY AFTER EXTERNAL GATES.**
 
-The implementation, deterministic fallback, regression suite, production build, browser journeys, accessibility automation, and production dependency audit pass locally. No deployment was attempted or claimed because this isolated worktree has no linked Vercel project, and the production database migration plus live OpenAI and Resend smoke checks require approved credentials.
+The implementation, deterministic fallback, regression suite, production build, browser journeys, accessibility automation, and production dependency audit pass locally. The feature branch includes the current `origin/main`. No deployment was attempted or claimed because production deploys through the repository's `main`-branch Git integration only, and the production database migration plus live OpenAI and Resend smoke checks require approved credentials.
 
 ## Implemented scope
 
@@ -36,13 +36,14 @@ The implementation, deterministic fallback, regression suite, production build, 
 
 | Gate | Result |
 | --- | --- |
-| `npm run test:concierge` | PASS — 34/34 |
+| `npm run test:concierge` | PASS — 35/35 |
 | `npm run test:crm` | PASS — 58/58 |
 | `npm run test:commercial` | PASS — 6/6 |
-| Combined unit/integration assertions | PASS — 98/98 |
+| Combined unit/integration assertions | PASS — 99/99 |
+| `npm run test:dev-routing` after merging current `main` | PASS — 9/9 |
 | `npm run test:concierge:e2e` against `next start` | PASS — 12/12 |
 | `npm run test:release-qa` against `next start` | PASS — 50/50 |
-| `npm run build` | PASS — Next.js 16.2.7 Turbopack, 37 static pages generated |
+| `npm run build` | PASS — Next.js 16.2.7 Turbopack, 38 static pages generated |
 | `npx tsc --noEmit` | PASS |
 | `npm run lint` | PASS — zero errors; same one pre-existing warning |
 | `git diff --check` | PASS |
@@ -99,19 +100,24 @@ Not verified in this worktree:
 
 The existing Vercel build script runs `node scripts/migrate-crm.mjs && next build`, so deployment must have the intended production `DATABASE_URL` before the build begins.
 
-After confirming the environment and database target:
+After confirming the environment and database target, use the repository's PR workflow:
 
 ```bash
 npm ci
-npm run db:migrate-crm
+npm run test:concierge
+npm run test:crm
 npm run build
-npx vercel --prod
+# Push codex/ai-project-concierge, open a PR to main, and merge after checks pass.
+# The Vercel Git integration then runs vercel-build and applies migration 007.
 ```
+
+Do not use a Vercel CLI production promotion for this repository. Its recorded deployment guardrail requires production to remain traceable to `main` through the Git integration.
 
 Then complete one real-provider concierge recommendation, submit one controlled lead, confirm the notification email, inspect its CRM qualification envelope, and recheck the Revenue Leak Audit handoff. Do not enable public traffic if the migration or durable lead persistence fails; the deterministic recommendation itself may remain available without OpenAI.
 
 ## Remaining launch risks
 
+- The committed feature branch is local and has not been pushed or merged to `main`.
 - External credentials and production mutation were deliberately not inferred from local implementation authority.
 - Production migration and provider/email smoke checks are the only blocking launch gates identified.
 - Manual screen-reader review remains advisable even though automated accessibility checks pass.
