@@ -11,7 +11,6 @@ export const metadata: Metadata = {
   title: "Koinophobia Labs | Websites, AI Workflows and Business Systems",
   description: "Founder-led websites, AI workflows, booking systems, and conversion improvements for small businesses. Start with a practical Revenue Leak Audit.",
   alternates: { canonical: "https://koinophobialabs.com/" },
-  openGraph: { url: "/" },
 };
 
 const schema = {
