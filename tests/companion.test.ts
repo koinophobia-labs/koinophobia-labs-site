@@ -4,6 +4,7 @@ import path from "node:path";
 import test from "node:test";
 import { resolveCompanionMotionState } from "../lib/companion/motion";
 import { companionHostAllowed, resolveCompanionPageContext } from "../lib/companion/page-context";
+import { answerSiteQuestion, SITE_HELP_TOPICS } from "../lib/companion/site-help";
 import {
   canShowCompanionInvitation,
   COMPANION_DISMISSAL_MS,
@@ -32,7 +33,7 @@ test("page context enables intentional studio routes with deterministic copy", (
     const context = resolveCompanionPageContext(route);
     assert.equal(context.enabled, true, route);
     assert.equal(context.routeKey, routeKey, route);
-    assert.ok(context.invitationDelayMs >= 12_000, route);
+    assert.ok(context.invitationDelayMs >= 6_000, route);
     assert.ok(context.actions.some((action) => action.id === "concierge"), route);
   }
 });
@@ -87,6 +88,20 @@ test("motion state prioritizes interaction and reduced motion without randomness
   assert.doesNotMatch(read("components/companion/KoiCompanion.tsx"), /Math\.random/);
 });
 
+test("basic site questions use deterministic published answers", () => {
+  assert.ok(SITE_HELP_TOPICS.length >= 8);
+  const pricing = answerSiteQuestion("How much does a website project cost?");
+  assert.equal(pricing.id, "pricing");
+  assert.equal(pricing.matched, true);
+  assert.match(pricing.answer, /Final scope, price, and timing are confirmed by Blake/);
+  const audit = answerSiteQuestion("What is the revenue leak audit?");
+  assert.equal(audit.id, "audit");
+  assert.equal(audit.href, "/audit");
+  const unknown = answerSiteQuestion("Can you tell me the weather?");
+  assert.equal(unknown.matched, false);
+  assert.equal(unknown.href, "/concierge");
+});
+
 test("the global companion mounts once and lazy-loads the existing shared concierge", () => {
   const layout = read("app/layout.tsx");
   const companion = read("components/companion/KoiCompanion.tsx");
@@ -104,7 +119,9 @@ test("keyboard, focus, dismissal, reduced-motion, print, and safe-area protectio
   const companion = read("components/companion/KoiCompanion.tsx");
   const panel = read("components/companion/KoiCompanionPanel.tsx");
   const css = read("app/koi-companion.css");
-  assert.match(companion, /aria-label=.*Open project concierge/);
+  assert.match(companion, /aria-label=.*Open Koinophobia Labs site guide/);
+  assert.match(companion, /pointermove/);
+  assert.match(companion, /translate3d/);
   assert.match(companion, /aria-haspopup="dialog"/);
   assert.match(panel, /event\.key === "Escape"/);
   assert.match(panel, /event\.key !== "Tab"/);
@@ -117,6 +134,6 @@ test("keyboard, focus, dismissal, reduced-motion, print, and safe-area protectio
 
 test("companion analytics remain categorical and exclude visitor answers", () => {
   const companionSources = read("components/companion/KoiCompanion.tsx") + read("components/companion/KoiCompanionPanel.tsx");
-  for (const event of ["koi_companion_viewed", "koi_companion_invitation_shown", "koi_companion_invitation_dismissed", "koi_companion_opened", "koi_companion_minimized", "koi_companion_action_selected"]) assert.match(companionSources, new RegExp(event));
+  for (const event of ["koi_companion_viewed", "koi_companion_invitation_shown", "koi_companion_invitation_dismissed", "koi_companion_opened", "koi_companion_minimized", "koi_companion_action_selected", "koi_site_question_answered"]) assert.match(companionSources, new RegExp(event));
   assert.doesNotMatch(companionSources, /businessName|primaryProblem|desiredOutcome|contactEmail|websiteUrl/);
 });

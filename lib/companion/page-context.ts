@@ -33,55 +33,55 @@ const exactContexts: Record<string, Omit<CompanionPageContext, "enabled" | "acti
     routeKey: "home",
     invitation: "Not sure where to start?",
     preferredSide: "right",
-    invitationDelayMs: 14_000,
+    invitationDelayMs: 6_000,
   },
   "/services": {
     routeKey: "services",
     invitation: "I can help match the problem to a service.",
     preferredSide: "right",
-    invitationDelayMs: 12_000,
+    invitationDelayMs: 6_000,
   },
   "/work": {
     routeKey: "work",
     invitation: "Want to find the closest fit for your project?",
     preferredSide: "left",
-    invitationDelayMs: 16_000,
+    invitationDelayMs: 8_000,
   },
   "/products": {
     routeKey: "products",
     invitation: "Looking for something built around your business?",
     preferredSide: "right",
-    invitationDelayMs: 16_000,
+    invitationDelayMs: 8_000,
   },
   "/process": {
     routeKey: "process",
     invitation: "I can help turn the process into a practical first step.",
     preferredSide: "right",
-    invitationDelayMs: 18_000,
+    invitationDelayMs: 9_000,
   },
   "/about": {
     routeKey: "about",
     invitation: "Want Blake to review the shape of your project?",
     preferredSide: "right",
-    invitationDelayMs: 18_000,
+    invitationDelayMs: 9_000,
   },
   "/audit": {
     routeKey: "audit",
     invitation: "Unsure whether you need an audit or a build?",
     preferredSide: "left",
-    invitationDelayMs: 15_000,
+    invitationDelayMs: 7_000,
   },
   "/revenue-leak-audit": {
     routeKey: "audit",
     invitation: "Unsure whether you need an audit or a build?",
     preferredSide: "left",
-    invitationDelayMs: 15_000,
+    invitationDelayMs: 7_000,
   },
   "/intake": {
     routeKey: "intake",
     invitation: "I can help organize the project before you submit.",
     preferredSide: "left",
-    invitationDelayMs: 18_000,
+    invitationDelayMs: 9_000,
     actions: [
       { id: "concierge", label: "Help me organize the project" },
       { id: "intake", label: "Continue with the standard form", href: "/intake#standard-intake" },
@@ -119,7 +119,7 @@ export function resolveCompanionPageContext(pathname: string): CompanionPageCont
       invitation: "Does this feel close to what your business needs?",
       actions: baseActions,
       preferredSide: "left",
-      invitationDelayMs: 18_000,
+      invitationDelayMs: 9_000,
     };
   }
 
@@ -130,7 +130,7 @@ export function resolveCompanionPageContext(pathname: string): CompanionPageCont
       invitation: "Want to map this kind of experience to your business?",
       actions: baseActions,
       preferredSide: "right",
-      invitationDelayMs: 18_000,
+      invitationDelayMs: 9_000,
     };
   }
 

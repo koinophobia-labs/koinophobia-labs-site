@@ -78,7 +78,12 @@ try {
     const { context, page } = await pageAt(chromiumBrowser, "/", { viewport: { width: 1440, height: 1000 } });
     const trigger = page.getByTestId("koi-companion-trigger");
     await trigger.waitFor();
-    check(await trigger.getAttribute("aria-label") === "Open project concierge", "homepage renders semantic resting koi");
+    check(await trigger.getAttribute("aria-label") === "Open Koinophobia Labs site guide", "homepage renders semantic active site guide");
+    const initialKoiBox = await trigger.boundingBox();
+    await page.mouse.move(1110, 710);
+    await page.waitForTimeout(850);
+    const followedKoiBox = await trigger.boundingBox();
+    check(Boolean(initialKoiBox && followedKoiBox && Math.abs(followedKoiBox.x - initialKoiBox.x) > 30), "desktop koi actively follows the pointer within its bounded pond", JSON.stringify({ initialKoiBox, followedKoiBox }));
     const collision = await page.evaluate(() => {
       const triggerRect = document.querySelector("[data-testid='koi-companion-trigger']")?.getBoundingClientRect();
       const navRect = document.querySelector(".studio-nav")?.getBoundingClientRect();
@@ -88,7 +93,7 @@ try {
       return overlaps(triggerRect, navRect) || overlaps(triggerRect, ctaRect) ? "collision" : "clear";
     });
     check(collision === "clear", "resting koi avoids primary navigation and hero CTAs", collision);
-    await page.waitForTimeout(14_300);
+    await page.waitForTimeout(6_300);
     const invitation = page.getByRole("status").filter({ hasText: "Not sure where to start?" });
     check(await invitation.isVisible(), "homepage invitation waits and appears contextually");
     await page.screenshot({ path: "qa-screenshots/koi/home-invitation-1440.png", fullPage: false });
@@ -104,6 +109,11 @@ try {
     const { context, page } = await pageAt(chromiumBrowser, "/services");
     const panel = await openPanel(page);
     check(await panel.getByText("I can help match the problem to a service.", { exact: true }).isVisible(), "services panel uses deterministic page context");
+    await panel.getByRole("button", { name: "Ask a question about the site" }).click();
+    await panel.getByRole("button", { name: "How much does a project cost?" }).click();
+    check(await panel.getByText(/Published starting points range from a focused \$250 Revenue Leak Audit/).isVisible(), "site guide answers a basic pricing question from published information");
+    check(await panel.getByRole("link", { name: "See prices and engagement options" }).isVisible(), "site answer provides a relevant source route");
+    await panel.getByRole("button", { name: "Back to options" }).click();
     await page.keyboard.press("Escape");
     const trigger = page.getByTestId("koi-companion-trigger");
     check(await trigger.evaluate((element) => element === document.activeElement), "Escape minimizes panel and restores trigger focus");

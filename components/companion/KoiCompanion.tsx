@@ -30,6 +30,22 @@ function interactionInProgress() {
   return Boolean(document.querySelector("dialog[open], [role='dialog'], [aria-modal='true'], [aria-expanded='true']"));
 }
 
+function triggerOverlapsInteractiveControl(trigger: HTMLElement) {
+  const triggerRect = trigger.getBoundingClientRect();
+  const controls = document.querySelectorAll<HTMLElement>('a[href], button, input, select, textarea, [role="button"]');
+  for (const control of controls) {
+    if (control === trigger || control.closest(".koi-companion")) continue;
+    const style = window.getComputedStyle(control);
+    if (style.display === "none" || style.visibility === "hidden" || Number(style.opacity) === 0) continue;
+    const rect = control.getBoundingClientRect();
+    if (rect.width === 0 || rect.height === 0) continue;
+    const overlapX = Math.min(triggerRect.right, rect.right) - Math.max(triggerRect.left, rect.left);
+    const overlapY = Math.min(triggerRect.bottom, rect.bottom) - Math.max(triggerRect.top, rect.top);
+    if (overlapX > 6 && overlapY > 6) return true;
+  }
+  return false;
+}
+
 export default function KoiCompanion() {
   const pathname = usePathname();
   const context = useMemo(() => resolveCompanionPageContext(pathname), [pathname]);
@@ -43,6 +59,7 @@ export default function KoiCompanion() {
   const [paused, setPaused] = useState(false);
   const [reducedMotion, setReducedMotion] = useState(false);
   const [collisionHidden, setCollisionHidden] = useState(false);
+  const presenceRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const noticeTimerRef = useRef<number | null>(null);
 
@@ -108,6 +125,56 @@ export default function KoiCompanion() {
   }, []);
 
   useEffect(() => {
+    if (!hydrated || !hostAllowed || !context.enabled || open || reducedMotion) return;
+    const pointer = window.matchMedia("(hover: hover) and (pointer: fine)");
+    if (!pointer.matches) return;
+    const presence = presenceRef.current;
+    let frame = 0;
+    let currentX = 0;
+    let currentY = 0;
+    let targetX = 0;
+    let targetY = 0;
+    let lastCollisionCheck = 0;
+
+    const render = (timestamp: number) => {
+      currentX += (targetX - currentX) * 0.16;
+      currentY += (targetY - currentY) * 0.16;
+      presence?.style.setProperty("transform", `translate3d(${currentX.toFixed(2)}px, ${currentY.toFixed(2)}px, 0)`);
+      if (timestamp - lastCollisionCheck > 120 && triggerRef.current) {
+        lastCollisionCheck = timestamp;
+        const blocked = triggerOverlapsInteractiveControl(triggerRef.current);
+        setCollisionHidden((current) => current === blocked ? current : blocked);
+        if (blocked) setInvitationVisible(false);
+      }
+      if (Math.abs(targetX - currentX) > 0.35 || Math.abs(targetY - currentY) > 0.35) frame = window.requestAnimationFrame(render);
+      else frame = 0;
+    };
+
+    const follow = (event: PointerEvent) => {
+      if (event.pointerType === "touch" || interactionInProgress()) return;
+      const side = context.preferredSide;
+      const anchorX = side === "right" ? window.innerWidth - 53 : 53;
+      const anchorY = window.innerHeight - 62;
+      const horizontalReach = Math.min(420, window.innerWidth * 0.44);
+      const verticalReach = Math.min(430, window.innerHeight * 0.52);
+      const desiredX = event.clientX - anchorX + (side === "right" ? -118 : 118);
+      targetX = side === "right" ? Math.max(-horizontalReach, Math.min(0, desiredX)) : Math.min(horizontalReach, Math.max(0, desiredX));
+      targetY = Math.max(-verticalReach, Math.min(0, event.clientY - anchorY + 34));
+      if (!frame) frame = window.requestAnimationFrame(render);
+      setMotionState("noticing");
+      if (noticeTimerRef.current) window.clearTimeout(noticeTimerRef.current);
+      noticeTimerRef.current = window.setTimeout(() => setMotionState("resting"), 700);
+    };
+
+    window.addEventListener("pointermove", follow, { passive: true });
+    return () => {
+      window.cancelAnimationFrame(frame);
+      window.removeEventListener("pointermove", follow);
+      presence?.style.removeProperty("transform");
+    };
+  }, [context.enabled, context.preferredSide, hostAllowed, hydrated, open, reducedMotion]);
+
+  useEffect(() => {
     if (!hydrated || !hostAllowed || !context.enabled || open) return;
     let frame = 0;
     const inspect = () => {
@@ -115,19 +182,7 @@ export default function KoiCompanion() {
       frame = window.requestAnimationFrame(() => {
         const trigger = triggerRef.current;
         if (!trigger) return;
-        const triggerRect = trigger.getBoundingClientRect();
-        const controls = document.querySelectorAll<HTMLElement>('a[href], button, input, select, textarea, [role="button"]');
-        let blocked = false;
-        for (const control of controls) {
-          if (control === trigger || control.closest(".koi-companion")) continue;
-          const style = window.getComputedStyle(control);
-          if (style.display === "none" || style.visibility === "hidden" || Number(style.opacity) === 0) continue;
-          const rect = control.getBoundingClientRect();
-          if (rect.width === 0 || rect.height === 0) continue;
-          const overlapX = Math.min(triggerRect.right, rect.right) - Math.max(triggerRect.left, rect.left);
-          const overlapY = Math.min(triggerRect.bottom, rect.bottom) - Math.max(triggerRect.top, rect.top);
-          if (overlapX > 6 && overlapY > 6) { blocked = true; break; }
-        }
+        const blocked = triggerOverlapsInteractiveControl(trigger);
         setCollisionHidden((current) => current === blocked ? current : blocked);
         if (blocked) setInvitationVisible(false);
       });
@@ -217,29 +272,31 @@ export default function KoiCompanion() {
       data-reduced-motion={reducedMotion ? "true" : "false"}
       data-paused={paused ? "true" : "false"}
     >
-      {invitationVisible && context.invitation ? (
-        <div className="koi-companion-invitation" role="status">
-          <button className="koi-companion-invitation__message" type="button" onClick={() => openPanel("invitation")}>{context.invitation}</button>
-          <button className="koi-companion-invitation__dismiss" type="button" onClick={dismissInvitation} aria-label="Dismiss koi invitation"><X size={14} aria-hidden="true" /></button>
-        </div>
-      ) : null}
-      <button
-        ref={triggerRef}
-        className="koi-companion-trigger"
-        type="button"
-        aria-label={hasDraft ? "Open project concierge and continue saved session" : "Open project concierge"}
-        aria-expanded={open}
-        aria-haspopup="dialog"
-        aria-hidden={collisionHidden ? "true" : undefined}
-        tabIndex={collisionHidden ? -1 : 0}
-        onClick={() => openPanel("trigger")}
-        onPointerEnter={notice}
-        data-testid="koi-companion-trigger"
-      >
-        <span className="koi-companion-trigger__water" aria-hidden="true" />
-        <CompanionKoiArt id="living-koi-trigger" className="koi-companion-trigger__koi" />
-        <span className="koi-companion-trigger__signal" aria-hidden="true" />
-      </button>
+      <div ref={presenceRef} className="koi-companion-presence">
+        {invitationVisible && context.invitation ? (
+          <div className="koi-companion-invitation" role="status">
+            <button className="koi-companion-invitation__message" type="button" onClick={() => openPanel("invitation")}>{context.invitation}<small>Ask me about this site or find the right service.</small></button>
+            <button className="koi-companion-invitation__dismiss" type="button" onClick={dismissInvitation} aria-label="Dismiss koi invitation"><X size={14} aria-hidden="true" /></button>
+          </div>
+        ) : null}
+        <button
+          ref={triggerRef}
+          className="koi-companion-trigger"
+          type="button"
+          aria-label={hasDraft ? "Open site guide and continue saved project concierge session" : "Open Koinophobia Labs site guide"}
+          aria-expanded={open}
+          aria-haspopup="dialog"
+          aria-hidden={collisionHidden ? "true" : undefined}
+          tabIndex={collisionHidden ? -1 : 0}
+          onClick={() => openPanel("trigger")}
+          onPointerEnter={notice}
+          data-testid="koi-companion-trigger"
+        >
+          <span className="koi-companion-trigger__water" aria-hidden="true" />
+          <CompanionKoiArt id="living-koi-trigger" className="koi-companion-trigger__koi" />
+          <span className="koi-companion-trigger__signal" aria-hidden="true" />
+        </button>
+      </div>
       {open ? <KoiCompanionPanel context={context} hasDraft={hasDraft} onClose={closePanel} onDismiss={dismissCompanion} /> : null}
     </div>
   );

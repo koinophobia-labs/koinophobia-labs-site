@@ -17,8 +17,11 @@ The concierge is also available as a restrained, contextual koi companion on the
 - `lib/companion/page-context.ts` deterministically maps approved public routes to copy and actions. Unknown, private, transactional, CRM, and full-page concierge routes are suppressed.
 - `lib/companion/session.ts` validates versioned session-only UI preferences: invitation count, cooldown, dismissal, and minimized state.
 - `lib/companion/motion.ts` resolves the finite visual states: resting, noticing, inviting, listening, and sleeping.
+- `lib/companion/site-help.ts` contains the bounded, deterministic FAQ topics and route links used for basic questions about published site information.
 
-The trigger can invite at most twice per browser session, observes a ten-minute invitation cooldown, and honors a 30-minute dismissal. It never chases the cursor. Page visibility, inactivity, and `prefers-reduced-motion` constrain animation. On narrow screens, a runtime collision guard hides the trigger whenever its fixed corner would cover an interactive page control and restores it when the corner is clear.
+The trigger can invite at most twice per browser session, observes a ten-minute invitation cooldown, and honors a 30-minute dismissal. On fine-pointer desktop devices, the koi trails the pointer inside a bounded lower-page pond with a damped compositor transform; it does not roam into the navigation or upper reading area. Tracking stops while the visitor types, while a dialog is open, on touch devices, and under reduced motion. Page visibility and inactivity further constrain animation. A throttled runtime collision guard hides the trigger whenever movement would cover an interactive control and restores it when the position is clear.
+
+The first invitation appears after six to nine seconds depending on page context. Its speech bubble offers both project matching and site guidance. The panel can answer basic questions about services, published starting prices, typical timing, the Revenue Leak Audit, process, work examples, AI behavior, and contacting Blake. Answers are selected from reviewed local content and always link to a relevant public route. Unknown questions fall back to a capability boundary and the project concierge; no free-form model call, invented availability, or automatic quote is used.
 
 The companion is mounted once in the root layout but is eligible only on the canonical Labs host, Labs-owned Vercel preview deployments, localhost, and a route allowlist. Preview support keeps draft PRs visually reviewable without enabling the companion on the separate `koinophobia.dev` site. It does not appear on CRM, API, payment, campaign, game, full-page concierge, or unknown routes.
 
@@ -172,10 +175,11 @@ The existing `trackStudioEvent` abstraction emits privacy-conscious events:
 - `koi_concierge_resumed`
 - `koi_concierge_completed`
 - `koi_standard_intake_selected`
+- `koi_site_question_answered`
 
 Properties are limited to step ID, entry page, recommended service, confidence band, recommendation source, and completion status. Raw visitor text, contact details, and business details are not sent to analytics.
 
-Companion properties are likewise categorical: route context, action ID, interaction state, and whether an existing draft was resumed. Invitation and dismissal records remain in `sessionStorage`; answer drafts continue to use the concierge's versioned 24-hour `localStorage` record.
+Companion properties are likewise categorical: route context, action ID, interaction state, site-question topic, answer status, and whether an existing draft was resumed. Raw site questions are not sent to analytics. Invitation and dismissal records remain in `sessionStorage`; answer drafts continue to use the concierge's versioned 24-hour `localStorage` record.
 
 Compare concierge completion and submitted-lead rates with the existing standard intake. Segment by entry page, recommendation, confidence band, and prefill-to-submit conversion. Quality should also be reviewed manually through lead fit and eventual lifecycle outcome; a higher completion rate is not useful if qualification quality falls.
 
@@ -249,7 +253,7 @@ npm run build
 
 The browser suite expects the site at `CONCIERGE_QA_URL`, defaulting to `http://localhost:3100`. It covers website rebuild, automation, audit, quick fix, ambiguous/manual review, deterministic outage behavior, refresh recovery, editable intake prefill, mocked successful persistence, a 390px mobile journey, horizontal overflow, and an axe WCAG A/AA scan.
 
-The koi suite expects a built site at `KOI_QA_URL`, defaulting to `http://localhost:3000`. It covers the route and host allowlists, invitation limits, dismissal, draft continuity, deterministic AI-unavailable completion, focus trapping and return, Escape, narrow-screen collision avoidance, reduced motion, horizontal overflow, WCAG A/AA, and Chromium/WebKit behavior. The capture script records the home page at 320, 390, 768, 1024, 1440, and 1920 pixels plus representative contexts and open-panel states.
+The koi suite expects a built site at `KOI_QA_URL`, defaulting to `http://localhost:3000`. It covers the route and host allowlists, bounded desktop pointer following, deterministic site answers, invitation limits, dismissal, draft continuity, deterministic AI-unavailable completion, focus trapping and return, Escape, collision avoidance, reduced motion, horizontal overflow, WCAG A/AA, and Chromium/WebKit behavior. The capture script records the home page at 320, 390, 768, 1024, 1440, and 1920 pixels plus representative contexts and open-panel states.
 
 ## Known limitations
 

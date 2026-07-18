@@ -23,6 +23,16 @@ async function capture(path, width, height, name, options = {}) {
     await page.getByRole("dialog").waitFor();
     await page.waitForTimeout(420);
   }
+  if (options.pointerFollow) {
+    await page.mouse.move(Math.round(width * 0.72), Math.round(height * 0.68));
+    await page.waitForTimeout(850);
+  }
+  if (options.siteHelp) {
+    const panel = page.getByRole("dialog");
+    await panel.getByRole("button", { name: "Ask a question about the site" }).click();
+    await panel.getByRole("button", { name: "How much does a project cost?" }).click();
+    await page.waitForTimeout(180);
+  }
   if (options.startFlow) {
     const panel = page.getByRole("dialog");
     await panel.getByRole("button", { name: /Help me figure out what I need/i }).click();
@@ -61,6 +71,8 @@ try {
   await capture("/audit", 1440, 1000, "audit-1440");
   await capture("/intake", 1440, 1000, "intake-1440");
   await capture("/services", 1440, 1000, "panel-menu-1440", { openPanel: true });
+  await capture("/", 1440, 1000, "active-follow-1440", { pointerFollow: true });
+  await capture("/services", 1440, 1000, "site-help-1440", { openPanel: true, siteHelp: true });
   await capture("/services", 1024, 900, "panel-question-1024", { openPanel: true, startFlow: true });
   await capture("/", 390, 844, "mobile-focused-question-390", { openPanel: true, startFlow: true, focusInput: true });
   await capture("/", 390, 844, "reduced-motion-390", { reducedMotion: true });
