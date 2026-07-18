@@ -84,6 +84,17 @@ Not verified in this worktree:
 - An authenticated production CRM record inspection.
 - A live Stripe checkout (unchanged and intentionally not charged during local QA).
 
+## Production environment audit
+
+The production Vercel environment-name audit on 2026-07-18 confirmed `DATABASE_URL`, `CRM_ADMIN_SECRET`, the existing Resend variables, and the existing Stripe secrets are present and encrypted. Secret values and entropy were not read.
+
+Two requested production variables are not currently configured:
+
+- `CONCIERGE_SIGNING_SECRET`
+- `NEXT_PUBLIC_SITE_URL`
+
+`OPENAI_API_KEY` is also absent, but it is optional and does not block the deterministic concierge.
+
 ## Required production configuration
 
 - `DATABASE_URL`
@@ -99,6 +110,10 @@ Not verified in this worktree:
 ## Deployment and post-deploy gate
 
 The existing Vercel build script runs `node scripts/migrate-crm.mjs && next build`, so deployment must have the intended production `DATABASE_URL` before the build begins.
+
+Migration `007` is additive and backward compatible with the currently deployed application: it adds a defaulted JSONB column and indexes, while the old application neither reads nor writes that column. The new application is not safe to serve before the migration because every intake insert includes `concierge_data`. The existing `vercel-build` order is therefore the correct sequence: migrate first, build the new artifact second, and only activate it after the build succeeds. A failed migration prevents the new deployment from replacing the current one.
+
+The three indexes use regular `CREATE INDEX`, so they can briefly block writes while each index is built. The production `crm_leads` row count was not inspected. Run the deployment during a low-write window if that table has grown materially; do not bypass `vercel-build` or deploy the new artifact before migration completion.
 
 After confirming the environment and database target, use the repository's PR workflow:
 
@@ -118,6 +133,7 @@ Then complete one real-provider concierge recommendation, submit one controlled 
 ## Remaining launch risks
 
 - The committed feature branch is local and has not been pushed or merged to `main`.
-- External credentials and production mutation were deliberately not inferred from local implementation authority.
+- GitHub CLI authentication is currently invalid and must be restored before the branch and draft PR can be published.
+- `CONCIERGE_SIGNING_SECRET` and `NEXT_PUBLIC_SITE_URL` must be added to the Vercel production environment before merge.
 - Production migration and provider/email smoke checks are the only blocking launch gates identified.
 - Manual screen-reader review remains advisable even though automated accessibility checks pass.
