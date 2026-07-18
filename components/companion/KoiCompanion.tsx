@@ -7,7 +7,15 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import CompanionKoiArt from "@/components/companion/CompanionKoiArt";
 import { trackStudioEvent } from "@/components/studio/AnalyticsBridge";
 import { companionHostAllowed, resolveCompanionPageContext } from "@/lib/companion/page-context";
-import { resolveCompanionMotionState, type CompanionMotionState } from "@/lib/companion/motion";
+import {
+  ambientDrift,
+  clampOffset,
+  COMPANION_PROXIMITY_RADIUS,
+  pointerInfluence,
+  resolveCompanionMotionState,
+  scrollInfluence,
+  type CompanionMotionState,
+} from "@/lib/companion/motion";
 import {
   canShowCompanionInvitation,
   COMPANION_STORAGE_KEY,
@@ -124,103 +132,115 @@ export default function KoiCompanion() {
     return () => document.removeEventListener("visibilitychange", update);
   }, []);
 
+  // Anchored motion controller (audit M1): the koi drifts inside a small safe
+  // region around its corner anchor. The pointer and scroll only *influence*
+  // that drift within hard caps (see lib/companion/motion.ts) and the koi always
+  // eases back to the anchor. It never tracks the cursor across the viewport.
+  // rAF runs only while there is motion to resolve — the koi rests otherwise.
   useEffect(() => {
     if (!hydrated || !hostAllowed || !context.enabled || open || reducedMotion) return;
     const pointer = window.matchMedia("(hover: hover) and (pointer: fine)");
-    if (!pointer.matches) return;
+    const pointerCapable = pointer.matches;
     const presence = presenceRef.current;
     let frame = 0;
     let currentX = 0;
     let currentY = 0;
-    let targetX = 0;
-    let targetY = 0;
-    let lastCollisionCheck = 0;
-    let selectionLocked = false;
-    let settleTimer = 0;
     let headingDegrees = 0;
-    const triggerElement = triggerRef.current;
+    let scrollNudgeY = 0;
+    let lastScrollY = window.scrollY;
+    let lastPointer = { x: -9999, y: -9999 };
+
+    const anchorCenter = () => {
+      const trigger = triggerRef.current;
+      if (!trigger) return null;
+      const rect = trigger.getBoundingClientRect();
+      return { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
+    };
+
+    const frozen = () => paused || interactionInProgress();
 
     const render = (timestamp: number) => {
-      currentX += (targetX - currentX) * 0.16;
-      currentY += (targetY - currentY) * 0.16;
+      scrollNudgeY *= 0.9;
+      let targetX = 0;
+      let targetY = 0;
+      if (!frozen()) {
+        const anchor = anchorCenter();
+        const influence = pointerCapable && anchor ? pointerInfluence(lastPointer, anchor) : { x: 0, y: 0, active: false };
+        const driftActive = influence.active || Math.abs(scrollNudgeY) > 0.5;
+        const drift = driftActive ? ambientDrift(timestamp) : { x: 0, y: 0 };
+        // Every contribution is bounded; the sum is clamped again to the hard cap.
+        const combined = clampOffset(influence.x + drift.x * 0.5, influence.y + scrollNudgeY + drift.y * 0.5);
+        targetX = combined.x;
+        targetY = combined.y;
+      }
+      currentX += (targetX - currentX) * 0.12;
+      currentY += (targetY - currentY) * 0.12;
       const remainingX = targetX - currentX;
       const remainingY = targetY - currentY;
-      if (Math.hypot(remainingX, remainingY) > 1.5) {
+      if (Math.hypot(remainingX, remainingY) > 0.4) {
         const desiredHeading = Math.atan2(remainingY, remainingX) * (180 / Math.PI) + 90;
         const shortestTurn = ((desiredHeading - headingDegrees + 540) % 360) - 180;
-        headingDegrees += shortestTurn * 0.2;
+        headingDegrees += shortestTurn * 0.15;
+      } else {
+        headingDegrees += (0 - headingDegrees) * 0.06;
       }
       if (presence) {
         presence.style.setProperty("transform", `translate3d(${currentX.toFixed(2)}px, ${currentY.toFixed(2)}px, 0)`);
         presence.style.setProperty("--koi-heading", `${headingDegrees.toFixed(2)}deg`);
-        presence.dataset.headingDegrees = headingDegrees.toFixed(1);
       }
-      if (timestamp - lastCollisionCheck > 120 && triggerRef.current) {
-        lastCollisionCheck = timestamp;
-        const blocked = triggerOverlapsInteractiveControl(triggerRef.current);
-        setCollisionHidden((current) => current === blocked ? current : blocked);
-        if (blocked) setInvitationVisible(false);
+      const settled =
+        Math.hypot(remainingX, remainingY) < 0.3 &&
+        Math.hypot(targetX, targetY) < 0.3 &&
+        Math.abs(scrollNudgeY) < 0.3 &&
+        Math.abs(headingDegrees) < 0.3;
+      if (settled) {
+        frame = 0;
+        setMotionState((current) => (current === "sleeping" ? current : "resting"));
+      } else {
+        frame = window.requestAnimationFrame(render);
       }
-      if (Math.abs(targetX - currentX) > 0.35 || Math.abs(targetY - currentY) > 0.35) frame = window.requestAnimationFrame(render);
-      else frame = 0;
     };
 
-    const follow = (event: PointerEvent) => {
-      if (event.pointerType === "touch" || interactionInProgress()) return;
-      const trigger = triggerRef.current;
-      if (selectionLocked && trigger) {
-        const rect = trigger.getBoundingClientRect();
-        const distance = Math.hypot(event.clientX - (rect.left + rect.width / 2), event.clientY - (rect.top + rect.height / 2));
-        if (distance <= 170) return;
-        selectionLocked = false;
-        if (presence) presence.dataset.selectable = "false";
-      }
-      const side = context.preferredSide;
-      const anchorX = side === "right" ? window.innerWidth - 53 : 53;
-      const anchorY = window.innerHeight - 62;
-      const pointerOffsetX = event.clientX < window.innerWidth / 2 ? 52 : -52;
-      const desiredCenterX = Math.max(44, Math.min(window.innerWidth - 44, event.clientX + pointerOffsetX));
-      const desiredCenterY = Math.max(52, Math.min(window.innerHeight - 50, event.clientY + 42));
-      targetX = desiredCenterX - anchorX;
-      targetY = desiredCenterY - anchorY;
-      if (presence) {
-        presence.dataset.bubbleSide = desiredCenterX < window.innerWidth / 2 ? "left" : "right";
-        presence.dataset.bubbleVertical = desiredCenterY < 190 ? "below" : "above";
-      }
+    const kick = () => {
       if (!frame) frame = window.requestAnimationFrame(render);
-      setMotionState("noticing");
-      if (noticeTimerRef.current) window.clearTimeout(noticeTimerRef.current);
-      noticeTimerRef.current = window.setTimeout(() => setMotionState("resting"), 700);
-      window.clearTimeout(settleTimer);
-      settleTimer = window.setTimeout(() => {
-        selectionLocked = true;
-        if (presence) presence.dataset.selectable = "true";
-        setMotionState("resting");
-      }, 280);
     };
 
-    const lockForSelection = () => {
-      selectionLocked = true;
-      window.clearTimeout(settleTimer);
-      if (presence) presence.dataset.selectable = "true";
-      setMotionState("resting");
+    const onPointerMove = (event: PointerEvent) => {
+      if (event.pointerType === "touch" || frozen()) return;
+      lastPointer = { x: event.clientX, y: event.clientY };
+      const anchor = anchorCenter();
+      if (!anchor) return;
+      const near = Math.hypot(anchor.x - event.clientX, anchor.y - event.clientY) < COMPANION_PROXIMITY_RADIUS;
+      if (presence) presence.dataset.bubbleSide = anchor.x < window.innerWidth / 2 ? "left" : "right";
+      if (near) {
+        setMotionState("noticing");
+        if (noticeTimerRef.current) window.clearTimeout(noticeTimerRef.current);
+        noticeTimerRef.current = window.setTimeout(() => setMotionState("resting"), 900);
+        kick();
+      }
     };
 
-    window.addEventListener("pointermove", follow, { passive: true });
-    triggerElement?.addEventListener("pointerenter", lockForSelection);
+    const onScroll = () => {
+      if (frozen()) return;
+      const y = window.scrollY;
+      scrollNudgeY = scrollInfluence(y - lastScrollY);
+      lastScrollY = y;
+      if (Math.abs(scrollNudgeY) > 0.5) {
+        setMotionState((current) => (current === "noticing" || current === "inviting" ? current : "drifting"));
+        kick();
+      }
+    };
+
+    window.addEventListener("pointermove", onPointerMove, { passive: true });
+    window.addEventListener("scroll", onScroll, { passive: true });
     return () => {
       window.cancelAnimationFrame(frame);
-      window.clearTimeout(settleTimer);
-      window.removeEventListener("pointermove", follow);
-      triggerElement?.removeEventListener("pointerenter", lockForSelection);
+      window.removeEventListener("pointermove", onPointerMove);
+      window.removeEventListener("scroll", onScroll);
       presence?.style.removeProperty("transform");
       presence?.style.removeProperty("--koi-heading");
-      if (presence) {
-        presence.dataset.selectable = "false";
-        delete presence.dataset.headingDegrees;
-      }
     };
-  }, [context.enabled, context.preferredSide, hostAllowed, hydrated, open, reducedMotion]);
+  }, [context.enabled, context.preferredSide, hostAllowed, hydrated, open, paused, reducedMotion]);
 
   useEffect(() => {
     if (!hydrated || !hostAllowed || !context.enabled || open) return;
@@ -311,7 +331,7 @@ export default function KoiCompanion() {
   }
 
   if (!hydrated || !hostAllowed || !context.enabled || session.hidden) return null;
-  const renderedMotionState = resolveCompanionMotionState({ open, invitationVisible, reducedMotion, ambientState: motionState });
+  const renderedMotionState = resolveCompanionMotionState({ open, paused, collisionHidden, invitationVisible, reducedMotion, ambientState: motionState });
 
   return (
     <div
@@ -320,7 +340,7 @@ export default function KoiCompanion() {
       data-reduced-motion={reducedMotion ? "true" : "false"}
       data-paused={paused ? "true" : "false"}
     >
-      <div ref={presenceRef} className="koi-companion-presence" data-bubble-side={context.preferredSide} data-bubble-vertical="above" data-selectable="false">
+      <div ref={presenceRef} className="koi-companion-presence" data-bubble-side={context.preferredSide} data-bubble-vertical="above">
         {invitationVisible && context.invitation ? (
           <div className="koi-companion-invitation" role="status">
             <button className="koi-companion-invitation__message" type="button" onClick={() => openPanel("invitation")}>{context.invitation}<small>Ask me about this site or find the right service.</small></button>

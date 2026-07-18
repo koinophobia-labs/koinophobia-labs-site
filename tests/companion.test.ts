@@ -2,9 +2,29 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 import path from "node:path";
 import test from "node:test";
-import { resolveCompanionMotionState } from "../lib/companion/motion";
+import {
+  ambientDrift,
+  clampOffset,
+  COMPANION_DRIFT_RADIUS,
+  COMPANION_MAX_OFFSET,
+  COMPANION_PROXIMITY_NUDGE,
+  COMPANION_PROXIMITY_RADIUS,
+  COMPANION_SCROLL_NUDGE,
+  pointerInfluence,
+  resolveCompanionMotionState,
+  scrollInfluence,
+} from "../lib/companion/motion";
 import { companionHostAllowed, resolveCompanionPageContext } from "../lib/companion/page-context";
 import { answerSiteQuestion, SITE_HELP_TOPICS } from "../lib/companion/site-help";
+import {
+  answerGroundedQuestion,
+  compareServices,
+  KNOWN_SERVICES,
+  pageBrief,
+  relevantWork,
+  smallestNextStep,
+} from "../lib/companion/site-knowledge";
+import { serviceOffers, studioConfig, workProjects } from "../lib/commercial";
 import {
   canShowCompanionInvitation,
   COMPANION_DISMISSAL_MS,
@@ -122,8 +142,12 @@ test("keyboard, focus, dismissal, reduced-motion, print, and safe-area protectio
   assert.match(companion, /aria-label=.*Open Koinophobia Labs site guide/);
   assert.match(companion, /pointermove/);
   assert.match(companion, /translate3d/);
-  assert.match(companion, /selectionLocked/);
-  assert.match(companion, /data-selectable/);
+  // Anchored motion, not cursor chasing: the controller must use the bounded
+  // influence helpers and must NOT set its target from raw pointer coordinates.
+  assert.match(companion, /pointerInfluence/);
+  assert.match(companion, /clampOffset/);
+  assert.match(companion, /scrollInfluence/);
+  assert.doesNotMatch(companion, /targetX = desiredCenterX|event\.clientX \+/);
   assert.match(companion, /Math\.atan2/);
   assert.match(companion, /shortestTurn/);
   assert.match(companion, /--koi-heading/);
@@ -144,6 +168,114 @@ test("keyboard, focus, dismissal, reduced-motion, print, and safe-area protectio
 
 test("companion analytics remain categorical and exclude visitor answers", () => {
   const companionSources = read("components/companion/KoiCompanion.tsx") + read("components/companion/KoiCompanionPanel.tsx");
-  for (const event of ["koi_companion_viewed", "koi_companion_invitation_shown", "koi_companion_invitation_dismissed", "koi_companion_opened", "koi_companion_minimized", "koi_companion_action_selected", "koi_site_question_answered"]) assert.match(companionSources, new RegExp(event));
+  for (const event of [
+    "koi_companion_viewed",
+    "koi_companion_invitation_shown",
+    "koi_companion_invitation_dismissed",
+    "koi_companion_opened",
+    "koi_companion_minimized",
+    "koi_companion_action_selected",
+    "koi_site_question_answered",
+    "koi_companion_page_understood",
+    "koi_companion_services_compared",
+    "koi_companion_relevant_work_selected",
+  ]) assert.match(companionSources, new RegExp(event));
   assert.doesNotMatch(companionSources, /businessName|primaryProblem|desiredOutcome|contactEmail|websiteUrl/);
+  // The relevant-work finder must never send the visitor's free-text intent.
+  assert.doesNotMatch(companionSources, /trackStudioEvent\([^)]*workIntent/);
+});
+
+// --- Grounded site knowledge (audit U1–U3, C2) ---------------------------
+
+test("site knowledge is derived from commercial.ts, not hand-typed", () => {
+  assert.equal(KNOWN_SERVICES.length, serviceOffers.length);
+  for (const service of KNOWN_SERVICES) {
+    const source = serviceOffers.find((offer) => offer.slug === service.slug);
+    assert.ok(source, service.slug);
+    assert.equal(service.price, source.price);
+    assert.equal(service.timeline, source.timeline);
+  }
+  // Pricing answer reflects live studioConfig numbers, not literals.
+  const pricing = answerGroundedQuestion("how much does a website cost");
+  assert.ok(pricing.answer.includes(studioConfig.auditPrice));
+  assert.ok(pricing.answer.includes(studioConfig.websiteRange));
+});
+
+test("service comparison is grounded and steers uncertainty to the audit", () => {
+  const cmp = compareServices("audit", "website");
+  assert.ok(cmp);
+  assert.equal(cmp.a.slug, "audit");
+  assert.equal(cmp.b.slug, "website");
+  assert.match(cmp.recommendation, new RegExp(studioConfig.auditPrice.replace("$", "\\$")));
+  // Identical or unknown slugs return null rather than a fabricated comparison.
+  assert.equal(compareServices("audit", "audit"), null);
+  assert.equal(compareServices("audit", "not-a-service"), null);
+});
+
+test("relevant work ranks concept builds by real capability signal", () => {
+  const matches = relevantWork("messy inquiries routing and structured intake");
+  assert.ok(matches.length >= 1);
+  assert.equal(matches[0].slug, "blackline-ritual"); // structured intake project
+  assert.ok(matches.every((match) => workProjects.some((project) => project.slug === match.slug)));
+  assert.ok(matches.every((match) => match.href === `/work/${match.slug}`));
+});
+
+test("page briefs and next steps are page-specific and non-empty", () => {
+  const services = pageBrief("services");
+  assert.ok(services.facts.length >= serviceOffers.length);
+  const workDetail = pageBrief("work_detail", "blackline-ritual");
+  assert.match(workDetail.summary, /Blackline Ritual/);
+  // Smallest next step for proof pages points at a service, not a forced build.
+  assert.equal(smallestNextStep("work").href, "/services");
+  assert.match(smallestNextStep("audit").href, /audit/);
+});
+
+test("routes expose distinct, page-appropriate copilot intents", () => {
+  assert.deepEqual(resolveCompanionPageContext("/services").copilot, ["understand", "compare", "next_step"]);
+  assert.deepEqual(resolveCompanionPageContext("/work").copilot, ["understand", "relevant_work", "next_step"]);
+  assert.deepEqual(resolveCompanionPageContext("/products").copilot, ["understand", "next_step"]);
+  // Work-detail carries the slug so answers can name the project.
+  assert.equal(resolveCompanionPageContext("/work/blackline-ritual").slug, "blackline-ritual");
+});
+
+// --- Motion is anchored, never a cursor follower (audit M1) ----------------
+
+test("pointer influence is capped and vanishes beyond the proximity radius", () => {
+  const anchor = { x: 1000, y: 700 };
+  // Cursor far away → zero influence (no chasing).
+  const far = pointerInfluence({ x: 100, y: 100 }, anchor);
+  assert.equal(far.active, false);
+  assert.equal(far.x, 0);
+  assert.equal(far.y, 0);
+  // Cursor extremely close → still bounded by the nudge cap.
+  const near = pointerInfluence({ x: 1002, y: 701 }, anchor);
+  assert.ok(near.active);
+  assert.ok(Math.hypot(near.x, near.y) <= COMPANION_PROXIMITY_NUDGE + 1e-9);
+  // Across a sweep of distances, displacement never exceeds the cap.
+  for (let d = 1; d < COMPANION_PROXIMITY_RADIUS * 2; d += 7) {
+    const infl = pointerInfluence({ x: anchor.x - d, y: anchor.y }, anchor);
+    assert.ok(Math.hypot(infl.x, infl.y) <= COMPANION_PROXIMITY_NUDGE + 1e-9, `d=${d}`);
+  }
+});
+
+test("total offset, drift, and scroll influence stay within hard caps", () => {
+  assert.ok(COMPANION_DRIFT_RADIUS < COMPANION_MAX_OFFSET);
+  const clamped = clampOffset(999, -999);
+  assert.ok(Math.hypot(clamped.x, clamped.y) <= COMPANION_MAX_OFFSET + 1e-9);
+  const small = clampOffset(3, 4);
+  assert.deepEqual(small, { x: 3, y: 4 });
+  for (let t = 0; t < 20000; t += 137) {
+    const drift = ambientDrift(t);
+    assert.ok(Math.hypot(drift.x, drift.y) <= COMPANION_DRIFT_RADIUS + 1e-9, `t=${t}`);
+  }
+  assert.ok(Math.abs(scrollInfluence(9999)) <= COMPANION_SCROLL_NUDGE + 1e-9);
+  assert.ok(Math.abs(scrollInfluence(-9999)) <= COMPANION_SCROLL_NUDGE + 1e-9);
+  assert.equal(Math.sign(scrollInfluence(100)), -1); // scroll down → koi rises
+});
+
+test("the motion controller never targets raw pointer coordinates", () => {
+  const companion = read("components/companion/KoiCompanion.tsx");
+  assert.doesNotMatch(companion, /event\.clientX \+|desiredCenterX/);
+  assert.match(companion, /pointerInfluence/);
+  assert.match(companion, /clampOffset/);
 });

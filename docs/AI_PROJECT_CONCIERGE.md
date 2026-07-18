@@ -16,12 +16,15 @@ The concierge is also available as a restrained, contextual koi companion on the
 - `components/companion/KoiCompanionPanel.tsx` presents contextual quick actions and lazy-loads the existing `ConciergeFlow` inside a desktop side drawer or mobile bottom sheet.
 - `lib/companion/page-context.ts` deterministically maps approved public routes to copy and actions. Unknown, private, transactional, CRM, and full-page concierge routes are suppressed.
 - `lib/companion/session.ts` validates versioned session-only UI preferences: invitation count, cooldown, dismissal, and minimized state.
-- `lib/companion/motion.ts` resolves the finite visual states: resting, noticing, inviting, listening, and sleeping.
-- `lib/companion/site-help.ts` contains the bounded, deterministic FAQ topics and route links used for basic questions about published site information.
+- `lib/companion/motion.ts` holds the bounded, pure motion math and the finite state machine (resting, drifting, noticing, inviting, listening, sleeping, avoiding, paused).
+- `lib/companion/site-knowledge.ts` derives the assistant's knowledge — services, service comparison, relevant-work matching, page briefs, next steps, and free-text answers — **from `lib/commercial.ts`**, so nothing is hand-maintained and answers cannot drift from the published pages.
+- `lib/companion/site-help.ts` is a thin back-compat adapter over `site-knowledge` (the `SITE_HELP_TOPICS` / `answerSiteQuestion` API).
 
-The trigger can invite at most twice per browser session, observes a ten-minute invitation cooldown, and honors a 30-minute dismissal. On fine-pointer desktop devices, the koi freely trails the pointer across the full viewport with a damped compositor transform and a small offset so it does not sit directly under the cursor. When the pointer pauses, the koi locks its screen position and remains still while the visitor approaches to hover or click; it resumes following only after the pointer moves outside the selection radius. Its speech bubble flips horizontally and vertically near viewport edges and freezes movement while visible. Tracking stops while the visitor types, while a dialog is open, on touch devices, and under reduced motion. Page visibility and inactivity further constrain animation. A throttled runtime collision guard hides the trigger whenever movement would cover an interactive control and restores it when the position is clear.
+The trigger can invite at most twice per browser session, observes a ten-minute invitation cooldown, and honors a 30-minute dismissal. **The koi is anchored, not a cursor follower.** It rests at a route-specific corner and drifts only within a small safe region (max 40px from its anchor). The pointer and scroll merely *influence* that drift within hard caps — a shy notice nudge (≤22px) when the cursor comes within 150px, a decaying scroll nudge (≤18px) — and the koi always eases back to its anchor. It never tracks the cursor across the viewport. `requestAnimationFrame` runs only while there is motion to resolve, so the koi rests the majority of page time. Drift freezes entirely while the visitor types, while a dialog is open, on touch devices, under reduced motion, and while the tab is hidden. A throttled collision guard hides the trigger if it would cover an interactive control.
 
-The koi has no circular button backing. Its visual presence comes from the branded fish silhouette, a subtle body/tail swimming cycle, and two fading wake strokes. While it travels, a smoothed heading calculation turns the fish and its wake toward the current movement vector using the shortest rotational path; the speech bubble and interactive hit target remain upright. Focus remains visible through the cyan accessibility outline rather than a persistent container.
+The koi has no circular button backing. Its visual presence comes from the fish silhouette, a subtle body/tail swimming cycle, and two fading wake strokes. A smoothed heading calculation turns the fish and its wake toward its (small) movement vector using the shortest rotational path and eases upright at rest; the interactive hit target remains upright. Focus is visible through the cyan accessibility outline. The panel's entrance animates transform only — its opacity base is 1 — so a throttled/hidden tab can never freeze the dialog invisible.
+
+Opening the panel first shows **page-aware copilot surfaces** distinct per route: "Understand this page" (a grounded brief + facts), "Compare two options" (a real side-by-side of two published services with an audit-first recommendation), "Find the closest work" (relevant concept builds ranked by capability), plus a smallest-sensible-next-step card that is not always a build. These sit alongside the site-question help and the concierge itself, so the koi helps a visitor understand the page before ever asking for project details.
 
 The first invitation appears after six to nine seconds depending on page context. Its speech bubble offers both project matching and site guidance. The panel can answer basic questions about services, published starting prices, typical timing, the Revenue Leak Audit, process, work examples, AI behavior, and contacting Blake. Answers are selected from reviewed local content and always link to a relevant public route. Unknown questions fall back to a capability boundary and the project concierge; no free-form model call, invented availability, or automatic quote is used.
 
@@ -173,6 +176,9 @@ The existing `trackStudioEvent` abstraction emits privacy-conscious events:
 - `koi_companion_opened`
 - `koi_companion_minimized`
 - `koi_companion_action_selected`
+- `koi_companion_page_understood`
+- `koi_companion_services_compared`
+- `koi_companion_relevant_work_selected`
 - `koi_concierge_started`
 - `koi_concierge_resumed`
 - `koi_concierge_completed`
@@ -255,7 +261,7 @@ npm run build
 
 The browser suite expects the site at `CONCIERGE_QA_URL`, defaulting to `http://localhost:3100`. It covers website rebuild, automation, audit, quick fix, ambiguous/manual review, deterministic outage behavior, refresh recovery, editable intake prefill, mocked successful persistence, a 390px mobile journey, horizontal overflow, and an axe WCAG A/AA scan.
 
-The koi suite expects a built site at `KOI_QA_URL`, defaulting to `http://localhost:3000`. It covers the route and host allowlists, bounded desktop pointer following, deterministic site answers, invitation limits, dismissal, draft continuity, deterministic AI-unavailable completion, focus trapping and return, Escape, collision avoidance, reduced motion, horizontal overflow, WCAG A/AA, and Chromium/WebKit behavior. The capture script records the home page at 320, 390, 768, 1024, 1440, and 1920 pixels plus representative contexts and open-panel states.
+The koi suite expects a built site at `KOI_QA_URL`, defaulting to `http://localhost:3000`. It covers the route and host allowlists, anchored (non-chasing) desktop motion within its bounded region, deterministic site answers, invitation limits, dismissal, draft continuity, deterministic AI-unavailable completion, focus trapping and return, Escape, collision avoidance, reduced motion, horizontal overflow, WCAG A/AA, and Chromium/WebKit behavior. The capture script records the home page at 320, 390, 768, 1024, 1440, and 1920 pixels plus representative contexts and open-panel states.
 
 ## Known limitations
 
