@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { Check, ShieldCheck } from "lucide-react";
 import IntakeForm from "@/components/acquisition/IntakeForm";
 import StudioFooter from "@/components/studio/StudioFooter";
@@ -54,6 +55,7 @@ export default function AuditPage() {
         <section className="studio-section studio-section--compact">
           <div className="studio-container">
             <SectionIntro eyebrow={auditContinuity.kicker} title={auditContinuity.heading} body={auditContinuity.body} />
+            <p className="studio-disclosure">Not sure diagnosis is the right first step? <Link className="studio-text-link" href="/concierge?entry=audit" data-analytics="concierge_entry_click">Use the Project Concierge</Link> to compare the fit without blocking the audit path.</p>
           </div>
         </section>
 

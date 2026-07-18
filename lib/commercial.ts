@@ -306,7 +306,7 @@ export const faqs = [
   { question: "Do you work with businesses outside Chicago?", answer: "Yes. The studio is based in Chicago and can work remotely with businesses elsewhere when the project and communication needs are a good fit." },
   { question: "Who owns the finished website or system?", answer: studioConfig.ownershipCopy },
   { question: "How many revisions are included?", answer: studioConfig.revisionCopy },
-  { question: "What if I am not sure what I need?", answer: "Describe the friction in plain language. You do not need to arrive with a technical solution. The Revenue Leak Audit is the lowest-risk starting point for website and customer-journey uncertainty." },
+  { question: "What if I am not sure what I need?", answer: "Use the AI Project Concierge to describe the friction in plain language and get a preliminary, rules-grounded recommendation. The Revenue Leak Audit remains the lowest-risk starting point when website and customer-journey uncertainty is the main issue." },
 ];
 
 export const getWorkProject = (slug: string) =>

@@ -1,7 +1,8 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { NextRequest } from "next/server";
-import { intakeOutcome, POST as intakeRoute } from "../app/api/intake/route";
+import { POST as intakeRoute } from "../app/api/intake/route";
+import { intakeOutcome } from "../lib/acquisition/intake";
 import { intakeServiceOptions } from "../lib/acquisition/intake-options";
 import {
   AUDIT_PRICE_LABEL,

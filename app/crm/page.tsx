@@ -1,3 +1,21 @@
-import { cookies } from "next/headers"; import { redirect } from "next/navigation"; import Link from "next/link"; import { CRM_COOKIE,verifyCrmSession } from "@/lib/crm-auth"; import { leadStatuses,listLeads } from "@/lib/acquisition/leads";
-export const dynamic="force-dynamic";
-export default async function Crm({searchParams}:{searchParams:Promise<{search?:string;status?:string;sort?:string}>}){if(!verifyCrmSession((await cookies()).get(CRM_COOKIE)?.value))redirect("/crm/login");const p=await searchParams;let leads;try{leads=await listLeads(p)}catch{return <main className="section simple-page"><h1>Lead CRM</h1><p role="alert">The lead database is temporarily unavailable.</p></main>}return <main className="section simple-page crm-page"><p className="kicker kicker-gold">Private workspace</p><h1>Lead CRM</h1><form className="crm-filters"><input name="search" defaultValue={p.search} placeholder="Search person, business, or email"/><select name="status" defaultValue={p.status||""}><option value="">All statuses</option>{leadStatuses.map(s=><option key={s}>{s}</option>)}</select><select name="sort" defaultValue={p.sort||"newest"}><option value="newest">Newest</option><option value="follow-up">Follow-up date</option></select><button className="btn btn-cyan">Apply</button></form>{leads.length?<div className="lead-table-wrap panel"><table className="lead-table"><thead><tr><th>Business</th><th>Contact</th><th>Status</th><th>Follow-up</th><th>Created</th><th/></tr></thead><tbody>{leads.map(l=><tr key={l.id}><td><strong>{l.businessName}</strong><span>{l.name}</span></td><td><a href={`mailto:${l.email}`}>{l.email}</a></td><td>{l.status}</td><td>{l.followUpAt?new Date(l.followUpAt).toLocaleDateString():"—"}</td><td>{new Date(l.createdAt).toLocaleDateString()}</td><td><Link href={`/crm/leads/${l.id}`}>Open</Link></td></tr>)}</tbody></table></div>:<div className="panel"><h2>No leads found</h2><p>New valid intake submissions will appear here automatically.</p></div>}</main>}
+import { cookies } from "next/headers";
+import Link from "next/link";
+import { redirect } from "next/navigation";
+import { CRM_COOKIE, verifyCrmSession } from "@/lib/crm-auth";
+import { leadStatuses, listLeads } from "@/lib/acquisition/leads";
+import { serviceLabel } from "@/lib/concierge/questions";
+
+export const dynamic = "force-dynamic";
+
+export default async function Crm({ searchParams }: { searchParams: Promise<{ search?: string; status?: string; sort?: string }> }) {
+  if (!verifyCrmSession((await cookies()).get(CRM_COOKIE)?.value)) redirect("/crm/login");
+  const params = await searchParams;
+  let leads;
+  try { leads = await listLeads(params); } catch { return <main className="section simple-page"><h1>Lead CRM</h1><p role="alert">The lead database is temporarily unavailable.</p></main>; }
+  return <main className="section simple-page crm-page">
+    <p className="kicker kicker-gold">Private workspace</p>
+    <h1>Lead CRM</h1>
+    <form className="crm-filters"><input name="search" defaultValue={params.search} placeholder="Search person, business, or email" /><select name="status" defaultValue={params.status || ""}><option value="">All statuses</option>{leadStatuses.map((status) => <option key={status}>{status}</option>)}</select><select name="sort" defaultValue={params.sort || "newest"}><option value="newest">Newest</option><option value="follow-up">Follow-up date</option></select><button className="btn btn-cyan">Apply</button></form>
+    {leads.length ? <div className="lead-table-wrap panel"><table className="lead-table"><thead><tr><th>Business</th><th>Contact</th><th>Qualification</th><th>Status</th><th>Follow-up</th><th>Created</th><th /></tr></thead><tbody>{leads.map((lead) => <tr key={lead.id}><td><strong>{lead.businessName}</strong><span>{lead.name}</span>{lead.concierge ? <span className="crm-source-badge">AI concierge</span> : null}</td><td><a href={`mailto:${lead.email}`}>{lead.email}</a></td><td>{lead.concierge ? <div className="crm-signal"><strong>{serviceLabel(lead.concierge.recommendedService)}</strong><span>{Math.round(lead.concierge.recommendationConfidence * 100)}% confidence</span>{lead.concierge.requiresHumanReview ? <b>Review required</b> : null}</div> : <span>{lead.serviceInterest}</span>}</td><td>{lead.status}</td><td>{lead.followUpAt ? new Date(lead.followUpAt).toLocaleDateString() : "—"}</td><td>{new Date(lead.createdAt).toLocaleDateString()}</td><td><Link href={`/crm/leads/${lead.id}`}>Open</Link></td></tr>)}</tbody></table></div> : <div className="panel"><h2>No leads found</h2><p>New valid intake submissions will appear here automatically.</p></div>}
+  </main>;
+}

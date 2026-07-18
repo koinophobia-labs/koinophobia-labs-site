@@ -1,4 +1,5 @@
 import { Pool, type PoolClient, type QueryResultRow } from "pg";
+import type { ConciergeLeadData } from "@/lib/concierge/types";
 
 export const leadStatuses = ["new", "contacted", "replied", "meeting", "proposal", "won", "lost"] as const;
 export const leadOutcomes = ["open", "won", "lost"] as const;
@@ -9,7 +10,7 @@ export type LeadInput = {
   name: string; businessName: string; email: string; phone?: string;
   websiteOrSocial: string; industry: string; serviceInterest: string;
   budgetRange?: string; timeline: string; biggestProblem: string;
-  notes?: string; source?: string;
+  notes?: string; source?: string; concierge?: ConciergeLeadData;
 };
 
 export type LeadRecord = LeadInput & {
@@ -43,6 +44,7 @@ function map(row: QueryResultRow): LeadRecord {
     outcome: row.outcome, internalNotes: row.internal_notes || "", paymentStatus:row.payment_status||"not_started",
     lastContacted: row.last_contacted_at ? new Date(row.last_contacted_at).toISOString() : undefined,
     nextFollowUpDate: row.follow_up_at ? new Date(row.follow_up_at).toISOString() : undefined,
+    concierge: row.source === "ai_project_concierge" && row.concierge_data && typeof row.concierge_data === "object" && typeof row.concierge_data.sessionId === "string" ? row.concierge_data as ConciergeLeadData : undefined,
   };
 }
 
@@ -53,11 +55,11 @@ export function leadDedupeKey(idempotencyKey: string) {
 export async function storeLead(input: LeadInput, idempotencyKey = crypto.randomUUID(), db: Queryable = database()): Promise<{ lead: LeadRecord; created: boolean }> {
   const id = crypto.randomUUID();
   const result = await db.query(`
-    insert into crm_leads (id, dedupe_key, source, name, business_name, email, phone, website_or_social, industry, service_interest, budget_range, timeline, biggest_problem, notes)
-    values ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14)
+    insert into crm_leads (id, dedupe_key, source, name, business_name, email, phone, website_or_social, industry, service_interest, budget_range, timeline, biggest_problem, notes, concierge_data)
+    values ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15::jsonb)
     on conflict (dedupe_key) do update set updated_at = crm_leads.updated_at
     returning *, (xmax = 0) as created
-  `, [id, leadDedupeKey(idempotencyKey), input.source || "website intake", input.name, input.businessName, input.email.toLowerCase(), input.phone || "", input.websiteOrSocial, input.industry, input.serviceInterest, input.budgetRange || "", input.timeline, input.biggestProblem, input.notes || ""]);
+  `, [id, leadDedupeKey(idempotencyKey), input.source || "website intake", input.name, input.businessName, input.email.toLowerCase(), input.phone || "", input.websiteOrSocial, input.industry, input.serviceInterest, input.budgetRange || "", input.timeline, input.biggestProblem, input.notes || "", JSON.stringify(input.concierge || {})]);
   return { lead: map(result.rows[0]), created: Boolean(result.rows[0].created) };
 }
 
