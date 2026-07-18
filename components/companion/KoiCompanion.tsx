@@ -27,7 +27,7 @@ const KoiCompanionPanel = dynamic(() => import("@/components/companion/KoiCompan
 function interactionInProgress() {
   const active = document.activeElement as HTMLElement | null;
   if (active?.matches("input, textarea, select, [contenteditable='true']")) return true;
-  return Boolean(document.querySelector("dialog[open], [role='dialog'], [aria-modal='true'], [aria-expanded='true']"));
+  return Boolean(document.querySelector("dialog[open], [role='dialog'], [aria-modal='true'], [aria-expanded='true'], .koi-companion-invitation"));
 }
 
 function triggerOverlapsInteractiveControl(trigger: HTMLElement) {
@@ -135,6 +135,9 @@ export default function KoiCompanion() {
     let targetX = 0;
     let targetY = 0;
     let lastCollisionCheck = 0;
+    let selectionLocked = false;
+    let settleTimer = 0;
+    const triggerElement = triggerRef.current;
 
     const render = (timestamp: number) => {
       currentX += (targetX - currentX) * 0.16;
@@ -152,6 +155,14 @@ export default function KoiCompanion() {
 
     const follow = (event: PointerEvent) => {
       if (event.pointerType === "touch" || interactionInProgress()) return;
+      const trigger = triggerRef.current;
+      if (selectionLocked && trigger) {
+        const rect = trigger.getBoundingClientRect();
+        const distance = Math.hypot(event.clientX - (rect.left + rect.width / 2), event.clientY - (rect.top + rect.height / 2));
+        if (distance <= 170) return;
+        selectionLocked = false;
+        if (presence) presence.dataset.selectable = "false";
+      }
       const side = context.preferredSide;
       const anchorX = side === "right" ? window.innerWidth - 53 : 53;
       const anchorY = window.innerHeight - 62;
@@ -168,13 +179,30 @@ export default function KoiCompanion() {
       setMotionState("noticing");
       if (noticeTimerRef.current) window.clearTimeout(noticeTimerRef.current);
       noticeTimerRef.current = window.setTimeout(() => setMotionState("resting"), 700);
+      window.clearTimeout(settleTimer);
+      settleTimer = window.setTimeout(() => {
+        selectionLocked = true;
+        if (presence) presence.dataset.selectable = "true";
+        setMotionState("resting");
+      }, 280);
+    };
+
+    const lockForSelection = () => {
+      selectionLocked = true;
+      window.clearTimeout(settleTimer);
+      if (presence) presence.dataset.selectable = "true";
+      setMotionState("resting");
     };
 
     window.addEventListener("pointermove", follow, { passive: true });
+    triggerElement?.addEventListener("pointerenter", lockForSelection);
     return () => {
       window.cancelAnimationFrame(frame);
+      window.clearTimeout(settleTimer);
       window.removeEventListener("pointermove", follow);
+      triggerElement?.removeEventListener("pointerenter", lockForSelection);
       presence?.style.removeProperty("transform");
+      if (presence) presence.dataset.selectable = "false";
     };
   }, [context.enabled, context.preferredSide, hostAllowed, hydrated, open, reducedMotion]);
 
@@ -276,7 +304,7 @@ export default function KoiCompanion() {
       data-reduced-motion={reducedMotion ? "true" : "false"}
       data-paused={paused ? "true" : "false"}
     >
-      <div ref={presenceRef} className="koi-companion-presence" data-bubble-side={context.preferredSide} data-bubble-vertical="above">
+      <div ref={presenceRef} className="koi-companion-presence" data-bubble-side={context.preferredSide} data-bubble-vertical="above" data-selectable="false">
         {invitationVisible && context.invitation ? (
           <div className="koi-companion-invitation" role="status">
             <button className="koi-companion-invitation__message" type="button" onClick={() => openPanel("invitation")}>{context.invitation}<small>Ask me about this site or find the right service.</small></button>

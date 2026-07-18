@@ -84,6 +84,13 @@ try {
     await page.waitForTimeout(850);
     const followedKoiBox = await trigger.boundingBox();
     check(Boolean(initialKoiBox && followedKoiBox && Math.abs(followedKoiBox.x - initialKoiBox.x) > 500 && followedKoiBox.x < 600), "desktop koi freely follows the pointer across the viewport", JSON.stringify({ initialKoiBox, followedKoiBox }));
+    check(await page.locator(".koi-companion-presence").getAttribute("data-selectable") === "true", "koi settles into a selectable state after pointer pause");
+    if (followedKoiBox) {
+      await page.mouse.move(followedKoiBox.x + followedKoiBox.width / 2, followedKoiBox.y + followedKoiBox.height / 2);
+      await page.waitForTimeout(180);
+      const selectionBox = await trigger.boundingBox();
+      check(Boolean(selectionBox && Math.abs(selectionBox.x - followedKoiBox.x) < 4 && Math.abs(selectionBox.y - followedKoiBox.y) < 4), "koi stays still while the pointer approaches to select it", JSON.stringify({ followedKoiBox, selectionBox }));
+    }
     const collision = await page.evaluate(() => {
       const triggerRect = document.querySelector("[data-testid='koi-companion-trigger']")?.getBoundingClientRect();
       const navRect = document.querySelector(".studio-nav")?.getBoundingClientRect();

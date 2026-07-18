@@ -122,6 +122,11 @@ test("keyboard, focus, dismissal, reduced-motion, print, and safe-area protectio
   assert.match(companion, /aria-label=.*Open Koinophobia Labs site guide/);
   assert.match(companion, /pointermove/);
   assert.match(companion, /translate3d/);
+  assert.match(companion, /selectionLocked/);
+  assert.match(companion, /data-selectable/);
+  assert.doesNotMatch(css, /koi-companion-trigger::before/);
+  assert.match(css, /koi-companion-swim/);
+  assert.match(css, /koi-companion-tail/);
   assert.match(companion, /aria-haspopup="dialog"/);
   assert.match(panel, /event\.key === "Escape"/);
   assert.match(panel, /event\.key !== "Tab"/);
