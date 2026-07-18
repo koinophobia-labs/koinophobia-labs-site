@@ -1,110 +1,197 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import { ArrowUpRight, MapPin, MessageSquareText, Sparkles } from "lucide-react";
-import { buildCards, founderLinks, primaryActions, reachOutReasons } from "@/lib/founderHub";
+import Link from "next/link";
+import {
+  ArrowLeft,
+  ArrowUpRight,
+  FileText,
+  GitBranch,
+  IdCard,
+  Mail,
+  MapPin,
+} from "lucide-react";
+import { founderLinks } from "@/lib/founderHub";
+import { LINKS } from "@/lib/links";
+
+// The fast networking card for koinophobia.dev. It shares the personal home's
+// dark, violet-controlled identity (.connectcard mirrors the .devhome palette)
+// and exists to make someone who just met Blake recognize him and act quickly —
+// not to retell the homepage or sell the studio.
 
 export const metadata: Metadata = {
-  title: "Blake Taylor — Founder",
-  description: "Blake builds systems that turn messy, high-friction work into clear, repeatable leverage.",
+  title: { absolute: "Connect with Blake Taylor" },
+  description:
+    "Blake Taylor — Chicago-based founder and product builder. Contact, follow, and explore what I build. I build systems that turn chaos into leverage.",
   alternates: { canonical: "https://koinophobia.dev/connect" },
   openGraph: {
-    title: "Blake Taylor — Founder, Koinophobia Labs",
-    description: "Products, websites, and workflows built around leverage through better systems.",
+    type: "profile",
+    siteName: "koinophobia.dev",
     url: "https://koinophobia.dev/connect",
-    images: [{ url: "/og-founder.png", width: 1200, height: 630 }],
+    title: "Connect with Blake Taylor",
+    description:
+      "Chicago-based founder and product builder. Contact, follow, and explore what I build.",
+    images: [{ url: "https://koinophobia.dev/og-founder.png", width: 1200, height: 630 }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Blake Taylor — Founder, Koinophobia Labs",
-    description: "Products, websites, and workflows built around leverage through better systems.",
-    images: ["/og-founder.png"],
+    title: "Connect with Blake Taylor",
+    description: "Chicago-based founder and product builder. Contact, follow, and explore what I build.",
+    images: ["https://koinophobia.dev/og-founder.png"],
   },
 };
 
+const contactActions: Array<{
+  label: string;
+  href: string;
+  icon: typeof Mail;
+  primary?: boolean;
+  external?: boolean;
+  internal?: boolean;
+}> = [
+  { label: "Email me", href: founderLinks.emailWithContext, icon: Mail, primary: true },
+  { label: "LinkedIn", href: LINKS.linkedin, icon: IdCard, external: true },
+  { label: "GitHub", href: LINKS.github, icon: GitBranch, external: true },
+  { label: "Résumé", href: "/resume", icon: FileText, internal: true },
+];
+
+const work: Array<{
+  name: string;
+  note: string;
+  href: string;
+  external?: boolean;
+}> = [
+  {
+    name: "Career Forge",
+    note: "Leverage in the job search",
+    href: LINKS.careerForge,
+    external: true,
+  },
+  { name: "Trendi", note: "Leverage for creators", href: "/trendi" },
+  { name: "You Know Ball", note: "Sports takes, scored honestly", href: "/you-know-ball/play" },
+  {
+    name: "Koinophobia Labs",
+    note: "The studio I run — hire it",
+    href: LINKS.labs,
+    external: true,
+  },
+];
+
 export default function ConnectPage() {
   return (
-    <>
-      <div className="page-field founder-field" aria-hidden="true" />
-      <main className="founder-page">
-        <section className="founder-shell" aria-labelledby="connect-title">
-          <div className="founder-card">
-            <div className="founder-ambient-koi" aria-hidden="true">
-              <Image src="/koi-mark.png" alt="" width={320} height={320} priority />
-            </div>
+    <div className="connectcard">
+      <div className="connectcard__field" aria-hidden="true" />
+      <main className="connectcard__inner">
+        <header className="connectcard__top">
+          <Link className="connectcard__home" href="/">
+            <ArrowLeft size={15} aria-hidden="true" /> koinophobia.dev
+          </Link>
+          <span className="connectcard__loc">
+            <MapPin size={14} aria-hidden="true" /> Chicago, IL
+          </span>
+        </header>
 
-            <header className="founder-header">
-              <a className="founder-brand" href="https://koinophobialabs.com">
-                <span className="brand-mark"><Image src="/koi-mark.png" alt="" width={32} height={32} priority /></span>
-                <span>Koinophobia Labs / Blake Taylor</span>
+        <section className="connectcard__hero" aria-labelledby="connect-name">
+          <figure className="connectcard__portrait">
+            <Image
+              src="/blake-portrait.jpg"
+              alt="Blake Taylor"
+              width={640}
+              height={800}
+              priority
+            />
+          </figure>
+          <div className="connectcard__id">
+            <p className="connectcard__kicker">Founder · product builder</p>
+            <h1 id="connect-name">Blake Taylor</h1>
+            <p className="connectcard__role">
+              I build systems that turn <span>chaos into leverage.</span>
+            </p>
+            <p className="connectcard__sub">
+              Operator background in high-volume sportsbook operations, now building AI products and
+              the systems around them. If we just met — here&apos;s how to stay in touch.
+            </p>
+          </div>
+        </section>
+
+        <nav className="connectcard__actions" aria-label="Contact Blake">
+          {contactActions.map((action) => {
+            const Icon = action.icon;
+            const className = `connectcard__action${action.primary ? " connectcard__action--primary" : ""}`;
+            const inner = (
+              <>
+                <Icon size={18} aria-hidden="true" />
+                <span>{action.label}</span>
+              </>
+            );
+            if (action.internal) {
+              return (
+                <Link key={action.label} className={className} href={action.href}>
+                  {inner}
+                </Link>
+              );
+            }
+            return (
+              <a
+                key={action.label}
+                className={className}
+                href={action.href}
+                target={action.external ? "_blank" : undefined}
+                rel={action.external ? "noopener noreferrer" : undefined}
+                aria-label={action.external ? `${action.label} (opens in a new tab)` : action.label}
+              >
+                {inner}
               </a>
-              <span className="founder-location"><MapPin size={15} aria-hidden="true" />Chicago, IL</span>
-            </header>
+            );
+          })}
+        </nav>
 
-            <div className="founder-hero">
-              <div className="founder-hero-text">
-                <p className="kicker kicker-gold">Founder · operator · product builder</p>
-                <h1 id="connect-title">Blake Taylor</h1>
-                <p className="founder-role">I build systems that create leverage.</p>
-                <p className="founder-sub">
-                  My background is in operations, customer experience, and trust-heavy environments where small process improvements matter. Koinophobia Labs turns that mindset into products, websites, and workflows.
-                </p>
-                <p className="founder-intro">
-                  Different problems, same move: find the friction, replace repeated decisions with a reliable system, and give people more room for judgment.
-                </p>
-              </div>
-              <figure className="founder-portrait">
-                <Image src="/blake-portrait.jpg" width={640} height={800} priority alt="Blake Taylor, founder of Koinophobia Labs" />
-                <figcaption aria-hidden="true">Operator · Founder · Builder</figcaption>
-              </figure>
-            </div>
-
-            <nav className="founder-actions" aria-label="Connect with Blake">
-              {primaryActions.map((action) => {
-                const Icon = action.icon;
-                return (
-                  <a key={action.label} className={`founder-action founder-action-${action.tone}`} href={action.href} target={action.external ? "_blank" : undefined} rel={action.external ? "noopener noreferrer" : undefined} aria-label={action.external ? `${action.label} (opens in a new tab)` : action.label}>
-                    <Icon size={19} aria-hidden="true" /><span>{action.label}</span><ArrowUpRight size={17} aria-hidden="true" />
-                  </a>
-                );
-              })}
-            </nav>
-          </div>
-
-          <aside className="founder-side" aria-label="Fast context">
-            <div className="signal-card">
-              <Sparkles size={20} aria-hidden="true" />
-              <p className="kicker kicker-cyan">The operating idea</p>
-              <h2>Turn high-friction work into repeatable leverage.</h2>
-              <p>That throughline connects the studio’s products, client work, and Blake’s operating background.</p>
-              <ul className="founder-focus-list">{reachOutReasons.map((reason) => <li key={reason}>{reason}</li>)}</ul>
-            </div>
-            <div className="event-card">
-              <MessageSquareText size={20} aria-hidden="true" />
-              <p className="kicker kicker-gold">Start a conversation</p>
-              <h2>Have a role, product, or tangled workflow in mind?</h2>
-              <p>Send a quick note with what you are building, hiring for, or trying to make easier.</p>
-              <a className="btn btn-gold" href={founderLinks.emailWithContext}><span>Email Blake</span></a>
-            </div>
-          </aside>
+        <section className="connectcard__work" aria-labelledby="connect-work">
+          <p className="connectcard__label" id="connect-work">
+            What I&apos;m building
+          </p>
+          <ul className="connectcard__work-list">
+            {work.map((item) => {
+              const inner = (
+                <>
+                  <span className="connectcard__work-name">{item.name}</span>
+                  <span className="connectcard__work-note">{item.note}</span>
+                  <ArrowUpRight className="connectcard__work-arrow" size={15} aria-hidden="true" />
+                </>
+              );
+              return (
+                <li key={item.name}>
+                  {item.external ? (
+                    <a
+                      href={item.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={`${item.name} — ${item.note} (opens in a new tab)`}
+                    >
+                      {inner}
+                    </a>
+                  ) : (
+                    <Link href={item.href} aria-label={`${item.name} — ${item.note}`}>
+                      {inner}
+                    </Link>
+                  )}
+                </li>
+              );
+            })}
+          </ul>
         </section>
 
-        <section className="founder-section" aria-labelledby="building-title">
-          <div className="founder-section-head">
-            <p className="kicker kicker-cyan">Applications of the systems mindset</p>
-            <h2 id="building-title">One operating idea, expressed through different work.</h2>
-          </div>
-          <div className="founder-proof-grid">
-            {buildCards.map((card) => (
-              <article className="founder-proof-card" key={card.title}>
-                <span>{card.tag}</span><h3>{card.title}</h3><p>{card.body}</p>
-                <a href={card.href} target={card.external ? "_blank" : undefined} rel={card.external ? "noopener noreferrer" : undefined} aria-label={card.external ? `${card.cta} (opens in a new tab)` : card.cta}>
-                  {card.cta} <ArrowUpRight size={15} aria-hidden="true" />
-                </a>
-              </article>
-            ))}
-          </div>
-        </section>
+        <Link className="connectcard__more" href="/">
+          Read the full story on koinophobia.dev
+          <ArrowUpRight size={16} aria-hidden="true" />
+        </Link>
+
+        <footer className="connectcard__footer">
+          <span>koinophobia.dev — the person</span>
+          <a href={LINKS.labs} target="_blank" rel="noopener noreferrer">
+            koinophobialabs.com — the studio <ArrowUpRight size={13} aria-hidden="true" />
+          </a>
+        </footer>
       </main>
-    </>
+    </div>
   );
 }
