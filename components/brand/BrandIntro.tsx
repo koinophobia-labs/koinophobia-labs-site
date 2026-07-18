@@ -9,17 +9,13 @@ export default function BrandIntro() {
   const [active, setActive] = useState(true);
 
   useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      setActive(false);
-      return;
-    }
-
-    const safetyTimer = window.setTimeout(
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const timer = window.setTimeout(
       () => setActive(false),
-      INTRO_DURATION_MS + 300,
+      reduceMotion ? 0 : INTRO_DURATION_MS + 300,
     );
 
-    return () => window.clearTimeout(safetyTimer);
+    return () => window.clearTimeout(timer);
   }, []);
 
   if (!active) return null;

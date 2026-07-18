@@ -17,9 +17,9 @@ test("betting requests pause scoring", () => {
   assert.equal(score.points, 0);
 });
 
-test("the homepage preserves the requested product hierarchy", async () => {
+test("the homepage keeps services and business work ahead of internal products", async () => {
   const page = await readFile(new URL("../app/page.tsx", import.meta.url), "utf8");
-  assert.ok(page.indexOf("<TrendiFeature") < page.indexOf("<YouKnowBall"));
-  const spotlight = await readFile(new URL("../components/YouKnowBall.tsx", import.meta.url), "utf8");
-  assert.ok(spotlight.indexOf("Interactive product spotlight · 02") < spotlight.indexOf("Private build · 03"));
+  assert.ok(page.indexOf("client_work_view") < page.indexOf("Products built inside the lab"));
+  assert.ok(page.indexOf("id=\"services\"") < page.indexOf("Products built inside the lab"));
+  assert.ok(page.includes("Technical depth, separated from client proof"));
 });

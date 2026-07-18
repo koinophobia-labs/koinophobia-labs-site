@@ -1,0 +1,8 @@
+import type { Metadata } from "next";
+import { CTABand, ProductCard, SectionIntro } from "@/components/studio";
+import StudioFooter from "@/components/studio/StudioFooter";
+import StudioNav from "@/components/studio/StudioNav";
+import { products } from "@/lib/commercial";
+
+export const metadata: Metadata = { title: "Products Built Inside the Lab", description: "Career Forge, Trendi, and You Know Ball: internal Koinophobia Labs products demonstrating product, AI, interface, and engineering capability.", alternates: { canonical: "/products" }, openGraph: { url: "/products" } };
+export default function ProductsPage() { return <div className="studio-site"><StudioNav /><main><header className="studio-page-hero"><div className="studio-container studio-page-hero__grid"><div><p className="studio-eyebrow">Products by Koinophobia Labs</p><h1>Original software, not client proof.</h1><p className="studio-page-hero__lede">These shipped and working products demonstrate the same product strategy, interface design, AI integration, mobile thinking, and release discipline available to client work.</p></div><aside className="studio-page-hero__aside">Career Forge, Trendi, and You Know Ball are internal Koinophobia Labs products. Their technical depth supports the service pitch; it does not imply external client outcomes.</aside></div></header><section className="studio-section studio-section--compact"><div className="studio-container"><SectionIntro eyebrow="Inside the lab" title="Three different products. Reusable product capability." /><div className="studio-product-grid">{products.map((product) => <ProductCard product={product} key={product.title} />)}</div></div></section><CTABand /></main><StudioFooter /></div>; }

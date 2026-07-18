@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   if (!demo) return {};
 
   return {
-    title: `${demo.name} - Website Concept by Koinophobia Labs`,
+    title: `${demo.name} - Website Concept`,
     description: demo.subhead,
   };
 }
@@ -106,7 +106,7 @@ export default async function DemoPage({ params }: { params: Promise<{ slug: str
         <section className="section business-spotlight" aria-labelledby="spotlight-title">
           <SectionHead
             kicker={demo.spotlight.kicker}
-            index="// REAL_BUSINESS_PROOF"
+            index="// CONCEPT_PROOF_MODEL"
             title={demo.spotlight.title}
           >
             {demo.spotlight.body}
@@ -194,17 +194,6 @@ export default async function DemoPage({ params }: { params: Promise<{ slug: str
                 </li>
               ))}
             </ul>
-          </div>
-        </section>
-
-        <section className="section testimonial-section" aria-label={`${demo.name} testimonials`}>
-          <div className="testimonial-grid">
-            {demo.testimonials.map((testimonial) => (
-              <blockquote key={testimonial.name}>
-                <p>&ldquo;{testimonial.quote}&rdquo;</p>
-                <cite>{testimonial.name}</cite>
-              </blockquote>
-            ))}
           </div>
         </section>
 

@@ -7,6 +7,7 @@ import {
   intakeServiceOptions as serviceInterestOptions,
   intakeTimelines as timelines,
 } from "@/lib/acquisition/intake-options";
+import { trackStudioEvent } from "@/components/studio/AnalyticsBridge";
 
 type SubmitState =
   | { status: "idle" }
@@ -18,6 +19,7 @@ function IntakeFormInner({ defaultService = "" }: { defaultService?: string }) {
   const searchParams = useSearchParams();
   const requestedService = searchParams.get("service") || defaultService;
   const [state, setState] = useState<SubmitState>({ status: "idle" });
+  const [started, setStarted] = useState(false);
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -35,6 +37,7 @@ function IntakeFormInner({ defaultService = "" }: { defaultService?: string }) {
         status: "success",
         message: payload.message || "Intake received. Blake will review and reply with the practical next step.",
       });
+      trackStudioEvent("intake_form_completion");
       return;
     }
     setState({
@@ -46,7 +49,7 @@ function IntakeFormInner({ defaultService = "" }: { defaultService?: string }) {
   }
 
   return (
-    <form className="intake-form panel" onSubmit={onSubmit}>
+    <form className="intake-form panel" onSubmit={onSubmit} onFocus={() => { if (!started) { setStarted(true); trackStudioEvent("intake_form_start"); } }}>
       {state.status === "success" ? (
         <div className="success-state" role="status">
           <strong>Intake received.</strong>
@@ -120,20 +123,25 @@ function IntakeFormInner({ defaultService = "" }: { defaultService?: string }) {
         </label>
         <label className="form-span">
           <span>Biggest problem</span>
-          <textarea name="biggestProblem" rows={4} required maxLength={4000} />
+          <textarea name="biggestProblem" rows={4} required maxLength={4000} placeholder="Where are customers, time, or follow-up falling through?" />
         </label>
         <label className="form-span">
-          <span>Notes</span>
-          <textarea name="notes" rows={4} maxLength={8000} />
+          <span>Desired outcome</span>
+          <textarea name="desiredOutcome" rows={3} required maxLength={2000} placeholder="What should be easier or measurably better when this is done?" />
+        </label>
+        <label className="form-span">
+          <span>Current tools optional</span>
+          <textarea name="currentTools" rows={3} maxLength={2000} placeholder="Website platform, calendar, payment tool, CRM, email, forms, or spreadsheets" />
+        </label>
+        <label className="form-span">
+          <span>Anything else optional</span>
+          <textarea name="notes" rows={3} maxLength={4000} />
         </label>
       </div>
       <button className="btn btn-gold" type="submit" disabled={state.status === "submitting"}>
         {state.status === "submitting" ? "Sending..." : "Submit intake"}
       </button>
-      <p className="contact-fallback">
-        Private lead data is submitted to the server. In development it is stored locally; in production use
-        the configured email provider or email fallback.
-      </p>
+      <p className="contact-fallback">Your contact and business details are used to review this request and reply. Do not include passwords, card numbers, or customer data.</p>
     </form>
   );
 }

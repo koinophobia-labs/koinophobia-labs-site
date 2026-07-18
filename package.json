@@ -11,11 +11,13 @@
     "test:crm": "tsx --test tests/crm.test.ts tests/crm-routes.test.ts tests/proposals.test.ts tests/audits.test.ts tests/audit-persistence.test.ts tests/audit-crawler.test.ts tests/payments.test.ts tests/audit-landing.test.ts tests/resume.test.ts tests/about.test.ts tests/you-know-ball.test.ts tests/trendi-hero.test.ts",
     "test:ykb": "tsx --test tests/you-know-ball.test.ts",
     "test:trendi": "tsx --test tests/trendi-hero.test.ts",
+    "test:commercial": "tsx --test tests/commercial.test.ts",
     "test:release-qa": "node scripts/blake-release-qa.mjs",
     "db:migrate-crm": "node scripts/migrate-crm.mjs",
     "vercel-build": "node scripts/migrate-crm.mjs && next build"
   },
   "dependencies": {
+    "@vercel/analytics": "^2.0.1",
     "cheerio": "^1.2.0",
     "clsx": "^2.1.1",
     "framer-motion": "^12.40.0",
