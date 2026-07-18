@@ -2,12 +2,6 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "redirects": [
     {
-      "source": "/",
-      "has": [{ "type": "host", "value": "koinophobia.dev" }],
-      "destination": "/connect",
-      "permanent": false
-    },
-    {
       "source": "/:path*",
       "has": [{ "type": "host", "value": "www.koinophobia.dev" }],
       "destination": "https://koinophobia.dev/:path*",

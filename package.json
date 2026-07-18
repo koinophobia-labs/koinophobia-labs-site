@@ -14,6 +14,7 @@
     "test:commercial": "tsx --test tests/commercial.test.ts",
     "test:concierge": "tsx --test tests/concierge-routing.test.ts tests/concierge-api.test.ts tests/concierge-intake.test.ts tests/concierge-ui.test.ts",
     "test:concierge:e2e": "node scripts/qa-concierge.mjs",
+    "test:dev-routing": "tsx --test tests/dev-home-routing.test.ts",
     "test:release-qa": "node scripts/blake-release-qa.mjs",
     "db:migrate-crm": "node scripts/migrate-crm.mjs",
     "vercel-build": "node scripts/migrate-crm.mjs && next build"
