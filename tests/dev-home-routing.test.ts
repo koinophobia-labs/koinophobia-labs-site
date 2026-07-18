@@ -1,0 +1,97 @@
+import test from "node:test";
+import assert from "node:assert/strict";
+import { existsSync, readFileSync } from "node:fs";
+import { fileURLToPath } from "node:url";
+
+// Guards the two-host routing contract for the shared app:
+//   koinophobia.dev  /  -> personal home (app/home)
+//   koinophobialabs.com  /  -> studio home (app/page.tsx)
+// plus canonicalization of the internal /home target and the /connect card.
+
+const root = new URL("../", import.meta.url);
+const read = (rel: string) => readFileSync(new URL(rel, root), "utf8");
+const exists = (rel: string) => existsSync(fileURLToPath(new URL(rel, root)));
+
+const nextConfig = read("next.config.ts");
+const nextConfigCompact = nextConfig.replace(/\s/g, "");
+const vercelJson = JSON.parse(read("vercel.json"));
+const devHome = read("app/home/page.tsx");
+const studioHome = read("app/page.tsx");
+
+test("koinophobia.dev / rewrites to the personal home", () => {
+  assert.ok(
+    nextConfigCompact.includes('{source:"/",has:[{type:"host",value:"koinophobia.dev"}],destination:"/home"'),
+    "expected a host-scoped rewrite of / -> /home for koinophobia.dev",
+  );
+});
+
+test("koinophobialabs.com keeps the studio homepage at /", () => {
+  // The studio page is app/page.tsx and no rewrite redirects the .com root away.
+  assert.match(studioHome, /className="studio-site"/);
+  assert.ok(
+    !nextConfigCompact.includes('{source:"/",has:[{type:"host",value:"koinophobialabs.com"}],destination:"/home"'),
+    "koinophobialabs.com root must not rewrite to /home",
+  );
+});
+
+test("/home canonicalizes to one public URL per host", () => {
+  for (const host of ["koinophobia.dev", "koinophobialabs.com"]) {
+    assert.ok(
+      nextConfigCompact.includes(`{source:"/home",has:[{type:"host",value:"${host}"}],destination:"https://koinophobia.dev/"`),
+      `expected /home to redirect to canonical root for ${host}`,
+    );
+  }
+});
+
+test("the legacy koinophobia.dev / -> /connect redirect is gone", () => {
+  const hasConnectRootRedirect = (vercelJson.redirects ?? []).some(
+    (r: { source: string; destination: string; has?: Array<{ value: string }> }) =>
+      r.source === "/" &&
+      r.destination === "/connect" &&
+      (r.has ?? []).some((h) => h.value === "koinophobia.dev"),
+  );
+  assert.equal(hasConnectRootRedirect, false, "root should no longer redirect to /connect");
+});
+
+test("the www.koinophobia.dev -> apex redirect is preserved", () => {
+  const hasWwwRedirect = (vercelJson.redirects ?? []).some(
+    (r: { destination: string; has?: Array<{ value: string }> }) =>
+      r.destination === "https://koinophobia.dev/:path*" &&
+      (r.has ?? []).some((h) => h.value === "www.koinophobia.dev"),
+  );
+  assert.equal(hasWwwRedirect, true, "www.koinophobia.dev must still redirect to the apex");
+});
+
+test("/connect remains available as the fast networking card", () => {
+  assert.ok(exists("app/connect/page.tsx"), "app/connect/page.tsx must exist");
+});
+
+test("every internal link on the personal home resolves to a real route", () => {
+  // Extract internal routes from both JSX attributes (href="/x") and the
+  // systems data literals (href: "/x"). Dynamic href={LINKS.*} are external.
+  const hrefs = [...devHome.matchAll(/href[=:]\s*"(\/[^"?#]*)"/g)].map((m) => m[1]);
+  const internal = [...new Set(hrefs)].filter((h) => !h.startsWith("//"));
+  assert.ok(internal.length >= 3, "expected several internal links to verify");
+
+  const routeFile = (route: string) => {
+    const clean = route.replace(/\/+$/, "") || "/";
+    if (clean === "/") return "app/page.tsx";
+    return `app/${clean.slice(1)}/page.tsx`;
+  };
+
+  for (const route of internal) {
+    assert.ok(exists(routeFile(route)), `internal link ${route} has no page file (${routeFile(route)})`);
+  }
+});
+
+test("You Know Ball links to the playable route, not the missing /you-know-ball index", () => {
+  assert.doesNotMatch(devHome, /href="\/you-know-ball"/, "/you-know-ball has no index page");
+  assert.match(devHome, /href:\s*"\/you-know-ball\/play"/);
+  assert.ok(exists("app/you-know-ball/play/page.tsx"));
+});
+
+test("internal navigation uses next/link to avoid full document reloads", () => {
+  assert.match(devHome, /import Link from "next\/link"/);
+  // Hash and external links stay as plain anchors; internal route links use Link.
+  assert.match(devHome, /<Link className="devhome__btn devhome__btn--ghost" href="\/connect">/);
+});
