@@ -1,21 +1,17 @@
 "use client";
 
 import { useEffect } from "react";
-
-declare global {
-  interface Window {
-    gtag?: (...args: unknown[]) => void;
-    plausible?: (event: string, options?: { props?: Record<string, string> }) => void;
-  }
-}
+import { usePathname } from "next/navigation";
+import { track } from "@vercel/analytics";
 
 export function trackStudioEvent(event: string, detail: Record<string, string> = {}) {
   window.dispatchEvent(new CustomEvent("koinophobia:analytics", { detail: { event, ...detail } }));
-  window.gtag?.("event", event, detail);
-  window.plausible?.(event, { props: detail });
+  track(event, detail);
 }
 
 export default function AnalyticsBridge() {
+  const pathname = usePathname();
+
   useEffect(() => {
     const seen = new Set<Element>();
     const observer = new IntersectionObserver(
@@ -42,7 +38,7 @@ export default function AnalyticsBridge() {
       observer.disconnect();
       document.removeEventListener("click", onClick);
     };
-  }, []);
+  }, [pathname]);
 
   return null;
 }

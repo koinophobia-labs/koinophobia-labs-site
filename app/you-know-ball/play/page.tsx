@@ -6,6 +6,7 @@ import YouKnowBallGame from "@/components/YouKnowBallGame";
 export const metadata: Metadata = {
   title: "Play You Know Ball",
   description: "Drop a sports take, face a BanterBot counterargument, and see how your take scores.",
+  alternates: { canonical: "/you-know-ball/play" },
 };
 
 export default function YouKnowBallPlayPage() {

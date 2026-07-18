@@ -4,7 +4,7 @@ import BrandLogo from "@/components/brand/BrandLogo";
 import "./crm.css";
 
 export const metadata: Metadata = {
-  title: "Private CRM | Koinophobia Labs",
+  title: "Private CRM",
   robots: { index: false, follow: false, nocache: true },
 };
 

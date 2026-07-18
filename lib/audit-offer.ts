@@ -52,6 +52,6 @@ export const auditSteps: Array<{ title: string; body: string }> = [
 
 export const auditContinuity = {
   kicker: "Got an email from Blake?",
-  heading: "The email named one problem he could see from outside.",
+  heading: "The email named one problem Blake could see from outside.",
   body: "Conflicting hours, a booking form that stops short, five different ways to contact you, artist pages that trail off — whatever it was, that is one visible symptom. The audit checks the whole site, measures what is costing you inquiries, and puts everything in one prioritized report.",
 };

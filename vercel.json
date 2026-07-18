@@ -12,6 +12,12 @@
       "has": [{ "type": "host", "value": "www.koinophobia.dev" }],
       "destination": "https://koinophobia.dev/:path*",
       "permanent": true
+    },
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "www.koinophobialabs.com" }],
+      "destination": "https://koinophobialabs.com/:path*",
+      "permanent": true
     }
   ]
 }

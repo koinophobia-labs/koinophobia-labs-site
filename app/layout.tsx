@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Archivo, IBM_Plex_Mono, Inter, JetBrains_Mono, Newsreader, Sora } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import BrandIntro from "@/components/brand/BrandIntro";
 import "./globals.css";
 import "./founder.css";
@@ -99,6 +100,7 @@ export default function RootLayout({
       <body>
         <BrandIntro />
         <AnalyticsBridge />
+        <Analytics />
         {children}
       </body>
     </html>

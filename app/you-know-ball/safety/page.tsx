@@ -4,6 +4,7 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "You Know Ball Safety",
   description: "Safety and responsible-use notes for You Know Ball.",
+  alternates: { canonical: "/you-know-ball/safety" },
 };
 
 export default function YouKnowBallSafetyPage() {

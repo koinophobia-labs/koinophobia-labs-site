@@ -105,7 +105,11 @@ body:has(.founder-page) {
   place-items: center;
   border: 1px solid var(--founder-rule);
   border-radius: 50%;
-  background: var(--founder-paper);
+  /* brand.css hides the legacy raster img and paints the official emblem
+     as a background layer; keep that emblem when restyling the chrome. */
+  background:
+    center / 24px 24px no-repeat url("/brand/koi-emblem.svg"),
+    var(--founder-paper);
   box-shadow: none;
 }
 
@@ -478,7 +482,9 @@ body:has(.founder-page) {
   }
 
   .founder-hero {
-    align-items: flex-start;
+    display: grid;
+    justify-items: start;
+    gap: 22px;
     margin: 48px 0 36px;
   }
 
@@ -487,8 +493,13 @@ body:has(.founder-page) {
     line-height: 0.86;
   }
 
+  .founder-hero-text {
+    width: 100%;
+  }
+
   .founder-portrait {
-    width: 118px;
+    order: -1;
+    width: clamp(132px, 36vw, 200px);
     transform: none;
   }
 

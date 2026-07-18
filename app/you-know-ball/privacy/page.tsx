@@ -5,6 +5,7 @@ export const metadata: Metadata = {
   title: "You Know Ball Privacy Policy",
   description:
     "Launch-draft privacy policy for You Know Ball, the sports debate game from Koinophobia Labs.",
+  alternates: { canonical: "/you-know-ball/privacy" },
 };
 
 export default function YouKnowBallPrivacyPage() {
