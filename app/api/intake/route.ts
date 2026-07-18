@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { type LeadInput, storeLead } from "@/lib/acquisition/leads";
 
 const requiredFields = ["name", "businessName", "email", "websiteOrSocial", "industry", "serviceInterest", "timeline", "biggestProblem"] as const;
-const fieldLimits: Record<string, number> = { name: 120, businessName: 160, email: 254, phone: 40, websiteOrSocial: 500, industry: 120, serviceInterest: 160, budgetRange: 80, timeline: 80, biggestProblem: 4000, notes: 8000 };
+const fieldLimits: Record<string, number> = { name: 120, businessName: 160, email: 254, phone: 40, websiteOrSocial: 500, industry: 120, serviceInterest: 160, budgetRange: 80, timeline: 80, biggestProblem: 4000, notes: 8400 };
 const rateLimit = new Map<string, { count: number; resetAt: number }>();
 const RATE_WINDOW_MS = 10 * 60 * 1000;
 const RATE_MAX = 5;
@@ -11,14 +11,20 @@ function value(form: FormData, key: string) { return String(form.get(key) || "")
 function validEmail(input: string) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input); }
 
 export function validateIntake(form: FormData): { input?: LeadInput; errors?: Record<string, string> } {
+  const desiredOutcome=value(form,"desiredOutcome"), currentTools=value(form,"currentTools"), additionalNotes=value(form,"notes");
   const input: LeadInput = {
     name: value(form, "name"), businessName: value(form, "businessName"), email: value(form, "email"),
     phone: value(form, "phone"), websiteOrSocial: value(form, "websiteOrSocial"), industry: value(form, "industry"),
     serviceInterest: value(form, "serviceInterest"), budgetRange: value(form, "budgetRange"), timeline: value(form, "timeline"),
-    biggestProblem: value(form, "biggestProblem"), notes: value(form, "notes"), source: "website intake",
+    biggestProblem: value(form, "biggestProblem"),
+    notes: [desiredOutcome ? `Desired outcome: ${desiredOutcome}` : "", currentTools ? `Current tools: ${currentTools}` : "", additionalNotes ? `Additional notes: ${additionalNotes}` : ""].filter(Boolean).join("\n\n"),
+    source: "website intake",
   };
   const errors: Record<string, string> = {};
   for (const key of requiredFields) if (!input[key]) errors[key] = "This field is required.";
+  if (desiredOutcome.length>2000) errors.desiredOutcome="Must be 2000 characters or fewer.";
+  if (currentTools.length>2000) errors.currentTools="Must be 2000 characters or fewer.";
+  if (additionalNotes.length>4000) errors.notes="Must be 4000 characters or fewer.";
   if (input.email && !validEmail(input.email)) errors.email = "Enter a valid email address.";
   for (const [key, limit] of Object.entries(fieldLimits)) {
     if (String(input[key as keyof LeadInput] || "").length > limit) errors[key] = `Must be ${limit} characters or fewer.`;

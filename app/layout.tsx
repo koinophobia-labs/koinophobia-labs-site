@@ -9,6 +9,8 @@ import "./home.css";
 import "./you-know-ball-home-fix.css";
 import "./trendi-feature.css";
 import "./trendi-hero-visual.css";
+import "./commercial.css";
+import AnalyticsBridge from "@/components/studio/AnalyticsBridge";
 
 const sora = Sora({
   variable: "--font-sora",
@@ -38,25 +40,30 @@ const ibmPlexMono = IBM_Plex_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://koinophobialabs.com"),
-  title: "Koinophobia Labs — AI Products, Creator Systems, and Proof",
+  title: {
+    default: "Koinophobia Labs | Websites, AI Workflows and Business Systems",
+    template: "%s | Koinophobia Labs",
+  },
   description:
-    "Koinophobia Labs is Blake Taylor’s product studio for AI tools, creator systems, sports debate products, and command-center interfaces. Built, tested, shipped.",
+    "Founder-led websites, AI workflows, booking systems, and conversion improvements for small businesses. Start with a practical Revenue Leak Audit.",
   icons: {
     icon: "/koi-mark.png",
     apple: "/koi-mark.png",
   },
   openGraph: {
-    title: "Koinophobia Labs — AI Products, Creator Systems, and Proof",
+    type: "website",
+    siteName: "Koinophobia Labs",
+    title: "Koinophobia Labs | Websites, AI Workflows and Business Systems",
     description:
-      "Koinophobia Labs is Blake Taylor’s product studio for AI tools, creator systems, sports debate products, and command-center interfaces. Built, tested, shipped.",
-    images: [{ url: "/og.png", width: 1200, height: 630 }],
+      "Founder-led websites, AI workflows, booking systems, and conversion improvements for small businesses.",
+    images: [{ url: "/og-commercial-1200.png", width: 1200, height: 630, alt: "Koinophobia Labs — websites, AI workflows, and business systems" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Koinophobia Labs — AI Products, Creator Systems, and Proof",
+    title: "Koinophobia Labs | Websites, AI Workflows and Business Systems",
     description:
-      "Koinophobia Labs is Blake Taylor’s product studio for AI tools, creator systems, sports debate products, and command-center interfaces. Built, tested, shipped.",
-    images: ["/og.png"],
+      "Founder-led websites, AI workflows, booking systems, and conversion improvements for small businesses.",
+    images: ["/og-commercial-1200.png"],
   },
 };
 
@@ -66,8 +73,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${sora.variable} ${inter.variable} ${jetbrains.variable} ${archivo.variable} ${newsreader.variable} ${ibmPlexMono.variable}`}>
-      <body>{children}</body>
+    <html lang="en" data-scroll-behavior="smooth" className={`${sora.variable} ${inter.variable} ${jetbrains.variable} ${archivo.variable} ${newsreader.variable} ${ibmPlexMono.variable}`}>
+      <body><AnalyticsBridge />{children}</body>
     </html>
   );
 }

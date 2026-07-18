@@ -15,8 +15,10 @@ export const intakeBudgets = [
 
 export const intakeServiceOptions = [
   "Website audit",
-  "Website design",
-  "Website redesign",
-  "SEO",
+  "Quick Fix Sprint",
+  "Landing Page Rebuild",
+  "Small-Business Website",
+  "AI Workflow or Front Office",
+  "Not sure yet",
   "Other",
 ];
