@@ -12,6 +12,8 @@
   pointer-events: none;
   background: transparent;
   contain: layout style;
+  perspective: 1400px;
+  perspective-origin: 50% 46%;
 }
 
 /* Opaque field behind the emblem: black from first paint (it is part of the
@@ -50,30 +52,35 @@
   width: min(42vw, 560px);
   aspect-ratio: 1;
   opacity: 0;
-  transform: scale(0.92);
+  transform: translateZ(-180px) rotateX(16deg) scale(0.9);
   filter: blur(14px);
   transition:
     opacity 620ms cubic-bezier(0.33, 0, 0.2, 1),
-    transform 700ms cubic-bezier(0.22, 0.61, 0.21, 1),
+    transform 720ms cubic-bezier(0.22, 0.61, 0.21, 1),
     filter 650ms cubic-bezier(0.33, 0, 0.2, 1);
   will-change: opacity, transform, filter;
 }
 
+/* Settles onto a slight resting tilt so the emblem reads as an object in
+   space rather than a flat sticker. */
 .brand-intro[data-phase="enter"] .brand-intro__stage,
 .brand-intro[data-phase="live"] .brand-intro__stage {
   opacity: 1;
-  transform: scale(1);
+  transform: translateZ(0) rotateX(4.5deg) scale(1);
   filter: blur(0px);
 }
 
+/* Exit: the emblem levels out and comes toward the camera while the field
+   fades behind it — the center name swells readable, then dissolves. The
+   opacity fade is delayed so growth leads and the fade trails. */
 .brand-intro[data-phase="exit"] .brand-intro__stage {
   opacity: 0;
-  transform: scale(1.03);
-  filter: blur(2px);
+  transform: translateZ(170px) rotateX(0deg) scale(1.22);
+  filter: blur(1.5px);
   transition:
-    opacity 780ms cubic-bezier(0.4, 0, 0.2, 1),
-    transform 840ms cubic-bezier(0.4, 0, 0.2, 1),
-    filter 840ms cubic-bezier(0.4, 0, 0.2, 1);
+    opacity 700ms cubic-bezier(0.4, 0, 0.2, 1) 200ms,
+    transform 920ms cubic-bezier(0.3, 0, 0.24, 1),
+    filter 920ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .brand-intro__motion {
@@ -81,6 +88,7 @@
   width: 100%;
   height: 100%;
   transform-origin: center;
+  transform-style: preserve-3d;
 }
 
 .brand-intro[data-phase="enter"] .brand-intro__motion,
@@ -89,20 +97,26 @@
   animation: brand-intro-drift 5600ms cubic-bezier(0.37, 0, 0.63, 1) both;
 }
 
-/* A slow partial orbit around the center plus a breathing scale — the emblem
-   swims in place rather than spinning. Radius ≈ 0.55% of stage width. */
+/* A slow partial orbit around the center, a breathing scale that steadily
+   carries the emblem toward the viewer, and a faint 3D float (rotateX/Y under
+   the container's perspective) — the emblem swims in place and approaches,
+   rather than spinning. Orbit radius ≈ 0.55% of stage width. */
 @keyframes brand-intro-drift {
   0% {
-    transform: translate3d(0.55%, 0%, 0) scale(0.988);
+    transform: translate3d(0.55%, 0%, 0) rotateX(0.8deg) rotateY(-1.3deg)
+      scale(0.988);
   }
   30% {
-    transform: translate3d(0.17%, 0.52%, 0) scale(1.004);
+    transform: translate3d(0.17%, 0.52%, 0) rotateX(-0.7deg) rotateY(0.5deg)
+      scale(1.014);
   }
   60% {
-    transform: translate3d(-0.44%, 0.33%, 0) scale(1.012);
+    transform: translate3d(-0.44%, 0.33%, 0) rotateX(0.4deg) rotateY(1.3deg)
+      scale(1.045);
   }
   100% {
-    transform: translate3d(-0.52%, -0.18%, 0) scale(1.002);
+    transform: translate3d(-0.52%, -0.18%, 0) rotateX(-0.3deg) rotateY(-0.4deg)
+      scale(1.075);
   }
 }
 

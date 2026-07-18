@@ -16,7 +16,7 @@ const TIMELINE: ReadonlyArray<readonly [Phase, number]> = [
   ["enter", 0],
   ["live", 850],
   ["exit", 1950],
-  ["done", 2900],
+  ["done", 3000],
 ];
 const REDUCED_TIMELINE: ReadonlyArray<readonly [Phase, number]> = [
   ["enter", 0],
