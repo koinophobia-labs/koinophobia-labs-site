@@ -283,6 +283,24 @@ body:has(.devhome) {
   line-height: 1.6;
 }
 
+.devhome__now-more {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+  margin-top: 16px;
+  color: var(--dh-violet-hot);
+  font-family: var(--font-ibm-plex-mono), monospace;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-decoration: none;
+  transition: color 140ms ease;
+}
+
+.devhome__now-more:hover,
+.devhome__now-more:focus-visible {
+  color: var(--dh-text);
+}
+
 /* ---------- systems ---------- */
 
 .devhome__systems {

@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight, GitBranch, IdCard, Mail, QrCode } from "lucide-react";
 import { LINKS } from "@/lib/links";
+import { nowSnapshot } from "@/lib/now";
 
 // This page is the root of koinophobia.dev (rewritten from "/" for that host in
 // next.config.ts). koinophobialabs.com explains the studio; this page explains Blake.
@@ -41,25 +42,6 @@ const personSchema = {
   address: { "@type": "PostalAddress", addressLocality: "Chicago", addressRegion: "IL" },
   sameAs: [LINKS.linkedin, LINKS.github, "https://koinophobialabs.com"],
 };
-
-const nowEntries = [
-  {
-    label: "koinophobia labs",
-    line: "Full-time on the studio since July 2026. Client work runs through the audit-first pipeline on the studio site.",
-  },
-  {
-    label: "career forge",
-    line: "Live on the web. Packaging the paid beta and bringing in the first paying users.",
-  },
-  {
-    label: "trendi",
-    line: "On TestFlight. Current sprint: getting it into the hands of the first ten creators.",
-  },
-  {
-    label: "you know ball",
-    line: "In development, TestFlight builds shipping. Deepening the debate engine so it argues like someone who actually watches.",
-  },
-];
 
 const systems = [
   {
@@ -121,7 +103,7 @@ export default function DevHomePage() {
         <span className="devhome__wordmark">koinophobia.dev</span>
         <nav className="devhome__nav" aria-label="Site">
           <a href="#systems">Work</a>
-          <a href="#now">Now</a>
+          <Link href="/now">Now</Link>
           <Link href="/resume">Résumé</Link>
           <Link href="/connect">Connect</Link>
         </nav>
@@ -171,13 +153,16 @@ export default function DevHomePage() {
             <span className="devhome__now-stamp">status · July 2026</span>
           </div>
           <ul className="devhome__now-list">
-            {nowEntries.map((entry) => (
+            {nowSnapshot.map((entry) => (
               <li key={entry.label}>
                 <span className="devhome__now-label">{entry.label}</span>
                 <span className="devhome__now-line">{entry.line}</span>
               </li>
             ))}
           </ul>
+          <Link className="devhome__now-more" href="/now">
+            Read the full update <ArrowUpRight size={14} aria-hidden="true" />
+          </Link>
         </section>
 
         <section className="devhome__systems" id="systems" aria-labelledby="devhome-systems-title">

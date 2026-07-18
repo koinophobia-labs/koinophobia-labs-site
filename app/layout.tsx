@@ -18,6 +18,7 @@ import "./commercial.css";
 import "./dev-home.css";
 import "./connect-card.css";
 import "./resume-dev.css";
+import "./now-dev.css";
 import AnalyticsBridge from "@/components/studio/AnalyticsBridge";
 
 const sora = Sora({
