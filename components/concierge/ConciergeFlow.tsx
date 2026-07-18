@@ -36,7 +36,13 @@ function resultAction(evaluation: ConciergeEvaluationResponse) {
   return "Continue with a prefilled intake";
 }
 
-export default function ConciergeFlow({ entry = "direct" }: { entry?: string }) {
+export default function ConciergeFlow({
+  entry = "direct",
+  surface = "page",
+}: {
+  entry?: string;
+  surface?: "page" | "companion";
+}) {
   const [stage, setStage] = useState<Stage>("intro");
   const [step, setStep] = useState(0);
   const [sessionId, setSessionId] = useState("");
@@ -59,9 +65,10 @@ export default function ConciergeFlow({ entry = "direct" }: { entry?: string }) 
         setStage("result");
       } else setStage("questions");
       trackStudioEvent("concierge_recovered_session", { step_id: stepIds[recovered.step] || "result" });
+      if (surface === "companion") trackStudioEvent("koi_concierge_resumed", { route_category: entry.replace(/^koi_/, ""), completion_status: recovered.stage });
     }, 0);
     return () => window.clearTimeout(timer);
-  }, [entry]);
+  }, [entry, surface]);
 
   useEffect(() => {
     if (stage === "questions" || stage === "result" || stage === "error") headingRef.current?.focus();
@@ -78,10 +85,15 @@ export default function ConciergeFlow({ entry = "direct" }: { entry?: string }) 
     setStage("questions");
     saveDraft({ version: 1, sessionId: id, savedAt: Date.now(), step: 0, stage: "questions", answers: initial });
     trackStudioEvent("concierge_started", { entry_page: entry });
+    if (surface === "companion") trackStudioEvent("koi_concierge_started", { route_category: entry.replace(/^koi_/, ""), session_state: "new" });
   }
 
   function update<K extends keyof ConciergeAnswers>(key: K, value: ConciergeAnswers[K]) {
-    setAnswers((current) => ({ ...current, [key]: value }));
+    setAnswers((current) => {
+      const next = { ...current, [key]: value };
+      if (sessionId && stage === "questions") saveDraft({ version: 1, sessionId, savedAt: Date.now(), step, stage: "questions", answers: next });
+      return next;
+    });
     setMessage("");
   }
 
@@ -139,6 +151,7 @@ export default function ConciergeFlow({ entry = "direct" }: { entry?: string }) 
       saveDraft({ version: 1, sessionId, savedAt: Date.now(), step: 6, stage: "result", answers: finalAnswers, evaluation: result });
       trackStudioEvent("concierge_recommendation_generated", { recommendation_source: result.source, confidence_band: result.recommendation.confidenceBand });
       trackStudioEvent("concierge_service_recommended", { recommended_service: result.recommendation.service, confidence_band: result.recommendation.confidenceBand });
+      if (surface === "companion") trackStudioEvent("koi_concierge_completed", { route_category: entry.replace(/^koi_/, ""), completion_status: "recommendation", recommendation_source: result.source });
     } catch (error) {
       setMessage(error instanceof Error && error.name !== "AbortError" ? error.message : "The request timed out safely. Retry or continue with the standard form.");
       setStage("error");
@@ -164,7 +177,12 @@ export default function ConciergeFlow({ entry = "direct" }: { entry?: string }) 
     saveDraft({ version: 1, sessionId, savedAt: Date.now(), step: 0, stage: "questions", answers });
   }
 
-  const standardForm = <Link className="concierge-standard-link" href="/intake" onClick={() => trackStudioEvent("concierge_standard_form_selected", { step_id: stage === "questions" ? stepIds[step] : stage })}>Prefer the standard form?</Link>;
+  function selectStandardForm() {
+    trackStudioEvent("concierge_standard_form_selected", { step_id: stage === "questions" ? stepIds[step] : stage });
+    if (surface === "companion") trackStudioEvent("koi_standard_intake_selected", { route_category: entry.replace(/^koi_/, ""), completion_status: stage });
+  }
+
+  const standardForm = <Link className="concierge-standard-link" href="/intake" onClick={selectStandardForm}>Prefer the standard form?</Link>;
   const prompt = branchPrompt(answers.problemKind);
 
   if (stage === "intro") return (

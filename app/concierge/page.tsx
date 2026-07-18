@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 
 export default async function ConciergePage({ searchParams }: { searchParams: Promise<{ entry?: string }> }) {
   const rawEntry = (await searchParams).entry || "direct";
-  const entry = ["home", "services", "intake", "audit", "direct"].includes(rawEntry) ? rawEntry : "direct";
+  const entry = ["home", "services", "intake", "audit", "koi", "direct"].includes(rawEntry) ? rawEntry : "direct";
   return (
     <div className="studio-site concierge-page">
       <StudioNav />

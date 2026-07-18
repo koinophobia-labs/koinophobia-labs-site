@@ -8,6 +8,22 @@ The public route is `/concierge`. Visitors can enter from the homepage, services
 
 The result is preliminary. Scope, fit, price, and timing are confirmed by Blake after review.
 
+## Living koi companion
+
+The concierge is also available as a restrained, contextual koi companion on the public Labs site. The companion is a second entrance to the same finite workflow, not a chatbot and not a second recommendation system.
+
+- `components/companion/KoiCompanion.tsx` owns the small page-level trigger, route context, invitation limits, collision avoidance, and session preferences.
+- `components/companion/KoiCompanionPanel.tsx` presents contextual quick actions and lazy-loads the existing `ConciergeFlow` inside a desktop side drawer or mobile bottom sheet.
+- `lib/companion/page-context.ts` deterministically maps approved public routes to copy and actions. Unknown, private, transactional, CRM, and full-page concierge routes are suppressed.
+- `lib/companion/session.ts` validates versioned session-only UI preferences: invitation count, cooldown, dismissal, and minimized state.
+- `lib/companion/motion.ts` resolves the finite visual states: resting, noticing, inviting, listening, and sleeping.
+
+The trigger can invite at most twice per browser session, observes a ten-minute invitation cooldown, and honors a 30-minute dismissal. It never chases the cursor. Page visibility, inactivity, and `prefers-reduced-motion` constrain animation. On narrow screens, a runtime collision guard hides the trigger whenever its fixed corner would cover an interactive page control and restores it when the corner is clear.
+
+The companion is mounted once in the root layout but is eligible only on the canonical Labs host, localhost, and a route allowlist. It does not appear on CRM, API, payment, campaign, game, full-page concierge, or unknown routes, and it is suppressed on the separate `koinophobia.dev` site.
+
+Opening the workflow uses the same `ConciergeFlow`, deterministic evaluation endpoint, draft key, signed handoff, intake prefill, CRM persistence, and notification path as `/concierge`. Every answer edit is saved immediately to the existing 24-hour local draft. Minimizing, refreshing, or continuing on the full page therefore preserves progress without creating a parallel source of truth.
+
 ## User flow
 
 The client presents seven truthful steps:
@@ -146,8 +162,20 @@ The existing `trackStudioEvent` abstraction emits privacy-conscious events:
 - `concierge_audit_cta_clicked`
 - `concierge_error`
 - `concierge_recovered_session`
+- `koi_companion_viewed`
+- `koi_companion_invitation_shown`
+- `koi_companion_invitation_dismissed`
+- `koi_companion_opened`
+- `koi_companion_minimized`
+- `koi_companion_action_selected`
+- `koi_concierge_started`
+- `koi_concierge_resumed`
+- `koi_concierge_completed`
+- `koi_standard_intake_selected`
 
 Properties are limited to step ID, entry page, recommended service, confidence band, recommendation source, and completion status. Raw visitor text, contact details, and business details are not sent to analytics.
+
+Companion properties are likewise categorical: route context, action ID, interaction state, and whether an existing draft was resumed. Invitation and dismissal records remain in `sessionStorage`; answer drafts continue to use the concierge's versioned 24-hour `localStorage` record.
 
 Compare concierge completion and submitted-lead rates with the existing standard intake. Segment by entry page, recommendation, confidence band, and prefill-to-submit conversion. Quality should also be reviewed manually through lead fit and eventual lifecycle outcome; a higher completion rate is not useful if qualification quality falls.
 
@@ -210,6 +238,8 @@ Run migrations only against the intended database. For UI-only local evaluation,
 ```bash
 npm run test:concierge
 npm run test:concierge:e2e
+npm run test:koi-companion:e2e
+npm run screenshots:koi
 npm run test:crm
 npm run test:commercial
 npx tsc --noEmit
@@ -218,6 +248,8 @@ npm run build
 ```
 
 The browser suite expects the site at `CONCIERGE_QA_URL`, defaulting to `http://localhost:3100`. It covers website rebuild, automation, audit, quick fix, ambiguous/manual review, deterministic outage behavior, refresh recovery, editable intake prefill, mocked successful persistence, a 390px mobile journey, horizontal overflow, and an axe WCAG A/AA scan.
+
+The koi suite expects a built site at `KOI_QA_URL`, defaulting to `http://localhost:3000`. It covers the route and host allowlists, invitation limits, dismissal, draft continuity, deterministic AI-unavailable completion, focus trapping and return, Escape, narrow-screen collision avoidance, reduced motion, horizontal overflow, WCAG A/AA, and Chromium/WebKit behavior. The capture script records the home page at 320, 390, 768, 1024, 1440, and 1920 pixels plus representative contexts and open-panel states.
 
 ## Known limitations
 

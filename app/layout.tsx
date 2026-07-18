@@ -20,6 +20,8 @@ import "./connect-card.css";
 import "./resume-dev.css";
 import "./now-dev.css";
 import AnalyticsBridge from "@/components/studio/AnalyticsBridge";
+import KoiCompanion from "@/components/companion/KoiCompanion";
+import "./koi-companion.css";
 
 const sora = Sora({
   variable: "--font-sora",
@@ -106,6 +108,7 @@ export default function RootLayout({
         <AnalyticsBridge />
         <Analytics />
         {children}
+        <KoiCompanion />
       </body>
     </html>
   );
