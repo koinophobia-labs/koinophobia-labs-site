@@ -18,6 +18,7 @@ const vercelJson = JSON.parse(read("vercel.json"));
 const devHome = read("app/home/page.tsx");
 const studioHome = read("app/page.tsx");
 const connect = read("app/connect/page.tsx");
+const resumePage = read("app/resume/page.tsx");
 
 test("koinophobia.dev / rewrites to the personal home", () => {
   assert.ok(
@@ -117,4 +118,23 @@ test("/connect links back to the homepage client-side and every internal link re
     const file = clean === "/" ? "app/page.tsx" : `app/${clean.slice(1)}/page.tsx`;
     assert.ok(exists(file), `/connect internal link ${route} has no page file (${file})`);
   }
+});
+
+test("/resume wears the dark .resumedev identity, not the legacy .mini/.founder system", () => {
+  assert.match(resumePage, /className="resumedev"/);
+  assert.doesNotMatch(resumePage, /className="mini-page|className="page-field|founder-/);
+});
+
+test("/resume keeps personal metadata and the ATS PDF download intact", () => {
+  assert.match(resumePage, /title:\s*\{\s*absolute:\s*"Blake Taylor — Résumé"\s*\}/);
+  assert.match(resumePage, /canonical:\s*"https:\/\/koinophobia\.dev\/resume"/);
+  // The downloadable ATS artifact must remain wired to the generated PDF.
+  assert.match(resumePage, /const PDF_PATH = "\/resume\/Blake-Taylor-Resume\.pdf"/);
+  assert.match(resumePage, /download="Blake-Taylor-Resume\.pdf"/);
+});
+
+test("/resume renders from lib/resume.json (single source of truth), not inlined facts", () => {
+  assert.match(resumePage, /import resume from "@\/lib\/resume\.json"/);
+  assert.match(resumePage, /resume\.experience\.map/);
+  assert.match(resumePage, /\{resume\.summary\}/);
 });
