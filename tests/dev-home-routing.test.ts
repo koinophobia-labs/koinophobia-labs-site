@@ -17,6 +17,7 @@ const nextConfigCompact = nextConfig.replace(/\s/g, "");
 const vercelJson = JSON.parse(read("vercel.json"));
 const devHome = read("app/home/page.tsx");
 const studioHome = read("app/page.tsx");
+const connect = read("app/connect/page.tsx");
 
 test("koinophobia.dev / rewrites to the personal home", () => {
   assert.ok(
@@ -94,4 +95,26 @@ test("internal navigation uses next/link to avoid full document reloads", () => 
   assert.match(devHome, /import Link from "next\/link"/);
   // Hash and external links stay as plain anchors; internal route links use Link.
   assert.match(devHome, /<Link className="devhome__btn devhome__btn--ghost" href="\/connect">/);
+});
+
+test("/connect wears the dark .connectcard identity, not the legacy .founder system", () => {
+  assert.match(connect, /className="connectcard"/);
+  assert.doesNotMatch(connect, /founder-page|founder-shell|founder-card|founder-hero/);
+});
+
+test("/connect has personal metadata independent of the studio title template", () => {
+  // title.absolute bypasses the "%s | Koinophobia Labs" layout template.
+  assert.match(connect, /title:\s*\{\s*absolute:\s*"Connect with Blake Taylor"\s*\}/);
+  assert.match(connect, /canonical:\s*"https:\/\/koinophobia\.dev\/connect"/);
+});
+
+test("/connect links back to the homepage client-side and every internal link resolves", () => {
+  assert.match(connect, /import Link from "next\/link"/);
+  assert.match(connect, /<Link className="connectcard__home" href="\/">/);
+  const hrefs = [...connect.matchAll(/href[=:]\s*"(\/[^"?#]*)"/g)].map((m) => m[1]);
+  for (const route of [...new Set(hrefs)]) {
+    const clean = route.replace(/\/+$/, "") || "/";
+    const file = clean === "/" ? "app/page.tsx" : `app/${clean.slice(1)}/page.tsx`;
+    assert.ok(exists(file), `/connect internal link ${route} has no page file (${file})`);
+  }
 });

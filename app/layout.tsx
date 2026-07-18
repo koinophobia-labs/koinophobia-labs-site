@@ -16,6 +16,7 @@ import "./founder-editorial.css";
 import "./product-worlds.css";
 import "./commercial.css";
 import "./dev-home.css";
+import "./connect-card.css";
 import AnalyticsBridge from "@/components/studio/AnalyticsBridge";
 
 const sora = Sora({
