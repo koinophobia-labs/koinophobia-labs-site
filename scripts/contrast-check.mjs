@@ -63,6 +63,33 @@ const pairs = [
   ["#B15CFF", DH_PANEL2, "normal", "dark: violet-hot arrow/icon on panel-2 (hover)"],
   ["#B15CFF", "#201538", "normal", "dark: violet-hot status-chip text on violet-soft fill"],
   ["#FFFFFF", "#9447FF", "normal", "dark: white button label on violet"],
+  // ---- koinophobia.dev product worlds (app/dev-system.css [data-world]) ----
+  // Each product accent must clear AA on all three dark surfaces, and ink text
+  // must clear AA on the accent (used for .devpage__btn labels).
+  ["#FF9D3D", DH_INK, "normal", "forge: Career Forge accent on ink"],
+  ["#FF9D3D", DH_PANEL, "normal", "forge: accent on panel"],
+  ["#FF9D3D", DH_PANEL2, "normal", "forge: accent on panel-2"],
+  ["#FFB867", DH_INK, "normal", "forge: accent-hot on ink"],
+  ["#FFB867", DH_PANEL, "normal", "forge: accent-hot on panel"],
+  ["#05060A", "#FF9D3D", "normal", "forge: ink button label on accent"],
+  ["#3DDCC2", DH_INK, "normal", "signal: Trendi accent on ink"],
+  ["#3DDCC2", DH_PANEL, "normal", "signal: accent on panel"],
+  ["#3DDCC2", DH_PANEL2, "normal", "signal: accent on panel-2"],
+  ["#78ECD8", DH_INK, "normal", "signal: accent-hot on ink"],
+  ["#78ECD8", DH_PANEL, "normal", "signal: accent-hot on panel"],
+  ["#05060A", "#3DDCC2", "normal", "signal: ink button label on accent"],
+  ["#FF7A4D", DH_INK, "normal", "arena: You Know Ball accent on ink"],
+  ["#FF7A4D", DH_PANEL, "normal", "arena: accent on panel"],
+  ["#FF7A4D", DH_PANEL2, "normal", "arena: accent on panel-2"],
+  ["#FF9D79", DH_INK, "normal", "arena: accent-hot on ink"],
+  ["#FF9D79", DH_PANEL, "normal", "arena: accent-hot on panel"],
+  ["#05060A", "#FF7A4D", "normal", "arena: ink button label on accent"],
+  ["#6FA8CF", DH_INK, "normal", "cave: Koi Cave accent on ink"],
+  ["#6FA8CF", DH_PANEL, "normal", "cave: accent on panel"],
+  ["#6FA8CF", DH_PANEL2, "normal", "cave: accent on panel-2"],
+  ["#98C4E2", DH_INK, "normal", "cave: accent-hot on ink"],
+  ["#98C4E2", DH_PANEL, "normal", "cave: accent-hot on panel"],
+  ["#05060A", "#6FA8CF", "normal", "cave: ink button label on accent"],
 ];
 
 let fail = 0;

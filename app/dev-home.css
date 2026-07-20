@@ -7,17 +7,6 @@ body:has(.devhome) {
 }
 
 .devhome {
-  --dh-ink: #05060a;
-  --dh-panel: #0a0b12;
-  --dh-panel-2: #0d0e17;
-  --dh-text: #e8e6f0;
-  --dh-body: #a7a3b8;
-  --dh-muted: #807c94; /* WCAG AA: >=4.5:1 on #05060a, #0a0b12, and #0d0e17 */
-  --dh-violet: #9447ff;
-  --dh-violet-hot: #b15cff;
-  --dh-violet-soft: rgba(148, 71, 255, 0.16);
-  --dh-rule: rgba(148, 71, 255, 0.16);
-  --dh-rule-quiet: rgba(232, 230, 240, 0.08);
   position: relative;
   width: min(1120px, calc(100% - clamp(24px, 6vw, 72px)));
   margin: 0 auto;
@@ -588,4 +577,35 @@ body:has(.devhome) {
     flex: 1 1 auto;
     justify-content: center;
   }
+}
+
+/* ---------- links inside prose blocks (notes teasers, texture lines) ---------- */
+
+.devhome__principle-grid h3 a,
+.devhome__texture a {
+  color: inherit;
+  text-decoration: none;
+  text-decoration-color: var(--dh-rule);
+  transition: color 140ms ease;
+}
+
+.devhome__texture a {
+  color: var(--dh-violet-hot);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.devhome__principle-grid h3 a:hover,
+.devhome__principle-grid h3 a:focus-visible,
+.devhome__texture a:hover,
+.devhome__texture a:focus-visible {
+  color: var(--dh-violet-hot);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.devhome a:focus-visible {
+  outline: 2px solid var(--dh-violet-hot);
+  outline-offset: 3px;
+  border-radius: 3px;
 }

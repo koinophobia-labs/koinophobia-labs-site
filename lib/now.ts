@@ -7,7 +7,7 @@ import { LINKS } from "@/lib/links";
 // lastUpdated is a LITERAL, manually maintained string — never a runtime date.
 // Bump it by hand whenever the copy below changes.
 
-export const nowLastUpdated = "July 18, 2026";
+export const nowLastUpdated = "July 20, 2026";
 
 export const nowHero = {
   heading: "What I'm doing now.",
@@ -50,7 +50,7 @@ export const nowActiveWork: Array<{
     name: "Career Forge",
     stage: "Live beta",
     snapshot:
-      "Live on the web. Packaging the paid beta and bringing in the first paying users.",
+      "Released to production on July 19. Anyone can finish the workflow and export real documents. No paying users yet.",
     doingNow:
       "Packaging the paid tier and founding cohort, and sharpening it toward being the easiest résumé and job-prep experience to actually finish.",
     nextProof:
@@ -61,27 +61,27 @@ export const nowActiveWork: Array<{
   },
   {
     name: "Trendi",
-    stage: "TestFlight validation",
+    stage: "TestFlight beta · release blocked",
     snapshot:
-      "On TestFlight. Current sprint: getting it into the hands of the first ten creators.",
+      "Testers are on build 114. Builds 115 and 116 are finished and stuck behind an Apple account problem.",
     doingNow:
-      "Getting it in front of the first ten creators and listening for one thing: whether the words it gives back are good enough to actually record.",
+      "Clearing the upload block so testers get the build that's actually done, then getting it in front of the first ten creators and listening for one thing: whether the words it gives back are good enough to record.",
     nextProof:
       "Creators using the output to publish, repeatedly — not another layer of polish.",
-    href: "/trendi",
+    href: "/products/trendi",
     cta: "See Trendi",
   },
   {
     name: "You Know Ball",
-    stage: "TestFlight-ready · player validation",
+    stage: "Web demo live · iOS unreleased",
     snapshot:
-      "In development, TestFlight builds shipping. Deepening the debate engine so it argues like someone who actually watches.",
+      "Playable in a browser today. The iOS build runs on exactly one phone — mine — and has never been on TestFlight.",
     doingNow:
-      "The debate engine, scoring, replay, receipts, and daily-play systems are built and TestFlight-ready, with a live playable web demo. Now I'm watching whether players come back.",
+      "The debate engine, scoring, replay, receipts, and daily-play systems are built, and the web demo is live. The iOS build has never reached an outside tester, so the honest next step is getting it into hands, not adding to it.",
     nextProof:
       "Real players returning to argue, sharing their receipts, and caring about the outcome.",
-    href: "/you-know-ball/play",
-    cta: "Play the web demo",
+    href: "/products/you-know-ball",
+    cta: "See You Know Ball",
   },
 ];
 
@@ -94,8 +94,8 @@ export const nowSnapshot = nowActiveWork.map((item) => ({
 export const nowProof = [
   "A first repeatable paid studio engagement.",
   "External Career Forge users finishing the whole workflow — and paying for it.",
-  "Ten creators using Trendi with honest feedback.",
-  "Real You Know Ball players returning and sharing results.",
+  "Trendi's finished build actually in testers' hands, then ten creators using it.",
+  "A You Know Ball build installed by someone who isn't me.",
   "A salary role aligned with customer-facing AI and implementation work.",
 ];
 

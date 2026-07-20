@@ -17,11 +17,12 @@
     "test:concierge:e2e": "node scripts/qa-concierge.mjs",
     "test:koi-companion:e2e": "node scripts/qa-koi-companion.mjs",
     "screenshots:koi": "node scripts/capture-koi-companion.mjs",
-    "test:dev-routing": "tsx --test tests/dev-home-routing.test.ts",
+    "test:dev-routing": "tsx --test tests/dev-home-routing.test.ts tests/dev-universe.test.ts",
     "test:now": "tsx --test tests/now.test.ts",
     "test:release-qa": "node scripts/blake-release-qa.mjs",
     "db:migrate-crm": "node scripts/migrate-crm.mjs",
-    "vercel-build": "node scripts/migrate-crm.mjs && next build"
+    "vercel-build": "node scripts/migrate-crm.mjs && next build",
+    "test:dev-universe": "tsx --test tests/dev-universe.test.ts"
   },
   "dependencies": {
     "@vercel/analytics": "^2.0.1",

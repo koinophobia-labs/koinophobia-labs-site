@@ -47,8 +47,24 @@ test("every internal link on /now resolves to a real route", () => {
   const dataHrefs = [...nowData.matchAll(/href:\s*"(\/[^"?#]*)"/g)].map((m) => m[1]);
   for (const route of [...new Set([...pageHrefs, ...dataHrefs])]) {
     const clean = route.replace(/\/+$/, "") || "/";
-    const file = clean === "/" ? "app/page.tsx" : `app/${clean.slice(1)}/page.tsx`;
-    assert.ok(exists(file), `/now internal link ${route} has no page file (${file})`);
+    if (clean === "/") {
+      assert.ok(exists("app/page.tsx"));
+      continue;
+    }
+    // Personal routes that collide with studio pages are served on
+    // koinophobia.dev by a host rewrite into app/dev/*, and product/note pages
+    // are dynamic segments. Accept any of those resolutions.
+    const segments = clean.slice(1).split("/");
+    const parent = segments.slice(0, -1).join("/");
+    const candidates = [
+      `app/${segments.join("/")}/page.tsx`,
+      `app/dev/${segments.join("/")}/page.tsx`,
+      ...(parent ? [`app/${parent}/[slug]/page.tsx`, `app/dev/${parent}/[slug]/page.tsx`] : []),
+    ];
+    assert.ok(
+      candidates.some((file) => exists(file)),
+      `/now internal link ${route} has no page file (tried ${candidates.join(", ")})`,
+    );
   }
 });
 

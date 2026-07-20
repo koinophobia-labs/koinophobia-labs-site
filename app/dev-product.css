@@ -1,0 +1,512 @@
+/* koinophobia.dev product worlds.
+   ===============================
+   Requirement from Blake: stop treating every product as the same dark purple
+   card. The world stays shared — ink, grid field, Sora/Inter/IBM Mono — but
+   each product gets its own rhythm, not just its own hex code. Accent alone is
+   a skin; rhythm is an identity.
+
+     forge  (Career Forge)  structural ledger, numbered, left-ruled, dense
+     signal (Trendi)        spoken aloud, big quoted lines, airy, rounded
+     arena  (You Know Ball) scoreboard, squared edges, numerals that shout
+     cave   (Koi Cave)      no cards at all, low contrast, wide, quiet
+
+   Shared skeleton first, then the per-world overrides. */
+
+/* ---------- index ---------- */
+
+.devprod-index__head {
+  padding: var(--dh-gap-xl) 0 var(--dh-gap-l);
+}
+
+.devprod-index__head h1 {
+  margin: 0 0 20px;
+  max-width: 18ch;
+  font-family: var(--font-sora), sans-serif;
+  font-size: clamp(32px, 5.4vw, 56px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.08;
+}
+
+.devprod-index__list {
+  display: grid;
+  gap: var(--dh-gap-m);
+}
+
+.devprod-card {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 14px var(--dh-gap-m);
+  align-items: start;
+  padding: var(--dh-pad-card);
+  border: 1px solid var(--dh-rule-quiet);
+  border-left: 2px solid var(--acc);
+  border-radius: 10px;
+  background: var(--dh-panel);
+  text-decoration: none;
+  transition:
+    border-color 160ms ease,
+    background 160ms ease;
+}
+
+.devprod-card:hover,
+.devprod-card:focus-visible {
+  background: var(--dh-panel-2);
+  border-color: var(--acc-soft);
+  border-left-color: var(--acc-hot);
+}
+
+.devprod-card h2 {
+  margin: 0 0 8px;
+  color: var(--dh-text);
+  font-family: var(--font-sora), sans-serif;
+  font-size: clamp(20px, 2.6vw, 26px);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.devprod-card__tagline {
+  margin: 0 0 14px;
+  max-width: 52ch;
+  color: var(--dh-body);
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.devprod-card__status {
+  margin: 0;
+  color: var(--dh-muted);
+  font-family: var(--font-ibm-plex-mono), monospace;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.devprod-index__studio {
+  margin-top: var(--dh-gap-l);
+  padding: var(--dh-pad-card);
+  border: 1px dashed var(--dh-rule);
+  border-radius: 10px;
+}
+
+.devprod-index__studio h2 {
+  margin: 0 0 10px;
+  font-family: var(--font-sora), sans-serif;
+  font-size: 19px;
+  font-weight: 600;
+}
+
+.devprod-index__studio p {
+  margin: 0 0 16px;
+  max-width: 62ch;
+  color: var(--dh-body);
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+/* ---------- detail: shared skeleton ---------- */
+
+.devprod__hero {
+  padding: var(--dh-gap-l) 0 var(--dh-gap-l);
+  border-bottom: 1px solid var(--dh-rule-quiet);
+}
+
+.devprod__hero h1 {
+  margin: 0 0 18px;
+  font-family: var(--font-sora), sans-serif;
+  font-size: clamp(36px, 6.4vw, 68px);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.02;
+}
+
+.devprod__tagline {
+  margin: 0 0 22px;
+  max-width: 34ch;
+  color: var(--acc-hot);
+  font-size: clamp(17px, 2.3vw, 22px);
+  line-height: 1.4;
+}
+
+.devprod__statusline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+
+.devprod__statusline p {
+  margin: 0;
+  color: var(--dh-body);
+  font-family: var(--font-ibm-plex-mono), monospace;
+  font-size: 12.5px;
+  letter-spacing: 0.02em;
+}
+
+.devprod__section {
+  padding: var(--dh-gap-l) 0;
+  border-bottom: 1px solid var(--dh-rule-quiet);
+}
+
+.devprod__section:last-of-type {
+  border-bottom: 0;
+}
+
+.devprod__section > h2 {
+  margin: 0 0 var(--dh-gap-m);
+  color: var(--dh-muted);
+  font-family: var(--font-ibm-plex-mono), monospace;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.devprod__prose {
+  max-width: 66ch;
+  color: var(--dh-body);
+  font-size: clamp(15px, 1.7vw, 17.5px);
+  line-height: 1.68;
+}
+
+.devprod__prose p {
+  margin: 0 0 var(--dh-gap-s);
+}
+
+.devprod__thesis {
+  max-width: 30ch;
+  color: var(--dh-text);
+  font-family: var(--font-sora), sans-serif;
+  font-size: clamp(21px, 3.2vw, 32px);
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  line-height: 1.28;
+}
+
+.devprod__state {
+  display: grid;
+  gap: 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  max-width: 68ch;
+}
+
+.devprod__state li {
+  position: relative;
+  padding-left: 26px;
+  color: var(--dh-body);
+  font-size: 15.5px;
+  line-height: 1.62;
+}
+
+.devprod__state li::before {
+  position: absolute;
+  top: 0.62em;
+  left: 0;
+  width: 10px;
+  height: 1px;
+  background: var(--acc);
+  content: "";
+}
+
+.devprod__decisions {
+  display: grid;
+  gap: var(--dh-gap-m);
+}
+
+.devprod__decision h3 {
+  margin: 0 0 8px;
+  color: var(--dh-text);
+  font-family: var(--font-sora), sans-serif;
+  font-size: clamp(17px, 2vw, 20px);
+  font-weight: 600;
+  line-height: 1.34;
+}
+
+.devprod__decision p {
+  margin: 0;
+  max-width: 62ch;
+  color: var(--dh-body);
+  font-size: 15px;
+  line-height: 1.62;
+}
+
+.devprod__learned {
+  max-width: 58ch;
+  color: var(--dh-text);
+  font-size: clamp(16px, 2vw, 19px);
+  font-style: italic;
+  line-height: 1.55;
+}
+
+/* The honesty block. Same treatment in every world on purpose — this is the
+   one section that must never be styled to feel optional. */
+.devprod__notyet {
+  padding: var(--dh-pad-card);
+  border: 1px solid rgba(232, 230, 240, 0.14);
+  border-radius: 8px;
+  background: rgba(232, 230, 240, 0.02);
+}
+
+.devprod__notyet h2 {
+  margin: 0 0 14px;
+  color: var(--dh-text);
+  font-family: var(--font-ibm-plex-mono), monospace;
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.devprod__notyet ul {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.devprod__notyet li {
+  position: relative;
+  padding-left: 24px;
+  color: var(--dh-body);
+  font-size: 15px;
+  line-height: 1.58;
+}
+
+.devprod__notyet li::before {
+  position: absolute;
+  left: 0;
+  color: var(--dh-muted);
+  content: "\2715";
+  font-size: 11px;
+}
+
+.devprod__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: var(--dh-gap-m);
+}
+
+.devprod__nextprev {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 26px;
+  justify-content: space-between;
+  padding: var(--dh-gap-m) 0;
+  border-top: 1px solid var(--dh-rule-quiet);
+}
+
+/* =========================================================
+   FORGE — Career Forge. Structural. A ledger, not a brochure.
+   ========================================================= */
+
+[data-world="forge"] .devprod__hero h1 {
+  text-transform: uppercase;
+  letter-spacing: -0.015em;
+}
+
+[data-world="forge"] .devprod__decisions {
+  counter-reset: forge;
+  gap: 0;
+}
+
+[data-world="forge"] .devprod__decision {
+  position: relative;
+  counter-increment: forge;
+  padding: var(--dh-gap-m) 0 var(--dh-gap-m) clamp(48px, 7vw, 76px);
+  border-top: 1px solid var(--dh-rule-quiet);
+}
+
+[data-world="forge"] .devprod__decision:last-child {
+  border-bottom: 1px solid var(--dh-rule-quiet);
+}
+
+[data-world="forge"] .devprod__decision::before {
+  position: absolute;
+  top: var(--dh-gap-m);
+  left: 0;
+  color: var(--acc);
+  content: counter(forge, decimal-leading-zero);
+  font-family: var(--font-ibm-plex-mono), monospace;
+  font-size: 13px;
+  letter-spacing: 0.1em;
+}
+
+[data-world="forge"] .devprod__state li::before {
+  width: 6px;
+  height: 6px;
+  top: 0.55em;
+  background: transparent;
+  border: 1px solid var(--acc);
+}
+
+/* =========================================================
+   SIGNAL — Trendi. Spoken out loud. Airy, rounded, quoted.
+   ========================================================= */
+
+[data-world="signal"] .devprod__thesis {
+  position: relative;
+  max-width: 24ch;
+  padding-left: clamp(18px, 3vw, 30px);
+  border-left: 3px solid var(--acc);
+  font-size: clamp(23px, 4vw, 40px);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.18;
+}
+
+[data-world="signal"] .devprod__decisions {
+  gap: var(--dh-gap-l);
+}
+
+[data-world="signal"] .devprod__decision {
+  padding: var(--dh-pad-card);
+  border-radius: 16px;
+  background: var(--dh-panel);
+}
+
+[data-world="signal"] .devprod__decision h3 {
+  color: var(--acc-hot);
+}
+
+[data-world="signal"] .devprod__state li::before {
+  top: 0.68em;
+  width: 14px;
+  border-radius: 2px;
+}
+
+[data-world="signal"] .devprod__hero h1 {
+  letter-spacing: -0.035em;
+}
+
+/* =========================================================
+   ARENA — You Know Ball. Scoreboard. Squared off, numerals loud.
+   ========================================================= */
+
+[data-world="arena"] .devprod__hero h1 {
+  font-size: clamp(38px, 7.6vw, 80px);
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+}
+
+[data-world="arena"] .devprod__decision,
+[data-world="arena"] .devprod__notyet,
+[data-world="arena"] .devprod__scoreboard {
+  border-radius: 0;
+}
+
+[data-world="arena"] .devprod__decisions {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+}
+
+[data-world="arena"] .devprod__decision {
+  padding: var(--dh-gap-m);
+  border-top: 2px solid var(--acc);
+  background: var(--dh-panel);
+}
+
+[data-world="arena"] .devprod__state li::before {
+  top: 0.6em;
+  width: 8px;
+  height: 8px;
+  background: var(--acc);
+  border-radius: 0;
+}
+
+/* the stat strip — only the arena has one */
+.devprod__scoreboard {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 150px), 1fr));
+  gap: 1px;
+  margin-top: var(--dh-gap-m);
+  background: var(--dh-rule-quiet);
+  border: 1px solid var(--dh-rule-quiet);
+}
+
+.devprod__scoreboard div {
+  padding: var(--dh-gap-m) var(--dh-gap-s);
+  background: var(--dh-ink);
+  text-align: center;
+}
+
+.devprod__scoreboard dt {
+  color: var(--dh-muted);
+  font-family: var(--font-ibm-plex-mono), monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.devprod__scoreboard dd {
+  margin: 8px 0 0;
+  color: var(--acc-hot);
+  font-family: var(--font-sora), sans-serif;
+  font-size: clamp(26px, 4.4vw, 40px);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+/* =========================================================
+   CAVE — Koi Cave. Still water. No cards. The quietest page here.
+   ========================================================= */
+
+[data-world="cave"] .devprod__hero h1 {
+  font-size: clamp(30px, 4.6vw, 50px);
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+
+[data-world="cave"] .devprod__tagline {
+  color: var(--dh-body);
+  font-weight: 300;
+}
+
+[data-world="cave"] .devprod__thesis {
+  max-width: 34ch;
+  color: var(--dh-body);
+  font-weight: 400;
+  font-size: clamp(19px, 2.6vw, 26px);
+  letter-spacing: 0.005em;
+  line-height: 1.44;
+}
+
+[data-world="cave"] .devprod__decisions {
+  gap: var(--dh-gap-l);
+  max-width: 62ch;
+}
+
+[data-world="cave"] .devprod__decision {
+  padding: 0;
+  border: 0;
+  background: none;
+}
+
+[data-world="cave"] .devprod__decision h3 {
+  margin-bottom: 12px;
+  font-weight: 500;
+  color: var(--acc-hot);
+}
+
+[data-world="cave"] .devprod__state li::before {
+  width: 16px;
+  opacity: 0.6;
+}
+
+[data-world="cave"] .devprod__section {
+  padding: var(--dh-gap-xl) 0;
+}
+
+/* ---------- responsive ---------- */
+
+@media (max-width: 640px) {
+  .devprod-card {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  [data-world="forge"] .devprod__decision {
+    padding-left: 34px;
+  }
+}

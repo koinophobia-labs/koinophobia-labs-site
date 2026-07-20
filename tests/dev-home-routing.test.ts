@@ -12,36 +12,60 @@ const root = new URL("../", import.meta.url);
 const read = (rel: string) => readFileSync(new URL(rel, root), "utf8");
 const exists = (rel: string) => existsSync(fileURLToPath(new URL(rel, root)));
 
-const nextConfig = read("next.config.ts");
-const nextConfigCompact = nextConfig.replace(/\s/g, "");
+// Assert against the RESOLVED config, not its source text. The earlier version
+// of this file matched whitespace-stripped source fragments, which broke the
+// moment the host strings were extracted into constants — a refactor that
+// changed nothing about behaviour. Resolving the config tests the contract.
+type Rule = { source: string; destination: string; has?: Array<{ type: string; value: string }> };
+const hostOf = (rule: Rule) => (rule.has ?? []).find((h) => h.type === "host")?.value;
+
+// Resolved lazily: the tsx test transform targets CJS, which has no top-level
+// await. Memoized so the config is only evaluated once across the suite.
+let rulesPromise: Promise<{ redirects: Rule[]; beforeFiles: Rule[] }> | null = null;
+const rules = () => {
+  rulesPromise ??= (async () => {
+    const { default: config } = await import("../next.config");
+    const rewriteRules = await config.rewrites!();
+    return {
+      redirects: (await config.redirects!()) as Rule[],
+      beforeFiles: (Array.isArray(rewriteRules)
+        ? rewriteRules
+        : (rewriteRules.beforeFiles ?? [])) as Rule[],
+    };
+  })();
+  return rulesPromise;
+};
+const findRewrite = async (source: string, host: string) =>
+  (await rules()).beforeFiles.find((r) => r.source === source && hostOf(r) === host);
+const findRedirect = async (source: string, host: string) =>
+  (await rules()).redirects.find((r) => r.source === source && hostOf(r) === host);
 const vercelJson = JSON.parse(read("vercel.json"));
 const devHome = read("app/home/page.tsx");
 const studioHome = read("app/page.tsx");
 const connect = read("app/connect/page.tsx");
 const resumePage = read("app/resume/page.tsx");
 
-test("koinophobia.dev / rewrites to the personal home", () => {
-  assert.ok(
-    nextConfigCompact.includes('{source:"/",has:[{type:"host",value:"koinophobia.dev"}],destination:"/home"'),
-    "expected a host-scoped rewrite of / -> /home for koinophobia.dev",
-  );
+test("koinophobia.dev / rewrites to the personal home", async () => {
+  const rule = await findRewrite("/", "koinophobia.dev");
+  assert.ok(rule, "expected a host-scoped rewrite of / for koinophobia.dev");
+  assert.equal(rule!.destination, "/home");
 });
 
-test("koinophobialabs.com keeps the studio homepage at /", () => {
+test("koinophobialabs.com keeps the studio homepage at /", async () => {
   // The studio page is app/page.tsx and no rewrite redirects the .com root away.
   assert.match(studioHome, /className="studio-site"/);
-  assert.ok(
-    !nextConfigCompact.includes('{source:"/",has:[{type:"host",value:"koinophobialabs.com"}],destination:"/home"'),
-    "koinophobialabs.com root must not rewrite to /home",
+  assert.equal(
+    await findRewrite("/", "koinophobialabs.com"),
+    undefined,
+    "koinophobialabs.com root must not rewrite away from the studio home",
   );
 });
 
-test("/home canonicalizes to one public URL per host", () => {
+test("/home canonicalizes to one public URL per host", async () => {
   for (const host of ["koinophobia.dev", "koinophobialabs.com"]) {
-    assert.ok(
-      nextConfigCompact.includes(`{source:"/home",has:[{type:"host",value:"${host}"}],destination:"https://koinophobia.dev/"`),
-      `expected /home to redirect to canonical root for ${host}`,
-    );
+    const rule = await findRedirect("/home", host);
+    assert.ok(rule, `expected /home to redirect for ${host}`);
+    assert.equal(rule!.destination, "https://koinophobia.dev/");
   }
 });
 
@@ -75,20 +99,88 @@ test("every internal link on the personal home resolves to a real route", () => 
   const internal = [...new Set(hrefs)].filter((h) => !h.startsWith("//"));
   assert.ok(internal.length >= 3, "expected several internal links to verify");
 
-  const routeFile = (route: string) => {
+  // A koinophobia.dev URL may be served either by a same-named route in the app
+  // tree or, for the personal routes that collide with studio pages, by a
+  // host-scoped rewrite into app/dev/*. Resolve both, including dynamic
+  // segments, so a broken personal link still fails this test.
+  const candidateFiles = (route: string) => {
     const clean = route.replace(/\/+$/, "") || "/";
-    if (clean === "/") return "app/page.tsx";
-    return `app/${clean.slice(1)}/page.tsx`;
+    if (clean === "/") return ["app/page.tsx", "app/home/page.tsx"];
+    const segments = clean.slice(1).split("/");
+    const parent = segments.slice(0, -1).join("/");
+    return [
+      `app/${segments.join("/")}/page.tsx`,
+      `app/dev/${segments.join("/")}/page.tsx`,
+      ...(parent
+        ? [`app/${parent}/[slug]/page.tsx`, `app/dev/${parent}/[slug]/page.tsx`]
+        : []),
+    ];
   };
 
   for (const route of internal) {
-    assert.ok(exists(routeFile(route)), `internal link ${route} has no page file (${routeFile(route)})`);
+    const candidates = candidateFiles(route);
+    assert.ok(
+      candidates.some((file) => exists(file)),
+      `internal link ${route} has no page file (tried ${candidates.join(", ")})`,
+    );
   }
 });
 
-test("You Know Ball links to the playable route, not the missing /you-know-ball index", () => {
-  assert.doesNotMatch(devHome, /href="\/you-know-ball"/, "/you-know-ball has no index page");
-  assert.match(devHome, /href:\s*"\/you-know-ball\/play"/);
+test("every personal route in the nav is reachable on koinophobia.dev", async () => {
+  // Each public URL must be either a real app route or a host-scoped rewrite.
+  const navRoutes = ["/products", "/lab", "/notes", "/now", "/about", "/connect"];
+  for (const route of navRoutes) {
+    const rewrite = await findRewrite(route, "koinophobia.dev");
+    const direct = exists(`app${route}/page.tsx`);
+    assert.ok(
+      rewrite || direct,
+      `${route} is in the nav but is neither a rewrite nor an app route`,
+    );
+    if (rewrite) {
+      assert.ok(
+        exists(`app${rewrite.destination}/page.tsx`),
+        `${route} rewrites to ${rewrite.destination}, which has no page file`,
+      );
+    }
+  }
+});
+
+test("/dev/* is internal plumbing and never a public URL", async () => {
+  // Every rewrite destination under /dev must also have a redirect collapsing
+  // the /dev URL to the clean one, so pages have exactly one public address.
+  const devRewrites = (await rules()).beforeFiles.filter(
+    (r) => hostOf(r) === "koinophobia.dev" && r.destination.startsWith("/dev/"),
+  );
+  assert.ok(devRewrites.length >= 4, "expected the personal routes to rewrite into /dev/*");
+  for (const rule of devRewrites) {
+    assert.ok(
+      await findRedirect(rule.destination, "koinophobia.dev"),
+      `${rule.destination} is publicly reachable with no redirect to ${rule.source}`,
+    );
+  }
+});
+
+test("koinophobia.dev serves its own sitemap and robots, not the studio's", async () => {
+  for (const [source, destination] of [
+    ["/sitemap.xml", "/dev-sitemap.xml"],
+    ["/robots.txt", "/dev-robots.txt"],
+  ]) {
+    const rule = await findRewrite(source, "koinophobia.dev");
+    assert.ok(rule, `${source} must be host-scoped for koinophobia.dev`);
+    assert.equal(rule!.destination, destination);
+    assert.ok(exists(`app${destination}/route.ts`), `${destination} has no route handler`);
+  }
+});
+
+test("nothing links to the missing /you-know-ball index, and the demo route exists", () => {
+  // /you-know-ball has no index page — only /play, /privacy, /support, /safety.
+  // The home page now routes through /products/you-know-ball, which carries the
+  // playable link, so assert the invariant across both surfaces.
+  const ykbProduct = read("lib/dev/universe.ts");
+  for (const [label, source] of [["home", devHome], ["universe", ykbProduct]] as const) {
+    assert.doesNotMatch(source, /"\/you-know-ball"/, `${label} must not link to the missing index`);
+  }
+  assert.match(ykbProduct, /"\/you-know-ball\/play"/, "the product page must link to the demo");
   assert.ok(exists("app/you-know-ball/play/page.tsx"));
 });
 
