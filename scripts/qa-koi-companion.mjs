@@ -15,6 +15,10 @@ function check(condition, label, detail = "") {
 async function pageAt(browser, path = "/", options = {}) {
   const context = await browser.newContext({ viewport: { width: 1280, height: 900 }, ...options });
   const page = await context.newPage();
+  await page.addInitScript(() => {
+    window.__koiAnalytics = [];
+    window.addEventListener("koinophobia:analytics", (event) => window.__koiAnalytics.push(event.detail));
+  });
   await page.goto(`${base}${path}`, { waitUntil: "networkidle" });
   return { context, page };
 }
@@ -46,7 +50,7 @@ async function advance(panel) {
   await panel.locator(".concierge-form-actions").getByRole("button", { name: /Continue|Get my recommendation/i }).click();
 }
 
-async function completeWebsiteFlow(page, panel) {
+async function completeWebsiteFlow(page, panel, { expectResult = true } = {}) {
   await startFlow(page, panel);
   const question = panel.locator(".concierge-question");
   await question.getByRole("button", { name: /website is not converting/i }).click();
@@ -69,7 +73,7 @@ async function completeWebsiteFlow(page, panel) {
   await question.getByLabel("Name").fill("Koi QA");
   await question.getByLabel("Email").fill("koi-qa@example.com");
   await advance(panel);
-  await panel.locator(".concierge-result").waitFor();
+  if (expectResult) await panel.locator(".concierge-result").waitFor();
 }
 
 const chromiumBrowser = await chromium.launch();
@@ -80,23 +84,17 @@ try {
     await trigger.waitFor();
     check(await trigger.getAttribute("aria-label") === "Open Koinophobia Labs site guide", "homepage renders semantic active site guide");
     const initialKoiBox = await trigger.boundingBox();
-    await page.mouse.move(420, 420);
-    await page.waitForTimeout(850);
-    const followedKoiBox = await trigger.boundingBox();
-    const firstHeading = Number(await page.locator(".koi-companion-presence").getAttribute("data-heading-degrees"));
-    check(Boolean(initialKoiBox && followedKoiBox && Math.abs(followedKoiBox.x - initialKoiBox.x) > 500 && followedKoiBox.x < 600), "desktop koi freely follows the pointer across the viewport", JSON.stringify({ initialKoiBox, followedKoiBox }));
-    check(firstHeading < -20, "koi points up-left while swimming up-left", String(firstHeading));
-    check(await page.locator(".koi-companion-presence").getAttribute("data-selectable") === "true", "koi settles into a selectable state after pointer pause");
-    if (followedKoiBox) {
-      await page.mouse.move(followedKoiBox.x + followedKoiBox.width / 2, followedKoiBox.y + followedKoiBox.height / 2);
-      await page.waitForTimeout(180);
-      const selectionBox = await trigger.boundingBox();
-      check(Boolean(selectionBox && Math.abs(selectionBox.x - followedKoiBox.x) < 4 && Math.abs(selectionBox.y - followedKoiBox.y) < 4), "koi stays still while the pointer approaches to select it", JSON.stringify({ followedKoiBox, selectionBox }));
-    }
-    await page.mouse.move(1_120, 250);
-    await page.waitForTimeout(850);
-    const secondHeading = Number(await page.locator(".koi-companion-presence").getAttribute("data-heading-degrees"));
-    check(secondHeading > 35, "koi turns smoothly to face a new swim direction", JSON.stringify({ firstHeading, secondHeading }));
+    if (initialKoiBox) await page.mouse.move(initialKoiBox.x + 10, initialKoiBox.y + 10);
+    await page.waitForTimeout(650);
+    const influencedKoiBox = await trigger.boundingBox();
+    const influencedDistance = initialKoiBox && influencedKoiBox ? Math.hypot(influencedKoiBox.x - initialKoiBox.x, influencedKoiBox.y - initialKoiBox.y) : Infinity;
+    check(influencedDistance <= 42, "desktop koi reacts only inside its bounded anchor region", JSON.stringify({ initialKoiBox, influencedKoiBox, influencedDistance }));
+    await page.mouse.move(120, 120);
+    await page.waitForTimeout(1_100);
+    const returnedKoiBox = await trigger.boundingBox();
+    const returnedDistance = initialKoiBox && returnedKoiBox ? Math.hypot(returnedKoiBox.x - initialKoiBox.x, returnedKoiBox.y - initialKoiBox.y) : Infinity;
+    check(returnedDistance <= 42, "desktop koi never chases a distant pointer", JSON.stringify({ initialKoiBox, returnedKoiBox, returnedDistance }));
+    check(await trigger.locator("[data-companion-koi-art]").count() === 1, "trigger renders the official two-koi companion art");
     const collision = await page.evaluate(() => {
       const triggerRect = document.querySelector("[data-testid='koi-companion-trigger']")?.getBoundingClientRect();
       const navRect = document.querySelector(".studio-nav")?.getBoundingClientRect();
@@ -109,6 +107,8 @@ try {
     await page.waitForTimeout(6_300);
     const invitation = page.getByRole("status").filter({ hasText: "Not sure where to start?" });
     check(await invitation.isVisible(), "homepage invitation waits and appears contextually");
+    const invitationEvents = await page.evaluate(() => window.__koiAnalytics.filter((event) => event.event === "koi_companion_invitation_shown"));
+    check(invitationEvents.some((event) => event.route_category === "home" && event.invitation_kind === "route"), "invitation analytics are categorical and route-aware", JSON.stringify(invitationEvents));
     await page.screenshot({ path: "qa-screenshots/koi/home-invitation-1440.png", fullPage: false });
     await invitation.getByRole("button", { name: "Dismiss koi invitation" }).click();
     check(await trigger.evaluate((element) => element === document.activeElement), "invitation dismissal returns focus to koi");
@@ -124,12 +124,54 @@ try {
     check(await panel.getByText("I can help match the problem to a service.", { exact: true }).isVisible(), "services panel uses deterministic page context");
     await panel.getByRole("button", { name: "Ask a question about the site" }).click();
     await panel.getByRole("button", { name: "How much does a project cost?" }).click();
-    check(await panel.getByText(/Published starting points range from a focused \$250 Revenue Leak Audit/).isVisible(), "site guide answers a basic pricing question from published information");
+    check(await panel.getByText(/Published starting points: the Revenue Leak Audit is \$250/).isVisible(), "site guide answers a basic pricing question from published information");
     check(await panel.getByRole("link", { name: "See prices and engagement options" }).isVisible(), "site answer provides a relevant source route");
     await panel.getByRole("button", { name: "Back to options" }).click();
     await page.keyboard.press("Escape");
     const trigger = page.getByTestId("koi-companion-trigger");
     check(await trigger.evaluate((element) => element === document.activeElement), "Escape minimizes panel and restores trigger focus");
+    await context.close();
+  }
+
+  {
+    const { context, page } = await pageAt(chromiumBrowser, "/services");
+    const invitation = page.getByRole("status").filter({ hasText: "I can help match the problem to a service." });
+    await invitation.waitFor({ timeout: 7_000 });
+    await invitation.getByRole("button", { name: /I can help match the problem to a service/i }).click();
+    const panel = page.getByRole("dialog");
+    await panel.getByRole("heading", { name: "Which of these fits better?" }).waitFor();
+    check(await panel.getByRole("heading", { name: "Which of these fits better?" }).isVisible(), "services invitation opens the one relevant comparison action");
+    await context.close();
+  }
+
+  {
+    const context = await chromiumBrowser.newContext({ viewport: { width: 1280, height: 900 } });
+    const page = await context.newPage();
+    await page.addInitScript(() => {
+      window.__koiAnalytics = [];
+      window.addEventListener("koinophobia:analytics", (event) => window.__koiAnalytics.push(event.detail));
+      window.sessionStorage.setItem("koinophobia:koi-companion:v1", JSON.stringify({
+        version: 1,
+        hidden: false,
+        minimized: true,
+        invitationCount: 0,
+        lastInvitationAt: 0,
+        lastInvitationRoute: "",
+        dismissedUntil: 0,
+        visitedRoutes: ["services", "work"],
+        engagedRoutes: ["services", "work"],
+        planOfferShown: false,
+      }));
+    });
+    await page.goto(`${base}/products`, { waitUntil: "networkidle" });
+    const invitation = page.getByRole("status").filter({ hasText: "turn what you explored into a recommended project plan" });
+    await invitation.waitFor({ timeout: 6_000 });
+    await invitation.getByRole("button", { name: /turn what you explored into a recommended project plan/i }).click();
+    const panel = page.getByRole("dialog");
+    await panel.getByRole("heading", { name: "Get a practical starting recommendation." }).waitFor();
+    check(await panel.getByRole("heading", { name: "Get a practical starting recommendation." }).isVisible(), "meaningful browsing opens directly into the existing concierge");
+    const planEvents = await page.evaluate(() => window.__koiAnalytics.filter((event) => event.event === "koi_companion_plan_invitation_shown"));
+    check(planEvents.length === 1 && planEvents[0].route_category === "products", "project-plan offer emits one categorical analytics event", JSON.stringify(planEvents));
     await context.close();
   }
 
@@ -142,7 +184,7 @@ try {
     const primary = "Our website loses qualified mobile visitors before they complete the inquiry path.";
     await question.getByLabel("What are you seeing?").fill(primary);
     await advance(panel);
-    await panel.getByRole("button", { name: "Minimize project concierge" }).click();
+    await panel.getByRole("button", { name: "Minimize site guide" }).click();
     await page.goto(`${base}/work`, { waitUntil: "networkidle" });
     panel = await openPanel(page);
     check(await panel.getByRole("button", { name: /Continue my concierge session/i }).isVisible(), "work page recognizes the saved companion session");
@@ -168,6 +210,21 @@ try {
     await panel.getByRole("link", { name: "Start a project" }).click();
     await page.waitForURL(/\/intake/);
     check(await page.getByRole("heading", { name: "Know the direction already?" }).isVisible(), "companion standard project action reaches editable intake");
+    await context.close();
+  }
+
+  {
+    const { context, page } = await pageAt(chromiumBrowser, "/services");
+    await page.route("**/api/concierge/evaluate", (route) => route.fulfill({
+      status: 503,
+      contentType: "application/json",
+      body: JSON.stringify({ ok: false, message: "Recommendation service temporarily unavailable." }),
+    }));
+    const panel = await openPanel(page);
+    await completeWebsiteFlow(page, panel, { expectResult: false });
+    await panel.getByRole("heading", { name: "The recommendation did not load." }).waitFor();
+    check(await panel.getByRole("button", { name: "Retry recommendation" }).isVisible(), "backend outage exposes a safe retry");
+    check(await panel.getByRole("link", { name: "Prefer the standard form?" }).isVisible(), "backend outage preserves the standard-intake escape path");
     await context.close();
   }
 
@@ -208,6 +265,21 @@ try {
     await page.addScriptTag({ content: axe.source });
     const violations = await page.evaluate(() => window.axe.run(document, { runOnly: { type: "tag", values: ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"] } }));
     check(violations.violations.length === 0, "open mobile companion passes automated WCAG A/AA", violations.violations.map((item) => item.id).join(", "));
+    await page.route("**/api/intake", (route) => route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({ ok: true, message: "Controlled QA lead accepted." }),
+    }));
+    await panel.getByRole("link", { name: /Continue with a prefilled intake/i }).click();
+    await page.waitForURL(/\/intake\?concierge=/);
+    await page.getByText("Concierge details loaded.", { exact: true }).waitFor();
+    check(await page.getByLabel("Business name").inputValue() === "Living Koi QA Co", "intake handoff preserves qualified business details");
+    check(await page.getByLabel("Email").inputValue() === "koi-qa@example.com", "intake handoff preserves qualified contact details");
+    await page.getByRole("button", { name: "Submit intake" }).click();
+    await page.getByText("Controlled QA lead accepted.", { exact: true }).waitFor();
+    check(true, "mobile preview journey reaches a successful controlled lead submission");
+    const completionEvents = await page.evaluate(() => window.__koiAnalytics.filter((event) => ["concierge_intake_prefilled", "concierge_intake_submitted", "intake_form_completion"].includes(event.event)));
+    check(completionEvents.length === 3, "handoff and successful submission analytics fire exactly once", JSON.stringify(completionEvents));
     await page.screenshot({ path: "qa-screenshots/koi/mobile-result-390.png", fullPage: false });
     await context.close();
   }

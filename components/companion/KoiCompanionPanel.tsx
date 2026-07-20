@@ -6,7 +6,7 @@ import { ArrowUpRight, Compass, HelpCircle, Minimize2, Scale, Search, Send, Spar
 import { useEffect, useMemo, useRef, useState } from "react";
 import CompanionKoiArt from "@/components/companion/CompanionKoiArt";
 import { trackStudioEvent } from "@/components/studio/AnalyticsBridge";
-import type { CompanionPageContext, CopilotIntent } from "@/lib/companion/page-context";
+import type { CompanionPageContext, CompanionPanelSurface, CopilotIntent } from "@/lib/companion/page-context";
 import { answerSiteQuestion, SITE_HELP_TOPICS, type SiteHelpAnswer } from "@/lib/companion/site-help";
 import {
   compareServices,
@@ -24,9 +24,7 @@ const ConciergeFlow = dynamic(() => import("@/components/concierge/ConciergeFlow
   loading: () => <div className="koi-companion-panel__loading" role="status">Preparing the project concierge…</div>,
 });
 
-type Surface = "menu" | "help" | "understand" | "compare" | "work" | "concierge";
-
-const COPILOT_META: Record<Exclude<CopilotIntent, "next_step">, { icon: typeof Compass; title: string; hint: string; surface: Surface }> = {
+const COPILOT_META: Record<Exclude<CopilotIntent, "next_step">, { icon: typeof Compass; title: string; hint: string; surface: CompanionPanelSurface }> = {
   understand: { icon: Compass, title: "Understand this page", hint: "What it shows and what to pay attention to.", surface: "understand" },
   compare: { icon: Scale, title: "Compare two options", hint: "See how services differ, with a grounded suggestion.", surface: "compare" },
   relevant_work: { icon: Search, title: "Find the closest work", hint: "Match a business problem to a real concept build.", surface: "work" },
@@ -35,15 +33,17 @@ const COPILOT_META: Record<Exclude<CopilotIntent, "next_step">, { icon: typeof C
 export default function KoiCompanionPanel({
   context,
   hasDraft,
+  initialSurface,
   onClose,
   onDismiss,
 }: {
   context: CompanionPageContext;
   hasDraft: boolean;
+  initialSurface: CompanionPanelSurface;
   onClose: () => void;
   onDismiss: () => void;
 }) {
-  const [surface, setSurface] = useState<Surface>("menu");
+  const [surface, setSurface] = useState<CompanionPanelSurface>(initialSurface);
   const [question, setQuestion] = useState("");
   const [siteAnswer, setSiteAnswer] = useState<SiteHelpAnswer | null>(null);
   const [comparison, setComparison] = useState<ServiceComparison | null>(null);

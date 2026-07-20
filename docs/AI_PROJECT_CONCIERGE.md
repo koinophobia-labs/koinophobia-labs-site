@@ -26,11 +26,11 @@ The koi has no circular button backing. Its visual presence comes from the fish 
 
 Opening the panel first shows **page-aware copilot surfaces** distinct per route: "Understand this page" (a grounded brief + facts), "Compare two options" (a real side-by-side of two published services with an audit-first recommendation), "Find the closest work" (relevant concept builds ranked by capability), plus a smallest-sensible-next-step card that is not always a build. These sit alongside the site-question help and the concierge itself, so the koi helps a visitor understand the page before ever asking for project details.
 
-The first invitation appears after six to nine seconds depending on page context. Its speech bubble offers both project matching and site guidance. The panel can answer basic questions about services, published starting prices, typical timing, the Revenue Leak Audit, process, work examples, AI behavior, and contacting Blake. Answers are selected from reviewed local content and always link to a relevant public route. Unknown questions fall back to a capability boundary and the project concierge; no free-form model call, invented availability, or automatic quote is used.
+The first invitation appears after six to nine seconds depending on page context and offers one route-relevant action: service comparison on `/services`, proof matching on `/work`, a concrete revenue-leak explanation on `/audit`, or a products-versus-client-services explanation on `/products`. After meaningful engagement on two commercial routes (at least eight seconds and 30% scroll depth on each), one invitation can offer to turn the visitor's exploration into a recommended project plan. The panel can also answer basic questions about services, published starting prices, typical timing, the Revenue Leak Audit, process, work examples, AI behavior, and contacting Blake. Answers are selected from reviewed local content and always link to a relevant public route. Unknown questions fall back to a capability boundary and the project concierge; no free-form model call, invented availability, or automatic quote is used.
 
 The companion is mounted once in the root layout but is eligible only on the canonical Labs host, Labs-owned Vercel preview deployments, localhost, and a route allowlist. Preview support keeps draft PRs visually reviewable without enabling the companion on the separate `koinophobia.dev` site. It does not appear on CRM, API, payment, campaign, game, full-page concierge, or unknown routes.
 
-Opening the workflow uses the same `ConciergeFlow`, deterministic evaluation endpoint, draft key, signed handoff, intake prefill, CRM persistence, and notification path as `/concierge`. Every answer edit is saved immediately to the existing 24-hour local draft. Minimizing, refreshing, or continuing on the full page therefore preserves progress without creating a parallel source of truth.
+Opening the workflow uses the same `ConciergeFlow`, deterministic evaluation endpoint, draft key, signed handoff, intake prefill, CRM persistence, and notification path as `/concierge`. Every answer edit is saved immediately to a versioned, tab-scoped `sessionStorage` draft with a 24-hour validity window. Minimizing, refreshing, navigating between pages, or continuing on the full page in that tab therefore preserves progress without creating a parallel source of truth or leaking one visitor's answers into a newly opened tab. The previous origin-wide `localStorage` draft is removed once during migration.
 
 ## User flow
 
@@ -59,7 +59,7 @@ The concerns are separated under `lib/concierge`:
 - `ai.ts`: optional server-only OpenAI Responses API enhancement with strict structured output.
 - `evaluate.ts`: deterministic-first orchestration and AI fallback.
 - `signing.ts`: HMAC-signed evaluation summary handoff.
-- `session.ts`: versioned 24-hour browser-draft validation.
+- `session.ts`: versioned, tab-scoped 24-hour browser-draft validation and legacy cleanup.
 
 Public and commercial integration points:
 
@@ -187,7 +187,7 @@ The existing `trackStudioEvent` abstraction emits privacy-conscious events:
 
 Properties are limited to step ID, entry page, recommended service, confidence band, recommendation source, and completion status. Raw visitor text, contact details, and business details are not sent to analytics.
 
-Companion properties are likewise categorical: route context, action ID, interaction state, site-question topic, answer status, and whether an existing draft was resumed. Raw site questions are not sent to analytics. Invitation and dismissal records remain in `sessionStorage`; answer drafts continue to use the concierge's versioned 24-hour `localStorage` record.
+Companion properties are likewise categorical: route context, action ID, interaction state, site-question topic, answer status, meaningful-route count, invitation kind, and whether an existing draft was resumed. Raw site questions are not sent to analytics. Invitation, dismissal, engagement, and answer-draft records remain in tab-scoped `sessionStorage`.
 
 Compare concierge completion and submitted-lead rates with the existing standard intake. Segment by entry page, recommendation, confidence band, and prefill-to-submit conversion. Quality should also be reviewed manually through lead fit and eventual lifecycle outcome; a higher completion rate is not useful if qualification quality falls.
 
@@ -203,7 +203,7 @@ Compare concierge completion and submitted-lead rates with the existing standard
 - Model structured-output validation and fail-closed parsing.
 - No client secret, raw model HTML, unsafe markdown, arbitrary model URL, or model-selected recipient.
 - Escaped HTML email content and privacy-safe logs.
-- Versioned local draft with a 24-hour expiry; submitted data is persisted to the CRM, not left only in browser storage.
+- Versioned, tab-scoped draft with a 24-hour validity window; submitted data is persisted to the CRM and the current tab's draft is cleared.
 
 Visitors are explicitly told not to enter passwords, payment details, customer lists, protected health information, or other sensitive data.
 

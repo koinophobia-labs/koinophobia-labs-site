@@ -1,0 +1,469 @@
+[
+  {
+    "name": "home-320",
+    "path": "/",
+    "width": 320,
+    "height": 844,
+    "scrollWidth": 320,
+    "clientWidth": 320,
+    "trigger": {
+      "left": 248,
+      "top": 756,
+      "right": 310,
+      "bottom": 834
+    },
+    "panel": null,
+    "active": {
+      "top": 0,
+      "bottom": 19422.953125
+    },
+    "viewport": {
+      "width": 320,
+      "height": 844
+    }
+  },
+  {
+    "name": "home-390",
+    "path": "/",
+    "width": 390,
+    "height": 844,
+    "scrollWidth": 390,
+    "clientWidth": 390,
+    "trigger": {
+      "left": 318,
+      "top": 756,
+      "right": 380,
+      "bottom": 834
+    },
+    "panel": null,
+    "active": {
+      "top": 0,
+      "bottom": 18240.1875
+    },
+    "viewport": {
+      "width": 390,
+      "height": 844
+    }
+  },
+  {
+    "name": "home-768",
+    "path": "/",
+    "width": 768,
+    "height": 900,
+    "scrollWidth": 768,
+    "clientWidth": 768,
+    "trigger": {
+      "left": 680,
+      "top": 794,
+      "right": 750,
+      "bottom": 882
+    },
+    "panel": null,
+    "active": {
+      "top": 0,
+      "bottom": 13588.90625
+    },
+    "viewport": {
+      "width": 768,
+      "height": 900
+    }
+  },
+  {
+    "name": "home-1024",
+    "path": "/",
+    "width": 1024,
+    "height": 1000,
+    "scrollWidth": 1024,
+    "clientWidth": 1024,
+    "trigger": {
+      "left": 936,
+      "top": 894,
+      "right": 1006,
+      "bottom": 982
+    },
+    "panel": null,
+    "active": {
+      "top": 0,
+      "bottom": 11164.0625
+    },
+    "viewport": {
+      "width": 1024,
+      "height": 1000
+    }
+  },
+  {
+    "name": "home-1440",
+    "path": "/",
+    "width": 1440,
+    "height": 1000,
+    "scrollWidth": 1440,
+    "clientWidth": 1440,
+    "trigger": {
+      "left": 1352,
+      "top": 894,
+      "right": 1422,
+      "bottom": 982
+    },
+    "panel": null,
+    "active": {
+      "top": 0,
+      "bottom": 11511.359375
+    },
+    "viewport": {
+      "width": 1440,
+      "height": 1000
+    }
+  },
+  {
+    "name": "home-1920",
+    "path": "/",
+    "width": 1920,
+    "height": 1000,
+    "scrollWidth": 1920,
+    "clientWidth": 1920,
+    "trigger": {
+      "left": 1832,
+      "top": 894,
+      "right": 1902,
+      "bottom": 982
+    },
+    "panel": null,
+    "active": {
+      "top": 0,
+      "bottom": 11511.359375
+    },
+    "viewport": {
+      "width": 1920,
+      "height": 1000
+    }
+  },
+  {
+    "name": "services-1440",
+    "path": "/services",
+    "width": 1440,
+    "height": 1000,
+    "scrollWidth": 1440,
+    "clientWidth": 1440,
+    "trigger": {
+      "left": 1352,
+      "top": 894,
+      "right": 1422,
+      "bottom": 982
+    },
+    "panel": null,
+    "active": {
+      "top": 0,
+      "bottom": 6727.234375
+    },
+    "viewport": {
+      "width": 1440,
+      "height": 1000
+    }
+  },
+  {
+    "name": "work-1440",
+    "path": "/work",
+    "width": 1440,
+    "height": 1000,
+    "scrollWidth": 1440,
+    "clientWidth": 1440,
+    "trigger": {
+      "left": 18,
+      "top": 894,
+      "right": 88,
+      "bottom": 982
+    },
+    "panel": null,
+    "active": {
+      "top": 0,
+      "bottom": 4404.734375
+    },
+    "viewport": {
+      "width": 1440,
+      "height": 1000
+    }
+  },
+  {
+    "name": "products-1440",
+    "path": "/products",
+    "width": 1440,
+    "height": 1000,
+    "scrollWidth": 1440,
+    "clientWidth": 1440,
+    "trigger": {
+      "left": 1352,
+      "top": 894,
+      "right": 1422,
+      "bottom": 982
+    },
+    "panel": null,
+    "active": {
+      "top": 0,
+      "bottom": 2532.5
+    },
+    "viewport": {
+      "width": 1440,
+      "height": 1000
+    }
+  },
+  {
+    "name": "audit-1440",
+    "path": "/audit",
+    "width": 1440,
+    "height": 1000,
+    "scrollWidth": 1440,
+    "clientWidth": 1440,
+    "trigger": {
+      "left": 18,
+      "top": 894,
+      "right": 88,
+      "bottom": 982
+    },
+    "panel": null,
+    "active": {
+      "top": 0,
+      "bottom": 5693.625
+    },
+    "viewport": {
+      "width": 1440,
+      "height": 1000
+    }
+  },
+  {
+    "name": "intake-1440",
+    "path": "/intake",
+    "width": 1440,
+    "height": 1000,
+    "scrollWidth": 1440,
+    "clientWidth": 1440,
+    "trigger": {
+      "left": 18,
+      "top": 894,
+      "right": 88,
+      "bottom": 982
+    },
+    "panel": null,
+    "active": {
+      "top": 0,
+      "bottom": 2686.875
+    },
+    "viewport": {
+      "width": 1440,
+      "height": 1000
+    }
+  },
+  {
+    "name": "panel-menu-1440",
+    "path": "/services",
+    "width": 1440,
+    "height": 1000,
+    "scrollWidth": 1440,
+    "clientWidth": 1440,
+    "trigger": {
+      "left": 1352,
+      "top": 894,
+      "right": 1422,
+      "bottom": 982
+    },
+    "panel": {
+      "left": 760,
+      "top": 20,
+      "right": 1420,
+      "bottom": 980
+    },
+    "active": {
+      "top": 41.5,
+      "bottom": 85.5
+    },
+    "viewport": {
+      "width": 1440,
+      "height": 1000
+    }
+  },
+  {
+    "name": "services-comparison-1440",
+    "path": "/services",
+    "width": 1440,
+    "height": 1000,
+    "scrollWidth": 1440,
+    "clientWidth": 1440,
+    "trigger": {
+      "left": 1352,
+      "top": 894,
+      "right": 1422,
+      "bottom": 982
+    },
+    "panel": {
+      "left": 760,
+      "top": 20,
+      "right": 1420,
+      "bottom": 980
+    },
+    "active": {
+      "top": 0,
+      "bottom": 6727.234375
+    },
+    "viewport": {
+      "width": 1440,
+      "height": 1000
+    }
+  },
+  {
+    "name": "mobile-comparison-390",
+    "path": "/services",
+    "width": 390,
+    "height": 844,
+    "scrollWidth": 390,
+    "clientWidth": 390,
+    "trigger": {
+      "left": 318,
+      "top": 756,
+      "right": 380,
+      "bottom": 834
+    },
+    "panel": {
+      "left": 0,
+      "top": 10,
+      "right": 390,
+      "bottom": 844
+    },
+    "active": {
+      "top": 0,
+      "bottom": 9046.640625
+    },
+    "viewport": {
+      "width": 390,
+      "height": 844
+    }
+  },
+  {
+    "name": "anchored-reaction-1440",
+    "path": "/",
+    "width": 1440,
+    "height": 1000,
+    "scrollWidth": 1440,
+    "clientWidth": 1440,
+    "trigger": {
+      "left": 1352,
+      "top": 894,
+      "right": 1422,
+      "bottom": 982
+    },
+    "panel": null,
+    "active": {
+      "top": 0,
+      "bottom": 11511.359375
+    },
+    "viewport": {
+      "width": 1440,
+      "height": 1000
+    }
+  },
+  {
+    "name": "site-help-1440",
+    "path": "/services",
+    "width": 1440,
+    "height": 1000,
+    "scrollWidth": 1440,
+    "clientWidth": 1440,
+    "trigger": {
+      "left": 1352,
+      "top": 894,
+      "right": 1422,
+      "bottom": 982
+    },
+    "panel": {
+      "left": 760,
+      "top": 20,
+      "right": 1420,
+      "bottom": 980
+    },
+    "active": {
+      "top": 372.140625,
+      "bottom": 410.140625
+    },
+    "viewport": {
+      "width": 1440,
+      "height": 1000
+    }
+  },
+  {
+    "name": "panel-question-1024",
+    "path": "/services",
+    "width": 1024,
+    "height": 900,
+    "scrollWidth": 1024,
+    "clientWidth": 1024,
+    "trigger": {
+      "left": 936,
+      "top": 794,
+      "right": 1006,
+      "bottom": 882
+    },
+    "panel": {
+      "left": 344,
+      "top": 20,
+      "right": 1004,
+      "bottom": 880
+    },
+    "active": {
+      "top": 277.796875,
+      "bottom": 363.453125
+    },
+    "viewport": {
+      "width": 1024,
+      "height": 900
+    }
+  },
+  {
+    "name": "mobile-focused-question-390",
+    "path": "/",
+    "width": 390,
+    "height": 844,
+    "scrollWidth": 390,
+    "clientWidth": 390,
+    "trigger": {
+      "left": 318,
+      "top": 756,
+      "right": 380,
+      "bottom": 834
+    },
+    "panel": {
+      "left": 0,
+      "top": 10,
+      "right": 390,
+      "bottom": 844
+    },
+    "active": {
+      "top": 438.921875,
+      "bottom": 568.921875
+    },
+    "viewport": {
+      "width": 390,
+      "height": 844
+    }
+  },
+  {
+    "name": "reduced-motion-390",
+    "path": "/",
+    "width": 390,
+    "height": 844,
+    "scrollWidth": 390,
+    "clientWidth": 390,
+    "trigger": {
+      "left": 318,
+      "top": 756,
+      "right": 380,
+      "bottom": 834
+    },
+    "panel": null,
+    "active": {
+      "top": 0,
+      "bottom": 18240.1875
+    },
+    "viewport": {
+      "width": 390,
+      "height": 844
+    }
+  }
+]

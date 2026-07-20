@@ -9,11 +9,13 @@ export type CompanionAction = {
 // Page-copilot surfaces the panel can open in place (audit U4). Distinct per
 // route so the assistant is genuinely page-aware, not a fixed launcher.
 export type CopilotIntent = "understand" | "compare" | "relevant_work" | "next_step";
+export type CompanionPanelSurface = "menu" | "help" | "understand" | "compare" | "work" | "concierge";
 
 export type CompanionPageContext = {
   routeKey: CompanionRouteKey | "suppressed";
   enabled: boolean;
   invitation?: string;
+  invitationSurface?: CompanionPanelSurface;
   actions: CompanionAction[];
   copilot: CopilotIntent[];
   /** Concrete slug for work-detail / demo routes, so the panel can ground answers. */
@@ -47,6 +49,7 @@ const exactContexts: Record<string, ExactContext> = {
   "/": {
     routeKey: "home",
     invitation: "Not sure where to start?",
+    invitationSurface: "compare",
     copilot: ["understand", "compare", "next_step"],
     preferredSide: "right",
     invitationDelayMs: 6_000,
@@ -54,6 +57,7 @@ const exactContexts: Record<string, ExactContext> = {
   "/services": {
     routeKey: "services",
     invitation: "I can help match the problem to a service.",
+    invitationSurface: "compare",
     copilot: ["understand", "compare", "next_step"],
     preferredSide: "right",
     invitationDelayMs: 6_000,
@@ -61,13 +65,15 @@ const exactContexts: Record<string, ExactContext> = {
   "/work": {
     routeKey: "work",
     invitation: "Want to find the closest fit for your project?",
+    invitationSurface: "work",
     copilot: ["understand", "relevant_work", "next_step"],
     preferredSide: "left",
     invitationDelayMs: 8_000,
   },
   "/products": {
     routeKey: "products",
-    invitation: "Looking for something built around your business?",
+    invitation: "These are Koinophobia Labs products—not client-service packages.",
+    invitationSurface: "understand",
     copilot: ["understand", "next_step"],
     preferredSide: "right",
     invitationDelayMs: 8_000,
@@ -75,6 +81,7 @@ const exactContexts: Record<string, ExactContext> = {
   "/process": {
     routeKey: "process",
     invitation: "I can help turn the process into a practical first step.",
+    invitationSurface: "understand",
     copilot: ["understand", "next_step"],
     preferredSide: "right",
     invitationDelayMs: 9_000,
@@ -82,20 +89,23 @@ const exactContexts: Record<string, ExactContext> = {
   "/about": {
     routeKey: "about",
     invitation: "Want Blake to review the shape of your project?",
+    invitationSurface: "concierge",
     copilot: ["understand", "next_step"],
     preferredSide: "right",
     invitationDelayMs: 9_000,
   },
   "/audit": {
     routeKey: "audit",
-    invitation: "Unsure whether you need an audit or a build?",
+    invitation: "Want to see what a revenue leak could look like in your business?",
+    invitationSurface: "understand",
     copilot: ["understand", "compare", "next_step"],
     preferredSide: "left",
     invitationDelayMs: 7_000,
   },
   "/revenue-leak-audit": {
     routeKey: "audit",
-    invitation: "Unsure whether you need an audit or a build?",
+    invitation: "Want to see what a revenue leak could look like in your business?",
+    invitationSurface: "understand",
     copilot: ["understand", "compare", "next_step"],
     preferredSide: "left",
     invitationDelayMs: 7_000,
@@ -103,6 +113,7 @@ const exactContexts: Record<string, ExactContext> = {
   "/intake": {
     routeKey: "intake",
     invitation: "I can help organize the project before you submit.",
+    invitationSurface: "concierge",
     copilot: ["understand", "next_step"],
     preferredSide: "left",
     invitationDelayMs: 9_000,
@@ -141,6 +152,7 @@ export function resolveCompanionPageContext(pathname: string): CompanionPageCont
       routeKey: "work_detail",
       enabled: true,
       invitation: "Does this feel close to what your business needs?",
+      invitationSurface: "understand",
       actions: baseActions,
       copilot: ["understand", "relevant_work", "next_step"],
       slug: path.slice("/work/".length).split("/", 1)[0] || undefined,
@@ -154,6 +166,7 @@ export function resolveCompanionPageContext(pathname: string): CompanionPageCont
       routeKey: "demo",
       enabled: true,
       invitation: "Want to map this kind of experience to your business?",
+      invitationSurface: "work",
       actions: baseActions,
       copilot: ["understand", "relevant_work", "next_step"],
       slug: path.slice("/demos/".length).split("/", 1)[0] || undefined,

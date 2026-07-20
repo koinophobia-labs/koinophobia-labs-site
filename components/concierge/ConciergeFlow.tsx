@@ -5,7 +5,7 @@ import { ArrowLeft, ArrowRight, Check, RotateCcw } from "lucide-react";
 import { FormEvent, useEffect, useRef, useState } from "react";
 import { trackStudioEvent } from "@/components/studio/AnalyticsBridge";
 import { branchPrompt, CONCIERGE_TOTAL_STEPS, intakeServiceFor, problemChoices } from "@/lib/concierge/questions";
-import { CONCIERGE_STORAGE_KEY, parseConciergeDraft } from "@/lib/concierge/session";
+import { loadConciergeDraft, saveConciergeDraft } from "@/lib/concierge/session";
 import {
   conciergeBudgetRanges,
   conciergeTimelines,
@@ -20,7 +20,7 @@ type Stage = "intro" | "questions" | "loading" | "result" | "error";
 const stepIds = ["problem", "context", "impact", "outcome", "business", "constraints", "contact"] as const;
 
 function saveDraft(draft: ConciergeDraft) {
-  try { window.localStorage.setItem(CONCIERGE_STORAGE_KEY, JSON.stringify(draft)); } catch { /* Draft recovery is optional. */ }
+  saveConciergeDraft(window.sessionStorage, draft);
 }
 
 function resultHref(sessionId: string, evaluation: ConciergeEvaluationResponse) {
@@ -54,9 +54,8 @@ export default function ConciergeFlow({
   useEffect(() => {
     trackStudioEvent("concierge_viewed", { entry_page: entry });
     const timer = window.setTimeout(() => {
-      let recovered: ConciergeDraft | null = null;
-      try { recovered = parseConciergeDraft(window.localStorage.getItem(CONCIERGE_STORAGE_KEY)); } catch { /* No recovery available. */ }
-    if (!recovered) { try { window.localStorage.removeItem(CONCIERGE_STORAGE_KEY); } catch { /* Draft recovery is optional. */ } return; }
+      const recovered = loadConciergeDraft(window.sessionStorage, window.localStorage);
+      if (!recovered) return;
       setSessionId(recovered.sessionId);
       setAnswers(recovered.answers);
       setStep(recovered.step);
@@ -260,7 +259,7 @@ export default function ConciergeFlow({
         </div>
         {message ? <p className="concierge-validation" role="alert">{message}</p> : null}
         <div className="concierge-form-actions"><button className="concierge-back" type="button" onClick={back}><ArrowLeft size={16} aria-hidden="true" />Back</button><button className="studio-button" type="submit">{step === 6 ? "Get my recommendation" : "Continue"}<ArrowRight size={16} aria-hidden="true" /></button></div>
-        <div className="concierge-form-escape">{standardForm}<span>Your current concierge draft stays on this device for 24 hours.</span></div>
+        <div className="concierge-form-escape">{standardForm}<span>Your draft stays in this browser tab while it is open, for up to 24 hours.</span></div>
       </form>
     </section>
   );

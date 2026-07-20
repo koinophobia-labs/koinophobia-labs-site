@@ -9,7 +9,7 @@ import {
 } from "@/lib/acquisition/intake-options";
 import { trackStudioEvent } from "@/components/studio/AnalyticsBridge";
 import { intakeServiceFor } from "@/lib/concierge/questions";
-import { CONCIERGE_STORAGE_KEY, parseConciergeDraft } from "@/lib/concierge/session";
+import { clearConciergeDraft, loadConciergeDraftForSession } from "@/lib/concierge/session";
 
 type SubmitState =
   | { status: "idle" }
@@ -29,8 +29,7 @@ function IntakeFormInner({ defaultService = "" }: { defaultService?: string }) {
   useEffect(() => {
     if (!requestedConciergeSession || !formRef.current) return;
     const timer = window.setTimeout(() => {
-      let draft;
-      try { draft = parseConciergeDraft(window.localStorage.getItem(CONCIERGE_STORAGE_KEY)); } catch { return; }
+      const draft = loadConciergeDraftForSession(window.sessionStorage, requestedConciergeSession, window.localStorage);
       if (!draft || draft.sessionId !== requestedConciergeSession || !draft.evaluation || !formRef.current) return;
       const form = formRef.current;
       const prefill: Record<string, string> = {
@@ -75,7 +74,7 @@ function IntakeFormInner({ defaultService = "" }: { defaultService?: string }) {
       trackStudioEvent("intake_form_completion");
       if (conciergeHandoff) {
         trackStudioEvent("concierge_intake_submitted", { completion_status: "success" });
-        try { window.localStorage.removeItem(CONCIERGE_STORAGE_KEY); } catch { /* Optional cleanup. */ }
+        clearConciergeDraft(window.sessionStorage);
       }
       return;
     }

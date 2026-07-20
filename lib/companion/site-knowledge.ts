@@ -255,7 +255,8 @@ export function pageBrief(routeKey: CompanionRouteKey, slug?: string): PageBrief
         summary: auditService ? `${auditService.title}: ${auditService.deliverable}` : "The Revenue Leak Audit — a prioritized diagnosis before you commit to a build.",
         facts: [
           auditService ? `${auditService.priceLabel}: ${auditService.price}, delivered in ${auditService.timeline}.` : `${studioConfig.auditPrice}, ${studioConfig.auditTimeline}.`,
-          "Reviews trust, mobile flow, booking/contact paths, and conversion friction.",
+          "A revenue leak can look like mobile visitors missing the next step, contact requests going to the wrong place, or qualified inquiries waiting too long for follow-up.",
+          "The audit reviews trust, mobile flow, booking/contact paths, and conversion friction.",
           "You get a scored report you can use here or take elsewhere.",
         ],
       };

@@ -8,7 +8,7 @@ The living koi companion is ready for review as a draft pull request. It adds a 
 
 - One root-mounted companion, governed by a deterministic route and host allowlist that includes Labs-owned Vercel previews for review.
 - One shared `ConciergeFlow` for the companion and `/concierge`.
-- One shared versioned draft, evaluation endpoint, intake handoff, CRM record, and Resend notification path.
+- One tab-scoped versioned draft, evaluation endpoint, intake handoff, CRM record, and Resend notification path.
 - Deterministic recommendation remains authoritative; `OPENAI_API_KEY` remains optional.
 - Panel and full concierge workflow are dynamically imported only after interaction.
 - Companion UI preferences are session-only and contain no lead or answer content.
@@ -20,10 +20,9 @@ The living koi companion is ready for review as a draft pull request. It adds a 
 - Keyboard operable trigger, dialog semantics, focus trap, Escape close, and focus restoration.
 - Desktop side drawer and mobile bottom sheet respect viewport and safe-area boundaries.
 - Runtime collision detection prevents the fixed koi from covering interactive page controls.
-- Fine-pointer desktop movement follows the visitor across the full viewport, flips the speech bubble at viewport edges, and stops during typing, dialogs, touch input, or reduced motion.
-- A 280ms pointer pause locks the koi in place for selection; entering its hit target keeps it still until the pointer leaves the selection radius.
-- The trigger uses the fish silhouette, tail/body swimming cycle, and wake strokes without a circular widget background.
-- The fish and wake steer toward the live movement vector along the shortest turn while the bubble and click target stay upright.
+- Fine-pointer desktop movement stays within 40px of its route-specific anchor. Nearby pointer and scroll activity can influence the drift within hard caps; typing, dialogs, touch input, hidden tabs, and reduced motion stop it.
+- The trigger uses the official transparent two-koi identity with controlled violet glow and no attached widget background.
+- Route invitations open one relevant surface directly; the persistent trigger can still open the lightweight menu.
 - Basic site questions resolve through reviewed deterministic topics and source links; raw questions are not sent to analytics or an AI provider.
 - Motion pauses when hidden, settles after inactivity, and removes repeated swimming under reduced motion.
 - Automated WCAG 2 A/AA checks pass for the open mobile experience.
@@ -31,12 +30,12 @@ The living koi companion is ready for review as a draft pull request. It adds a 
 
 ## Performance gate
 
-- The contextual menu and deterministic site guide share a lazy chunk: 16,808 bytes raw, 6,467 bytes gzip in the release build.
+- The contextual menu and deterministic site guide remain behind the existing lazy companion-panel boundary.
 - The heavier shared concierge workflow remains behind a second dynamic boundary.
-- No chat framework, model client SDK, or new font/image payload was added.
-- The koi illustration reuses the repo's existing code-native fish geometry.
+- No chat framework, model client SDK, new font, or new source image was added.
+- The koi illustration reuses the repository's existing official two-koi brand asset.
 
-Chunk filenames are build hashes and may change. The size evidence above is from the final local production build and is intended as an order-of-magnitude release check, not a permanent budget assertion.
+Chunk filenames and exact compression vary by build; the production build gate verifies that the interaction boundaries remain compilable without adding a new runtime framework.
 
 ## Verification matrix
 
@@ -56,27 +55,27 @@ npm run lint
 npm run build
 ```
 
-The visual capture matrix contains 17 screenshots across 320, 390, 768, 1024, 1440, and 1920 pixel widths, representative page contexts, active pointer following, a deterministic site answer, open menu/question states, keyboard focus, and reduced motion. The capture metrics report no horizontal overflow.
+The visual capture matrix contains 19 screenshots across 320, 390, 768, 1024, 1440, and 1920 pixel widths, representative page contexts, anchored pointer influence, a deterministic site answer, open menu/question states, keyboard focus, route-direct comparison, and reduced motion. The capture metrics report no horizontal overflow.
 
-Final local results on 2026-07-18:
+Final local results on 2026-07-20:
 
 | Gate | Result |
 | --- | --- |
-| Concierge unit/integration, including companion and site-guide rules | 45/45 pass |
+| Concierge unit/integration, including companion, isolation, and site-guide rules | 62/62 pass |
 | CRM and adjacent production regressions | 58/58 pass |
 | Commercial contract | 6/6 pass |
 | Dual-domain routing | 15/15 pass |
 | `/now` regressions | 11/11 pass |
 | Release browser QA | 50/50 pass |
 | Existing concierge Chromium E2E | 12/12 pass |
-| Companion Chromium/WebKit E2E | 38/38 pass |
+| Companion Chromium/WebKit E2E | 46/46 pass |
 | TypeScript | pass |
 | ESLint | 0 errors; one pre-existing `_random` warning in `lib/trendiHero.ts` |
 | Next.js production build | pass; 39 pages generated |
 
 Routes visually inspected: `/`, `/services`, `/work`, `/products`, `/audit`, and `/intake`. Suppression was exercised on `/concierge`, `/crm`, `/crm/login`, `/crm/leads/example`, `/payment/success`, `/trendi`, and `/you-know-ball/play`. Host tests also cover the Labs production domain, localhost, and suppression on `koinophobia.dev`.
 
-Visual states inspected: free full-viewport pointer following, resting, edge-aware invitation speech bubble, site-question answer, contextual menu, long question, focused mobile free-text input, and reduced motion. Desktop drawer and mobile bottom-sheet results passed without viewport overflow. The deterministic AI-unavailable journey completed with its fallback disclosure, and a draft resumed after minimizing, route navigation, refresh, and continuation to `/concierge`.
+Visual states inspected: anchored pointer influence, resting, edge-aware invitation speech bubble, route-direct service comparison, site-question answer, contextual menu, long question, focused mobile free-text input, and reduced motion. Desktop drawer and mobile bottom-sheet results passed without viewport overflow. The deterministic backend-unavailable journey exposed a safe retry and the standard intake fallback; a draft resumed after minimizing, route navigation, refresh, and continuation to `/concierge`.
 
 ## Remaining blockers and recommendation
 
