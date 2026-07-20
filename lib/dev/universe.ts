@@ -4,19 +4,31 @@ import { LINKS } from "@/lib/links";
 //
 // Rules this file exists to enforce:
 //  1. ONE status vocabulary. Before this file, the same product carried three
-//     different status labels across /, /now and /resume. A site whose stated
-//     principle is "honest software" cannot contradict itself about what is
-//     shipped.
+//     different status labels across /, /now and /resume.
 //  2. Reach is a fact, not a mood. `reach` answers one question — who can use
-//     this today, without asking Blake for anything? Everything else is
-//     narrative.
-//  3. No claim here may outrun what actually exists. If a build is not in a
-//     tester's hands, this file does not say it is.
+//     this today, without asking Blake for anything?
+//  3. `stage` never collapses distinct release states. "Release-ready",
+//     "uploaded", and "in a tester's hands" are three different things, and
+//     conflating them is how the site started lying the first time.
+//  4. NOTHING here may be published without a source. Every product carries
+//     `verifiedAt` and `evidence[]`, and tests/dev-universe.test.ts fails the
+//     build if either is missing or stale.
 //
-// Bump `universeLastUpdated` by hand whenever a status changes. Never a runtime
-// date — a date that moves on its own is not evidence of anything.
+// Reconciled 2026-07-20 against release artifacts, Apple delivery logs, and
+// live HTTP checks. Three claims from the previous pass were provably wrong and
+// are corrected below — including one that UNDER-claimed. See docs/
+// RELEASE-TRUTH-RECONCILIATION.md for the full audit trail.
 
 export const universeLastUpdated = "July 20, 2026";
+
+/** Who owns keeping these statuses honest. Rendered nowhere; asserted in tests. */
+export const statusOwner = "Blake Taylor";
+
+/**
+ * How stale a status may be before the test suite fails. Status decay is the
+ * failure mode this whole file exists to prevent, so it is enforced, not hoped.
+ */
+export const MAX_STATUS_AGE_DAYS = 45;
 
 /**
  * Who can use this today, with no help from me.
@@ -33,33 +45,77 @@ export const reachLabel: Record<Reach, string> = {
   internal: "Runs for me only",
 };
 
+/**
+ * The release ladder. Deliberately granular: an artifact can be uploaded and
+ * accepted by Apple while still being in nobody's hands, and that distinction
+ * is the single most common place a status quietly becomes a lie.
+ */
+export type Stage =
+  | "concept"
+  | "local"
+  | "internally-validated"
+  | "release-candidate"
+  | "uploaded"
+  | "internal-testers"
+  | "external-testers"
+  | "public"
+  | "paused";
+
+export const stageLabel: Record<Stage, string> = {
+  concept: "Concept / experiment",
+  local: "Local development",
+  "internally-validated": "Internally validated",
+  "release-candidate": "Release candidate",
+  uploaded: "Uploaded, accepted by Apple",
+  "internal-testers": "Available to internal testers",
+  "external-testers": "Available to external testers",
+  public: "Publicly available",
+  paused: "Paused",
+};
+
+/** Rendering order, low to high. Used to sanity-check claims in tests. */
+export const stageRank: Record<Stage, number> = {
+  concept: 0,
+  paused: 0,
+  local: 1,
+  "internally-validated": 2,
+  "release-candidate": 3,
+  uploaded: 4,
+  "internal-testers": 5,
+  "external-testers": 6,
+  public: 7,
+};
+
+export type Evidence = {
+  /** The specific claim this backs. */
+  claim: string;
+  /** Where it can be checked. A path, a log, an HTTP response — not a vibe. */
+  source: string;
+};
+
 export type ProductIdentity = {
-  /** Drives the per-product accent theme in dev-product.css. */
   theme: "forge" | "signal" | "arena" | "cave" | "studio";
-  /** One line of visual intent, used as the page's mono kicker. */
   register: string;
 };
 
 export type Product = {
   slug: string;
   name: string;
-  /** The one-line version. No feature lists. */
   tagline: string;
   identity: ProductIdentity;
   reach: Reach;
-  /** Precise, specific status. Never a marketing word. */
+  stage: Stage;
+  /** One precise sentence. Never a marketing word. */
   status: string;
-  /** The human problem, told as something Blake watched happen. */
+  /** ISO date the status was last checked against artifacts. */
+  verifiedAt: string;
+  /** What proves the current status. Rendered on the page. */
+  evidence: Evidence[];
   problem: string;
-  /** The opinion the product is an argument for. */
   thesis: string;
-  /** Where it genuinely is, including what is blocked and why. */
   state: string[];
-  /** Decisions and tradeoffs — the interesting part. */
   decisions: Array<{ call: string; why: string }>;
-  /** What building it changed his mind about. */
   learned: string;
-  /** Only links that actually work for a stranger. */
   actions: Array<{ label: string; href: string; external?: boolean; primary?: boolean }>;
   /** Things that are NOT true yet. Rendered verbatim, on purpose. */
   notYet: string[];
@@ -72,15 +128,34 @@ export const products: Product[] = [
     tagline: "The job-search system I needed the week I lost my job.",
     identity: { theme: "forge", register: "Structural · built under pressure" },
     reach: "public",
-    status: "Public beta — live on the web, free to finish end to end",
+    stage: "public",
+    status:
+      "Live on the web, in live commerce mode — a $49 Career Reset link is enabled in production",
+    verifiedAt: "2026-07-20",
+    evidence: [
+      {
+        claim: "The site is live and serving",
+        source: "HTTP 200 from career-forge-lite.vercel.app, checked 2026-07-20",
+      },
+      {
+        claim: "Production is in live commerce mode, not test mode",
+        source:
+          "/pricing renders “Founding paid beta · Career Reset only” and “$49”, a string the code emits only when commerceMode === \"live\"",
+      },
+      {
+        claim: "Released build",
+        source: "origin/main b1be8b2, tagged v0.10.0-beta.1",
+      },
+    ],
     problem:
       "When my DraftKings role ended I had the same problem everyone in that seat has: a hundred scattered applications, no feedback, and advice too generic to act on. The job search is the highest-stakes project most people ever run, and almost nobody runs it as a project.",
     thesis:
       "A résumé tool that invents experience is worse than no tool. The useful thing is not generation — it's organizing evidence you already have into something a stranger can evaluate in six seconds.",
     state: [
       "Live at career-forge-lite.vercel.app. A stranger can walk in, build a dossier, generate role-specific drafts, and export a real DOCX and ZIP without talking to me.",
-      "Released to production on July 19, 2026 (v0.10.0-beta.1) after a readiness sprint: early-win bullets, a lighter first-run profile, and in-product feedback capture.",
+      "Released to production on July 19, 2026 (v0.10.0-beta.1) after a readiness sprint: early-win bullets and a lighter first-run profile.",
       "The generation engine is deterministic. There is no model writing your history — every claim traces to something you entered.",
+      "Production is currently in live commerce mode: the pricing page shows a $49 Career Reset and a working payment link. That is a real capability to take real money, and I have not reconciled it against anything.",
     ],
     decisions: [
       {
@@ -92,8 +167,8 @@ export const products: Product[] = [
         why: "People were abandoning at a wall of empty textareas. Nine of them are now optional and collapsed. Completion beats completeness.",
       },
       {
-        call: "Shipped an 'early win' before asking for real work.",
-        why: "The product has to prove itself before it asks you to type for twenty minutes.",
+        call: "Kept everything client-side — no accounts, no server-side career data.",
+        why: "It's the right call for privacy and it's the reason I know almost nothing about how the product is actually used. I traded my own visibility for the user's, on purpose, and I'd make the trade again while admitting what it costs me.",
       },
     ],
     learned:
@@ -102,8 +177,9 @@ export const products: Product[] = [
       { label: "Open Career Forge", href: LINKS.careerForge, external: true, primary: true },
     ],
     notYet: [
-      "No confirmed paying users. The paid tier exists as a hypothesis, not as revenue.",
-      "The checkout path has never been verified end to end — it fail-closes rather than charging anyone.",
+      "I cannot tell you whether anyone has ever paid. There is no order database by design, so the only system that knows is Stripe, and I have not reconciled it. Treat “paying customers” as unestablished in both directions.",
+      "I have collected zero beta feedback. It saves to the tester's own browser and never reaches me — a design decision I did not think through.",
+      "No confirmed job outcome. Nobody has told me this got them hired.",
       "Lane suggestions still come from a fixed library, so an operations résumé gets tech-pivot lanes it didn't ask for. Known defect, not yet fixed.",
     ],
   },
@@ -113,25 +189,44 @@ export const products: Product[] = [
     tagline: "The gap between having an idea and pressing record.",
     identity: { theme: "signal", register: "Kinetic · spoken out loud" },
     reach: "limited",
-    status: "iOS TestFlight beta — testers are on build 114",
+    stage: "internal-testers",
+    status: "Build 118 is on TestFlight and installed internally. No external testers yet",
+    verifiedAt: "2026-07-20",
+    evidence: [
+      {
+        claim: "Build 118 uploaded, processed, and installed from TestFlight",
+        source:
+          "TestFlight app page screenshot showing Version 0.1.0 (118), release date Jul 19 2026, 90-day expiry, with an Open button",
+      },
+      {
+        claim: "Builds 114–119 exist as archives",
+        source: "~/Library/Developer/Xcode/Archives/2026-07-{12,17,19}/Trendi-0.1.0-1*.xcarchive",
+      },
+      {
+        claim: "The data-isolation gate is incomplete",
+        source:
+          "PENDING-beta-user-handoff.md — “Status: PENDING — User B unavailable”, cross-user rows all read “Not run”",
+      },
+    ],
     problem:
       "Most creators don't run out of ideas. They stall in the ninety seconds between having one and pressing record, because a thought in your head is not the same thing as words you can say on camera. I watched people abandon good ideas at exactly that gap, including me.",
     thesis:
       "Nobody needs another script generator. They need the specific sentence to open with. A coach in your pocket, not a script mill.",
     state: [
       "An iOS app in SwiftUI. You type the messy thought; it hands back hooks, a recordable script, a caption, and a simple shot plan.",
-      "TestFlight testers are currently on build 114. Builds 115 and 116 are archived, validated, and reproducible from a clean checkout — but not uploaded.",
-      "The upload is blocked on an Apple account problem, not a code problem: the signing account lost App Store Connect access for the team. It needs Blake at a keyboard with 2FA, and no amount of engineering fixes it.",
-      "Build 116 passes its full suite — 883 tests, zero failures — and carries three P1 fixes testers have not received yet.",
+      "Build 118 was uploaded to App Store Connect, imported clean, and is installed from TestFlight on my own device. That makes it available to internal testers — which today means me.",
+      "Build 119 already exists: an isolation-hardened release candidate, archived and validated. It has never been uploaded, and its three commits exist only on this machine.",
+      "The clean-state data-isolation gate is unfinished. The User A leg passed all seventeen steps it could run; step eighteen needed a second, genuinely different Apple account on the test phone, and there wasn't one. No cross-user conclusion is possible until that runs.",
+      "The newer generation pipeline is still switched off — builds 117, 118 and 119 all ship with the V1 client.",
     ],
     decisions: [
       {
-        call: "Turned the newer generation pipeline back off before shipping 116.",
-        why: "V2 wrote better copy and broke written-mode, leaked a default that assumed one platform, and rejected legitimate stories at the claims gate. A better sentence isn't worth a worse product. It serves V1 to everyone until that cluster is fixed.",
+        call: "Turned the newer generation pipeline back off before shipping.",
+        why: "V2 wrote better copy and broke written-mode, leaked a default that assumed one platform, and rejected legitimate stories at the claims gate. A better sentence isn't worth a worse product.",
       },
       {
-        call: "Built a claims gate that refuses to write things you can't back up.",
-        why: "The fastest way to get a creator in trouble is to hand them a confident sentence about a result they never got.",
+        call: "Refused to call 118 the internal release candidate.",
+        why: "It's uploaded, it's installed, and it still isn't signed off, because the cross-user half of the isolation test never ran. An untested isolation boundary is exactly the kind of thing that looks fine until it very much isn't.",
       },
       {
         call: "Kept it iOS-only and unpublished.",
@@ -139,15 +234,16 @@ export const products: Product[] = [
       },
     ],
     learned:
-      "Shipping and delivering are different verbs. I have a validated build that is better than the one people are using, and it has been stuck behind an account permission for days. Release infrastructure is part of the product, and I learned that the expensive way.",
+      "Shipping and delivering are different verbs, and I learned it the expensive way — with a finished build sitting behind an account permission for days. What I'd add now is that finishing the upload didn't finish the job either: 118 is in TestFlight and still isn't cleared, because the last gate needs a second person, not more code.",
     actions: [
       { label: "Read the full Trendi story", href: "/trendi", primary: true },
       { label: "Ask for beta access", href: LINKS.email },
     ],
     notYet: [
       "Not on the App Store, and not submitted for review.",
-      "Testers are two builds behind the work that's finished.",
-      "No paid tier, and no evidence yet of creators returning week over week.",
+      "No external testers. The only device it has ever run on through TestFlight is mine.",
+      "Data isolation between two users is unproven — the second half of that test has never been run.",
+      "Build 119, the isolation-hardened candidate, is not uploaded and not backed up anywhere but this Mac.",
     ],
   },
   {
@@ -156,16 +252,35 @@ export const products: Product[] = [
     tagline: "Sports takes, scored honestly, by something that actually watches.",
     identity: { theme: "arena", register: "Scoreboard · argue and defend" },
     reach: "public",
-    status: "Playable web demo — iOS build runs on one phone, mine",
+    stage: "uploaded",
+    status:
+      "Web demo is public. Builds 26 and 27 were accepted by Apple, but reached no tester",
+    verifiedAt: "2026-07-20",
+    evidence: [
+      {
+        claim: "Builds 26 and 27 were accepted by App Store Connect",
+        source:
+          "Apple's own 409 responses: the 2026-07-16 upload log reports previousBundleVersion 26, and the 2026-07-19 log reports 27 — Apple naming builds it had already accepted",
+      },
+      {
+        claim: "No delivery receipt or tester assignment survives",
+        source:
+          "No success log, no App Store Connect record on this machine; processing state and group assignment unverified",
+      },
+      {
+        claim: "The iOS work is unmerged and unbacked-up",
+        source: "banter-bot-content-expansion has no git remote configured; main sits at cf74ac4",
+      },
+    ],
     problem:
       "Sports takes are the most passionate opinions most people hold, and they evaporate into group-chat noise within an hour. Nobody keeps score. Nobody has to defend anything. The most fun argument you had this week left no trace.",
     thesis:
       "The fun isn't in being told you're right. It's in being made to defend a position by something that knows ball and doesn't flatter you. No participation trophies.",
     state: [
       "The web demo is playable right now, in a browser, with no account. Drop a take, the debate engine counters, your argument gets a transparent score.",
-      "The engine is deterministic and mechanically neutral across five sports — 460 topics, five personalities, no model deciding who wins.",
-      "Verified across 4,500 simulated games: a blind-play cohort wins about 2.4% of the time, an expert cohort 100%. That gap is the whole product — the score has to mean something.",
-      "The iOS build (0.1.0, build 27) runs on my phone and nowhere else.",
+      "The engine is deterministic and mechanically neutral across five sports — no model deciding who wins, and a score a player can reconstruct.",
+      "On iOS, builds 26 and 27 were uploaded and accepted by App Store Connect. I never confirmed they finished processing, never assigned them to a tester group, and nobody has installed either one.",
+      "None of the recent engine work is merged to main, and the repository has no remote — it exists on this machine and nowhere else.",
     ],
     decisions: [
       {
@@ -174,7 +289,7 @@ export const products: Product[] = [
       },
       {
         call: "Tuned it until blind play loses badly.",
-        why: "Early on, someone who knew nothing could win a quarter of the time. That number is the honesty of the whole game, and I chased it from 16–27% down to under 5%.",
+        why: "Early on, someone who knew nothing could win often enough that the score wasn't measuring anything. Closing that gap is the whole product, and it's the work I'm proudest of and least able to show you.",
       },
       {
         call: "Betting guardrails from day one.",
@@ -182,15 +297,16 @@ export const products: Product[] = [
       },
     ],
     learned:
-      "I built a scoring system before I had players, which meant I spent months optimizing a number nobody had complained about. The engine got genuinely good. The thing I still haven't proven is whether anyone comes back tomorrow.",
+      "I uploaded two builds to Apple and then never took the last step of putting either in front of a person — and until I went looking for evidence, I'd have told you confidently that nothing had ever been uploaded at all. Not knowing the state of your own release is its own kind of failure.",
     actions: [
       { label: "Play the web demo", href: "/you-know-ball/play", primary: true },
       { label: "Open the standalone build", href: LINKS.ykbDemo, external: true },
     ],
     notYet: [
-      "Never been on TestFlight. No outside player has ever installed the iOS build.",
+      "Never confirmed past Apple's processing step, and never assigned to a tester group.",
       "Not submitted to the App Store.",
-      "The only playtesting so far is mine and simulated. No evidence yet that real players return.",
+      "No outside player has installed the iOS build. Confirmed testers: zero.",
+      "The engine numbers I'd want to quote here — cohort win rates, tournament results — I can't currently point at an artifact for, so I'm not quoting them.",
     ],
   },
   {
@@ -199,16 +315,35 @@ export const products: Product[] = [
     tagline: "A private operator brain that never leaves the machine.",
     identity: { theme: "cave", register: "Quiet · local-first, unlisted" },
     reach: "internal",
-    status: "Internal build — not public, not distributed, no users but me",
+    stage: "internally-validated",
+    status: "Internal build — dev-signed and un-notarized, so it cannot run on another Mac",
+    verifiedAt: "2026-07-20",
+    evidence: [
+      {
+        claim: "Not distributable to anyone",
+        source:
+          "codesign shows “Apple Development: BLAKE JIHAD TAYLOR”; spctl -a returns rejected; stapler reports no ticket",
+      },
+      {
+        claim: "The installed app is current, not stale",
+        source: "~/Applications/Koi Cave.app binary stamped Jul 13 2026, built from HEAD 350269a",
+      },
+      {
+        claim: "Certified with limitations, and the mail path never ran",
+        source:
+          "MORNING_FOUNDER_BRIEF_CERTIFICATION_REPORT.md; gmail-oauth-config.json holds a clientID and no tokens",
+      },
+    ],
     problem:
       "Every tool that promises to organize your work wants your work on its servers, on a subscription, forever. I wanted the leverage without renting my own context back from someone else.",
     thesis:
       "Personal infrastructure beats personal productivity apps. If the thing that knows the most about how I work is owned by a company, that's a dependency, not leverage.",
     state: [
-      "A macOS app: notes, tasks, memory, and automations, running local-first. 1,269 tests green.",
+      "A macOS app: notes, tasks, memory, and automations, running local-first.",
       "The morning founder brief is certified with limitations — it survived every failure drill I could design, including corrupt caches, malformed events, and a disconnected mail provider.",
-      "The build installed on my own machine predates the feature I just certified. The certified version isn't the one I use every morning yet.",
-      "One known truth bug: items waiting on me for more than 72 hours drop out of the brief while it reports no urgent signal. That's the exact failure mode a brief exists to prevent.",
+      "It is signed with a development certificate and not notarized, which means Gatekeeper rejects it on any Mac but this one. There is nothing to hand anyone even if I wanted to.",
+      "One known truth bug remains: items waiting on me for more than 72 hours drop out of the brief while it reports no urgent signal. That's the exact failure mode a brief exists to prevent.",
+      "The mail integration has never completed a real sync. The stored config holds a client ID and no tokens, so every brief it has ever produced was built from local state.",
     ],
     decisions: [
       {
@@ -225,11 +360,12 @@ export const products: Product[] = [
       },
     ],
     learned:
-      "Certifying something is not the same as running it. I proved a feature worked and then didn't install it on my own laptop for weeks — which tells you the certification was for the report, not for me.",
+      "I certified a feature against every failure I could imagine and never connected the one integration that would have made it real. The drills tested how it behaves when the data is missing, which turns out to be the only state I've ever actually run it in.",
     actions: [],
     notYet: [
       "No public build, no download, no waitlist. There is nothing to try.",
-      "The live mail integration has never completed a real sync.",
+      "Never notarized, so it cannot be installed by anyone else even privately.",
+      "The live mail integration has never completed a sync, so the feature has never run against real data.",
       "It is a case study in how I build, not a product I'm offering.",
     ],
   },
@@ -238,9 +374,21 @@ export const products: Product[] = [
 export const getProduct = (slug: string) => products.find((p) => p.slug === slug);
 
 /**
+ * You Know Ball is the only product whose page carries a scoreboard, because
+ * it's the only one whose thesis is a number. These are release facts rather
+ * than gameplay statistics — every one is checkable, which the engine numbers
+ * currently are not.
+ */
+export const arenaScoreboard = [
+  { label: "Builds Apple accepted", value: "2" },
+  { label: "Reached a tester", value: "0" },
+  { label: "Outside players", value: "0" },
+  { label: "App Store review", value: "None" },
+];
+
+/**
  * The studio is deliberately NOT in `products`. It is not something to try —
- * it's something to hire, and it lives on its own domain. Keeping it out of the
- * product list is the whole point of having two sites.
+ * it's something to hire, and it lives on its own domain.
  */
 export const studio = {
   name: "Koinophobia Labs",

@@ -3,10 +3,10 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowUpRight } from "lucide-react";
 import DevShell from "@/components/dev/DevShell";
-import { getNote, notes } from "@/lib/dev/lab";
+import { getNote, publishedNotes } from "@/lib/dev/lab";
 
 export function generateStaticParams() {
-  return notes.map(({ slug }) => ({ slug }));
+  return publishedNotes.map(({ slug }) => ({ slug }));
 }
 
 export async function generateMetadata({
@@ -43,8 +43,8 @@ export default async function DevNotePage({ params }: { params: Promise<{ slug: 
   const note = getNote((await params).slug);
   if (!note) notFound();
 
-  const index = notes.findIndex((n) => n.slug === note.slug);
-  const next = notes[index + 1];
+  const index = publishedNotes.findIndex((n) => n.slug === note.slug);
+  const next = publishedNotes[index + 1];
 
   return (
     <DevShell current="/notes" narrow fieldX="26%">

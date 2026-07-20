@@ -50,7 +50,7 @@ export const nowActiveWork: Array<{
     name: "Career Forge",
     stage: "Live beta",
     snapshot:
-      "Released to production on July 19. Anyone can finish the workflow and export real documents. No paying users yet.",
+      "Released to production on July 19. Anyone can finish the workflow and export real documents. A paid tier is live; I haven't reconciled whether anyone has bought it.",
     doingNow:
       "Packaging the paid tier and founding cohort, and sharpening it toward being the easiest résumé and job-prep experience to actually finish.",
     nextProof:
@@ -61,11 +61,11 @@ export const nowActiveWork: Array<{
   },
   {
     name: "Trendi",
-    stage: "TestFlight beta · release blocked",
+    stage: "TestFlight · internal only",
     snapshot:
-      "Testers are on build 114. Builds 115 and 116 are finished and stuck behind an Apple account problem.",
+      "Build 118 is on TestFlight and installed on my own device. No external testers yet, and the isolation gate isn't closed.",
     doingNow:
-      "Clearing the upload block so testers get the build that's actually done, then getting it in front of the first ten creators and listening for one thing: whether the words it gives back are good enough to record.",
+      "Finishing the clean-state data-isolation check — it needs a second real Apple account on the test phone, which is the whole reason it's still open — then getting the build in front of the first ten creators.",
     nextProof:
       "Creators using the output to publish, repeatedly — not another layer of polish.",
     href: "/products/trendi",
@@ -73,11 +73,11 @@ export const nowActiveWork: Array<{
   },
   {
     name: "You Know Ball",
-    stage: "Web demo live · iOS unreleased",
+    stage: "Web demo live · iOS uploaded, untested",
     snapshot:
-      "Playable in a browser today. The iOS build runs on exactly one phone — mine — and has never been on TestFlight.",
+      "Playable in a browser today. Two iOS builds were accepted by Apple and then never put in front of anyone.",
     doingNow:
-      "The debate engine, scoring, replay, receipts, and daily-play systems are built, and the web demo is live. The iOS build has never reached an outside tester, so the honest next step is getting it into hands, not adding to it.",
+      "The engine, scoring, replay and receipts are built, and the web demo is live. Builds 26 and 27 reached App Store Connect and stopped there — so the next step is a tester group, not more features.",
     nextProof:
       "Real players returning to argue, sharing their receipts, and caring about the outcome.",
     href: "/products/you-know-ball",
@@ -94,8 +94,8 @@ export const nowSnapshot = nowActiveWork.map((item) => ({
 export const nowProof = [
   "A first repeatable paid studio engagement.",
   "External Career Forge users finishing the whole workflow — and paying for it.",
-  "Trendi's finished build actually in testers' hands, then ten creators using it.",
-  "A You Know Ball build installed by someone who isn't me.",
+  "Trendi's isolation gate closed, then the build in ten creators' hands.",
+  "A You Know Ball build assigned to a tester group and installed by someone who isn't me.",
   "A salary role aligned with customer-facing AI and implementation work.",
 ];
 

@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowUpRight } from "lucide-react";
 import DevShell from "@/components/dev/DevShell";
-import { getProduct, products, reachLabel } from "@/lib/dev/universe";
+import { arenaScoreboard, getProduct, products, reachLabel, stageLabel } from "@/lib/dev/universe";
 
 // Served as koinophobia.dev/products/[slug] via a host rewrite.
 // Next 16: `params` is a Promise in pages and generateMetadata.
@@ -41,15 +41,6 @@ export async function generateMetadata({
   };
 }
 
-/** Only You Know Ball has a scoreboard — it's the one product whose whole
- *  argument is a number, so it's the one page that gets to shout numbers. */
-const ARENA_STATS = [
-  { label: "Simulated games", value: "4,500" },
-  { label: "Blind play wins", value: "2.36%" },
-  { label: "Expert play wins", value: "100%" },
-  { label: "Topics, 5 sports", value: "460" },
-];
-
 export default async function DevProductPage({
   params,
 }: {
@@ -77,8 +68,25 @@ export default async function DevProductPage({
             <span className="devpage__reach" data-reach={product.reach}>
               {reachLabel[product.reach]}
             </span>
+            <span className="devprod__stage">{stageLabel[product.stage]}</span>
             <p>{product.status}</p>
           </div>
+
+          {/* The claim and the receipt sit together. A reader should be able to
+              check a status here rather than take it on trust. */}
+          <details className="devprod__evidence">
+            <summary>
+              Verified {product.verifiedAt} · {product.evidence.length} sources
+            </summary>
+            <dl>
+              {product.evidence.map((item) => (
+                <div key={item.claim}>
+                  <dt>{item.claim}</dt>
+                  <dd>{item.source}</dd>
+                </div>
+              ))}
+            </dl>
+          </details>
           {product.actions.length > 0 ? (
             <div className="devprod__actions">
               {product.actions.map((action) =>
@@ -142,7 +150,7 @@ export default async function DevProductPage({
           </ul>
           {product.slug === "you-know-ball" ? (
             <dl className="devprod__scoreboard">
-              {ARENA_STATS.map((stat) => (
+              {arenaScoreboard.map((stat) => (
                 <div key={stat.label}>
                   <dt>{stat.label}</dt>
                   <dd>{stat.value}</dd>

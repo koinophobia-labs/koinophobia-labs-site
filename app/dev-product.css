@@ -510,3 +510,62 @@
     padding-left: 34px;
   }
 }
+
+/* ---------- stage chip + evidence disclosure ----------
+   The stage never collapses "release-ready", "uploaded" and "in someone's
+   hands" into one word, and the evidence sits one click from the claim. */
+
+.devprod__stage {
+  padding: 5px 11px;
+  border: 1px solid var(--acc-soft);
+  border-radius: 999px;
+  color: var(--acc-hot);
+  font-family: var(--font-ibm-plex-mono), monospace;
+  font-size: 11px;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.devprod__evidence {
+  margin-top: var(--dh-gap-m);
+  max-width: 68ch;
+  border-top: 1px solid var(--dh-rule-quiet);
+  padding-top: 14px;
+}
+
+.devprod__evidence summary {
+  color: var(--dh-muted);
+  cursor: pointer;
+  font-family: var(--font-ibm-plex-mono), monospace;
+  font-size: 11.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  transition: color 140ms ease;
+}
+
+.devprod__evidence summary:hover,
+.devprod__evidence summary:focus-visible {
+  color: var(--acc-hot);
+}
+
+.devprod__evidence dl {
+  display: grid;
+  gap: 14px;
+  margin: 16px 0 0;
+}
+
+.devprod__evidence dt {
+  color: var(--dh-text);
+  font-size: 14.5px;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+.devprod__evidence dd {
+  margin: 5px 0 0;
+  color: var(--dh-body);
+  font-family: var(--font-ibm-plex-mono), monospace;
+  font-size: 12.5px;
+  line-height: 1.6;
+}

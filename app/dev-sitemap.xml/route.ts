@@ -1,4 +1,4 @@
-import { notes } from "@/lib/dev/lab";
+import { publishedNotes } from "@/lib/dev/lab";
 import { products } from "@/lib/dev/universe";
 
 // koinophobia.dev's own sitemap.
@@ -25,7 +25,7 @@ export function GET() {
     })),
     { path: "/now", priority: "0.9", changefreq: "weekly" },
     { path: "/notes", priority: "0.8", changefreq: "weekly" },
-    ...notes.map((note) => ({
+    ...publishedNotes.map((note) => ({
       path: `/notes/${note.slug}`,
       priority: "0.7",
       changefreq: "yearly",

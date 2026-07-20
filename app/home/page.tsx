@@ -4,7 +4,7 @@ import Link from "next/link";
 import { ArrowUpRight, GitBranch, IdCard, Mail, QrCode } from "lucide-react";
 import { LINKS } from "@/lib/links";
 import { nowLastUpdated, nowSnapshot } from "@/lib/now";
-import { notes } from "@/lib/dev/lab";
+import { publishedNotes } from "@/lib/dev/lab";
 import { products, reachLabel } from "@/lib/dev/universe";
 
 // This page is the root of koinophobia.dev (rewritten from "/" for that host in
@@ -201,7 +201,7 @@ export default function DevHomePage() {
             </p>
           </div>
           <div className="devhome__principle-grid">
-            {notes.slice(0, 3).map((note) => (
+            {publishedNotes.slice(0, 3).map((note) => (
               <article key={note.slug}>
                 <h3>
                   <Link href={`/notes/${note.slug}`}>{note.title}</Link>
