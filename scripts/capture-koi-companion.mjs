@@ -23,9 +23,14 @@ async function capture(path, width, height, name, options = {}) {
     await page.getByRole("dialog").waitFor();
     await page.waitForTimeout(420);
   }
-  if (options.pointerFollow) {
+  if (options.pointerInfluence) {
     await page.mouse.move(Math.round(width * 0.58), Math.round(height * 0.72));
     await page.waitForTimeout(850);
+  }
+  if (options.compare) {
+    const panel = page.getByRole("dialog");
+    await panel.getByRole("button", { name: "Compare two options" }).click();
+    await panel.getByRole("heading", { name: "Which of these fits better?" }).waitFor();
   }
   if (options.siteHelp) {
     const panel = page.getByRole("dialog");
@@ -71,7 +76,9 @@ try {
   await capture("/audit", 1440, 1000, "audit-1440");
   await capture("/intake", 1440, 1000, "intake-1440");
   await capture("/services", 1440, 1000, "panel-menu-1440", { openPanel: true });
-  await capture("/", 1440, 1000, "active-follow-1440", { pointerFollow: true });
+  await capture("/services", 1440, 1000, "services-comparison-1440", { openPanel: true, compare: true });
+  await capture("/services", 390, 844, "mobile-comparison-390", { openPanel: true, compare: true });
+  await capture("/", 1440, 1000, "anchored-reaction-1440", { pointerInfluence: true });
   await capture("/services", 1440, 1000, "site-help-1440", { openPanel: true, siteHelp: true });
   await capture("/services", 1024, 900, "panel-question-1024", { openPanel: true, startFlow: true });
   await capture("/", 390, 844, "mobile-focused-question-390", { openPanel: true, startFlow: true, focusInput: true });

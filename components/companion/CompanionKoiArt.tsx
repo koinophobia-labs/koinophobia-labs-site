@@ -1,18 +1,23 @@
-import { TrendiFishBody, TrendiFishDefs } from "@/components/trendi/TrendiFish";
-
-const companionPalette = ["#f1eaff", "#c9a7ff", "#a66cff", "#6840bc"] as const;
+import Image from "next/image";
 
 export default function CompanionKoiArt({ id, className = "" }: { id: string; className?: string }) {
   return (
-    <svg
-      className={className}
-      viewBox="0 0 307 596"
+    <span
+      className={`koi-companion-art ${className}`}
       aria-hidden="true"
-      focusable="false"
+      data-art-id={id}
       data-companion-koi-art=""
     >
-      <defs><TrendiFishDefs id={id} colors={companionPalette} /></defs>
-      <TrendiFishBody id={id} className="koi-companion-art__body" />
-    </svg>
+      <Image
+        className="koi-companion-art__image"
+        src="/brand/koinophobia-labs-koi-640.webp"
+        alt=""
+        width={640}
+        height={640}
+        sizes="(max-width: 760px) 62px, 70px"
+        draggable={false}
+      />
+      <span className="koi-companion-art__glow" />
+    </span>
   );
 }

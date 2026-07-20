@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import CompanionKoiArt from "@/components/companion/CompanionKoiArt";
 import { trackStudioEvent } from "@/components/studio/AnalyticsBridge";
-import { companionHostAllowed, resolveCompanionPageContext } from "@/lib/companion/page-context";
+import { companionHostAllowed, resolveCompanionPageContext, type CompanionPanelSurface } from "@/lib/companion/page-context";
 import {
   ambientDrift,
   clampOffset,
@@ -17,15 +17,19 @@ import {
   type CompanionMotionState,
 } from "@/lib/companion/motion";
 import {
+  canOfferProjectPlan,
   canShowCompanionInvitation,
   COMPANION_STORAGE_KEY,
   dismissCompanionInvitation,
   emptyCompanionSession,
   parseCompanionSession,
   recordCompanionInvitation,
+  recordCompanionRouteEngagement,
+  recordCompanionRouteVisit,
+  recordProjectPlanInvitation,
   type CompanionSession,
 } from "@/lib/companion/session";
-import { CONCIERGE_STORAGE_KEY, parseConciergeDraft } from "@/lib/concierge/session";
+import { loadConciergeDraft } from "@/lib/concierge/session";
 
 const KoiCompanionPanel = dynamic(() => import("@/components/companion/KoiCompanionPanel"), {
   ssr: false,
@@ -63,6 +67,8 @@ export default function KoiCompanion() {
   const [open, setOpen] = useState(false);
   const [hasDraft, setHasDraft] = useState(false);
   const [invitationVisible, setInvitationVisible] = useState(false);
+  const [invitationKind, setInvitationKind] = useState<"route" | "plan">("route");
+  const [panelSurface, setPanelSurface] = useState<CompanionPanelSurface>("menu");
   const [motionState, setMotionState] = useState<CompanionMotionState>("resting");
   const [paused, setPaused] = useState(false);
   const [reducedMotion, setReducedMotion] = useState(false);
@@ -70,8 +76,10 @@ export default function KoiCompanion() {
   const presenceRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const noticeTimerRef = useRef<number | null>(null);
+  const sessionRef = useRef<CompanionSession>(emptyCompanionSession());
 
   const persistSession = useCallback((next: CompanionSession) => {
+    sessionRef.current = next;
     setSession(next);
     try { window.sessionStorage.setItem(COMPANION_STORAGE_KEY, JSON.stringify(next)); } catch { /* Interface persistence is optional. */ }
   }, []);
@@ -81,6 +89,7 @@ export default function KoiCompanion() {
       setHostAllowed(companionHostAllowed(window.location.hostname));
       let recovered = emptyCompanionSession();
       try { recovered = parseCompanionSession(window.sessionStorage.getItem(COMPANION_STORAGE_KEY)); } catch { /* Start with safe defaults. */ }
+      sessionRef.current = recovered;
       setSession(recovered);
       setHydrated(true);
     }, 0);
@@ -91,6 +100,8 @@ export default function KoiCompanion() {
     const timer = window.setTimeout(() => {
       setOpen(false);
       setInvitationVisible(false);
+      setInvitationKind("route");
+      setPanelSurface("menu");
       setMotionState("resting");
     }, 0);
     return () => window.clearTimeout(timer);
@@ -102,18 +113,69 @@ export default function KoiCompanion() {
   }, [context.enabled, context.routeKey, hostAllowed, hydrated, session.hidden]);
 
   useEffect(() => {
-    if (!hydrated || !hostAllowed || !context.enabled || !context.invitation || open || collisionHidden || !canShowCompanionInvitation(session, context.routeKey)) return;
+    if (!hydrated || !hostAllowed || !context.enabled || session.hidden) return;
+    const timer = window.setTimeout(() => {
+      const current = sessionRef.current;
+      const next = recordCompanionRouteVisit(current, context.routeKey);
+      if (next !== current) persistSession(next);
+    }, 0);
+    return () => window.clearTimeout(timer);
+  }, [context.enabled, context.routeKey, hostAllowed, hydrated, persistSession, session.hidden]);
+
+  useEffect(() => {
+    if (!hydrated || !hostAllowed || !context.enabled || session.hidden) return;
+    let dwellReached = false;
+    let depthReached = false;
+    let recorded = false;
+
+    const qualify = () => {
+      if (recorded || !dwellReached || !depthReached || interactionInProgress()) return;
+      recorded = true;
+      const next = recordCompanionRouteEngagement(sessionRef.current, context.routeKey);
+      persistSession(next);
+      trackStudioEvent("koi_companion_meaningful_route", {
+        route_category: context.routeKey,
+        engaged_route_count: String(next.engagedRoutes.length),
+      });
+    };
+
+    const onScroll = () => {
+      const scrollable = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+      if (window.scrollY / scrollable >= 0.3) depthReached = true;
+      qualify();
+    };
+
+    const timer = window.setTimeout(() => {
+      dwellReached = true;
+      onScroll();
+    }, 8_000);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+    return () => {
+      window.clearTimeout(timer);
+      window.removeEventListener("scroll", onScroll);
+    };
+  }, [context.enabled, context.routeKey, hostAllowed, hydrated, persistSession, session.hidden]);
+
+  useEffect(() => {
+    const planReady = canOfferProjectPlan(session);
+    const routeReady = Boolean(context.invitation && canShowCompanionInvitation(session, context.routeKey));
+    if (!hydrated || !hostAllowed || !context.enabled || open || collisionHidden || (!planReady && !routeReady)) return;
     const timer = window.setTimeout(() => {
       if (document.visibilityState !== "visible" || interactionInProgress()) return;
-      const next = recordCompanionInvitation(session, context.routeKey);
+      const kind = canOfferProjectPlan(session) ? "plan" : "route";
+      const next = kind === "plan" ? recordProjectPlanInvitation(session) : recordCompanionInvitation(session, context.routeKey);
       persistSession(next);
+      setInvitationKind(kind);
       setInvitationVisible(true);
       setMotionState("inviting");
       trackStudioEvent("koi_companion_invitation_shown", {
         route_category: context.routeKey,
         invitation_number: String(next.invitationCount),
+        invitation_kind: kind,
       });
-    }, context.invitationDelayMs);
+      if (kind === "plan") trackStudioEvent("koi_companion_plan_invitation_shown", { route_category: context.routeKey });
+    }, planReady ? 5_000 : context.invitationDelayMs);
     return () => window.clearTimeout(timer);
   }, [collisionHidden, context, hostAllowed, hydrated, open, persistSession, session]);
 
@@ -285,41 +347,43 @@ export default function KoiCompanion() {
   useEffect(() => () => { if (noticeTimerRef.current) window.clearTimeout(noticeTimerRef.current); }, []);
 
   function openPanel(entryAction: "trigger" | "invitation") {
-    let draft = null;
-    try { draft = parseConciergeDraft(window.localStorage.getItem(CONCIERGE_STORAGE_KEY)); } catch { /* No draft available. */ }
+    const draft = loadConciergeDraft(window.sessionStorage, window.localStorage);
     setHasDraft(Boolean(draft));
     setInvitationVisible(false);
+    setPanelSurface(entryAction === "invitation" ? invitationKind === "plan" ? "concierge" : context.invitationSurface || "menu" : "menu");
     setOpen(true);
-    persistSession({ ...session, minimized: false });
+    persistSession({ ...sessionRef.current, minimized: false });
     trackStudioEvent("koi_companion_opened", {
       route_category: context.routeKey,
       entry_action: entryAction,
       session_state: draft ? "resumed" : "new",
       device_class: window.matchMedia("(max-width: 760px)").matches ? "mobile" : "desktop",
+      invitation_kind: entryAction === "invitation" ? invitationKind : "none",
     });
   }
 
   const closePanel = useCallback(() => {
     setOpen(false);
-    persistSession({ ...session, minimized: true });
+    persistSession({ ...sessionRef.current, minimized: true });
     trackStudioEvent("koi_companion_minimized", { route_category: context.routeKey });
     window.queueMicrotask(() => triggerRef.current?.focus());
-  }, [context.routeKey, persistSession, session]);
+  }, [context.routeKey, persistSession]);
 
   function dismissInvitation() {
-    const next = dismissCompanionInvitation(session);
+    const current = sessionRef.current;
+    const next = dismissCompanionInvitation(current);
     persistSession(next);
     setInvitationVisible(false);
     setMotionState("resting");
     trackStudioEvent("koi_companion_invitation_dismissed", {
       route_category: context.routeKey,
-      invitation_number: String(session.invitationCount),
+      invitation_number: String(current.invitationCount),
     });
     triggerRef.current?.focus();
   }
 
   function dismissCompanion() {
-    persistSession({ ...session, hidden: true, minimized: true });
+    persistSession({ ...sessionRef.current, hidden: true, minimized: true });
     setOpen(false);
   }
 
@@ -332,6 +396,7 @@ export default function KoiCompanion() {
 
   if (!hydrated || !hostAllowed || !context.enabled || session.hidden) return null;
   const renderedMotionState = resolveCompanionMotionState({ open, paused, collisionHidden, invitationVisible, reducedMotion, ambientState: motionState });
+  const invitationCopy = invitationKind === "plan" ? "Want me to turn what you explored into a recommended project plan?" : context.invitation;
 
   return (
     <div
@@ -341,9 +406,9 @@ export default function KoiCompanion() {
       data-paused={paused ? "true" : "false"}
     >
       <div ref={presenceRef} className="koi-companion-presence" data-bubble-side={context.preferredSide} data-bubble-vertical="above">
-        {invitationVisible && context.invitation ? (
+        {invitationVisible && invitationCopy ? (
           <div className="koi-companion-invitation" role="status">
-            <button className="koi-companion-invitation__message" type="button" onClick={() => openPanel("invitation")}>{context.invitation}<small>Ask me about this site or find the right service.</small></button>
+            <button className="koi-companion-invitation__message" type="button" onClick={() => openPanel("invitation")}>{invitationCopy}<small>{invitationKind === "plan" ? "Seven focused questions. Your answers stay with you across pages." : "Open one page-relevant next step."}</small></button>
             <button className="koi-companion-invitation__dismiss" type="button" onClick={dismissInvitation} aria-label="Dismiss koi invitation"><X size={14} aria-hidden="true" /></button>
           </div>
         ) : null}
@@ -367,7 +432,7 @@ export default function KoiCompanion() {
           <span className="koi-companion-trigger__signal" aria-hidden="true" />
         </button>
       </div>
-      {open ? <KoiCompanionPanel context={context} hasDraft={hasDraft} onClose={closePanel} onDismiss={dismissCompanion} /> : null}
+      {open ? <KoiCompanionPanel context={context} hasDraft={hasDraft} initialSurface={panelSurface} onClose={closePanel} onDismiss={dismissCompanion} /> : null}
     </div>
   );
 }

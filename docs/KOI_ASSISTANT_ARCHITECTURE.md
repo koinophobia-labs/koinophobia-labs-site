@@ -12,7 +12,7 @@ The koi is a single, page-aware companion for the **studio site only** (koinopho
 |------|------|
 | `components/companion/KoiCompanion.tsx` | Global mount, presence, motion controller, invitation budget, collision avoidance, analytics. |
 | `components/companion/KoiCompanionPanel.tsx` | The dialog: page-aware menu + copilot surfaces (understand / compare / work / help) + concierge. |
-| `components/companion/CompanionKoiArt.tsx` | SVG koi (reuses the Trendi fish geometry so it can transform/undulate live). |
+| `components/companion/CompanionKoiArt.tsx` | Accessible presentation wrapper for the official transparent two-koi brand artwork. |
 | `lib/companion/page-context.ts` | Route → `{ routeKey, invitation, actions, copilot[], slug, preferredSide, delay }`; host allowlist; suppression list. |
 | `lib/companion/site-knowledge.ts` | **Grounded knowledge derived from `lib/commercial.ts`** — services, comparison, relevant-work, page briefs, next steps, free-text answers. |
 | `lib/companion/site-help.ts` | Thin back-compat adapter over `site-knowledge` (`SITE_HELP_TOPICS`, `answerSiteQuestion`). |
@@ -23,7 +23,7 @@ The koi is a single, page-aware companion for the **studio site only** (koinopho
 
 ## Page-aware usefulness model
 
-`resolveCompanionPageContext(pathname)` classifies the route and returns a `copilot: CopilotIntent[]` list (`understand` | `compare` | `relevant_work` | `next_step`) that is **distinct per route** — `/services` offers compare, `/work` offers relevant-work, `/products` offers neither. The panel renders exactly those surfaces plus the always-present help, concierge, and nav actions.
+`resolveCompanionPageContext(pathname)` classifies the route and returns a `copilot: CopilotIntent[]` list (`understand` | `compare` | `relevant_work` | `next_step`) that is **distinct per route** — `/services` opens comparison, `/work` opens relevant work, `/audit` opens a revenue-leak explanation, and `/products` opens the products-versus-client-services explanation. The panel renders the invited surface directly, with the broader menu still available from the persistent trigger.
 
 ### Site knowledge source
 
@@ -58,18 +58,18 @@ The controller (`KoiCompanion.tsx`) runs `requestAnimationFrame` **only while th
 
 `triggerOverlapsInteractiveControl()` (throttled to 120ms, plus scroll/resize) hides the koi (`aria-hidden`, `tabIndex -1`) when it would cover a link/button. The koi's small drift means it rarely needs this; when blocked it enters the `avoiding` state.
 
-## Annoyance budget (`lib/companion/session.ts`) — unchanged, and correct
+## Annoyance budget (`lib/companion/session.ts`)
 
-Max 2 proactive invitations/session, 10-min cooldown, per-route dedupe, 30-min dismissal, full-session "let the koi rest," suppressed while a field is focused / dialog is open / during scroll / right after nav / after the concierge has started. The koi rests or sleeps the majority of page time.
+Max 2 proactive invitations/session, 10-min cooldown, per-route dedupe, 30-min dismissal, full-session "let the koi rest," suppressed while a field is focused / dialog is open / during scroll / right after nav / after the concierge has started. Meaningful engagement is recorded only after at least eight seconds and 30% scroll depth on a route. After two engaged commercial routes, one invitation may offer to turn the visitor's exploration into a project plan. The koi rests or sleeps the majority of page time.
 
 ## Persistence
 
-- `koinophobia:koi-companion:v1` (sessionStorage) — companion session (hidden/minimized/invitation counters).
-- `CONCIERGE_STORAGE_KEY` (localStorage) — the **shared** concierge draft. The panel autosaves on every answer and offers "continue on the full page," so there is exactly one lead pipeline.
+- `koinophobia:koi-companion:v1` (`sessionStorage`) — companion session (hidden/minimized/invitation counters, visited and engaged routes, plan-offer status).
+- `CONCIERGE_STORAGE_KEY` (`sessionStorage`) — the **shared-within-the-tab** concierge draft. The panel autosaves on every answer and offers "continue on the full page," so there is exactly one lead pipeline while independent tabs remain isolated. A one-time migration deletes the legacy origin-wide `localStorage` record.
 
 ## Analytics
 
-Categorical only, via the existing `trackStudioEvent`. Events: `koi_companion_viewed/opened/minimized/invitation_shown/invitation_dismissed/action_selected`, `koi_site_question_answered`, `koi_companion_page_understood`, `koi_companion_services_compared` (service-slug pair), `koi_companion_relevant_work_selected` (top slug + count), and the concierge's `koi_concierge_*`. **No visitor free-text, business names, contact details, or CRM identifiers are ever sent** — the relevant-work intent and site questions stay client-side (asserted by test).
+Categorical only, via the existing `trackStudioEvent`. Events: `koi_companion_viewed/opened/minimized/invitation_shown/invitation_dismissed/action_selected`, `koi_companion_meaningful_route`, `koi_companion_plan_invitation_shown`, `koi_site_question_answered`, `koi_companion_page_understood`, `koi_companion_services_compared` (service-slug pair), `koi_companion_relevant_work_selected` (top slug + count), and the concierge's `koi_concierge_*`. **No visitor free-text, business names, contact details, or CRM identifiers are ever sent** — the relevant-work intent and site questions stay client-side (asserted by test).
 
 ## AI constraints
 

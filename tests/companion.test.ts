@@ -26,6 +26,7 @@ import {
 } from "../lib/companion/site-knowledge";
 import { serviceOffers, studioConfig, workProjects } from "../lib/commercial";
 import {
+  canOfferProjectPlan,
   canShowCompanionInvitation,
   COMPANION_DISMISSAL_MS,
   COMPANION_INVITATION_COOLDOWN_MS,
@@ -33,6 +34,9 @@ import {
   emptyCompanionSession,
   parseCompanionSession,
   recordCompanionInvitation,
+  recordCompanionRouteEngagement,
+  recordCompanionRouteVisit,
+  recordProjectPlanInvitation,
 } from "../lib/companion/session";
 
 const root = path.resolve(import.meta.dirname, "..");
@@ -55,7 +59,14 @@ test("page context enables intentional studio routes with deterministic copy", (
     assert.equal(context.routeKey, routeKey, route);
     assert.ok(context.invitationDelayMs >= 6_000, route);
     assert.ok(context.actions.some((action) => action.id === "concierge"), route);
+    assert.ok(context.invitationSurface, route);
   }
+  assert.equal(resolveCompanionPageContext("/services").invitationSurface, "compare");
+  assert.equal(resolveCompanionPageContext("/work").invitationSurface, "work");
+  assert.equal(resolveCompanionPageContext("/audit").invitationSurface, "understand");
+  assert.equal(resolveCompanionPageContext("/products").invitationSurface, "understand");
+  assert.match(resolveCompanionPageContext("/audit").invitation || "", /revenue leak/i);
+  assert.match(resolveCompanionPageContext("/products").invitation || "", /products.*not client-service/i);
 });
 
 test("internal, personal, payment, product-demo, and dedicated concierge routes are suppressed", () => {
@@ -100,6 +111,21 @@ test("invitation frequency caps, route deduplication, cooldown, and dismissal ar
   assert.equal(canShowCompanionInvitation(dismissed, "services", now + COMPANION_INVITATION_COOLDOWN_MS + 1), false);
 });
 
+test("meaningful browsing offers one project-plan invitation after two engaged routes", () => {
+  const now = 1_000_000;
+  const initial = emptyCompanionSession();
+  const visited = recordCompanionRouteVisit(initial, "services");
+  assert.deepEqual(visited.visitedRoutes, ["services"]);
+  const first = recordCompanionRouteEngagement(visited, "services");
+  assert.equal(canOfferProjectPlan(first, now), false);
+  const second = recordCompanionRouteEngagement(first, "work");
+  assert.equal(canOfferProjectPlan(second, now), true);
+  const offered = recordProjectPlanInvitation(second, now);
+  assert.equal(offered.planOfferShown, true);
+  assert.equal(offered.lastInvitationRoute, "project_plan");
+  assert.equal(canOfferProjectPlan(offered, now + 1), false);
+});
+
 test("motion state prioritizes interaction and reduced motion without randomness", () => {
   assert.equal(resolveCompanionMotionState({ open: true, invitationVisible: true, reducedMotion: true, ambientState: "sleeping" }), "listening");
   assert.equal(resolveCompanionMotionState({ open: false, invitationVisible: true, reducedMotion: true, ambientState: "sleeping" }), "inviting");
@@ -131,8 +157,17 @@ test("the global companion mounts once and lazy-loads the existing shared concie
   assert.match(companion, /dynamic\(\(\) => import\("@\/components\/companion\/KoiCompanionPanel"\)/);
   assert.match(panel, /dynamic\(\(\) => import\("@\/components\/concierge\/ConciergeFlow"\)/);
   assert.match(panel, /<ConciergeFlow entry=/);
-  assert.match(flow, /CONCIERGE_STORAGE_KEY/);
+  assert.match(flow, /saveConciergeDraft\(window\.sessionStorage/);
   assert.match(flow, /saveDraft\(\{ version: 1, sessionId, savedAt: Date\.now\(\), step, stage: "questions", answers: next \}\)/);
+});
+
+test("the companion uses the official two-koi emblem without an attached widget background", () => {
+  const art = read("components/companion/CompanionKoiArt.tsx");
+  const css = read("app/koi-companion.css");
+  assert.match(art, /koinophobia-labs-koi-640\.webp/);
+  assert.doesNotMatch(art, /TrendiFish/);
+  assert.match(css, /\.koi-companion-trigger[\s\S]*background: transparent/);
+  assert.doesNotMatch(css, /\.koi-companion-trigger::before/);
 });
 
 test("keyboard, focus, dismissal, reduced-motion, print, and safe-area protections are present", () => {
@@ -154,7 +189,7 @@ test("keyboard, focus, dismissal, reduced-motion, print, and safe-area protectio
   assert.match(companion, /koi-companion-trigger__steer/);
   assert.doesNotMatch(css, /koi-companion-trigger::before/);
   assert.match(css, /koi-companion-swim/);
-  assert.match(css, /koi-companion-tail/);
+  assert.match(css, /koi-companion-swim/);
   assert.match(css, /rotate\(var\(--koi-heading/);
   assert.match(companion, /aria-haspopup="dialog"/);
   assert.match(panel, /event\.key === "Escape"/);
@@ -179,6 +214,8 @@ test("companion analytics remain categorical and exclude visitor answers", () =>
     "koi_companion_page_understood",
     "koi_companion_services_compared",
     "koi_companion_relevant_work_selected",
+    "koi_companion_meaningful_route",
+    "koi_companion_plan_invitation_shown",
   ]) assert.match(companionSources, new RegExp(event));
   assert.doesNotMatch(companionSources, /businessName|primaryProblem|desiredOutcome|contactEmail|websiteUrl/);
   // The relevant-work finder must never send the visitor's free-text intent.
@@ -228,6 +265,16 @@ test("page briefs and next steps are page-specific and non-empty", () => {
   // Smallest next step for proof pages points at a service, not a forced build.
   assert.equal(smallestNextStep("work").href, "/services");
   assert.match(smallestNextStep("audit").href, /audit/);
+  assert.match(pageBrief("audit").facts.join(" "), /mobile visitors|contact requests|follow-up/i);
+  assert.match(pageBrief("products").summary, /not client work/i);
+});
+
+test("backend unavailability keeps a retry and standard-intake escape path", () => {
+  const flow = read("components/concierge/ConciergeFlow.tsx");
+  assert.match(flow, /The recommendation did not load/);
+  assert.match(flow, /Retry recommendation/);
+  assert.match(flow, /Prefer the standard form/);
+  assert.match(flow, /request timed out safely/i);
 });
 
 test("routes expose distinct, page-appropriate copilot intents", () => {

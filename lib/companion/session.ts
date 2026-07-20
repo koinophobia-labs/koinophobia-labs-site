@@ -11,6 +11,9 @@ export type CompanionSession = {
   lastInvitationAt: number;
   lastInvitationRoute: string;
   dismissedUntil: number;
+  visitedRoutes: string[];
+  engagedRoutes: string[];
+  planOfferShown: boolean;
 };
 
 export const emptyCompanionSession = (): CompanionSession => ({
@@ -21,7 +24,15 @@ export const emptyCompanionSession = (): CompanionSession => ({
   lastInvitationAt: 0,
   lastInvitationRoute: "",
   dismissedUntil: 0,
+  visitedRoutes: [],
+  engagedRoutes: [],
+  planOfferShown: false,
 });
+
+function safeRoutes(value: unknown) {
+  if (!Array.isArray(value)) return [];
+  return [...new Set(value.filter((route): route is string => typeof route === "string" && route.length > 0).map((route) => route.slice(0, 80)))].slice(-8);
+}
 
 export function parseCompanionSession(raw: string | null): CompanionSession {
   if (!raw || raw.length > 2_000) return emptyCompanionSession();
@@ -36,6 +47,9 @@ export function parseCompanionSession(raw: string | null): CompanionSession {
       lastInvitationAt: Number.isFinite(value.lastInvitationAt) && Number(value.lastInvitationAt) > 0 ? Number(value.lastInvitationAt) : 0,
       lastInvitationRoute: typeof value.lastInvitationRoute === "string" ? value.lastInvitationRoute.slice(0, 80) : "",
       dismissedUntil: Number.isFinite(value.dismissedUntil) && Number(value.dismissedUntil) > 0 ? Number(value.dismissedUntil) : 0,
+      visitedRoutes: safeRoutes(value.visitedRoutes),
+      engagedRoutes: safeRoutes(value.engagedRoutes),
+      planOfferShown: value.planOfferShown === true,
     };
   } catch {
     return emptyCompanionSession();
@@ -59,4 +73,29 @@ export function recordCompanionInvitation(session: CompanionSession, routeKey: s
 
 export function dismissCompanionInvitation(session: CompanionSession, now = Date.now()): CompanionSession {
   return { ...session, dismissedUntil: now + COMPANION_DISMISSAL_MS };
+}
+
+export function recordCompanionRouteVisit(session: CompanionSession, routeKey: string): CompanionSession {
+  if (session.visitedRoutes.includes(routeKey)) return session;
+  return { ...session, visitedRoutes: [...session.visitedRoutes, routeKey].slice(-8) };
+}
+
+export function recordCompanionRouteEngagement(session: CompanionSession, routeKey: string): CompanionSession {
+  const visited = recordCompanionRouteVisit(session, routeKey);
+  if (visited.engagedRoutes.includes(routeKey)) return visited;
+  return { ...visited, engagedRoutes: [...visited.engagedRoutes, routeKey].slice(-8) };
+}
+
+export function canOfferProjectPlan(session: CompanionSession, now = Date.now()) {
+  return !session.hidden && !session.planOfferShown && session.dismissedUntil <= now && session.engagedRoutes.length >= 2 && session.invitationCount < COMPANION_INVITATION_LIMIT;
+}
+
+export function recordProjectPlanInvitation(session: CompanionSession, now = Date.now()): CompanionSession {
+  return {
+    ...session,
+    planOfferShown: true,
+    invitationCount: Math.min(COMPANION_INVITATION_LIMIT, session.invitationCount + 1),
+    lastInvitationAt: now,
+    lastInvitationRoute: "project_plan",
+  };
 }
