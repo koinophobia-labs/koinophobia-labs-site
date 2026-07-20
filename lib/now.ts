@@ -48,11 +48,11 @@ export const nowActiveWork: Array<{
   },
   {
     name: "Career Forge",
-    stage: "Live beta",
+    stage: "Live beta · paid tier closed",
     snapshot:
-      "Released to production on July 19. Anyone can finish the workflow and export real documents. A paid tier is live; I haven't reconciled whether anyone has bought it.",
+      "Released to production on July 19 and free to use. I closed the paid tier on July 20 after finding a purchase could fail to deliver without recording it.",
     doingNow:
-      "Packaging the paid tier and founding cohort, and sharpening it toward being the easiest résumé and job-prep experience to actually finish.",
+      "Proving the paid path end to end before it reopens — durable fulfillment state, a signed-webhook drill, and a reconciliation against Stripe. Checkout stays shut until that runs.",
     nextProof:
       "External users completing the full workflow, trusting the output, and paying because it materially simplifies their search.",
     href: LINKS.careerForge,
@@ -93,7 +93,7 @@ export const nowSnapshot = nowActiveWork.map((item) => ({
 
 export const nowProof = [
   "A first repeatable paid studio engagement.",
-  "External Career Forge users finishing the whole workflow — and paying for it.",
+  "A demonstrated Career Forge fulfillment path, then external users finishing the workflow.",
   "Trendi's isolation gate closed, then the build in ten creators' hands.",
   "A You Know Ball build assigned to a tester group and installed by someone who isn't me.",
   "A salary role aligned with customer-facing AI and implementation work.",

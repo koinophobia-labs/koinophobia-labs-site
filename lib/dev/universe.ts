@@ -153,8 +153,7 @@ export const products: Product[] = [
     identity: { theme: "forge", register: "Structural · built under pressure" },
     reach: "public",
     stage: "public",
-    status:
-      "Live on the web, in live commerce mode — a $49 Career Reset link is enabled in production",
+    status: "Live on the web and free to use. Paid checkout is closed until fulfillment is proven",
     verifiedAt: "2026-07-20",
     evidence: [
       {
@@ -162,18 +161,18 @@ export const products: Product[] = [
         source: "HTTP 200 from career-forge-lite.vercel.app, checked 2026-07-20",
       },
       {
-        claim: "Production is in live commerce mode, not test mode",
+        claim: "Paid checkout is closed in production",
         source:
-          "/pricing renders “Founding paid beta · Career Reset only” and “$49”, a string the code emits only when commerceMode === \"live\"",
+          "GET /api/commerce-health returns canSellSafely:false; POST /api/checkout returns 503 fulfillment_not_ready; /pricing renders no buy control and no stripe.com link (checked 2026-07-20)",
       },
       {
         claim: "Released build",
         source: "origin/main b1be8b2, tagged v0.10.0-beta.1",
       },
       {
-        claim: "Fulfillment could fail silently after payment",
+        claim: "Fulfillment could fail silently after payment, and was closed because of it",
         source:
-          "Audit 2026-07-20: live checkout returns a Payment Link and never learns the outcome; the webhook 503s without STRIPE_WEBHOOK_SECRET, which was never provisioned. Fix open as career-forge-lite#28",
+          "Audit 2026-07-20: live checkout returned a Payment Link and never learned the outcome. Brake merged as career-forge-lite#28 (3c66a77) and deployed; production health now names STRIPE_WEBHOOK_SECRET, RESEND_API_KEY and LICENSE_EMAIL_FROM as missing",
       },
     ],
     problem:
@@ -184,7 +183,7 @@ export const products: Product[] = [
       "Live at career-forge-lite.vercel.app. A stranger can walk in, build a dossier, generate role-specific drafts, and export a real DOCX and ZIP without talking to me.",
       "Released to production on July 19, 2026 (v0.10.0-beta.1) after a readiness sprint: early-win bullets and a lighter first-run profile.",
       "The generation engine is deterministic. There is no model writing your history — every claim traces to something you entered.",
-      "Production is in live commerce mode with a working $49 payment link — and an audit on July 20 found the fulfillment path behind it runs entirely in the buyer's browser. Close the tab on the way back from Stripe and the license is never issued, with nothing recording that it happened. A fix that refuses to sell unless the deployment can prove delivery is written and open for review; until it lands, checkout stays closed.",
+      "Paid checkout is closed, deliberately. An audit on July 20 found the fulfillment path behind the $49 link ran entirely in the buyer's browser: close the tab on the way back from Stripe and the license was never issued, with nothing recording it. The brake is deployed — the pricing page shows a contact CTA and the checkout endpoint refuses. It reopens only when the whole journey has been demonstrated end to end, not when the right environment variables exist.",
     ],
     decisions: [
       {
@@ -203,6 +202,10 @@ export const products: Product[] = [
         call: "Closed checkout rather than leaving a warning next to a live buy button.",
         why: "The audit found a paying customer could get nothing and leave no trace. A checkout that refuses to open is a bad day; one that charges and delivers nothing is a refund, an apology, and someone's trust. \"No database\" was the right call for career data and I carried it one step too far, into the one place that needed a record.",
       },
+      {
+        call: "Made reopening depend on a demonstrated journey, not on configuration.",
+        why: "My first fix checked that six environment variables contained text and called it ready. That is the same mistake in a smaller font — presence isn't proof. Checkout now reopens only after the full path has actually run.",
+      },
     ],
     learned:
       "I built this for myself first, so every feature aimed at someone already motivated, and the hardest problems turned out to be the first ninety seconds rather than the output quality. The sharper lesson came later: I shipped a working payment button and never once asked what happens if the customer's browser doesn't come back.",
@@ -211,7 +214,8 @@ export const products: Product[] = [
     ],
     notYet: [
       "I cannot tell you whether anyone has ever paid. There is no order database by design, so the only system that knows is Stripe, and I have not reconciled it. Treat “paying customers” as unestablished in both directions.",
-      "Worse: until the July 20 fix lands, I could not have told you whether a payment failed to deliver either. Nothing logged it.",
+      "Worse: before July 20 I could not have told you whether a payment failed to deliver either. Nothing logged it.",
+      "Durable fulfillment state isn't provisioned yet, so checkout stays closed until it is.",
       "I have collected zero beta feedback. It saves to the tester's own browser and never reaches me — a design decision I did not think through.",
       "No confirmed job outcome. Nobody has told me this got them hired.",
       "Lane suggestions still come from a fixed library, so an operations résumé gets tech-pivot lanes it didn't ask for. Known defect, not yet fixed.",
