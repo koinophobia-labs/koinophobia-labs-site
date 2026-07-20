@@ -19,6 +19,7 @@ import "./dev-system.css";
 import "./dev-home.css";
 import "./dev-product.css";
 import "./dev-pages.css";
+import "./dev-koi.css";
 import "./connect-card.css";
 import "./resume-dev.css";
 import "./now-dev.css";

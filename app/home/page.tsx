@@ -6,6 +6,7 @@ import { LINKS } from "@/lib/links";
 import { nowLastUpdated, nowSnapshot } from "@/lib/now";
 import { publishedNotes } from "@/lib/dev/lab";
 import { products, reachLabel } from "@/lib/dev/universe";
+import PersonalKoi from "@/components/dev-koi/PersonalKoi";
 
 // This page is the root of koinophobia.dev (rewritten from "/" for that host in
 // next.config.ts). koinophobialabs.com explains the studio; this page explains Blake.
@@ -91,7 +92,9 @@ export default function DevHomePage() {
         <nav className="devhome__nav" aria-label="Site">
           <Link href="/products">Products</Link>
           <Link href="/lab">Lab</Link>
-          <Link href="/notes">Notes</Link>
+          {/* Notes appears only once something is published there. Linking to
+              an empty section promises writing that isn't up yet. */}
+          {publishedNotes.length > 0 ? <Link href="/notes">Notes</Link> : null}
           <Link href="/now">Now</Link>
           <Link href="/about">About</Link>
           <Link href="/connect">Connect</Link>
@@ -320,6 +323,7 @@ export default function DevHomePage() {
         </a>
       </footer>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(personSchema) }} />
+      <PersonalKoi />
     </div>
   );
 }

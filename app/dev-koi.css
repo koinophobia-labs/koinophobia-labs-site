@@ -1,0 +1,292 @@
+/* koinophobia.dev personal koi.
+   =============================
+   Namespace `.devkoi*` — deliberately distinct from the studio companion's
+   `.koi-companion*`. Different tokens too: this reads --dh-* from
+   dev-system.css and inherits --acc, so the fish takes on the accent of
+   whichever product world it's resting in.
+
+   z-index band 120/121 sits below the studio companion's 260/850/851. The two
+   never coexist, but if a future mount ever put them on one page, the personal
+   koi should lose rather than cover a panel.
+
+   THE OPACITY RULE (inherited from the studio koi's hardest bug): opacity is
+   never animated on anything that must remain visible. Background tabs throttle
+   CSS animations, and a `both`-filled opacity fade freezes at 0 — leaving a
+   permanently invisible element that still occupies the DOM. Entrance
+   animations here move transform only. */
+
+.devkoi {
+  position: fixed;
+  right: max(18px, env(safe-area-inset-right));
+  bottom: max(18px, env(safe-area-inset-bottom));
+  z-index: 120;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+  pointer-events: none;
+  --devkoi-size: 54px;
+}
+
+.devkoi > * {
+  pointer-events: auto;
+}
+
+/* ---------- the creature ---------- */
+
+.devkoi__body {
+  display: grid;
+  place-items: center;
+  width: var(--devkoi-size);
+  height: var(--devkoi-size);
+  padding: 0;
+  background: none;
+  border: 0;
+  border-radius: 50%;
+  color: var(--acc, #9447ff);
+  cursor: pointer;
+  /* No opacity animation — see the header. Entrance is transform only. */
+  opacity: 1;
+  animation: devkoi-arrive 900ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes devkoi-arrive {
+  from {
+    transform: translate3d(26px, 8px, 0) scale(0.88);
+  }
+  to {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+.devkoi__swim {
+  display: block;
+  width: 100%;
+  height: 100%;
+  will-change: transform;
+  transform-origin: 50% 50%;
+}
+
+.devkoi__glyph {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  transform: rotate(var(--devkoi-heading, 0deg));
+  transition: transform 220ms ease-out;
+  filter: drop-shadow(0 0 10px color-mix(in srgb, var(--acc, #9447ff) 26%, transparent));
+}
+
+/* A slow internal pulse — the only thing that runs while resting. */
+.devkoi__body-pulse,
+.devkoi__body {
+  transition: color 240ms ease;
+}
+
+.devkoi__fin--tail {
+  transform-origin: 62% 54%;
+  animation: devkoi-flick 3.6s ease-in-out infinite;
+}
+
+.devkoi__fin--lead {
+  transform-origin: 40% 50%;
+  animation: devkoi-flick 3.6s ease-in-out infinite reverse;
+}
+
+@keyframes devkoi-flick {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(-7deg);
+  }
+}
+
+.devkoi__body:hover .devkoi__glyph,
+.devkoi__body:focus-visible .devkoi__glyph {
+  filter: drop-shadow(0 0 15px color-mix(in srgb, var(--acc, #9447ff) 42%, transparent));
+}
+
+.devkoi__body:focus-visible {
+  outline: 2px solid var(--acc-hot, #b15cff);
+  outline-offset: 4px;
+}
+
+/* Minimized: still present, noticeably quieter. */
+.devkoi[data-minimized="true"] .devkoi__glyph {
+  opacity: 0.45;
+  filter: none;
+}
+
+.devkoi[data-minimized="true"] .devkoi__fin--tail,
+.devkoi[data-minimized="true"] .devkoi__fin--lead {
+  animation: none;
+}
+
+/* Hidden tab: pause the ambient animation only. Never the note — its content
+   must stay readable if the tab loses visibility while open. */
+.devkoi[data-paused="true"] .devkoi__body,
+.devkoi[data-paused="true"] .devkoi__body *,
+.devkoi[data-paused="true"] .devkoi__body *::before,
+.devkoi[data-paused="true"] .devkoi__body *::after {
+  animation-play-state: paused !important;
+}
+
+/* ---------- the note ---------- */
+
+.devkoi__note {
+  position: relative;
+  width: min(300px, calc(100vw - 36px));
+  padding: 16px 34px 14px 16px;
+  background: var(--dh-panel, #0a0b12);
+  border: 1px solid var(--dh-rule-quiet, rgba(232, 230, 240, 0.08));
+  border-left: 2px solid var(--acc, #9447ff);
+  border-radius: 10px;
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.55);
+  /* Transform-only entrance; opacity stays 1 so a throttled tab can't freeze
+     this at invisible. */
+  opacity: 1;
+  animation: devkoi-note-in 260ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes devkoi-note-in {
+  from {
+    transform: translate3d(0, 8px, 0) scale(0.98);
+  }
+  to {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+.devkoi__note p {
+  margin: 0;
+  color: var(--dh-text, #e8e6f0);
+  font-size: 14px;
+  line-height: 1.58;
+}
+
+.devkoi__note-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+  align-items: center;
+  margin-top: 12px;
+}
+
+.devkoi__note-link {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+  color: var(--acc-hot, #b15cff);
+  font-family: var(--font-ibm-plex-mono), monospace;
+  font-size: 11.5px;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.devkoi__note-link:hover,
+.devkoi__note-link:focus-visible {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.devkoi__note-dismiss {
+  padding: 0;
+  background: none;
+  border: 0;
+  color: var(--dh-muted, #807c94);
+  cursor: pointer;
+  font-family: var(--font-ibm-plex-mono), monospace;
+  font-size: 11.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.devkoi__note-dismiss:hover,
+.devkoi__note-dismiss:focus-visible {
+  color: var(--dh-text, #e8e6f0);
+}
+
+.devkoi__note-close {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  background: none;
+  border: 0;
+  border-radius: 5px;
+  color: var(--dh-muted, #807c94);
+  cursor: pointer;
+}
+
+.devkoi__note-close:hover,
+.devkoi__note-close:focus-visible {
+  color: var(--dh-text, #e8e6f0);
+}
+
+.devkoi__note :focus-visible,
+.devkoi__note-close:focus-visible {
+  outline: 2px solid var(--acc-hot, #b15cff);
+  outline-offset: 2px;
+}
+
+/* ---------- small screens ---------- */
+
+@media (max-width: 420px) {
+  .devkoi {
+    right: 12px;
+    bottom: 12px;
+    --devkoi-size: 44px;
+  }
+
+  .devkoi__note {
+    width: min(280px, calc(100vw - 24px));
+  }
+}
+
+/* At 320px a resting fish is fine; a note plus a fish is not. The note is
+   allowed, but it is the full usable width and the fish shrinks under it. */
+@media (max-width: 340px) {
+  .devkoi {
+    --devkoi-size: 38px;
+  }
+
+  .devkoi__note {
+    width: calc(100vw - 24px);
+  }
+}
+
+/* ---------- reduced motion ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .devkoi__body,
+  .devkoi__fin--tail,
+  .devkoi__fin--lead {
+    animation: none !important;
+  }
+
+  .devkoi__swim {
+    transform: none !important;
+  }
+
+  .devkoi__glyph {
+    transform: none !important;
+    transition: none !important;
+  }
+
+  .devkoi__note {
+    animation: none !important;
+  }
+}
+
+@media print {
+  .devkoi {
+    display: none !important;
+  }
+}
