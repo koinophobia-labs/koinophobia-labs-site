@@ -3,12 +3,15 @@ import assert from "node:assert/strict";
 import { existsSync, readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import {
-  MAX_STATUS_AGE_DAYS,
+  STAGE_FRESHNESS_DAYS,
+  type Stage,
+  checkFreshness,
   getProduct,
   products,
   reachLabel,
   stageLabel,
   stageRank,
+  staleProducts,
   statusOwner,
   universeLastUpdated,
 } from "../lib/dev/universe";
@@ -54,29 +57,81 @@ test("every product carries verification metadata", () => {
   }
 });
 
-test("no product status has gone stale", () => {
-  // Status decay is the actual failure mode. Make it break the build.
-  const now = Date.now();
-  for (const product of products) {
-    const ageDays = (now - Date.parse(product.verifiedAt)) / 86_400_000;
+test("no product status has gone stale for its stage", () => {
+  // Stage-aware, not a flat window. A product mid-release can be wrong within
+  // days; Trendi moved 114 → 119 in eight. A universal 45-day allowance let an
+  // archaeological status pass CI.
+  const stale = staleProducts();
+  assert.deepEqual(
+    stale.map((r) => r.product),
+    [],
+    stale.map((r) => r.message).join("\n\n"),
+  );
+});
+
+test("every stage has a freshness budget, and fast stages are tight", () => {
+  for (const stage of Object.keys(stageLabel) as Stage[]) {
     assert.ok(
-      ageDays <= MAX_STATUS_AGE_DAYS,
-      `${product.name} was last verified ${Math.round(ageDays)} days ago (limit ${MAX_STATUS_AGE_DAYS}). Re-check it against artifacts, then bump verifiedAt.`,
+      typeof STAGE_FRESHNESS_DAYS[stage] === "number",
+      `stage "${stage}" has no freshness budget — add one to STAGE_FRESHNESS_DAYS`,
     );
   }
+  // Anything mid-release must be re-checked at least weekly.
+  for (const stage of ["release-candidate", "uploaded", "internal-testers"] as Stage[]) {
+    assert.ok(
+      STAGE_FRESHNESS_DAYS[stage] <= 7,
+      `stage "${stage}" moves fast and cannot have a ${STAGE_FRESHNESS_DAYS[stage]}-day window`,
+    );
+  }
+  // A dormant product should not demand weekly ceremony.
+  assert.ok(STAGE_FRESHNESS_DAYS.paused >= 30);
+  assert.ok(STAGE_FRESHNESS_DAYS.concept >= 30);
+});
+
+test("a stale status produces an actionable message", () => {
+  // The failure has to tell you what to do, not just that something is wrong.
+  const product = products[0];
+  const longAgo = Date.parse(product.verifiedAt) + 10_000 * 86_400_000;
+  const result = checkFreshness(product, longAgo);
+
+  assert.equal(result.fresh, false);
+  assert.match(result.message, /STALE STATUS/);
+  assert.ok(result.message.includes(product.name), "names the product");
+  assert.ok(result.message.includes(product.stage), "names the stage");
+  assert.ok(result.message.includes(product.verifiedAt), "names the verification date");
+  assert.ok(result.message.includes(String(result.allowedDays)), "names the allowed age");
+  assert.match(result.message, /what to do:/, "states the corrective action");
+  assert.match(result.message, /do NOT just bump the date/, "warns against a rubber-stamp refresh");
+});
+
+test("freshness is never auto-refreshed", () => {
+  // A function that silently moved verifiedAt would make the whole model
+  // decorative. The date may only change when a human inspected evidence.
+  const source = read("lib/dev/universe.ts");
+  assert.doesNotMatch(
+    source,
+    /verifiedAt\s*=\s*(?!")/,
+    "verifiedAt is assigned dynamically somewhere — it must stay a literal",
+  );
 });
 
 test("a status owner is recorded", () => {
   assert.ok(statusOwner.length > 0);
 });
 
-test("date stamps are literal strings, never runtime dates", () => {
+test("published dates are literals, never read from the clock", () => {
+  // The invariant is about VALUES that get published, not about the clock being
+  // untouchable. checkFreshness() legitimately compares against Date.now() —
+  // that's measuring staleness, not asserting that someone looked.
   for (const source of [read("lib/dev/universe.ts"), read("lib/dev/lab.ts")]) {
     assert.doesNotMatch(
       source,
-      /new Date\(\)|Date\.now\(\)/,
-      "a status date that moves on its own is not evidence of anything",
+      /(verifiedAt|LastUpdated|date)\s*:\s*(new Date|Date\.now|.*toISOString)/i,
+      "a published date is being generated at runtime — it must be a literal a human typed",
     );
+  }
+  for (const product of products) {
+    assert.match(product.verifiedAt, /^\d{4}-\d{2}-\d{2}$/);
   }
   assert.ok(universeLastUpdated.length > 0);
   assert.ok(nowLastUpdated.length > 0);
@@ -307,20 +362,88 @@ test("every product action link is usable by a stranger", () => {
 
 /* ---------- field notes ---------- */
 
-test("held field notes stay in the repo but off the site", () => {
-  const held = notes.filter((note) => !note.published);
-  assert.ok(held.length > 0, "expected at least one note held for Blake's review");
+test("no note publishes without BOTH gates", () => {
+  // Claude drafts these notes in Blake's first person, under his byline. The
+  // approval flag is the one that stops that from becoming ghostwriting: it is
+  // a claim that the human named on the page has actually read the words.
+  for (const note of notes) {
+    if (publishedNotes.some((p) => p.slug === note.slug)) {
+      assert.equal(note.published, true, `${note.slug} rendered without published`);
+      assert.equal(
+        note.approvedByBlake,
+        true,
+        `${note.slug} is publicly reachable but Blake has not approved it`,
+      );
+    }
+  }
+  // A note flagged for publication but unread must NOT be reachable.
+  const unapproved = notes.filter((n) => n.published && !n.approvedByBlake);
+  for (const note of unapproved) {
+    assert.equal(
+      getNote(note.slug),
+      undefined,
+      `${note.slug} is marked published without approval and still resolves`,
+    );
+  }
+});
+
+test("every first-person note is currently held for review", () => {
+  // As of 2026-07-20 Blake has personally reviewed none of them.
+  assert.equal(
+    publishedNotes.length,
+    0,
+    "a note became publicly reachable — confirm Blake actually approved it",
+  );
+  for (const note of notes) {
+    assert.equal(note.approvedByBlake, false, `${note.slug} claims approval`);
+  }
+});
+
+test("held notes are preserved, never emptied", () => {
+  const held = notes.filter((note) => !note.published || !note.approvedByBlake);
+  assert.ok(held.length > 0);
   for (const note of held) {
     assert.ok(
-      note.body.length > 0,
-      `held note ${note.slug} was emptied — hold means unpublished, never deleted`,
+      note.body.length >= 3,
+      `held note ${note.slug} lost its body — hold means unpublished, never deleted`,
     );
+    assert.ok(note.title.length > 0 && note.hook.length > 0, `${note.slug} was gutted`);
     assert.equal(getNote(note.slug), undefined, `held note ${note.slug} still resolves`);
   }
 });
 
+test("nothing links to an empty notes section", () => {
+  // Advertising writing that isn't there is its own small dishonesty.
+  const shell = read("components/dev/DevShell.tsx");
+  const home = read("app/home/page.tsx");
+  const sitemap = read("app/dev-sitemap.xml/route.ts");
+
+  assert.match(shell, /publishedNotes\.length > 0/, "nav must hide Notes while empty");
+  assert.match(home, /publishedNotes\.length > 0/, "homepage must hide the notes section");
+  assert.match(sitemap, /publishedNotes\.length > 0/, "sitemap must not advertise empty notes");
+
+  // The Notes entry may exist in the source, but only inside the conditional —
+  // an unconditional entry in the array is the failure worth catching.
+  const navBlock = shell.slice(shell.indexOf("DEV_NAV"), shell.indexOf("];"));
+  const notesLine = navBlock.split("\n").find((line) => line.includes('href: "/notes"'));
+  if (notesLine) {
+    assert.match(
+      notesLine,
+      /publishedNotes\.length > 0/,
+      "the Notes nav entry is unconditional — it would link to an empty section",
+    );
+  }
+});
+
+test("the review file still covers every note", () => {
+  assert.ok(exists("docs/FIELD-NOTES-REVIEW.md"));
+  const review = read("docs/FIELD-NOTES-REVIEW.md");
+  for (const note of notes) {
+    assert.ok(review.includes(note.slug), `${note.slug} is unreviewed`);
+  }
+});
+
 test("published field notes are specific, dated, and resolvable", () => {
-  assert.ok(publishedNotes.length >= 3);
   for (const note of publishedNotes) {
     assert.ok(getNote(note.slug), `${note.slug} does not resolve`);
     assert.match(
@@ -336,14 +459,6 @@ test("published field notes are specific, dated, and resolvable", () => {
     );
   }
   assert.equal(new Set(notes.map((n) => n.slug)).size, notes.length, "duplicate note slug");
-});
-
-test("a review file exists for the notes written in Blake's voice", () => {
-  assert.ok(exists("docs/FIELD-NOTES-REVIEW.md"));
-  const review = read("docs/FIELD-NOTES-REVIEW.md");
-  for (const note of notes) {
-    assert.ok(review.includes(note.slug), `${note.slug} is unreviewed`);
-  }
 });
 
 test("the sitemap lists only published notes", () => {

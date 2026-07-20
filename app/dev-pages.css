@@ -340,3 +340,15 @@
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
+
+/* Empty state for /notes while every note is held for review. */
+.devnotes__empty {
+  margin: var(--dh-gap-l) 0;
+  max-width: 60ch;
+  padding: var(--dh-pad-card);
+  border: 1px dashed var(--dh-rule);
+  border-radius: 9px;
+  color: var(--dh-body);
+  font-size: 15.5px;
+  line-height: 1.66;
+}

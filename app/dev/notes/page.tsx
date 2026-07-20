@@ -34,6 +34,19 @@ export default function DevNotesPage() {
         <p className="devsec__stamp">Updated {labLastUpdated}</p>
       </section>
 
+      {publishedNotes.length === 0 ? (
+        // Honest empty state rather than a 404. The route is unlinked from the
+        // nav while it's empty, but anyone arriving from a sitemap, a bookmark
+        // or a search result gets told what's actually going on.
+        <p className="devnotes__empty">
+          Nothing published yet. The notes are written and sitting in the
+          repository — I haven&apos;t read them closely enough to put my name on
+          them in public, and a byline I haven&apos;t checked is exactly the kind
+          of claim the rest of this site exists to avoid. They&apos;ll go up as I
+          clear them.
+        </p>
+      ) : null}
+
       <ul className="devnotes__list">
         {publishedNotes.map((note) => (
           <li className="devnotes__item" key={note.slug}>

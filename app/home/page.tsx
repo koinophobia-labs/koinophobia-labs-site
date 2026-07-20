@@ -192,28 +192,33 @@ export default function DevHomePage() {
           </p>
         </section>
 
-        <section className="devhome__principles" aria-labelledby="devhome-notes-title">
-          <div className="devhome__section-head">
-            <h2 id="devhome-notes-title">What I&apos;m learning</h2>
-            <p>
-              Build logs from inside the work — a blocked release, a feature I switched off on
-              purpose, a number I chased for months.
+        {/* The writing section only exists when there is writing. Every field
+            note is currently held for Blake's review, so this collapses to the
+            lab rather than advertising an empty archive. */}
+        {publishedNotes.length > 0 ? (
+          <section className="devhome__principles" aria-labelledby="devhome-notes-title">
+            <div className="devhome__section-head">
+              <h2 id="devhome-notes-title">What I&apos;m learning</h2>
+              <p>
+                Build logs from inside the work — a blocked release, a feature I switched off on
+                purpose, a number I chased for months.
+              </p>
+            </div>
+            <div className="devhome__principle-grid">
+              {publishedNotes.slice(0, 3).map((note) => (
+                <article key={note.slug}>
+                  <h3>
+                    <Link href={`/notes/${note.slug}`}>{note.title}</Link>
+                  </h3>
+                  <p>{note.hook}</p>
+                </article>
+              ))}
+            </div>
+            <p className="devhome__texture">
+              <Link href="/notes">All field notes</Link> · <Link href="/lab">the lab</Link>
             </p>
-          </div>
-          <div className="devhome__principle-grid">
-            {publishedNotes.slice(0, 3).map((note) => (
-              <article key={note.slug}>
-                <h3>
-                  <Link href={`/notes/${note.slug}`}>{note.title}</Link>
-                </h3>
-                <p>{note.hook}</p>
-              </article>
-            ))}
-          </div>
-          <p className="devhome__texture">
-            <Link href="/notes">All field notes</Link> · <Link href="/lab">the lab</Link>
-          </p>
-        </section>
+          </section>
+        ) : null}
 
         <section className="devhome__principles" aria-labelledby="devhome-principles-title">
           <div className="devhome__section-head">

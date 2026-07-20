@@ -24,12 +24,17 @@ export function GET() {
       changefreq: "monthly",
     })),
     { path: "/now", priority: "0.9", changefreq: "weekly" },
-    { path: "/notes", priority: "0.8", changefreq: "weekly" },
-    ...publishedNotes.map((note) => ({
-      path: `/notes/${note.slug}`,
-      priority: "0.7",
-      changefreq: "yearly",
-    })),
+    // /notes is only advertised to crawlers once something is published there.
+    ...(publishedNotes.length > 0
+      ? [
+          { path: "/notes", priority: "0.8", changefreq: "weekly" },
+          ...publishedNotes.map((note) => ({
+            path: `/notes/${note.slug}`,
+            priority: "0.7",
+            changefreq: "yearly",
+          })),
+        ]
+      : []),
     { path: "/lab", priority: "0.7", changefreq: "monthly" },
     { path: "/about", priority: "0.8", changefreq: "monthly" },
     { path: "/connect", priority: "0.7", changefreq: "monthly" },

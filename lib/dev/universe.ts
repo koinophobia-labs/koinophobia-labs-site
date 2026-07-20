@@ -25,10 +25,34 @@ export const universeLastUpdated = "July 20, 2026";
 export const statusOwner = "Blake Taylor";
 
 /**
- * How stale a status may be before the test suite fails. Status decay is the
- * failure mode this whole file exists to prevent, so it is enforced, not hoped.
+ * How stale a status may be before the test suite fails, BY STAGE.
+ *
+ * A single window was the wrong shape. Trendi moved through builds 114 → 119 in
+ * eight days; a 45-day allowance would have let "uploaded" sit there as an
+ * archaeological artifact while CI stayed green. The rule has to be tight where
+ * things move fast and loose where they genuinely don't.
+ *
+ * Read it as: how long can this claim stay true without anyone looking?
+ * A product mid-release can change under you in a day. A paused one can't.
+ *
+ * The policy lives here, next to the stages it governs, so the tests read it
+ * rather than re-encode it.
  */
-export const MAX_STATUS_AGE_DAYS = 45;
+export const STAGE_FRESHNESS_DAYS: Record<Stage, number> = {
+  // Actively moving through release. Anything here can be wrong tomorrow.
+  "release-candidate": 7,
+  uploaded: 7,
+  "internal-testers": 7,
+  // Real outside users, but changes arrive in batches rather than hourly.
+  "external-testers": 14,
+  // Live or settled, but still worth re-checking monthly.
+  public: 30,
+  "internally-validated": 30,
+  local: 30,
+  // Deliberately dormant. Re-checking weekly would be theatre.
+  paused: 90,
+  concept: 90,
+};
 
 /**
  * Who can use this today, with no help from me.
@@ -146,6 +170,11 @@ export const products: Product[] = [
         claim: "Released build",
         source: "origin/main b1be8b2, tagged v0.10.0-beta.1",
       },
+      {
+        claim: "Fulfillment could fail silently after payment",
+        source:
+          "Audit 2026-07-20: live checkout returns a Payment Link and never learns the outcome; the webhook 503s without STRIPE_WEBHOOK_SECRET, which was never provisioned. Fix open as career-forge-lite#28",
+      },
     ],
     problem:
       "When my DraftKings role ended I had the same problem everyone in that seat has: a hundred scattered applications, no feedback, and advice too generic to act on. The job search is the highest-stakes project most people ever run, and almost nobody runs it as a project.",
@@ -155,7 +184,7 @@ export const products: Product[] = [
       "Live at career-forge-lite.vercel.app. A stranger can walk in, build a dossier, generate role-specific drafts, and export a real DOCX and ZIP without talking to me.",
       "Released to production on July 19, 2026 (v0.10.0-beta.1) after a readiness sprint: early-win bullets and a lighter first-run profile.",
       "The generation engine is deterministic. There is no model writing your history — every claim traces to something you entered.",
-      "Production is currently in live commerce mode: the pricing page shows a $49 Career Reset and a working payment link. That is a real capability to take real money, and I have not reconciled it against anything.",
+      "Production is in live commerce mode with a working $49 payment link — and an audit on July 20 found the fulfillment path behind it runs entirely in the buyer's browser. Close the tab on the way back from Stripe and the license is never issued, with nothing recording that it happened. A fix that refuses to sell unless the deployment can prove delivery is written and open for review; until it lands, checkout stays closed.",
     ],
     decisions: [
       {
@@ -170,14 +199,19 @@ export const products: Product[] = [
         call: "Kept everything client-side — no accounts, no server-side career data.",
         why: "It's the right call for privacy and it's the reason I know almost nothing about how the product is actually used. I traded my own visibility for the user's, on purpose, and I'd make the trade again while admitting what it costs me.",
       },
+      {
+        call: "Closed checkout rather than leaving a warning next to a live buy button.",
+        why: "The audit found a paying customer could get nothing and leave no trace. A checkout that refuses to open is a bad day; one that charges and delivers nothing is a refund, an apology, and someone's trust. \"No database\" was the right call for career data and I carried it one step too far, into the one place that needed a record.",
+      },
     ],
     learned:
-      "I built this for myself first, which meant every feature was aimed at someone already motivated. The hardest problems turned out to be the first ninety seconds — not the output quality.",
+      "I built this for myself first, so every feature aimed at someone already motivated, and the hardest problems turned out to be the first ninety seconds rather than the output quality. The sharper lesson came later: I shipped a working payment button and never once asked what happens if the customer's browser doesn't come back.",
     actions: [
       { label: "Open Career Forge", href: LINKS.careerForge, external: true, primary: true },
     ],
     notYet: [
       "I cannot tell you whether anyone has ever paid. There is no order database by design, so the only system that knows is Stripe, and I have not reconciled it. Treat “paying customers” as unestablished in both directions.",
+      "Worse: until the July 20 fix lands, I could not have told you whether a payment failed to deliver either. Nothing logged it.",
       "I have collected zero beta feedback. It saves to the tester's own browser and never reaches me — a design decision I did not think through.",
       "No confirmed job outcome. Nobody has told me this got them hired.",
       "Lane suggestions still come from a fixed library, so an operations résumé gets tech-pivot lanes it didn't ask for. Known defect, not yet fixed.",
@@ -372,6 +406,55 @@ export const products: Product[] = [
 ];
 
 export const getProduct = (slug: string) => products.find((p) => p.slug === slug);
+
+export type FreshnessResult = {
+  product: string;
+  stage: Stage;
+  verifiedAt: string;
+  ageDays: number;
+  allowedDays: number;
+  fresh: boolean;
+  /** Names the product, the stage, the dates, and what to actually do. */
+  message: string;
+};
+
+/**
+ * Evaluate one product against its stage's freshness budget.
+ *
+ * Deliberately returns a result rather than refreshing anything. A verification
+ * date may only move after a human has looked at evidence — a function that
+ * auto-bumped it would convert this whole system back into decoration.
+ */
+export function checkFreshness(product: Product, now: number = Date.now()): FreshnessResult {
+  const allowedDays = STAGE_FRESHNESS_DAYS[product.stage];
+  const ageDays = Math.floor((now - Date.parse(product.verifiedAt)) / 86_400_000);
+  const fresh = ageDays <= allowedDays;
+
+  return {
+    product: product.name,
+    stage: product.stage,
+    verifiedAt: product.verifiedAt,
+    ageDays,
+    allowedDays,
+    fresh,
+    message: fresh
+      ? `${product.name} — stage "${product.stage}" verified ${product.verifiedAt} (${ageDays}d old, limit ${allowedDays}d).`
+      : [
+          `STALE STATUS: ${product.name}`,
+          `  stage:        ${product.stage} (${stageLabel[product.stage]})`,
+          `  verified at:  ${product.verifiedAt} — ${ageDays} days ago`,
+          `  allowed age:  ${allowedDays} days for this stage`,
+          `  what to do:   re-check ${product.name} against release artifacts`,
+          `                (archives, Apple delivery logs, live HTTP, signing),`,
+          `                update status/evidence if it moved, then set`,
+          `                verifiedAt to today in lib/dev/universe.ts.`,
+          `  do NOT just bump the date — the date is a claim that someone looked.`,
+        ].join("\n"),
+  };
+}
+
+export const staleProducts = (now: number = Date.now()) =>
+  products.map((p) => checkFreshness(p, now)).filter((r) => !r.fresh);
 
 /**
  * You Know Ball is the only product whose page carries a scoreboard, because

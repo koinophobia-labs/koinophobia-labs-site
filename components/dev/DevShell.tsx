@@ -1,19 +1,24 @@
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { LINKS } from "@/lib/links";
+import { publishedNotes } from "@/lib/dev/lab";
 
 // Shared chrome for every koinophobia.dev route except the home page (which
 // owns its own hero-scale topbar). One nav definition means the personal site
 // can't grow a route that nothing links to.
 
+// Notes only appears once something is actually published there. Linking to an
+// empty section is worse than not having the section — it promises writing that
+// isn't there. The route still resolves and explains itself; it just isn't
+// advertised while every note is held for review.
 export const DEV_NAV = [
   { href: "/products", label: "Products" },
   { href: "/lab", label: "Lab" },
-  { href: "/notes", label: "Notes" },
+  ...(publishedNotes.length > 0 ? [{ href: "/notes", label: "Notes" }] : []),
   { href: "/now", label: "Now" },
   { href: "/about", label: "About" },
   { href: "/connect", label: "Connect" },
-] as const;
+];
 
 export type DevWorld = "forge" | "signal" | "arena" | "cave" | "studio";
 

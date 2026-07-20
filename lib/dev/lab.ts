@@ -7,10 +7,13 @@
 //     intact — and every specific must be checkable. Numbers I cannot point at
 //     an artifact for do not get published, however good they sound.
 //
-// PUBLICATION GATE: these notes are written in Blake's first person and make
-// factual claims about private product history. `published: false` keeps a note
-// in the repo but off the site, pending his sign-off. Nothing is ever deleted to
-// resolve a review. See docs/FIELD-NOTES-REVIEW.md.
+// PUBLICATION GATE: every note here is written in Blake's first person, carries
+// his byline, and makes factual claims about private product history — and
+// Claude drafted all of them. A note publishes only when BOTH `published` and
+// `approvedByBlake` are true. As of 2026-07-20 every note is held: Blake has
+// not personally read any of them, so none are publicly reachable.
+//
+// Nothing is ever deleted to resolve a review. See docs/FIELD-NOTES-REVIEW.md.
 //
 // Reconciled 2026-07-20. Bump `labLastUpdated` by hand. Newest notes first.
 
@@ -78,8 +81,20 @@ export type Note = {
   title: string;
   hook: string;
   tag: string;
-  /** False keeps the note in the repo but off the site, pending Blake's review. */
+  /**
+   * Two independent gates, and BOTH must be true to publish.
+   *
+   * `published`      — Blake wants this on the site.
+   * `approvedByBlake` — Blake has personally read it.
+   *
+   * They are separate on purpose. `published` is an editorial decision;
+   * `approvedByBlake` is a factual claim about whether a human whose name is on
+   * the byline has actually read the words. Claude drafts these notes, so the
+   * second gate is the one that keeps it from becoming an unsupervised
+   * ghostwriter. Both default to false for any new note.
+   */
   published: boolean;
+  approvedByBlake: boolean;
   body: string[];
 };
 
@@ -90,7 +105,8 @@ export const notes: Note[] = [
     title: "My site was wrong about my own products — in both directions",
     hook: "An honesty audit that found the overclaim I expected and an underclaim I didn't.",
     tag: "This site",
-    published: true,
+    published: false,
+    approvedByBlake: false,
     body: [
       "I have a principle written on my homepage: real status labels, documented decisions, no invented proof. So before publishing this version of the site I went looking at how it actually described my work, expecting to find a few places where I'd been generous with myself.",
       "I found those. You Know Ball was carrying three different statuses on one domain — \"in development\" on the home page, \"TestFlight builds shipping\" on the now page, \"TestFlight + live web MVP\" on the résumé. That's the failure mode with honest labels: nobody sets out to overclaim, you write the optimistic version on a Tuesday when it's nearly true, and then the build gets blocked and the sentence doesn't.",
@@ -106,7 +122,8 @@ export const notes: Note[] = [
     title: "Shipping and delivering are different verbs",
     hook: "A finished Trendi build sat behind an account permission for days. Then finishing the upload turned out not to finish the job either.",
     tag: "Trendi",
-    published: true,
+    published: false,
+    approvedByBlake: false,
     body: [
       "Build 116 of Trendi was done. Full suite green, archive built and validated, three P1 fixes in hand. Nobody had it. The upload failed with an Apple account error — the signing identity had lost App Store Connect access — and there's no engineering that gets around that. It needed me at a keyboard with a second factor.",
       "Meanwhile the people testing Trendi were on build 114, which predated all of it. For days I had a better product than the one my testers were using, and every hour of that gap was invisible from the outside.",
@@ -121,7 +138,8 @@ export const notes: Note[] = [
     title: "I turned off the version that wrote better",
     hook: "Trendi's newer generation pipeline is finished, and disabled on purpose.",
     tag: "Trendi",
-    published: true,
+    published: false,
+    approvedByBlake: false,
     body: [
       "Trendi has a second-generation pipeline that produces noticeably better copy. It is currently serving to zero percent of devices, deliberately. Builds 117, 118 and 119 all ship with the V1 client.",
       "It broke written mode entirely, leaked an onboarding default that assumed one platform, and its claims gate started rejecting people's real stories about their own clients as unsupported assertions.",
@@ -140,6 +158,7 @@ export const notes: Note[] = [
     // Rewritten without them; still needs Blake to confirm the story is right
     // before it goes up.
     published: false,
+    approvedByBlake: false,
     body: [
       "You Know Ball scores how well you defend a sports take. Early on I ran cohorts of simulated players against the debate engine and found that a cohort arguing at random — no knowledge, no structure — was winning a large share of games.",
       "That's a fine result for a slot machine and a fatal one for a game about knowing ball. If someone who doesn't watch can win regularly, the score isn't measuring anything, and everyone can feel that even if they can't name it.",
@@ -158,6 +177,7 @@ export const notes: Note[] = [
     // around what still holds. Tone is the most self-critical on the site and
     // the subject is an unreleased private tool, so this needs his call.
     published: false,
+    approvedByBlake: false,
     body: [
       "I put the morning founder brief in Koi Cave through every failure drill I could design: no cache, corrupt cache, malformed events, disconnected mail, double refresh, navigation mid-load. It passed all of them.",
       "Then I looked at what it had actually been running against. The mail integration has never completed a sync — the stored config holds a client ID and no tokens, and the file the sync writes to has never been created. Every brief the tool has ever produced was built from local seed state.",
@@ -168,8 +188,13 @@ export const notes: Note[] = [
   },
 ];
 
-/** Only these render on /notes. Held notes stay in the repo, off the site. */
-export const publishedNotes = notes.filter((note) => note.published);
+/**
+ * Only these render on /notes. A note ships when Blake wants it up AND has read
+ * it — never on one gate alone. Held notes stay in the repo, off the site.
+ */
+export const publishedNotes = notes.filter(
+  (note) => note.published && note.approvedByBlake,
+);
 
 export const getNote = (slug: string) =>
   publishedNotes.find((n) => n.slug === slug);
