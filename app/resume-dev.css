@@ -6,17 +6,6 @@ body:has(.resumedev) {
 }
 
 .resumedev {
-  --dh-ink: #05060a;
-  --dh-panel: #0a0b12;
-  --dh-panel-2: #0d0e17;
-  --dh-text: #e8e6f0;
-  --dh-body: #a7a3b8;
-  --dh-muted: #807c94; /* WCAG AA: >=4.5:1 on ink, panel, panel-2 */
-  --dh-violet: #9447ff;
-  --dh-violet-hot: #b15cff;
-  --dh-violet-soft: rgba(148, 71, 255, 0.16);
-  --dh-rule: rgba(148, 71, 255, 0.16);
-  --dh-rule-quiet: rgba(232, 230, 240, 0.08);
   position: relative;
   min-height: 100dvh;
   color: var(--dh-text);

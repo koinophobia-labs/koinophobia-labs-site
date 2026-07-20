@@ -7,7 +7,7 @@ import { LINKS } from "@/lib/links";
 // lastUpdated is a LITERAL, manually maintained string — never a runtime date.
 // Bump it by hand whenever the copy below changes.
 
-export const nowLastUpdated = "July 18, 2026";
+export const nowLastUpdated = "July 20, 2026";
 
 export const nowHero = {
   heading: "What I'm doing now.",
@@ -48,11 +48,11 @@ export const nowActiveWork: Array<{
   },
   {
     name: "Career Forge",
-    stage: "Live beta",
+    stage: "Live beta · paid tier closed",
     snapshot:
-      "Live on the web. Packaging the paid beta and bringing in the first paying users.",
+      "Released to production on July 19 and free to use. I closed the paid tier on July 20 after finding a purchase could fail to deliver without recording it.",
     doingNow:
-      "Packaging the paid tier and founding cohort, and sharpening it toward being the easiest résumé and job-prep experience to actually finish.",
+      "Proving the paid path end to end before it reopens — durable fulfillment state, a signed-webhook drill, and a reconciliation against Stripe. Checkout stays shut until that runs.",
     nextProof:
       "External users completing the full workflow, trusting the output, and paying because it materially simplifies their search.",
     href: LINKS.careerForge,
@@ -61,27 +61,27 @@ export const nowActiveWork: Array<{
   },
   {
     name: "Trendi",
-    stage: "TestFlight validation",
+    stage: "TestFlight · internal only",
     snapshot:
-      "On TestFlight. Current sprint: getting it into the hands of the first ten creators.",
+      "Build 118 is on TestFlight and installed on my own device. No external testers yet, and the isolation gate isn't closed.",
     doingNow:
-      "Getting it in front of the first ten creators and listening for one thing: whether the words it gives back are good enough to actually record.",
+      "Finishing the clean-state data-isolation check — it needs a second real Apple account on the test phone, which is the whole reason it's still open — then getting the build in front of the first ten creators.",
     nextProof:
       "Creators using the output to publish, repeatedly — not another layer of polish.",
-    href: "/trendi",
+    href: "/products/trendi",
     cta: "See Trendi",
   },
   {
     name: "You Know Ball",
-    stage: "TestFlight-ready · player validation",
+    stage: "Web demo live · iOS uploaded, untested",
     snapshot:
-      "In development, TestFlight builds shipping. Deepening the debate engine so it argues like someone who actually watches.",
+      "Playable in a browser today. Two iOS builds were accepted by Apple and then never put in front of anyone.",
     doingNow:
-      "The debate engine, scoring, replay, receipts, and daily-play systems are built and TestFlight-ready, with a live playable web demo. Now I'm watching whether players come back.",
+      "The engine, scoring, replay and receipts are built, and the web demo is live. Builds 26 and 27 reached App Store Connect and stopped there — so the next step is a tester group, not more features.",
     nextProof:
       "Real players returning to argue, sharing their receipts, and caring about the outcome.",
-    href: "/you-know-ball/play",
-    cta: "Play the web demo",
+    href: "/products/you-know-ball",
+    cta: "See You Know Ball",
   },
 ];
 
@@ -93,9 +93,9 @@ export const nowSnapshot = nowActiveWork.map((item) => ({
 
 export const nowProof = [
   "A first repeatable paid studio engagement.",
-  "External Career Forge users finishing the whole workflow — and paying for it.",
-  "Ten creators using Trendi with honest feedback.",
-  "Real You Know Ball players returning and sharing results.",
+  "A demonstrated Career Forge fulfillment path, then external users finishing the workflow.",
+  "Trendi's isolation gate closed, then the build in ten creators' hands.",
+  "A You Know Ball build assigned to a tester group and installed by someone who isn't me.",
   "A salary role aligned with customer-facing AI and implementation work.",
 ];
 

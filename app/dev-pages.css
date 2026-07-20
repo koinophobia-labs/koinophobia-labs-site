@@ -1,0 +1,354 @@
+/* koinophobia.dev — experiments, field notes, about.
+   These three share the .devpage shell and violet accent (they're Blake, not a
+   product), but each has its own structure: the lab is a bench of artifacts,
+   notes are a log, about is a single column of prose. */
+
+/* ---------- shared page head ---------- */
+
+.devsec__head {
+  padding: var(--dh-gap-xl) 0 var(--dh-gap-l);
+  border-bottom: 1px solid var(--dh-rule-quiet);
+}
+
+.devsec__head h1 {
+  margin: 0 0 20px;
+  max-width: 20ch;
+  font-family: var(--font-sora), sans-serif;
+  font-size: clamp(32px, 5.4vw, 56px);
+  font-weight: 700;
+  letter-spacing: -0.022em;
+  line-height: 1.08;
+}
+
+.devsec__stamp {
+  color: var(--dh-muted);
+  font-family: var(--font-ibm-plex-mono), monospace;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+/* ---------- the lab ---------- */
+
+.devlab__list {
+  display: grid;
+  gap: 0;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.devlab__item {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px;
+  padding: var(--dh-gap-l) 0;
+  border-bottom: 1px solid var(--dh-rule-quiet);
+}
+
+@media (min-width: 820px) {
+  .devlab__item {
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.4fr);
+    gap: var(--dh-gap-l);
+  }
+}
+
+.devlab__item h2 {
+  margin: 0 0 8px;
+  font-family: var(--font-sora), sans-serif;
+  font-size: clamp(19px, 2.4vw, 24px);
+  font-weight: 600;
+  letter-spacing: -0.012em;
+}
+
+.devlab__kind {
+  margin: 0;
+  color: var(--dh-violet-hot);
+  font-family: var(--font-ibm-plex-mono), monospace;
+  font-size: 11.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.devlab__body {
+  margin: 0 0 var(--dh-gap-s);
+  max-width: 62ch;
+  color: var(--dh-body);
+  font-size: 15.5px;
+  line-height: 1.64;
+}
+
+.devlab__finding {
+  position: relative;
+  margin: 0;
+  padding: 14px 0 0 0;
+  max-width: 62ch;
+  border-top: 1px solid var(--dh-rule);
+  color: var(--dh-text);
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.devlab__finding::before {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--dh-muted);
+  content: "What it showed";
+  font-family: var(--font-ibm-plex-mono), monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.devlab__live {
+  display: inline-flex;
+  gap: 7px;
+  align-items: center;
+  margin-top: 12px;
+  color: var(--dh-muted);
+  font-family: var(--font-ibm-plex-mono), monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.devlab__live::before {
+  width: 6px;
+  height: 6px;
+  background: var(--dh-violet);
+  border-radius: 50%;
+  content: "";
+}
+
+/* ---------- field notes ---------- */
+
+.devnotes__list {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.devnotes__item {
+  border-bottom: 1px solid var(--dh-rule-quiet);
+}
+
+.devnotes__link {
+  display: grid;
+  gap: 10px;
+  padding: var(--dh-gap-m) 0;
+  text-decoration: none;
+  transition: opacity 140ms ease;
+}
+
+.devnotes__link:hover h2,
+.devnotes__link:focus-visible h2 {
+  color: var(--dh-violet-hot);
+}
+
+.devnotes__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  color: var(--dh-muted);
+  font-family: var(--font-ibm-plex-mono), monospace;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.devnotes__item h2 {
+  margin: 0;
+  max-width: 30ch;
+  color: var(--dh-text);
+  font-family: var(--font-sora), sans-serif;
+  font-size: clamp(20px, 2.8vw, 27px);
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  line-height: 1.22;
+  transition: color 140ms ease;
+}
+
+.devnotes__hook {
+  margin: 0;
+  max-width: 60ch;
+  color: var(--dh-body);
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+/* ---------- single note ---------- */
+
+.devnote__head {
+  padding: var(--dh-gap-l) 0 var(--dh-gap-m);
+}
+
+.devnote__head h1 {
+  margin: 14px 0 0;
+  max-width: 22ch;
+  font-family: var(--font-sora), sans-serif;
+  font-size: clamp(30px, 5vw, 50px);
+  font-weight: 700;
+  letter-spacing: -0.024em;
+  line-height: 1.08;
+}
+
+.devnote__body {
+  max-width: 68ch;
+  padding-bottom: var(--dh-gap-l);
+}
+
+.devnote__body p {
+  margin: 0 0 var(--dh-gap-m);
+  color: var(--dh-body);
+  font-size: clamp(16px, 1.9vw, 18.5px);
+  line-height: 1.72;
+}
+
+.devnote__body p:first-child {
+  color: var(--dh-text);
+  font-size: clamp(17px, 2.1vw, 21px);
+  line-height: 1.6;
+}
+
+/* ---------- about ---------- */
+
+.devabout__body {
+  max-width: 68ch;
+  padding: var(--dh-gap-l) 0;
+}
+
+.devabout__body p {
+  margin: 0 0 var(--dh-gap-m);
+  color: var(--dh-body);
+  font-size: clamp(16px, 1.9vw, 18.5px);
+  line-height: 1.72;
+}
+
+.devabout__body p:first-of-type {
+  color: var(--dh-text);
+  font-size: clamp(17px, 2.2vw, 22px);
+  line-height: 1.55;
+}
+
+.devabout__beliefs {
+  display: grid;
+  gap: 0;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.devabout__belief {
+  padding: var(--dh-gap-m) 0;
+  border-top: 1px solid var(--dh-rule-quiet);
+}
+
+.devabout__belief h3 {
+  margin: 0 0 10px;
+  max-width: 30ch;
+  color: var(--dh-text);
+  font-family: var(--font-sora), sans-serif;
+  font-size: clamp(18px, 2.3vw, 23px);
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  line-height: 1.3;
+}
+
+.devabout__belief p {
+  margin: 0;
+  max-width: 64ch;
+  color: var(--dh-body);
+  font-size: 15.5px;
+  line-height: 1.64;
+}
+
+.devabout__word {
+  margin: var(--dh-gap-l) 0;
+  padding: var(--dh-pad-card);
+  border-left: 2px solid var(--dh-violet);
+  background: var(--dh-panel);
+}
+
+.devabout__word dt {
+  color: var(--dh-text);
+  font-family: var(--font-sora), sans-serif;
+  font-size: clamp(21px, 3vw, 28px);
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+
+.devabout__word dd {
+  margin: 6px 0 0;
+  max-width: 58ch;
+  color: var(--dh-body);
+  font-size: 15.5px;
+  line-height: 1.64;
+}
+
+.devabout__word dd em {
+  color: var(--dh-violet-hot);
+  font-style: normal;
+}
+
+/* ---------- connect intents (routing the visitor) ---------- */
+
+.devroute {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr));
+  gap: var(--dh-gap-s);
+  margin-top: var(--dh-gap-m);
+}
+
+.devroute__item {
+  display: grid;
+  gap: 7px;
+  padding: var(--dh-gap-m);
+  border: 1px solid var(--dh-rule-quiet);
+  border-radius: 9px;
+  background: var(--dh-panel);
+  text-decoration: none;
+  transition:
+    border-color 150ms ease,
+    background 150ms ease;
+}
+
+.devroute__item:hover,
+.devroute__item:focus-visible {
+  background: var(--dh-panel-2);
+  border-color: var(--dh-violet-soft);
+}
+
+.devroute__item strong {
+  color: var(--dh-text);
+  font-family: var(--font-sora), sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.devroute__item span {
+  color: var(--dh-body);
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.devroute__item em {
+  color: var(--dh-violet-hot);
+  font-family: var(--font-ibm-plex-mono), monospace;
+  font-size: 11px;
+  font-style: normal;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* Empty state for /notes while every note is held for review. */
+.devnotes__empty {
+  margin: var(--dh-gap-l) 0;
+  max-width: 60ch;
+  padding: var(--dh-pad-card);
+  border: 1px dashed var(--dh-rule);
+  border-radius: 9px;
+  color: var(--dh-body);
+  font-size: 15.5px;
+  line-height: 1.66;
+}

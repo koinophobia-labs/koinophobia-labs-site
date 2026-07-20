@@ -1,0 +1,329 @@
+/* koinophobia.dev shared design system.
+   =====================================
+   Before this file, the same 11-token palette block was copy-pasted into
+   dev-home.css, now-dev.css, connect-card.css and resume-dev.css. Changing the
+   brand violet meant four edits, and the tokens had already started to drift.
+   They live here once now.
+
+   The world is one place: ink #05060a, a 44px field grid, mono labels, Sora
+   headings. What varies is the ACCENT — each product page sets --acc via
+   [data-world], so Career Forge reads as a forge and You Know Ball reads as a
+   scoreboard without either leaving the universe. Violet stays reserved for
+   Blake himself and the connective tissue between products. */
+
+:where(.devhome, .nowdev, .connectcard, .resumedev, .devpage) {
+  --dh-ink: #05060a;
+  --dh-panel: #0a0b12;
+  --dh-panel-2: #0d0e17;
+  --dh-text: #e8e6f0;
+  --dh-body: #a7a3b8;
+  --dh-muted: #807c94; /* WCAG AA: >=4.5:1 on #05060a, #0a0b12, and #0d0e17 */
+  --dh-violet: #9447ff;
+  --dh-violet-hot: #b15cff;
+  --dh-violet-soft: rgba(148, 71, 255, 0.16);
+  --dh-rule: rgba(148, 71, 255, 0.16);
+  --dh-rule-quiet: rgba(232, 230, 240, 0.08);
+
+  /* Accent defaults to violet — Blake's own colour. Product pages override. */
+  --acc: var(--dh-violet);
+  --acc-hot: var(--dh-violet-hot);
+  --acc-soft: var(--dh-violet-soft);
+
+  /* One spacing rhythm instead of ad-hoc clamps per rule. */
+  --dh-gap-s: clamp(10px, 1.6vw, 16px);
+  --dh-gap-m: clamp(18px, 3vw, 28px);
+  --dh-gap-l: clamp(30px, 5vw, 56px);
+  --dh-gap-xl: clamp(48px, 8vw, 96px);
+  --dh-pad-card: clamp(20px, 3.2vw, 32px);
+}
+
+body:has(.devpage) {
+  background: #05060a;
+}
+
+/* ---------- per-product accent worlds ----------
+   Each accent is verified >=4.5:1 against ink, panel and panel-2 by
+   scripts/contrast-check.mjs. Do not eyeball a replacement. */
+
+[data-world="forge"] {
+  /* Career Forge — ember. Built under pressure, structural. */
+  --acc: #ff9d3d;
+  --acc-hot: #ffb867;
+  --acc-soft: rgba(255, 157, 61, 0.14);
+}
+
+[data-world="signal"] {
+  /* Trendi — signal mint. Kinetic, on-camera, live. */
+  --acc: #3ddcc2;
+  --acc-hot: #78ecd8;
+  --acc-soft: rgba(61, 220, 194, 0.13);
+}
+
+[data-world="arena"] {
+  /* You Know Ball — scoreboard heat. */
+  --acc: #ff7a4d;
+  --acc-hot: #ff9d79;
+  --acc-soft: rgba(255, 122, 77, 0.14);
+}
+
+[data-world="cave"] {
+  /* Koi Cave — still water. Deliberately the quietest world on the site. */
+  --acc: #6fa8cf;
+  --acc-hot: #98c4e2;
+  --acc-soft: rgba(111, 168, 207, 0.13);
+}
+
+[data-world="studio"] {
+  --acc: var(--dh-violet);
+  --acc-hot: var(--dh-violet-hot);
+  --acc-soft: var(--dh-violet-soft);
+}
+
+/* ---------- shared page shell (new .dev routes) ---------- */
+
+.devpage {
+  position: relative;
+  width: min(var(--dh-measure, 1040px), calc(100% - clamp(24px, 6vw, 72px)));
+  margin: 0 auto;
+  padding: clamp(18px, 3vw, 30px) 0 0;
+  color: var(--dh-text);
+  font-family: var(--font-inter), sans-serif;
+}
+
+.devpage--narrow {
+  --dh-measure: 760px;
+}
+
+.devpage__field {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 60% 42% at var(--dh-field-x, 72%) -6%, var(--acc-soft), transparent 68%),
+    linear-gradient(rgba(232, 230, 240, 0.022) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(232, 230, 240, 0.022) 1px, transparent 1px),
+    #05060a;
+  background-size: auto, 44px 44px, 44px 44px, auto;
+}
+
+/* ---------- top bar ---------- */
+
+.devpage__topbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 18px;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--dh-rule-quiet);
+}
+
+.devpage__wordmark {
+  color: var(--dh-text);
+  font-family: var(--font-ibm-plex-mono), monospace;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-decoration: none;
+}
+
+.devpage__wordmark::before {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  margin-right: 9px;
+  background: var(--acc);
+  border-radius: 50%;
+  vertical-align: 1px;
+  content: "";
+}
+
+.devpage__nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(12px, 2.4vw, 22px);
+}
+
+.devpage__nav a {
+  color: var(--dh-body);
+  font-family: var(--font-ibm-plex-mono), monospace;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: color 140ms ease;
+}
+
+.devpage__nav a:hover,
+.devpage__nav a:focus-visible {
+  color: var(--acc-hot);
+}
+
+.devpage__nav a[aria-current="page"] {
+  color: var(--dh-text);
+}
+
+/* ---------- shared primitives ---------- */
+
+.devpage__kicker {
+  margin: 0 0 16px;
+  color: var(--acc-hot);
+  font-family: var(--font-ibm-plex-mono), monospace;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.devpage__lede {
+  margin: 0 0 var(--dh-gap-m);
+  max-width: 62ch;
+  color: var(--dh-body);
+  font-size: clamp(15px, 1.7vw, 18px);
+  line-height: 1.62;
+}
+
+.devpage__back {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  color: var(--dh-muted);
+  font-family: var(--font-ibm-plex-mono), monospace;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: color 140ms ease;
+}
+
+.devpage__back:hover,
+.devpage__back:focus-visible {
+  color: var(--acc-hot);
+}
+
+.devpage__footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 20px;
+  justify-content: space-between;
+  margin-top: var(--dh-gap-xl);
+  padding: var(--dh-gap-m) 0 clamp(30px, 5vw, 52px);
+  border-top: 1px solid var(--dh-rule-quiet);
+  color: var(--dh-muted);
+  font-family: var(--font-ibm-plex-mono), monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.devpage__footer a {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+  color: var(--dh-muted);
+  text-decoration: none;
+  transition: color 140ms ease;
+}
+
+.devpage__footer a:hover,
+.devpage__footer a:focus-visible {
+  color: var(--acc-hot);
+}
+
+/* ---------- reach chip: the one fact every product must state ---------- */
+
+.devpage__reach {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  padding: 5px 11px;
+  border: 1px solid var(--dh-rule-quiet);
+  border-radius: 999px;
+  color: var(--dh-body);
+  font-family: var(--font-ibm-plex-mono), monospace;
+  font-size: 11px;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.devpage__reach::before {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  content: "";
+}
+
+.devpage__reach[data-reach="public"] {
+  border-color: var(--acc-soft);
+  color: var(--acc-hot);
+}
+
+.devpage__reach[data-reach="public"]::before {
+  background: var(--acc);
+}
+
+.devpage__reach[data-reach="limited"]::before {
+  background: var(--dh-body);
+}
+
+.devpage__reach[data-reach="internal"]::before {
+  border: 1px solid var(--dh-muted);
+}
+
+/* ---------- buttons ---------- */
+
+.devpage__btn {
+  display: inline-flex;
+  gap: 9px;
+  align-items: center;
+  padding: 12px 20px;
+  background: var(--acc);
+  border: 1px solid var(--acc);
+  border-radius: 7px;
+  color: #05060a;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition:
+    background 140ms ease,
+    transform 140ms ease;
+}
+
+.devpage__btn:hover {
+  background: var(--acc-hot);
+  border-color: var(--acc-hot);
+}
+
+.devpage__btn--ghost {
+  background: transparent;
+  border-color: var(--dh-rule-quiet);
+  color: var(--dh-text);
+}
+
+.devpage__btn--ghost:hover {
+  background: transparent;
+  border-color: var(--acc);
+  color: var(--acc-hot);
+}
+
+/* ---------- focus + motion ---------- */
+
+.devpage a:focus-visible,
+.devpage button:focus-visible {
+  outline: 2px solid var(--acc-hot);
+  outline-offset: 3px;
+  border-radius: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .devpage *,
+  .devpage *::before,
+  .devpage *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

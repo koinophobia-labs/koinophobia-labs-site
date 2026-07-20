@@ -3,7 +3,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight, GitBranch, IdCard, Mail, QrCode } from "lucide-react";
 import { LINKS } from "@/lib/links";
-import { nowSnapshot } from "@/lib/now";
+import { nowLastUpdated, nowSnapshot } from "@/lib/now";
+import { publishedNotes } from "@/lib/dev/lab";
+import { products, reachLabel } from "@/lib/dev/universe";
 
 // This page is the root of koinophobia.dev (rewritten from "/" for that host in
 // next.config.ts). koinophobialabs.com explains the studio; this page explains Blake.
@@ -43,42 +45,27 @@ const personSchema = {
   sameAs: [LINKS.linkedin, LINKS.github, "https://koinophobialabs.com"],
 };
 
-const systems = [
-  {
-    name: "Career Forge",
-    origin: "Started from my own layoff.",
-    body: "When my DraftKings role ended, the job search in front of me looked like pure chaos: scattered applications, no feedback loops, advice too generic to act on. I built the system I needed — positioning, applications, outreach, and interview prep as one repeatable operation. Then I kept building it for the next person in that seat.",
-    status: "Live · beta",
-    href: LINKS.careerForge,
-    cta: "Open Career Forge",
-    external: true,
-  },
-  {
-    name: "Trendi",
-    origin: "Started from watching good ideas die before the record button.",
-    body: "Most creators don't run out of ideas — they stall in the gap between having one and pressing record. Trendi is an iOS app that takes a rough thought and hands you clear words to say on camera. A coach in your pocket, not a script mill.",
-    status: "iOS · TestFlight",
-    href: "/trendi",
-    cta: "See Trendi",
-  },
-  {
-    name: "You Know Ball",
-    origin: "Started from a lifetime of sports arguments.",
-    body: "Sports takes are the most passionate opinions most of us hold, and they usually evaporate into group-chat noise. You Know Ball turns them into an actual game: stake a claim, defend it against a debate engine that knows ball, and get scored honestly — no participation trophies.",
-    status: "iOS · in development",
-    href: "/you-know-ball/play",
-    cta: "Play the web demo",
-  },
-  {
-    name: "Koinophobia Labs",
-    origin: "The same idea, applied to other people's businesses.",
-    body: "Small businesses leak time and revenue through the exact kind of friction I build against everywhere else — unclear websites, messy intake, follow-up that lives in someone's memory. The studio is where I do that work for clients. If you want to hire it, that lives on its own site.",
-    status: "Open for client work",
-    href: LINKS.labs,
-    cta: "Visit the studio",
-    external: true,
-  },
-];
+// Rendered from lib/dev/universe.ts so the home page cannot describe a product
+// differently from the product's own page. Origins stay here because they're
+// the homepage's job — one line on why the thing exists at all.
+const origins: Record<string, string> = {
+  "career-forge": "Started from my own layoff.",
+  trendi: "Started from watching good ideas die before the record button.",
+  "you-know-ball": "Started from a lifetime of sports arguments.",
+  "koi-cave": "Started from not wanting to rent my own context back.",
+};
+
+const systems = products.map((product) => ({
+  name: product.name,
+  origin: origins[product.slug] ?? "",
+  body: product.problem,
+  status: product.status,
+  reach: product.reach,
+  href: `/products/${product.slug}`,
+  // These go to the product's story page on this site, not to the product
+  // itself — "Open" would promise a launch that doesn't happen here.
+  cta: `Read the ${product.name} story`,
+}));
 
 const principles = [
   {
@@ -102,9 +89,11 @@ export default function DevHomePage() {
       <header className="devhome__topbar">
         <span className="devhome__wordmark">koinophobia.dev</span>
         <nav className="devhome__nav" aria-label="Site">
-          <a href="#systems">Work</a>
+          <Link href="/products">Products</Link>
+          <Link href="/lab">Lab</Link>
+          <Link href="/notes">Notes</Link>
           <Link href="/now">Now</Link>
-          <Link href="/resume">Résumé</Link>
+          <Link href="/about">About</Link>
           <Link href="/connect">Connect</Link>
         </nav>
       </header>
@@ -123,13 +112,15 @@ export default function DevHomePage() {
               role was eliminated — I stopped building around a job and went all in.
             </p>
             <p className="devhome__lede devhome__lede--secondary">
-              Everything on this page started as a real problem in my own life. This site is where I
-              document what I&apos;m building, why, and what it&apos;s teaching me.
+              Everything here started as a real problem in my own life. This is the working record:
+              what I&apos;m building, where each thing honestly stands, what broke on the way, and
+              what it changed my mind about. The studio sells outcomes. This site shows the
+              machinery.
             </p>
             <div className="devhome__hero-actions">
-              <a className="devhome__btn" href="#systems">
+              <Link className="devhome__btn" href="/products">
                 See what I&apos;m building
-              </a>
+              </Link>
               <Link className="devhome__btn devhome__btn--ghost" href="/connect">
                 Connect with me
               </Link>
@@ -150,7 +141,7 @@ export default function DevHomePage() {
         <section className="devhome__now" id="now" aria-labelledby="devhome-now-title">
           <div className="devhome__now-head">
             <h2 id="devhome-now-title">Right now</h2>
-            <span className="devhome__now-stamp">status · July 2026</span>
+            <span className="devhome__now-stamp">status · {nowLastUpdated}</span>
           </div>
           <ul className="devhome__now-list">
             {nowSnapshot.map((entry) => (
@@ -170,7 +161,8 @@ export default function DevHomePage() {
             <h2 id="devhome-systems-title">The systems</h2>
             <p>
               Four builds, one operating idea. Each one exists because I lived the problem first —
-              they&apos;re evidence of how I think, not inventory.
+              they&apos;re evidence of how I think, not inventory. Every status below is the real
+              one, including the two that aren&apos;t in anyone&apos;s hands yet.
             </p>
           </div>
           <div className="devhome__system-list">
@@ -178,32 +170,55 @@ export default function DevHomePage() {
               <article className="devhome__system" key={system.name}>
                 <div className="devhome__system-meta">
                   <span className="devhome__system-index">0{index + 1}</span>
-                  <span className="devhome__system-status">{system.status}</span>
+                  <span className="devhome__system-status">{reachLabel[system.reach]}</span>
                 </div>
                 <div className="devhome__system-body">
                   <h3>{system.name}</h3>
                   <p className="devhome__system-origin">{system.origin}</p>
                   <p>{system.body}</p>
-                  {system.external ? (
-                    <a
-                      className="devhome__system-link"
-                      href={system.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label={`${system.cta} (opens in a new tab)`}
-                    >
-                      {system.cta} <ArrowUpRight size={15} aria-hidden="true" />
-                    </a>
-                  ) : (
-                    <Link className="devhome__system-link" href={system.href} aria-label={system.cta}>
-                      {system.cta} <ArrowUpRight size={15} aria-hidden="true" />
-                    </Link>
-                  )}
+                  <Link className="devhome__system-link" href={system.href} aria-label={system.cta}>
+                    {system.cta} <ArrowUpRight size={15} aria-hidden="true" />
+                  </Link>
                 </div>
               </article>
             ))}
           </div>
+          <p className="devhome__texture">
+            The studio is the same idea pointed at other people&apos;s businesses.{" "}
+            <a href={LINKS.labs} target="_blank" rel="noopener noreferrer">
+              That work lives on its own site
+            </a>
+            .
+          </p>
         </section>
+
+        {/* The writing section only exists when there is writing. Every field
+            note is currently held for Blake's review, so this collapses to the
+            lab rather than advertising an empty archive. */}
+        {publishedNotes.length > 0 ? (
+          <section className="devhome__principles" aria-labelledby="devhome-notes-title">
+            <div className="devhome__section-head">
+              <h2 id="devhome-notes-title">What I&apos;m learning</h2>
+              <p>
+                Build logs from inside the work — a blocked release, a feature I switched off on
+                purpose, a number I chased for months.
+              </p>
+            </div>
+            <div className="devhome__principle-grid">
+              {publishedNotes.slice(0, 3).map((note) => (
+                <article key={note.slug}>
+                  <h3>
+                    <Link href={`/notes/${note.slug}`}>{note.title}</Link>
+                  </h3>
+                  <p>{note.hook}</p>
+                </article>
+              ))}
+            </div>
+            <p className="devhome__texture">
+              <Link href="/notes">All field notes</Link> · <Link href="/lab">the lab</Link>
+            </p>
+          </section>
+        ) : null}
 
         <section className="devhome__principles" aria-labelledby="devhome-principles-title">
           <div className="devhome__section-head">
@@ -219,7 +234,8 @@ export default function DevHomePage() {
           </div>
           <p className="devhome__texture">
             Off the clock it&apos;s hoops arguments, the gym, and anime — which explains at least one
-            of the products above.
+            of the products above. <Link href="/about">The longer version, and why the site is
+            called koinophobia</Link>.
           </p>
         </section>
 
@@ -227,9 +243,46 @@ export default function DevHomePage() {
           <div className="devhome__connect-card">
             <h2 id="devhome-connect-title">Talk to me</h2>
             <p>
-              Hiring, building something, or just want to compare notes on products and systems?
-              I read everything that comes in.
+              I read everything that comes in. To save you a guess about where to start:
             </p>
+            <div className="devroute">
+              <a
+                className="devroute__item"
+                href={LINKS.labs}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <em>Hire the studio</em>
+                <strong>Koinophobia Labs</strong>
+                <span>
+                  Client work — sites, intake, and AI front-office systems. It has its own intake,
+                  so I won&apos;t duplicate it here.
+                </span>
+              </a>
+              <Link className="devroute__item" href="/products">
+                <em>Try something</em>
+                <strong>The products</strong>
+                <span>
+                  Two are open to anyone right now. The pages say plainly which two, and why the
+                  others aren&apos;t.
+                </span>
+              </Link>
+              <a className="devroute__item" href={LINKS.email}>
+                <em>Test a beta</em>
+                <strong>Ask for access</strong>
+                <span>
+                  Trendi runs an invite-only TestFlight. Tell me what you make and I&apos;ll add
+                  you.
+                </span>
+              </a>
+              <a className="devroute__item" href={LINKS.email}>
+                <em>Hire me, or build together</em>
+                <strong>Email</strong>
+                <span>
+                  Roles, collaborations, speaking, or comparing notes on products and systems.
+                </span>
+              </a>
+            </div>
             <div className="devhome__connect-actions">
               <a className="devhome__btn" href={LINKS.email}>
                 <Mail size={17} aria-hidden="true" /> Email me
