@@ -9,7 +9,7 @@ export type CompanionAction = {
 // Page-copilot surfaces the panel can open in place (audit U4). Distinct per
 // route so the assistant is genuinely page-aware, not a fixed launcher.
 export type CopilotIntent = "understand" | "compare" | "relevant_work" | "next_step";
-export type CompanionPanelSurface = "menu" | "help" | "understand" | "compare" | "work" | "concierge";
+export type CompanionPanelSurface = "menu" | "help" | "understand" | "compare" | "work" | "concierge" | "front_office";
 
 export type CompanionPageContext = {
   routeKey: CompanionRouteKey | "suppressed";

@@ -35,9 +35,11 @@ test("the two companions can never appear on the same host", () => {
   const hosts = [
     "koinophobia.dev",
     "www.koinophobia.dev",
+    "preview.koinophobia.dev",
     "koinophobialabs.com",
     "www.koinophobialabs.com",
     "koinophobia-labs.vercel.app",
+    "koinophobia-labs-git-featu-abc123-example.vercel.app",
     "koinophobia-dev-git-main-example.vercel.app",
     "example.com",
   ];
@@ -58,6 +60,17 @@ test("the personal koi is allowed on the personal host and refused on the studio
   assert.equal(personalKoiHostAllowed("www.koinophobialabs.com"), false);
   assert.equal(personalKoiHostAllowed("koinophobia-labs.vercel.app"), false);
   assert.equal(personalKoiHostAllowed("evil.example.com"), false);
+});
+
+test("the staging host is an exact personal-side exception, invisible to the studio", () => {
+  // preview.koinophobia.dev exists so the personal site can be tested on a
+  // real hostname before merge. Exact string only — sibling subdomains and
+  // lookalikes stay out, and the studio companion must never accept it.
+  assert.equal(personalKoiHostAllowed("preview.koinophobia.dev"), true);
+  assert.equal(companionHostAllowed("preview.koinophobia.dev"), false);
+  assert.equal(personalKoiHostAllowed("preview2.koinophobia.dev"), false);
+  assert.equal(personalKoiHostAllowed("preview.koinophobia.dev.evil.com"), false);
+  assert.equal(personalKoiHostAllowed("xpreview.koinophobia.dev"), false);
 });
 
 test("the personal koi is never mounted by studio surfaces", () => {

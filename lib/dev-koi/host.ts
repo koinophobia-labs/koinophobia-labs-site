@@ -15,6 +15,10 @@
 export function personalKoiHostAllowed(hostname: string): boolean {
   const host = hostname.toLowerCase();
   if (host === "koinophobia.dev" || host === "www.koinophobia.dev") return true;
+  // Production-like staging: an exact subdomain Blake points at a branch to
+  // test the personal site on a real hostname. Never a wildcard, and it can
+  // never satisfy the studio allowlist, so the two-koi separation holds.
+  if (host === "preview.koinophobia.dev") return true;
   // Local development and preview builds of the personal site.
   if (host === "localhost" || host === "127.0.0.1") return true;
   return /^koinophobia-dev(?:-[a-z0-9-]+)?\.vercel\.app$/.test(host);

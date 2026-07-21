@@ -160,6 +160,38 @@ test("/dev/* is internal plumbing and never a public URL", async () => {
   }
 });
 
+test("the staging host mirrors every personal rewrite, with no redirects and no indexing", async () => {
+  const resolved = await rules();
+  // Every koinophobia.dev rewrite exists identically for preview.koinophobia.dev.
+  const prodRewrites = resolved.beforeFiles.filter((r) => hostOf(r) === "koinophobia.dev");
+  assert.ok(prodRewrites.length >= 8, "expected the full personal rewrite set");
+  for (const rule of prodRewrites) {
+    const mirrored = resolved.beforeFiles.find(
+      (r) => r.source === rule.source && r.destination === rule.destination && hostOf(r) === "preview.koinophobia.dev",
+    );
+    assert.ok(mirrored, `${rule.source} is not mirrored for the staging host`);
+  }
+  // No canonicalizing redirects on staging — a tester must never be bounced
+  // to production mid-journey.
+  assert.equal(
+    resolved.redirects.filter((r) => hostOf(r) === "preview.koinophobia.dev").length,
+    0,
+    "staging must have no redirects",
+  );
+  // And the staging host must refuse indexing.
+  const { default: config } = await import("../next.config");
+  const headerRules = (await config.headers!()) as Array<Rule & { headers: Array<{ key: string; value: string }> }>;
+  const noindex = headerRules.find(
+    (r) => hostOf(r) === "preview.koinophobia.dev" && r.headers.some((h) => h.key === "X-Robots-Tag" && /noindex/.test(h.value)),
+  );
+  assert.ok(noindex, "staging host must send X-Robots-Tag: noindex");
+  // The production hosts must NOT be caught by that header rule.
+  for (const rule of headerRules) {
+    const host = hostOf(rule);
+    assert.ok(host !== "koinophobia.dev" && host !== "koinophobialabs.com", "noindex must never target a production host");
+  }
+});
+
 test("koinophobia.dev serves its own sitemap and robots, not the studio's", async () => {
   for (const [source, destination] of [
     ["/sitemap.xml", "/dev-sitemap.xml"],

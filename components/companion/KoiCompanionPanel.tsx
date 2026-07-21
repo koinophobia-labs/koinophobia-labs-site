@@ -24,6 +24,10 @@ const ConciergeFlow = dynamic(() => import("@/components/concierge/ConciergeFlow
   loading: () => <div className="koi-companion-panel__loading" role="status">Preparing the project concierge…</div>,
 });
 
+const StudioFrontOffice = dynamic(() => import("@/components/front-office/StudioFrontOffice"), {
+  loading: () => <div className="koi-companion-panel__loading" role="status">Opening the front office…</div>,
+});
+
 const COPILOT_META: Record<Exclude<CopilotIntent, "next_step">, { icon: typeof Compass; title: string; hint: string; surface: CompanionPanelSurface }> = {
   understand: { icon: Compass, title: "Understand this page", hint: "What it shows and what to pay attention to.", surface: "understand" },
   compare: { icon: Scale, title: "Compare two options", hint: "See how services differ, with a grounded suggestion.", surface: "compare" },
@@ -98,6 +102,11 @@ export default function KoiCompanionPanel({
       session_state: hasDraft ? "resumed" : "new",
     });
     setSurface("concierge");
+  }
+
+  function selectFrontOffice() {
+    trackStudioEvent("front_office_opened", { host: "studio", route: context.routeKey });
+    setSurface("front_office");
   }
 
   function selectLink(action: string) {
@@ -206,10 +215,14 @@ export default function KoiCompanionPanel({
                 <span><strong>Ask a question about the site</strong><small>Services, pricing, timelines, audits, process, or Blake.</small></span>
                 <ArrowUpRight size={17} aria-hidden="true" />
               </button>
+              <button className="koi-companion-action koi-companion-action--primary" type="button" onClick={selectFrontOffice}>
+                <Waves size={18} aria-hidden="true" />
+                <span><strong>Describe the problem — I&apos;ll organize it</strong><small>Plain language in, a structured brief and the smallest next step out.</small></span>
+                <ArrowUpRight size={17} aria-hidden="true" />
+              </button>
               {context.actions.map((action) => action.id === "concierge" ? (
-                <button className="koi-companion-action koi-companion-action--primary" type="button" key={action.id} onClick={selectConcierge}>
-                  <Waves size={18} aria-hidden="true" />
-                  <span><strong>{hasDraft ? "Continue my concierge session" : action.label}</strong><small>{hasDraft ? "Your saved answers are ready." : "Seven focused questions · deterministic routing"}</small></span>
+                <button className="koi-companion-action" type="button" key={action.id} onClick={selectConcierge}>
+                  <span><strong>{hasDraft ? "Continue my concierge session" : "Prefer structured questions?"}</strong><small>{hasDraft ? "Your saved answers are ready." : "The step-by-step concierge — same routing, fixed steps."}</small></span>
                   <ArrowUpRight size={17} aria-hidden="true" />
                 </button>
               ) : (
@@ -332,6 +345,13 @@ export default function KoiCompanionPanel({
                 <Link href={siteAnswer.href} onClick={() => selectLink(`site_answer_${siteAnswer.id}`)}>{siteAnswer.linkLabel} <ArrowUpRight size={14} aria-hidden="true" /></Link>
               </div>
             ) : null}
+          </div>
+        ) : surface === "front_office" ? (
+          <div className="koi-companion-panel__flow">
+            <div className="koi-companion-panel__flow-nav">
+              <button type="button" onClick={() => setSurface("menu")}>Back to options</button>
+            </div>
+            <StudioFrontOffice />
           </div>
         ) : (
           <div className="koi-companion-panel__flow">
