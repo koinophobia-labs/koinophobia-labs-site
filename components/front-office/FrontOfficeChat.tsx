@@ -161,19 +161,14 @@ export default function FrontOfficeChat({
       dispatch({ type: "FREE_TEXT", text: value });
       setText("");
     };
+    // The audit's mobile finding: with chips first, "you can just type" sat
+    // 258px below the fold at 320px. The visitor's own words are the whole
+    // point — the input leads, the chips assist underneath.
     return (
       <div className="ffo" data-host={policy.host} data-stage="goal">
         <p className="ffo__lead">{lead}</p>
-        <div className="ffo__chips" role="group" aria-label="Starting points">
-          {policy.intents.map((intent) => (
-            <button key={intent.id} type="button" className="ffo__chip" onClick={() => dispatch({ type: "SELECT_INTENT", intent: intent.id })}>
-              <strong>{intent.label}</strong>
-              {intent.hint ? <span>{intent.hint}</span> : null}
-            </button>
-          ))}
-        </div>
         <form className="ffo__ask" onSubmit={submitText}>
-          <label htmlFor={`ffo-goal-${policy.host}`}>Or say it in your own words</label>
+          <label htmlFor={`ffo-goal-${policy.host}`}>Say it in your own words — typos and half-thoughts welcome</label>
           <div className="ffo__ask-row">
             <textarea
               id={`ffo-goal-${policy.host}`}
@@ -188,6 +183,15 @@ export default function FrontOfficeChat({
             </button>
           </div>
         </form>
+        <p className="ffo__or">or pick a starting point</p>
+        <div className="ffo__chips" role="group" aria-label="Starting points">
+          {policy.intents.map((intent) => (
+            <button key={intent.id} type="button" className="ffo__chip" onClick={() => dispatch({ type: "SELECT_INTENT", intent: intent.id })}>
+              <strong>{intent.label}</strong>
+              {intent.hint ? <span>{intent.hint}</span> : null}
+            </button>
+          ))}
+        </div>
         <p className="ffo__privacy">{privacyNote}</p>
       </div>
     );
@@ -196,12 +200,20 @@ export default function FrontOfficeChat({
   /* ------------------------------------------------------------ clarify */
 
   if (session.stage === "clarify" && question) {
+    // Qualitative progress on purpose. "8 details to go" read like a long
+    // form and the field-count math jumped on paired questions; buckets are
+    // honest about direction without doing arithmetic at the visitor.
     const remaining = missingFields(session, policy).length;
+    const progressLabel =
+      remaining === 1 ? "Last detail" : remaining <= 3 ? "Almost there" : "A few quick questions — only what changes the answer";
     return (
       <div className="ffo" data-host={policy.host} data-stage="clarify">
-        <p className="ffo__progress" aria-live="polite">
-          {remaining === 1 ? "Last detail" : `${remaining} details to go`}
-        </p>
+        <p className="ffo__progress" aria-live="polite">{progressLabel}</p>
+        {session.fields.contactReluctance ? (
+          <p className="ffo__reassure" role="note">
+            No contact details are needed for any of this — nothing leaves your browser unless you choose to send a brief at the end.
+          </p>
+        ) : null}
         <div className="ffo__question">
           <h3 ref={questionHeadingRef} tabIndex={-1}>{question.prompt(session)}</h3>
           {question.hint ? <p className="ffo__hint">{question.hint(session)}</p> : null}

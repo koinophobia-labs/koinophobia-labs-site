@@ -187,6 +187,10 @@ export type StudioRecommendation = {
   offer?: (typeof serviceOffers)[number];
   /** What is still uncertain — rendered verbatim in the review card. */
   uncertain: string[];
+  /** A budget/scope mismatch worth naming NOW, respectfully — never buried
+   *  in the uncertainty list. The hard refusal for urgent timelines lives in
+   *  the router; this covers the longer runways. */
+  mismatch?: string;
   summary: string;
 };
 
@@ -226,10 +230,19 @@ export function studioRecommendation(session: FrontOfficeSession): StudioRecomme
     if (label && session.fields[key]) uncertain.push(`${label} was read from your message — worth a check`);
   }
 
+  // The boundary string comes from the canonical range the visitor picked —
+  // never a second copy of a number in this file.
+  const mismatch =
+    answers.budgetRange === conciergeBudgetRanges[0] &&
+    ["custom_product", "website_rebuild"].includes(recommendation.service)
+      ? `Worth saying now: ${recommendation.service === "custom_product" ? "a custom build" : "a full rebuild"} doesn't realistically fit a budget ${answers.budgetRange.toLowerCase()}. Blake will recommend the smallest useful step for that budget rather than stretch the scope — no pressure either way.`
+      : undefined;
+
   return {
     recommendation,
     offer,
     uncertain,
+    ...(mismatch ? { mismatch } : {}),
     summary: deterministicQualificationSummary(answers, recommendation),
   };
 }

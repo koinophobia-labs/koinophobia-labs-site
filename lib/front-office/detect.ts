@@ -18,11 +18,14 @@ export function detectUrl(text: string): string | undefined {
   return candidate;
 }
 
-/** "my tattoo shop" → "Tattoo shop". Conservative: requires an ownership
- *  phrase ending in a recognizable establishment noun. */
+/** "my tattoo shop" → "Tattoo shop", "we run a gym" → "Gym". Requires an
+ *  ownership phrase ending in a recognizable establishment noun. The noun may
+ *  stand alone ("my gym") or carry a qualifier ("tattoo shop") — the audit
+ *  found real visitors say both, and "we run…" is at least as common as
+ *  "I run…". */
 export function detectBusinessType(text: string): string | undefined {
   const match = text.slice(0, MAX_INPUT).match(
-    /\b(?:my|our|for (?:my|our)|i (?:run|own|manage)(?: a| an)?)\s+([a-z][a-z\s-]{1,32}?(?:shop|studio|salon|gym|restaurant|cafe|café|bar|clinic|agency|firm|store|practice|bakery|barbershop|boutique|company|nonprofit|gallery))\b/i,
+    /\b(?:my|our|for (?:my|our)|(?:i|we) (?:run|own|manage|have|opened)(?: a| an)?)\s+((?:[a-z][a-z\s-]{0,31}?\s)?(?:shop|studio|salon|gym|restaurant|cafe|café|bar|clinic|agency|firm|store|practice|bakery|barbershop|boutique|company|nonprofit|gallery))\b/i,
   );
   if (!match) return undefined;
   const captured = match[1]

@@ -134,7 +134,11 @@ export function scoreConcierge(answers: Partial<ConciergeAnswers>): ServiceRecom
   const scores: Scores = { revenue_leak_audit: 0.5, website_rebuild: 0.5, ai_automation: 0.5, custom_product: 0.5, quick_fix: 0.5 };
 
   if (includesAny(text, harmfulPatterns)) return finalize("not_a_fit", 0.96, deterministicReasons(answers, "not_a_fit", text));
-  if (answers.problemKind === "custom_product" && answers.budgetRange === "Under $500" && answers.timeline === "This week") {
+  // The budget/scope mismatch must be named whenever it is knowable — a
+  // visitor who says "$200 custom app" deserves the honest answer whether
+  // they picked "this week" or "this month". (Longer runways get a softer
+  // in-card note from the front office instead of a hard refusal.)
+  if (answers.problemKind === "custom_product" && answers.budgetRange === "Under $500" && (answers.timeline === "This week" || answers.timeline === "This month")) {
     return finalize("not_a_fit", 0.9, ["A custom product cannot be responsibly scoped and delivered within the stated budget and timing.", "A no-code prototype or narrower self-service test is the more realistic first step."]);
   }
 
