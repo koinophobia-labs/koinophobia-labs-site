@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import PersonalKoi from "@/components/dev-koi/PersonalKoi";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -192,6 +193,7 @@ export default function ConnectPage() {
           </a>
         </footer>
       </main>
+      <PersonalKoi />
     </div>
   );
 }

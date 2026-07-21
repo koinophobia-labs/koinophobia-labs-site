@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import PersonalKoi from "@/components/dev-koi/PersonalKoi";
 import Link from "next/link";
 import { ArrowLeft, ArrowUpRight } from "lucide-react";
 import {
@@ -175,6 +176,7 @@ export default function NowPage() {
           <Link href="/">Back to the story</Link>
         </footer>
       </main>
+      <PersonalKoi />
     </div>
   );
 }

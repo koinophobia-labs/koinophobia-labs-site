@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { LINKS } from "@/lib/links";
 import { publishedNotes } from "@/lib/dev/lab";
+import PersonalKoi from "@/components/dev-koi/PersonalKoi";
 
 // Shared chrome for every koinophobia.dev route except the home page (which
 // owns its own hero-scale topbar). One nav definition means the personal site
@@ -70,6 +71,11 @@ export default function DevShell({
           koinophobialabs.com — the studio <ArrowUpRight size={13} aria-hidden="true" />
         </a>
       </footer>
+
+      {/* Personal-site only. The studio companion is mounted in the root
+          layout and gated by a hostname allowlist; this one is gated by the
+          fact that nothing on koinophobialabs.com imports it. */}
+      <PersonalKoi />
     </div>
   );
 }
