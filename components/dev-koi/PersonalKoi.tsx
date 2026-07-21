@@ -69,11 +69,14 @@ export default function PersonalKoi() {
   const [reducedMotion, setReducedMotion] = useState(false);
   const [paused, setPaused] = useState(false);
   const [offscreen, setOffscreen] = useState(false);
+  // A note leaves the way it arrived — with a transform, never an unmount snap.
+  const [closing, setClosing] = useState(false);
 
   const bodyRef = useRef<HTMLDivElement | null>(null);
   const rootRef = useRef<HTMLDivElement | null>(null);
   const dwellTimer = useRef<number | null>(null);
   const scrollTimer = useRef<number | null>(null);
+  const closeTimer = useRef<number | null>(null);
   const sessionRef = useRef(session);
 
   // Mirrored in an effect rather than during render: the timers and listeners
@@ -187,6 +190,9 @@ export default function PersonalKoi() {
       const next = selectObservation(pathname, trigger, seen);
       if (!next) return;
 
+      // A fresh note cancels any exit in flight so it never arrives already leaving.
+      if (closeTimer.current) window.clearTimeout(closeTimer.current);
+      setClosing(false);
       setObservation(next);
       const updated = recordShown(current, next.id, now);
       setSession(updated);
@@ -202,7 +208,10 @@ export default function PersonalKoi() {
     // Clearing is deferred with the arrival timer rather than fired
     // synchronously — a setState during effect commit cascades a second render
     // on every navigation, for a note that is usually already null.
-    const clearId = window.setTimeout(() => setObservation(null), 0);
+    const clearId = window.setTimeout(() => {
+      setClosing(false);
+      setObservation(null);
+    }, 0);
     const arriveId = window.setTimeout(() => offer("arrive"), 2200);
     dwellTimer.current = window.setTimeout(() => offer("dwell"), DWELL_MS);
 
@@ -235,9 +244,31 @@ export default function PersonalKoi() {
     writeSession(next);
   };
 
+  // Clear the note with a short exit rather than an unmount snap. The unmount is
+  // driven by this timeout, never by animationend — so a throttled tab that
+  // freezes the CSS mid-exit still removes the note on schedule. Reduced motion
+  // skips the movement entirely.
+  const dismissNote = useCallback(() => {
+    if (closeTimer.current) window.clearTimeout(closeTimer.current);
+    if (reducedMotion) {
+      setClosing(false);
+      setObservation(null);
+      return;
+    }
+    setClosing(true);
+    closeTimer.current = window.setTimeout(() => {
+      setClosing(false);
+      setObservation(null);
+    }, 200);
+  }, [reducedMotion]);
+
+  useEffect(() => () => {
+    if (closeTimer.current) window.clearTimeout(closeTimer.current);
+  }, []);
+
   const toggle = () => {
     if (observation) {
-      setObservation(null);
+      dismissNote();
       return;
     }
     if (session.minimized) {
@@ -252,6 +283,8 @@ export default function PersonalKoi() {
       selectObservation(pathname, "arrive", seen) ??
       selectObservation(pathname, "scroll-rest", seen);
     if (found) {
+      if (closeTimer.current) window.clearTimeout(closeTimer.current);
+      setClosing(false);
       setObservation(found);
       const updated = recordShown(sessionRef.current, found.id, Date.now());
       setSession(updated);
@@ -276,7 +309,7 @@ export default function PersonalKoi() {
       data-reduced-motion={reducedMotion ? "true" : "false"}
     >
       {observation ? (
-        <div className="devkoi__note" role="status">
+        <div className="devkoi__note" role="status" data-closing={closing ? "true" : "false"}>
           <p>{observation.message}</p>
           <div className="devkoi__note-actions">
             {observation.action ? (
@@ -303,7 +336,7 @@ export default function PersonalKoi() {
             <button
               type="button"
               className="devkoi__note-dismiss"
-              onClick={() => setObservation(null)}
+              onClick={dismissNote}
             >
               Dismiss
             </button>

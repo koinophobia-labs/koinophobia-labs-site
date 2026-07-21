@@ -159,6 +159,22 @@
   }
 }
 
+/* Exit is the entrance in reverse — the note settles back down toward the koi
+   rather than vanishing. Transform only (never opacity): a throttled tab must
+   not be able to freeze it, and the unmount is driven by a JS timeout anyway. */
+.devkoi__note[data-closing="true"] {
+  animation: devkoi-note-out 200ms cubic-bezier(0.4, 0, 1, 1) both;
+}
+
+@keyframes devkoi-note-out {
+  from {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  to {
+    transform: translate3d(0, 10px, 0) scale(0.96);
+  }
+}
+
 .devkoi__note p {
   margin: 0;
   color: var(--dh-text, #e8e6f0);
