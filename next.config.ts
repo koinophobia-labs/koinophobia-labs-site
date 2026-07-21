@@ -4,6 +4,21 @@ const DEV_HOST = "koinophobia.dev";
 const LABS_HOST = "koinophobialabs.com";
 
 /**
+ * Production-like staging for the personal site. The Vercel domain
+ * preview.koinophobia.dev is assigned to a chosen branch, so koinophobia.dev
+ * changes can be exercised on a real hostname — host rewrites, host-gated
+ * companions, real TLS — without touching production.
+ *
+ * Deliberately an EXACT host, never a wildcard: it mirrors only the personal
+ * rewrites below and the personal koi's allowlist. It can never satisfy the
+ * studio companion's allowlist, so nothing can leak onto koinophobialabs.com.
+ * Canonicalizing redirects stay production-only on purpose — a tester on the
+ * preview host must not be bounced to the live site mid-journey.
+ */
+const DEV_PREVIEW_HOST = "preview.koinophobia.dev";
+const DEV_HOSTS = [DEV_HOST, DEV_PREVIEW_HOST];
+
+/**
  * koinophobia.dev routes that live under /dev/* in the app tree.
  *
  * They need host-scoped rewrites because several of them (/products, /about)
@@ -54,35 +69,48 @@ const nextConfig: NextConfig = {
   },
   async rewrites() {
     return {
-      beforeFiles: [
+      // Each personal rewrite exists once per dev host — exact values, so the
+      // preview host behaves exactly like koinophobia.dev without a wildcard.
+      beforeFiles: DEV_HOSTS.flatMap((host) => [
         // koinophobia.dev is Blake's personal home; koinophobialabs.com keeps
         // the studio homepage at the shared "/" route.
         {
           source: "/",
-          has: [{ type: "host", value: DEV_HOST }],
+          has: [{ type: "host" as const, value: host }],
           destination: "/home",
         },
         ...DEV_ROUTES.map((route) => ({
           source: route,
-          has: [{ type: "host" as const, value: DEV_HOST }],
+          has: [{ type: "host" as const, value: host }],
           destination: `/dev${route}`,
         })),
         // Crawler files are per-host. app/sitemap.ts and app/robots.ts are the
         // studio's; koinophobia.dev gets its own from dedicated route handlers.
         {
           source: "/sitemap.xml",
-          has: [{ type: "host" as const, value: DEV_HOST }],
+          has: [{ type: "host" as const, value: host }],
           destination: "/dev-sitemap.xml",
         },
         {
           source: "/robots.txt",
-          has: [{ type: "host" as const, value: DEV_HOST }],
+          has: [{ type: "host" as const, value: host }],
           destination: "/dev-robots.txt",
         },
-      ],
+      ]),
       afterFiles: [],
       fallback: [],
     };
+  },
+  async headers() {
+    return [
+      // The staging host duplicates the personal site; crawlers must never
+      // index it. Production hosts are untouched by this rule.
+      {
+        source: "/:path*",
+        has: [{ type: "host" as const, value: DEV_PREVIEW_HOST }],
+        headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }],
+      },
+    ];
   },
 };
 
