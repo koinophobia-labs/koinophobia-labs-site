@@ -1,10 +1,16 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import dynamic from "next/dynamic";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ArrowUpRight, X } from "lucide-react";
 import KoiGlyph from "./KoiGlyph";
+
+const PersonalKoiPanel = dynamic(() => import("./PersonalKoiPanel"), {
+  ssr: false,
+  loading: () => <div className="devkoi-panel devkoi-panel--loading" role="status">Waking the koi…</div>,
+});
 import {
   selectObservation,
   worldForRoute,
@@ -71,13 +77,22 @@ export default function PersonalKoi() {
   const [offscreen, setOffscreen] = useState(false);
   // A note leaves the way it arrived — with a transform, never an unmount snap.
   const [closing, setClosing] = useState(false);
+  // The front-office panel. Open replaces the tap-for-a-note behaviour; the
+  // proactive notes still surface on their own while the panel is closed.
+  const [panelOpen, setPanelOpen] = useState(false);
 
   const bodyRef = useRef<HTMLDivElement | null>(null);
   const rootRef = useRef<HTMLDivElement | null>(null);
+  const triggerRef = useRef<HTMLButtonElement | null>(null);
   const dwellTimer = useRef<number | null>(null);
   const scrollTimer = useRef<number | null>(null);
   const closeTimer = useRef<number | null>(null);
   const sessionRef = useRef(session);
+  const panelOpenRef = useRef(false);
+
+  useEffect(() => {
+    panelOpenRef.current = panelOpen;
+  }, [panelOpen]);
 
   // Mirrored in an effect rather than during render: the timers and listeners
   // below close over sessionRef and must read the latest value without
@@ -177,6 +192,7 @@ export default function PersonalKoi() {
     (trigger: KoiTrigger) => {
       const current = sessionRef.current;
       if (current.dismissed || current.minimized) return;
+      if (panelOpenRef.current) return;
       if (document.visibilityState !== "visible") return;
       // Narrow viewports: wait to be asked. A note here would cover content.
       if (window.innerWidth < PROACTIVE_MIN_WIDTH) return;
@@ -211,6 +227,7 @@ export default function PersonalKoi() {
     const clearId = window.setTimeout(() => {
       setClosing(false);
       setObservation(null);
+      setPanelOpen(false);
     }, 0);
     const arriveId = window.setTimeout(() => offer("arrive"), 2200);
     dwellTimer.current = window.setTimeout(() => offer("dwell"), DWELL_MS);
@@ -266,33 +283,31 @@ export default function PersonalKoi() {
     if (closeTimer.current) window.clearTimeout(closeTimer.current);
   }, []);
 
+  // Tapping the koi opens the front office. The old tap-for-a-note behaviour
+  // is retired — on narrow screens a tapped floating note could cover a
+  // primary button, and a purposeful panel with an explicit close cannot.
+  // Proactive notes are untouched; a tap simply always means "talk".
+  const closePanel = useCallback(() => {
+    setPanelOpen(false);
+    triggerRef.current?.focus();
+  }, []);
+
   const toggle = () => {
-    if (observation) {
-      dismissNote();
+    if (panelOpen) {
+      closePanel();
       return;
     }
-    if (session.minimized) {
-      update({ minimized: false });
-      return;
-    }
-    // A click with nothing pending: look for something worth saying, and if
-    // there isn't, stay quiet rather than inventing filler.
-    const seen = suppressedIds(sessionRef.current, cooldownFor, Date.now());
-    const found =
-      selectObservation(pathname, "dwell", seen) ??
-      selectObservation(pathname, "arrive", seen) ??
-      selectObservation(pathname, "scroll-rest", seen);
-    if (found) {
-      if (closeTimer.current) window.clearTimeout(closeTimer.current);
-      setClosing(false);
-      setObservation(found);
-      const updated = recordShown(sessionRef.current, found.id, Date.now());
-      setSession(updated);
-      writeSession(updated);
-    } else {
-      update({ minimized: true });
-    }
+    if (observation) dismissNote();
+    if (session.minimized) update({ minimized: false });
+    setPanelOpen(true);
   };
+
+  // The panel greets with the page's own arrival observation (cooldowns
+  // ignored — a greeting is not a note), so it opens grounded in the page.
+  const greeting = useMemo(
+    () => selectObservation(pathname, "arrive", new Set())?.message ?? null,
+    [pathname],
+  );
 
   if (!hydrated || !hostAllowed || session.dismissed) return null;
 
@@ -353,23 +368,23 @@ export default function PersonalKoi() {
       ) : null}
 
       <button
+        ref={triggerRef}
         type="button"
         className="devkoi__body"
         data-testid="dev-koi"
         onClick={toggle}
-        aria-label={
-          observation
-            ? "Close this note"
-            : session.minimized
-              ? "Wake the koi"
-              : "Ask the koi about this page"
-        }
-        aria-expanded={observation ? true : false}
+        aria-label={panelOpen ? "Close the koi panel" : "Ask the koi about this page"}
+        aria-expanded={panelOpen || Boolean(observation)}
+        aria-haspopup="dialog"
       >
         <span ref={bodyRef as React.RefObject<HTMLSpanElement>} className="devkoi__swim">
           <KoiGlyph />
         </span>
       </button>
+
+      {panelOpen ? (
+        <PersonalKoiPanel world={world} observationLine={greeting} onClose={closePanel} />
+      ) : null}
     </div>
   );
 }

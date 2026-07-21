@@ -21,10 +21,23 @@ function IntakeFormInner({ defaultService = "" }: { defaultService?: string }) {
   const searchParams = useSearchParams();
   const requestedService = searchParams.get("service") || defaultService;
   const requestedConciergeSession = searchParams.get("concierge") || "";
+  // Warm handoff from the koinophobia.dev front office: the visitor followed
+  // a link that showed them exactly this text. It only seeds the problem
+  // field — they still review and explicitly submit here.
+  const handoffContext = (searchParams.get("context") || "").slice(0, 400);
   const [state, setState] = useState<SubmitState>({ status: "idle" });
   const [started, setStarted] = useState(false);
   const [conciergeHandoff, setConciergeHandoff] = useState<{ sessionId: string; answers: string; token: string } | null>(null);
   const formRef = useRef<HTMLFormElement>(null);
+
+  useEffect(() => {
+    if (!handoffContext || !formRef.current) return;
+    const control = formRef.current.elements.namedItem("biggestProblem");
+    if (control instanceof HTMLTextAreaElement && !control.value) {
+      control.value = handoffContext;
+      trackStudioEvent("front_office_handoff_prefilled", { host: "studio" });
+    }
+  }, [handoffContext]);
 
   useEffect(() => {
     if (!requestedConciergeSession || !formRef.current) return;
