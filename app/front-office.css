@@ -205,6 +205,47 @@
   color: var(--ffo-dim);
 }
 
+.ffo__or {
+  margin: 14px 0 8px;
+  color: var(--ffo-muted);
+  font-family: var(--font-ibm-plex-mono), monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.ffo__reassure {
+  margin: 0 0 12px;
+  padding: 9px 12px;
+  background: color-mix(in srgb, var(--ffo-acc) 7%, transparent);
+  border-left: 2px solid var(--ffo-acc);
+  border-radius: 8px;
+  color: var(--ffo-dim);
+  font-size: 12.5px;
+  line-height: 1.5;
+}
+
+.ffo__mismatch {
+  margin: 8px 0 0;
+  padding: 10px 12px;
+  background: color-mix(in srgb, #ff9d79 9%, transparent);
+  border-left: 2px solid #ff9d79;
+  border-radius: 8px;
+  color: var(--ffo-text);
+  font-size: 12.5px;
+  line-height: 1.55;
+}
+
+/* The /concierge page wrapper: the front office leads, the step-by-step
+   toggle sits under it. */
+.concierge-page-flow .ffo {
+  max-width: 560px;
+}
+
+.concierge-page-flow__switch {
+  margin-top: 18px;
+}
+
 .ffo__eyebrow {
   margin: 0 0 8px;
   color: var(--ffo-muted);

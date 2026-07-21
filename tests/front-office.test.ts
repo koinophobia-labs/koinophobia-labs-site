@@ -427,6 +427,135 @@ test("a session saved mid-submit restores at review, never in a phantom submitti
   assert.equal(restored?.stage, "review");
 });
 
+/* ==================================== usability-audit regression guards */
+
+test("audit A: 'never actually book' classifies as a follow-up problem, no categorization detour", () => {
+  assert.equal(
+    classifyProblemKind("people message us but half of them never actually book and idk why"),
+    "lead_followup",
+  );
+});
+
+test("audit B: intake-shaped pain classifies, and 'we run a tattoo shop' yields the business type", () => {
+  const text = "we run a tattoo shop and my wife has to go through emails and instagram because people leave out size placement references and all kinds of stuff";
+  assert.equal(classifyProblemKind(text), "manual_work");
+  assert.equal(extractBusinessType(text), "Tattoo shop");
+});
+
+test("audit: bare establishment nouns and 'we have/own' phrasings are captured", () => {
+  assert.equal(extractBusinessType("could Blake make something like this for my gym"), "Gym");
+  assert.equal(extractBusinessType("we have a bakery on the north side"), "Bakery");
+});
+
+test("audit E: 'in two weeks' maps to a timeline and the $200 custom app gets the honest refusal", () => {
+  assert.equal(extractTimeline("need a full custom app in two weeks"), "This month");
+  const session = {
+    ...emptySession("studio", SID, NOW),
+    fields: {
+      problemKind: "custom_product",
+      primaryProblem: "need a full custom app in two weeks and my budget is like $200",
+      branchContext: "an app for my customers to order ahead",
+      impact: "losing orders",
+      desiredOutcome: "an app in the store",
+      businessName: "Test",
+      industry: "Startup",
+      budgetRange: "Under $500",
+      timeline: "This month",
+    },
+  };
+  const { recommendation } = studioRecommendation(session);
+  assert.equal(recommendation.service, "not_a_fit", "This-month urgency must not dodge the feasibility answer");
+});
+
+test("audit E: longer runways get a visible mismatch note instead of silence", () => {
+  const session = {
+    ...emptySession("studio", SID, NOW),
+    fields: {
+      problemKind: "custom_product",
+      primaryProblem: "custom portal for my clients, small budget",
+      branchContext: "clients need a portal for uploads and status",
+      impact: "hours of email back and forth",
+      desiredOutcome: "clients self-serve",
+      businessName: "Test",
+      industry: "Agency",
+      budgetRange: "Under $500",
+      timeline: "1-2 months",
+    },
+  };
+  const { mismatch } = studioRecommendation(session);
+  assert.ok(mismatch, "an under-budget custom request must be named, not buried");
+  assert.doesNotMatch(mismatch!, /unfortunately|sorry/i, "respectful, not apologetic");
+});
+
+test("audit J: 'make something like this for my gym' is hiring intent with the context carried", () => {
+  const extraction = extractPersonalFields("could Blake make something like this for my gym");
+  assert.equal(extraction.intent, "hire");
+  assert.equal(extraction.fields.industry, "Gym");
+  const session = drive(personalPolicy, [
+    { type: "FREE_TEXT", text: "could Blake make something like this for my gym" },
+  ]);
+  const outcome = personalOutcome(session);
+  assert.equal(outcome.kind, "handoff");
+  assert.ok(outcome.kind === "handoff" && outcome.handoff.carried.includes("Gym"));
+});
+
+test("audit J: the goal chips include a hiring path, and choosing it lands on the handoff", () => {
+  const chips = personalPolicy.questions[0].chips!(emptySession("personal", SID, NOW));
+  const hireChip = chips.find((chip) => chip.value === "studio");
+  assert.ok(hireChip, "a visitor whose phrasing dodges every pattern still needs a hiring chip");
+  const session = drive(personalPolicy, [
+    { type: "FREE_TEXT", text: "hello" },
+    { type: "ANSWER", questionId: "goal", value: "studio" },
+  ]);
+  assert.equal(personalOutcome(session).kind, "handoff");
+});
+
+test("audit F: no-contact language is noticed, acknowledged, and never rendered or submitted", () => {
+  const { fields } = extractStudioFields("I'm just looking, don't contact me");
+  assert.equal(fields.contactReluctance, "noted");
+  const session = { ...emptySession("studio", SID, NOW), fields: { ...fields, primaryProblem: "just looking" } };
+  assert.ok(!studioBrief(session).some((line) => line.field === "contactReluctance"), "not a brief line");
+  const answers = draftAnswers(session, { name: "T", email: "t@e.co", websiteOrSocial: "t.co" });
+  assert.ok(!("contactReluctance" in answers), "never leaves the browser");
+});
+
+test("audit: the goal screen leads with the visitor's own words, chips beneath", () => {
+  const chat = read("components/front-office/FrontOfficeChat.tsx");
+  const goalBlock = chat.slice(chat.indexOf('data-stage="goal"'), chat.indexOf('/* ------------------------------------------------------------ clarify */'));
+  assert.ok(goalBlock.indexOf("ffo__ask") < goalBlock.indexOf("ffo__chips"), "free text must render before the intent chips");
+  assert.doesNotMatch(chat, /\$\{remaining\} details to go/, "no arithmetic at the visitor");
+});
+
+test("audit: 'send' belongs only to the button that sends", () => {
+  const studioSource = read("components/front-office/StudioFrontOffice.tsx");
+  assert.match(studioSource, /Looks right — continue/);
+  assert.match(studioSource, /Send the brief to Blake/);
+  assert.doesNotMatch(studioSource, /This is right — send it to Blake/);
+  assert.match(studioSource, /from your message/, "the inference flag speaks plain language");
+  assert.doesNotMatch(studioSource, />inferred</, "the jargon chip is gone");
+});
+
+test("audit: every existing help CTA now lands on the front office at /concierge", () => {
+  const page = read("app/concierge/page.tsx");
+  assert.match(page, /ConciergePageFlow/);
+  const flow = read("components/concierge/ConciergePageFlow.tsx");
+  assert.ok(flow.indexOf("StudioFrontOffice") < flow.indexOf("seven-question"), "front office leads; steps remain a toggle");
+  assert.match(flow, /mode === "steps"/, "the step-by-step flow stays directly linkable");
+});
+
+test("audit: a plain tap on the studio koi opens the conversation, not a launcher", () => {
+  const companion = read("components/companion/KoiCompanion.tsx");
+  assert.match(companion, /: "front_office"\);/, "trigger taps must land on the front office");
+});
+
+test("audit: the personal koi wears a visible label while resting", () => {
+  const koi = read("components/dev-koi/PersonalKoi.tsx");
+  assert.match(koi, /devkoi__label/);
+  assert.match(koi, /Ask the koi</);
+  const css = read("app/dev-koi.css");
+  assert.match(css, /\.devkoi__label/);
+});
+
 test("missing required fields drive the clarify loop until complete", () => {
   let session = drive(studioPolicy, [{ type: "SELECT_INTENT", intent: "not_sure" }]);
   assert.ok(missingFields(session, studioPolicy).length > 0);

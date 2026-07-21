@@ -97,8 +97,11 @@ export function matchProduct(text: string): { slug: string; category: string } |
   return { slug: top.slug, category: top.category };
 }
 
+// Hiring verbs real visitors use — the audit's Journey J said "could Blake
+// MAKE something like this for my gym" and fell straight through the old
+// build-only pattern into the product chips.
 const HIRE_PATTERN =
-  /\bhire\b|build (one of these|something|a (system|site|website|tool|app|workflow))[^.?!]{0,40} for (my|our|us|me)\b|for my (business|company|clients)\b|client work|do this for (my|us)\b/i;
+  /\bhire\b|(?:build|make|create|do) (?:one of these|something(?: like (?:this|that))?|this|that|a (?:system|site|website|tool|app|workflow))[^.?!]{0,40} for (?:my|our|us|me)\b|for my (?:business|company|clients)\b|client work/i;
 const COLLAB_PATTERN = /collaborat|partner(ship| with)?\b|work together|team up|co.?found/i;
 const NOW_PATTERN = /what (is|'s| are you) (he |blake )?(building|working on)( (now|right now|these days))?/i;
 const WANTS_BETA_PATTERN = /test ?flight|\bbeta\b|try (the )?(ios|iphone) (app|version)|\binstall\b/i;
@@ -149,6 +152,11 @@ export const personalQuestions: FollowUpQuestion[] = [
           : product.name,
         hint: product.tagline,
       })),
+      // The audit's dead end: a visitor with commercial intent whose phrasing
+      // dodged the hire pattern reached these chips and found nothing that
+      // fit. Hiring is a first-class answer to "what are you trying to get
+      // done?" — value "studio" resolves to the handoff, not a product.
+      { value: "studio", label: "Have Blake build something for me", hint: "Client work — routed through the studio." },
       { value: "none", label: "Just exploring", hint: "Pointers to the good rooms." },
     ],
     eligible: (session) => !session.intent || PRODUCT_INTENTS.has(session.intent),
@@ -238,7 +246,9 @@ export function buildStudioHandoff(session: FrontOfficeSession): StudioHandoff {
 }
 
 export function personalOutcome(session: FrontOfficeSession): PersonalOutcome {
-  if (session.intent === "hire") {
+  // Hiring intent arrives two ways: detected in free text, or chosen from the
+  // goal chips ("studio" is not a product slug — it is the handoff).
+  if (session.intent === "hire" || session.fields.productSlug === "studio") {
     return { kind: "handoff", handoff: buildStudioHandoff(session), explanation: HANDOFF_EXPLANATION };
   }
   if (session.intent === "collaborate") {

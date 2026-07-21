@@ -129,12 +129,17 @@ explicitly submits there. Nothing is transferred silently.
 
 ## Migration / legacy note
 
-`ConciergeFlow` (7-step form) remains available at `/concierge` and as the
-"structured questions" alternative inside the studio panel. Both UIs converge
-on the same authoritative server path (`/api/concierge/evaluate` →
-`/api/intake`), so there is one execution path for evaluation, storage, and
-notification. If the conversational flow proves strictly better, the 7-step
-UI can be retired without touching the server.
+After the 2026-07-21 usability audit, the hierarchy flipped: `/concierge`
+now LEADS with the conversational front office (so every pre-existing help
+CTA on the site — home hero, /intake "Help me choose", /audit's concierge
+link, the services decision band — is a front-office front door), and a
+plain tap on the studio koi opens the conversation directly with the
+launcher menu one tap away ("More options"). `ConciergeFlow` (7-step form)
+remains one toggle away and directly linkable at `/concierge?mode=steps`.
+Both UIs still converge on the same authoritative server path
+(`/api/concierge/evaluate` → `/api/intake`) — one execution path for
+evaluation, storage, and notification. If the conversational flow proves
+strictly better, the 7-step UI can be retired without touching the server.
 
 ## Analytics (categorical only, no free text, no names/emails)
 

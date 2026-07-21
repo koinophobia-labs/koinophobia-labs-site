@@ -77,7 +77,7 @@ function StudioOutcome({ api }: { api: FrontOfficeApi }) {
 
   if (session.stage === "review") {
     const brief = studioBrief(session);
-    const { recommendation, offer, uncertain } = studioRecommendation(session);
+    const { recommendation, offer, uncertain, mismatch } = studioRecommendation(session);
     return (
       <div className="ffo__outcome">
         <p className="ffo__eyebrow">What I heard</p>
@@ -86,7 +86,7 @@ function StudioOutcome({ api }: { api: FrontOfficeApi }) {
             <div key={line.field} className="ffo__brief-line" data-inferred={line.inferred ? "true" : "false"}>
               <dt>
                 {line.label}
-                {line.inferred ? <em title="Read from your message — check it">inferred</em> : null}
+                {line.inferred ? <em>from your message</em> : null}
               </dt>
               {editing === line.field ? (
                 <dd>
@@ -133,6 +133,7 @@ function StudioOutcome({ api }: { api: FrontOfficeApi }) {
           ) : (
             <p className="ffo__no-offer">Scope and pricing for this path are confirmed after Blake reviews the brief — no number is invented here.</p>
           )}
+          {mismatch ? <p className="ffo__mismatch" role="note">{mismatch}</p> : null}
           {uncertain.length ? (
             <div className="ffo__uncertain">
               <p>Still uncertain:</p>
@@ -142,8 +143,10 @@ function StudioOutcome({ api }: { api: FrontOfficeApi }) {
           {recommendation.assumption ? <p className="ffo__assumption">{recommendation.assumption}</p> : null}
         </div>
 
+        {/* "Send" belongs to exactly one button — the one that sends. This
+            step only continues to the contact + consent screen. */}
         <button type="button" className="ffo__primary" onClick={() => dispatch({ type: "CONFIRM_REVIEW" })}>
-          This is right — send it to Blake <ArrowRight size={15} aria-hidden="true" />
+          Looks right — continue <ArrowRight size={15} aria-hidden="true" />
         </button>
         <div className="ffo__footer">
           <button type="button" className="ffo__restart" onClick={restart}><RotateCcw size={13} aria-hidden="true" /> Start over</button>

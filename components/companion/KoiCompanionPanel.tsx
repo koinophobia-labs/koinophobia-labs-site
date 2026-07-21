@@ -349,7 +349,9 @@ export default function KoiCompanionPanel({
         ) : surface === "front_office" ? (
           <div className="koi-companion-panel__flow">
             <div className="koi-companion-panel__flow-nav">
-              <button type="button" onClick={() => setSurface("menu")}>Back to options</button>
+              {/* The conversation is now the landing surface; the launcher is
+                  the optional place, so the link reads forward, not back. */}
+              <button type="button" onClick={() => setSurface("menu")}>More options</button>
             </div>
             <StudioFrontOffice />
           </div>

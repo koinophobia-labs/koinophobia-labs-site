@@ -350,7 +350,11 @@ export default function KoiCompanion() {
     const draft = loadConciergeDraft(window.sessionStorage, window.localStorage);
     setHasDraft(Boolean(draft));
     setInvitationVisible(false);
-    setPanelSurface(entryAction === "invitation" ? invitationKind === "plan" ? "concierge" : context.invitationSurface || "menu" : "menu");
+    // A plain tap lands in the conversation, not a launcher — the usability
+    // audit found the menu interstitial cost first-time visitors a step.
+    // Invitations still open their promised page-specific surface, and the
+    // menu remains one tap away ("More options") inside the panel.
+    setPanelSurface(entryAction === "invitation" ? invitationKind === "plan" ? "concierge" : context.invitationSurface || "menu" : "front_office");
     setOpen(true);
     persistSession({ ...sessionRef.current, minimized: false });
     trackStudioEvent("koi_companion_opened", {

@@ -166,7 +166,9 @@ export default function PersonalKoi() {
       const t = (time - started) / period;
       // Two out-of-phase sines: a slow lateral drift and a smaller vertical
       // one, so the path is a lazy figure rather than a circle.
-      const x = Math.sin(t * Math.PI * 2) * radius;
+      // Biased slightly left so the rightmost point of the drift never
+      // touches the viewport edge (screenshots caught the fins grazing it).
+      const x = Math.sin(t * Math.PI * 2) * radius - 4;
       const y = Math.sin(t * Math.PI * 2 * 0.6 + 1.1) * (radius * 0.55);
       const heading = Math.cos(t * Math.PI * 2) * 7;
 
@@ -377,6 +379,12 @@ export default function PersonalKoi() {
         aria-expanded={panelOpen || Boolean(observation)}
         aria-haspopup="dialog"
       >
+        {/* The audit's discoverability verdict: an unlabeled fish reads as
+            decoration. A quiet persistent label makes the affordance legible
+            without a tutorial; it yields while a note or the panel is open. */}
+        {!panelOpen && !observation ? (
+          <span className="devkoi__label" aria-hidden="true">Ask the koi</span>
+        ) : null}
         <span ref={bodyRef as React.RefObject<HTMLSpanElement>} className="devkoi__swim">
           <KoiGlyph />
         </span>

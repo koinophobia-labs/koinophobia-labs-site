@@ -33,12 +33,20 @@ const PROBLEM_SIGNALS: Record<ProblemKind, RegExp[]> = {
     /leads? (fall|drop|disappear|go cold|slip)/i,
     /inquir(y|ies)|never (finish|complete) (booking|checkout|the form)/i,
     /no.?shows?|abandon(ed|ing)? (booking|cart|form)/i,
+    // How real visitors phrase it (audit journeys A/B): messaging that
+    // never converts into an actual booking or purchase.
+    /people (message|dm|text|contact|reach out)/i,
+    /(never|don'?t|won'?t|half of them|barely) (of them )?(actually |really )?(book|schedule|buy|purchase|show up)/i,
   ],
   manual_work: [
     /manual(ly)?|by hand|copy.?past(e|ing)|data entry/i,
     /spreadsheet|same questions?|repetitive|every (day|week) we/i,
     /organiz(e|ing) (customer )?(emails?|inbox)|rout(e|ing) (emails?|requests?|leads?)/i,
     /assign(ing)? (work|requests?|tickets?)|sending them to (different|other)/i,
+    // Intake-shaped pain: someone digging through channels because requests
+    // arrive incomplete ("people leave out size, placement, references…").
+    /(go(es|ing)?|sort(s|ing)?|dig(s|ging)?) through (emails?|messages|dms|instagram)/i,
+    /leave out|missing (details|info(rmation)?)|incomplete (requests?|inquiries|messages)/i,
   ],
   custom_product: [
     /app idea|build (an? )?(app|product|tool|portal|dashboard|prototype)/i,
@@ -89,11 +97,21 @@ export function extractBudgetRange(text: string): string | undefined {
 
 export function extractTimeline(text: string): string | undefined {
   const scoped = text.slice(0, MAX_INPUT);
-  if (/asap|urgent|right away|this week|immediately/i.test(scoped)) return conciergeTimelines[0];
-  if (/this month|few weeks|next month/i.test(scoped)) return conciergeTimelines[1];
+  if (/asap|urgent|right away|this week|next week|immediately/i.test(scoped)) return conciergeTimelines[0];
+  // "in two weeks" sits between the chips; within-a-month is the honest bucket.
+  if (/this month|few weeks|next month|(?:in )?(?:two|2|three|3|a couple(?: of)?) weeks/i.test(scoped)) return conciergeTimelines[1];
   if (/(1|one|2|two|couple(?: of)?) months|this quarter/i.test(scoped)) return conciergeTimelines[2];
   if (/just (looking|researching|exploring|curious)|no rush|someday/i.test(scoped)) return conciergeTimelines[3];
   return undefined;
+}
+
+/** No-contact language ("just looking, don't contact me"). The flow never
+ *  demanded contact anyway — but a visitor who says this deserves to be told
+ *  so, once, instead of being silently marched into questions. */
+export function detectContactReluctance(text: string): boolean {
+  return /don'?t (contact|email|call|reach out)|no (contact|emails?|calls?|spam)|not (giving|sharing) (my )?(email|info|number)|just (looking|browsing)/i.test(
+    text.slice(0, MAX_INPUT),
+  );
 }
 
 /** "my tattoo shop" → "Tattoo shop". */
@@ -135,5 +153,8 @@ export function extractStudioFields(text: string): ExtractionResult {
     fields.industry = businessType;
     inferred.push("industry");
   }
+  // Not a brief field — a one-time cue for the UI to say "nothing is sent
+  // unless you send it." Excluded from the review brief and the payload.
+  if (detectContactReluctance(text)) fields.contactReluctance = "noted";
   return { fields, inferred };
 }
