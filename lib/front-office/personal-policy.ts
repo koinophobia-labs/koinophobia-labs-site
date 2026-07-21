@@ -102,6 +102,21 @@ export function matchProduct(text: string): { slug: string; category: string } |
 // build-only pattern into the product chips.
 const HIRE_PATTERN =
   /\bhire\b|(?:build|make|create|do) (?:one of these|something(?: like (?:this|that))?|this|that|a (?:system|site|website|tool|app|workflow))[^.?!]{0,40} for (?:my|our|us|me)\b|for my (?:business|company|clients)\b|client work/i;
+
+// The word "hire" is not the intent. "I already hired a developer", "I don't
+// want to hire anyone", and "how did Blake get hired" all contain it and mean
+// something else — a wrong handoff burns more trust than a clarifying chip.
+const HIRE_NEGATION =
+  /\b(?:already|just|recently) hired\b|\b(?:don'?t|do not|won'?t|never|not (?:looking|trying|planning)(?: to)?) (?:want to |going to |gonna )?hir(?:e|ing)\b|no plans to hire|how (?:did|does|do) .{0,40}(?:get )?hired\b/i;
+
+// "Can I hire Career Forge?" is a product question wearing a hiring verb.
+// When the object of "hire" is one of the products, clarify with the product
+// card instead of assuming a service lead.
+const HIRE_PRODUCT_OBJECT = /\bhire\s+(?:career ?forge|trendi|you know ball|koi ?cave)\b/i;
+
+export function detectHireIntent(text: string): boolean {
+  return HIRE_PATTERN.test(text) && !HIRE_NEGATION.test(text) && !HIRE_PRODUCT_OBJECT.test(text);
+}
 const COLLAB_PATTERN = /collaborat|partner(ship| with)?\b|work together|team up|co.?found/i;
 const NOW_PATTERN = /what (is|'s| are you) (he |blake )?(building|working on)( (now|right now|these days))?/i;
 const WANTS_BETA_PATTERN = /test ?flight|\bbeta\b|try (the )?(ios|iphone) (app|version)|\binstall\b/i;
@@ -113,7 +128,7 @@ export function extractPersonalFields(text: string): ExtractionResult {
   if (trimmed) fields.goalText = trimmed;
 
   let intent: string | undefined;
-  if (HIRE_PATTERN.test(text)) intent = "hire";
+  if (detectHireIntent(text)) intent = "hire";
   else if (COLLAB_PATTERN.test(text)) intent = "collaborate";
   else if (NOW_PATTERN.test(text)) intent = "whats_building";
 

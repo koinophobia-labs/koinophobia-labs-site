@@ -33,6 +33,7 @@ import {
 import {
   buildProductMatch,
   buildStudioHandoff,
+  detectHireIntent,
   extractPersonalFields,
   matchProduct,
   personalOutcome,
@@ -554,6 +555,95 @@ test("audit: the personal koi wears a visible label while resting", () => {
   assert.match(koi, /Ask the koi</);
   const css = read("app/dev-koi.css");
   assert.match(css, /\.devkoi__label/);
+});
+
+/* ============================= release-candidate regression risks */
+
+const feasibilitySession = (patch: Record<string, string>) => ({
+  ...emptySession("studio", SID, NOW),
+  fields: {
+    problemKind: "unsure",
+    primaryProblem: "something is off with how we get customers",
+    branchContext: "hard to say exactly where it breaks down",
+    impact: "fewer bookings than the foot traffic suggests",
+    desiredOutcome: "more of the interest turning into bookings",
+    businessName: "Test Co",
+    industry: "Salon",
+    budgetRange: "Not sure yet",
+    timeline: "Just researching",
+    ...patch,
+  },
+});
+
+test("feasibility guard: an audit-sized budget is never treated as a mismatch", () => {
+  const { recommendation, mismatch } = studioRecommendation(feasibilitySession({ budgetRange: "Under $500" }));
+  assert.equal(recommendation.service, "revenue_leak_audit", "an unsure visitor with a small budget is the audit's exact customer");
+  assert.equal(mismatch, undefined, "the audit costs less than the range — no mismatch exists");
+});
+
+test("feasibility guard: a mid-range landing-page problem keeps its published offer", () => {
+  assert.equal(extractBudgetRange("our budget is $500 for the landing page"), "$500-$1,500");
+  const { recommendation, mismatch, offer } = studioRecommendation(
+    feasibilitySession({ problemKind: "website", primaryProblem: "landing page is not converting mobile visitors", branchContext: "visitors reach the page and bounce before the form", budgetRange: "$500-$1,500", timeline: "This month" }),
+  );
+  assert.equal(recommendation.service, "website_rebuild");
+  assert.equal(mismatch, undefined);
+  assert.ok(offer, "the published offer belongs on a realistic request");
+});
+
+test("feasibility guard: low budget with flexible timing gets the note, not a rejection", () => {
+  const { recommendation, mismatch } = studioRecommendation(
+    feasibilitySession({ problemKind: "custom_product", primaryProblem: "a client portal eventually, no rush at all", branchContext: "clients email files back and forth today", budgetRange: "Under $500", timeline: "Just researching" }),
+  );
+  assert.notEqual(recommendation.service, "not_a_fit", "flexible scope must not be rejected prematurely");
+  assert.ok(mismatch, "but the budget reality is still named");
+});
+
+test("feasibility guard: high budget with urgency is a normal engagement, no mismatch", () => {
+  const { recommendation, mismatch } = studioRecommendation(
+    feasibilitySession({ problemKind: "custom_product", primaryProblem: "an internal ops dashboard our team needs urgently", branchContext: "reporting is stitched from three spreadsheets", budgetRange: "$3,500+", timeline: "This week" }),
+  );
+  assert.equal(recommendation.service, "custom_product");
+  assert.equal(mismatch, undefined);
+});
+
+test("feasibility guard: no budget supplied means no assumed mismatch", () => {
+  const { mismatch } = studioRecommendation(
+    feasibilitySession({ problemKind: "custom_product", primaryProblem: "an app idea for my customers", branchContext: "order-ahead for regulars" }),
+  );
+  assert.equal(mismatch, undefined);
+});
+
+test("reluctance: 'no sales call, but show me what fits' is heard and the flow keeps helping", () => {
+  const { fields } = extractStudioFields("no sales call, but show me what fits my shop");
+  assert.equal(fields.contactReluctance, "noted");
+});
+
+test("reluctance: the visitor can change their mind — consent still works normally", () => {
+  const session = { ...feasibilitySession({}), stage: "review" as const, fields: { ...feasibilitySession({}).fields, contactReluctance: "noted" } };
+  const next = reduce(session, { type: "CONFIRM_REVIEW" }, studioPolicy, NOW);
+  assert.equal(next.stage, "consent", "reluctance is an acknowledgment, never a lock");
+});
+
+test("reluctance: the preference survives a close-and-reopen via storage", () => {
+  const session = { ...emptySession("studio", SID, NOW), fields: { primaryProblem: "just looking around", contactReluctance: "noted" } };
+  const restored = parseFrontOfficeSession(JSON.stringify(session), "studio", NOW);
+  assert.equal(restored?.fields.contactReluctance, "noted");
+});
+
+test("hiring intent: the false-positive gallery stays out of the handoff", () => {
+  assert.equal(detectHireIntent("could Blake build this for my gym"), true);
+  assert.equal(detectHireIntent("could Blake make something like this for my gym"), true);
+  assert.equal(detectHireIntent("I already hired a developer"), false);
+  assert.equal(detectHireIntent("I don't want to hire anyone"), false);
+  assert.equal(detectHireIntent("how did Blake get hired at DraftKings?"), false);
+  assert.equal(detectHireIntent("could this help someone I hired?"), false);
+});
+
+test("hiring intent: 'can I hire Career Forge' clarifies with the product, not a service lead", () => {
+  const extraction = extractPersonalFields("can I hire Career Forge?");
+  assert.notEqual(extraction.intent, "hire");
+  assert.equal(extraction.fields.productSlug, "career-forge", "the product question gets the product answer");
 });
 
 test("missing required fields drive the clarify loop until complete", () => {

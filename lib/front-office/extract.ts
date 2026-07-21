@@ -109,7 +109,7 @@ export function extractTimeline(text: string): string | undefined {
  *  demanded contact anyway — but a visitor who says this deserves to be told
  *  so, once, instead of being silently marched into questions. */
 export function detectContactReluctance(text: string): boolean {
-  return /don'?t (contact|email|call|reach out)|no (contact|emails?|calls?|spam)|not (giving|sharing) (my )?(email|info|number)|just (looking|browsing)/i.test(
+  return /don'?t (contact|email|call|reach out)|no (?:sales |phone )?(contact|emails?|calls?|spam|pitch)|not (giving|sharing) (my )?(email|info|number)|just (looking|browsing)/i.test(
     text.slice(0, MAX_INPUT),
   );
 }
