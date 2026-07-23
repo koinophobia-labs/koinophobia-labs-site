@@ -231,7 +231,7 @@ export default function KoiCompanionPanel({
                 </Link>
               ))}
             </div>
-            <p className="koi-companion-panel__boundary">Answers come from published Koinophobia Labs information. Project recommendations still use the deterministic concierge, and Blake reviews every submitted project.</p>
+            <p className="koi-companion-panel__boundary">This koi is the guide for the Koinophobia Labs website — not a login, and not the Koi Cave or any product agent. It keeps no memory between visits or across products. Answers come from published Koinophobia Labs information. Project recommendations still use the deterministic concierge, and Blake reviews every submitted project.</p>
             <button className="koi-companion-rest" type="button" onClick={onDismiss}><X size={14} aria-hidden="true" /> Let the koi rest for this visit</button>
           </div>
         ) : surface === "understand" && brief ? (

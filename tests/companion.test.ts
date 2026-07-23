@@ -222,6 +222,15 @@ test("companion analytics remain categorical and exclude visitor answers", () =>
   assert.doesNotMatch(companionSources, /trackStudioEvent\([^)]*workIntent/);
 });
 
+test("the studio koi disambiguates itself as a website guide with no cross-product memory (XP-05)", () => {
+  const panel = read("components/companion/KoiCompanionPanel.tsx");
+  // It names itself the website guide, not a product agent or the Koi Cave.
+  assert.match(panel, /guide for the Koinophobia Labs website/i);
+  assert.match(panel, /not the Koi Cave or any product agent/i);
+  // It explicitly disclaims cross-product / cross-visit memory.
+  assert.match(panel, /no memory between visits or across products/i);
+});
+
 // --- Grounded site knowledge (audit U1–U3, C2) ---------------------------
 
 test("site knowledge is derived from commercial.ts, not hand-typed", () => {
