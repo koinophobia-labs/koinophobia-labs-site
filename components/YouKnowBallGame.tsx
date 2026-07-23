@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { FormEvent, useMemo, useState } from "react";
 import { ArrowRight, RotateCcw } from "lucide-react";
-import { debatePrompts, scoreTake, trackYkb, type RoundScore } from "@/lib/youKnowBall";
+import { debatePrompts, scoreTake, SCORING_ENGINE_NOTE, trackYkb, type RoundScore } from "@/lib/youKnowBall";
 
 type Props = { compact?: boolean };
 
@@ -71,7 +71,7 @@ export default function YouKnowBallGame({ compact = false }: Props) {
             <div><span>TAKE STRENGTH</span><strong>{result.score.takeStrength}</strong><small>/100</small></div>
             <div><span>RANK POINTS</span><strong>{result.score.paused ? "—" : `+${result.score.points}`}</strong></div>
           </div>
-          <p className="ykb-score-note">Starter scoring · clear claim, sports context, reasoning, and evidence. This preview does not save rank or XP.</p>
+          <p className="ykb-score-note">Starter scoring · clear claim, sports context, reasoning, and evidence. {SCORING_ENGINE_NOTE} This preview does not save rank or XP.</p>
           <div className="ykb-result-actions">
             <button type="button" onClick={replay}><RotateCcw size={16} /> {compact ? "Reset" : "Run it back"}</button>
             {compact ? <Link href="/you-know-ball/play" onClick={() => trackYkb("continued_to_full_game")}>Play the full web version <ArrowRight size={16} /></Link> : null}

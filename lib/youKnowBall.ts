@@ -1,3 +1,23 @@
+// ILLUSTRATIVE REIMPLEMENTATION — NOT the shipped You Know Ball engine.
+//
+// This is a small, self-contained scoring model written only for the marketing
+// web demo on koinophobialabs.com. It is inspired by the product's scoring but
+// deliberately diverges from it and must not be mistaken for the real module:
+//
+//   * Betting gate: this version PAUSES on ANY betting term (see scoreTake).
+//     The shipped demo refuses only when a betting term AND an advice phrase
+//     co-occur, so the two behave differently on the same input (XP-06; the
+//     shipped gate's narrower predicate is the YKB-01 bypass).
+//   * The point / take-strength math here is a simplified demo heuristic, not
+//     the product's tuned engine, so numbers will not match the real app.
+//
+// If the real behaviour ever needs to be shown, vendor the product's actual
+// scoring module rather than extending this file.
+
+/** Shown wherever this demo presents a score, so the marketing demo is never mistaken for the shipped engine (XP-06). */
+export const SCORING_ENGINE_NOTE =
+  "Illustrative scoring for this web demo — not the shipped You Know Ball engine.";
+
 export type DebatePrompt = {
   id: string;
   sport: "NBA" | "NFL" | "MLB";
@@ -49,7 +69,9 @@ export const debatePrompts: DebatePrompt[] = [
   },
 ];
 
-// Ported from public/you-know-ball-scoring.js in the authoritative private app.
+// Demo betting gate: pauses on ANY betting term. This is intentionally stricter
+// than — and behaviourally different from — the shipped engine's term-AND-advice
+// predicate (XP-06). Do not treat this as the product's guardrail.
 const bettingPattern = /\b(bet|bett|wager|parlay|spread|moneyline|prop|odds|sportsbook|unit|lock|tail|fade|cover|over\/under|pick|cash|free money|risk[- ]?free|chase|win my money back)\b|[+-]\d+/i;
 const reasonPattern = /\b(because|cuz|cause|since|due to|the reason|why|if|when|unless|but|however|counter|proof|evidence|context|resume|peak|longevity|defense|offense|coaching|health|roster|playoff|finals|rings|scheme|spacing|usage|role)\b/i;
 const heatPattern = /\b(goat|overrated|trash|washed|all-time|rings|no debate|winning it all|title|mvp|hall|dynasty|choke|fraud|clears)\b/i;
