@@ -8,6 +8,7 @@
 // Pure and typed on purpose: no React, no DOM — unit-testable in isolation.
 
 import { businessProblems, faqs, processSteps, serviceOffers, studioConfig, workProjects } from "@/lib/commercial";
+import { products as universeProducts, publicStatusLabel } from "@/lib/dev/universe";
 
 export type CompanionRouteKey =
   | "home"
@@ -229,14 +230,21 @@ export function pageBrief(routeKey: CompanionRouteKey, slug?: string): PageBrief
         facts: ["Each project names the problem, the solution, and the capabilities involved."],
       };
     }
-    case "products":
+    case "products": {
+      // XP-04: surface the single-sourced, readiness-gated status from the dated
+      // product universe, never a hand-typed marketing string. If a product ever
+      // leaves the universe it simply drops out here rather than going stale.
+      const studioProducts = ["career-forge", "trendi", "you-know-ball"]
+        .map((slug) => universeProducts.find((product) => product.slug === slug))
+        .filter((product): product is (typeof universeProducts)[number] => Boolean(product));
       return {
         summary: "Internal products Koinophobia Labs has built — evidence of how the studio thinks, not client work.",
         facts: [
-          "Career Forge, Trendi, and You Know Ball are internal builds at different maturities.",
-          "They demonstrate AI interaction design, product UX, and production deployment.",
+          ...studioProducts.map((product) => `${product.name} — ${publicStatusLabel(product)}.`),
+          "Status comes from the dated product universe, not marketing copy, so it stays honest as each build moves.",
         ],
       };
+    }
     case "process":
       return {
         summary: "How a Koinophobia Labs engagement runs, end to end.",

@@ -411,6 +411,31 @@ export const products: Product[] = [
 
 export const getProduct = (slug: string) => products.find((p) => p.slug === slug);
 
+/**
+ * Public marketing label for a studio product card, DERIVED from this dated
+ * source of truth. It exists so lib/commercial.ts (the koinophobialabs.com
+ * studio site) can render ONE status vocabulary instead of drifting into its
+ * own — the failure this file was built to prevent, now enforced across both
+ * surfaces (XP-04).
+ *
+ * The single rule that matters: "Live" is gated behind `reach === "public"`.
+ * A product is "Live" only when anyone can use it today with no help from Blake
+ * — never merely because a demo route exists. `stage` refines the public label
+ * (a full public app vs a public demo of an otherwise-unreleased product), and
+ * everything short of public reads as beta or internal, never "Live".
+ */
+export function publicStatusLabel(product: Product): string {
+  switch (product.reach) {
+    case "public":
+      return product.stage === "public" ? "Live web app" : "Live web demo";
+    case "limited":
+      return product.stage === "external-testers" ? "Open beta" : "Private beta";
+    case "internal":
+    default:
+      return "Internal preview";
+  }
+}
+
 export type FreshnessResult = {
   product: string;
   stage: Stage;

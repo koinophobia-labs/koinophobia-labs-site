@@ -8,6 +8,7 @@ import {
   checkFreshness,
   getProduct,
   products,
+  publicStatusLabel,
   reachLabel,
   stageLabel,
   stageRank,
@@ -55,6 +56,21 @@ test("every product carries verification metadata", () => {
       );
     }
   }
+});
+
+test("publicStatusLabel is the single source for studio labels and gates 'Live' behind public reach (XP-04)", () => {
+  for (const product of products) {
+    const label = publicStatusLabel(product);
+    assert.ok(label.length > 0, `${product.name}: empty status label`);
+    // "Live" is reserved for products anyone can use today with no help.
+    if (/\bLive\b/.test(label)) assert.equal(product.reach, "public", `${product.name}: Live label without public reach`);
+    if (product.reach !== "public") assert.doesNotMatch(label, /\bLive\b/, `${product.name}: non-public product labeled Live`);
+  }
+  // Concrete expectations for the current roster.
+  assert.equal(publicStatusLabel(getProduct("career-forge")!), "Live web app");
+  assert.equal(publicStatusLabel(getProduct("trendi")!), "Private beta");
+  assert.equal(publicStatusLabel(getProduct("you-know-ball")!), "Live web demo");
+  assert.equal(publicStatusLabel(getProduct("koi-cave")!), "Internal preview");
 });
 
 test("no product status has gone stale for its stage", () => {

@@ -1,4 +1,18 @@
+import { getProduct as getUniverseProduct, publicStatusLabel } from "@/lib/dev/universe";
 import { LINKS } from "@/lib/links";
+
+/**
+ * XP-04: a studio product card's status is DERIVED from the dated single source
+ * of truth in lib/dev/universe.ts, never hand-written here. This collapses the
+ * two status vocabularies into one and gates any "Live" label behind the
+ * product's own readiness (reach), so the marketing site cannot claim a product
+ * is "Live" that the universe knows is internal or beta-only.
+ */
+function studioProductStatus(universeSlug: string): string {
+  const product = getUniverseProduct(universeSlug);
+  if (!product) throw new Error(`No lib/dev/universe product for studio card "${universeSlug}"`);
+  return `Internal Product · ${publicStatusLabel(product)}`;
+}
 
 export type WorkStatus =
   | "live-client"
@@ -185,7 +199,7 @@ export const workProjects: WorkProject[] = [
 export const products = [
   {
     title: "Career Forge",
-    status: "Internal Product · Live MVP",
+    status: studioProductStatus("career-forge"),
     audience: "Job seekers and career changers",
     body: "An ATS-focused tool that turns real work history into clearer resume and LinkedIn materials without inventing experience or metrics.",
     capabilities: ["AI-assisted generation", "Structured onboarding", "Document workflows", "Production deployment"],
@@ -195,7 +209,7 @@ export const products = [
   },
   {
     title: "Trendi",
-    status: "Internal Product · Working Demo",
+    status: studioProductStatus("trendi"),
     audience: "Creators moving from idea to usable script",
     body: "A focused creator workflow for shaping a rough thought into clear words to say on camera.",
     capabilities: ["Structured creative workflow", "Responsive product UI", "User-state flow", "Product prototyping"],
@@ -205,7 +219,7 @@ export const products = [
   },
   {
     title: "You Know Ball",
-    status: "Internal Product · Live Web MVP",
+    status: studioProductStatus("you-know-ball"),
     audience: "Sports fans and creators",
     body: "A sports-debate AI with an answer-first interaction model, scoring, shareable output, and betting guardrails.",
     capabilities: ["AI interaction design", "Native iOS shell", "Safety testing", "Production web deployment"],
