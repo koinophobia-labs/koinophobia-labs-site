@@ -624,3 +624,6 @@
   letter-spacing: 0.07em;
   text-transform: uppercase;
 }
+
+[data-world="memory"] .devprod__tagline { font-family:var(--font-newsreader),Georgia,serif; line-height:1.3; }
+[data-world="memory"] .devprod__section { padding-block:52px; }

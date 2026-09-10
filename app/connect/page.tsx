@@ -62,12 +62,12 @@ const work: Array<{
   external?: boolean;
 }> = [
   {
-    name: "Career Forge",
-    note: "Leverage in the job search",
-    href: LINKS.careerForge,
-    external: true,
+    name: "Way In",
+    note: "Career Hub · formerly Career Forge",
+    href: "/way-in",
   },
   { name: "Trendi", note: "Leverage for creators", href: "/trendi" },
+  { name: "Forget About It", note: "Catch the thought. Get back to your day.", href: "/forget-about-it" },
   { name: "You Know Ball", note: "Sports takes, scored honestly", href: "/you-know-ball/play" },
   {
     name: "Koinophobia Labs",

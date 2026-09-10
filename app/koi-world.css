@@ -1700,12 +1700,16 @@ body:has(.kw) > .koi-companion {
 .kw[data-motion="still"] .dest__stage {
   min-height: auto;
   position: static;
+  mask-image: none;
+  -webkit-mask-image: none;
   padding-block: clamp(4rem, 12vh, 7rem);
 }
 
 .kw[data-motion="still"] .dest {
   min-height: auto;
   height: auto !important;
+  margin-bottom: 0;
+  scroll-margin-top: 5rem;
 }
 
 @media (prefers-reduced-motion: reduce) {

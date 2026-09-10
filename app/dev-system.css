@@ -327,3 +327,5 @@ body:has(.devpage) {
     scroll-behavior: auto !important;
   }
 }
+
+[data-world="memory"] { --acc:#eda578; --acc-hot:#ffd2b6; --acc-soft:rgba(237,165,120,.14); }

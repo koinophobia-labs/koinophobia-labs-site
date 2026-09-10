@@ -45,12 +45,11 @@ export const buildCards: Array<{
     cta: "View Trendi",
   },
   {
-    title: "Career Forge",
+    title: "Way In",
     tag: "LEVERAGE FOR JOB SEEKERS",
     body: "Turns a scattered career transition into a repeatable operation for positioning, applications, outreach, and interviews.",
-    href: founderLinks.careerForge,
-    cta: "Open Career Forge",
-    external: true,
+    href: "/way-in",
+    cta: "Explore Way In",
   },
   {
     title: "Website Revenue Leak Audit",

@@ -9,7 +9,7 @@ const proof = [
   "Creator-specific output",
   "Recordable scripts",
   "For solo creators & founders",
-  "TestFlight beta",
+  "Available on the App Store",
 ];
 
 export default function TrendiFeature() {
@@ -23,7 +23,7 @@ export default function TrendiFeature() {
               <p id="trendi-feature-wordmark" className="trendiLaunch_wordmark" aria-label="Trendi">TRENDI</p>
               <h2 id="trendi-feature-title">Turn the thought in your head into words you can actually record.</h2>
               <p className="trendiLaunch_lede">Type it or say it messy. Trendi shapes the idea into creator-specific, usable words—without adding more generic content sludge to the feed.</p>
-              <p className="trendiLaunch_status"><strong>TESTFLIGHT BETA</strong><span>Available through TestFlight. Not yet publicly released on the App Store.</span></p>
+              <p className="trendiLaunch_status"><strong>ON THE APP STORE</strong><span>Free for iPhone with optional Trendi Pro.</span></p>
               <div className="trendiLaunch_actions">
                 <Link id="trendi-feature-cta" className="trendiLaunch_primary" href="/trendi">View Trendi <ArrowRight size={17} aria-hidden="true" /></Link>
                 <a className="trendiLaunch_secondary" href="#trendi-demo">Watch the real demo</a>

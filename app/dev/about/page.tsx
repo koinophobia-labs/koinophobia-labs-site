@@ -42,7 +42,7 @@ const beliefs = [
   },
   {
     title: "Honest status labels are a feature.",
-    body: "Half of what I've built isn't finished, and the site says so on every page. \"TestFlight beta, testers are two builds behind\" is less impressive and more useful than \"launched.\" I'd rather someone trust the one claim I make than be impressed by four they can't check.",
+    body: "Trendi, Forget About It, and Way In are on the App Store. Other projects are still in development, and the site labels them separately. The earlier TestFlight stories stay in the dated build log. I'd rather someone trust the one claim I make than be impressed by four they can't check.",
   },
   {
     title: "Teaching it is the fastest way to find out if you know it.",

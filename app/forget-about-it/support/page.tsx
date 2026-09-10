@@ -13,8 +13,8 @@ export const metadata: Metadata = {
 export default function ForgetAboutItSupportPage() {
   return (
     <main className="legal-page">
-      <Link className="legal-back" href="/">
-        ← Koinophobia Labs
+      <Link className="legal-back" href="/forget-about-it">
+        ← Forget About It
       </Link>
       <p className="kicker kicker-orange">ForgetAboutIt</p>
       <h1>Support</h1>

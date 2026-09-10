@@ -233,7 +233,7 @@ export function pageBrief(routeKey: CompanionRouteKey, slug?: string): PageBrief
       return {
         summary: "Internal products Koinophobia Labs has built — evidence of how the studio thinks, not client work.",
         facts: [
-          "Career Forge, Trendi, and You Know Ball are internal builds at different maturities.",
+          "Trendi, Forget About It, and Way In are available on the App Store. Way In was formerly Career Forge; its web destination remains available. You Know Ball has a web demo.",
           "They demonstrate AI interaction design, product UX, and production deployment.",
         ],
       };

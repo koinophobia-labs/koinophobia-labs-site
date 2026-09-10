@@ -33,7 +33,8 @@ const FAILSAFE_MS = 6000;
 export default function BrandIntro() {
   const pathname = usePathname();
   const skipForImmediateAccess =
-    pathname === "/trendi/privacy" || pathname === "/trendi/support";
+    pathname === "/trendi/privacy" || pathname === "/trendi/support" ||
+    pathname === "/forget-about-it/privacy" || pathname === "/forget-about-it/support";
   const [phase, setPhase] = useState<Phase>("boot");
   const imgRef = useRef<HTMLImageElement>(null);
   const startedRef = useRef(false);

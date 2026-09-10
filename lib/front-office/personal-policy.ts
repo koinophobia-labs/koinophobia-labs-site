@@ -52,7 +52,7 @@ const PRODUCT_MATCHERS: Record<string, { category: string; patterns: RegExp[] }>
       /r[eé]sum[eé]|\bcv\b/i,
       /laid off|lay.?off|lost my job|job (search|hunt|market)/i,
       /linkedin|interview|applications?\b|cover letter/i,
-      /career/i,
+      /career|way in/i,
     ],
   },
   trendi: {
@@ -64,6 +64,14 @@ const PRODUCT_MATCHERS: Record<string, { category: string; patterns: RegExp[] }>
       /say (it |something )?(on camera|out loud)/i,
       /ideas? into/i,
     ],
+  },
+  concierge: {
+    category: "the studio front desk",
+    patterns: [/labs concierge|ai front desk|front office|concierge/i],
+  },
+  "forget-about-it": {
+    category: "remembering your day",
+    patterns: [/forget ?about ?it|memory journal|remember my day|capture a thought|apple watch/i],
   },
   "you-know-ball": {
     category: "sports takes",

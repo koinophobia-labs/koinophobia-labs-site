@@ -58,7 +58,7 @@ const constellation = [
     audience: "The studio's own operating loop",
     body:
       "A local-first operator system for notes, tasks, memory, and automations. It runs on one machine and stays there.",
-    status: "Private build · not distributable",
+    status: "Development project · no public download",
     href: "/dev/products/koi-cave",
     cta: "Read the Koi Cave record",
     internal: true,
