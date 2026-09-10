@@ -131,7 +131,7 @@ if (
   JSON.stringify(architecture.destinationIds) !== JSON.stringify(expectedIds) ||
   architecture.primaryLinks !== expectedIds.length ||
   architecture.journeyLinks !== expectedIds.length ||
-  architecture.productNodes !== 4 ||
+  architecture.productNodes !== 5 ||
   !architecture.hasWater ||
   !architecture.hasStage ||
   architecture.overflow
