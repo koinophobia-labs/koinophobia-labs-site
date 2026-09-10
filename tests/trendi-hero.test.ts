@@ -130,7 +130,8 @@ test("the hero page keeps the approved positioning and a clickable CTA", async (
   assert.ok(page.includes("Your content coach"));
   assert.ok(page.includes('id="trendi-hero-cta"'));
   assert.ok(page.includes("mailto:koinophobia999@gmail.com"));
-  assert.ok(page.includes("Ask about Trendi"));
+  assert.ok(page.includes('href={trendiRelease.url}'));
+  assert.ok(page.includes('<AppStoreLink product="trendi" placement="hero"'));
   assert.ok(!page.match(/launch updates|availability news/i));
   assert.ok(!page.match(/TestFlight|beta access|limited beta/i));
   // Semantic heading order: the h1 is the promise, not the decorative mark.

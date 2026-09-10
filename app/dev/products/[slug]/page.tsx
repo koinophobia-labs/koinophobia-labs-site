@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowUpRight } from "lucide-react";
+import { ProductPageView } from "@/components/products/ProductAnalytics";
 import DevShell from "@/components/dev/DevShell";
 import { arenaScoreboard, getProduct, products, reachLabel, stageLabel } from "@/lib/dev/universe";
 
@@ -55,6 +56,7 @@ export default async function DevProductPage({
   return (
     <DevShell world={product.identity.theme} current="/products" fieldX="30%">
       <article>
+        {product.slug === "trendi" || product.slug === "forget-about-it" || product.slug === "career-forge" ? <ProductPageView product={product.slug === "career-forge" ? "way-in" : product.slug} surface="story" /> : null}
         <section className="devprod__hero">
           <Link className="devpage__back" href="/products">
             <ArrowLeft size={13} aria-hidden="true" /> All products

@@ -199,7 +199,7 @@ export const DESTINATIONS: Destination[] = [
     index: 1,
     label: "Products",
     marker: "01",
-    hint: "Career Forge, Trendi, You Know Ball and the internal builds",
+    hint: "Trendi, Forget About It, Way In, web demos and development projects",
     clip: "duo",
     transitionClip: "separate",
     band: { desktop: 2.75, mobile: 1.25 },

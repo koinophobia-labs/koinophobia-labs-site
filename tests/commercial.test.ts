@@ -82,13 +82,13 @@ test("every case-study slug resolves and has a static route", () => {
   }
 });
 
-test("products are explicitly internal and commercial guidance is complete", () => {
+test("released products have product-specific destinations and commercial guidance remains complete", () => {
   assert.deepEqual(
     products.map((product) => product.title),
-    ["Career Forge", "Trendi", "You Know Ball"],
+    ["Trendi", "Forget About It", "Way In", "You Know Ball"],
   );
   assert.ok(
-    products.every((product) => product.status.startsWith("Internal Product")),
+    products.every((product) => product.status.startsWith("Available")),
   );
   assert.equal(processSteps.length, 6);
   assert.ok(faqs.length >= 13);
@@ -149,7 +149,7 @@ test("the koi world leads through six destinations without hiding the business",
 
   // Koi Cave is present but never presented as something a visitor can obtain.
   assert.match(page, /Koi Cave/);
-  assert.match(page, /Private build · not distributable/);
+  assert.match(page, /Development project · no public download/);
   assert.doesNotMatch(
     page,
     /<Link\s+key=\{node\.title\}/,

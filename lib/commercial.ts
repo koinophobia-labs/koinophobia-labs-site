@@ -1,4 +1,3 @@
-import { LINKS } from "@/lib/links";
 
 export type WorkStatus =
   | "live-client"
@@ -187,34 +186,24 @@ export const workProjects: WorkProject[] = [
 
 export const products = [
   {
-    title: "Career Forge",
-    status: "Internal Product · Live MVP",
-    audience: "Job seekers and career changers",
-    body: "An ATS-focused tool that turns real work history into clearer resume and LinkedIn materials without inventing experience or metrics.",
-    capabilities: ["AI-assisted generation", "Structured onboarding", "Document workflows", "Production deployment"],
-    href: LINKS.careerForge,
-    cta: "Open Career Forge",
-    image: undefined,
+    title: "Trendi", status: "Available on the App Store · iPhone", audience: "Creators moving from idea to recording",
+    body: "Turn a rough thought into hooks, an editable script, a caption, and a simple shot plan. Record with the teleprompter.",
+    capabilities: ["Coach Packs", "Script editor", "Teleprompter", "Free & optional Pro"], href: "/trendi", cta: "Explore Trendi", image: "/trendi/store/04-own-the-script.jpg",
   },
   {
-    title: "Trendi",
-    status: "Shipped · Live on the App Store",
-    audience: "Creators moving from idea to usable script",
-    body: "A focused creator workflow for shaping a rough thought into clear words to say on camera. Free on the App Store, no account required.",
-    capabilities: ["Structured creative workflow", "Responsive product UI", "User-state flow", "App Store release discipline"],
-    href: "/trendi",
-    cta: "Explore Trendi",
-    image: "/trendi/trendi-final-output.jpg",
+    title: "Forget About It", status: "Available on the App Store · iPhone + Apple Watch", audience: "People who want to remember the small things",
+    body: "Capture a thought before it disappears, then return to a readable record of your day. A private journal that works offline.",
+    capabilities: ["Quick capture", "Watch companion", "Daily record", "On-device journal"], href: "/forget-about-it", cta: "Explore Forget About It", image: "/forget-about-it/store/1.jpg",
   },
   {
-    title: "You Know Ball",
-    status: "Internal Product · Live Web MVP",
-    audience: "Sports fans and creators",
+    title: "Way In", status: "Available on the App Store · iPhone + iPad", audience: "Job seekers and career changers",
+    body: "Bring your real experience, resumes, job fit, and follow-ups into one career workspace. Formerly Career Forge; the web product remains available.",
+    capabilities: ["Resume review", "Job fit", "Interview preparation", "Application tracking"], href: "/way-in", cta: "Explore Way In & the web app", image: "/way-in/store/1.jpg",
+  },
+  {
+    title: "You Know Ball", status: "Available web demo · iOS release unverified", audience: "Sports fans and creators",
     body: "A sports-debate AI with an answer-first interaction model, scoring, shareable output, and betting guardrails.",
-    capabilities: ["AI interaction design", "Native iOS shell", "Safety testing", "Production web deployment"],
-    href: "/you-know-ball/play",
-    cta: "Play You Know Ball",
-    image: "/proof/you-know-ball/mobile-play.png",
+    capabilities: ["Sports debate", "Scoring", "Shareable output"], href: "/you-know-ball/play", cta: "Play the web demo", image: "/proof/you-know-ball/mobile-play.png",
   },
 ];
 

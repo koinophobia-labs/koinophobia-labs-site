@@ -18,7 +18,7 @@ import {
 export const metadata: Metadata = {
   title: { absolute: "Products — Blake Taylor" },
   description:
-    "Five products built from problems I lived first: Career Forge, Trendi, You Know Ball, the Labs Concierge, and Koi Cave. Honest status on each one.",
+    "Trendi, Forget About It, Way In, available web products, and development projects.",
   alternates: { canonical: "https://koinophobia.dev/products" },
   openGraph: {
     type: "website",
@@ -26,7 +26,7 @@ export const metadata: Metadata = {
     url: "https://koinophobia.dev/products",
     title: "Products — Blake Taylor",
     description:
-      "Career Forge, Trendi, You Know Ball, the Labs Concierge, Koi Cave. What each one is for, where it actually stands, and what it taught me.",
+      "Trendi, Forget About It, Way In, You Know Ball, the Labs Concierge, Koi Cave. What each one is for, where it actually stands, and what it taught me.",
     images: [{ url: "https://koinophobia.dev/og-founder.png", width: 1200, height: 630 }],
   },
 };
@@ -47,11 +47,12 @@ export default function DevProductsPage() {
           Every page below opens with the same question: who can use this today without asking me
           for anything? That answer is a fact. Everything after it is a story.
         </p>
-        <p className="devsec__stamp">Status verified {universeLastUpdated}</p>
+        <p className="devsec__stamp">Release update {universeLastUpdated} · verification dates are listed per product.</p>
       </section>
 
-      <section className="devprod-index__list" aria-label="Products">
-        {products.map((product) => (
+      {[{ label: "Available apps & web products", items: products.filter(p => p.reach === "public") }, { label: "Development projects", items: products.filter(p => p.reach !== "public") }].map(group => <section className="devprod-index__list" aria-label={group.label} key={group.label}>
+        <h2 className="devpage__kicker">{group.label}</h2>
+        {group.items.map((product) => (
           <Link
             key={product.slug}
             className="devprod-card"
@@ -71,7 +72,7 @@ export default function DevProductsPage() {
             </span>
           </Link>
         ))}
-      </section>
+      </section>)}
 
       <section className="devprod-index__studio" aria-labelledby="devprod-studio">
         <h2 id="devprod-studio">{studio.name}</h2>

@@ -61,6 +61,7 @@ const personSchema = {
 // the homepage's job — one line on why the thing exists at all.
 const origins: Record<string, string> = {
   "career-forge": "Started from my own layoff.",
+  "forget-about-it": "For the thoughts that disappear before you write them down.",
   trendi: "Started from watching good ideas die before the record button.",
   "you-know-ball": "Started from a lifetime of sports arguments.",
   concierge: "Started from refusing to give my own studio a fake front door.",
@@ -112,7 +113,7 @@ const loop = [
     step: "05",
     title: "Refine — or refuse",
     receipt:
-      "Trendi's better-writing pipeline is switched off on purpose. A better sentence doesn't beat a broken written mode.",
+      "In July 2026, I switched off an experimental Trendi pipeline after it broke written mode. A better sentence did not justify a broken workflow.",
   },
   {
     step: "06",
@@ -348,19 +349,14 @@ export default function DevHomePage() {
                 <em>Curious about the products</em>
                 <strong>See the constellation</strong>
                 <span>
-                  Two are open to anyone right now. Every page says exactly where it stands, with
-                  sources.
+                  Available apps and web products, with development projects clearly marked.
                 </span>
               </Link>
-              <a
-                className="devroute__item"
-                href="https://apps.apple.com/us/app/trendi-content-coach/id6776299336"
-              >
-                <em>You&apos;d try Trendi</em>
-                <strong>Get it on the App Store</strong>
+              <a className="devroute__item" href="https://koinophobialabs.com/trendi">
+                <em>You create videos</em>
+                <strong>Try Trendi</strong>
                 <span>
-                  Trendi: Content Coach is live — free, no account required. Type a messy
-                  thought, leave with words to say on camera.
+                  Trendi is available on the App Store. Its product page explains Free and Pro.
                 </span>
               </a>
               <Link className="devroute__item" href="/resume">

@@ -581,7 +581,7 @@ export default function TrendiHeroVisual({
         .filter(Boolean)
         .join(" ")}
       data-paused={paused ? "true" : "false"}
-      data-reduced={reducedMotion ? "true" : "false"}
+      suppressHydrationWarning data-reduced={reducedMotion ? "true" : "false"}
       aria-hidden="true"
     >
       <div className="trendiHV_phoneWrap" data-trendi-phone="">

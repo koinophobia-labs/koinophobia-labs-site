@@ -1655,15 +1655,16 @@ body:has(.kw) > .koi-companion {
   }
 }
 
-/* A short laptop cannot safely hold the full systems matrix inside a sticky
-   viewport. Release that one dense chapter into normal flow so every service
-   and CTA remains reachable without shrinking the copy below reading size. */
+/* Short laptops need normal scrolling for the product constellation and
+   systems matrix so every card and CTA remains reachable at reading size. */
 @media (min-width: 1025px) and (max-height: 760px) {
+  .dest--products,
   .dest--systems {
     height: auto;
     min-height: 100svh;
   }
 
+  .dest--products .dest__stage,
   .dest--systems .dest__stage {
     position: relative;
     top: auto;
@@ -1672,6 +1673,7 @@ body:has(.kw) > .koi-companion {
     padding-block: 5rem 6rem;
   }
 
+  .kw[data-koi-ready="true"] #products .dest__inner,
   .kw[data-koi-ready="true"] #systems .dest__inner {
     opacity: 1;
     transform: none;
@@ -1700,12 +1702,16 @@ body:has(.kw) > .koi-companion {
 .kw[data-motion="still"] .dest__stage {
   min-height: auto;
   position: static;
+  mask-image: none;
+  -webkit-mask-image: none;
   padding-block: clamp(4rem, 12vh, 7rem);
 }
 
 .kw[data-motion="still"] .dest {
   min-height: auto;
   height: auto !important;
+  margin-bottom: 0;
+  scroll-margin-top: 5rem;
 }
 
 @media (prefers-reduced-motion: reduce) {

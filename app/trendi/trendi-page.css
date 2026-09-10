@@ -211,3 +211,26 @@
   .trendiPage_primary, .trendiPage_secondary { transition: none; }
   .trendiPage_primary:hover, .trendiPage_secondary:hover { transform: none; }
 }
+
+/* Released product path: the existing koi world and typography remain. */
+.trendiPage_plans { padding: 72px max(24px, calc((100% - 1320px) / 2)); }
+.trendiPage_planGrid { display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-top:32px; }
+.trendiPage_planGrid article { padding:28px; border:1px solid #55506b; border-radius:20px; background:#171322; }
+.trendiPage_planGrid h3 { font-size:24px; margin:0 0 16px; }
+.trendiPage_allowance { font-size:32px; font-weight:700; color:#fff; }
+.trendiPage_allowance span { display:block; font-size:16px; font-weight:400; }
+.trendiPage_planGrid p, .trendiPage_planNote { line-height:1.7; }
+.trendiPage_planNote { color:#c4bfd2; font-size:16px; margin-top:20px; max-width:940px; }
+.trendiPage_planNote a, .trendiPage_releaseNote a { text-decoration:underline; text-underline-offset:4px; }
+.trendiPage_screens { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:20px; }
+.trendiPage_screens figure { margin:0; min-width:0; }
+.trendiPage_screens img { width:100%; height:auto; border-radius:18px; }
+.trendiPage_screens figcaption { font-size:16px; line-height:1.5; color:#d4cede; margin-top:16px; }
+.trendiPage_archiveDemo { margin-top:36px; border-top:1px solid #55506b; padding-top:24px; }
+.trendiPage_archiveDemo summary { cursor:pointer; font-size:16px; min-height:44px; }
+.trendiPage_archiveDemo > p { font-size:16px; line-height:1.6; color:#c4bfd2; margin-bottom:24px; }
+.trendiPage_world a:focus-visible, .trendiPage_world summary:focus-visible, .trendiPage_world video:focus-visible { outline:3px solid #d8b5ff; outline-offset:5px; }
+@media (max-width:900px) { .trendiPage_screens { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+@media (max-width:600px) { .trendiPage_planGrid { grid-template-columns:1fr; } .trendiPage_screens { gap:14px; } .trendiPage_plans { padding:48px 20px; } .trendiPage_screens figcaption { font-size:14px; } }
+
+.trendiPage_releaseNote { font-size:14px; line-height:1.65; }

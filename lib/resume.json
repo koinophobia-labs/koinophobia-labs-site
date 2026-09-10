@@ -44,7 +44,7 @@
       "name": "Trendi",
       "tag": "AI PRODUCT",
       "url": "https://koinophobia.dev/trendi",
-      "blurb": "iOS creator execution product that turns rough ideas into recordable content. SwiftUI; shipped through TestFlight."
+      "blurb": "iOS creator product that turns rough ideas into recordable content. SwiftUI; available on the App Store."
     },
     {
       "name": "You Know Ball",
@@ -54,10 +54,10 @@
       "tone": "orange"
     },
     {
-      "name": "Career Forge",
+      "name": "Way In (formerly Career Forge)",
       "tag": "LIVE TOOL",
       "url": "https://career-forge-lite.vercel.app",
-      "blurb": "Live Next.js/TypeScript résumé and job-search product."
+      "blurb": "Live résumé and job-search web product, with Way In also released for iPhone and iPad."
     },
     {
       "name": "Koinophobia Labs systems",

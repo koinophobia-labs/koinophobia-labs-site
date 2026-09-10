@@ -7,7 +7,7 @@ import { LINKS } from "@/lib/links";
 // lastUpdated is a LITERAL, manually maintained string — never a runtime date.
 // Bump it by hand whenever the copy below changes.
 
-export const nowLastUpdated = "July 26, 2026";
+export const nowLastUpdated = "September 10, 2026";
 
 export const nowHero = {
   heading: "What I'm doing now.",
@@ -48,34 +48,34 @@ export const nowActiveWork: Array<{
   },
   {
     name: "Trendi",
-    stage: "TestFlight · internal, build 122",
-    snapshot:
-      "Record Mode reached TestFlight — builds 120, 121 and 122 in one evening, two of them fixing defects a real phone surfaced within hours.",
-    doingNow:
-      "Running the deliberate on-device update pass and the focused record → playback → share checks on build 122. The simulator stayed green through both of the defects a genuine install caught, which is exactly why the phone runs the gate.",
+    stage: "Available on the App Store · 0.2.1",
+    snapshot: "Available for iPhone. Free includes three Coach Packs per weekly allowance period; optional Pro provides 100 each month.",
+    doingNow: "Making the released app easier to discover, understand, download, and get support for.",
     nextProof:
       "Creators using the output to publish, repeatedly — not another layer of polish.",
     href: "/products/trendi",
     cta: "See Trendi",
   },
   {
-    name: "Career Forge",
-    stage: "Live beta · checkout certification-pinned",
-    snapshot:
-      "Free to use in beta. A durable order store now passes its health checks; checkout stays closed until the paid journey is re-proven on the code that's actually deployed.",
-    doingNow:
-      "Re-certifying the paid path on the current build. The sales approval is pinned to an exact commit, so every merge re-closes the store on purpose — reopening takes a demonstrated journey, not a config change.",
-    nextProof:
-      "External users completing the full workflow, trusting the output, and paying because it materially simplifies their search.",
-    href: LINKS.careerForge,
-    cta: "Open Career Forge",
-    external: true,
+    name: "Way In / Career Forge",
+    stage: "App Store release · web app available",
+    snapshot: "Way In 1.0 is available for iPhone and iPad. The original Career Forge web destination now displays Way In and remains available.",
+    doingNow: "Connecting the native release to the existing web product without moving anyone's workspace or changing checkout.",
+    nextProof: "People completing their career workflow and finding the next action useful; downloads alone do not show that.",
+    href: "https://koinophobialabs.com/way-in", cta: "Explore Way In", external: true,
+  },
+  {
+    name: "Forget About It", stage: "Available on the App Store · 1.0",
+    snapshot: "The private memory journal is released for iPhone with an Apple Watch companion. Capture offline and come back to your day.",
+    doingNow: "Making the released app, its original commercial, and support information easy to find.",
+    nextProof: "Whether people find it useful to return to the thoughts they saved. The journal app has no analytics.",
+    href: "https://koinophobialabs.com/forget-about-it", cta: "Explore Forget About It", external: true,
   },
   {
     name: "You Know Ball",
     stage: "Web demo live · iOS uploaded, untested",
     snapshot:
-      "Playable in a browser today. Builds 26 and 27 sit accepted at App Store Connect, still assigned to no tester.",
+      "Playable in a browser today. July 2026 records show accepted iOS uploads; current native distribution is unverified.",
     doingNow:
       "The latest engine work — clutch-time finishes and an honest comeback bonus the UI had been promising without paying — is committed on a branch that exists only on this machine. The next step is still a tester group, not more features.",
     nextProof:
@@ -93,8 +93,8 @@ export const nowSnapshot = nowActiveWork.map((item) => ({
 
 export const nowProof = [
   "A first repeatable paid studio engagement.",
-  "Career Forge's certified journey re-proven on the deployed build, then external users finishing the workflow.",
-  "Trendi's build in ten creators' hands after the on-device gate list clears.",
+  "People completing the Way In career workflow, with web and native outcomes measured separately.",
+  "Creators returning to Trendi and using their scripts to record. Website clicks alone cannot prove that.",
   "A You Know Ball build assigned to a tester group and installed by someone who isn't me.",
   "A salary role aligned with customer-facing AI and implementation work.",
 ];

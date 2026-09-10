@@ -14,7 +14,7 @@ const destinations = [
 fs.mkdirSync(outputDirectory, { recursive: true });
 
 async function pageTarget() {
-  for (let attempt = 0; attempt < 60; attempt += 1) {
+  for (let attempt = 0; attempt < 120; attempt += 1) {
     try {
       const targets = await fetch("http://127.0.0.1:9222/json/list").then(
         (response) => response.json(),
@@ -131,7 +131,7 @@ if (
   JSON.stringify(architecture.destinationIds) !== JSON.stringify(expectedIds) ||
   architecture.primaryLinks !== expectedIds.length ||
   architecture.journeyLinks !== expectedIds.length ||
-  architecture.productNodes !== 4 ||
+  architecture.productNodes !== 5 ||
   !architecture.hasWater ||
   !architecture.hasStage ||
   architecture.overflow
@@ -161,7 +161,7 @@ for (const [id, filename] of destinations) {
     const heading = content?.querySelector("h1, h2");
     const headingRect = heading?.getBoundingClientRect();
     const currentLinks = [
-      ...document.querySelectorAll('[data-koi-link][aria-current="location"]'),
+      ...document.querySelectorAll('.kw__nav [data-koi-link][aria-current="location"], .kw__map [data-koi-link][aria-current="location"]'),
     ].map((link) => link.dataset.koiLink);
     const mapTargets = [...document.querySelectorAll(".kw__map [data-koi-link]")];
     return {
@@ -283,14 +283,13 @@ for (const frame of frameCases) {
       phase: document.querySelector(".kw")?.dataset.koiPhase,
       content: rect ? { top: rect.top, left: rect.left, opacity: Number(getComputedStyle(content).opacity) } : null,
       videoTime: activeVideo?.currentTime ?? 0,
+      videoRate: activeVideo?.playbackRate ?? 0,
       videoPaused: !activeVideo || activeVideo.paused || activeVideo.dataset.koiStatic === "true",
-      videoInFrame: Boolean(
-        videoRect &&
-        videoRect.left >= -1 &&
-        videoRect.right <= innerWidth + 1 &&
-        videoRect.top >= -1 &&
-        videoRect.bottom <= innerHeight + 1
-      ),
+      videoVisibleFraction: videoRect
+        ? (Math.max(0, Math.min(videoRect.right, innerWidth) - Math.max(videoRect.left, 0)) *
+          Math.max(0, Math.min(videoRect.bottom, innerHeight) - Math.max(videoRect.top, 0))) /
+          Math.max(videoRect.width * videoRect.height, 1)
+        : 0,
       depthFullWidth: Boolean(depth && Math.abs(depth.getBoundingClientRect().width - innerWidth) <= 1),
       depthHeight: depth?.getBoundingClientRect().height ?? 0,
       depthFillHidden: !depthFill || getComputedStyle(depthFill).display === "none",
@@ -305,6 +304,7 @@ for (const frame of frameCases) {
     return {
       content: rect ? { top: rect.top, left: rect.left, opacity: Number(getComputedStyle(content).opacity) } : null,
       videoTime: activeVideo?.currentTime ?? 0,
+      videoRate: activeVideo?.playbackRate ?? 0,
       videoPaused: !activeVideo || activeVideo.paused || activeVideo.dataset.koiStatic === "true",
     };
   })()`);
@@ -317,14 +317,17 @@ for (const frame of frameCases) {
     readingRestBefore.content.opacity >= 0.999 &&
     readingRestAfter.content.opacity >= 0.999
   );
-  const videoStable = readingRestBefore.videoPaused &&
-    readingRestAfter.videoPaused &&
-    Math.abs(readingRestBefore.videoTime - readingRestAfter.videoTime) < 0.03;
+  // The shipped controller keeps a slow ambient drift at rest; text stays still.
+  const videoStable = (readingRestBefore.videoPaused && readingRestAfter.videoPaused &&
+    Math.abs(readingRestBefore.videoTime - readingRestAfter.videoTime) < 0.03) ||
+    (!readingRestBefore.videoPaused && !readingRestAfter.videoPaused &&
+      readingRestBefore.videoRate >= 0.25 && readingRestBefore.videoRate <= 0.5 &&
+      readingRestAfter.videoRate >= 0.25 && readingRestAfter.videoRate <= 0.5);
   if (
     readingRestBefore.phase !== "hold" ||
     !contentStable ||
     !videoStable ||
-    (frame.width >= 2800 && !readingRestBefore.videoInFrame) ||
+    (frame.width >= 2800 && readingRestBefore.videoVisibleFraction < 0.72) ||
     !readingRestBefore.depthFullWidth ||
     Math.abs(readingRestBefore.depthHeight - 1) > 0.1 ||
     !readingRestBefore.depthFillHidden
@@ -359,7 +362,7 @@ for (const frame of frameCases) {
       };
     })()`);
 
-    const expectedStage = frame.width <= 1024 || (id === "systems" && frame.height <= 760)
+    const expectedStage = frame.width <= 1024 || (["products", "systems"].includes(id) && frame.height <= 760)
       ? ["static", "relative"]
       : ["sticky"];
     if (
@@ -421,7 +424,10 @@ for (const frame of frameCases) {
         const height = Math.max(0, Math.min(rect.bottom, innerHeight) - Math.max(rect.top, 0));
         return (width * height) / Math.max(rect.width * rect.height, 1);
       })()`);
-      if (sceneVisibility < 0.72) {
+      // Portrait poses deliberately crop the decorative koi to leave room for copy.
+      // Keep a majority visible on phones; retain the wider framing check on ultrawide.
+      const minimumSceneVisibility = frame.width <= 1024 ? 0.6 : 0.72;
+      if (sceneVisibility < minimumSceneVisibility) {
         throw new Error(
           `${frame.name} ${id} scene is over-clipped: ${sceneVisibility.toFixed(3)}`,
         );

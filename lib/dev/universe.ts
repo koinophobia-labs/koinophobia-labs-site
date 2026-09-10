@@ -24,7 +24,7 @@ import { LINKS } from "@/lib/links";
 // certified free-launch candidate, while You Know Ball's historical Apple
 // acceptance was preserved without guessing at its current distribution state.
 
-export const universeLastUpdated = "August 13, 2026";
+export const universeLastUpdated = "September 10, 2026";
 
 /** Who owns keeping these statuses honest. Rendered nowhere; asserted in tests. */
 export const statusOwner = "Blake Taylor";
@@ -154,7 +154,7 @@ export type Evidence = {
 };
 
 export type ProductIdentity = {
-  theme: "forge" | "signal" | "arena" | "cave" | "studio";
+  theme: "forge" | "signal" | "arena" | "cave" | "studio" | "memory";
   register: string;
 };
 
@@ -184,49 +184,26 @@ export type Product = {
 export const products: Product[] = [
   {
     slug: "career-forge",
-    name: "Career Forge",
+    name: "Way In",
     tagline: "The job-search system I needed the week I lost my job.",
     identity: { theme: "forge", register: "Structural · built under pressure" },
     reach: "public",
     stage: "public",
-    status:
-      "Live on the web and free to use. Checkout is certification-pinned and currently closed: the deployed code has moved past the last certified commit",
-    verifiedAt: "2026-07-26",
+    status: "Way In is available on the App Store for iPhone and iPad, version 1.0. The legacy Career Forge web destination now also displays Way In",
+    verifiedAt: "2026-09-10",
     evidence: [
-      {
-        claim: "The site is live and serving",
-        source: "HTTP 200 from career-forge-lite.vercel.app, checked 2026-07-26",
-      },
-      {
-        claim: "Checkout is closed, and closed for the pinned-certification reason",
-        source:
-          "GET /api/commerce-health (2026-07-26): canSellSafely:false; stripe_verified_certification and human_authorization both pin commit 28d3def while the deployment runs 909a5bb8",
-      },
-      {
-        claim: "A durable order store now exists and answers",
-        source:
-          "commerce-health operational checks (2026-07-26): durable_store passed (neon-postgres), store_reachable passed with a round-trip write/read/delete",
-      },
-      {
-        claim: "The beta line shipped July 19",
-        source: "career-forge-lite origin/main b1be8b2, tagged v0.10.0-beta.1",
-      },
-      {
-        claim: "Fulfillment could fail silently after payment, and checkout was closed because of it",
-        source:
-          "Audit 2026-07-20: live checkout returned a Payment Link and never learned the outcome. Brake merged as career-forge-lite#28 (3c66a77) and deployed",
-      },
+      { claim: "Public iPhone and iPad release", source: "https://apps.apple.com/us/app/way-in-career-hub/id6807942376 — public US listing and Apple Lookup API, checked 2026-09-10" },
+      { claim: "Legacy web destination remains available under the Way In name", source: "https://career-forge-lite.vercel.app — HTTP 200 and Way In branding, checked 2026-09-10" },
     ],
     problem:
       "When my DraftKings role ended I had the same problem everyone in that seat has: a hundred scattered applications, no feedback, and advice too generic to act on. The job search is the highest-stakes project most people ever run, and almost nobody runs it as a project.",
     thesis:
       "A résumé tool that invents experience is worse than no tool. The useful thing is not generation — it's organizing evidence you already have into something a stranger can evaluate in six seconds.",
     state: [
-      "Live at career-forge-lite.vercel.app. A stranger can walk in, build a dossier, generate role-specific drafts, and export a real DOCX and ZIP without talking to me.",
-      "Released to production on July 19, 2026 (v0.10.0-beta.1) after a readiness sprint: early-win bullets and a lighter first-run profile.",
-      "The generation engine is deterministic. There is no model writing your history — every claim traces to something you entered.",
-      "Checkout closed itself on July 20 and has stayed closed on purpose. The audit that day found the $49 fulfillment path ran entirely in the buyer's browser: close the tab on the way back from Stripe and the license was never issued, with nothing recording it.",
-      "Since then the missing piece got built: a durable order store now passes the health check's round-trip. What hasn't happened is re-certification — the sales approval is pinned to the exact commit it certified, the code moved, so the store shut itself again. That reflex is the system working.",
+      "Career Forge is now named Way In. The original web destination still works; the native iPhone and iPad app has a separately verified public App Store listing.",
+      "Build a Career Profile from approved facts, review resumes and job fit, prepare for interviews, and track applications and follow-ups.",
+      "Free iOS access includes resume review and job-fit analysis. Optional App Store purchases unlock export, tailoring, interview preparation, and planning. The 30-Day Career Pass does not auto-renew.",
+      "The July 2026 checkout closure and certification decisions below are development history, not a statement about today's web checkout. Current web offers are shown by the web product itself.",
     ],
     decisions: [
       {
@@ -253,15 +230,12 @@ export const products: Product[] = [
     learned:
       "I built this for myself first, so every feature aimed at someone already motivated, and the hardest problems turned out to be the first ninety seconds rather than the output quality. The sharper lesson came later: I shipped a working payment button and never once asked what happens if the customer's browser doesn't come back.",
     actions: [
-      { label: "Open Career Forge", href: LINKS.careerForge, external: true, primary: true },
+      { label: "Explore Way In for iPhone & iPad", href: "https://koinophobialabs.com/way-in", external: true, primary: true },
+      { label: "Open Way In web (formerly Career Forge)", href: LINKS.careerForge, external: true },
     ],
     notYet: [
-      "I cannot tell you whether anyone has ever paid. There is no order history from the pre-store era by design, so the only system that knows is Stripe, and I have not reconciled it. Treat “paying customers” as unestablished in both directions.",
-      "Worse: before July 20 I could not have told you whether a payment failed to deliver either. Nothing logged it.",
-      "The certified end-to-end journey hasn't been re-demonstrated on the current build, so checkout stays closed.",
-      "I have collected zero beta feedback. It saves to the tester's own browser and never reaches me — a design decision I did not think through.",
-      "No confirmed job outcome. Nobody has told me this got them hired.",
-      "Lane suggestions still come from a fixed library, so an operations résumé gets tech-pivot lanes it didn't ask for. Known defect, not yet fixed.",
+      "Way In does not apply to jobs for you or guarantee interviews or offers.",
+      "Website clicks do not establish installs, paid purchases, or job outcomes; those measures have not been reconciled here.",
     ],
   },
   {
@@ -269,53 +243,20 @@ export const products: Product[] = [
     name: "Trendi",
     tagline: "The gap between having an idea and pressing record.",
     identity: { theme: "signal", register: "Kinetic · spoken out loud" },
-    reach: "internal",
-    stage: "release-candidate",
-    status:
-      "Build 132 is the certified free-launch release candidate awaiting signing and App Store upload; build 122 previously reached internal TestFlight",
-    verifiedAt: "2026-08-13",
-    evidence: [
-      {
-        claim: "Build 132 is the exact current release candidate",
-        source:
-          "general-ai-command-center PR #6 at d347f0305f69675ba23cc94bf99f30c8d29af856; 0.1.0 (132), free launch with three Coach Packs per ISO week and no launch IAP or paywall, certified 2026-08-13",
-      },
-      {
-        claim: "Build 132 has not crossed the Apple distribution gates",
-        source:
-          "No signed archive, exported IPA, App Store Connect upload receipt, processed-build record or tester assignment exists for d347f030 / build 132 in the 2026-08-13 release evidence",
-      },
-      {
-        claim: "Build 122 previously reached internal TestFlight",
-        source:
-          "altool delivery UUIDs e5cbeefe (120), caa3229b (121), d811be60 (122); App Store Connect processed each VALID, with 122 READY_FOR_BETA_TESTING",
-      },
-      {
-        claim: "The archives and release IPA exist on this machine",
-        source:
-          "~/Library/Developer/Xcode/Archives/2026-07-25/Trendi-0.1.0-{120,121,122}.xcarchive and ~/Documents/Trendi-122-rc/Trendi.ipa, checked 2026-07-26",
-      },
-      {
-        claim: "Installs on the test phone are genuine TestFlight installs",
-        source:
-          "devicectl app inventory with --include-default-apps shows TestFlight present on the device; the earlier 'sideload' theory was a filter artifact and was retracted 2026-07-25",
-      },
-      {
-        claim: "The cross-account isolation gate is still open",
-        source:
-          "PENDING-beta-user-handoff.md still reads “Status: PENDING — User B unavailable”, account-identity legs “Not run” (checked 2026-07-26)",
-      },
-    ],
+    reach: "public",
+    stage: "public",
+    status: "Available on the App Store for iPhone: version 0.2.1, iOS 17.0 or later. Free with optional Trendi Pro",
+    verifiedAt: "2026-09-10",
+    evidence: [{ claim: "Public release, compatibility, Free and Pro allowances", source: "https://apps.apple.com/us/app/trendi-content-coach/id6776299336 — public US listing and Apple Lookup API, checked 2026-09-10" }],
     problem:
       "Most creators don't run out of ideas. They stall in the ninety seconds between having one and pressing record, because a thought in your head is not the same thing as words you can say on camera. I watched people abandon good ideas at exactly that gap, including me.",
     thesis:
       "Nobody needs another script generator. They need the specific sentence to open with. A coach in your pocket, not a script mill.",
     state: [
-      "An iOS app in SwiftUI. You type the messy thought; it hands back hooks, a recordable script, a caption, and a simple shot plan.",
-      "Record Mode went from a state machine with mocked hardware to real AVFoundation capture to five passed gates on a physical iPhone — including a two-minute real recording and an A→B→A user-switch check that recordings stay isolated between app users.",
-      "Builds 120, 121 and 122 went to TestFlight in one evening on July 25. Not velocity theatre: the first on-phone pass found a paid-for coach script rendering as five empty sections (fixed in 121), then the live camera preview showing sideways on the front sensor (fixed in 122).",
-      "Both of those defects were invisible in the simulator. They surfaced within hours of running the genuinely distributed build on a real phone.",
-      "The newer generation pipeline is still switched off — the shipping builds carry the V1 client on purpose.",
+      "Type or speak a rough thought to get an angle, three hooks, an editable script, a caption, and a simple shot plan.",
+      "Record section by section or as a full script with the teleprompter. Keep ideas and drafts in the on-device Vault.",
+      "Free includes three successful Coach Packs per weekly allowance period. Optional monthly Pro provides 100 Coach Packs each month. The editor, saved work, and teleprompter stay available on Free.",
+      "The July 2026 TestFlight story remains in the dated build log; Trendi reached the public App Store on August 28, 2026.",
     ],
     decisions: [
       {
@@ -327,19 +268,32 @@ export const products: Product[] = [
         why: "The simulator suite was green for weeks while the first hours on real hardware found two shipping defects. The simulator votes; the device decides.",
       },
       {
-        call: "Kept it iOS-only and unpublished.",
-        why: "It is easier to learn from ten creators who can reach me than from a public listing I can't support.",
+        call: "Started with a small iPhone testing group in July 2026.",
+        why: "That early testing period helped expose recording defects before the public release.",
       },
     ],
     learned:
       "Shipping and delivering are different verbs, and I learned it the expensive way — with a finished build sitting behind an account permission for days. The newer lesson is that even my own evidence expires: I retired a whole theory about how builds reached my phone after reading one CLI flag's documentation, because the app inventory I'd trusted turned out to be filtered.",
-    actions: [],
-    notYet: [
-      "Not on the App Store, and not submitted for review.",
-      "Build 132 has not been signed, uploaded or assigned to testers; build 122's verified reach was internal TestFlight.",
-      "The clean-state isolation gate — a second, genuinely different Apple account walking through the app end to end — has still never run.",
-      "The exact build 132 successor still needs its physical-iPhone, screenshot, signing, archive, upload and processing gates.",
-    ],
+    actions: [{ label: "Explore Trendi, Free & Pro", href: "https://koinophobialabs.com/trendi", external: true, primary: true }],
+    notYet: ["No automatic posting, scheduling, or social-account connections.", "No guaranteed views, followers, revenue, or audience growth."],
+  },
+  {
+    slug: "forget-about-it",
+    name: "Forget About It",
+    tagline: "Keep the thought before it slips away.",
+    identity: { theme: "memory", register: "Personal · kept on your devices" },
+    reach: "public",
+    stage: "public",
+    status: "Available on the App Store, version 1.0. Free for iPhone with an Apple Watch companion; works offline",
+    verifiedAt: "2026-09-10",
+    evidence: [{ claim: "Public release, devices, and journal features", source: "https://apps.apple.com/us/app/forgetaboutit/id6804360983 — public US listing and Apple Lookup API, checked 2026-09-10" }],
+    problem: "A thought can disappear before you reach somewhere to write it down. The fragments you do save can be just as hard to find again.",
+    thesis: "Make capture quick enough for the moment, then let the day become something you can read back.",
+    state: ["Capture by text or speech on iPhone, or speak, scribble, or type on Apple Watch.", "Watch captures queue offline and sync when your iPhone reconnects. Your words stay separate from the app's interpretation.", "The app has no account, analytics, or server. The journal stays on your devices and can be exported from Settings."],
+    decisions: [{ call: "Preserve the original words.", why: "The app's reading of a day belongs beside the captures, without replacing them." }, { call: "Keep the journal on device.", why: "Private memories should not need an account or a server to be useful." }],
+    learned: "Fast capture only helps when you can return to what you kept. Both ends of that path matter.",
+    actions: [{ label: "Explore Forget About It", href: "https://koinophobialabs.com/forget-about-it", external: true, primary: true }],
+    notYet: ["No cloud account or server recovery of a journal.", "The journal is excluded from backups; save your own copy from Settings."],
   },
   {
     slug: "you-know-ball",
@@ -350,8 +304,9 @@ export const products: Product[] = [
     stage: "uploaded",
     status:
       "Public web demo. Apple's July 2026 upload responses prove iOS builds 26 and 27 were accepted; current processing, tester assignment and distribution are unverified",
-    verifiedAt: "2026-08-13",
+    verifiedAt: "2026-09-10",
     evidence: [
+      { claim: "The public web demo responds; native distribution remains unverified", source: "https://you-know-ball-orpin.vercel.app — HTTP 200, checked 2026-09-10. The Apple acceptance records below are explicitly July 2026 history, not current distribution receipts." },
       {
         claim: "Builds 26 and 27 were accepted by App Store Connect",
         source:
@@ -406,7 +361,7 @@ export const products: Product[] = [
     ],
     notYet: [
       "Current App Store Connect processing and tester assignment are unverified; no current receipt or beta-group record was available in the August 13 evidence refresh.",
-      "Not submitted to the App Store.",
+      "A current public iOS release has not been verified here.",
       "No current external-tester or install record was available; do not infer either zero testers or successful distribution.",
       "The engine numbers I'd want to quote here — cohort win rates, tournament results — I can't currently point at an artifact for, so I'm not quoting them.",
     ],
@@ -419,9 +374,10 @@ export const products: Product[] = [
     reach: "public",
     stage: "public",
     status:
-      "Live on both sites as the koi's front office. It routes real conversations; none has become a paid engagement yet",
-    verifiedAt: "2026-07-26",
+      "Available on both sites as the koi front office, with an existing studio inquiry path",
+    verifiedAt: "2026-09-10",
     evidence: [
+      { claim: "Public concierge and founder front-office entry points are available", source: "https://koinophobialabs.com/concierge and https://koinophobia.dev — HTTP 200 and public entry points checked 2026-09-10. Historical implementation evidence follows." },
       {
         claim: "The front office leads the studio's concierge page",
         source:
@@ -468,7 +424,7 @@ export const products: Product[] = [
       { label: "Meet it on the studio site", href: LINKS.labs, external: true, primary: true },
     ],
     notYet: [
-      "No lead that arrived through it has become a paying engagement. It routes conversations; it hasn't closed one.",
+      "Current paid-conversion results are not established by this page.",
       "The five-human benchmark hasn't run — every score so far is my own adversarial walkthrough, and I already know how that can fool me.",
       "It only answers from what the sites already publish. Ask it something the pages don't know and it tells you so.",
     ],
@@ -479,42 +435,21 @@ export const products: Product[] = [
     tagline: "A private operator brain that never leaves the machine.",
     identity: { theme: "cave", register: "Quiet · local-first, unlisted" },
     reach: "internal",
-    stage: "internally-validated",
-    status: "Internal build — dev-signed and un-notarized, so it cannot run on another Mac",
-    verifiedAt: "2026-07-26",
-    evidence: [
-      {
-        claim: "Not distributable to anyone",
-        source:
-          "codesign shows a development identity under team 3TY4W55YC5; spctl -a still returns rejected, re-checked 2026-07-26",
-      },
-      {
-        claim: "The installed app is current, not stale",
-        source:
-          "~/Applications/Koi Cave.app binary stamped Jul 23 2026, built from the operator-loop branch tip",
-      },
-      {
-        claim: "The operator loop produced a real, proof-checked receipt",
-        source:
-          "KOI_CAVE_OPERATOR_LOOP_V1_REPORT.md; receipt 7F044DA9 with proof artifacts on disk under the app's Proof directory, present 2026-07-26",
-      },
-      {
-        claim: "Certified with limitations, and the mail path never ran",
-        source:
-          "MORNING_FOUNDER_BRIEF_CERTIFICATION_REPORT.md; gmail-oauth-config.json holds a clientID and no tokens",
-      },
-    ],
+    stage: "local",
+    status: "Private development project. No public download is offered here; the technical build record below is dated July 2026",
+    verifiedAt: "2026-09-10",
+    evidence: [{ claim: "Public site offers a development record, not a download", source: "https://koinophobia.dev/products/koi-cave — public development page and its absence of a download action checked 2026-09-10. Technical notes below are preserved as July 26, 2026 history; no newer binary or signing claim is made." }],
     problem:
       "Every tool that promises to organize your work wants your work on its servers, on a subscription, forever. I wanted the leverage without renting my own context back from someone else.",
     thesis:
       "Personal infrastructure beats personal productivity apps. If the thing that knows the most about how I work is owned by a company, that's a dependency, not leverage.",
     state: [
-      "A macOS app: notes, tasks, memory, and automations, running local-first.",
-      "The operator loop closed for the first time on July 23: a typed command becomes a validated packet, passes an approval gate, runs a repo-inspection worker, and comes back as a receipt that a separate validator re-checks from artifacts on disk.",
-      "That work is deliberately unmerged. The last gate is human hands — me typing the command into the composer myself — before it lands on main.",
-      "The morning founder brief is certified with limitations — it survived every failure drill I could design, including corrupt caches, malformed events, and a disconnected mail provider.",
-      "One known truth bug remains: items waiting on me for more than 72 hours drop out of the brief while it reports no urgent signal. That's the exact failure mode a brief exists to prevent.",
-      "The mail integration has never completed a real sync. The stored config holds a client ID and no tokens, so every brief it has ever produced was built from local state.",
+      "July 26, 2026 record: A macOS app: notes, tasks, memory, and automations, running local-first.",
+      "July 26, 2026 record: The operator loop closed for the first time on July 23: a typed command becomes a validated packet, passes an approval gate, runs a repo-inspection worker, and comes back as a receipt that a separate validator re-checks from artifacts on disk.",
+      "July 26, 2026 record: That work is deliberately unmerged. The last gate is human hands — me typing the command into the composer myself — before it lands on main.",
+      "July 26, 2026 record: The morning founder brief is certified with limitations — it survived every failure drill I could design, including corrupt caches, malformed events, and a disconnected mail provider.",
+      "July 26, 2026 record: One known truth bug remains: items waiting on me for more than 72 hours drop out of the brief while it reports no urgent signal. That's the exact failure mode a brief exists to prevent.",
+      "July 26, 2026 record: The mail integration has never completed a real sync. The stored config holds a client ID and no tokens, so every brief it has ever produced was built from local state.",
     ],
     decisions: [
       {
@@ -538,11 +473,8 @@ export const products: Product[] = [
       "I certified a feature against every failure I could imagine and never connected the one integration that would have made it real. The drills tested how it behaves when the data is missing, which turns out to be the only state I've ever actually run it in.",
     actions: [],
     notYet: [
-      "No public build, no download, no waitlist. There is nothing to try.",
-      "Never notarized, so it cannot be installed by anyone else even privately.",
-      "The operator loop lives on a branch; main doesn't have it yet, and the human-hands gate hasn't run.",
-      "The live mail integration has never completed a sync, so the feature has never run against real data.",
-      "It is a case study in how I build, not a product I'm offering.",
+      "No public download is offered here.",
+      "The July 2026 signing, operator-loop, and mail-sync notes have not been reverified for a newer build.",
     ],
   },
 ];

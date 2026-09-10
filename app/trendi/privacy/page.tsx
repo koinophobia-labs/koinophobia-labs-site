@@ -18,7 +18,7 @@ export default function TrendiPrivacyPage() {
       </Link>
       <p className="kicker kicker-orange">Trendi</p>
       <h1>Privacy Policy</h1>
-      <p className="legal-note">Effective August 13, 2026</p>
+      <p className="legal-note">Effective August 31, 2026</p>
 
       <section>
         <h2>Scope</h2>
@@ -33,10 +33,11 @@ export default function TrendiPrivacyPage() {
         <h2>Information Trendi processes</h2>
         <ul>
           <li>
-            <strong>Account information.</strong> Trendi uses Sign in with Apple.
-            It verifies Apple credentials and associates Coach requests with a
-            pseudonymous workspace. Trendi does not request your Apple email
-            address. A name provided during sign-in can be used on your device.
+            <strong>Account information.</strong> Trendi supports Sign in with Apple
+            and guest access. For signed-in workspaces, it verifies Apple credentials
+            and associates Coach requests with a pseudonymous workspace. Trendi does
+            not request your Apple email address. A name provided during sign-in can
+            be used on your device. Guest workspaces use a pseudonymous credential.
           </li>
           <li>
             <strong>Creator content.</strong> When you ask Trendi to generate a
@@ -53,6 +54,14 @@ export default function TrendiPrivacyPage() {
             creator text.
           </li>
           <li>
+            <strong>Subscription records.</strong> If you use Trendi Pro, the app
+            sends Apple-signed StoreKit transaction and renewal information to the
+            Coach service. Trendi verifies the app, product, transaction, expiration,
+            revocation, and grace-period information and uses purchase transaction
+            identifiers to operate one purchase-owned monthly allowance. This keeps
+            the subscription separate from a changeable Trendi workspace.
+          </li>
+          <li>
             <strong>Support messages.</strong> If you contact support, Koinophobia
             Labs processes the email address and information you include so it can
             respond to your support request or Trendi inquiry.
@@ -65,8 +74,9 @@ export default function TrendiPrivacyPage() {
           </li>
         </ul>
         <p>
-          This version of Trendi does not offer an in-app purchase or subscription
-          and does not receive payment-card information.
+          Trendi Pro is an optional auto-renewable subscription purchased and managed
+          through Apple. Apple processes the payment; Trendi does not receive your
+          payment-card information.
         </p>
       </section>
 
@@ -92,7 +102,13 @@ export default function TrendiPrivacyPage() {
           <li>authenticate you and keep workspaces separated;</li>
           <li>generate, deliver, replay, and recover the Coach Pack you request;</li>
           <li>personalize coaching from context you choose to provide;</li>
-          <li>operate free allowances, retries, and delivery controls;</li>
+          <li>
+            operate free and subscription allowances, retries, and delivery controls;
+          </li>
+          <li>
+            verify subscription status and prevent one purchase from being duplicated
+            across workspaces;
+          </li>
           <li>secure, maintain, and troubleshoot the service; and</li>
           <li>respond to support, privacy, and deletion requests.</li>
         </ul>
@@ -102,8 +118,9 @@ export default function TrendiPrivacyPage() {
         <h2>Service providers</h2>
         <ul>
           <li>
-            <strong>Apple</strong> provides Sign in with Apple, speech recognition,
-            Photos export, and system sharing.
+            <strong>Apple</strong> provides Sign in with Apple, StoreKit purchases and
+            subscription management, speech recognition, Photos export, and system
+            sharing.
           </li>
           <li>
             <strong>Vercel</strong> hosts the Coach service and public pages;
@@ -163,6 +180,11 @@ export default function TrendiPrivacyPage() {
             expire sooner.
           </li>
           <li>
+            A subscription-month allowance and its purchase transaction identifiers
+            can remain through the verified subscription or grace period plus up to
+            seven days for late delivery and refund handling.
+          </li>
+          <li>
             Limited hosting and security logs are retained according to the
             applicable provider settings and legal requirements.
           </li>
@@ -185,6 +207,14 @@ export default function TrendiPrivacyPage() {
           local workspace from the device, clears the session, and signs out. This
           deletion overrides Trendi&apos;s normal Coach-result and control-record
           retention periods.
+        </p>
+        <p>
+          Deleting a Trendi workspace does not cancel an App Store subscription and
+          cannot erase Apple&apos;s purchase record. Manage or cancel Trendi Pro in
+          Apple&apos;s subscription settings. Because the subscription allowance belongs
+          to the purchase rather than a changeable workspace, its limited verification
+          and allowance record can remain for the subscription or grace period plus up
+          to seven days as described above.
         </p>
         <p>
           Trendi also attempts to revoke its Sign in with Apple authorization.
@@ -217,7 +247,9 @@ export default function TrendiPrivacyPage() {
           <strong>Privacy &amp; Data</strong>, and delete your Trendi account from the
           app. Resetting AI processing consent does not delete your content; Trendi
           asks for consent again before sending another request to an external AI
-          provider. For an access, correction, privacy, or deletion question, email{" "}
+          provider. You can restore purchases in Trendi and manage or cancel Trendi Pro
+          through Apple&apos;s subscription settings. For an access, correction,
+          privacy, or deletion question, email{" "}
           <a href={`mailto:${privacyEmail}`}>{privacyEmail}</a>.
         </p>
       </section>

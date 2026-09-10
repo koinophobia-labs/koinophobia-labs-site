@@ -22,7 +22,7 @@ export const DEV_NAV = [
   { href: "/connect", label: "Connect" },
 ];
 
-export type DevWorld = "forge" | "signal" | "arena" | "cave" | "studio";
+export type DevWorld = "forge" | "signal" | "arena" | "cave" | "studio" | "memory";
 
 export default function DevShell({
   world,

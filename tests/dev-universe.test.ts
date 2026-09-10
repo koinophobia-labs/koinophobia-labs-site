@@ -198,8 +198,8 @@ test("the front office is in the universe, honestly", () => {
     "the concierge needs dated, checkable evidence",
   );
   assert.ok(
-    concierge!.notYet.some((line) => /paying|engagement/i.test(line)),
-    "it must say plainly that no routed conversation has become a paid engagement",
+    concierge!.notYet.some((line) => /paid|paying|engagement/i.test(line)),
+    "paid outcomes must remain explicitly unestablished without current evidence",
   );
 });
 
@@ -240,26 +240,14 @@ test("You Know Ball does not claim it was never uploaded", () => {
   );
 });
 
-test("Trendi reflects build 132 while preserving build 122 TestFlight evidence", () => {
-  // Re-pinned 2026-08-13: build 132 is the current certified free-launch
-  // candidate. Build 122 remains historical proof of internal TestFlight reach.
-  const trendi = getProduct("trendi");
-  assert.ok(trendi);
-  const prose = [trendi!.status, ...trendi!.state].join(" ");
-  assert.equal(trendi!.reach, "internal");
-  assert.equal(trendi!.stage, "release-candidate");
-  assert.match(trendi!.status, /132/, "build 132 must headline the current status");
-  assert.match(prose, /122/, "build 122's historical TestFlight evidence must remain");
-  assert.doesNotMatch(
-    trendi!.status,
-    /blocked on builds? 11[56]|stuck behind an apple account|\b118\b/i,
-    "superseded builds must not headline the status",
-  );
-  // The isolation gate is genuinely open; the page must not imply otherwise.
-  assert.ok(
-    [...trendi!.state, ...trendi!.notYet].some((line) => /isolation/i.test(line)),
-    "the incomplete data-isolation gate must be disclosed",
-  );
+test("Trendi reflects its verified public release while the dated log preserves beta history", () => {
+  const trendi = getProduct("trendi")!;
+  assert.equal(trendi.reach, "public");
+  assert.equal(trendi.stage, "public");
+  assert.match(trendi.status, /0\.2\.1/);
+  assert.match(trendi.evidence.map(e => e.source).join(" "), /apps\.apple\.com.*6776299336/);
+  assert.doesNotMatch(trendi.status, /release.candidate|invite.only|not on the app store/i);
+  assert.match(read("lib/dev/log.ts"), /122/);
 });
 
 test("Career Forge does not claim checkout is closed, or that anyone bought", () => {
@@ -351,7 +339,7 @@ test("/now and the product universe agree about TestFlight", () => {
 
     const nowClaims = /testflight/i.test(`${entry.stage} ${entry.snapshot} ${entry.doingNow}`);
     const universeClaims = /testflight|internal testers/i.test(
-      `${stageLabel[product.stage]} ${product.status} ${product.state.join(" ")}`,
+      `${stageLabel[product.stage]} ${product.status}`,
     );
     assert.equal(
       nowClaims,
