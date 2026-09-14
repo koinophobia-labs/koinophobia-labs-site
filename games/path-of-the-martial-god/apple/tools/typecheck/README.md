@@ -22,6 +22,24 @@ that wrote it, and no amount of green here substitutes for one real build on a M
 
 **Treat a pass as "no internal contradictions found", never as "this compiles".**
 
+## Coverage
+
+All eleven presentation files, including `MartialGodApp.swift`. That file was excluded
+at first because SwiftUI is a DSL rather than a flat API — property wrappers, a result
+builder and modifier chaining all have to behave structurally before one line of the app
+shell type-checks. It is covered now, because the app's entry point and scene-phase
+wiring is the last place you want finding its first error on a Mac.
+
+`@Observable` is **not** stubbed: the Observation module ships with the open-source
+toolchain and works on Linux, so the real macro runs.
+
+## The one remaining blind spot
+
+`#selector`. Linux Swift has no Objective-C runtime, so the harness rewrites
+`#selector(foo)` into `Selector("foo")` in a throwaway copy of the sources. The
+shipping files are never touched, and the target/action pairing goes unchecked —
+a selector naming a method that does not exist will pass here and crash there.
+
 ## Running it
 
 ```bash

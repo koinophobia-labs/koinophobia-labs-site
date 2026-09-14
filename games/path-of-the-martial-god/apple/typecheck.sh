@@ -51,26 +51,12 @@ find "$SRC" -name '*.swift' -print0 | xargs -0 sed -i \
   -e 's/@objc //g' \
   -e 's/#selector(\([A-Za-z_][A-Za-z0-9_]*\))/Selector("\1")/g'
 
-# MartialGodApp.swift is excluded, deliberately and visibly.
-#
-# It is the SwiftUI shell: @main, @Observable, @Environment(\.scenePhase), the
-# ViewBuilder DSL and the modifier chain. Stubbing that machinery convincingly is a far
-# bigger job than the rest of the harness put together, and a half-accurate SwiftUI stub
-# produces errors that are not real and passes that are not either. Better to check ten
-# files honestly and name the eleventh than to check eleven and trust none of them.
-#
-# What is lost: the app entry point, scene-phase wiring, and the SwiftUI-to-UIKit
-# bridge. Those are the FIRST things to exercise on the Mac.
-EXCLUDE="MartialGodApp.swift"
-rm -f "$SRC/MartialGod/App/$EXCLUDE"
-
 echo "==> type-checking the presentation layer"
-echo "    excluded: $EXCLUDE (SwiftUI DSL — see tools/typecheck/README.md)"
 swiftc -typecheck -I "$OUT" -I "$CORE/Modules" -I "$CORE" \
   $(find "$SRC" -name '*.swift' | sort)
 INNER
 
 run "$SCRIPT"
 echo
-echo "TYPE-CHECK OK — no internal contradictions in 10 of the 11 presentation files."
+echo "TYPE-CHECK OK — no internal contradictions in all 11 presentation files."
 echo "This is NOT proof it compiles on a Mac; see tools/typecheck/README.md."

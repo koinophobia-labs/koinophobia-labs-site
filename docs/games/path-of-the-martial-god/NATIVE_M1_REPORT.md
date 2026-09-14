@@ -69,10 +69,10 @@ Real checks, really executed:
 | Strict concurrency (`-strict-concurrency=complete`) | ✅ clean in MartialGodCore |
 | Simulation frame cost | ✅ **7.4µs/tick**, 0.045% of a 60Hz frame (release, x86_64 Linux) |
 | Presentation layer parses (`swiftc -parse`, 11 files) | ✅ syntax only |
-| **Presentation layer TYPE-CHECKS against stub frameworks (10 of 11 files)** | ✅ `./typecheck.sh` — our own types, optionality, labels and conformances. Not Apple's API shape |
+| **Presentation layer TYPE-CHECKS against stub frameworks (ALL 11 files)** | ✅ `./typecheck.sh` — our own types, optionality, labels and conformances, SwiftUI shell included. Not Apple's API shape |
 | App icon meets App Store requirements | ✅ 1024×1024, opaque, no alpha |
 | Presentation layer links, or type-checks against the REAL frameworks | ⛔ needs the iOS SDK |
-| `MartialGodApp.swift` (the SwiftUI shell) checked at all | ⛔ excluded — stubbing the SwiftUI DSL would give false signal in both directions |
+| `#selector` target/action pairing | ⛔ no Objective-C runtime on Linux; rewritten away by the harness |
 | Launches on simulator or device | ⛔ needs Xcode |
 | Render / audio / haptics performance | ⛔ needs a device |
 
@@ -404,7 +404,7 @@ Neither would have been visible until someone ran the generator.
 
 | # | Issue | Severity |
 | --- | --- | --- |
-| N-1 | ~~Nothing has been compiled.~~ **The core is compiled and green** — 37 tests, parity gate, strict concurrency. **10 of the 11 presentation files now type-check** against stub frameworks (`./typecheck.sh`); the SwiftUI shell and all real-SDK behaviour still need a Mac. | Open, narrowed further |
+| N-1 | ~~Nothing has been compiled.~~ **The core is compiled and green** — 37 tests, parity gate, strict concurrency. **All 11 presentation files now type-check** against stub frameworks (`./typecheck.sh`), the SwiftUI shell included; real-SDK behaviour still needs a Mac. | Open, narrowed further |
 | N-2 | `Renderer.swift` is still the highest-risk file: pipeline state, vertex descriptor and shader ABI are what a compiler and a GPU catch and a reviewer does not. It now **type-checks** against stub Metal, which is more than parsing and much less than building. | High |
 | N-3 | The touch grammar is untested on glass. Tap-versus-flick disambiguation is the most likely tuning need. | High |
 | N-4 | ~~The input buffer is inert in both implementations.~~ **Fixed**, and the Swift half is now proven by a parity gate that actually ran — `bufferedVerb` matches the oracle on every one of 5,861 frames. | Closed |
