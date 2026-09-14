@@ -53,6 +53,21 @@ export type LogEntry = {
 
 export const logEntries: LogEntry[] = [
   {
+    slug: "one-studio-rebuild-live",
+    date: "2026-09-14",
+    title: "The rebuild is live. One studio, one domain.",
+    product: "site",
+    kind: "release",
+    what: "Pull request #57 merged to main and Vercel deployed it. koinophobialabs.com now leads with the three App Store apps, reports the lab at its real stage, and carries the koi renders, the analytics events, the social card, the RSS feed, and the build-time App Store versions. koinophobia.dev redirects into it, permanently.",
+    why: "For six weeks the studio site sold website audits while the apps were live on the store. The proof and the studio are in one place now.",
+    next: "Watch the sixteen events for a month, then decide whether cinematic mode costs readers. Confirm the GitHub Actions billing lock is lifted so CI runs on the next change.",
+    evidence: [
+      { claim: "Production serves the merge commit", source: "Vercel deployment dpl_4Rsus7xrC9JLGtmnvK1RLMsbe7Jd for 12d0241, target production, 2026-09-14" },
+      { claim: "Redirects fire on the live hosts", source: "curl 2026-09-14: /services, /intake, /products, /about, /work, /concierge, /now return 308 to the new pages; koinophobia.dev/, /products/trendi, /about, /log return 308 to koinophobialabs.com" },
+      { claim: "CI did not run on the pull request", source: "GitHub annotation 'The job was not started because your account is locked due to a billing issue'; the CI steps were reproduced in a clean clone instead (docs/evidence/REBUILD_QA_2026-09-14.md)" },
+    ],
+  },
+  {
     slug: "one-studio-rebuild-pull-request",
     date: "2026-09-14",
     title: "The rebuild reaches a pull request",
