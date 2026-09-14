@@ -2,8 +2,8 @@
 
 **These stubs are not Apple's APIs, and they are not a claim about them.**
 
-They are the minimum declarations needed to make `swiftc -typecheck` accept the eleven
-presentation files on a machine with no iOS SDK. Their only job is to check *our* code
+They are the minimum declarations needed to make `swiftc -typecheck` accept the
+thirteen presentation files on a machine with no iOS SDK. Their only job is to check *our* code
 against *itself*: our types, our optionality, our argument labels, our protocol
 conformances, our control flow.
 
@@ -22,9 +22,31 @@ that wrote it, and no amount of green here substitutes for one real build on a M
 
 **Treat a pass as "no internal contradictions found", never as "this compiles".**
 
+### This has already happened once
+
+`UIView` conforms to `NSCoding`, so `init?(coder:)` is a **required** initializer and
+any subclass declaring a designated initializer of its own must supply it. The stub
+`UIView` did not declare it, so the harness had nothing to enforce — and passed two
+overlays that Xcode would have rejected outright:
+
+```
+error: 'required' initializer 'init(coder:)' must be provided by subclass of 'UIView'
+```
+
+A green run was reported on files that could not build. The stubs now declare the
+initializer on `UIView`, `UIViewController` and `MTKView`, and the harness reproduces
+that exact error when it is removed.
+
+The lesson is not "the stubs are now correct". It is that **the failure mode of this
+harness is a false pass**, it is silent, and the only thing that finds it is reading a
+stub against Apple's actual documentation. When adding a stub, prefer declaring *more*
+of the real shape than the code currently needs — required initializers, non-optional
+returns, `@MainActor` isolation — because every simplification is a question the
+harness stops asking.
+
 ## Coverage
 
-All eleven presentation files, including `MartialGodApp.swift`. That file was excluded
+All thirteen presentation files, including `MartialGodApp.swift`. That file was excluded
 at first because SwiftUI is a DSL rather than a flat API — property wrappers, a result
 builder and modifier chaining all have to behave structurally before one line of the app
 shell type-checks. It is covered now, because the app's entry point and scene-phase

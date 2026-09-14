@@ -39,6 +39,23 @@ function strip(src) {
       }
       continue;
     }
+    // Raw strings: one or more '#' then a quote. Inside one, a backslash is not an
+    // escape and a bare quote is not a terminator — only quote-plus-the-same-run-of-#
+    // ends it. Missing this reads `#"a ""#` as TWO plain strings and then swallows
+    // whatever follows, braces included, until the next quote anywhere in the file.
+    // That produced a confident "unbalanced braces" report on a file swiftc compiles.
+    if (c === '#') {
+      let k = 0;
+      while (src[i + k] === '#') k++;
+      if (src[i + k] === '"') {
+        const hashes = '#'.repeat(k);
+        const close = (src.startsWith('"""', i + k) ? '"""' : '"') + hashes;
+        i += close.length;                         // opening delimiter is the same length
+        while (i < n && !src.startsWith(close, i)) i++;
+        i += close.length; continue;
+      }
+      out += c; i++; continue;
+    }
     if (c === '"') {
       if (src.startsWith('"""', i)) {
         i += 3;

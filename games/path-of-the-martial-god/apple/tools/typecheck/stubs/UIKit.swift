@@ -71,6 +71,7 @@ open class UIView: UIResponder {
     public var safeAreaInsets = UIEdgeInsets.zero
     public var alpha: CGFloat = 1
     public var isHidden = false
+    public var isUserInteractionEnabled = true
     open func addSubview(_ v: UIView) {}
     open func removeFromSuperview() {}
     open func layoutSubviews() {}
@@ -81,6 +82,19 @@ open class UIView: UIResponder {
     open func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {}
     public override init() { super.init() }
     public init(frame: CGRect) { super.init(); self.frame = frame }
+
+    /// UIView conforms to NSCoding, so this initializer is REQUIRED, and a subclass
+    /// that declares a designated initializer of its own must supply it or the Mac
+    /// build fails outright:
+    ///
+    ///     error: 'required' initializer 'init(coder:)' must be provided by
+    ///            subclass of 'UIView'
+    ///
+    /// It is stubbed as `required` for exactly that reason. Nothing in this game is
+    /// ever decoded from a nib, so the initializer is dead weight at runtime — but a
+    /// stub that leaves it out passes files Xcode will not build, which is the single
+    /// failure mode this whole harness exists to prevent.
+    public required init?(coder: NSCoder) { super.init() }
 }
 
 open class UILabel: UIView {
@@ -88,6 +102,24 @@ open class UILabel: UIView {
     public var text: String?
     public var textColor: UIColor?
     public var textAlignment: NSTextAlignment = .left
+    public var font: UIFont!
+    public var adjustsFontSizeToFitWidth = false
+    public var minimumScaleFactor: CGFloat = 0
+}
+
+open class UIFont {
+    public struct Weight: Sendable {
+        public let rawValue: CGFloat
+        public init(rawValue: CGFloat) { self.rawValue = rawValue }
+        public static let regular = Weight(rawValue: 0)
+        public static let medium = Weight(rawValue: 0.23)
+        public static let semibold = Weight(rawValue: 0.3)
+        public static let bold = Weight(rawValue: 0.4)
+    }
+    public static func systemFont(ofSize s: CGFloat) -> UIFont { UIFont() }
+    public static func systemFont(ofSize s: CGFloat, weight: Weight) -> UIFont { UIFont() }
+    public static func monospacedSystemFont(ofSize s: CGFloat, weight: Weight) -> UIFont { UIFont() }
+    public init() {}
 }
 
 open class UIGestureRecognizer {
@@ -114,6 +146,9 @@ open class UIEvent { public init() {} }
 
 open class UIViewController: UIResponder {
     public var view: UIView = UIView()
+    public override init() { super.init() }
+    /// Required for the same reason as UIView's — see the note there.
+    public required init?(coder: NSCoder) { super.init() }
     open func viewDidLoad() {}
     open var supportedInterfaceOrientations: UIInterfaceOrientationMask { .all }
     open var prefersHomeIndicatorAutoHidden: Bool { false }

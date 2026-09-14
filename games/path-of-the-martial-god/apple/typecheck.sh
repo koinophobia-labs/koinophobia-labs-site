@@ -1,9 +1,11 @@
 #!/usr/bin/env bash
 # Type-check the presentation layer without an iOS SDK.
 #
-# The eleven files under MartialGod/ import UIKit, MetalKit, AVFoundation,
-# CoreHaptics, GameController, QuartzCore and SwiftUI. None of those exist on Linux, so
+# The files under MartialGod/ import UIKit, MetalKit, AVFoundation, CoreHaptics,
+# GameController, QuartzCore and SwiftUI. None of those exist on Linux, so
 # `swiftc -parse` is all that has been possible: syntax only, no types.
+# (The count is computed below, never written here — a hardcoded number is a claim
+#  that silently stops being true the next time a file is added.)
 #
 # This builds minimal stub MODULES with those names and type-checks the real files
 # against them. It catches everything wrong inside our own code. It cannot catch a stub

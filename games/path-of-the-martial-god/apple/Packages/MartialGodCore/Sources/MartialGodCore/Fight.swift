@@ -35,6 +35,53 @@ public struct Outcome: Sendable {
     public var note: String
 }
 
+public extension Outcome {
+
+    /// Which fighter an outcome is ABOUT — which is not always the one who won.
+    ///
+    /// Two of the four endings name something the winner DID. The other two name
+    /// something the loser could no longer do. Anything that puts a fight into words
+    /// has to know the difference, and the reference build does not: `showOutcome` in
+    /// `reference/view/main.js` phrases all four with the winner as subject, so a fight
+    /// won by knockout reads "You could not continue."
+    ///
+    /// This lives in the simulation rather than in a view because it is a fact about
+    /// the outcome model, not a choice of words. The words stay in the presentation
+    /// layer, where they belong.
+    enum Subject: Sendable { case winner, loser }
+
+    /// The endings the simulation can actually reach.
+    ///
+    /// `Outcome.reason` stays a `String` because the parity trace compares it as one
+    /// and the JavaScript oracle emits one; this is the typed reading of it. Being
+    /// `CaseIterable` with an exhaustive `subject` switch means a new ending cannot be
+    /// added here without deciding who it is about — the compiler asks.
+    enum Reason: String, Sendable, CaseIterable {
+        /// A terminal option was taken and the fight ended on it.
+        case finished
+        /// The Final Inch was held open and let go deliberately. The Stop.
+        case stopped
+        /// Vitality reached zero. Describes the loser.
+        case unconscious
+        /// Will broke while down. Describes the loser.
+        case yielded
+
+        public var subject: Subject {
+            switch self {
+            case .finished, .stopped:      return .winner
+            case .unconscious, .yielded:   return .loser
+            }
+        }
+    }
+
+    /// The typed ending, or `nil` for a reason this build does not know about.
+    ///
+    /// Deliberately optional rather than defaulted: a caller that guesses a subject for
+    /// an unrecognised ending prints a confident sentence about the wrong man, which is
+    /// the exact failure this type exists to prevent.
+    var knownReason: Reason? { Reason(rawValue: reason) }
+}
+
 /// Minimum separation between two standing fighters, metres. Sits just inside the MID
 /// band on purpose: Low River's preferred distance is mid, and M1 ships no clinch, so
 /// the contact band has almost nothing in its grammar.

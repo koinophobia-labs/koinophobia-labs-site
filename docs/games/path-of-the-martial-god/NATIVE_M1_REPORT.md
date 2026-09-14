@@ -50,7 +50,7 @@ Real checks, really executed:
 
 | Check | Result |
 | --- | --- |
-| Reference oracle regression suite | ✅ **60/60 pass** — 19 simulation, 8 fairness, 17 parity harness, 12 input buffer, 4 cross-tree sync |
+| Reference oracle regression suite | ✅ **89/89 pass** — 19 simulation, 17 parity harness, 12 input buffer, 8 fairness, 8 playtest baseline, 6 cross-tree sync, 4 settings, 4 audio cues, 3 tuning constants, 3 terminal resolution, 3 first-run, 2 selectors |
 | **Parity harness self-test** — corrupts a good trace every way a port defect would, including a wrong buffered verb | ✅ 17/17 pass |
 | Golden traces generated from the oracle | ✅ 7 scenarios, 5,861 frames, 407 events (format v2, re-baselined after the buffer fix) |
 | Oracle determinism (regenerating reproduces committed traces byte for byte) | ✅ pass |
@@ -63,13 +63,13 @@ Real checks, really executed:
 | The buffer capture sits above the early returns in **both** trees | ✅ pass (positional check, runs without Xcode) |
 | Site suites unaffected by the restructure | ✅ lint, typecheck, 193 tests pass |
 | **Swift core compiles** | ✅ Swift 5.10, one error found and fixed |
-| **Swift unit suite** | ✅ 37/37 pass |
+| **Swift unit suite** | ✅ **43/43 pass** — 16 combat, 11 input buffer, 6 outcome subject, 5 port contract, 4 parity, 1 performance |
 | **THE PARITY GATE, run for real** | ✅ all 7 scenarios, 5,861 frames, 407 events, 0 divergences |
 | Worst continuous deviation across the whole set | ✅ 1.3e-15 against a 1e-4 tolerance (0.0% of budget) |
 | Strict concurrency (`-strict-concurrency=complete`) | ✅ clean in MartialGodCore |
 | Simulation frame cost | ✅ **7.4µs/tick**, 0.045% of a 60Hz frame (release, x86_64 Linux) |
-| Presentation layer parses (`swiftc -parse`, 11 files) | ✅ syntax only |
-| **Presentation layer TYPE-CHECKS against stub frameworks (ALL 11 files)** | ✅ `./typecheck.sh` — our own types, optionality, labels and conformances, SwiftUI shell included. Not Apple's API shape |
+| Presentation layer parses (`swiftc -parse`, 13 files) | ✅ syntax only |
+| **Presentation layer TYPE-CHECKS against stub frameworks (ALL 13 files)** | ✅ `./typecheck.sh` — our own types, optionality, labels, conformances and **required-initializer obligations**, SwiftUI shell included. Not Apple's API shape |
 | App icon meets App Store requirements | ✅ 1024×1024, opaque, no alpha |
 | Presentation layer links, or type-checks against the REAL frameworks | ⛔ needs the iOS SDK |
 | `#selector` target/action pairing | ⛔ no Objective-C runtime on Linux; rewritten away by the harness |
@@ -404,6 +404,76 @@ The difference between the two images is, exactly, whether the body is still mov
 put them on the floor, and that the renderer actually reads `fight.over?.terminal` —
 because the pose can only tell them apart if something passes it the answer.
 
+### 8.10 What the game says when it is over — and a bug inherited from the reference
+
+The native build said **nothing**. The fight ended, the body fell or stood, and the
+screen held that image with no text at all. The web prototype names the ending in one
+sentence; the port had a restart gesture and no statement.
+
+Building it surfaced a defect in the reference. `showOutcome` in
+`reference/view/main.js` picks its subject once —
+
+```js
+const who = e.winnerId === 'player' ? 'You' : 'He';
+```
+
+— and then applies it to all four endings. Two of the four describe the winner
+(`finished`, `stopped`); the other two describe the **loser** (`unconscious`,
+`yielded`). So a fight you win by knockout reads:
+
+> **You could not continue.**
+
+It survived every playtest of M1 because it only misfires in half the endings and only
+in one of the two voices, and because the sentence is grammatical — it is simply about
+the wrong man.
+
+The native build does not reproduce it, and the fix is structured so a third
+implementation cannot either. **Who an ending is about is a fact about the ending, not
+a choice of words**, so it lives in the simulation:
+
+```swift
+public extension Outcome {
+    enum Subject: Sendable { case winner, loser }
+    enum Reason: String, Sendable, CaseIterable {
+        case finished, stopped, unconscious, yielded
+        public var subject: Subject {
+            switch self {
+            case .finished, .stopped:    return .winner
+            case .unconscious, .yielded: return .loser
+            }
+        }
+    }
+    var knownReason: Reason? { Reason(rawValue: reason) }
+}
+```
+
+`OutcomeOverlay` supplies English for that subject and nothing more. `reason` stays a
+`String` because the parity trace compares it as one and the oracle emits one; `Reason`
+is the typed reading of it, and `knownReason` is deliberately **optional** — an ending
+this build has no words for falls back to a bare "You won." rather than printing a
+confident sentence about the wrong fighter.
+
+`OutcomeSubjectTests` guards three things, each verified by mutation:
+
+| Guard | Mutation it catches |
+| --- | --- |
+| The subject differs across the set | Making every ending `.winner` — i.e. retyping the reference's bug |
+| Each ending maps to the right subject | Flipping either pair |
+| Every `reason:` literal in `Fight.swift` parses as a `Reason` | Adding an ending to the simulation that nothing knows how to narrate. Read from source, because staging all four endings in a unit test would require conditions no unit test should have to arrange |
+
+`CaseIterable` plus an exhaustive `switch` means a fifth ending cannot be added without
+the compiler asking who it is about.
+
+The overlay itself keeps the same restraint as the rest of the interface: one sentence,
+no score, no rating, no breakdown of the exchange. It holds for 0.35s before fading in
+over 0.5s — the last frame of a fight is the one the whole milestone is about, and text
+that materialises instantly arrives before the player has finished looking. The fade is
+driven from the render loop rather than `UIView.animate`, because the caller already
+knows exactly how long the fight has been over and that clock survives a backgrounded
+app where a detached animation would finish invisibly. The restart hint appears **only
+once the tap is actually live**, so the game never invites a touch it is about to
+ignore.
+
 ### 9.0 The Final Inch, built to its own spec
 
 `COMBAT_SYSTEM.md` §10 specifies four things for the Inch. Three were present and one
@@ -467,11 +537,62 @@ plausible one:
 
 Neither would have been visible until someone ran the generator.
 
+### 9.3 A required initializer the stub harness was not asking for
+
+Two shipping files would have failed the Mac build outright, and the type-check harness
+was passing both:
+
+```
+error: 'required' initializer 'init(coder:)' must be provided by subclass of 'UIView'
+```
+
+`UIView` conforms to `NSCoding`, so `init?(coder:)` is a *required* initializer: any
+subclass that declares a designated initializer of its own must supply it. Both
+overlays do declare one — `ControlsOverlay(frame:onDismiss:)` and
+`OutcomeOverlay(frame:outcome:)` — and neither had it. The stub `UIView` did not
+declare the initializer at all, so the harness had nothing to enforce and reported a
+clean pass on files Xcode rejects.
+
+This is precisely the failure mode `tools/typecheck/README.md` warns about — a stub
+that misremembers Apple's API produces a **false pass**, which is worse than no harness
+— and it is the first instance of it found. Fixed on both sides:
+
+- The stub `UIView`, `UIViewController` and `MTKView` now declare `required init?(coder:)`.
+- Both overlays implement it, with a `fatalError` naming why it cannot be reached: these
+  views are built in code with an outcome or a dismissal to run, and are never decoded
+  from a nib.
+
+Verified by mutation — removing the initializer from `OutcomeOverlay` reproduces the
+Xcode error verbatim, at the right line, and restoring it goes green. The harness now
+catches this class of defect for every view written from here on.
+
+Nothing in the previous type-check passes was wrong about the code it examined; the
+harness simply was not asking this question. Every other stub remains a stub, and a pass
+still means *"no internal contradictions found"*, never *"this compiles."*
+
+### 9.4 The other kind of harness failure: a confident false alarm
+
+`preflight.mjs` reported `unbalanced braces: 23 { vs 24 }` on a file `swiftc` compiles
+and runs. Its string-stripper did not know about Swift **raw strings**, so `#"reason: ""#`
+read as two ordinary string literals — and the second one ran on, swallowing everything
+up to the next quote anywhere in the file, an opening brace included.
+
+A false pass is the worse failure, but a false alarm is not harmless: `PortContractTests`
+already carries a note about this, written when the ban list fired on a doc comment
+saying there was no randomness. *A gate that fires on correct code trains whoever sees
+the red bar to read it as noise.* Both failures end the same way — the tool stops being
+consulted.
+
+Fixed by teaching the stripper the raw-string delimiter rule (`#`-run, quote, matching
+`#`-run; no escapes inside), and verified both directions: preflight is clean on the
+file that tripped it, and still reports the imbalance when a stray brace is added to
+that same file.
+
 ## 10. Known issues
 
 | # | Issue | Severity |
 | --- | --- | --- |
-| N-1 | ~~Nothing has been compiled.~~ **The core is compiled and green** — 37 tests, parity gate, strict concurrency. **All 11 presentation files now type-check** against stub frameworks (`./typecheck.sh`), the SwiftUI shell included; real-SDK behaviour still needs a Mac. | Open, narrowed further |
+| N-1 | ~~Nothing has been compiled.~~ **The core is compiled and green** — 43 tests, parity gate, strict concurrency. **All 13 presentation files now type-check** against stub frameworks (`./typecheck.sh`), the SwiftUI shell included; real-SDK behaviour still needs a Mac. | Open, narrowed further |
 | N-2 | `Renderer.swift` is still the highest-risk file: pipeline state, vertex descriptor and shader ABI are what a compiler and a GPU catch and a reviewer does not. It now **type-checks** against stub Metal, which is more than parsing and much less than building. | High |
 | N-3 | The touch grammar is untested on glass. Tap-versus-flick disambiguation is the most likely tuning need. | High |
 | N-4 | ~~The input buffer is inert in both implementations.~~ **Fixed**, and the Swift half is now proven by a parity gate that actually ran — `bufferedVerb` matches the oracle on every one of 5,861 frames. | Closed |
@@ -482,11 +603,15 @@ Neither would have been visible until someone ran the generator.
 | N-9 | ~~Parity tolerances have never been exercised against real Swift output.~~ **Measured:** worst deviation 1.3e-15 against 1e-4, eleven orders of magnitude of headroom. Left as declared, because that figure is x86_64 Linux and says nothing about arm64 and Apple's libm. | Closed on Linux, open on Apple |
 | N-10 | ~~No restart affordance is wired to a gesture.~~ **Fixed:** three-finger tap any time, or a tap anywhere 1.6s after the fight ends. Three, not two — two thumbs on the glass *is* the playing position, so the originally-intended two-finger tap would have thrown away live fights. | Closed |
 | N-11 | SwiftPM's generated `resource_bundle_accessor.swift` trips strict concurrency. Not our code; fixed in newer SwiftPM. Will need a toolchain bump before Swift 6. | Low |
+| N-12 | **The browser reference narrates two of its four endings with the wrong subject** (§8.10) — a knockout win reads "You could not continue." The native build does not inherit it and `OutcomeSubjectTests` prevents a third implementation from doing so. Left unfixed in `reference/view/main.js` on purpose: the browser build is a frozen, parity-verified reference and this is presentation copy, not simulation. | Open in the reference, closed in the port |
+| N-13 | ~~The native build said nothing when a fight ended.~~ **Fixed** — `OutcomeOverlay`, one sentence, timed to let the last image land first. | Closed |
+| N-14 | ~~Two overlays were missing `required init?(coder:)` and the stub harness was not asking for it~~ (§9.3). **Fixed on both sides**, and the harness now catches it by mutation. A reminder that every other stub is still only a stub. | Closed |
 
 ## 11. TestFlight readiness blockers
 
 1. ~~Compile it.~~ The core compiles. **The app target still needs one `xcodegen &&
-   xcodebuild` on a Mac** — 11 presentation files have never been type-checked.
+   xcodebuild` on a Mac** — all 13 presentation files type-check against stub
+   frameworks, but never against the real SDK.
 2. ~~Run `./parity.sh` and make it pass.~~ **Done, and it passes.** Re-run it on the
    Mac anyway: this result is x86_64 Linux, and arm64 with Apple's libm is a different
    floating-point environment.
@@ -512,7 +637,7 @@ Assessed honestly against the fourteen stated criteria.
 | --- | --- | --- |
 | 1 | Launches as an Apple app | ⛔ app target unbuilt |
 | 2 | One full unarmed fight via the production input scheme | ✍️ implemented, unrun on glass |
-| 3 | Fight begins and ends normally | ✅ in the simulation — fights start, resolve and terminate in 37 tests and 7 traced scenarios; ✍️ on a screen |
+| 3 | Fight begins and ends normally | ✅ in the simulation — fights start, resolve and terminate in 43 tests and 7 traced scenarios; ✍️ on a screen |
 | 4 | Passes parity/regression checks | ✅ **the gate ran and passed** — 5,861 frames, 407 events, 0 divergences |
 | 5 | Both fighters visually readable | ✍️ pose ported; unrendered |
 | 6 | Angling meaningfully visible | ✍️ camera sits off-axis for exactly this; unrendered |
@@ -532,8 +657,8 @@ every rule this game is about, and the part a reviewer cannot check by reading �
 compiled, tested, measured, and proven identical to the validated oracle frame by
 frame. That was the largest single risk in the milestone and it is retired.
 
-What remains is the app around it: 11 files of UIKit and Metal that need the iOS SDK
-to type-check and a device to run, plus a bundle identifier only you can decide. The
+What remains is the app around it: 13 files of UIKit and Metal that need the real iOS
+SDK and a device to run, plus a bundle identifier only you can decide. The
 honest summary is no longer "nothing has been compiled". It is:
 
 > **The game's rules are proven. The window they are shown through is not.**

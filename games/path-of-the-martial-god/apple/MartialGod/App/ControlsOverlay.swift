@@ -67,6 +67,12 @@ public final class ControlsOverlay: UIView {
         addSubview(footer)
     }
 
+    /// Created in code with a dismissal to run; never decoded from a nib. Required
+    /// because UIView conforms to NSCoding, not because anything calls it.
+    required init?(coder: NSCoder) {
+        fatalError("ControlsOverlay is built in code, never loaded from a nib")
+    }
+
     /// Laid out by hand rather than with constraints: it is one screen of static text,
     /// and a layout this simple does not need an engine behind it.
     public override func layoutSubviews() {
@@ -79,6 +85,15 @@ public final class ControlsOverlay: UIView {
         let rowH = min(26, h * 0.062)
         let block = rowH * CGFloat(lines.count)
         let top = (h - block) / 2 + rowH * 0.4
+
+        let size = min(17, max(12, rowH * 0.62))
+        title.font = .systemFont(ofSize: min(26, max(18, w * 0.026)), weight: .semibold)
+        footer.font = .monospacedSystemFont(ofSize: size * 0.85, weight: .regular)
+        for line in lines {
+            line.0.font = .monospacedSystemFont(ofSize: size * 0.85, weight: .regular)
+            line.1.font = .systemFont(ofSize: size, weight: .regular)
+            line.2.font = .monospacedSystemFont(ofSize: size * 0.9, weight: .regular)
+        }
 
         title.frame = CGRect(x: inset, y: top - rowH * 2.4, width: w - inset * 2, height: rowH)
         let zoneW = (w - inset * 2) * 0.26

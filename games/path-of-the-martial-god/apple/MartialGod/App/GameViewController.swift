@@ -137,6 +137,26 @@ public final class GameViewController: UIViewController {
         session.restart()
         renderer.fight = session.fight
         touch.reset()
+        outcome?.removeFromSuperview()
+        outcome = nil
+    }
+
+    private var outcome: OutcomeOverlay?
+
+    /// Name the outcome once the fight is over, and let it arrive on its own clock.
+    ///
+    /// Called every rendered frame, so the overlay's fade is driven by the same time
+    /// base as everything else on screen rather than by a detached animation.
+    private func syncOutcome() {
+        guard let over = session.fight.over, let ended = session.endedAt else { return }
+        if outcome == nil {
+            let card = OutcomeOverlay(frame: view.bounds, outcome: over)
+            card.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+            view.addSubview(card)
+            outcome = card
+        }
+        outcome?.tick(secondsSinceEnd: CACurrentMediaTime() - ended,
+                      restartLive: acceptsTapToFightAgain)
     }
 }
 
@@ -166,5 +186,6 @@ extension GameViewController: MTKViewDelegate {
         renderer.camera = session.camera
         renderer.renderTime = now
         renderer.draw(in: view)
+        syncOutcome()
     }
 }

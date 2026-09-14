@@ -133,4 +133,5 @@ open class MTKView: UIView {
     public init(frame: CGRect, device: MTLDevice?) { super.init(frame: frame); self.device = device }
     // MTKView is an Objective-C class, so UIView's init(frame:) is surfaced too.
     public override init(frame: CGRect) { super.init(frame: frame) }
+    public required init?(coder: NSCoder) { super.init(coder: coder) }
 }
