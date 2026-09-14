@@ -379,7 +379,10 @@ for (const frame of frameCases) {
     }
 
     const controls = await evaluate(`(async () => {
-      const nodes = [...document.querySelectorAll(${JSON.stringify(`#${id} .dest__inner a, #${id} .dest__inner button`)})];
+      // Stretched card covers are card-sized by design, not tap targets of
+      // their own; the cards sit in a horizontal snap row on phones.
+      const nodes = [...document.querySelectorAll(${JSON.stringify(`#${id} .dest__inner a, #${id} .dest__inner button`)})]
+        .filter((node) => !node.classList.contains("pcard__cover"));
       const masthead = document.querySelector(".kw__masthead")?.getBoundingClientRect();
       const map = document.querySelector(".kw__map")?.getBoundingClientRect();
       const intersects = (a, b) => Boolean(
@@ -387,7 +390,7 @@ for (const frame of frameCases) {
       );
       const results = [];
       for (const node of nodes) {
-        node.scrollIntoView({ block: "center", behavior: "instant" });
+        node.scrollIntoView({ block: "center", inline: "center", behavior: "instant" });
         await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
         const rect = node.getBoundingClientRect();
         results.push({

@@ -287,9 +287,9 @@ export const DESTINATIONS: Destination[] = [
     clip: "work",
     band: { desktop: 2.6, mobile: 1.3 },
     pose: {
-      arrive: pose(0.3, 0.42, 1.36, 3, 0.36, 0.9, 1.8),
-      hold: pose(0.06, 0.4, 1.28, 0, 0.3, 1, 0.5),
-      depart: pose(-0.2, 0.3, 1.34, -2, 0.44, 0.96, 0.6),
+      arrive: pose(0.3, 0.3, 1.26, 3, 0.36, 0.9, 1.8),
+      hold: pose(0.06, 0.22, 1.18, 0, 0.3, 1, 0.5),
+      depart: pose(-0.2, 0.18, 1.24, -2, 0.44, 0.96, 0.6),
     },
     poseMobile: {
       arrive: pose(0.06, -0.54, 1.16, 2, 0.24, 0.9, 1.6),
