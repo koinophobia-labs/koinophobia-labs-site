@@ -55,7 +55,16 @@ public final class GameSession {
         haptics.start()
     }
 
+    /// Seconds since the fight ended, or nil while one is still being fought.
+    ///
+    /// Used to decide when a tap means "again" rather than "strike". The delay matters:
+    /// the last blow of a fight is usually struck with a finger already moving, and
+    /// restarting under that finger would rob the player of the one moment the whole
+    /// milestone is about — seeing what just happened to a body.
+    public private(set) var endedAt: CFTimeInterval?
+
     public func restart() {
+        endedAt = nil
         fight = Fight(options: options)
         accumulator = 0
         hold = 0
@@ -95,6 +104,7 @@ public final class GameSession {
             fight.step(input: input())
             consume(fight.events)
             sampleDiagnostics()
+            if fight.over != nil, endedAt == nil { endedAt = now }
         }
 
         camera.update(a: fight.a, b: fight.b, dt: Float(dt))

@@ -11,6 +11,20 @@ open MartialGod.xcodeproj
 
 Requires macOS with Xcode 15+. `bootstrap.sh` installs XcodeGen via Homebrew if needed.
 
+### Without a Mac
+
+The simulation half needs no Apple toolchain at all. `MartialGodCore` is platform-free
+by contract — `PortContractTests` enforces it — so the whole thing, including the port
+gate, builds and runs on Linux:
+
+```bash
+./test.sh          # the Swift unit suite
+./parity.sh        # THE PORT GATE, against the oracle's own recorded inputs
+```
+
+Both use a local `swift` if there is one and the official Swift image if there is not.
+Only the presentation layer needs a Mac, and that is exactly the part still unproven.
+
 ## Layout
 
 ```
@@ -39,4 +53,5 @@ MartialGod/
 
 ## Before this can go to TestFlight
 
-See `NATIVE_M1_REPORT.md` §11. In short: it has never been compiled.
+See `NATIVE_M1_REPORT.md` §11. In short: the simulation is compiled, tested and at
+parity; the app target has never been built, and the bundle identifier is a placeholder.

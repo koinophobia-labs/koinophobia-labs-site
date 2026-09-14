@@ -34,6 +34,7 @@ public final class GameViewController: UIViewController {
         metalView.delegate = self
         touch.tuning.sensitivity = CGFloat(SettingsStore.shared.settings.controlSensitivity)
         touch.tuning.leftHanded = SettingsStore.shared.settings.leftHanded
+        installRestartGesture()
         session.start()
     }
 
@@ -61,6 +62,13 @@ public final class GameViewController: UIViewController {
     // MARK: - touch
 
     public override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        // Once the fight is over and the outcome has stood, a touch anywhere starts
+        // another one. No menu, no button, nothing to read — the same contract the
+        // rest of the interface keeps.
+        if acceptsTapToFightAgain {
+            handleRestart()
+            return
+        }
         touch.touchesBegan(touches, in: metalView)
     }
     public override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -73,8 +81,43 @@ public final class GameViewController: UIViewController {
         touch.touchesCancelled(touches, in: metalView)
     }
 
-    /// Restart on a two-finger tap; there is no menu in Native M1.
-    @objc private func handleRestart() { session.restart(); renderer.fight = session.fight }
+    // MARK: - starting again
+
+    /// How long the outcome is allowed to stand before a tap means "again".
+    ///
+    /// The last blow of a fight is usually thrown with a finger already moving, so an
+    /// immediate tap-to-restart would wipe the screen at the exact moment the whole
+    /// milestone is about: seeing what just happened to a body.
+    private static let restartGraceSeconds: CFTimeInterval = 1.6
+
+    /// Three fingers, because two is the playing position.
+    ///
+    /// The original comment here promised a two-finger tap and nothing installed it.
+    /// That was the luckier failure: two thumbs on the glass IS how this game is held,
+    /// so a two-finger tap would have restarted live fights by accident — a quick tap
+    /// on the intent pad and a quick tap for a strike is a two-finger tap. Three
+    /// fingers cannot happen while playing, which is the entire requirement for a
+    /// control whose only job is to throw a fight away.
+    private func installRestartGesture() {
+        let tap = UITapGestureRecognizer(target: self, action: #selector(handleRestart))
+        tap.numberOfTouchesRequired = 3
+        tap.cancelsTouchesInView = false      // combat input must still reach touchesBegan
+        tap.delaysTouchesBegan = false
+        tap.delaysTouchesEnded = false
+        view.addGestureRecognizer(tap)
+    }
+
+    /// True once the fight is over and the outcome has had time to land.
+    private var acceptsTapToFightAgain: Bool {
+        guard session.fight.over != nil, let ended = session.endedAt else { return false }
+        return CACurrentMediaTime() - ended >= Self.restartGraceSeconds
+    }
+
+    @objc private func handleRestart() {
+        session.restart()
+        renderer.fight = session.fight
+        touch.reset()
+    }
 }
 
 extension GameViewController: MTKViewDelegate {

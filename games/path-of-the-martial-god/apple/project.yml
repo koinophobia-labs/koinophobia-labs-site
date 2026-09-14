@@ -53,6 +53,10 @@ targets:
         CURRENT_PROJECT_VERSION: "1"
         TARGETED_DEVICE_FAMILY: "1,2"       # iPhone and iPad
         SWIFT_VERSION: "5.9"
+        # Naming the icon set is not optional: an asset catalog that merely CONTAINS an
+        # AppIcon set produces an app with no icon, and the failure surfaces at upload.
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
         ENABLE_USER_SCRIPT_SANDBOXING: YES
         # No entitlements file: the game requires no capabilities at all in M1, and
         # adding unused ones invites review questions and provisioning breakage.

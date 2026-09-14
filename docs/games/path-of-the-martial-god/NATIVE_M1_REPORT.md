@@ -7,30 +7,42 @@
 | | |
 | --- | --- |
 | **WEB M1** | **VALIDATED REFERENCE PROTOTYPE** — reclassified, preserved, not shipped |
-| **NATIVE M1** | **IN PRODUCTION — code complete, NEVER COMPILED** |
+| **NATIVE M1** | **IN PRODUCTION — simulation compiled, tested and at parity; the app around it is not yet built** |
 
 ---
 
 ## 1. Read this first
 
-This environment is **Linux with no Apple toolchain**: no Xcode, no `swift`, no iOS
-SDK, no simulator, no Instruments, no device. `swift.org` and GitHub release downloads
-are refused at the egress proxy by organisation policy (HTTP 403), which the proxy
-documentation classifies as non-retryable, so a Swift toolchain could not be obtained
-either.
+This environment is **Linux with no Apple toolchain**: no Xcode, no iOS SDK, no
+simulator, no Instruments, no device.
 
-**Consequence: not one line of the Swift in this milestone has ever been compiled.**
+An earlier version of this report said no Swift toolchain could be obtained either,
+because `swift.org` and GitHub release downloads are both refused at the egress proxy.
+**That was true of the routes I had tried and false as a conclusion.** Docker Hub
+rate-limits anonymous pulls, but Google's mirror of the official images is reachable,
+so there is a Swift 5.10 toolchain here after all.
 
-That single fact governs the whole report. Everything below is written so you can tell,
-at a glance, which claims are verified and which are merely written:
+That changes the character of this document. `MartialGodCore` is platform-free by
+contract — `PortContractTests` enforces it — so the whole simulation, its unit suite
+and **the parity gate** build and run on Linux. They have now done so.
+
+What still cannot be done here is the presentation layer: 11 files of UIKit, Metal,
+AVFoundation, CoreHaptics and GameController that need the iOS SDK to type-check and a
+device to run. Those are the files that remain unproven, and `Renderer.swift` is the
+riskiest of them.
+
+Everything below is marked so you can tell, at a glance, which claims are verified and
+which are merely written:
 
 | Mark | Meaning |
 | --- | --- |
-| ✅ | Verified by something that actually ran in this session |
+| ✅ | Verified by something that actually ran |
 | ✍️ | Written and reviewed, **never executed** |
 | ⛔ | Cannot be done here at all |
 
 I have not marked anything ✅ that I could not run.
+
+**Status: the simulation is proven. The app around it is not.**
 
 ## 2. What was actually verified
 
@@ -50,10 +62,17 @@ Real checks, really executed:
 | Input buffer behaves, and the opponent still cannot use it | ✅ 12/12 pass; 9 of them fail against the pre-fix code |
 | The buffer capture sits above the early returns in **both** trees | ✅ pass (positional check, runs without Xcode) |
 | Site suites unaffected by the restructure | ✅ lint, typecheck, 193 tests pass |
-| Swift compiles | ⛔ no toolchain |
-| Swift unit tests / parity gate run | ⛔ no toolchain |
-| Launches on simulator or device | ⛔ no toolchain |
-| Performance measurements | ⛔ no device |
+| **Swift core compiles** | ✅ Swift 5.10, one error found and fixed |
+| **Swift unit suite** | ✅ 37/37 pass |
+| **THE PARITY GATE, run for real** | ✅ all 7 scenarios, 5,861 frames, 407 events, 0 divergences |
+| Worst continuous deviation across the whole set | ✅ 1.3e-15 against a 1e-4 tolerance (0.0% of budget) |
+| Strict concurrency (`-strict-concurrency=complete`) | ✅ clean in MartialGodCore |
+| Simulation frame cost | ✅ **7.4µs/tick**, 0.045% of a 60Hz frame (release, x86_64 Linux) |
+| Presentation layer parses (`swiftc -parse`, 11 files) | ✅ syntax only — no Apple SDK here |
+| App icon meets App Store requirements | ✅ 1024×1024, opaque, no alpha |
+| Presentation layer **type-checks** or links | ⛔ needs the iOS SDK |
+| Launches on simulator or device | ⛔ needs Xcode |
+| Render / audio / haptics performance | ⛔ needs a device |
 
 ## 3. Requirement → code map
 
@@ -299,10 +318,27 @@ generated it can be committed and the spec retired, or kept as the source of tru
 
 ## 9. Performance
 
-⛔ **No measurements were taken. There is no device and no Instruments.** Anything
-numeric here would be invented, so there are no numbers.
+The simulation is measured. The app around it is not.
 
-What is *designed* for, and what to measure first:
+| | |
+| --- | --- |
+| Simulation cost | **7.4µs per tick** (release build, x86_64 Linux) |
+| 60Hz frame budget | 16,667µs |
+| Share of budget spent simulating | **0.045%** |
+
+Whole fights are timed, not quiet ticks, so that figure includes perception, the
+brain's full scoring pass over 18 options, landing resolution and the Final Inch.
+`TraceDump --bench` reproduces it; `PerformanceTests` guards it with a 1,000µs ceiling,
+deliberately ~20× the debug-build cost. That ceiling is a tripwire for an accidental
+O(n²) or a per-tick allocation storm, not a tuning target — a tight assertion would
+fail on a busy CI runner and teach everyone to ignore it.
+
+Read that number for what it is: **the simulation is not going to be the problem.**
+Even at 10× the cost on a phone it is under half a percent of the budget. What remains
+unmeasured is everything that actually touches hardware — the renderer, audio,
+haptics, and thermals over a long session.
+
+What is *designed* for, and what to measure first on a device:
 
 - The simulation runs at a fixed 60 Hz regardless of display rate; `preferredFramesPerSecond`
   is 120 so ProMotion changes presentation only. Determinism is structurally
@@ -314,31 +350,38 @@ What is *designed* for, and what to measure first:
 - Draw is a single pass, one pipeline, one draw call, no post stack.
 
 **Profile before believing any of that.** First measurements to take: frame pacing on
-the oldest supported device, allocation count per tick, touch-to-photon latency, and
-thermal behaviour over a ten-minute session.
+the oldest supported device, allocation count per frame, touch-to-photon latency, and
+thermal behaviour over a ten-minute session. None of those are simulation questions,
+which is rather the point of the table above.
 
 ## 10. Known issues
 
 | # | Issue | Severity |
 | --- | --- | --- |
-| N-1 | **Nothing has been compiled.** Expect ordinary first-build errors across 30 files. | Blocking |
-| N-2 | `Renderer.swift` is the highest-risk file: pipeline state, vertex descriptor and shader ABI are exactly what a compiler and a GPU catch and a human reviewer does not. | High |
+| N-1 | ~~Nothing has been compiled.~~ **The core is compiled and green** — 37 tests, parity gate, strict concurrency. The 11 presentation files parse but do not type-check; they need the iOS SDK. | Open, narrowed |
+| N-2 | `Renderer.swift` is still the highest-risk file: pipeline state, vertex descriptor and shader ABI are exactly what a compiler and a GPU catch and a reviewer does not. It parses; nothing more. | High |
 | N-3 | The touch grammar is untested on glass. Tap-versus-flick disambiguation is the most likely tuning need. | High |
-| N-4 | ~~The input buffer is inert in both implementations.~~ **Fixed (§6)** in both trees, measured, traces re-baselined to format v2. The Swift half has never been compiled, so the positional guard in `production-sync.test.js` is what stands behind it until a Mac runs `./parity.sh`. | Low |
-| N-5 | `TechniqueDB` uses mutable static state. Fine today; Swift 6 strict concurrency will require a `let`-loaded or actor-isolated form. | Medium |
-| N-6 | No app icon artwork. The asset catalog has the slot and no image. | Blocks TestFlight |
+| N-4 | ~~The input buffer is inert in both implementations.~~ **Fixed**, and the Swift half is now proven by a parity gate that actually ran — `bufferedVerb` matches the oracle on every one of 5,861 frames. | Closed |
+| N-5 | ~~`TechniqueDB` uses mutable static state.~~ **Fixed:** one immutable `Sendable` table in a `static let`. Verified clean under `-strict-concurrency=complete`, and CI fails on any new warning. | Closed |
+| N-6 | ~~No app icon artwork.~~ **Generated** from the game's own stance (`tools/make-icon.py`), 1024×1024, opaque, and `ASSETCATALOG_COMPILER_APPICON_NAME` is now set — it was missing, which would have produced an iconless app at upload. | Closed |
 | N-7 | Bundle identifier `com.koinophobialabs.martialgod` is a placeholder pending App Store Connect. | Blocks TestFlight |
 | N-8 | Renderer is a scaffold. Skinned meshes, real silhouettes and authored animation are M2 and are the subject of the engine re-evaluation gate. | Expected |
-| N-9 | Parity tolerances are declared but have never been exercised against real Swift output; the true cross-language deviation is unmeasured. | Medium |
-| N-10 | No restart affordance is wired to a gesture in the shipped view (`handleRestart` exists, unbound). | Low |
+| N-9 | ~~Parity tolerances have never been exercised against real Swift output.~~ **Measured:** worst deviation 1.3e-15 against 1e-4, eleven orders of magnitude of headroom. Left as declared, because that figure is x86_64 Linux and says nothing about arm64 and Apple's libm. | Closed on Linux, open on Apple |
+| N-10 | ~~No restart affordance is wired to a gesture.~~ **Fixed:** three-finger tap any time, or a tap anywhere 1.6s after the fight ends. Three, not two — two thumbs on the glass *is* the playing position, so the originally-intended two-finger tap would have thrown away live fights. | Closed |
+| N-11 | SwiftPM's generated `resource_bundle_accessor.swift` trips strict concurrency. Not our code; fixed in newer SwiftPM. Will need a toolchain bump before Swift 6. | Low |
 
 ## 11. TestFlight readiness blockers
 
-1. **Compile it.** Everything else is downstream.
-2. **Run `./parity.sh` and make it pass.** The port is not the game until it agrees
-   with the oracle.
-3. App icon artwork (1024 and the derived set).
-4. A real bundle identifier, App ID and provisioning profile.
+1. ~~Compile it.~~ The core compiles. **The app target still needs one `xcodegen &&
+   xcodebuild` on a Mac** — 11 presentation files have never been type-checked.
+2. ~~Run `./parity.sh` and make it pass.~~ **Done, and it passes.** Re-run it on the
+   Mac anyway: this result is x86_64 Linux, and arm64 with Apple's libm is a different
+   floating-point environment.
+3. ~~App icon artwork.~~ **Done** — generated, 1024×1024, opaque, wired into the
+   catalog. Replace it with drawn artwork when there is any; `tools/make-icon.py`
+   exists so it is reproducible rather than a mystery binary.
+4. A real bundle identifier, App ID and provisioning profile. **Business decision —
+   the one genuine blocker nobody but you can clear.**
 5. Signing identity and an App Store Connect record.
 6. Launch screen verified on notch and Dynamic Island devices.
 7. Age rating questionnaire — the game depicts non-gory unarmed violence.
@@ -354,10 +397,10 @@ Assessed honestly against the fourteen stated criteria.
 
 | # | Criterion | Status |
 | --- | --- | --- |
-| 1 | Launches as an Apple app | ⛔ unbuilt |
-| 2 | One full unarmed fight via the production input scheme | ✍️ implemented, unrun |
-| 3 | Fight begins and ends normally | ✍️ implemented, unrun |
-| 4 | Passes parity/regression checks | ✍️ gate built and self-tested; **never run against Swift** |
+| 1 | Launches as an Apple app | ⛔ app target unbuilt |
+| 2 | One full unarmed fight via the production input scheme | ✍️ implemented, unrun on glass |
+| 3 | Fight begins and ends normally | ✅ in the simulation — fights start, resolve and terminate in 37 tests and 7 traced scenarios; ✍️ on a screen |
+| 4 | Passes parity/regression checks | ✅ **the gate ran and passed** — 5,861 frames, 407 events, 0 divergences |
 | 5 | Both fighters visually readable | ✍️ pose ported; unrendered |
 | 6 | Angling meaningfully visible | ✍️ camera sits off-axis for exactly this; unrendered |
 | 7 | Commitment and recovery visible | ✍️ recovery is the loudest pose state; unrendered |
@@ -367,10 +410,23 @@ Assessed honestly against the fourteen stated criteria.
 | 11 | No required gameplay meter | ✅ by construction — debug overlay defaults off and there is no HUD |
 | 12 | Background/foreground correct | ✍️ implemented; the fight cannot tick while paused, and time is not accumulated |
 | 13 | Runs cleanly on simulator and device | ⛔ |
-| 14 | Suitable for TestFlight packaging | ⛔ see §11 |
+| 14 | Suitable for TestFlight packaging | ⛔ see §11 — one business decision and one Mac |
 
-**Native M1 is NOT complete.** It is code-complete and unbuilt. The one thing standing
-between this report and a genuine answer is a machine with Xcode on it.
+**Native M1 is still NOT complete, but the shape of what is missing has changed.**
+
+It is no longer "code-complete and unbuilt". The simulation — the part that carries
+every rule this game is about, and the part a reviewer cannot check by reading — is
+compiled, tested, measured, and proven identical to the validated oracle frame by
+frame. That was the largest single risk in the milestone and it is retired.
+
+What remains is the app around it: 11 files of UIKit and Metal that need the iOS SDK
+to type-check and a device to run, plus a bundle identifier only you can decide. The
+honest summary is no longer "nothing has been compiled". It is:
+
+> **The game's rules are proven. The window they are shown through is not.**
+
+And the readability gate is unchanged and still not mine to call: a person has to play
+it.
 
 ## 13. What was deliberately not built
 

@@ -160,6 +160,23 @@ public final class TouchGrammar {
         touchesEnded(touches, in: view)
     }
 
+    /// Drop every piece of in-flight touch state.
+    ///
+    /// A restart replaces the fight under whatever fingers are on the glass. Without
+    /// this, a latched guard or a half-resolved flick from the fight that just ended
+    /// carries into the first frames of the next one, and the new fight opens with an
+    /// input the player never made.
+    public func reset() {
+        intentTouch = nil
+        intentOrigin = .zero
+        actionTouch = nil
+        action = nil
+        pendingVerb = nil
+        pendingForward = 0
+        pendingLateral = 0
+        guardLatched = false
+    }
+
     private func resolveFlick(dx: CGFloat, dy: CGFloat, into a: inout ActiveTouch) {
         a.resolved = true
         // Screen coordinates: -y is up.
