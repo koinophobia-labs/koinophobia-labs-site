@@ -752,6 +752,74 @@ them by hand, and nothing stopped the next person changing one.
 
 Everything passes as it stands: the icon is 1024×1024, colour type 2, no `tRNS` chunk.
 
+### 9.10 A fight that cannot end — criterion 3 does not hold
+
+Nothing in the simulation bounds a fight's length. There is no round timer, no clock and
+no decision. `replay.js` caps at `60 * 120` ticks, but that is a **test harness guard**,
+not a rule of the game — nothing in `fight.js` knows it exists.
+
+So "the fight begins and ends normally" is a claim about behaviour, and it has to be
+asked by playing. `tools/endurance.mjs` holds one fixed input for twenty simulated
+minutes across three opponent temperaments. **Nine of eighteen cases never resolve.**
+
+| Player does | aggression 0.15 | 0.5 | 0.9 |
+| --- | --- | --- | --- |
+| nothing at all | **never** | **never** | ends 6.6s |
+| holds guard | **never** | ends 20.2s | ends 20.2s |
+| retreats | **never** | **never** | ends 16.8s |
+| retreats guarding | ends 83.5s | ends 79.8s | ends 21.7s |
+| circles | **never** | ends 23.8s | ends 27.4s |
+| **retreats and circles** | **never** | **never** | **never** |
+
+The last row is the serious one: it does not resolve at **any** temperament. And the
+stall is total — instrumented over five simulated minutes it produces **not one event of
+any kind**, with both fighters' breath, will and vitality pinned at maximum, orbiting
+1.95m apart forever.
+
+**The mechanism.** My first guess — unnormalised diagonal input making a diagonal move
+faster than an axial one — was wrong; `formMachine.js` line 313 normalises any vector
+longer than 1. The real cause is subtler and is about *radial* rate, not speed:
+
+| At aggression 0.5 | m/tick |
+| --- | --- |
+| Opponent's total travel | 0.0262 — **faster than the player** |
+| Player's total travel | 0.0246 |
+| Opponent **closing** (advances on only 49% of ticks; circles on 44%) | 0.49 × 0.030 = **0.0147** |
+| Player **opening** (100% of its budget, normalised) | 0.707 × 0.024 = **0.0170** |
+
+The opponent mirrors the circle instead of cutting the angle, so it moves faster and
+converges slower. A player who commits every tick to opening distance out-paces an
+opponent that splits its budget.
+
+**Why the design has no answer.** Nothing penalises not fighting. Breath is not spent by
+movement, so stasis costs neither fighter anything and is a stable equilibrium.
+`COMBAT_SYSTEM.md` §66 covers the opposite case — *"recovering Breath requires making
+distance, which requires footwork, which is the loop"* — and §258 covers letting the
+Inch lapse. Neither addresses an opponent who simply never engages. This is an
+**unspecified case, not an unimplemented spec**, which is why I have not silently picked
+a fix.
+
+**Why it matters more than it looks.** "Back away and move sideways" is the first
+instinct of someone who does not yet understand the game — which is precisely the person
+Native M1's exit condition is about. On a device their only exit is the three-finger
+tap, a control whose stated purpose is *to throw a fight away*. They would not be
+losing. They would be stuck.
+
+**Three ways out, all yours to choose** (see `OPEN_DECISIONS.md`):
+
+1. **Breath costs movement.** Physically true — sustained retreat is work — and it makes
+   the loop close on itself: refusing to engage tires you, and a tired man cannot refuse.
+   Most design-consistent. Changes tuning, so the parity traces need regenerating.
+2. **The opponent cuts the angle.** An interception heading rather than pure pursuit,
+   or an escalating commitment when nothing has happened for N seconds. Changes AI
+   behaviour only; traces still need regenerating.
+3. **A round limit.** Cheapest and least in keeping: the design has no scoring, so
+   "ends" would need a judging rule invented for it.
+
+Recorded, not fixed: this is balance, and balance is frozen without your say-so.
+`tests/a-fight-must-be-finishable.test.js` pins the current behaviour in seven tests —
+including one that **fails when the defect is fixed**, and says so in its message.
+
 ## 10. Known issues
 
 | # | Issue | Severity |
@@ -774,6 +842,7 @@ Everything passes as it stands: the icon is 1024×1024, colour type 2, no `tRNS`
 | N-16 | ~~The shader ABI was agreed by hand and checked by nobody~~ (§9.6). **Fixed** — five static cross-checks, all mutation-verified. The ABI was correct as written; it is now correct *and* guarded. | Closed |
 | N-17 | `#selector` target/action pairing. **Half closed** (§9.6): preflight verifies the method exists and is `@objc`. A selector naming a method on a *different* object is still invisible here. | Low, was a blind spot |
 | N-18 | ~~All four NotificationCenter observer blocks touched main-actor state from a `@Sendable` closure~~ (§9.7). **Fixed** — explicit hops, and a preflight rule because the harness structurally cannot see the real signature. | Closed |
+| N-21 | **A player who retreats and circles is never caught, at any opponent temperament — the fight never ends and not one event fires** (§9.10). Criterion 3 does not hold. Three candidate fixes, all balance changes; recorded rather than chosen. | **Open — blocks M1, yours to decide** |
 | N-20 | ~~Nothing verified that the names in Info.plist and project.yml resolve to real asset sets~~ (§9.9). **Fixed** — six checks, mutation-verified. Everything already passed; now it stays that way. | Closed |
 | N-19 | **Audio session category is `.ambient`, so the ringer switch silences the game** (§9.8) — including breath, which the design names as the interface. Not changed: the argument runs both ways and it is a design call. **Decide before the first device test.** | Open — yours |
 
@@ -807,7 +876,7 @@ Assessed honestly against the fourteen stated criteria.
 | --- | --- | --- |
 | 1 | Launches as an Apple app | ⛔ app target unbuilt |
 | 2 | One full unarmed fight via the production input scheme | ✍️ implemented, unrun on glass |
-| 3 | Fight begins and ends normally | ✅ in the simulation — fights start, resolve and terminate in 43 tests and 7 traced scenarios; ✍️ on a screen |
+| 3 | Fight begins and ends normally | ⛔ **Does not hold.** Fights start and resolve in every traced scenario, but **9 of 18 passive-player cases never end at all** (§9.10) — one of them at no temperament whatsoever. Previously marked green on the strength of the traces, which do not cover a player who declines to fight |
 | 4 | Passes parity/regression checks | ✅ **the gate ran and passed** — 5,861 frames, 407 events, 0 divergences |
 | 5 | Both fighters visually readable | ✍️ pose ported; unrendered |
 | 6 | Angling meaningfully visible | ✍️ camera sits off-axis for exactly this; unrendered |

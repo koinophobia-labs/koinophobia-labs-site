@@ -157,6 +157,44 @@
 
 ---
 
+## What stops a fight that nobody starts?
+
+**Raised by:** the native M1 build, `NATIVE_M1_REPORT.md` §9.10.
+**Status:** open, and it blocks Native M1 criterion 3.
+**Reproduce:** `node reference/tools/endurance.mjs --why`
+
+Nothing bounds a fight's length — no timer, no clock, no decision — and nothing
+penalises not fighting. A player who holds "back and sideways" is never caught at
+**any** opponent temperament: over twenty simulated minutes not one event fires, and
+both fighters' breath, will and vitality stay at maximum. Nine of eighteen passive-player
+cases never resolve.
+
+It is not an AI bug in the ordinary sense. The opponent travels *faster* than the
+player (0.0262 vs 0.0246 m/tick) but splits its budget between advancing and mirroring
+the circle, so it closes at 0.0147 m/tick against a player opening at 0.0170. Faster,
+and converging slower.
+
+This is a genuinely unspecified case. `COMBAT_SYSTEM.md` §66 says recovering Breath
+requires making distance; it does not say what happens when someone makes distance
+forever.
+
+**The options:**
+
+| | Fix | For | Against |
+| --- | --- | --- | --- |
+| 1 | **Breath costs sustained movement** | Physically true; closes the loop on itself — refusing to engage tires you, and a tired man cannot refuse. Most in keeping with a game whose thesis is that competence creates options | Touches a core resource curve; every trace regenerates |
+| 2 | **Opponent cuts the angle** | Interception rather than pure pursuit, or escalating commitment after N quiet seconds. Leaves the player's own numbers alone | A cleverer opponent is a harder game; and it fixes the symptom, leaving "not fighting is free" true |
+| 3 | **A round limit** | Cheapest | The design has no scoring, so a decision needs a judging rule invented for it. Least in keeping |
+
+**Recommendation: 1, possibly with a light version of 2.** The design already says
+breath is the interface and that footwork costs; the one thing it does not charge for is
+the footwork that avoids the fight entirely. Making that cost something is not a new
+rule so much as the missing half of an existing one.
+
+**Not chosen here.** This is balance, and balance is yours.
+
+---
+
 ## Decisions deliberately NOT open
 
 Recorded so they are not re-litigated:
