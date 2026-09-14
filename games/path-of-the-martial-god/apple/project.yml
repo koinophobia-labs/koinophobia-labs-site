@@ -1,0 +1,81 @@
+# Canonical Xcode project definition (XcodeGen).
+#
+# WHY A SPEC RATHER THAN A COMMITTED .xcodeproj:
+# this project was authored in an environment with no Apple toolchain, so a
+# hand-written project.pbxproj could not be opened, built or validated even once. A
+# 60-line declarative spec that XcodeGen turns into a guaranteed-valid project wastes
+# far less of your time than 400 lines of unverifiable UUID bookkeeping that fails to
+# open. Run ./bootstrap.sh and you get a real .xcodeproj.
+#
+# Once generated, the .xcodeproj may be committed and this file retired, or kept as the
+# source of truth. Either is fine; keeping it makes target changes reviewable as diffs.
+
+name: MartialGod
+options:
+  bundleIdPrefix: com.koinophobialabs
+  deploymentTarget:
+    iOS: "17.0"
+  createIntermediateGroups: true
+  defaultConfig: Debug
+
+configs:
+  Debug: debug
+  Release: release
+
+packages:
+  MartialGodCore:
+    path: Packages/MartialGodCore
+
+targets:
+  MartialGod:
+    type: application
+    platform: iOS
+    deploymentTarget: "17.0"
+    sources:
+      - path: MartialGod
+        excludes:
+          - "Resources/Info.plist"
+    dependencies:
+      - package: MartialGodCore
+        product: MartialGodCore
+    resources:
+      - MartialGod/Resources/Assets.xcassets
+      - MartialGod/Resources/PrivacyInfo.xcprivacy
+    info:
+      path: MartialGod/Resources/Info.plist
+    settings:
+      base:
+        # TEMPORARY BUNDLE IDENTIFIER. Replace with the real App Store Connect
+        # identifier before the first TestFlight upload; see NATIVE_M1_REPORT.md.
+        PRODUCT_BUNDLE_IDENTIFIER: com.koinophobialabs.martialgod
+        PRODUCT_NAME: MartialGod
+        MARKETING_VERSION: "0.1.0"
+        CURRENT_PROJECT_VERSION: "1"
+        TARGETED_DEVICE_FAMILY: "1,2"       # iPhone and iPad
+        SWIFT_VERSION: "5.9"
+        ENABLE_USER_SCRIPT_SANDBOXING: YES
+        # No entitlements file: the game requires no capabilities at all in M1, and
+        # adding unused ones invites review questions and provisioning breakage.
+        CODE_SIGN_ENTITLEMENTS: ""
+        INFOPLIST_KEY_UIApplicationSceneManifest_Generation: NO
+      configs:
+        Debug:
+          SWIFT_ACTIVE_COMPILATION_CONDITIONS: DEBUG
+          SWIFT_OPTIMIZATION_LEVEL: "-Onone"
+          ONLY_ACTIVE_ARCH: YES
+        Release:
+          SWIFT_OPTIMIZATION_LEVEL: "-O"
+          SWIFT_COMPILATION_MODE: wholemodule
+          VALIDATE_PRODUCT: YES
+
+schemes:
+  MartialGod:
+    build:
+      targets:
+        MartialGod: all
+    run:
+      config: Debug
+    profile:
+      config: Release
+    archive:
+      config: Release

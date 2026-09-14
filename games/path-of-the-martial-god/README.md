@@ -1,43 +1,62 @@
-# Path of the Martial God — Milestone 1
+# Path of the Martial God
 
-The combat prototype. One unarmed fight, no HUD, placeholder geometry.
+Two things live here, and they are **not** the same thing.
 
-Design is canonical in [`docs/games/path-of-the-martial-god/`](../../docs/games/path-of-the-martial-god/).
-Build report: [`MILESTONE_1_REPORT.md`](../../docs/games/path-of-the-martial-god/MILESTONE_1_REPORT.md).
-Requirement→code map and the two canon conflicts resolved: [`IMPLEMENTATION_LEDGER.md`](../../docs/games/path-of-the-martial-god/IMPLEMENTATION_LEDGER.md).
+---
 
-## Run it
+## `apple/` — THE GAME
+
+The production Apple project. Swift + Metal, iPhone and iPad, bound for TestFlight and
+the App Store. **This is the product.** Everything shipped is built from here.
 
 ```bash
-node serve.mjs          # http://localhost:5173/
-node --test tests/*.test.js
-node verify.mjs         # browser pass; serve.mjs must be running
+cd apple && ./bootstrap.sh      # generate the Xcode project, build, test, run the parity gate
+cd apple && ./parity.sh         # the port gate on its own
 ```
 
-No build step and no dependencies. Node runs the ES modules directly; so does the browser.
+Engine rationale: [`PRODUCTION_ENGINE_DECISION.md`](../../docs/games/path-of-the-martial-god/PRODUCTION_ENGINE_DECISION.md)
+Status and requirement map: [`NATIVE_M1_REPORT.md`](../../docs/games/path-of-the-martial-god/NATIVE_M1_REPORT.md)
 
-## Controls
+---
 
-`W/S` pressure · retreat — `A/D` angle — `J` strike — `K` commit — `Shift` guard —
-`L` deflect — `Space` slip — `F` breathe — tap-and-release `J`/`K` to feint.
-`` ` `` debug overlay · `M` sound · `R` restart.
+## `reference/` — NOT THE GAME
 
-**Guard only covers the quadrant you face.** Walk around someone and it stops protecting them.
+The browser combat prototype, now classified:
 
-## Layout
+> **REFERENCE IMPLEMENTATION / COMBAT VALIDATION HARNESS**
 
+It exists to preserve verified combat behaviour, the regression suite, the parity
+traces, and the six defects Milestone 1 surfaced. It is the **specification oracle**:
+when the Swift simulation and this disagree, this one is right until a change is made
+deliberately and the traces are re-baselined.
+
+**Do not ship it. Do not polish it. Do not mistake it for the game.** It has no
+Apple lifecycle, no touch controls, no device story, and it never will.
+
+```bash
+cd reference && node --test tests/*.test.js    # the behaviour the port must preserve
+cd reference && node tools/trace.mjs           # regenerate the golden parity traces
+cd reference && node serve.mjs                 # play the harness, for comparison only
 ```
-sim/     deterministic, engine-free, 60Hz. No DOM, no timers, no randomness.
-  data/low-river.json   frame windows as text — edit and reload
-  formMachine.js        the combat FSM: commitment, cancels, the Lie, the Line
-  structure.js          four-quadrant base; geometry picks the quadrant
-  resolve.js            guard / deflect / slip / footwork, four costs
-  finalInch.js          terminals; the Stop is gated on competence
-  ai/perception.js      latency-gated snapshots — no input access, by construction
-  ai/brain.js           18 options × 10 named, inspectable scoring terms
-view/    presentation only. Replaceable; nothing in sim/ knows it exists.
-```
 
-**The port contract:** `sim/` is portable by construction and a test enforces it. Moving to
-Unreal means re-implementing `sim/` in C++ against this same JSON and these same frame
-integers, and replacing `view/`. See ruling C-2 in the ledger.
+---
+
+## How the two are kept honest
+
+The Swift port is a transliteration, so the numbers are duplicated by definition. Three
+checks stop them drifting apart, and all three run in the reference suite because that
+is the suite a machine without Xcode can execute:
+
+| Check | What it catches |
+| --- | --- |
+| `tests/production-sync.test.js` | Technique JSON, parity fixtures or any of 27 tuning constants drifting between the two implementations |
+| `tools/verify-trace.mjs` | The Swift simulation taking a different branch, or drifting beyond the declared numeric tolerance |
+| `tests/parity-harness.test.js` | The gate itself going blind — it corrupts a good trace eleven ways and requires every one to be caught |
+
+---
+
+## Documentation
+
+All design and production documents live in
+[`docs/games/path-of-the-martial-god/`](../../docs/games/path-of-the-martial-god/).
+Start with `EXECUTIVE_GAME_BLUEPRINT.md`.

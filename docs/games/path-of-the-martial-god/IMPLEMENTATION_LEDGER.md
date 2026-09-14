@@ -2,7 +2,7 @@
 ## Milestone 1 — design requirement → system → code
 
 **Scope:** `TECHNICAL_ARCHITECTURE.md` §11 steps 1–5. Exit: one unarmed fight, no HUD, readable by a stranger.
-**Code root:** `games/path-of-the-martial-god/`
+**Code root:** `games/path-of-the-martial-god/reference/` (reclassified as the combat validation harness)
 
 ---
 

@@ -1,3 +1,6 @@
-scratch/
-shots/
+# build outputs
 dist/
+shots/
+scratch/
+DerivedData/
+*.xcuserdatad/

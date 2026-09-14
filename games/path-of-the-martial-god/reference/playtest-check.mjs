@@ -5,14 +5,14 @@
  *   URL=http://localhost:5179/ node playtest-check.mjs   (against dist/)
  */
 import { chromium } from 'playwright';
-const OUT = '/home/user/koinophobia-labs-site/games/path-of-the-martial-god/shots';
-const URL = process.env.URL ?? 'http://localhost:5173/';
+const OUT = new URL('./shots/', import.meta.url).pathname;
+const TARGET = process.env.URL ?? 'http://localhost:5173/';
 const b = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium-1194/chrome-linux/chrome', args: ['--no-sandbox'] });
 const pg = await b.newPage({ viewport: { width: 1280, height: 800 } });
 const errs = [];
 pg.on('console', m => { if (m.type() === 'error' && !m.text().includes('404')) errs.push(m.text()); });
 pg.on('pageerror', e => errs.push('PAGEERROR: ' + e.message));
-await pg.goto(URL, { waitUntil: 'networkidle' });
+await pg.goto(TARGET, { waitUntil: 'networkidle' });
 
 // What does a first-time player actually see?
 const firstRun = await pg.evaluate(() => document.getElementById('overlay').innerText);

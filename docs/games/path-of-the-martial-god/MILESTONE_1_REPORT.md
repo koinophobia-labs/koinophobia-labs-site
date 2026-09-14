@@ -3,8 +3,9 @@
 
 **Milestone:** `TECHNICAL_ARCHITECTURE.md` §11 steps 1–5
 **Exit condition:** one complete unarmed fight, no HUD required for comprehension, readable by someone unfamiliar with the design
-**Status:** **IMPLEMENTED / AWAITING HUMAN PLAYTEST** — the automated criteria are met (§4, §5); the human-readability question is Blake's to answer, not mine (§11)
-**Code:** `games/path-of-the-martial-god/`
+**Status:** **VALIDATED REFERENCE PROTOTYPE** — superseded as the product by the native Apple build (`NATIVE_M1_REPORT.md`); retained as the combat specification oracle.
+**Original status:** IMPLEMENTED / AWAITING HUMAN PLAYTEST — the automated criteria are met (§4, §5); the human-readability question is Blake's to answer, not mine (§11)
+**Code:** `games/path-of-the-martial-god/reference/` (reclassified — see `NATIVE_M1_REPORT.md`)
 **Date:** 2026-09-14
 
 ---
@@ -12,14 +13,14 @@
 ## 1. How to launch it
 
 ```bash
-node games/path-of-the-martial-god/serve.mjs     # then open http://localhost:5173/
+node games/path-of-the-martial-god/reference/serve.mjs     # then open http://localhost:5173/
 ```
 
 No build step, no bundler, no new dependencies. The browser loads the same ES modules Node runs.
 
 ```bash
-node --test games/path-of-the-martial-god/tests/*.test.js   # 27 tests
-node games/path-of-the-martial-god/verify.mjs               # playable browser pass (server must be running)
+node --test games/path-of-the-martial-god/reference/tests/*.test.js   # 27 tests
+node games/path-of-the-martial-god/reference/verify.mjs               # playable browser pass (server must be running)
 ```
 
 ## 2. Controls
@@ -48,7 +49,7 @@ The same eight inputs produce different techniques by **intent**: `commit` + for
 
 | Module | What it is |
 | --- | --- |
-| `formMachine.js` | The combat FSM. Commitment, cancel windows, the Lie, locomotion, the Line, input buffer |
+| `formMachine.js` | The combat FSM. Commitment, cancel windows, the Lie, locomotion, the Line |
 | `techniques.js` + `data/low-river.json` | TechniqueDB. 12 techniques, Sound tier, frame windows as data with build-time validation |
 | `grammar.js` | StanceSystem — `resolve(style, verb, intent, band)`. The intent grammar |
 | `structure.js` | Four-quadrant base, geometric quadrant selection, collapse latch, footwork recovery |
@@ -123,7 +124,15 @@ Recorded so they can be overruled rather than inherited silently.
 
 1. **The collapse latch** (defect 2) is an addition to canon. Canon specifies the two-stage break but not what holds a quadrant at zero long enough for stage two to happen. 100 ticks (1.67 s).
 2. **Minimum separation of 1.02 m** is a consequence of M1 having no clinch. When Custody arrives, this must drop and the contact grammar must fill in.
-3. **An input buffer of 10 ticks.** Without it the player is strictly disadvantaged: the brain is consulted every tick and acts the instant it is free, while a human pressing during recovery has the press silently discarded.
+3. ~~**An input buffer of 10 ticks.**~~ **CORRECTION (2026-09-14).** This entry was
+   wrong. Porting the machine to Swift line by line exposed that the buffer is
+   **unreachable dead code**: its set-site tests `!actionable(f)`, but every early
+   return above it has already fired for `acting`, `staggered`, `down` and `finished`,
+   so control only reaches that line when the state is `neutral` or `guard` — both
+   actionable. Verified: 0 of 3,171 ticks ever populated it. When this milestone
+   measured "no change" after adding it, that was the evidence and I misread it as
+   being masked by another bug. **The unfairness it was meant to fix is real and still
+   open.** See `NATIVE_M1_REPORT.md` §6.
 4. **Guard absorbs 62% of structure force and 86% of vitality**, and covers `fore` only. Tuned so a static guard loses slowly, per "guarding does not save you; it postpones."
 5. **Leg strikes attack the quadrant that leg carries**, wherever the attacker stands. This is the one place technique overrides pure geometry.
 6. **Will is hidden from perception.** The opponent infers pressure from posture and breath, never from the number.
