@@ -2,17 +2,16 @@
 
 [![CI](https://github.com/koinophobia-labs/koinophobia-labs-site/actions/workflows/ci.yml/badge.svg)](https://github.com/koinophobia-labs/koinophobia-labs-site/actions/workflows/ci.yml)
 
-One Next.js codebase powers two connected public surfaces:
+One Next.js codebase, one public domain:
 
-- [koinophobialabs.com](https://koinophobialabs.com) — the studio front office for websites, AI workflows, audits, inquiries, proposals, and payments
-- [koinophobia.dev](https://koinophobia.dev) — Blake Taylor's living Founder OS: products, build log, experiments, current priorities, résumé, and release evidence
+- [koinophobialabs.com](https://koinophobialabs.com) — the studio. Three App Store apps (Trendi, Forget About It, Way In) lead; the lab reports experiments at their real stage; the build log is the raw feed; Blake is the builder; Work with me and Start are the door. koinophobia.dev redirects here, permanently.
 
-The shared idea is simple: turn messy workflows into useful systems, then make the product state and proof inspectable.
+The shared idea is simple: ship software, then say exactly what is true about it. Every product claim reads from one registry (`lib/dev/universe.ts` for evidence, `lib/products.ts` for presentation) and a test fails the build when a status goes stale.
 
 ## What this repository demonstrates
 
-- a dual-domain product architecture with host-specific routing
-- public studio acquisition and a founder portfolio from one deployment
+- one registry for product truth, with freshness budgets enforced by tests
+- a scroll-driven koi world built from real footage, with designed still fallbacks
 - structured intake, concierge routing, CRM persistence, and proposal workflows
 - Stripe Checkout with signed webhooks, idempotent event handling, and payment-state persistence
 - staged Google authentication with an exact administrator allowlist
@@ -25,16 +24,19 @@ The shared idea is simple: turn messy workflows into useful systems, then make t
 
 | Surface | Purpose | Representative routes |
 | --- | --- | --- |
-| Studio | Diagnose business friction and route the right engagement | `/`, `/audit`, `/intake`, `/concierge` |
-| Founder OS | Show what Blake is building, testing, learning, and shipping | `/products`, `/log`, `/lab`, `/now`, `/about`, `/resume` |
-| Private operations | Manage leads, proposals, audits, and payment state | `/internal/*`, protected API routes |
+| Home | The narrative: six scroll destinations on the koi engine | `/` |
+| Shipped | The App Store apps, with what each can't do yet | `/shipped`, `/trendi`, `/forget-about-it`, `/way-in` |
+| Lab | Experiments at their real stage, with receipts | `/lab`, `/lab/teachers-pet`, `/lab/koi`, `/lab/do-you-know-ball` |
+| Builder | The founder, the log, the résumé | `/blake`, `/log`, `/resume` |
+| Hire | Three engagement shapes and a two-paragraph inquiry | `/work-with-me`, `/start` |
+| Private operations | Manage leads, proposals, audits, and payment state | `/crm/*`, protected API routes |
 
 ## Architecture
 
 | Layer | Technology and responsibility |
 | --- | --- |
 | Application | Next.js 16 App Router, React 19, TypeScript |
-| UI | Tailwind CSS, Framer Motion, shared design tokens, host-specific product worlds |
+| UI | Design tokens (tokens.css), one site stylesheet, one motion stylesheet, the koi world |
 | Data | PostgreSQL with explicit migrations and environment guards |
 | Authentication | NextAuth with staged Google authentication and an administrator allowlist |
 | Payments | Stripe Checkout, raw-body webhook signature verification, idempotent event storage |
@@ -56,7 +58,6 @@ This codebase treats commercial and portfolio claims as product behavior, not ma
 
 See:
 
-- [Founder OS governing plan](docs/FOUNDER-OS.md)
 - [CRM Google authentication boundary](docs/CRM_GOOGLE_AUTH.md)
 - [Database migrations](migrations)
 
@@ -75,8 +76,7 @@ npm run typecheck
 npm run test:crm
 npm run test:concierge
 npm run test:commercial
-npm run test:dev-routing
-npm run test:now
+npm run test:products
 npm run test:migrations
 npm run build
 ```

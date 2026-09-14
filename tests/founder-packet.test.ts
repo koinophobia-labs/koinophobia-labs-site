@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import test from "node:test";
-import { serviceOffers } from "../lib/commercial";
+import { serviceOffers } from "../lib/acquisition/offers";
 import {
   buildFounderSalesPacket,
   packetMarksProspect,

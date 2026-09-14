@@ -1,3 +1,24 @@
+/* Tokens for the résumé page, carried over from the retired dev-system.css. */
+.resumedev {
+  --dh-ink: #05060a;
+  --dh-panel: #0a0b12;
+  --dh-panel-2: #0d0e17;
+  --dh-text: #e8e6f0;
+  --dh-body: #a7a3b8;
+  --dh-muted: #807c94;
+  --dh-violet: #9447ff;
+  --dh-violet-hot: #b15cff;
+  --dh-violet-soft: rgba(148, 71, 255, 0.16);
+  --dh-rule: rgba(148, 71, 255, 0.16);
+  --dh-rule-quiet: rgba(232, 230, 240, 0.08);
+  --dh-gap-s: clamp(10px, 1.6vw, 16px);
+  --dh-gap-m: clamp(18px, 3vw, 28px);
+  --dh-gap-l: clamp(30px, 5vw, 56px);
+  --dh-gap-xl: clamp(48px, 8vw, 96px);
+  --dh-pad-card: clamp(20px, 3.2vw, 32px);
+  --dh-measure: 760px;
+}
+
 /* koinophobia.dev/resume — the truthful résumé in the personal dark identity.
    Palette tokens mirror .devhome / .connectcard. Scope under .resumedev. */
 

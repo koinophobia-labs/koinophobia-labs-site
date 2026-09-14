@@ -28,7 +28,7 @@ test("structured data links the studio, founder, and website as one entity graph
     (entity) => entity["@id"] === `${STUDIO_URL}/#organization`,
   );
   const founder = graph.find(
-    (entity) => entity["@id"] === "https://koinophobia.dev/#person",
+    (entity) => entity["@id"] === `${STUDIO_URL}/blake#person`,
   );
   const website = graph.find(
     (entity) => entity["@id"] === `${STUDIO_URL}/#website`,
@@ -37,6 +37,7 @@ test("structured data links the studio, founder, and website as one entity graph
   assert.ok(organization);
   assert.ok(founder);
   assert.ok(website);
+  assert.equal(organization["@type"], "Organization");
   assert.match(JSON.stringify(organization), /github\.com\/koinophobia-labs/);
   assert.match(JSON.stringify(founder), /linkedin\.com\/in\/bt77/);
   assert.match(JSON.stringify(website), /#organization/);

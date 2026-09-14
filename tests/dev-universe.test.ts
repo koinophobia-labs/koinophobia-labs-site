@@ -18,7 +18,6 @@ import {
   universeLastUpdated,
 } from "../lib/dev/universe";
 import { experiments, getNote, notes, publishedNotes } from "../lib/dev/lab";
-import { nowActiveWork, nowLastUpdated } from "../lib/now";
 
 // The koinophobia.dev product universe exists because the site had drifted into
 // describing the same product three different ways on three different pages.
@@ -136,7 +135,6 @@ test("published dates are literals, never read from the clock", () => {
     assert.match(product.verifiedAt, /^\d{4}-\d{2}-\d{2}$/);
   }
   assert.ok(universeLastUpdated.length > 0);
-  assert.ok(nowLastUpdated.length > 0);
 });
 
 /* ---------- the status ladder ---------- */
@@ -277,7 +275,7 @@ test("Career Forge does not claim checkout is closed, or that anyone bought", ()
 test("unsourceable statistics stay out of published copy", () => {
   // Published once, then untraceable to any artifact during the audit.
   const banned = [/2\.36%/, /4,500 simulated/, /460 topics/, /16[–-]27%/];
-  const surfaces = ["lib/dev/universe.ts", "app/dev/products/[slug]/page.tsx", "app/home/page.tsx"];
+  const surfaces = ["lib/dev/universe.ts", "lib/products.ts", "app/page.tsx", "app/lab/do-you-know-ball/page.tsx"];
   for (const pattern of banned) {
     for (const file of surfaces) {
       assert.doesNotMatch(read(file), pattern, `${file} re-published an unsourced statistic`);
@@ -331,34 +329,7 @@ test("no product invents users, revenue, or testimonials", () => {
 
 /* ---------- cross-surface agreement ---------- */
 
-test("/now and the product universe agree about TestFlight", () => {
-  const byName = new Map(products.map((p) => [p.name, p]));
-  for (const entry of nowActiveWork) {
-    const product = byName.get(entry.name);
-    if (!product) continue; // the studio is not a product
 
-    const nowClaims = /testflight/i.test(`${entry.stage} ${entry.snapshot} ${entry.doingNow}`);
-    const universeClaims = /testflight|internal testers/i.test(
-      `${stageLabel[product.stage]} ${product.status}`,
-    );
-    assert.equal(
-      nowClaims,
-      universeClaims,
-      `/now and /products disagree about TestFlight for ${entry.name}`,
-    );
-  }
-});
-
-test("product links point at the personal universe, not studio chrome", () => {
-  for (const entry of nowActiveWork) {
-    if (entry.external) continue;
-    assert.match(
-      entry.href,
-      /^\/products\/|^\/you-know-ball\/play$/,
-      `${entry.name} links to ${entry.href}, which renders studio chrome on koinophobia.dev`,
-    );
-  }
-});
 
 test("product slugs are unique and every one resolves", () => {
   const slugs = products.map((p) => p.slug);
@@ -378,8 +349,7 @@ test("every product action link is usable by a stranger", () => {
       const parent = segments.slice(0, -1).join("/");
       const candidates = [
         `app/${segments.join("/")}/page.tsx`,
-        `app/dev/${segments.join("/")}/page.tsx`,
-        ...(parent ? [`app/dev/${parent}/[slug]/page.tsx`] : []),
+        ...(parent ? [`app/${parent}/[slug]/page.tsx`] : []),
       ];
       assert.ok(
         candidates.some((file) => exists(file)),
@@ -441,28 +411,6 @@ test("held notes are preserved, never emptied", () => {
   }
 });
 
-test("nothing links to an empty notes section", () => {
-  // Advertising writing that isn't there is its own small dishonesty.
-  const shell = read("components/dev/DevShell.tsx");
-  const home = read("app/home/page.tsx");
-  const sitemap = read("app/dev-sitemap.xml/route.ts");
-
-  assert.match(shell, /publishedNotes\.length > 0/, "nav must hide Notes while empty");
-  assert.match(home, /publishedNotes\.length > 0/, "homepage must hide the notes section");
-  assert.match(sitemap, /publishedNotes\.length > 0/, "sitemap must not advertise empty notes");
-
-  // The Notes entry may exist in the source, but only inside the conditional —
-  // an unconditional entry in the array is the failure worth catching.
-  const navBlock = shell.slice(shell.indexOf("DEV_NAV"), shell.indexOf("];"));
-  const notesLine = navBlock.split("\n").find((line) => line.includes('href: "/notes"'));
-  if (notesLine) {
-    assert.match(
-      notesLine,
-      /publishedNotes\.length > 0/,
-      "the Notes nav entry is unconditional — it would link to an empty section",
-    );
-  }
-});
 
 test("the review file still covers every note", () => {
   assert.ok(exists("docs/FIELD-NOTES-REVIEW.md"));
@@ -490,43 +438,10 @@ test("published field notes are specific, dated, and resolvable", () => {
   assert.equal(new Set(notes.map((n) => n.slug)).size, notes.length, "duplicate note slug");
 });
 
-test("the sitemap lists only published notes", () => {
-  const sitemap = read("app/dev-sitemap.xml/route.ts");
-  assert.match(sitemap, /publishedNotes/);
-  assert.doesNotMatch(sitemap, /\bnotes\.map\b/);
-});
 
 /* ---------- design system ---------- */
 
-test("each product has a distinct visual world", () => {
-  const themes = products.map((p) => p.identity.theme);
-  assert.equal(new Set(themes).size, themes.length, "two products share a theme");
 
-  const css = read("app/dev-product.css");
-  const system = read("app/dev-system.css");
-  for (const theme of themes) {
-    assert.ok(
-      system.includes(`[data-world="${theme}"]`),
-      `${theme} has no accent tokens in dev-system.css`,
-    );
-    assert.ok(
-      css.includes(`[data-world="${theme}"]`),
-      `${theme} has accent tokens but no rhythm overrides — that's a skin, not an identity`,
-    );
-  }
-});
-
-test("the design tokens are defined exactly once", () => {
-  const files = [
-    "app/dev-system.css",
-    "app/dev-home.css",
-    "app/now-dev.css",
-    "app/connect-card.css",
-    "app/resume-dev.css",
-  ];
-  const definitions = files.filter((file) => read(file).includes("--dh-ink:"));
-  assert.deepEqual(definitions, ["app/dev-system.css"], "palette tokens are duplicated again");
-});
 
 test("every experiment reports what it showed", () => {
   for (const experiment of experiments) {
