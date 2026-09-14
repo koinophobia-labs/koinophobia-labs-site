@@ -950,6 +950,38 @@ behind each.
 
 It does mean the game currently has one way to end, not four.
 
+### 9.14 The control group: the game is healthy for anyone who fights
+
+Five sections of this report describe fights that do not end, which without a control
+group is an unreadable amount of bad news. So: the same sweep, restricted to styles that
+actually engage. **45 configurations each — every temperament, patience and reaction
+speed — and every one resolves.**
+
+| Player style | Unresolved | Median fight |
+| --- | --- | --- |
+| holds guard | **0 / 45** | 22.6s |
+| advances and jabs | **0 / 45** | 11.9s |
+| commits repeatedly | **0 / 45** | 11.0s |
+| circles and strikes | **0 / 45** | 10.8s |
+| — | | |
+| does nothing | 10 / 45 | 6.6s |
+| **retreats and jabs** | **22 / 45** | **63.2s** |
+
+**This bounds the defect precisely.** What is wrong is wrong about players who decline
+to fight, not about fighting. An engaged fight lasts eleven to twenty-three seconds and
+always finishes — which is the game working, and worth stating plainly after §9.10
+through §9.13b.
+
+It also names the worst case honestly: **retreating while occasionally jabbing** fails
+to resolve half the time, and takes 63 seconds when it does. That is not an exotic
+input. It is what a cautious beginner does.
+
+`tests/engaged-fights-always-resolve.test.js` is now the regression guard that matters
+most, because every option in `OPEN_DECISIONS.md` changes the termination or resource
+economy, and the first thing any of them could break is an ordinary fight. Both
+directions are mutation-verified: put the Inch threshold out of reach, or halve will
+damage, and it fails.
+
 ## 10. Known issues
 
 | # | Issue | Severity |

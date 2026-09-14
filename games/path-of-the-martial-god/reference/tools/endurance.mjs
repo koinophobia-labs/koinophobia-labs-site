@@ -37,6 +37,27 @@ export const CASES = [
 export const TEMPERAMENTS = [0.15, 0.5, 0.9];
 
 /**
+ * Styles that actually engage. These are the control group, and the reason the stall
+ * is a bounded defect rather than a broken game: every one of them resolves, every
+ * time, in a sane number of seconds. Whatever is wrong is wrong about players who
+ * decline to fight, not about fighting.
+ */
+export const ENGAGING = [
+  ['holds guard',          () => ({ ...neutralIntent(), held: true, guard: true })],
+  ['advances and jabs',    (n) => ({ ...neutralIntent(), held: true, forward: 1, verb: n % 17 === 0 ? 'strike' : null })],
+  ['commits repeatedly',   (n) => ({ ...neutralIntent(), held: true, forward: 1, verb: n % 11 === 0 ? 'commit' : null })],
+  ['circles and strikes',  (n) => ({ ...neutralIntent(), held: true, forward: 0.2, lateral: 1, verb: n % 19 === 0 ? 'strike' : null })],
+];
+
+/** Run one engaging style, whose input needs the tick number. */
+export function endureIndexed(input, aggression, patience, reaction, cap = CAP) {
+  const f = makeFight({ aggression, patience, reaction, playerMastery: 0.25 });
+  let n = 0;
+  while (!f.over && n < cap) { step(f, input(n), {}); n++; }
+  return { over: f.over, ticks: n, fight: f };
+}
+
+/**
  * Run one case to resolution or to the cap.
  *
  * Events are read from `fight.log`, the cumulative record. NOTE for anyone extending
