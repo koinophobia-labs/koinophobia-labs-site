@@ -217,7 +217,7 @@ export default async function Home() {
                 <div className="kw__portrait">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
-                    src="/blake/portrait.jpg"
+                    src="/blake/portrait-2026-09-14.jpg"
                     alt="Blake Taylor on a bridge over the Chicago River"
                     width={736}
                     height={920}

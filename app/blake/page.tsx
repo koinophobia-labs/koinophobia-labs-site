@@ -42,7 +42,7 @@ export default function BlakePage() {
         <section className="two" aria-labelledby="blake-title">
           <div className="portrait s">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/blake/portrait.jpg" alt="Blake Taylor on a bridge over the Chicago River" width={736} height={920} />
+            <img src="/blake/portrait-2026-09-14.jpg" alt="Blake Taylor on a bridge over the Chicago River" width={736} height={920} />
           </div>
           <div className="page-head">
             <p className="k s">
