@@ -9,6 +9,7 @@
 import { bandFor } from '../sim/constants.js';
 import { distance } from '../sim/fighter.js';
 import { technique } from '../sim/techniques.js';
+import { BASELINE, PRIOR_BASELINE } from './build.js';
 
 const SIDES = ['player', 'opponent'];
 const other = (id) => (id === 'player' ? 'opponent' : 'player');
@@ -47,6 +48,17 @@ export function makeTelemetry() {
     breathOuts: perSide(() => 0),
     actionsWhileSpent: perSide(() => 0),   // techniques begun on an empty tank
     interrupts: perSide(() => 0),
+    /**
+     * Techniques that began from a press made while the body was still busy.
+     *
+     * The only metric the input-buffer fix adds. It is here because the baseline reset
+     * has to be answerable: if this is 0 across a session, the fix changed nothing for
+     * that player and their results are comparable to the old ones anyway; if it is
+     * large, it is the measure of how much the old build was eating. The opponent's
+     * count is always 0 — its brain never presses while committed — which makes the
+     * pair a live check that the buffer stayed a human-only affordance.
+     */
+    bufferedHonoured: perSide(() => 0),
     /** @type {any[]} the complete event log, surfaced through debug after the fight */
     log: [],
   };
@@ -64,8 +76,15 @@ export function sample(t, fight) {
   }
 }
 
-/** Call once per tick with that tick's events. */
-export function consume(t, events, fight) {
+/**
+ * Call once per tick with that tick's events.
+ *
+ * `input` is the intent that produced them. It is read ONLY to tell a technique that
+ * started from a live press apart from one the buffer was holding: the new-action
+ * block takes the live verb first, so a `begin` on a tick with no verb pressed can
+ * only have come from the buffer.
+ */
+export function consume(t, events, fight, input) {
   for (const e of events) t.log.push(e);
 
   for (let i = 0; i < events.length; i++) {
@@ -78,6 +97,7 @@ export function consume(t, events, fight) {
         if (tech.kind === 'Evade') t.slipsAttempted[e.who]++;
         const f = e.who === 'player' ? fight.a : fight.b;
         if (f.breath <= 0.5) t.actionsWhileSpent[e.who]++;
+        if (e.who === 'player' && input && !input.verb) t.bufferedHonoured.player++;
         break;
       }
       case 'hit': t.landed[e.by]++; break;
@@ -149,6 +169,7 @@ export function summarise(t) {
     late_guards: s('lateGuards'),
     breath_outs: s('breathOuts'),
     actions_on_an_empty_tank: s('actionsWhileSpent'),
+    presses_honoured_from_buffer: s('bufferedHonoured'),
     seconds_staggered: {
       you: Number((t.staggeredTicks.player / 60).toFixed(1)),
       him: Number((t.staggeredTicks.opponent / 60).toFixed(1)),
@@ -172,14 +193,44 @@ const STORE_KEY = 'pomg.m1.playtest';
 export function persist(t, survey) {
   try {
     const all = load();
-    all.push({ at: new Date().toISOString(), metrics: summarise(t), survey: survey ?? null });
+    all.push({
+      at: new Date().toISOString(),
+      baseline: BASELINE,
+      metrics: summarise(t),
+      survey: survey ?? null,
+    });
     localStorage.setItem(STORE_KEY, JSON.stringify(all.slice(-60)));
     return all.length;
   } catch { return 0; }
 }
 
+/**
+ * Read the stored results, labelling any that predate the baseline field.
+ *
+ * Fights played on the pre-fix hosted build measured something other than what the
+ * questionnaire asks. A player who could not tell whether they were in danger may
+ * simply have had the press discarded. Those sessions are NOT deleted — they are
+ * real diagnostic data about the old build, and the only honest thing to do with
+ * them is say which build they came from.
+ *
+ * The label is written back once, so a result exported later still carries it.
+ */
 export function load() {
-  try { return JSON.parse(localStorage.getItem(STORE_KEY) ?? '[]'); } catch { return []; }
+  try {
+    const all = JSON.parse(localStorage.getItem(STORE_KEY) ?? '[]');
+    if (!Array.isArray(all)) return [];
+    let migrated = false;
+    for (const row of all) {
+      if (row && typeof row === 'object' && !row.baseline) {
+        row.baseline = PRIOR_BASELINE;
+        migrated = true;
+      }
+    }
+    if (migrated) {
+      try { localStorage.setItem(STORE_KEY, JSON.stringify(all)); } catch { /* read-only storage */ }
+    }
+    return all;
+  } catch { return []; }
 }
 
 export { SIDES };

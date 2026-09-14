@@ -2,7 +2,8 @@
  * Artifact build — a DISTRIBUTION ADAPTER, not a variant of the game.
  *
  * The repository implementation is canonical. This script produces `dist/` for
- * hosting and is allowed to change exactly two things, both forced by the sandbox:
+ * hosting and is allowed to change exactly three things — two forced by the sandbox,
+ * and one that only labels the build:
  *
  *   1. JSON module -> JS module. `sim/techniques.js` imports the technique data with
  *      an import attribute (`with { type: 'json' }`). The hosted sandbox serves the
@@ -16,12 +17,18 @@
  *      and `../view/main.js` becomes `./view/main.js` because the page sits at the
  *      artifact root rather than in `web/`.
  *
+ *   3. Build identity. `view/build.js` is rewritten with the commit this build was
+ *      cut from and the time it was cut, so a hosted build can name itself in debug
+ *      mode and a playtest result can be filed against the baseline it came from.
+ *      Presentation only — nothing in `sim/` imports it.
+ *
  * Nothing else is touched: no timings, no AI parameters, no structure behaviour, no
  * movement, no damage, no Final Inch logic, no input grammar. Every other file is
  * copied byte-for-byte, and `verify-parity.mjs` proves the built simulation produces
  * an identical fight.
  */
 import { readFile, writeFile, mkdir, rm, copyFile } from 'node:fs/promises';
+import { execFileSync } from 'node:child_process';
 import { join, dirname } from 'node:path';
 import assert from 'node:assert/strict';
 
@@ -32,7 +39,7 @@ const COPY = [
   'sim/constants.js', 'sim/fighter.js', 'sim/fight.js', 'sim/finalInch.js',
   'sim/formMachine.js', 'sim/grammar.js', 'sim/replay.js', 'sim/resolve.js',
   'sim/structure.js', 'sim/ai/brain.js', 'sim/ai/perception.js',
-  'view/audio.js', 'view/debug.js', 'view/input.js', 'view/main.js',
+  'view/audio.js', 'view/build.js', 'view/debug.js', 'view/input.js', 'view/main.js',
   'view/pose.js', 'view/render.js', 'view/survey.js', 'view/telemetry.js',
 ];
 
@@ -81,6 +88,32 @@ const style = html.match(/<style>([\s\S]*?)<\/style>/)[1];
 const body = html.match(/<body>([\s\S]*?)<\/body>/)[1].replace('../view/main.js', './view/main.js');
 await out('index.html', `<title>${title}</title>\n<style>${style}</style>\n${body.trim()}\n`);
 
+// ---- 5. build identity, stamped from git ---------------------------------------
+//
+// Cut from the working tree, so a dirty tree is reported as dirty rather than
+// quietly published as the commit it no longer matches.
+function git(...args) {
+  return execFileSync('git', args, { cwd: ROOT, encoding: 'utf8' }).trim();
+}
+let commit;
+try {
+  const sha = git('rev-parse', '--short', 'HEAD');
+  const dirty = git('status', '--porcelain', '--', '.').length > 0;
+  commit = dirty ? `${sha}+dirty` : sha;
+} catch {
+  commit = 'unknown';
+}
+const built = new Date().toISOString().replace(/\.\d+Z$/, 'Z');
+
+const buildSrc = await readFile(join(ROOT, 'view/build.js'), 'utf8');
+const stamped = buildSrc
+  .replace("  commit: 'dev',", `  commit: '${commit}',`)
+  .replace("  built: 'local',", `  built: '${built}',`);
+assert.ok(stamped.includes(`commit: '${commit}'`), 'build.js commit placeholder not found — adapter is stale');
+assert.ok(stamped.includes(`built: '${built}'`), 'build.js built placeholder not found — adapter is stale');
+await out('view/build.js', stamped);
+
 const files = [...COPY, 'sim/techniques.js', 'sim/data/low-river.data.js'];
 console.log(`dist/ built: ${files.length} modules + index.html`);
 console.log(files.map((f) => `  ${f}`).join('\n'));
+console.log(`\nbuild label: ${(await import(join(DIST, 'view/build.js'))).buildLabel()}`);

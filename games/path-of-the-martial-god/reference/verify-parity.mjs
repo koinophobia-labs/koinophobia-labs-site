@@ -4,6 +4,7 @@
  * changed behaviour and the hosted build is no longer M1.
  */
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 import * as srcFight from './sim/fight.js';
 import * as srcReplay from './sim/replay.js';
 import * as srcForm from './sim/formMachine.js';
@@ -12,6 +13,32 @@ import * as dstFight from './dist/sim/fight.js';
 import * as dstReplay from './dist/sim/replay.js';
 import * as dstForm from './dist/sim/formMachine.js';
 import * as dstTech from './dist/sim/techniques.js';
+
+// 0. the combat source itself, byte for byte
+//
+// Behavioural equality is checked below, but a digest match only proves the two
+// simulations agree on the fights it ran. This proves the adapter did not touch the
+// combat source at all. `techniques.js` is the one permitted exception and it is
+// checked line by line: exactly one line may differ, and only the import.
+const SIM = [
+  'sim/constants.js', 'sim/fighter.js', 'sim/fight.js', 'sim/finalInch.js',
+  'sim/formMachine.js', 'sim/grammar.js', 'sim/replay.js', 'sim/resolve.js',
+  'sim/structure.js', 'sim/ai/brain.js', 'sim/ai/perception.js',
+];
+const read = (rel) => readFileSync(new URL(rel, import.meta.url).pathname, 'utf8');
+for (const rel of SIM) {
+  assert.equal(read(rel), read(`dist/${rel}`), `${rel}: the hosted build's combat source differs from the reference`);
+}
+{
+  const a = read('sim/techniques.js').split('\n');
+  const b = read('dist/sim/techniques.js').split('\n');
+  assert.equal(a.length, b.length, 'techniques.js: line count differs');
+  const diff = a.map((l, i) => [i, l, b[i]]).filter(([, l, r]) => l !== r);
+  assert.equal(diff.length, 1, `techniques.js: ${diff.length} lines differ; only the data import may`);
+  assert.ok(diff[0][1].includes("low-river.json") && diff[0][2].includes("low-river.data.js"),
+    'techniques.js: the differing line is not the data import');
+}
+console.log(`combat source:       byte-identical (${SIM.length} modules + techniques.js import line)`);
 
 // 1. technique data identical, field for field
 const a = srcTech.allTechniques().map((t) => JSON.stringify(t)).sort();

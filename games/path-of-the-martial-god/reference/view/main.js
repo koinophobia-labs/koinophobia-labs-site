@@ -11,7 +11,7 @@ import { makeRenderer } from './render.js';
 import { makeAudio } from './audio.js';
 import { makeInput, CONTROLS } from './input.js';
 import { drawDebug, showEventLog, hideEventLog } from './debug.js';
-import { makeTelemetry, sample as sampleTelemetry, consume as recordEvents } from './telemetry.js';
+import { makeTelemetry, sample as sampleTelemetry, consume as recordEvents, load as loadResults } from './telemetry.js';
 import { makeSurvey } from './survey.js';
 
 const canvas = document.getElementById('stage');
@@ -21,6 +21,11 @@ const input = makeInput(window);
 
 let fight = makeFight();
 let telemetry = makeTelemetry();
+// Results stored by an earlier build are labelled with the baseline they were
+// produced on as soon as this one opens, so nothing can be read back later without
+// saying which build it came from. Nothing is deleted; the label is the whole change.
+loadResults();
+
 let debugOn = false;
 let started = false;
 let acc = 0;
@@ -137,7 +142,7 @@ function frame(now) {
         const intent = fight.over || survey.open ? neutralIntent() : input.sample();
         step(fight, intent, {});
         consume(fight.events);
-        recordEvents(telemetry, fight.events, fight);
+        recordEvents(telemetry, fight.events, fight, intent);
         sampleTelemetry(telemetry, fight);
         if (fight.over) break;
       }

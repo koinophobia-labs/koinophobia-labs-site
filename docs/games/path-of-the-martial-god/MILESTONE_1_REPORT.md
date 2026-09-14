@@ -170,9 +170,46 @@ produced by `build-artifact.mjs` and proved equivalent by `verify-parity.mjs`
 2. **Page shape and import root.** The host supplies its own `<!doctype>/<head>/<body>`,
    so the page is emitted as content only and `../view/main.js` becomes `./view/main.js`
    because the page sits at the artifact root rather than in `web/`.
+3. **Build identity.** `view/build.js` is rewritten with the commit the build was cut
+   from and the time it was cut, so a hosted build names itself in debug mode and a
+   result can be filed against the baseline it came from. Presentation only; nothing in
+   `sim/` imports it, and a dirty working tree is stamped `+dirty` rather than quietly
+   published as the commit it no longer matches.
 
 Nothing else differs. No timings, AI parameters, structure behaviour, movement speeds,
-damage, Final Inch logic, input grammar or combat rules were touched.
+damage, Final Inch logic, input grammar or combat rules were touched. `verify-parity.mjs`
+now proves this **byte for byte** as well as behaviourally: every `sim/` module in the
+built output must be identical to the reference, and `techniques.js` may differ on
+exactly one line, which must be the data import.
+
+### 10.1 Playtest baseline reset (2026-09-14)
+
+The hosted build was republished to carry the input-buffer correction. That change is
+not a tuning change, but it **is** a change to what a playtest measures, so the human
+readability baseline was reset.
+
+| | |
+| --- | --- |
+| Current baseline | `REFERENCE v2 / INPUT BUFFER FIXED` |
+| Prior baseline | `PRE-BUFFER / INVALID FOR CURRENT INPUT-READABILITY BASELINE` |
+
+Every result stored by the earlier build is **labelled with the prior baseline and
+kept**. Nothing is deleted: a pre-fix session is real diagnostic data about a real
+build, and the only dishonest thing to do with it would be to file it alongside results
+from a build that behaves differently. The labelling happens the moment this build is
+opened, so nothing can be exported later without saying where it came from.
+
+The reason for the reset is narrow and worth stating exactly. A playtest of this
+milestone asks whether a person can read the fight without meters. On the pre-fix build,
+27.1% of presses made while the body was busy were discarded in silence. A player who
+answered "rarely" to *could you tell when you were in danger* may have been telling us
+about their comprehension, or about a command the interface threw away, and there is no
+way to separate the two after the fact.
+
+One metric was added to support the reset, and only one: `presses_honoured_from_buffer`.
+It is the measure of how much the old build was eating. The opponent's count is always
+0 — its brain never presses while committed — which makes the pair a live check that
+the buffer stayed a human-only affordance. The questionnaire is unchanged.
 
 **Playtest additions (view layer only, read-only with respect to the simulation):**
 

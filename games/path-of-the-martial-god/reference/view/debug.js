@@ -9,6 +9,7 @@ import { QUADRANTS, bandFor } from '../sim/constants.js';
 import { phaseOf } from '../sim/formMachine.js';
 import { technique, frames } from '../sim/techniques.js';
 import { distance, vitalityFraction } from '../sim/fighter.js';
+import { buildLabel } from './build.js';
 
 const MONO = '11px ui-monospace, SFMono-Regular, Menlo, monospace';
 
@@ -17,8 +18,17 @@ export function drawDebug(ctx, fight, w, h, telemetry) {
   ctx.font = MONO;
   ctx.textBaseline = 'top';
 
-  panel(ctx, 10, 10, 250, 168, () => {
-    let y = 16;
+  // Which build this is. Its own strip because the label is longer than the state
+  // panel is wide, and a version string that runs off its own background is the kind
+  // of thing someone squints at and misreads.
+  const label = buildLabel();
+  panel(ctx, 10, 10, Math.ceil(ctx.measureText(label).width) + 20, 22, () => {
+    ctx.fillStyle = '#7d8a6f';
+    ctx.fillText(label, 20, 16);
+  });
+
+  panel(ctx, 10, 38, 250, 166, () => {
+    let y = 44;
     const line = (s, c = '#cfd4d0') => { ctx.fillStyle = c; ctx.fillText(s, 20, y); y += 14; };
     line(`tick ${fight.tick}   d=${distance(fight.a, fight.b).toFixed(2)}m  ${bandFor(distance(fight.a, fight.b))}`, '#8a9298');
     for (const f of [fight.a, fight.b]) {
@@ -29,6 +39,12 @@ export function drawDebug(ctx, fight, w, h, telemetry) {
       line(`  ${f.state}${ph ? '/' + ph : ''} ${t ? t.name : ''}${fr ? ` [${f.form.tick}/${fr.startup}+${fr.active}+${fr.recovery}]` : ''}`, '#8a9298');
       line(`  ${QUADRANTS.map((q) => `${q[0]}${q.includes('S') ? q[4] : ''}:${f.structure[q].toFixed(0)}${f.structure.collapse[q] > 0 ? '!' : ''}`).join(' ')}`, '#a8b0a8');
       line(`  breath ${f.breath.toFixed(0)}  will ${f.will.toFixed(0)}  vit ${(vitalityFraction(f) * 100).toFixed(0)}%  line ${f.line.toFixed(2)}`, '#8a9298');
+      // The buffered verb decides what this fighter does on the next free tick, so it
+      // belongs here with the rest of the branch-determining state. It is also the one
+      // field where an empty value is the interesting reading: the opponent's stays
+      // empty for the whole fight, by construction.
+      line(`  buf ${f.buffer ? `${f.buffer.verb}@${f.buffer.age}` : '—'}`,
+        f.buffer ? '#b9a86a' : '#5d666d');
     }
   });
 
@@ -55,8 +71,8 @@ export function drawDebug(ctx, fight, w, h, telemetry) {
   // Live playtest tally. Debug-only: these never appear as gameplay meters.
   if (telemetry) {
     const t = telemetry;
-    panel(ctx, 10, 188, 250, 92, () => {
-      let y = 194;
+    panel(ctx, 10, 212, 250, 92, () => {
+      let y = 218;
       const line = (s2, c = '#8a9298') => { ctx.fillStyle = c; ctx.fillText(s2, 20, y); y += 13; };
       line('playtest tally            you / him', '#8a7a4e');
       line(`thrown      ${String(t.attempted.player).padStart(3)} / ${t.attempted.opponent}`);
