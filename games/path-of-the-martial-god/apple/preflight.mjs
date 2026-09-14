@@ -349,6 +349,87 @@ for (const f of swiftFiles) {
   }
 }
 
+// ---------------------------------------------------------------------------------
+// The asset catalog, and the two things that reference it by NAME.
+//
+// Names in Info.plist and project.yml are resolved by the asset compiler, not by a
+// compiler that knows about them. A missing colour set is a launch screen that does
+// not appear; a missing icon set is an app that uploads without an icon and is
+// rejected at that point, which is the most expensive place to find it.
+// ---------------------------------------------------------------------------------
+{
+  const CAT = join(ROOT, 'MartialGod/Resources/Assets.xcassets');
+  const plist = existsSync(join(ROOT, 'MartialGod/Resources/Info.plist'))
+    ? readFileSync(join(ROOT, 'MartialGod/Resources/Info.plist'), 'utf8') : '';
+  const asset = (msg) => problems.push(`assets: ${msg}`);
+
+  if (!existsSync(CAT)) {
+    asset('no Assets.xcassets at all');
+  } else {
+    // 1. Every Contents.json must be valid JSON. A malformed one fails the build with
+    //    a message that names the catalog rather than the file.
+    for (const f of walk(CAT, '.json')) {
+      try { JSON.parse(readFileSync(f, 'utf8')); }
+      catch (e) { note(f, `is not valid JSON: ${e.message}`); }
+    }
+
+    // 2. Names referenced from outside must resolve to a set that exists.
+    const has = (name, ext) => existsSync(join(CAT, `${name}.${ext}`));
+    const launch = plist.match(/<key>UIColorName<\/key>\s*<string>([^<]+)<\/string>/);
+    if (launch && !has(launch[1], 'colorset')) {
+      asset(`Info.plist's launch screen names colour "${launch[1]}" and no ${launch[1]}.colorset exists`);
+    }
+    const yml2 = readFileSync(join(ROOT, 'project.yml'), 'utf8');
+    for (const [key, ext] of [['ASSETCATALOG_COMPILER_APPICON_NAME', 'appiconset'],
+                              ['ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME', 'colorset']]) {
+      const m = yml2.match(new RegExp(`${key}:\\s*(\\S+)`));
+      if (!m) { asset(`project.yml does not set ${key} — the asset is built and never used`); continue; }
+      if (!has(m[1], ext)) asset(`project.yml sets ${key}: ${m[1]} and no ${m[1]}.${ext} exists`);
+    }
+
+    // 3. Every file an image set names must be on disk, and the icon must satisfy the
+    //    two rules the App Store enforces: 1024x1024, and NO alpha channel.
+    for (const f of walk(CAT, '.json')) {
+      let j; try { j = JSON.parse(readFileSync(f, 'utf8')); } catch { continue; }
+      for (const img of j.images ?? []) {
+        if (!img.filename) continue;
+        const onDisk = join(f.replace(/\/Contents\.json$/, ''), img.filename);
+        if (!existsSync(onDisk)) { note(f, `names "${img.filename}", which is not on disk`); continue; }
+        if (!f.includes('.appiconset') || !img.filename.endsWith('.png')) continue;
+        const png = readFileSync(onDisk);
+        if (png.slice(1, 4).toString() !== 'PNG') { note(f, `"${img.filename}" is not a PNG`); continue; }
+        const w = png.readUInt32BE(16), h = png.readUInt32BE(20), colourType = png[25];
+        if (w !== 1024 || h !== 1024) note(f, `app icon "${img.filename}" is ${w}x${h}; the store requires 1024x1024`);
+        // Colour types 4 and 6 carry an alpha channel; a tRNS chunk adds one to the rest.
+        if (colourType === 4 || colourType === 6 || png.includes(Buffer.from('tRNS'))) {
+          note(f, `app icon "${img.filename}" has an alpha channel — the App Store rejects transparent icons`);
+        }
+      }
+    }
+
+    // 4. The launch background must match the renderer's clear colour.
+    //    They are the first and second things drawn, in that order, and if they differ
+    //    the app flashes on every single launch — a defect nobody writes down and
+    //    everybody notices.
+    const lc = join(CAT, launch ? `${launch[1]}.colorset/Contents.json` : 'nope');
+    const rend = join(ROOT, 'MartialGod/Presentation/Renderer.swift');
+    if (existsSync(lc) && existsSync(rend)) {
+      let j; try { j = JSON.parse(readFileSync(lc, 'utf8')); } catch { j = null; }
+      const c = j?.colors?.[0]?.color?.components;
+      const m = stripComments(readFileSync(rend, 'utf8'))
+        .match(/MTLClearColor\(red:\s*([\d.]+),\s*green:\s*([\d.]+),\s*blue:\s*([\d.]+)/);
+      if (c && m) {
+        for (const [i, ch] of ['red', 'green', 'blue'].entries()) {
+          const a = parseFloat(c[ch]), b = parseFloat(m[i + 1]);
+          if (Math.abs(a - b) > 0.002) {
+            asset(`launch background ${ch} is ${a} and the renderer clears to ${b} — the app will flash on launch`);
+          }
+        }
+      }
+    }
+  }
+}
+
 console.log(`preflight: ${swiftFiles.length} Swift files checked`);
 if (problems.length === 0) {
   console.log('no structural problems found');

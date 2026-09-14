@@ -730,6 +730,28 @@ I have **not** changed it, because the argument does not go one way:
 It is a one-line change either way and it is a design call, not a defect. Worth deciding
 before the first device test, because it changes what that test is measuring.
 
+### 9.9 The asset catalog: correct, and now checked
+
+Names in `Info.plist` and `project.yml` are resolved by the asset compiler, not by
+anything that type-checks. Six failure modes, all statically decidable, none of which
+had a guard:
+
+| Check | What it costs when wrong |
+| --- | --- |
+| Every `Contents.json` parses | Build failure naming the catalog rather than the file |
+| `UIColorName` in the launch screen resolves to a colour set | **No launch screen** — a black flash, or nothing |
+| `ASSETCATALOG_COMPILER_APPICON_NAME` resolves to an icon set | An app that **uploads without an icon** and is rejected there: the most expensive place to find it |
+| Every `filename` in an image set is on disk | Silent missing asset |
+| The app icon is 1024×1024 with **no alpha channel** | App Store rejection; transparent icons are refused |
+| The launch background matches the renderer's `clearColor` | **A flash on every single launch** — a defect nobody writes down and everybody notices |
+
+All six are mutation-verified. That last one deserves its own sentence: the launch
+background and the Metal clear colour are the first and second things drawn, in that
+order. They agree today (`0.043, 0.055, 0.063` on both sides) because someone matched
+them by hand, and nothing stopped the next person changing one.
+
+Everything passes as it stands: the icon is 1024×1024, colour type 2, no `tRNS` chunk.
+
 ## 10. Known issues
 
 | # | Issue | Severity |
@@ -752,6 +774,7 @@ before the first device test, because it changes what that test is measuring.
 | N-16 | ~~The shader ABI was agreed by hand and checked by nobody~~ (§9.6). **Fixed** — five static cross-checks, all mutation-verified. The ABI was correct as written; it is now correct *and* guarded. | Closed |
 | N-17 | `#selector` target/action pairing. **Half closed** (§9.6): preflight verifies the method exists and is `@objc`. A selector naming a method on a *different* object is still invisible here. | Low, was a blind spot |
 | N-18 | ~~All four NotificationCenter observer blocks touched main-actor state from a `@Sendable` closure~~ (§9.7). **Fixed** — explicit hops, and a preflight rule because the harness structurally cannot see the real signature. | Closed |
+| N-20 | ~~Nothing verified that the names in Info.plist and project.yml resolve to real asset sets~~ (§9.9). **Fixed** — six checks, mutation-verified. Everything already passed; now it stays that way. | Closed |
 | N-19 | **Audio session category is `.ambient`, so the ringer switch silences the game** (§9.8) — including breath, which the design names as the interface. Not changed: the argument runs both ways and it is a design call. **Decide before the first device test.** | Open — yours |
 
 ## 11. TestFlight readiness blockers
