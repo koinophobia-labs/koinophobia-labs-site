@@ -19,7 +19,7 @@ import { getProduct, type Evidence } from "@/lib/dev/universe";
 // records — delivery logs, merged PRs, health endpoints, session reports. The
 // /log page says so. Newest first. Bump `logLastUpdated` by hand.
 
-export const logLastUpdated = "September 13, 2026";
+export const logLastUpdated = "September 14, 2026";
 
 export type LogKind = "release" | "defect" | "decision" | "milestone" | "lesson";
 
@@ -52,6 +52,20 @@ export type LogEntry = {
 };
 
 export const logEntries: LogEntry[] = [
+  {
+    slug: "one-studio-rebuild-pull-request",
+    date: "2026-09-14",
+    title: "The rebuild reaches a pull request",
+    product: "site",
+    kind: "milestone",
+    what: "All nine phases of the one-studio rebuild landed on one branch and went up for review: one registry, one domain, the App Store apps leading, the lab at its real stage, sixteen analytics events, a social card per page, an RSS feed, build-time App Store versions, five new koi renders, and a QA harness that passes at six widths with a phone LCP of 1.1 seconds.",
+    why: "Production still runs the site that sells website audits. Nothing here is live until the merge, and the merge is a human's call.",
+    next: "Merge, attach koinophobia.dev to the same Vercel project, verify the host redirect on the live domain, and confirm the analytics events arrive.",
+    evidence: [
+      { claim: "The pull request exists with the full verification record", source: "https://github.com/koinophobia-labs/koinophobia-labs-site/pull/57, opened 2026-09-14" },
+      { claim: "The QA numbers are on the branch", source: "docs/evidence/REBUILD_QA_2026-09-14.md and docs/koi/HIGGSFIELD_2026-09-14.md at b1670cf" },
+    ],
+  },
   {
     slug: "one-studio-rebuild-begins",
     date: "2026-09-13",
