@@ -19,6 +19,7 @@ export default function LabPage({
   stats,
   sections,
   primary,
+  plate,
   next,
 }: {
   product: SiteProduct;
@@ -28,6 +29,8 @@ export default function LabPage({
   stats: Array<{ value: string; label: string }>;
   sections: Array<{ kicker: string; title: string; body: React.ReactNode }>;
   primary?: { label: string; href: string; external?: boolean; analytics: string };
+  /** A generated atmosphere plate. Decoration, labelled as such, never evidence. */
+  plate?: { src: string; poster: string; caption: string };
   next: string;
 }) {
   const decision = product.decisions[0];
@@ -66,6 +69,15 @@ export default function LabPage({
             </div>
           ) : null}
         </header>
+
+        {plate ? (
+          <figure className="plate s" aria-hidden="true">
+            <video muted autoPlay loop playsInline preload="metadata" poster={plate.poster}>
+              <source src={plate.src} type="video/mp4" />
+            </video>
+            <figcaption className="receipt receipt--lab">{plate.caption}</figcaption>
+          </figure>
+        ) : null}
 
         {sections.map((section, index) => (
           <section className="sec" key={section.title} aria-labelledby={`lab-sec-${index}`}>

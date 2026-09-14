@@ -1066,3 +1066,20 @@
     justify-content: center;
   }
 }
+
+/* ---------- generated atmosphere plate (lab pages) ---------- */
+.plate {
+  margin: 0;
+  display: grid;
+  gap: 0.6rem;
+}
+.plate video {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: var(--radius);
+  border: 1px solid var(--line-soft);
+  background: var(--void);
+  display: block;
+  mix-blend-mode: screen;
+}

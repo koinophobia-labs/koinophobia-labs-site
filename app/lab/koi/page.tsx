@@ -26,6 +26,11 @@ export default function KoiPage() {
         { value: "298", label: "commits" },
         { value: "25", label: "versioned verdicts" },
       ]}
+      plate={{
+        src: "/koi/koi-afterimage-1280.mp4",
+        poster: "/koi/poster-afterimage.webp",
+        caption: "H5 · the electric after-image, generated 2026-09-14 from the studio's koi. Atmosphere, not evidence.",
+      }}
       sections={[
         {
           kicker: "What it has not learned",

@@ -46,6 +46,29 @@ export type KoiClip = {
 };
 
 export const CLIPS = {
+  surface: {
+    id: "koi-surface",
+    poster: "/koi/poster-surface.webp",
+    duration: 10.04,
+    hero: 3.0,
+    description:
+      "H1, the surface loop: the koi sinks away into the dark, circles far below, and rises back to its opening pose beneath the surface. Kling v3.0, matched first and last frame. Generated 2026-09-14.",
+  },
+  pass: {
+    id: "koi-pass",
+    poster: "/koi/poster-pass.webp",
+    duration: 4.04,
+    description:
+      "H2, the pass: the koi crosses the lens plane left to right, scales filling the frame for two frames. Seedance 2.5 from the H1 turn frame. Generated 2026-09-14.",
+  },
+  lattice: {
+    id: "koi-lattice",
+    poster: "/koi/poster-lattice.webp",
+    duration: 10.04,
+    hero: 4.0,
+    description:
+      "H4, the lattice: the koi descends nose-down past faint vertical planes receding into the dark. Seedance 2.5 from the H1 turn frame. Generated 2026-09-14.",
+  },
   lead: {
     id: "koi-lead",
     poster: "/koi/poster-lead.webp",
@@ -179,8 +202,8 @@ export const DESTINATIONS: Destination[] = [
     label: "Surface",
     marker: "00",
     hint: "What Koinophobia Labs is and what it has shipped",
-    clip: "lead",
-    transitionClip: "glass",
+    clip: "surface",
+    transitionClip: "pass",
     band: { desktop: 2.4, mobile: 1.45 },
     pose: {
       arrive: pose(0.24, -0.1, 1.3, -2, 0.32, 0.94, 1.8),
@@ -221,7 +244,7 @@ export const DESTINATIONS: Destination[] = [
     label: "Lab",
     marker: "02",
     hint: "Experiments at their real stage, with receipts",
-    clip: "systems",
+    clip: "lattice",
     band: { desktop: 2.6, mobile: 1.3 },
     pose: {
       arrive: pose(0.42, -0.3, 1.3, -4, 0.3, 0.9, 1.8),
