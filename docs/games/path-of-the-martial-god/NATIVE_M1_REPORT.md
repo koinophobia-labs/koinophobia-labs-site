@@ -896,6 +896,60 @@ to the Final Inch's threshold economy, it still did not close the 414-hit case, 
 choosing it by running the numbers until a test passed would be designing the game's
 core by trial and error. It is written up as option 3 in `OPEN_DECISIONS.md` instead.
 
+### 9.13 The Stop works — verified by playing, not by calling it
+
+The game's central mechanic had never been tested end to end. `sim.test.js` tests
+`attempt('stop', …)` directly — hand it a novice and it overshoots, hand it a master and
+it holds — which is the **last link** of the chain. Nothing asserted that a person
+playing the game can ever arrive there.
+
+A long chain tested only at its final link is the shape of every defect this project has
+produced: the input buffer, five settings, four constants, an audio cue, a pose branch.
+Each was present, plausible, and never reached.
+
+So: 36 fights per configuration across six mastery levels, three temperaments and two
+reaction speeds, played to resolution, taking the Stop whenever the window opened.
+
+| | |
+| --- | --- |
+| Fights where the window opened for the player | **30 / 36** |
+| Held Stops (`stopped` / `stop`) | **15** |
+| Reached for it and overshot into `strike_through` | **21** |
+| Stops produced when the player chose otherwise | **0** |
+
+**The mechanic works, and the competence gate is visibly biting.** Mercy is a skill here,
+not a button — which is the design's central claim, now demonstrated rather than
+asserted. Five tests pin it, and both failure directions are mutation-verified: remove
+the gate and "competence bites" fails; raise `difficulty` above any reachable mastery and
+"sometimes holds it" fails.
+
+**One of those tests was wrong first, in a way worth recording.** The overshoot check
+counted every `strike_through` outcome — including the fights the *opponent* won that
+way, which happens constantly. It passed with the competence gate removed entirely.
+Scoped to the player's own overshoots, it now fails as it should. A test that cannot
+fail is not a test, and the only reason this one got fixed is that every new guard here
+is mutated before it is trusted.
+
+### 9.13b Two of the four endings have never once fired
+
+Across 270 fight configurations in a broad sweep, and 108 more in the Stop grid, **every
+single resolved fight ended through the Final Inch.** Not one ended any other way:
+
+| Ending | Times observed | Why |
+| --- | --- | --- |
+| `finished` / `stopped` | all of them | The Inch works |
+| `unconscious` | **0** | Needs `vitalityFraction <= 0`, which sums **all six regions** — while `COMBAT_SYSTEM.md` §34 says damage **concentrates**. Concentrated damage never zeroes six accumulators |
+| `yielded` | **0** | Needs Will at or below 12 **and** down. Will bottoms out at 64.4 (§9.11) and nobody ever goes down |
+
+`COMBAT_SYSTEM.md` §32 says *"Vitality reaching zero means unconscious or unable to
+continue."* Whether that means the total or a located region is genuinely ambiguous in
+the document, and the answer decides whether this is a missing implementation or a
+deliberate design. **That ambiguity is the reason I have not resolved it** — see N-22 and
+`OPEN_DECISIONS.md`, where it is written up with three options and the measurements
+behind each.
+
+It does mean the game currently has one way to end, not four.
+
 ## 10. Known issues
 
 | # | Issue | Severity |
@@ -920,7 +974,8 @@ core by trial and error. It is written up as option 3 in `OPEN_DECISIONS.md` ins
 | N-18 | ~~All four NotificationCenter observer blocks touched main-actor state from a `@Sendable` closure~~ (§9.7). **Fixed** — explicit hops, and a preflight rule because the harness structurally cannot see the real signature. | Closed |
 | N-21 | ~~A player who retreats and circles is never caught at any temperament~~ (§9.10). **Fixed** — URGENCY, an eleventh scoring term. Nine stalls become four, all seven original traces regenerate byte-identically, and an eighth fixture makes the parity gate able to see the term. | Closed |
 | N-23 | ~~`WILL.onGassed` delivered half its documented value~~ (§9.12), refunded by an unconditional regeneration in the same loop. **Fixed** both sides, two traces re-baselined. Fourth variant of the declared-but-not-in-force defect class, and the first where the constant was actually read. | Closed |
-| N-22 | **A fight can be comprehensively won and still not end** (§9.11). 414 clean hits, 137 structure breaks, torso destroyed — and no terminal route fires, because `vitalityFraction` sums six regions the arms keep afloat and will regenerates faster than it is taken. Criterion 3 stays blocked. Core balance; not mine to choose. | **Open — blocks M1, yours to decide** |
+| N-24 | ~~The Stop — the design's central mechanic — was tested only at its last link~~ (§9.13). **Now verified end to end by playing**: 30/36 fights reach a player Inch, 15 hold the Stop, 21 overshoot. It works, and the competence gate bites. | Closed |
+| N-22 | **A fight can be comprehensively won and still not end**, and two of the four endings have never once fired in 378 fights (§9.11, §9.13b). 414 clean hits, 137 structure breaks, torso destroyed — and no terminal route fires, because `vitalityFraction` sums six regions the arms keep afloat and will regenerates faster than it is taken. Criterion 3 stays blocked. Core balance; not mine to choose. | **Open — blocks M1, yours to decide** |
 | N-20 | ~~Nothing verified that the names in Info.plist and project.yml resolve to real asset sets~~ (§9.9). **Fixed** — six checks, mutation-verified. Everything already passed; now it stays that way. | Closed |
 | N-19 | **Audio session category is `.ambient`, so the ringer switch silences the game** (§9.8) — including breath, which the design names as the interface. Not changed: the argument runs both ways and it is a design call. **Decide before the first device test.** | Open — yours |
 
