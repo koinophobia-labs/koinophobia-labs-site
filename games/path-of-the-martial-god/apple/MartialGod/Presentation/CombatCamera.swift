@@ -27,8 +27,24 @@ public struct CombatCamera {
     private var smoothedDistance: Float = 4.0
     private var shake: Float = 0
     private var initialised = false
+    /// 0 normally, easing to 1 while the Final Inch is open.
+    private var inch: Float = 0
 
     public init() {}
+
+    /// The Final Inch is the one moment the camera is allowed to editorialise.
+    ///
+    /// It closes in, slightly, and holds. Not a zoom-punch and not a shake — the
+    /// design's whole camera philosophy is the removal of excess movement, and a
+    /// violation of that would be noise rather than emphasis. It is here because this
+    /// is the only moment in the game where the fight stops and a person chooses.
+    ///
+    /// Reduce Motion halves it rather than removing it: the moment still has to be
+    /// legible to someone who cannot tolerate camera movement.
+    public mutating func setInchOpen(_ open: Bool) {
+        inchTarget = open ? (SettingsStore.shared.settings.reduceMotion ? 0.5 : 1) : 0
+    }
+    private var inchTarget: Float = 0
 
     public mutating func impulse(_ amount: Float) {
         // Reduce Motion is honoured at source, not by post-processing it away.
@@ -42,7 +58,12 @@ public struct CombatCamera {
         let centre = (pa + pb) * 0.5
         let axis = atan2(pb.z - pa.z, pb.x - pa.x)
         let separation = simd_length(pb - pa)
-        let want = min(maxDistance, max(minDistance, separation * distanceBias + 1.6))
+        // Ease toward the Inch framing rather than snapping to it.
+        inch += (inchTarget - inch) * 0.14
+        let inchPull = inch * 0.85          // metres closer at full Inch
+
+        let want = min(maxDistance, max(minDistance - inchPull,
+                                        separation * distanceBias + 1.6 - inchPull))
 
         if !initialised {
             smoothedCentre = centre; smoothedAngle = axis; smoothedDistance = want

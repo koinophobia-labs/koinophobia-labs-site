@@ -158,6 +158,34 @@ public final class CombatAudio {
             return Float(n * env * 0.10)
         }
         // Breath: filtered noise, opening up as it gets ragged.
+        // Cloth and body motion. Almost subliminal on its own; its job is to stop a
+        // committed technique sounding like nothing until it lands.
+        buffers["cloth"] = buffer(seconds: 0.16) { _, t in
+            let env = sin(.pi * min(1, t / 0.16))
+            return Float(Double.random(in: -1...1) * env * 0.035)
+        }
+
+        // Exhaustion. A drawn, involuntary pull of air — not a grunt of effort.
+        buffers["gasp"] = buffer(seconds: 0.52) { _, t in
+            let env = sin(.pi * min(1, t / 0.52))
+            let rasp = Double.random(in: -1...1) * 0.22
+            return Float((rasp + sin(t * 210) * 0.05) * env * 0.5)
+        }
+
+        // The Final Inch opening. Low, sustained, and the only sound in the game with
+        // no physical cause — the fight stops being physics and becomes a decision.
+        buffers["inch"] = buffer(seconds: 0.85) { _, t in
+            let env = min(1, t / 0.12) * max(0, 1 - (t - 0.12) / 0.73)
+            return Float((sin(t * 78) * 0.5 + sin(t * 117) * 0.22) * env * 0.30)
+        }
+
+        // Resolution. One low settling note under the outcome; the fight is over and
+        // the room is quiet again.
+        buffers["resolve"] = buffer(seconds: 1.1) { _, t in
+            let env = max(0, 1 - t / 1.1)
+            return Float((sin(t * 62) * 0.6 + sin(t * 93) * 0.18) * env * env * 0.34)
+        }
+
         for (name, bright) in [("breath_easy", 0.25), ("breath_hard", 0.85)] {
             buffers[name] = buffer(seconds: 0.30 + bright * 0.2) { _, t in
                 let env = sin(.pi * min(1, t / (0.30 + bright * 0.2)))
@@ -192,9 +220,36 @@ public final class CombatAudio {
             play("scuff", gain: 1.0)
         case .rise:
             play("scuff", gain: 0.6)
+        case .begin:
+            // Cloth on the wind-up, so a commitment is audible before it arrives.
+            if let id = e.technique, TechniqueDB.technique(id).kind.isOffensive {
+                play("cloth", gain: 0.5)
+            }
+        case .gassed:
+            play("gasp", gain: 0.85)
+        case .inchOpen:
+            play("inch", gain: 0.9)
+        case .terminal:
+            play("resolve", gain: 0.9)
+        case .over:
+            // Only when no terminal preceded it. `stopped` and `finished` mean a
+            // terminal event already rang this note a moment ago; `unconscious` and
+            // `yielded` end the fight without one. Ringing it twice inside a second
+            // would turn the game's quietest moment into a chime.
+            if e.reason == "unconscious" || e.reason == "yielded" {
+                play("resolve", gain: 0.8)
+            }
         default:
             break
         }
+    }
+
+    /// A footstep, triggered by ground actually covered rather than by a timer.
+    ///
+    /// Distance-driven so the rhythm IS the movement: circling ticks along, a committed
+    /// step-in lands one heavy footfall, and a fighter holding their ground is silent.
+    public func footstep(weight: Double) {
+        play("step", gain: Float(0.22 + weight * 0.30))
     }
 
     /// The breathing loop. Rate and volume both track Breath, and a master is quieter

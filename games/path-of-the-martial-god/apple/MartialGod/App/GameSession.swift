@@ -13,6 +13,15 @@ public final class GameSession {
     public let haptics = Haptics()
     public var camera = CombatCamera()
 
+    /// Ground covered since each fighter's last footfall, in metres.
+    ///
+    /// Footsteps are distance-driven, not timed: the rhythm then IS the movement, so
+    /// circling ticks along steadily, a committed step-in lands one heavy footfall, and
+    /// a fighter holding their ground makes no sound at all. A timer would give all
+    /// three the same beat and tell the player nothing.
+    private var strideSince: [String: Double] = [:]
+    private static let strideLength = 0.42
+
     private var accumulator: Double = 0
     private var lastTime: CFTimeInterval = 0
     /// Impact frame-hold, in seconds. The single most effective impact tool there is.
@@ -107,9 +116,12 @@ public final class GameSession {
             if fight.over != nil, endedAt == nil { endedAt = now }
         }
 
+        camera.setInchOpen(fight.inch != nil)
         camera.update(a: fight.a, b: fight.b, dt: Float(dt))
         audio.breath(for: fight.a, now: now, isPlayer: true)
         audio.breath(for: fight.b, now: now, isPlayer: false)
+        footsteps(for: fight.a, isPlayer: true)
+        footsteps(for: fight.b, isPlayer: false)
         return now
     }
 
@@ -150,6 +162,27 @@ public final class GameSession {
         if fight.a.state == .staggered { staggeredTicks += 1 }
         let band = bandFor(distance(fight.a, fight.b)).rawValue
         bandTicks[band, default: 0] += 1
+    }
+
+    /// Emit a footstep once a fighter has actually covered a stride.
+    ///
+    /// Reads `lastMove`, which the simulation already computes — nothing here feeds
+    /// back into combat. A fighter off their feet makes no footfalls.
+    private func footsteps(for f: Fighter, isPlayer: Bool) {
+        guard f.state != .down, f.state != .staggered else {
+            strideSince[f.id] = 0
+            return
+        }
+        let travelled = (f.lastMove.x * f.lastMove.x + f.lastMove.z * f.lastMove.z).squareRoot()
+        let total = (strideSince[f.id] ?? 0) + travelled
+        guard total >= Self.strideLength else {
+            strideSince[f.id] = total
+            return
+        }
+        strideSince[f.id] = 0
+        // A fighter driving forward lands harder than one circling.
+        let weight = f.moveMode == .advancing ? 1.0 : 0.45
+        audio.footstep(weight: weight * (isPlayer ? 1.0 : 0.75))
     }
 
     private func recordFight() {
