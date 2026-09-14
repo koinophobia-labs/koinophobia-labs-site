@@ -186,6 +186,13 @@ public final class CombatAudio {
             return Float((sin(t * 62) * 0.6 + sin(t * 93) * 0.18) * env * env * 0.34)
         }
 
+        // Room tone. Nearly nothing — the sound of a place with two people in it and
+        // no music. Long enough to cover the widest Inch window (1.4s at high mastery).
+        buffers["room"] = buffer(seconds: 1.6) { _, t in
+            let env = min(1, t / 0.10) * max(0, 1 - (t - 0.10) / 1.5)
+            return Float(Double.random(in: -1...1) * env * 0.018)
+        }
+
         for (name, bright) in [("breath_easy", 0.25), ("breath_hard", 0.85)] {
             buffers[name] = buffer(seconds: 0.30 + bright * 0.2) { _, t in
                 let env = sin(.pi * min(1, t / (0.30 + bright * 0.2)))
@@ -206,27 +213,47 @@ public final class CombatAudio {
 
     // MARK: - gameplay hooks
 
+    /// COMBAT_SYSTEM.md §10: "Audio drops to breath and room tone."
+    ///
+    /// Not a mood choice. The Inch is the one moment the game asks a question, and it
+    /// asks it with no prompt and no menu — so the soundtrack has to get out of the way
+    /// and leave the two things that still mean something: someone breathing, and the
+    /// room they are standing in.
+    private var inchOpen = false
+
+    public func setInchOpen(_ open: Bool) {
+        guard open != inchOpen else { return }
+        inchOpen = open
+        if open { play("room", gain: 1.0) }
+    }
+
+    /// Everything that goes through here ducks during the Inch. Breath deliberately
+    /// does NOT go through here — it is what the duck exists to reveal.
+    private func duck(_ gain: Float) -> Float {
+        inchOpen ? gain * 0.16 : gain
+    }
+
     public func handle(_ e: CombatEvent) {
         switch e.type {
         case .hit:
-            play(e.region == .head ? "crack" : "thud", gain: 0.9)
+            play(e.region == .head ? "crack" : "thud", gain: duck(0.9))
         case .guarded:
-            play("block", gain: 0.8)
+            play("block", gain: duck(0.8))
         case .deflected:
-            play("deflect", gain: 0.8)
+            play("deflect", gain: duck(0.8))
         case .whiff:
-            play("whiff", gain: 0.7)
+            play("whiff", gain: duck(0.7))
         case .brokeStructure:
-            play("scuff", gain: 1.0)
+            play("scuff", gain: duck(1.0))
         case .rise:
-            play("scuff", gain: 0.6)
+            play("scuff", gain: duck(0.6))
         case .begin:
             // Cloth on the wind-up, so a commitment is audible before it arrives.
             if let id = e.technique, TechniqueDB.technique(id).kind.isOffensive {
-                play("cloth", gain: 0.5)
+                play("cloth", gain: duck(0.5))
             }
         case .gassed:
-            play("gasp", gain: 0.85)
+            play("gasp", gain: duck(0.85))
         case .inchOpen:
             play("inch", gain: 0.9)
         case .terminal:
@@ -249,7 +276,7 @@ public final class CombatAudio {
     /// Distance-driven so the rhythm IS the movement: circling ticks along, a committed
     /// step-in lands one heavy footfall, and a fighter holding their ground is silent.
     public func footstep(weight: Double) {
-        play("step", gain: Float(0.22 + weight * 0.30))
+        play("step", gain: duck(Float(0.22 + weight * 0.30)))
     }
 
     /// The breathing loop. Rate and volume both track Breath, and a master is quieter

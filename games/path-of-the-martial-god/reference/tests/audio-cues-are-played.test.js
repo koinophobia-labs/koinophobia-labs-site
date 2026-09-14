@@ -51,6 +51,30 @@ test('the events that carry the fight are all audible', () => {
   }
 });
 
+test('the Final Inch drops the audio to breath and room tone', () => {
+  // COMBAT_SYSTEM.md §10 specifies this, and it is not decoration: the Inch asks the
+  // game's only question, with no prompt and no menu. The mix has to get out of the
+  // way and leave the two things that still mean something — someone breathing, and
+  // the room they are standing in.
+  const audio = readFileSync(AUDIO, 'utf8');
+  const src = strip(audio);
+  assert.ok(src.includes('func setInchOpen'), 'the audio layer cannot be told the Inch is open');
+  assert.ok(/buffers\["room"\]/.test(src), 'there is no room tone to drop to');
+  assert.ok(src.includes('func duck'), 'nothing ducks during the Inch');
+
+  // Breath must NOT be ducked — it is what the duck exists to reveal.
+  const breathBody = src.slice(src.indexOf('func breath'), src.indexOf('func breath') + 700);
+  assert.ok(!/duck\(/.test(breathBody),
+    'breath is being ducked along with everything else, which defeats the whole point');
+
+  const session = readFileSync(
+    new URL('../../apple/MartialGod/App/GameSession.swift', import.meta.url).pathname, 'utf8');
+  assert.ok(strip(session).includes('audio.setInchOpen'),
+    'the session never tells the audio layer the Inch is open');
+  assert.ok(strip(session).includes('camera.setInchOpen'),
+    'the session never tells the camera the Inch is open');
+});
+
 test('footsteps are driven by ground covered, not by a timer', () => {
   // The rhythm has to BE the movement: circling ticks along, a committed step-in lands
   // one heavy footfall, standing still is silent. A timer gives all three the same beat.

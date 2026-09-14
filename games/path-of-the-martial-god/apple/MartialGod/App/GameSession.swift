@@ -117,6 +117,7 @@ public final class GameSession {
         }
 
         camera.setInchOpen(fight.inch != nil)
+        audio.setInchOpen(fight.inch != nil)
         camera.update(a: fight.a, b: fight.b, dt: Float(dt))
         audio.breath(for: fight.a, now: now, isPlayer: true)
         audio.breath(for: fight.b, now: now, isPlayer: false)

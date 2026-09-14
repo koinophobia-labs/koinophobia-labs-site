@@ -99,7 +99,10 @@ public struct CombatCamera {
         }
 
         var target = smoothedCentre
-        target.y = 1.05
+        // COMBAT_SYSTEM.md §10: the Inch framing puts both FACES in shot. Pulling in
+        // alone would just crop two torsos — the look-at has to rise to head height,
+        // because the decision being offered is about a person, not a hitbox.
+        target.y = mix(1.05, 1.52, inch)
         return lookAt(eye: eye, target: target, up: SIMD3<Float>(0, 1, 0))
     }
 
@@ -123,6 +126,8 @@ public struct CombatCamera {
         return len < 1e-5 ? SIMD2<Float>(1, 0) : d / len
     }
 }
+
+private func mix(_ a: Float, _ b: Float, _ t: Float) -> Float { a + (b - a) * t }
 
 // MARK: - matrix helpers
 

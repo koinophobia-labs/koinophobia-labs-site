@@ -356,6 +356,25 @@ the oldest supported device, allocation count per frame, touch-to-photon latency
 thermal behaviour over a ten-minute session. None of those are simulation questions,
 which is rather the point of the table above.
 
+### 9.0 The Final Inch, built to its own spec
+
+`COMBAT_SYSTEM.md` §10 specifies four things for the Inch. Three were present and one
+was not, which only became visible on reading the spec line by line against the code:
+
+| Spec | Status |
+| --- | --- |
+| Time dilates to ~35% for 0.9–1.4s, scaling with mastery | ✅ `InchRule.dilation`, window from `windowTicks(mastery)` |
+| No prompt tells you the options or what they mean | ✅ nothing is drawn; the inputs you already know are the options |
+| The camera cuts to the Inch framing, **both faces visible** | ✅ the look-at now rises to head height. Pulling in alone cropped two torsos — the decision is about a person, not a hitbox |
+| **Audio drops to breath and room tone** | ✅ everything ducks to 16% except breath, over a room-tone bed |
+
+The audio rule is not mood. The Inch is the one moment the game asks a question, and it
+asks with no prompt and no menu, so the mix has to leave the two things that still mean
+something: someone breathing, and the room they are standing in. Breath is deliberately
+routed around the duck — it is what the duck exists to reveal, and a test asserts that,
+because ducking everything uniformly would be the easy mistake and would silently undo
+the whole effect.
+
 ### 9.1 The Metal path, read adversarially
 
 `Renderer.swift` cannot be compiled here, so it was read instead — specifically for the
