@@ -200,40 +200,7 @@ body:has(.kw) > .koi-companion {
    Chrome: masthead, section map, progress
    -------------------------------------------------------------------------- */
 
-/* The navigation plane is the water's surface: content rising toward it
-   dissolves underneath (see the .dest__stage mask), and the masthead itself
-   occludes cleanly — nothing ever travels through the logo or the links. */
-.kw__masthead {
-  position: fixed;
-  inset: 0 0 auto 0;
-  z-index: 40;
-  display: flex;
-  align-items: center;
-  gap: clamp(0.75rem, 3vw, 2rem);
-  padding: clamp(0.85rem, 2vw, 1.4rem) var(--kw-gutter);
-  background: linear-gradient(
-    180deg,
-    rgba(4, 6, 10, 0.94) 0%,
-    rgba(4, 6, 10, 0.78) 58%,
-    rgba(4, 6, 10, 0) 100%
-  );
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-}
-
-.kw__brand {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.6rem;
-  color: var(--kw-ink);
-  text-decoration: none;
-  font-family: var(--font-sora), sans-serif;
-  font-weight: 700;
-  font-size: clamp(0.9rem, 1.5vw, 1.02rem);
-  letter-spacing: -0.015em;
-  white-space: nowrap;
-}
-
+/* The emblem ring the shared masthead wears on every page. */
 .kw__brand-ring {
   width: 1.45rem;
   height: 1.45rem;
@@ -243,76 +210,6 @@ body:has(.kw) > .koi-companion {
   background:
     radial-gradient(circle at 34% 30%, rgba(127, 216, 234, 0.55), transparent 62%);
   box-shadow: 0 0 18px rgba(53, 182, 214, 0.25);
-}
-
-.kw__nav {
-  display: flex;
-  gap: clamp(0.6rem, 1.6vw, 1.35rem);
-  margin-left: auto;
-  font-size: 0.795rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  font-family: var(--font-mono), monospace;
-}
-
-.kw__nav a {
-  display: inline-flex;
-  align-items: center;
-  min-height: 40px;
-  color: var(--kw-faint);
-  text-decoration: none;
-  padding: 0.3rem 0;
-  border-bottom: 1px solid transparent;
-  transition: color 240ms ease, border-color 240ms ease;
-}
-
-.kw__nav a:hover,
-.kw__nav a:focus-visible {
-  color: var(--kw-ink);
-}
-
-.kw[data-koi-destination="surface"] .kw__nav a[href="#surface"],
-.kw[data-koi-destination="shipped"] .kw__nav a[href="#shipped"],
-.kw[data-koi-destination="lab"] .kw__nav a[href="#lab"],
-.kw[data-koi-destination="work"] .kw__nav a[href="#work"],
-.kw[data-koi-destination="blake"] .kw__nav a[href="#blake"],
-.kw[data-koi-destination="start"] .kw__nav a[href="#start"] {
-  color: var(--kw-accent);
-  border-bottom-color: rgba(127, 216, 234, 0.6);
-}
-
-.kw__masthead-cta {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.45rem;
-  padding: 0.6rem 0.95rem;
-  border-radius: 2px;
-  border: 1px solid rgba(127, 216, 234, 0.34);
-  background: rgba(8, 18, 26, 0.55);
-  color: var(--kw-ink);
-  font-family: var(--font-mono), monospace;
-  font-size: 0.7rem;
-  font-weight: 500;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  text-decoration: none;
-  white-space: nowrap;
-  transition: border-color 220ms ease, background 220ms ease, opacity 300ms ease,
-    transform 300ms ease;
-}
-
-.kw__masthead-cta:hover,
-.kw__masthead-cta:focus-visible {
-  border-color: rgba(127, 216, 234, 0.75);
-  background: rgba(16, 44, 56, 0.78);
-}
-
-/* On the hero the invitation already stands in the water — the chrome copy of
-   it surfaces only once the visitor moves on. One ask per screen. */
-.kw[data-koi-destination="surface"] .kw__masthead-cta {
-  opacity: 0;
-  transform: translateY(-6px);
-  pointer-events: none;
 }
 
 /* The section map: a depth gauge, not a navbar bolted on top. */
@@ -1374,20 +1271,6 @@ body:has(.kw) > .koi-companion {
     --kw-shell: 100%;
   }
 
-  .kw__nav {
-    display: none;
-  }
-
-  /* A fixed masthead over a scrolling page has to occlude cleanly, otherwise
-     copy passing underneath it becomes unreadable rather than hidden. */
-  .kw__masthead {
-    background: #04060a;
-    box-shadow: 0 1rem 1.5rem rgba(4, 6, 10, 0.84);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-    padding-bottom: 1.5rem;
-  }
-
   .kw__map {
     top: calc(5.5rem + env(safe-area-inset-top));
     bottom: auto;
@@ -1656,12 +1539,6 @@ body:has(.kw) > .koi-companion {
     opacity: 1;
     transform: none;
     pointer-events: auto;
-  }
-}
-
-@media (max-width: 520px) {
-  .kw__masthead-cta span {
-    display: none;
   }
 }
 
