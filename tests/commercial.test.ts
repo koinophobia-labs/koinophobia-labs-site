@@ -94,7 +94,7 @@ test("released products have product-specific destinations and commercial guidan
   assert.ok(faqs.length >= 13);
 });
 
-test("the koi world leads through six destinations without hiding the business", () => {
+test("the koi world leads through six destinations and reads every fact from the registry", () => {
   const page = fs.readFileSync(path.join(root, "app/page.tsx"), "utf8");
   const layout = fs.readFileSync(path.join(root, "app/layout.tsx"), "utf8");
   const world = fs.readFileSync(
@@ -109,17 +109,18 @@ test("the koi world leads through six destinations without hiding the business",
   const styles = fs.readFileSync(path.join(root, "app/koi-world.css"), "utf8");
 
   // Six destinations, wired in one place and rendered as real sections.
-  const ids = ["enter", "products", "systems", "work", "founder", "start"];
+  const ids = ["surface", "shipped", "lab", "blake", "work", "start"];
   for (const id of ids) {
     assert.match(journey, new RegExp(`id: "${id}"`));
     assert.match(page, new RegExp(`id="${id}"`));
+    assert.match(styles, new RegExp(`data-koi-destination="${id}"`));
   }
   assert.equal((page.match(/className="dest dest--/g) ?? []).length, 6);
   assert.match(page, /<KoiWorld \/>/);
   assert.match(layout, /import "\.\/koi-world\.css"/);
 
   // Every retired homepage koi module is gone, not merely unused.
-  assert.doesNotMatch(layout, /KoiDepthPass/);
+  assert.doesNotMatch(layout, /KoiDepthPass|BrandIntro|KoiCompanion/);
   assert.doesNotMatch(page, /ScrollKoiExperience|KoiNavigationMotion/);
   for (const retired of [
     "app/koi-scroll.css",
@@ -139,22 +140,11 @@ test("the koi world leads through six destinations without hiding the business",
     );
   }
 
-  // Commercial truth comes from lib/commercial, never from hardcoded copy.
-  assert.match(page, /from "@\/lib\/commercial"/);
-  assert.match(page, /serviceOffers\.find/);
-  assert.match(page, /workProjects\.map/);
-  assert.doesNotMatch(page, /\$250(?!\})/); // the audit price is interpolated
-  assert.match(page, /studioConfig\.auditPrice/);
-  assert.match(page, /studioConfig\.auditTimeline/);
-
-  // Koi Cave is present but never presented as something a visitor can obtain.
-  assert.match(page, /Koi Cave/);
-  assert.match(page, /Development project · no public download/);
-  assert.doesNotMatch(
-    page,
-    /<Link\s+key=\{node\.title\}/,
-    "product cards that may cross a host rewrite must use full navigation",
-  );
+  // Product truth comes from lib/products (which reads lib/dev/universe),
+  // never from hardcoded copy and never from the retired agency layer.
+  assert.match(page, /from "@\/lib\/products"/);
+  assert.doesNotMatch(page, /from "@\/lib\/commercial"/);
+  assert.doesNotMatch(page, /Revenue Leak|Quick Fix|Koi Cave/);
 
   // The koi is composited into the page, not parked behind it.
   assert.match(styles, /mix-blend-mode: screen/);
@@ -174,7 +164,7 @@ test("the koi world leads through six destinations without hiding the business",
   assert.match(world, /if \(envelope <= 0\)/);
   assert.match(world, /mountedKey = desired/);
 
-  // The two-koi composition is confined to the products reveal, and the
+  // The two-koi composition is confined to the shipped reveal, and the
   // journey returns to a single navigation koi immediately afterwards.
   assert.equal((journey.match(/clip: "duo"/g) ?? []).length, 1);
   assert.match(journey, /transitionClip: "separate"/);

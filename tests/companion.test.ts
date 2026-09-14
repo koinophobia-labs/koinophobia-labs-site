@@ -148,12 +148,14 @@ test("basic site questions use deterministic published answers", () => {
   assert.equal(unknown.href, "/concierge");
 });
 
-test("the global companion mounts once and lazy-loads the existing shared concierge", () => {
+test("the global companion is retired from the layout; its concierge flow still lazy-loads", () => {
+  // The one-studio rebuild removed the floating companion from every page.
+  // The concierge engine stays until the /start form absorbs it (phase 6).
   const layout = read("app/layout.tsx");
   const companion = read("components/companion/KoiCompanion.tsx");
   const panel = read("components/companion/KoiCompanionPanel.tsx");
   const flow = read("components/concierge/ConciergeFlow.tsx");
-  assert.equal((layout.match(/<KoiCompanion\s*\/>/g) || []).length, 1);
+  assert.equal((layout.match(/<KoiCompanion\s*\/>/g) || []).length, 0);
   assert.match(companion, /dynamic\(\(\) => import\("@\/components\/companion\/KoiCompanionPanel"\)/);
   assert.match(panel, /dynamic\(\(\) => import\("@\/components\/concierge\/ConciergeFlow"\)/);
   assert.match(panel, /<ConciergeFlow entry=/);

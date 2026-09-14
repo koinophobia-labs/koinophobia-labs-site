@@ -1,12 +1,20 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { ArrowDown, ArrowRight, ArrowUpRight } from "lucide-react";
 import KoiWorld from "@/components/koi/KoiWorld";
 import WaterText from "@/components/koi/WaterText";
+import { LabCard, ProductCard } from "@/components/site/Cards";
+import NowStrip from "@/components/site/NowStrip";
+import StickyStart from "@/components/site/StickyStart";
 import { DESTINATIONS } from "@/lib/koi/journey";
 import { LINKS } from "@/lib/links";
-import { products, serviceOffers, studioConfig, workProjects } from "@/lib/commercial";
+import {
+  engagementShapes,
+  engagementTerms,
+  labProducts,
+  replyPromise,
+  shippedProducts,
+} from "@/lib/products";
 import {
   STUDIO_DESCRIPTION,
   STUDIO_SCHEMA,
@@ -35,42 +43,6 @@ export const metadata: Metadata = {
   },
 };
 
-const audit = serviceOffers.find((offer) => offer.slug === "audit")!;
-const otherServices = serviceOffers.filter((offer) => offer.slug !== "audit");
-
-/**
- * The constellation. Three shipped products plus the internal operator build,
- * labelled exactly as the repository labels it: private, dev-signed, not
- * distributable. No invented availability.
- */
-const constellation = [
-  ...products.map((product) => ({
-    title: product.title,
-    audience: product.audience,
-    body: product.body,
-    status: product.status.replace("Internal Product · ", ""),
-    href: product.href,
-    cta: product.cta,
-    internal: false,
-  })),
-  {
-    title: "Koi Cave",
-    audience: "The studio's own operating loop",
-    body:
-      "A local-first operator system for notes, tasks, memory, and automations. It runs on one machine and stays there.",
-    status: "Development project · no public download",
-    href: "/dev/products/koi-cave",
-    cta: "Read the Koi Cave record",
-    internal: true,
-  },
-];
-
-const founderFacts = [
-  "Blake scopes the problem, designs the solution, builds the system, runs the checks, and leads the handoff.",
-  "High-volume customer operations at DraftKings; B.A. in Global Management, Earlham College.",
-  "Client work and owned products share one toolchain — the products are where new techniques get proven first.",
-];
-
 const bandStyle = (index: number) => {
   const destination = DESTINATIONS[index];
   return {
@@ -79,10 +51,16 @@ const bandStyle = (index: number) => {
   } as React.CSSProperties;
 };
 
+/**
+ * The homepage: six destinations, one dive. Surface, Shipped, Lab, Blake,
+ * Work with me, Start. Every fact on this page is read from the registry in
+ * lib/products.ts, which reads from lib/dev/universe.ts. See the rebuild
+ * document, sections 3 and 4.
+ */
 export default function Home() {
   return (
-    <div className="kw" data-koi-destination="enter">
-      <a className="kw__skip" href="#enter-copy">
+    <div className="kw" data-koi-destination="surface" data-motion-shell>
+      <a className="kw__skip" href="#surface-copy">
         Skip the animation and read the page
       </a>
 
@@ -90,18 +68,17 @@ export default function Home() {
       <WaterText />
 
       <header className="kw__masthead">
-        <Link className="kw__brand" href="#enter" aria-label="Koinophobia Labs, home">
+        <Link className="kw__brand ai" href="#surface" aria-label="Koinophobia Labs, home">
           <span className="kw__brand-ring" aria-hidden="true" />
           Koinophobia Labs
         </Link>
 
         <nav className="kw__nav" aria-label="Primary">
-          {DESTINATIONS.map((destination) => (
+          {DESTINATIONS.slice(1).map((destination) => (
             <a
               key={destination.id}
               href={`#${destination.id}`}
               data-koi-link={destination.id}
-              aria-current={destination.index === 0 ? "location" : undefined}
               aria-label={`${destination.label}: ${destination.hint}`}
             >
               {destination.label}
@@ -109,7 +86,7 @@ export default function Home() {
           ))}
         </nav>
 
-        <Link className="kw__masthead-cta" href="/intake">
+        <Link className="kw__masthead-cta ai" href="/start" data-analytics="inquiry_start" data-analytics-label="home_masthead">
           Start a project <ArrowUpRight size={15} aria-hidden="true" />
         </Link>
       </header>
@@ -130,108 +107,66 @@ export default function Home() {
       </nav>
 
       <main className="kw__main">
-        {/* ---------------------------------------------------- 00 Enter */}
-        <section
-          className="dest dest--enter"
-          id="enter"
-          style={bandStyle(0)}
-          aria-labelledby="enter-title"
-        >
+        {/* ---------------------------------------------------- 00 Surface */}
+        <section className="dest dest--surface" id="surface" style={bandStyle(0)} aria-labelledby="surface-title">
           <div className="dest__stage">
-            <div className="dest__inner" id="enter-copy">
+            <div className="dest__inner" id="surface-copy">
               <div>
-                <p className="kw__marker">
-                  <b>00</b> Enter the black water
-                </p>
-                <p className="kw__kicker">AI-native product studio · Chicago</p>
-                <h1 id="enter-title">Build what ordinary thinking would never reach.</h1>
+                <p className="kw__kicker">A one-person software studio · Chicago</p>
+                <h1 id="surface-title">Nothing here stayed an idea.</h1>
                 <p className="kw__lede">
-                  Koinophobia Labs builds AI-native products, websites, automation,
-                  prototypes, and internal systems — founder-led from first scope to
-                  launch. One builder, working software, no agency theater.
+                  Koinophobia Labs is Blake Taylor, building software alone and shipping it in
+                  public. Three apps reached the App Store this summer. A K–12 curriculum is being
+                  taught by a Mac. A language model is learning to read from random weights on a
+                  laptop. Blake also builds for other people.
                 </p>
                 <div className="kw__actions">
-                  <Link className="kw__btn kw__btn--primary" href="/intake">
-                    Start a project <ArrowRight size={16} aria-hidden="true" />
-                  </Link>
-                  <a
-                    className="kw__btn kw__btn--ghost kw__btn--dive"
-                    href="#products"
-                    data-koi-link="products"
-                  >
-                    Follow the koi <ArrowDown size={16} aria-hidden="true" />
+                  <a className="kw__btn kw__btn--primary kw__btn--dive ai" href="#shipped" data-koi-link="shipped">
+                    See what shipped <ArrowDown size={16} aria-hidden="true" />
+                  </a>
+                  <a className="kw__btn kw__btn--ghost ai" href="#work" data-koi-link="work">
+                    Work with Blake <ArrowRight size={16} aria-hidden="true" />
                   </a>
                 </div>
+                <dl className="kw__trust-rail" aria-label="Proof">
+                  <div>
+                    <dt>{shippedProducts.length} apps</dt>
+                    <dd>on the App Store</dd>
+                  </div>
+                  <div>
+                    <dt>1 builder</dt>
+                    <dd>0 employees</dd>
+                  </div>
+                  <div>
+                    <dt>Every claim</dt>
+                    <dd>dated and sourced</dd>
+                  </div>
+                </dl>
               </div>
-
             </div>
           </div>
         </section>
 
-        {/* ------------------------------------------------- 01 Products */}
-        <section
-          className="dest dest--products"
-          id="products"
-          style={bandStyle(1)}
-          aria-labelledby="products-title"
-        >
+        {/* ---------------------------------------------------- 01 Shipped */}
+        <section className="dest dest--shipped" id="shipped" style={bandStyle(1)} aria-labelledby="shipped-title">
           <div className="dest__stage">
             <div className="dest__inner">
               <p className="kw__marker">
-                <b>01</b> The product constellation
+                <b>01</b> Shipped · on the App Store now
               </p>
-              <h2 id="products-title">
-                Products the studio owns, ships, and answers for.
-              </h2>
+              <h2 id="shipped-title">Built by one person. Downloadable by anyone.</h2>
               <p>
-                Status is reported as it actually stands. Nothing here is
-                described as further along than it is.
+                Three apps, each one started as a problem Blake had. Real screens, real prices,
+                and one honest line each about what it doesn&apos;t do yet.
               </p>
-
-              <div className="kw__constellation">
-                {constellation.map((node, index) => {
-                  const external = /^https?:\/\//.test(node.href);
-                  const className = `kw__node${node.internal ? " kw__node--internal" : ""}`;
-                  const content = (
-                    <>
-                      <span className="kw__node-index">
-                        {String(index + 1).padStart(2, "0")}
-                      </span>
-                      <h3>{node.title}</h3>
-                      <p>{node.body}</p>
-                      <span className="kw__node-meta">
-                        <span>{node.status}</span>
-                        <ArrowUpRight size={15} aria-hidden="true" />
-                      </span>
-                    </>
-                  );
-                  return external ? (
-                    <a
-                      key={node.title}
-                      className={className}
-                      href={node.href}
-                      target="_blank"
-                      rel="noreferrer"
-                      aria-label={`${node.cta} — for ${node.audience}`}
-                    >
-                      {content}
-                    </a>
-                  ) : (
-                    <a
-                      key={node.title}
-                      className={className}
-                      href={node.href}
-                      aria-label={`${node.cta} — for ${node.audience}`}
-                    >
-                      {content}
-                    </a>
-                  );
-                })}
+              <div className="cards">
+                {shippedProducts.map((product, index) => (
+                  <ProductCard key={product.slug} product={product} index={index} placement="home" />
+                ))}
               </div>
-
               <div className="kw__actions">
-                <Link className="kw__btn kw__btn--ghost" href="/products">
-                  Every product, with honest status{" "}
+                <Link className="kw__btn kw__btn--ghost ai" href="/shipped">
+                  Every shipped product, with what it can&apos;t do yet{" "}
                   <ArrowUpRight size={15} aria-hidden="true" />
                 </Link>
               </div>
@@ -239,170 +174,69 @@ export default function Home() {
           </div>
         </section>
 
-        {/* -------------------------------------------------- 02 Systems */}
-        <section
-          className="dest dest--systems"
-          id="systems"
-          style={bandStyle(2)}
-          aria-labelledby="systems-title"
-        >
+        {/* -------------------------------------------------------- 02 Lab */}
+        <section className="dest dest--lab" id="lab" style={bandStyle(2)} aria-labelledby="lab-title">
           <div className="dest__stage">
             <div className="dest__inner">
-              <p className="kw__marker">
-                <b>02</b> Systems and services
+              <p className="kw__marker kw__marker--lab">
+                <b>02</b> The lab · experiments with receipts
               </p>
-              <h2 id="systems-title">
-                Find where the revenue leaks. Then build the system that stops it.
-              </h2>
+              <h2 id="lab-title">The part of the studio that isn&apos;t finished, on purpose.</h2>
               <p>
-                The visible experience is the surface. Koinophobia Labs builds the
-                intake, routing, automation, and operating logic underneath it.
+                Bigger bets, reported at their actual stage. Nothing here is on the App Store, and
+                nothing here pretends to be.
               </p>
-
-              <div className="kw__systems-grid">
-                <div className="kw__audit">
-                  <p className="kw__kicker">Start here</p>
-                  <h3>{audit.title}</h3>
-                  <div className="kw__audit-head">
-                    <span className="kw__price">{audit.price}</span>
-                    <span className="kw__price-note">
-                      {audit.priceLabel} · {audit.timeline}
-                    </span>
-                  </div>
-                  <p>{audit.forWhom}</p>
-                  <ul className="kw__includes">
-                    {audit.includes.map((item) => (
-                      <li key={item}>{item}</li>
-                    ))}
-                  </ul>
-                  <p style={{ marginTop: "1.1rem", fontSize: "0.9rem" }}>
-                    <strong style={{ color: "#dbe8ef" }}>You receive:</strong>{" "}
-                    {audit.deliverable}
-                  </p>
-                  <div className="kw__actions" style={{ marginTop: "1.3rem" }}>
-                    <Link className="kw__btn kw__btn--primary" href={audit.href}>
-                      {audit.cta} <ArrowRight size={16} aria-hidden="true" />
-                    </Link>
-                  </div>
-                </div>
-
-                <div className="kw__service-list">
-                  {otherServices.map((offer, index) => (
-                    <Link className="kw__service" href={offer.href} key={offer.slug}>
-                      <span>{String(index + 1).padStart(2, "0")}</span>
-                      <strong>{offer.title}</strong>
-                      <b>{offer.price}</b>
-                      <small>{offer.forWhom}</small>
-                    </Link>
-                  ))}
-                  <Link className="kw__service" href="/services">
-                    <span>—</span>
-                    <strong>All services, scope and timelines</strong>
-                    <b>
-                      <ArrowUpRight size={15} aria-hidden="true" />
-                    </b>
-                    <small>
-                      Pricing, what each engagement includes, and what is decided
-                      before development starts.
-                    </small>
-                  </Link>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ----------------------------------------------------- 03 Work */}
-        <section
-          className="dest dest--work"
-          id="work"
-          style={bandStyle(3)}
-          aria-labelledby="work-title"
-        >
-          <div className="dest__stage">
-            <div className="dest__inner">
-              <p className="kw__marker">
-                <b>03</b> Work and proof
-              </p>
-              <h2 id="work-title">Proof leaves a wake.</h2>
-              <p>
-                Studio-built demonstrations of positioning, structure, and intake.
-                Not client case studies, and they carry no invented results.
-              </p>
-
-              <div className="kw__work-grid">
-                {workProjects.map((project) => (
-                  <Link
-                    className="kw__proof"
-                    href={project.previewUrl ?? `/work/${project.slug}`}
-                    key={project.slug}
-                  >
-                    {project.image ? (
-                      <span className="kw__proof-visual" aria-hidden="true">
-                        <Image
-                          src={project.image}
-                          alt=""
-                          fill
-                          sizes="(max-width: 1024px) 92vw, 30vw"
-                        />
-                      </span>
-                    ) : null}
-                    <span className="kw__tag">{project.statusLabel}</span>
-                    <h3>{project.title}</h3>
-                    <p>{project.summary}</p>
-                    <span className="kw__proof-open">
-                      {project.businessType}
-                      <ArrowUpRight size={14} aria-hidden="true" />
-                    </span>
-                  </Link>
+              <div className="lab-list">
+                {labProducts.map((product, index) => (
+                  <LabCard key={product.slug} product={product} index={index} />
                 ))}
               </div>
-
               <div className="kw__actions">
-                <Link className="kw__btn kw__btn--ghost" href="/work">
-                  Open the work archive <ArrowUpRight size={15} aria-hidden="true" />
+                <Link className="kw__btn kw__btn--ghost ai" href="/lab">
+                  Open the lab <ArrowUpRight size={15} aria-hidden="true" />
                 </Link>
               </div>
             </div>
           </div>
         </section>
 
-        {/* -------------------------------------------------- 04 Founder */}
-        <section
-          className="dest dest--founder"
-          id="founder"
-          style={bandStyle(4)}
-          aria-labelledby="founder-title"
-        >
+        {/* ------------------------------------------------------ 03 Blake */}
+        <section className="dest dest--blake" id="blake" style={bandStyle(3)} aria-labelledby="blake-title">
           <div className="dest__stage">
             <div className="dest__inner">
               <p className="kw__marker">
-                <b>04</b> The founder
+                <b>03</b> The builder
               </p>
               <div className="kw__panel kw__founder">
                 <div className="kw__portrait">
-                  <Image
-                    src="/blake-portrait.jpg"
-                    alt="Blake Taylor, founder of Koinophobia Labs"
-                    fill
-                    sizes="(max-width: 860px) 170px, 260px"
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src="/blake/portrait.jpg"
+                    alt="Blake Taylor on a bridge over the Chicago River"
+                    width={736}
+                    height={920}
+                    loading="lazy"
                   />
                 </div>
                 <div>
                   <p className="kw__kicker">Blake Taylor · founder</p>
-                  <h2 id="founder-title">You work with the builder.</h2>
+                  <h2 id="blake-title">Laid off in July. Three apps on the App Store by September.</h2>
+                  <p className="voice">&ldquo;The simulator votes. The device decides.&rdquo;</p>
                   <p>
-                    One studio, one builder, no agency maze. The person making the
-                    promise is the person responsible for the result — from the first
-                    diagnosis through to the deployed system and its handoff.
+                    Blake Taylor spent three years inside sportsbook operations at DraftKings, where
+                    the job was staying calm while thousands of things went wrong at once. When the
+                    role ended in July 2026 he started building the tools he wished he&apos;d had,
+                    and didn&apos;t stop. He designs, writes, builds, tests, and ships everything on
+                    this site, using AI coding agents the way a woodworker uses power tools: for
+                    speed, never for judgment.
                   </p>
                   <ul className="kw__founder-facts">
-                    {founderFacts.map((fact) => (
-                      <li key={fact}>{fact}</li>
-                    ))}
+                    <li>Chicago.</li>
+                    <li>Earlham College, B.A. Global Management.</li>
+                    <li>DraftKings, sportsbook operations, three years.</li>
                   </ul>
-                  <Link className="kw__text-link" href="/about">
-                    Meet the founder <ArrowUpRight size={15} aria-hidden="true" />
+                  <Link className="kw__text-link ai" href="/blake">
+                    More about Blake <ArrowUpRight size={15} aria-hidden="true" />
                   </Link>
                 </div>
               </div>
@@ -410,70 +244,84 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ---------------------------------------------------- 05 Start */}
-        <section
-          className="dest dest--start"
-          id="start"
-          style={bandStyle(5)}
-          aria-labelledby="start-title"
-        >
+        {/* ------------------------------------------------- 04 Work with me */}
+        <section className="dest dest--work" id="work" style={bandStyle(4)} aria-labelledby="work-title">
+          <div className="dest__stage">
+            <div className="dest__inner">
+              <p className="kw__marker">
+                <b>04</b> Hire the studio
+              </p>
+              <h2 id="work-title">Have an idea that deserves to exist? Bring it.</h2>
+              <p>Koinophobia Labs takes on outside projects that fit what it has already proven it can do.</p>
+              <div className="shapes">
+                {engagementShapes.map((shape, index) => (
+                  <div className="shape glass s" key={shape.slug} style={{ "--i": index } as React.CSSProperties}>
+                    <h3>{shape.title}</h3>
+                    <p>{shape.body}</p>
+                    <span className="shape__t">{shape.timeline}</span>
+                  </div>
+                ))}
+              </div>
+              <p className="kw__also">
+                Also in scope: sites with a point of view, product films, experimental interfaces,
+                and automation that removes a job nobody wanted.
+              </p>
+              <dl className="kw__trust-rail" aria-label="Terms">
+                {engagementTerms.map((term) => (
+                  <div key={term.title}>
+                    <dt>{term.title}</dt>
+                    <dd>{term.body}</dd>
+                  </div>
+                ))}
+              </dl>
+              <div className="kw__actions">
+                <Link className="kw__btn kw__btn--primary ai" href="/start" data-analytics="inquiry_start" data-analytics-label="home_work">
+                  Start a project <ArrowRight size={16} aria-hidden="true" />
+                </Link>
+                <Link className="kw__btn kw__btn--ghost ai" href="/work-with-me">
+                  How engagements work <ArrowUpRight size={15} aria-hidden="true" />
+                </Link>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ------------------------------------------------------ 05 Start */}
+        <section className="dest dest--start" id="start" style={bandStyle(5)} aria-labelledby="start-title">
           <div className="dest__stage">
             <div className="dest__inner">
               <p className="kw__marker">
                 <b>05</b> Start a project
               </p>
-              <h2 id="start-title">Bring the problem. We will build the system.</h2>
+              <h2 id="start-title">Tell me the idea. I&apos;ll tell you what it takes.</h2>
               <p>
-                Start with a focused audit, describe the workflow, or send the project
-                directly. Every path ends with a written scope before any development
-                begins.
+                Two paragraphs are enough: what you want to exist, what exists today, and when you
+                need it. You&apos;ll hear back from Blake {replyPromise} with a real answer,
+                including &ldquo;don&apos;t build this yet&rdquo; when that&apos;s the answer.
               </p>
-
               <div className="kw__actions">
-                <Link className="kw__btn kw__btn--primary kw__btn--grand" href="/intake">
+                <Link className="kw__btn kw__btn--primary kw__btn--grand ai" href="/start" data-analytics="inquiry_start" data-analytics-label="home_start">
                   Start a project <ArrowRight size={18} aria-hidden="true" />
                 </Link>
               </div>
-              <a className="kw__finale-mail" href={LINKS.email}>
-                Email the studio directly <ArrowUpRight size={14} aria-hidden="true" />
+              <a className="kw__finale-mail" href={`${LINKS.email}?subject=Project%20idea`} data-analytics="founder_link_click" data-analytics-label="email">
+                Email Blake instead <ArrowUpRight size={14} aria-hidden="true" />
               </a>
 
-              <div className="kw__paths">
-                <Link className="kw__path" href="/audit">
-                  <strong>Revenue Leak Audit</strong>
-                  <small>
-                    {studioConfig.auditPrice} flat · {studioConfig.auditTimeline} ·
-                    prioritized PDF and walkthrough
-                  </small>
-                </Link>
-                <Link className="kw__path" href="/concierge?entry=home">
-                  <strong>Not sure what you need</strong>
-                  <small>
-                    Describe the friction in plain language and get a preliminary,
-                    rules-grounded recommendation.
-                  </small>
-                </Link>
-                <Link className="kw__path" href="/services">
-                  <strong>Every service, scoped in writing</strong>
-                  <small>
-                    Pricing, what each engagement includes, and what is decided
-                    before development starts.
-                  </small>
-                </Link>
-              </div>
+              <NowStrip />
 
-              <a className="kw__return" href="#enter" data-koi-link="enter">
+              <a className="kw__return" href="#surface" data-koi-link="surface">
                 Return to the surface
               </a>
 
               <footer className="kw__footer">
                 <span>Koinophobia Labs · Chicago</span>
                 <nav aria-label="Footer">
-                  <Link href="/services">Services</Link>
-                  <Link href="/products">Products</Link>
-                  <Link href="/work">Work</Link>
-                  <Link href="/about">About</Link>
-                  <Link href="/process">Process</Link>
+                  <Link href="/shipped">Shipped</Link>
+                  <Link href="/lab">Lab</Link>
+                  <Link href="/log">Log</Link>
+                  <Link href="/blake">Blake</Link>
+                  <Link href="/work-with-me">Work with me</Link>
                 </nav>
                 <span className="kw__footer-sign">Fear ordinary.</span>
               </footer>
@@ -485,6 +333,8 @@ export default function Home() {
       <div className="kw__depth" aria-hidden="true">
         <span />
       </div>
+
+      <StickyStart after="shipped" before="start" />
 
       <script
         type="application/ld+json"

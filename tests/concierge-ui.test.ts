@@ -6,16 +6,17 @@ import test from "node:test";
 const root = path.resolve(import.meta.dirname, "..");
 const read = (file: string) => fs.readFileSync(path.join(root, file), "utf8");
 
-test("homepage, services, intake, and audit expose intentional concierge entry points", () => {
+test("services, intake, and audit expose intentional concierge entry points; the homepage no longer does", () => {
   for (const file of [
-    "app/page.tsx",
     "app/services/page.tsx",
     "app/intake/page.tsx",
     "app/audit/page.tsx",
   ]) {
     assert.match(read(file), /\/concierge\?entry=/);
   }
-  assert.match(read("app/page.tsx"), /Not sure what you need/);
+  // The rebuilt homepage routes every inquiry to /start.
+  assert.doesNotMatch(read("app/page.tsx"), /\/concierge\?entry=/);
+  assert.match(read("app/page.tsx"), /href="\/start"/);
   assert.match(read("app/intake/page.tsx"), /Start the standard form/);
 });
 

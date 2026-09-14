@@ -19,7 +19,7 @@ import { getProduct, type Evidence } from "@/lib/dev/universe";
 // records — delivery logs, merged PRs, health endpoints, session reports. The
 // /log page says so. Newest first. Bump `logLastUpdated` by hand.
 
-export const logLastUpdated = "July 26, 2026";
+export const logLastUpdated = "September 13, 2026";
 
 export type LogKind = "release" | "defect" | "decision" | "milestone" | "lesson";
 
@@ -52,6 +52,61 @@ export type LogEntry = {
 };
 
 export const logEntries: LogEntry[] = [
+  {
+    slug: "one-studio-rebuild-begins",
+    date: "2026-09-13",
+    title: "The two sites become one studio",
+    product: "site",
+    kind: "decision",
+    what: "Started the rebuild that folds koinophobia.dev into koinophobialabs.com: the three App Store apps lead, the lab reports its real stage, the small-business audit offer is retired, and every product card reads from one registry.",
+    why: "A one-person studio with two homes splits its proof in half. The apps were live on the store while the studio site was still selling website audits.",
+    next: "Ship phases 0–5 on the rebuild branch, then the domain merge and redirects.",
+    evidence: [
+      { claim: "The rebuild plan and its audit are on the record", source: "The rebuild document and homepage prototype published 2026-09-13; branch rebuild/one-studio in koinophobia-labs-site" },
+    ],
+  },
+  {
+    slug: "three-apps-verified-public",
+    date: "2026-09-10",
+    title: "Way In, Trendi, and Forget About It verified public on the App Store",
+    product: "studio",
+    kind: "milestone",
+    what: "All three released apps were checked against Apple's public US listings and the Lookup API, and the site's customer paths were completed: App Store buttons, authentic store screenshots, and accurate Free and Pro allowances.",
+    why: "Website copy about a release is a claim; the listing is the evidence. The check moved every product page from 'in preparation' language to dated, verifiable status.",
+    next: "Read versions from the Lookup API at build time so the site can never drift from the store again.",
+    evidence: [
+      { claim: "Trendi is public on the App Store", source: "https://apps.apple.com/us/app/trendi-content-coach/id6776299336 — public US listing and Apple Lookup API, checked 2026-09-10" },
+      { claim: "ForgetAboutIt is public on the App Store", source: "https://apps.apple.com/us/app/forgetaboutit/id6804360983 — public US listing, checked 2026-09-10" },
+      { claim: "Way In is public on the App Store", source: "https://apps.apple.com/us/app/way-in-career-hub/id6807942376 — public US listing, checked 2026-09-10" },
+      { claim: "The customer-path deploy landed on main", source: "koinophobia-labs-site commit f985a1f, 2026-09-10" },
+    ],
+  },
+  {
+    slug: "way-in-native-resubmission",
+    date: "2026-09-03",
+    title: "Way In native build 6 resubmitted; the web app takes the new name",
+    product: "career-forge",
+    kind: "release",
+    what: "The native iPhone and iPad app was bumped to build 6 for App Store resubmission, and the Career Forge web app was renamed Way In so both surfaces carry one name.",
+    why: "Two names for one product is the kind of small lie that compounds. The rename closed it before the native listing went public.",
+    next: "Verify the public listing, then retire every remaining 'Career Forge' string on the site.",
+    evidence: [
+      { claim: "Build 6 was prepared for resubmission", source: "career-forge-native-ci commit 'Add native Way In iOS app and bump to build 6 for App Store resubmission', 2026-09-03" },
+    ],
+  },
+  {
+    slug: "trendi-public-app-store",
+    date: "2026-08-28",
+    title: "Trendi reaches the public App Store",
+    product: "trendi",
+    kind: "release",
+    what: "Trendi: Content Coach went public on the App Store for iPhone: free with three Coach Packs per weekly period, and an optional Trendi Pro subscription.",
+    why: "Every earlier entry about Trendi is about builds that reached a tester. This is the first one a stranger could install.",
+    next: "Watch whether the output gets used to publish, repeatedly, before adding a single feature.",
+    evidence: [
+      { claim: "Public listing exists", source: "https://apps.apple.com/us/app/trendi-content-coach/id6776299336, public since 2026-08-28 per the site's Trendi release commit 248975a (2026-08-30)" },
+    ],
+  },
   {
     slug: "founder-os-slice-one",
     date: "2026-07-26",

@@ -271,11 +271,11 @@ body:has(.kw) > .koi-companion {
   color: var(--kw-ink);
 }
 
-.kw[data-koi-destination="enter"] .kw__nav a[href="#enter"],
-.kw[data-koi-destination="products"] .kw__nav a[href="#products"],
-.kw[data-koi-destination="systems"] .kw__nav a[href="#systems"],
+.kw[data-koi-destination="surface"] .kw__nav a[href="#surface"],
+.kw[data-koi-destination="shipped"] .kw__nav a[href="#shipped"],
+.kw[data-koi-destination="lab"] .kw__nav a[href="#lab"],
 .kw[data-koi-destination="work"] .kw__nav a[href="#work"],
-.kw[data-koi-destination="founder"] .kw__nav a[href="#founder"],
+.kw[data-koi-destination="blake"] .kw__nav a[href="#blake"],
 .kw[data-koi-destination="start"] .kw__nav a[href="#start"] {
   color: var(--kw-accent);
   border-bottom-color: rgba(127, 216, 234, 0.6);
@@ -309,7 +309,7 @@ body:has(.kw) > .koi-companion {
 
 /* On the hero the invitation already stands in the water — the chrome copy of
    it surfaces only once the visitor moves on. One ask per screen. */
-.kw[data-koi-destination="enter"] .kw__masthead-cta {
+.kw[data-koi-destination="surface"] .kw__masthead-cta {
   opacity: 0;
   transform: translateY(-6px);
   pointer-events: none;
@@ -478,11 +478,11 @@ body:has(.kw) > .koi-companion {
   pointer-events: none;
 }
 
-.kw[data-koi-ready="true"][data-koi-destination="enter"] #enter .dest__inner,
-.kw[data-koi-ready="true"][data-koi-destination="products"] #products .dest__inner,
-.kw[data-koi-ready="true"][data-koi-destination="systems"] #systems .dest__inner,
+.kw[data-koi-ready="true"][data-koi-destination="surface"] #surface .dest__inner,
+.kw[data-koi-ready="true"][data-koi-destination="shipped"] #shipped .dest__inner,
+.kw[data-koi-ready="true"][data-koi-destination="lab"] #lab .dest__inner,
 .kw[data-koi-ready="true"][data-koi-destination="work"] #work .dest__inner,
-.kw[data-koi-ready="true"][data-koi-destination="founder"] #founder .dest__inner,
+.kw[data-koi-ready="true"][data-koi-destination="blake"] #blake .dest__inner,
 .kw[data-koi-ready="true"][data-koi-destination="start"] #start .dest__inner {
   /* Reading floor while arriving and holding; on departure the whole block
      sinks together (--kw-exit), so the words never dissolve over copy that
@@ -531,7 +531,7 @@ body:has(.kw) > .koi-companion {
 
 /* On the hero the chapter marker leads; the studio line supports quietly
    rather than competing as a second cyan eyebrow. */
-.dest--enter .kw__kicker {
+.dest--surface .kw__kicker {
   color: var(--kw-faint);
   font-size: 0.68rem;
 }
@@ -728,7 +728,7 @@ body:has(.kw) > .koi-companion {
    00 Enter
    -------------------------------------------------------------------------- */
 
-.dest--enter .dest__inner {
+.dest--surface .dest__inner {
   display: grid;
   gap: clamp(2rem, 5vw, 4rem);
   grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
@@ -1478,7 +1478,7 @@ body:has(.kw) > .koi-companion {
     padding: 36svh var(--kw-gutter) max(6rem, 10svh);
   }
 
-  .dest--enter .dest__stage {
+  .dest--surface .dest__stage {
     padding-top: 42svh;
   }
 
@@ -1496,7 +1496,7 @@ body:has(.kw) > .koi-companion {
     grid-template-columns: minmax(0, 1fr);
   }
 
-  .dest--enter .dest__inner,
+  .dest--surface .dest__inner,
   .kw__systems-grid,
   .kw__founder {
     grid-template-columns: minmax(0, 1fr);
@@ -1658,14 +1658,14 @@ body:has(.kw) > .koi-companion {
 /* Short laptops need normal scrolling for the product constellation and
    systems matrix so every card and CTA remains reachable at reading size. */
 @media (min-width: 1025px) and (max-height: 760px) {
-  .dest--products,
-  .dest--systems {
+  .dest--shipped,
+  .dest--lab {
     height: auto;
     min-height: 100svh;
   }
 
-  .dest--products .dest__stage,
-  .dest--systems .dest__stage {
+  .dest--shipped .dest__stage,
+  .dest--lab .dest__stage {
     position: relative;
     top: auto;
     min-height: 0;
@@ -1673,8 +1673,8 @@ body:has(.kw) > .koi-companion {
     padding-block: 5rem 6rem;
   }
 
-  .kw[data-koi-ready="true"] #products .dest__inner,
-  .kw[data-koi-ready="true"] #systems .dest__inner {
+  .kw[data-koi-ready="true"] #shipped .dest__inner,
+  .kw[data-koi-ready="true"] #lab .dest__inner {
     opacity: 1;
     transform: none;
     pointer-events: auto;
@@ -1749,11 +1749,11 @@ body:has(.kw) > .koi-companion {
    ========================================================================== */
 
 /* A scrim is a gradient with no edge. It buys legibility without drawing a box. */
-.dest--enter .dest__inner > div:first-child,
-.dest--products .dest__inner,
-.dest--systems .dest__inner,
+.dest--surface .dest__inner > div:first-child,
+.dest--shipped .dest__inner,
+.dest--lab .dest__inner,
 .dest--work .dest__inner,
-.dest--founder .dest__inner,
+.dest--blake .dest__inner,
 .dest--start .dest__inner {
   position: relative;
 }
@@ -1778,7 +1778,7 @@ body:has(.kw) > .koi-companion {
   --scrim-x: 50%;
 }
 
-.dest--enter .dest__inner {
+.dest--surface .dest__inner {
   --scrim-x: 22%;
 }
 
@@ -1894,13 +1894,13 @@ body:has(.kw) > .koi-companion {
 }
 
 /* The hero is now a single column of copy against open water on the right. */
-.dest--enter .dest__inner {
+.dest--surface .dest__inner {
   display: block;
   max-width: min(46rem, 62%);
 }
 
 @media (max-width: 1024px) {
-  .dest--enter .dest__inner {
+  .dest--surface .dest__inner {
     max-width: 100%;
   }
 }
@@ -1980,7 +1980,7 @@ body:has(.kw) > .koi-companion {
     font-size: 0.82rem;
   }
 
-  .dest--enter .dest__inner {
+  .dest--surface .dest__inner {
     max-width: min(62rem, 58%);
   }
 
@@ -2086,4 +2086,46 @@ body:has(.kw) > .koi-companion {
 
   .dest__inner h1::after,
   .dest__inner h2::after { display: none; }
+}
+
+
+/* ---------- one-studio rebuild: homepage additions ---------- */
+.kw__marker--lab b {
+  color: var(--pulse);
+}
+.kw .voice {
+  margin: 0.4rem 0 0.8rem;
+}
+.kw__also {
+  max-width: 68ch;
+  font-size: 0.95rem;
+}
+.kw .cards,
+.kw .lab-list,
+.kw .shapes {
+  margin-top: 0.4rem;
+}
+.kw .pcard p,
+.kw .lcard p,
+.kw .shape p {
+  font-size: 0.92rem;
+  line-height: 1.5;
+  max-width: none;
+}
+.kw .pcard h3,
+.kw .lcard h3,
+.kw .shape h3 {
+  font-size: 1.25rem;
+  margin: 0;
+}
+.kw .now {
+  margin-top: 2rem;
+  max-width: 640px;
+}
+.kw__portrait img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: saturate(0.85);
 }

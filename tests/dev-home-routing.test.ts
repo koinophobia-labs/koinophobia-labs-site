@@ -65,7 +65,7 @@ test("koinophobialabs.com keeps the studio homepage at /", async () => {
   // The studio page is app/page.tsx and no rewrite redirects the .com root away.
   assert.match(
     studioHome,
-    /<div className="kw" data-koi-destination="enter">/,
+    /<div className="kw" data-koi-destination="surface" data-motion-shell>/,
     "studio homepage root must keep the initialized koi-world shell",
   );
   assert.equal(
