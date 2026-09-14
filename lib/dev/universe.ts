@@ -196,7 +196,7 @@ export const products: Product[] = [
       { claim: "Legacy web destination remains available under the Way In name", source: "https://career-forge-lite.vercel.app — HTTP 200 and Way In branding, checked 2026-09-10" },
     ],
     problem:
-      "When my DraftKings role ended I had the same problem everyone in that seat has: a hundred scattered applications, no feedback, and advice too generic to act on. The job search is the highest-stakes project most people ever run, and almost nobody runs it as a project.",
+      "When my sportsbook role ended I had the same problem everyone in that seat has: a hundred scattered applications, no feedback, and advice too generic to act on. The job search is the highest-stakes project most people ever run, and almost nobody runs it as a project.",
     thesis:
       "A résumé tool that invents experience is worse than no tool. The useful thing is not generation — it's organizing evidence you already have into something a stranger can evaluate in six seconds.",
     state: [

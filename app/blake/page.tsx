@@ -56,7 +56,7 @@ export default function BlakePage() {
               was running from, so I&apos;d never get to forget it.&rdquo;
             </p>
             <p className="lede s" style={{ "--i": 3 } as React.CSSProperties}>
-              I&apos;m Blake. I spent three years in sportsbook operations at DraftKings, keeping
+              I&apos;m Blake. I spent three years in sportsbook operations in the sports-betting market, keeping
               high-volume systems and the people around them calm while a lot went wrong at once.
               In July 2026 the role ended. I had a list of tools I&apos;d wished existed for years, a
               Mac, and a set of AI coding agents I&apos;d learned to direct like a small crew. By
@@ -70,7 +70,7 @@ export default function BlakePage() {
                 <b>Earlham College</b> · B.A. Global Management
               </span>
               <span>
-                <b>DraftKings</b> · sportsbook operations, three years
+                <b>Sports betting</b> · sportsbook operations, three years
               </span>
             </div>
           </div>

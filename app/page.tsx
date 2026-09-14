@@ -229,7 +229,7 @@ export default async function Home() {
                   <h2 id="blake-title">Laid off in July. Three apps on the App Store by September.</h2>
                   <p className="voice">&ldquo;The simulator votes. The device decides.&rdquo;</p>
                   <p>
-                    Blake Taylor spent three years inside sportsbook operations at DraftKings, where
+                    Blake Taylor spent three years inside sportsbook operations in the sports-betting market, where
                     the job was staying calm while thousands of things went wrong at once. When the
                     role ended in July 2026 he started building the tools he wished he&apos;d had,
                     and didn&apos;t stop. He designs, writes, builds, tests, and ships everything on
@@ -239,7 +239,7 @@ export default async function Home() {
                   <ul className="kw__founder-facts">
                     <li>Chicago.</li>
                     <li>Earlham College, B.A. Global Management.</li>
-                    <li>DraftKings, sportsbook operations, three years.</li>
+                    <li>Sports betting, sportsbook operations, three years.</li>
                   </ul>
                   <Link className="kw__text-link ai" href="/blake">
                     More about Blake <ArrowUpRight size={15} aria-hidden="true" />

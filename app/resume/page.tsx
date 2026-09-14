@@ -19,7 +19,7 @@ import resume from "@/lib/resume.json";
 export const metadata: Metadata = {
   title: { absolute: "Blake Taylor — Résumé" },
   description:
-    "Résumé for Blake Taylor: AI product builder with a customer-experience and trust & safety background. Founder of Koinophobia Labs, formerly DraftKings.",
+    "Résumé for Blake Taylor: AI product builder with a customer-experience and trust & safety background. Founder of Koinophobia Labs, formerly in sportsbook operations.",
   alternates: {
     canonical: "https://koinophobialabs.com/resume",
   },
