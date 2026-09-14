@@ -627,3 +627,12 @@
 
 [data-world="memory"] .devprod__tagline { font-family:var(--font-newsreader),Georgia,serif; line-height:1.3; }
 [data-world="memory"] .devprod__section { padding-block:52px; }
+
+
+/* Lab worlds added by the one-studio rebuild. */
+[data-world="school"] .devprod__tagline { font-family:var(--font-newsreader),Georgia,serif; line-height:1.3; }
+[data-world="school"] .devprod__section { padding-block:52px; }
+[data-world="model"] .devprod__tagline { font-family:var(--font-newsreader),Georgia,serif; line-height:1.3; }
+[data-world="model"] .devprod__section { padding-block:52px; }
+[data-world="keeper"] .devprod__tagline { font-family:var(--font-newsreader),Georgia,serif; line-height:1.3; }
+[data-world="keeper"] .devprod__section { padding-block:52px; }

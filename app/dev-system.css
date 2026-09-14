@@ -329,3 +329,6 @@ body:has(.devpage) {
 }
 
 [data-world="memory"] { --acc:#eda578; --acc-hot:#ffd2b6; --acc-soft:rgba(237,165,120,.14); }
+[data-world="school"] { --acc:#a7d18a; --acc-hot:#d6f0c2; --acc-soft:rgba(167,209,138,.14); }
+[data-world="model"] { --acc:#9d6bff; --acc-hot:#c9b1ff; --acc-soft:rgba(157,107,255,.14); }
+[data-world="keeper"] { --acc:#c9b79a; --acc-hot:#ece1cd; --acc-soft:rgba(201,183,154,.14); }
