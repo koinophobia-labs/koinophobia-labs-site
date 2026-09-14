@@ -2164,3 +2164,34 @@ body:has(.kw) > .koi-companion {
   font-size: 0.86rem;
   color: var(--kw-dim);
 }
+
+
+/* The server-rendered first poster: painted before any JavaScript, gone as
+   soon as the first clip is playing. */
+.koi-world__first {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* Slightly larger than the engine's hero pose so this, not the video that
+     replaces it, is the largest paint. */
+  transform: translate(-50%, -50%) translate(9vw, -2vh) scale(1.3);
+  mix-blend-mode: screen;
+  filter: saturate(0.92) contrast(1.06);
+  -webkit-mask-image: radial-gradient(ellipse 78% 80% at 50% 50%, #000 55%, transparent 100%);
+  mask-image: radial-gradient(ellipse 78% 80% at 50% 50%, #000 55%, transparent 100%);
+  opacity: 1;
+  transition: opacity 600ms ease;
+  pointer-events: none;
+}
+.kw[data-koi-first="done"] .koi-world__first,
+.koi-world[data-motion="still"] .koi-world__first {
+  opacity: 0;
+}
+@media (max-width: 1024px) {
+  .koi-world__first {
+    transform: translate(-50%, -50%) translate(6vw, -30vh) scale(1.34);
+  }
+}

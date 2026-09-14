@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { preload } from "react-dom";
 import { ArrowDown, ArrowRight, ArrowUpRight } from "lucide-react";
 import KoiWorld from "@/components/koi/KoiWorld";
 import WaterText from "@/components/koi/WaterText";
 import { LabCard, ProductCard } from "@/components/site/Cards";
 import NowStrip from "@/components/site/NowStrip";
 import StickyStart from "@/components/site/StickyStart";
-import { DESTINATIONS } from "@/lib/koi/journey";
+import { CLIPS, DESTINATIONS } from "@/lib/koi/journey";
 import { LINKS } from "@/lib/links";
 import {
   engagementShapes,
@@ -59,6 +60,9 @@ const bandStyle = (index: number) => {
  * document, sections 3 and 4.
  */
 export default async function Home() {
+  // The first poster is the largest paint on a phone; fetch it before the
+  // koi engine's JavaScript creates the element that shows it.
+  preload(CLIPS[DESTINATIONS[0].clip].poster, { as: "image", fetchPriority: "high" });
   const shipped = await withLiveListings(shippedProducts);
   return (
     <div className="kw" data-koi-destination="surface" data-motion-shell>

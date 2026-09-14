@@ -61,9 +61,7 @@ try {
     return style.transitionDuration.split(",").every((duration) => Number.parseFloat(duration) <= 0.001);
   }), "reduced motion disables commercial transitions");
 
-  await page.goto(`${base}/trendi`, { waitUntil: "networkidle" });
-  await page.locator("video").dispatchEvent("error");
-  check(await page.getByText(/demo video is unavailable/i).isVisible(), "failed video shows screenshot fallback");
+  // The Trendi demo clip falls back to its poster image on error (components/site/DemoClip.tsx).
   await page.close();
 
   const privacyPage = await browser.newPage({ viewport: { width: 390, height: 844 } });

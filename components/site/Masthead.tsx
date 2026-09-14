@@ -27,7 +27,7 @@ export default function Masthead({ current }: { current?: string }) {
     <header className={`mast${glass ? " is-glass" : ""}`}>
       <Link className="mast__brand ai" href="/" aria-label="Koinophobia Labs, home">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/brand/koinophobia-labs-koi-640.webp" alt="" width={30} height={30} />
+        <img src="/brand/koi-emblem-128.png" alt="" width={30} height={30} />
         Koinophobia Labs
       </Link>
       <nav className={`mast__nav${open ? " is-open" : ""}`} id="site-nav" aria-label="Primary">

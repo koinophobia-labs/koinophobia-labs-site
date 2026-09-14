@@ -826,6 +826,9 @@
 .now a {
   display: flex;
   gap: 1rem;
+  align-items: baseline;
+  min-height: 44px;
+  padding: 0.35rem 0;
 }
 .now a:hover {
   color: var(--ink);

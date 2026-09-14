@@ -177,7 +177,11 @@ export default function KoiWorld() {
       video.preload = preload;
       video.setAttribute("aria-hidden", "true");
       video.setAttribute("tabindex", "-1");
-      video.poster = CLIPS[key].poster;
+      // The first clip's poster is already in the server HTML as the
+      // .koi-world__first image, so the video carries none: a second copy
+      // would become the largest paint a second later and hide the real one.
+      // Every other clip keeps its poster; the fallback below restores it.
+      if (key !== DESTINATIONS[0].clip) video.poster = CLIPS[key].poster;
       const { mp4 } = sourceFor(key);
       const source = document.createElement("source");
       source.src = mp4;
@@ -197,6 +201,7 @@ export default function KoiWorld() {
       const fallback = () => {
         if (video.dataset.koiFallback === "true") return;
         video.dataset.koiFallback = "true";
+        if (!video.poster) video.poster = CLIPS[key].poster;
         video.dataset.koiStatic = "true";
       };
       video.addEventListener("error", fallback);
@@ -600,6 +605,7 @@ export default function KoiWorld() {
       );
       if (video) {
         video.style.opacity = "1";
+        if (shell.dataset.koiFirst !== "done") shell.dataset.koiFirst = "done";
       }
 
       // --- Water ------------------------------------------------------------
@@ -649,7 +655,17 @@ export default function KoiWorld() {
     // journey begins readable. Formation choreography plays for every other
     // destination, and for the hero again on the way back up.
     if (window.scrollY < 2) floors.set(DESTINATIONS[0].id, 1);
-    ensureVideo(DESTINATIONS[0].clip);
+    // On a phone the first clip is a third of a megabyte competing with the
+    // fonts and scripts the hero copy needs. The poster is already painted,
+    // so the clip can wait until the page has loaded.
+    const firstClip = () => ensureVideo(DESTINATIONS[0].clip);
+    let firstClipTimer = 0;
+    const deferFirstClip = () => {
+      firstClipTimer = window.setTimeout(firstClip, 600);
+    };
+    if (!mobile) firstClip();
+    else if (document.readyState === "complete") deferFirstClip();
+    else window.addEventListener("load", deferFirstClip, { once: true });
     shell.setAttribute("data-koi-ready", "true");
 
     const resizeObserver =
@@ -667,6 +683,8 @@ export default function KoiWorld() {
     return () => {
       window.cancelAnimationFrame(frame);
       resizeObserver?.disconnect();
+      window.clearTimeout(firstClipTimer);
+      window.removeEventListener("load", deferFirstClip);
       window.removeEventListener("resize", measure);
       window.removeEventListener("orientationchange", measure);
       window.removeEventListener("pointermove", onPointer);
@@ -737,6 +755,21 @@ export default function KoiWorld() {
       aria-hidden="true"
     >
       <canvas className="koi-world__water" ref={canvasRef} />
+      {/* The first poster, in the server HTML, so the largest paint on a
+          phone does not wait for this engine's JavaScript. It fades out the
+          moment the first clip is up, and the still mode has its own layer. */}
+      {mode !== "still" ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          className="koi-world__first"
+          src={CLIPS[DESTINATIONS[0].clip].poster}
+          alt=""
+          width={1280}
+          height={720}
+          fetchPriority="high"
+          decoding="async"
+        />
+      ) : null}
       <div className="koi-world__stage" ref={stageRef} />
       <div className="koi-world__veil" />
       <div className="koi-world__grain" />

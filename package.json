@@ -7,7 +7,6 @@
     "build": "next build",
     "typecheck": "tsc --noEmit",
     "start": "next start",
-    "screenshots": "node scripts/capture-screenshots.mjs",
     "lint": "eslint",
     "test:auth": "tsx --test tests/crm-auth.test.ts tests/crm-routes.test.ts",
     "test:crm": "tsx --test tests/crm-auth.test.ts tests/crm.test.ts tests/crm-routes.test.ts tests/proposals.test.ts tests/audits.test.ts tests/audit-persistence.test.ts tests/audit-crawler.test.ts tests/payments.test.ts tests/intake-abuse.test.ts tests/redaction.test.ts tests/founder-packet.test.ts tests/resume.test.ts tests/you-know-ball.test.ts tests/legal-pages.test.ts tests/products.test.ts",
@@ -23,6 +22,7 @@
     "test:migrations": "node --test tests/database-migrations.test.mjs",
     "vercel-build": "next build",
     "koi:verify": "node scripts/verify-koi-world.mjs",
+    "qa:rebuild": "node scripts/qa-rebuild.mjs",
     "koi:contrast": "node scripts/audit-koi-contrast.mjs"
   },
   "dependencies": {

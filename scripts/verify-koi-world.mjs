@@ -10,7 +10,7 @@ import { chromium, devices } from 'playwright';
 
 const BASE = process.env.KOI_VERIFY_BASE ?? 'http://127.0.0.1:3000';
 const OUT = process.env.KOI_VERIFY_OUT ?? 'koi-verification';
-const DESTS = ['enter','products','systems','work','founder','start'];
+const DESTS = ['surface','shipped','lab','blake','work','start'];
 
 const VIEWPORTS = [
   { name: 'desktop-xl', viewport: { width: 1920, height: 1080 }, dpr: 1 },
@@ -102,9 +102,9 @@ async function shootJourney(browser, spec, opts = {}) {
   const afterReverse = await page.evaluate(() => ({
     dest: document.querySelector('.kw')?.dataset.koiDestination,
     ready: document.querySelector('.kw')?.dataset.koiReady,
-    opacity: getComputedStyle(document.querySelector('#enter .dest__inner')).opacity,
+    opacity: getComputedStyle(document.querySelector('#surface .dest__inner')).opacity,
   }));
-  if (afterReverse.dest !== 'enter') problems.push(`[${tag}] reverse scroll ended on "${afterReverse.dest}"`);
+  if (afterReverse.dest !== 'surface') problems.push(`[${tag}] reverse scroll ended on "${afterReverse.dest}"`);
   if (Number(afterReverse.opacity) < 0.9) problems.push(`[${tag}] hero copy dim after reverse scroll (${afterReverse.opacity})`);
   await page.screenshot({ path: `${OUT}/${tag}--reverse-top.png` });
 

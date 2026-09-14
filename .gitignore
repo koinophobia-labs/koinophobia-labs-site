@@ -34,3 +34,4 @@ pnpm-debug.log*
 *.tsbuildinfo
 qa-screenshots/
 .claude/launch.json
+artifacts/
