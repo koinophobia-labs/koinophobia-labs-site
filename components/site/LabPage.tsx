@@ -3,6 +3,7 @@ import { ArrowRight } from "lucide-react";
 import Masthead from "@/components/site/Masthead";
 import SiteFooter from "@/components/site/SiteFooter";
 import StickyStart from "@/components/site/StickyStart";
+import EvidenceDetails from "@/components/site/EvidenceDetails";
 import { stageLabel } from "@/lib/dev/universe";
 import type { SiteProduct } from "@/lib/products";
 
@@ -116,14 +117,7 @@ export default function LabPage({
               <li key={line}>{line}</li>
             ))}
           </ul>
-          <ul className="evidence s" style={{ "--i": 4 } as React.CSSProperties} aria-label="Evidence">
-            {product.evidence.map((item) => (
-              <li key={item.claim}>
-                <b>{item.claim}</b>
-                {item.source}
-              </li>
-            ))}
-          </ul>
+          <EvidenceDetails evidence={product.evidence} />
           <p className="s" style={{ "--i": 5 } as React.CSSProperties}>
             <strong>Next.</strong> {next}
           </p>

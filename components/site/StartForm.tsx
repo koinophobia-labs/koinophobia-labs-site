@@ -10,6 +10,7 @@ type State =
   | { status: "error"; message: string };
 
 const WHEN = [
+  { value: "Not sure yet", label: "Not sure yet" },
   { value: "Soon", label: "Soon" },
   { value: "This quarter", label: "This quarter" },
   { value: "No deadline", label: "No deadline" },
@@ -100,7 +101,7 @@ export default function StartForm({ entry = "start" }: { entry?: string }) {
     body.set("email", email);
     body.set("biggestProblem", idea);
     body.set("desiredOutcome", String(data.get("today") || "").trim());
-    body.set("timeline", String(data.get("when") || "No deadline"));
+    body.set("timeline", String(data.get("when") || "Not sure yet"));
     body.set("budgetRange", String(data.get("budget") || "Let's talk"));
     body.set("companyWebsite", String(data.get("companyWebsite") || ""));
     let response: Response;
@@ -162,9 +163,9 @@ export default function StartForm({ entry = "start" }: { entry?: string }) {
       <div className="field">
         <span className="field__label">When do you need it?</span>
         <div className="chips" role="group" aria-label="Timeline">
-          {WHEN.map((option, index) => (
+          {WHEN.map((option) => (
             <label key={option.value}>
-              <input type="radio" name="when" value={option.value} defaultChecked={index === 1} />
+              <input type="radio" name="when" value={option.value} defaultChecked={option.value === "Not sure yet"} />
               <span>{option.label}</span>
             </label>
           ))}
@@ -173,9 +174,9 @@ export default function StartForm({ entry = "start" }: { entry?: string }) {
       <div className="field">
         <span className="field__label">Budget range</span>
         <div className="chips" role="group" aria-label="Budget">
-          {BUDGET.map((option, index) => (
+          {BUDGET.map((option) => (
             <label key={option.value}>
-              <input type="radio" name="budget" value={option.value} defaultChecked={index === 1} />
+              <input type="radio" name="budget" value={option.value} defaultChecked={option.value === "Let's talk"} />
               <span>{option.label}</span>
             </label>
           ))}

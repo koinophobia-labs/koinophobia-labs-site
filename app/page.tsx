@@ -5,6 +5,7 @@ import { ArrowDown, ArrowRight, ArrowUpRight } from "lucide-react";
 import KoiWorld from "@/components/koi/KoiWorld";
 import WaterText from "@/components/koi/WaterText";
 import { LabCard, ProductCard } from "@/components/site/Cards";
+import Masthead from "@/components/site/Masthead";
 import NowStrip from "@/components/site/NowStrip";
 import StickyStart from "@/components/site/StickyStart";
 import { CLIPS, DESTINATIONS } from "@/lib/koi/journey";
@@ -73,29 +74,7 @@ export default async function Home() {
       <KoiWorld />
       <WaterText />
 
-      <header className="kw__masthead">
-        <Link className="kw__brand ai" href="#surface" aria-label="Koinophobia Labs, home">
-          <span className="kw__brand-ring" aria-hidden="true" />
-          Koinophobia Labs
-        </Link>
-
-        <nav className="kw__nav" aria-label="Primary">
-          {DESTINATIONS.slice(1).map((destination) => (
-            <a
-              key={destination.id}
-              href={`#${destination.id}`}
-              data-koi-link={destination.id}
-              aria-label={`${destination.label}: ${destination.hint}`}
-            >
-              {destination.label}
-            </a>
-          ))}
-        </nav>
-
-        <Link className="kw__masthead-cta ai" href="/start" data-analytics="inquiry_start" data-analytics-label="home_masthead">
-          Start a project <ArrowUpRight size={15} aria-hidden="true" />
-        </Link>
-      </header>
+      <Masthead />
 
       <nav className="kw__map" aria-label="Journey">
         {DESTINATIONS.map((destination) => (
@@ -116,15 +95,15 @@ export default async function Home() {
         {/* ---------------------------------------------------- 00 Surface */}
         <section className="dest dest--surface" id="surface" style={bandStyle(0)} aria-labelledby="surface-title">
           <div className="dest__stage">
-            <div className="dest__inner" id="surface-copy">
+            <div className="dest__inner" id="surface-copy" tabIndex={-1}>
               <div>
                 <p className="kw__kicker">A one-person software studio · Chicago</p>
                 <h1 id="surface-title">Nothing here stayed an idea.</h1>
                 <p className="kw__lede">
-                  Koinophobia Labs is Blake Taylor, building software alone and shipping it in
-                  public. Three apps reached the App Store this summer. A K–12 curriculum is being
-                  taught by a Mac. A language model is learning to read from random weights on a
-                  laptop. Blake also builds for other people.
+                  I’m Blake Taylor. I build apps, websites, and AI tools—from the first
+                  prototype to release. Three of my apps are on the App Store. In the lab:
+                  an experimental Mac learning app with its first course built, and a language
+                  model trained from scratch. Have a project in mind? Let’s build it.
                 </p>
                 <div className="kw__actions">
                   <a className="kw__btn kw__btn--primary kw__btn--dive ai" href="#shipped" data-koi-link="shipped">
@@ -144,8 +123,8 @@ export default async function Home() {
                     <dd>0 employees</dd>
                   </div>
                   <div>
-                    <dt>Every claim</dt>
-                    <dd>dated and sourced</dd>
+                    <dt>Work directly</dt>
+                    <dd>with the builder</dd>
                   </div>
                 </dl>
               </div>
@@ -162,8 +141,8 @@ export default async function Home() {
               </p>
               <h2 id="shipped-title">Built by one person. Downloadable by anyone.</h2>
               <p>
-                Three apps, each one started as a problem Blake had. Real screens, real prices,
-                and one honest line each about what it doesn&apos;t do yet.
+                Create a video, remember a thought, or plan your next career move.
+                Explore the apps and see them in action.
               </p>
               <div className="cards">
                 {shipped.map((product, index) => (
@@ -172,7 +151,7 @@ export default async function Home() {
               </div>
               <div className="kw__actions">
                 <Link className="kw__btn kw__btn--ghost ai" href="/shipped">
-                  Every shipped product, with what it can&apos;t do yet{" "}
+                  Explore the apps{" "}
                   <ArrowUpRight size={15} aria-hidden="true" />
                 </Link>
               </div>
@@ -189,8 +168,7 @@ export default async function Home() {
               </p>
               <h2 id="lab-title">The part of the studio that isn&apos;t finished, on purpose.</h2>
               <p>
-                Bigger bets, reported at their actual stage. Nothing here is on the App Store, and
-                nothing here pretends to be.
+                Explore the experiments in progress, what works today, and what comes next.
               </p>
               <div className="lab-list">
                 {labProducts.map((product, index) => (
@@ -328,6 +306,7 @@ export default async function Home() {
                   <Link href="/log">Log</Link>
                   <Link href="/blake">Blake</Link>
                   <Link href="/work-with-me">Work with me</Link>
+                  <Link href="/privacy">Privacy</Link>
                 </nav>
                 <span className="kw__footer-sign">Fear ordinary.</span>
               </footer>

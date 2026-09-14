@@ -2173,3 +2173,14 @@ body:has(.kw) > .koi-companion {
     transform: translate(-50%, -50%) translate(6vw, -30vh) scale(1.34);
   }
 }
+
+/* The same labeled masthead serves the home journey and detail pages. */
+#surface-copy { scroll-margin-top: 6rem; }
+@media (max-width: 1024px) {
+  .kw__map { display: none; }
+  .dest { min-height: 0; scroll-margin-top: 5rem; }
+  .dest__stage { padding: 6rem var(--kw-gutter) 4rem; }
+  .dest--surface .dest__stage { padding-top: 7.5rem; }
+  .kw .mast__nav a { padding: 0.4rem 0; }
+  .kw .mast__nav .btn { padding: 0.9rem 1.25rem; }
+}

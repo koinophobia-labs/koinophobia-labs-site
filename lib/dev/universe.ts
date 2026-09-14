@@ -1,4 +1,5 @@
 import { LINKS } from "@/lib/links";
+import { trendiRelease, forgetRelease, wayInRelease } from "@/lib/releases";
 
 // Single source of truth for the koinophobia.dev product universe.
 //
@@ -189,7 +190,7 @@ export const products: Product[] = [
     identity: { theme: "forge", register: "Structural · built under pressure" },
     reach: "public",
     stage: "public",
-    status: "Way In is available on the App Store for iPhone and iPad, version 1.0. The legacy Career Forge web destination now also displays Way In",
+    status: `Way In is available on the App Store for iPhone and iPad, version ${wayInRelease.version}. The legacy Career Forge web destination now also displays Way In`,
     verifiedAt: "2026-09-10",
     evidence: [
       { claim: "Public iPhone and iPad release", source: "https://apps.apple.com/us/app/way-in-career-hub/id6807942376 — public US listing and Apple Lookup API, checked 2026-09-10" },
@@ -245,7 +246,7 @@ export const products: Product[] = [
     identity: { theme: "signal", register: "Kinetic · spoken out loud" },
     reach: "public",
     stage: "public",
-    status: "Available on the App Store for iPhone: version 0.2.1, iOS 17.0 or later. Free with optional Trendi Pro",
+    status: `Available on the App Store for iPhone: version ${trendiRelease.version}, ${trendiRelease.minimumOS} or later. Free with optional Trendi Pro`,
     verifiedAt: "2026-09-10",
     evidence: [{ claim: "Public release, compatibility, Free and Pro allowances", source: "https://apps.apple.com/us/app/trendi-content-coach/id6776299336 — public US listing and Apple Lookup API, checked 2026-09-10" }],
     problem:
@@ -284,7 +285,7 @@ export const products: Product[] = [
     identity: { theme: "memory", register: "Personal · kept on your devices" },
     reach: "public",
     stage: "public",
-    status: "Available on the App Store, version 1.0. Free for iPhone with an Apple Watch companion; works offline",
+    status: `Available on the App Store, version ${forgetRelease.version}. Free for iPhone with an Apple Watch companion; works offline`,
     verifiedAt: "2026-09-10",
     evidence: [{ claim: "Public release, devices, and journal features", source: "https://apps.apple.com/us/app/forgetaboutit/id6804360983 — public US listing and Apple Lookup API, checked 2026-09-10" }],
     problem: "A thought can disappear before you reach somewhere to write it down. The fragments you do save can be just as hard to find again.",

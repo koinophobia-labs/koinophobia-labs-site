@@ -92,7 +92,7 @@ const site: Record<string, SiteMeta> = {
       url: trendiRelease.url,
       version: trendiRelease.version,
       verifiedAt: trendiRelease.verifiedAt,
-      priceLine: "Free · 3 Coach Packs a week · Trendi Pro $7.99/mo for 100",
+      priceLine: "Free · 3 Coach Packs a week · Trendi Pro $7.99/mo · 100 Coach Packs a month",
     },
     demo: {
       src: "/demo/trendi-hooks.mp4",
@@ -166,7 +166,7 @@ const site: Record<string, SiteMeta> = {
         { title: "Keep it yours", body: "No account, no analytics, no server. Export your own copy from Settings." },
       ],
       statusBody:
-        "On the App Store, version 1.0, free with no purchases. Apple also lists Mac and Vision compatibility; the app is built around iPhone and Apple Watch. There is no cloud recovery of a journal: the journal is excluded from backups on purpose, so export a copy if you'd miss it.",
+        "Free with no purchases. Apple also lists Mac and Vision compatibility; the app is built around iPhone and Apple Watch. There is no cloud recovery of a journal: the journal is excluded from backups on purpose, so export a copy if you'd miss it.",
     },
   },
   "career-forge": {
@@ -212,7 +212,7 @@ const site: Record<string, SiteMeta> = {
         { title: "Keep it moving", body: "Applications, follow-ups, rounds, outcomes, people." },
       ],
       statusBody:
-        "On the App Store, version 1.0. Formerly Career Forge; the original web app is still live under the new name. Free includes résumé review and job-fit analysis; optional purchases unlock export, tailoring, interview preparation, and planning. Way In does not apply to jobs for you and does not promise interviews or offers.",
+        "Formerly Career Forge; the original web app is still live under the new name. Free includes résumé review and job-fit analysis; optional purchases unlock export, tailoring, interview preparation, and planning. Way In does not apply to jobs for you and does not promise interviews or offers.",
       secondaryAction: { label: "Open the web version", href: "https://career-forge-lite.vercel.app", external: true },
     },
   },
@@ -254,7 +254,7 @@ const site: Record<string, SiteMeta> = {
   "preaching-to-the-choir": {
     section: "lab",
     href: "https://testflight.apple.com/join/1eUCSez8",
-    blurb: "A keeper, not a journal. Open TestFlight, build 66, approved for external testers.",
+    blurb: "Keep the things you notice and return to them later, without writing a journal entry. Available to test through TestFlight.",
     platforms: "iPhone · iPad · Mac",
     chip: "TestFlight",
     receipt: "1.0 (66) · 543 tests, 0 failures",
@@ -313,15 +313,15 @@ export const engagementShapes = [
     slug: "prototype",
     title: "Prove the idea",
     body:
-      "A working prototype on a real device in one to two weeks, so you decide with your thumbs instead of a slide deck. You keep the code either way.",
+      "A focused prototype of one core interaction, tested on a real device. A one-to-two-week scope is agreed before work starts; larger ideas take longer. You keep the code either way.",
     timeline: "One to two weeks",
-    proof: "Trendi went from a note to an internal TestFlight in one month",
+    proof: "Trendi’s idea-to-hooks flow; the full internal TestFlight build took one month",
   },
   {
     slug: "model",
     title: "Put a model to work",
     body:
-      "An AI feature or internal tool where the model does the writing and deterministic rules do the deciding, with a claims gate that refuses output the product can't stand behind.",
+      "An AI feature or internal tool built around your workflow, with clear checks on its output and human review where it matters.",
     timeline: "Two to six weeks",
     proof: "Trendi's coach pipeline, Way In's no-model résumé path, the studio's own release-truth audit",
   },

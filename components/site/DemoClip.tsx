@@ -23,7 +23,7 @@ export default function DemoClip({ product }: { product: SiteProduct }) {
     const video = videoRef.current;
     if (!video) return;
     const connection = (navigator as Navigator & { connection?: { saveData?: boolean; type?: string; effectiveType?: string } }).connection;
-    const cellular = Boolean(connection?.saveData) || connection?.type === "cellular" || /^(slow-2g|2g|3g)$/.test(connection?.effectiveType ?? "");
+    const cellular = window.matchMedia("(prefers-reduced-motion: reduce)").matches || Boolean(connection?.saveData) || connection?.type === "cellular" || /^(slow-2g|2g|3g)$/.test(connection?.effectiveType ?? "");
     setNeedsTap(cellular);
     if (cellular) return;
 
@@ -75,7 +75,7 @@ export default function DemoClip({ product }: { product: SiteProduct }) {
           <video
             ref={videoRef}
             muted
-            loop
+            controls
             playsInline
             preload={needsTap ? "none" : "metadata"}
             poster={demo.poster}
@@ -104,12 +104,15 @@ export default function DemoClip({ product }: { product: SiteProduct }) {
             </li>
           ))}
         </ol>
-        <p className="receipt">Cut from {demo.master}. Nothing in the frame is generated.</p>
-        <p className="receipt">
+        <details className="evidence-details">
+          <summary>Recording details and original video</summary>
+          <p>Cut from {demo.master}. Nothing in the frame is generated.</p>
+          <p>
           <a href={demo.masterSrc} target="_blank" rel="noreferrer" onClick={() => track("master_link_click", { product: product.slug })}>
             Open the untouched master ↗
           </a>
-        </p>
+          </p>
+        </details>
       </div>
     </div>
   );

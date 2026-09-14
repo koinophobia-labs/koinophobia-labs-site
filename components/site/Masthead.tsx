@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { NAV } from "@/lib/nav";
 
 /**
@@ -15,6 +15,19 @@ export default function Masthead({ current }: { current?: string }) {
   const active = current ?? pathname;
   const [glass, setGlass] = useState(false);
   const [open, setOpen] = useState(false);
+  const menuRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setOpen(false);
+        menuRef.current?.focus();
+      }
+    };
+    document.addEventListener("keydown", closeOnEscape);
+    return () => document.removeEventListener("keydown", closeOnEscape);
+  }, [open]);
 
   useEffect(() => {
     const onScroll = () => setGlass(window.scrollY > 80);
@@ -26,8 +39,7 @@ export default function Masthead({ current }: { current?: string }) {
   return (
     <header className={`mast${glass ? " is-glass" : ""}`}>
       <Link className="mast__brand ai" href="/" aria-label="Koinophobia Labs, home">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/brand/koi-emblem-128.png" alt="" width={30} height={30} />
+        <span className="kw__brand-ring" aria-hidden="true" />
         Koinophobia Labs
       </Link>
       <nav className={`mast__nav${open ? " is-open" : ""}`} id="site-nav" aria-label="Primary">
@@ -42,7 +54,7 @@ export default function Masthead({ current }: { current?: string }) {
             {item.label}
           </Link>
         ))}
-        <Link className="btn btn--primary mast__sheet-cta" href="/start" data-analytics="inquiry_start" data-analytics-label="masthead_sheet">
+        <Link className="btn btn--primary mast__sheet-cta" href="/start" onClick={() => setOpen(false)} data-analytics="inquiry_start" data-analytics-label="masthead_sheet">
           Start a project
         </Link>
       </nav>
@@ -50,6 +62,7 @@ export default function Masthead({ current }: { current?: string }) {
         Start a project
       </Link>
       <button
+        ref={menuRef}
         className="btn btn--small mast__menu"
         type="button"
         aria-expanded={open}
