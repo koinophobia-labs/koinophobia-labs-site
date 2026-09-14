@@ -29,8 +29,9 @@ test("separate product lookups do not reuse the first product's cached result", 
 });
 
 test("same-day log milestones preserve the recorded release order", () => {
-  assert.equal(nowEntries[0].slug, "one-studio-rebuild-live");
-  assert.equal(nowEntries[1].slug, "one-studio-rebuild-pull-request");
+  assert.equal(nowEntries[0].slug, "launch-day-corrections");
+  assert.equal(nowEntries[1].slug, "one-studio-rebuild-live");
+  assert.equal(nowEntries[2].slug, "one-studio-rebuild-pull-request");
 });
 
 test("evidence links explicit URLs without inventing links for local files", () => {
