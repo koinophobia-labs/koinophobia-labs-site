@@ -11,6 +11,8 @@ const eslintConfig = defineConfig([
     ".next/**",
     "out/**",
     "build/**",
+    // generated distribution adapter for the game prototype
+    "games/**/dist/**",
     "next-env.d.ts",
   ]),
 ]);

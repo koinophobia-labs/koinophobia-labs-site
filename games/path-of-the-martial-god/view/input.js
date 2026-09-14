@@ -85,13 +85,12 @@ export function makeInput(target = window) {
 }
 
 export const CONTROLS = [
-  ['W / S', 'Pressure · Retreat — walk him down, or give ground'],
-  ['A / D', 'Angle — leave the line and hunt the side he is not defending'],
-  ['J', 'Strike — light, fast, low commitment'],
-  ['K', 'Commit — heavy. It will land hard and you will be stuck'],
-  ['Shift (hold)', 'Guard — covers the quadrant you FACE, and nothing else'],
-  ['L', 'Deflect — timed. Free on success, expensive on failure'],
-  ['Space', 'Slip — directional. The wrong direction just moves you'],
-  ['F', 'Breathe — recover, and be vulnerable while you do'],
-  ['Tap and release J/K', 'Feint — release before you commit and the strike is a lie'],
+  ['W / S', 'pressure / retreat'],
+  ['A / D', 'angle'],
+  ['J', 'strike'],
+  ['K', 'commit'],
+  ['Shift', 'guard'],
+  ['L', 'deflect'],
+  ['Space', 'slip'],
+  ['F', 'breathe'],
 ];

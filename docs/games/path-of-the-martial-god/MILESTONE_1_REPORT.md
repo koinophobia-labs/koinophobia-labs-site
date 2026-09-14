@@ -3,7 +3,7 @@
 
 **Milestone:** `TECHNICAL_ARCHITECTURE.md` §11 steps 1–5
 **Exit condition:** one complete unarmed fight, no HUD required for comprehension, readable by someone unfamiliar with the design
-**Status:** **met, with caveats recorded in §7 and §8**
+**Status:** **IMPLEMENTED / AWAITING HUMAN PLAYTEST** — the automated criteria are met (§4, §5); the human-readability question is Blake's to answer, not mine (§11)
 **Code:** `games/path-of-the-martial-god/`
 **Date:** 2026-09-14
 
@@ -138,6 +138,58 @@ Recorded so they can be overruled rather than inherited silently.
 - **The replay harness is the future Meditation feature.** Determinism is already load-bearing.
 - **Nothing in the Next.js site was touched.** The prototype is a self-contained ESM package with its own `package.json` (`type: module`) outside `app/`.
 
-## 10. Not built, deliberately
+## 10. Hosted playtest build
+
+The repository implementation is canonical. `dist/` is a **distribution adapter** only,
+produced by `build-artifact.mjs` and proved equivalent by `verify-parity.mjs`
+(6 fights, tick-for-tick identical digests, identical technique data).
+
+**Forced divergences — packaging only, no behaviour:**
+
+1. **JSON module → JS module.** `sim/techniques.js` imports the technique data with an
+   import attribute (`with { type: 'json' }`), which the hosted sandbox's CSP will not
+   reliably serve. The identical object is emitted as `low-river.data.js` and the one
+   import line is rewritten. The build asserts deep equality before writing.
+2. **Page shape and import root.** The host supplies its own `<!doctype>/<head>/<body>`,
+   so the page is emitted as content only and `../view/main.js` becomes `./view/main.js`
+   because the page sits at the artifact root rather than in `web/`.
+
+Nothing else differs. No timings, AI parameters, structure behaviour, movement speeds,
+damage, Final Inch logic, input grammar or combat rules were touched.
+
+**Playtest additions (view layer only, read-only with respect to the simulation):**
+
+- `view/telemetry.js` — records duration, winner, terminal, techniques attempted and
+  landed, attacks guarded, deflects, slips attempted/successful, structure breaks,
+  Final Inch openings, guard bypasses (split into **by angle** and **by leg strike**,
+  because only the first supports the design claim), breath-outs, actions taken on an
+  empty tank, time staggered, and time in each distance band. Stored in `localStorage`;
+  no network, no backend.
+- `view/survey.js` — the post-fight questionnaire, with the strategy question first.
+- Debug mode now surfaces the **complete event log** after a fight, scrollable and
+  copyable. Still off by default; `` ` `` toggles.
+
+**First-run presentation** now shows the eight control labels and nothing else. The
+previous build explained the quadrant model and named the optimal strategy
+("walk around him"); both are removed, along with the descriptive control text in
+`input.js`. The feint is deliberately **not** listed — see §11.
+
+## 11. The open question this build exists to answer
+
+> Can a first-time player understand and participate in the fight without relying on meters?
+
+**Not self-assessed.** Automated verification can show the simulation is symmetric and
+that the better fighter wins; it cannot show that a person can read the fight. That
+gate is Blake's, and M1 stays in `IMPLEMENTED / AWAITING HUMAN PLAYTEST` until he has
+played it.
+
+One observation worth recording before the test: **the feint is currently
+undiscoverable.** It fires by releasing a strike or commit before its commitment
+frame, and nothing in the first-run presentation hints that holding versus tapping
+differs. A player who never holds a button long enough may also produce feints by
+accident without understanding why the attack did not arrive. Left as-is deliberately
+for this test — whether anyone finds it is itself a result.
+
+## 12. Not built, deliberately
 
 Styles beyond Low River · stance switching · Custody/grappling · animation tiers · mastery ladder · the Ledger · Body/conditioning · RecordBus · RumourNetwork · Standing · dialogue · quests · saves · menus · progression · Ruhn's content · endings · adaptive counter-purchase.

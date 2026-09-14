@@ -12,7 +12,7 @@ import { distance, vitalityFraction } from '../sim/fighter.js';
 
 const MONO = '11px ui-monospace, SFMono-Regular, Menlo, monospace';
 
-export function drawDebug(ctx, fight, w, h) {
+export function drawDebug(ctx, fight, w, h, telemetry) {
   ctx.save();
   ctx.font = MONO;
   ctx.textBaseline = 'top';
@@ -52,6 +52,21 @@ export function drawDebug(ctx, fight, w, h) {
     });
   }
 
+  // Live playtest tally. Debug-only: these never appear as gameplay meters.
+  if (telemetry) {
+    const t = telemetry;
+    panel(ctx, 10, 188, 250, 92, () => {
+      let y = 194;
+      const line = (s2, c = '#8a9298') => { ctx.fillStyle = c; ctx.fillText(s2, 20, y); y += 13; };
+      line('playtest tally            you / him', '#8a7a4e');
+      line(`thrown      ${String(t.attempted.player).padStart(3)} / ${t.attempted.opponent}`);
+      line(`landed      ${String(t.landed.player).padStart(3)} / ${t.landed.opponent}`);
+      line(`breaks      ${String(t.breaksCaused.player).padStart(3)} / ${t.breaksCaused.opponent}`);
+      line(`bypass/angle${String(t.guardBypassByAngle.player).padStart(3)} / ${t.guardBypassByAngle.opponent}`);
+      line(`staggered s ${(t.staggeredTicks.player / 60).toFixed(1).padStart(4)} / ${(t.staggeredTicks.opponent / 60).toFixed(1)}`);
+    });
+  }
+
   if (fight.inch) {
     panel(ctx, 10, h - 56, 300, 46, () => {
       ctx.fillStyle = '#c1272d';
@@ -70,4 +85,39 @@ function panel(ctx, x, y, w, h, body) {
   ctx.lineWidth = 1;
   ctx.strokeRect(x + 0.5, y + 0.5, w, h);
   body();
+}
+
+
+/* ---------------------------------------------------------------------------
+ * The complete event log, available through debug mode after a fight.
+ * DOM rather than canvas so it can be scrolled, selected and copied. Created on
+ * demand and removed with the overlay; nothing else depends on it.
+ * ------------------------------------------------------------------------- */
+let logEl = null;
+
+export function showEventLog(telemetry) {
+  if (logEl || !telemetry) return;
+  logEl = document.createElement('div');
+  logEl.className = 'dbg-log';
+  const rows = telemetry.log.map((e) => {
+    const { type, tick, ...rest } = e;
+    const detail = Object.entries(rest)
+      .map(([k, v]) => `${k}=${typeof v === 'number' ? Number(v.toFixed?.(2) ?? v) : v}`)
+      .join(' ');
+    return `<tr><td>${String(tick).padStart(5)}</td><td class="t-${type}">${type}</td><td>${detail}</td></tr>`;
+  }).join('');
+  logEl.innerHTML = `
+    <div class="dbg-head">
+      <b>event log</b> · ${telemetry.log.length} events · ${telemetry.duration.toFixed(1)}s
+      <button type="button" data-copy>copy JSON</button>
+    </div>
+    <div class="dbg-scroll"><table>${rows}</table></div>`;
+  document.body.appendChild(logEl);
+  logEl.querySelector('[data-copy]').addEventListener('click', async () => {
+    try { await navigator.clipboard.writeText(JSON.stringify(telemetry.log, null, 1)); } catch { /* ignore */ }
+  });
+}
+
+export function hideEventLog() {
+  if (logEl) { logEl.remove(); logEl = null; }
 }

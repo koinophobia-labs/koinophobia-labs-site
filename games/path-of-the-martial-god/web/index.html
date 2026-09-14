@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Path of the Martial God — Milestone 1</title>
+<title>Martial God Prototype</title>
 <style>
   :root{
     --paper:#e8e9e4; --ink:#12161a; --slate:#79828a; --rule:#2a3136; --red:#a4161a;
@@ -58,27 +58,92 @@
     display:block;margin-top:10px;font-family:var(--f-reg);font-size:11px;
     letter-spacing:.14em;text-transform:uppercase;color:#79828a;
   }
+
+  /* ---- post-fight questionnaire ---- */
+  .survey{
+    position:fixed;inset:0;z-index:20;overflow-y:auto;
+    background:rgba(8,10,12,0.93);
+    display:flex;align-items:flex-start;justify-content:center;
+    padding:40px 20px 60px;
+  }
+  .survey-card{max-width:620px;width:100%;}
+  .survey-eyebrow{
+    font-family:var(--f-reg);font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+    color:#8a7a4e;margin:0 0 8px;
+  }
+  .survey h2{font-size:clamp(22px,4vw,30px);margin:0 0 6px;font-weight:600;letter-spacing:-.015em;}
+  .survey-lede{color:#8d959a;margin:0 0 26px;font-size:15px;}
+  .q{margin:0 0 22px;border:0;padding:0;}
+  .q > label,.q legend{
+    display:block;font-size:15px;color:#dcdfd8;margin:0 0 9px;padding:0;line-height:1.45;
+  }
+  .q.strategy{
+    border-left:3px solid var(--red);padding-left:16px;margin-bottom:30px;
+  }
+  .q.strategy label{color:#fff;}
+  textarea{
+    width:100%;background:#14181b;color:#dcdfd8;border:1px solid #2d3438;
+    font-family:var(--f-body);font-size:15px;padding:9px 11px;resize:vertical;
+  }
+  textarea:focus{outline:2px solid var(--red);outline-offset:1px;border-color:transparent;}
+  .opts{display:flex;flex-wrap:wrap;gap:8px;}
+  .opt{
+    display:inline-flex;align-items:center;gap:7px;cursor:pointer;
+    border:1px solid #2d3438;padding:7px 12px;font-size:13.5px;color:#a8b0b4;
+  }
+  .opt:hover{border-color:#4a545a;color:#dcdfd8;}
+  .opt input{accent-color:#a4161a;margin:0;}
+  .opt:has(input:checked){border-color:var(--red);color:#fff;background:rgba(164,22,26,0.14);}
+  .opt:has(input:focus-visible){outline:2px solid var(--red);outline-offset:2px;}
+  .survey-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:28px;}
+  .ghost{
+    font-family:var(--f-reg);font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+    background:transparent;border:1px solid #2d3438;color:#8d959a;padding:11px 16px;cursor:pointer;
+  }
+  .ghost:hover{border-color:#4a545a;color:#dcdfd8;}
+  .ghost:focus-visible,.go:focus-visible{outline:2px solid var(--red);outline-offset:3px;}
+  .survey-note{font-family:var(--f-reg);font-size:11.5px;color:#8a7a4e;margin:14px 0 0;min-height:16px;}
+  .dump{margin-top:14px;height:180px;font-family:var(--f-reg);font-size:11px;}
+
+  /* ---- debug event log (debug mode only, after a fight) ---- */
+  .dbg-log{
+    position:fixed;right:10px;bottom:10px;z-index:15;width:min(460px,46vw);
+    max-height:52vh;display:flex;flex-direction:column;
+    background:rgba(10,13,15,0.94);border:1px solid rgba(120,130,136,0.22);
+    font-family:var(--f-reg);font-size:10.5px;color:#a8b0b4;
+  }
+  .dbg-head{
+    display:flex;align-items:center;gap:10px;padding:7px 10px;
+    border-bottom:1px solid rgba(120,130,136,0.18);color:#dcdfd8;
+  }
+  .dbg-head button{
+    margin-left:auto;background:transparent;border:1px solid #2d3438;color:#8d959a;
+    font-family:var(--f-reg);font-size:10px;padding:3px 8px;cursor:pointer;
+  }
+  .dbg-scroll{overflow:auto;}
+  .dbg-log table{border-collapse:collapse;width:100%;}
+  .dbg-log td{padding:1px 8px 1px 0;vertical-align:top;white-space:nowrap;}
+  .dbg-log td:first-child{color:#5d666d;text-align:right;}
+  .dbg-log td:last-child{white-space:normal;color:#79828a;}
+  .t-hit,.t-break{color:#d2454a;}
+  .t-guarded,.t-deflected,.t-evaded{color:#8fb3c4;}
+  .t-inch_open,.t-terminal,.t-over{color:#c9a227;}
+  @media (max-width:700px){ .dbg-log{width:calc(100vw - 20px);max-height:40vh;} }
   @media (max-width:640px){ dl{grid-template-columns:1fr;gap:2px 0;} dd{margin-bottom:8px;} }
 </style>
 </head>
 <body>
-  <canvas id="stage"></canvas>
+  <canvas id="stage" tabindex="0" aria-label="Fight"></canvas>
   <div id="outcome" aria-live="polite"></div>
 
   <div id="overlay">
     <div class="card">
-      <p class="eyebrow">Milestone 1 · combat prototype</p>
+      <p class="eyebrow">Milestone 1 / combat prototype</p>
       <h1>Path of the Martial God</h1>
-      <p class="lede">
-        One unarmed fight. <b>There are no bars.</b> Everything you need is in the
-        bodies: how he stands, where his weight is, how hard he is breathing, whether
-        he is stuck at the end of something he committed to.
-        <b>Guard only covers the quadrant you face</b> — walk around him and it stops
-        protecting him.
-      </p>
+      <p class="lede">One unarmed fight.</p>
       <dl id="controls"></dl>
       <button class="go" id="start" type="button">Begin</button>
-      <p class="keys">` debug overlay · M sound · R restart</p>
+      <p class="keys">R restart / M sound / ` debug</p>
     </div>
   </div>
 

@@ -10,7 +10,9 @@ import { neutralIntent } from '../sim/formMachine.js';
 import { makeRenderer } from './render.js';
 import { makeAudio } from './audio.js';
 import { makeInput, CONTROLS } from './input.js';
-import { drawDebug } from './debug.js';
+import { drawDebug, showEventLog, hideEventLog } from './debug.js';
+import { makeTelemetry, sample as sampleTelemetry, consume as recordEvents } from './telemetry.js';
+import { makeSurvey } from './survey.js';
 
 const canvas = document.getElementById('stage');
 const renderer = makeRenderer(canvas);
@@ -18,6 +20,7 @@ const audio = makeAudio();
 const input = makeInput(window);
 
 let fight = makeFight();
+let telemetry = makeTelemetry();
 let debugOn = false;
 let started = false;
 let acc = 0;
@@ -34,6 +37,8 @@ resize();
 // ---- chrome that is NOT a HUD: it is gone the moment the fight starts ----------
 const overlay = document.getElementById('overlay');
 const outcomeEl = document.getElementById('outcome');
+const survey = makeSurvey(document.body, telemetryRef(), () => { restart(); });
+function telemetryRef() { return new Proxy({}, { get: (_, k) => telemetry[k] }); }
 const controlsEl = document.getElementById('controls');
 controlsEl.innerHTML = CONTROLS
   .map(([k, d]) => `<dt>${k}</dt><dd>${d}</dd>`).join('');
@@ -47,7 +52,10 @@ function begin() {
 }
 
 function restart() {
+  survey.close();
+  hideEventLog();
   fight = reset(fight, {});
+  telemetry = makeTelemetry();
   outcomeEl.classList.remove('shown');
   renderer.fx.hold = 0;
   renderer.cam.push = 0;
@@ -55,9 +63,16 @@ function restart() {
 }
 
 window.addEventListener('keydown', (e) => {
+  // Never steal keys from the questionnaire's text fields.
+  const tag = e.target?.tagName;
+  if (tag === 'TEXTAREA' || tag === 'INPUT') return;
   if (e.code === 'Enter' && !started) { begin(); return; }
   if (e.code === 'KeyR') restart();
-  if (e.code === 'Backquote' || e.code === 'Tab') { e.preventDefault(); debugOn = !debugOn; }
+  if (e.code === 'Backquote' || e.code === 'Tab') {
+    e.preventDefault();
+    debugOn = !debugOn;
+    if (!debugOn) hideEventLog();
+  }
   if (e.code === 'KeyM') audio.toggle();
 });
 canvas.addEventListener('pointerdown', begin);
@@ -84,6 +99,8 @@ function consume(events) {
       case 'rise': audio.scuff(1.4); break;
       case 'over':
         showOutcome(e);
+        // Let the last blow land and settle before asking anything.
+        setTimeout(() => survey.show(), 1700);
         break;
       default: break;
     }
@@ -117,9 +134,11 @@ function frame(now) {
       let guard = 0;
       while (acc >= TICK_MS && guard++ < 6) {
         acc -= TICK_MS;
-        const intent = fight.over ? neutralIntent() : input.sample();
+        const intent = fight.over || survey.open ? neutralIntent() : input.sample();
         step(fight, intent, {});
         consume(fight.events);
+        recordEvents(telemetry, fight.events, fight);
+        sampleTelemetry(telemetry, fight);
         if (fight.over) break;
       }
     }
@@ -128,7 +147,12 @@ function frame(now) {
   }
 
   renderer.draw(fight, now / 1000);
-  if (debugOn) drawDebug(renderer.ctx, fight, canvas.width, canvas.height);
+  if (debugOn) {
+    drawDebug(renderer.ctx, fight, canvas.width, canvas.height, telemetry);
+    if (fight.over) showEventLog(telemetry); else hideEventLog();
+  } else {
+    hideEventLog();
+  }
   requestAnimationFrame(frame);
 }
 requestAnimationFrame(frame);
