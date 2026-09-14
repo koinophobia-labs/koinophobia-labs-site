@@ -51,12 +51,14 @@ find "$SRC" -name '*.swift' -print0 | xargs -0 sed -i \
   -e 's/@objc //g' \
   -e 's/#selector(\([A-Za-z_][A-Za-z0-9_]*\))/Selector("\1")/g'
 
-echo "==> type-checking the presentation layer"
+FILES=$(find "$SRC" -name '*.swift' | wc -l | tr -d ' ')
+echo "==> type-checking the presentation layer ($FILES files)"
 swiftc -typecheck -I "$OUT" -I "$CORE/Modules" -I "$CORE" \
   $(find "$SRC" -name '*.swift' | sort)
 INNER
 
+FILES=$(find MartialGod -name '*.swift' | wc -l | tr -d ' ')
 run "$SCRIPT"
 echo
-echo "TYPE-CHECK OK — no internal contradictions in all 11 presentation files."
+echo "TYPE-CHECK OK — no internal contradictions in $FILES presentation files."
 echo "This is NOT proof it compiles on a Mac; see tools/typecheck/README.md."

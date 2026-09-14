@@ -27,6 +27,10 @@ public struct GameSettings: Codable, Equatable {
     public var leftHanded = false
     public var controlSensitivity: Double = 1.0
 
+    /// Whether the control card has been shown. Once only — a game that explains
+    /// itself every launch is telling you it does not trust its own legibility.
+    public var hasSeenControls = false
+
     /// Settings that are DECLARED AND NOT YET HONOURED.
     ///
     /// They are kept because each represents a real design commitment with work behind

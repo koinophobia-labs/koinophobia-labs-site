@@ -35,7 +35,27 @@ public final class GameViewController: UIViewController {
         touch.tuning.sensitivity = CGFloat(SettingsStore.shared.settings.controlSensitivity)
         touch.tuning.leftHanded = SettingsStore.shared.settings.leftHanded
         installRestartGesture()
-        session.start()
+        presentControlsIfNeeded()
+    }
+
+    /// Show the control card, once, then begin.
+    ///
+    /// The gestures are invisible until named — a keyboard player can find J by looking
+    /// at the keyboard, and nobody can find "hold, then pull back" by looking at glass.
+    /// After the first launch it never appears again: the milestone's claim is that the
+    /// fight reads without being explained, and a card on every launch would quietly
+    /// concede that.
+    private func presentControlsIfNeeded() {
+        guard !SettingsStore.shared.settings.hasSeenControls else {
+            session.start()
+            return
+        }
+        let card = ControlsOverlay(frame: view.bounds) { [weak self] in
+            SettingsStore.shared.update { $0.hasSeenControls = true }
+            self?.session.start()
+        }
+        card.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        view.addSubview(card)
     }
 
     private func presentUnsupportedDevice() {

@@ -35,7 +35,16 @@ public struct UIViewAutoresizing: OptionSet, Sendable {
     public static let flexibleHeight = UIViewAutoresizing(rawValue: 2)
 }
 
+public struct UIEdgeInsets: Sendable {
+    public var top: CGFloat, left: CGFloat, bottom: CGFloat, right: CGFloat
+    public init(top: CGFloat = 0, left: CGFloat = 0, bottom: CGFloat = 0, right: CGFloat = 0) {
+        self.top = top; self.left = left; self.bottom = bottom; self.right = right
+    }
+    public static let zero = UIEdgeInsets()
+}
+
 open class UIColor {
+    public init(white: CGFloat, alpha: CGFloat) {}
     public static let white = UIColor()
     public static let black = UIColor()
     public static let clear = UIColor()
@@ -59,13 +68,23 @@ open class UIView: UIResponder {
     public var backgroundColor: UIColor?
     public var autoresizingMask: UIViewAutoresizing = []
     public var isMultipleTouchEnabled = false
+    public var safeAreaInsets = UIEdgeInsets.zero
+    public var alpha: CGFloat = 1
+    public var isHidden = false
     open func addSubview(_ v: UIView) {}
+    open func removeFromSuperview() {}
+    open func layoutSubviews() {}
     open func addGestureRecognizer(_ g: UIGestureRecognizer) {}
+    open func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {}
+    open func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {}
+    open func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {}
+    open func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {}
     public override init() { super.init() }
     public init(frame: CGRect) { super.init(); self.frame = frame }
 }
 
 open class UILabel: UIView {
+    public var numberOfLines: Int = 1
     public var text: String?
     public var textColor: UIColor?
     public var textAlignment: NSTextAlignment = .left

@@ -115,6 +115,31 @@ Real checks, really executed:
 | Port contract enforcement | `Tests/PortContractTests.swift` |
 | Apple project | `project.yml`, `bootstrap.sh`, `Info.plist`, `PrivacyInfo.xcprivacy` |
 
+## 3.9 The control card — how a stranger starts
+
+The native build had **no onboarding of any kind**. It launched straight into a fight,
+and its controls are gestures rather than labelled keys. A keyboard player can find `J`
+by looking at the keyboard; nobody finds "hold, then pull back" by looking at a pane of
+glass. A stranger opening the app saw two figures and had no way in — which fails the
+milestone's exit condition before the fight even begins.
+
+There is now a card on first launch, once, dismissed by touching anywhere. It lists ten
+gestures and their verbs and says nothing else.
+
+**Nothing else** is the important half. The web prototype showed eight control names
+and no more, deliberately: every system named on the way in is one the fight no longer
+has to communicate, and the readability measurement is spoiled the moment the game
+starts describing itself. Naming the vocabulary is not explaining the game — the verbs
+were always meant to be public; what they MEAN in a given moment is the thing the
+player works out.
+
+`first-run-reveals-nothing.test.js` holds that line, because it is the kind of line
+that erodes one helpful sentence at a time. It fails if a verb goes missing from the
+card, if the card starts mentioning quadrants, structure, frame windows, the Final
+Inch, mastery, difficulty or advice, or if the card stops being gated on
+`hasSeenControls` — a game that explains itself on every launch is conceding that it is
+not legible.
+
 ## 4. The touch grammar
 
 Not nine buttons on glass. Two thumbs, one idea each, and the design principle is
