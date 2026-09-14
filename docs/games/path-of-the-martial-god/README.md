@@ -39,6 +39,26 @@ A complete pre-production design package for a third-person martial-arts action 
 
 ---
 
+## Implementation record
+
+The twenty-two documents above are the **design**. These five are what happened when it
+was built, and they are the ones to read before touching code — they carry the rulings,
+the corrections, and the defects that were found the hard way.
+
+| Document | What it is |
+| --- | --- |
+| [IMPLEMENTATION_LEDGER.md](IMPLEMENTATION_LEDGER.md) | Design requirement → system → file, plus every conflict and defect ruled on rather than silently resolved |
+| [MILESTONE_1_REPORT.md](MILESTONE_1_REPORT.md) | The web prototype: six defects it surfaced, the assumptions it made, and the hosted playtest build |
+| [PRODUCTION_ENGINE_DECISION.md](PRODUCTION_ENGINE_DECISION.md) | Why native Swift + Metal rather than Unreal, and the gate for reopening that |
+| [NATIVE_M1_REPORT.md](NATIVE_M1_REPORT.md) | The Apple build: what is verified, what is merely written, and what cannot be done without a Mac |
+| [RELEASE_CHECKLIST.md](RELEASE_CHECKLIST.md) | Everything between here and TestFlight, split by what needs a Mac, an account, or a human |
+
+**The browser build is not the game.** It is a validated reference implementation and a
+parity oracle. `games/path-of-the-martial-god/README.md` says which tree is which, and
+says it loudly, for the same reason this paragraph exists.
+
+---
+
 ## The thesis, in one line
 
 > **A martial god is someone who can end any fight and chooses how it ends.** Mastery is not more damage — it is more terminal options. And the ability to be merciful is mechanically gated behind competence.

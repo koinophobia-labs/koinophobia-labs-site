@@ -1,4 +1,7 @@
 import Foundation
+#if canImport(UIKit)
+import UIKit
+#endif
 
 /// Minimal production persistence.
 ///
@@ -11,29 +14,46 @@ public struct GameSettings: Codable, Equatable {
 
     // MARK: presentation
     public var soundEnabled = true
-    public var musicVolume: Double = 0.6
     public var effectsVolume: Double = 0.9
     public var breathVolume: Double = 1.0
 
     // MARK: accessibility — architected in from the start, not bolted on later
-    /// Widens every timing window. Never changes what decisions exist, only the
-    /// bandwidth needed to make them.
-    public var timingWindowScale: Double = 1.0
-    /// Honours Reduce Motion: damps camera movement and impact shake.
+    /// Honours Reduce Motion: damps camera movement and impact shake. Defaults from
+    /// the system switch rather than waiting for a settings screen that does not
+    /// exist yet, because the people who need it have already set it once.
     public var reduceMotion = false
     /// 0 disables haptics entirely.
     public var hapticIntensity: Double = 1.0
-    /// Draws state cues that do not rely on colour alone.
-    public var colourIndependentCues = false
-    /// Optional captions for combat audio, for players who cannot hear the breathing.
-    public var combatCaptions = false
     public var leftHanded = false
     public var controlSensitivity: Double = 1.0
 
-    // MARK: diagnostics
-    /// The debug overlay is OFF by default and must stay that way: the milestone's
-    /// whole claim is that the fight reads without meters.
-    public var debugOverlay = false
+    /// Settings that are DECLARED AND NOT YET HONOURED.
+    ///
+    /// They are kept because each represents a real design commitment with work behind
+    /// it, and deleting them would lose the intention. They are quarantined here
+    /// because this milestone has already shipped one feature that read as implemented,
+    /// was documented, had a named constant, and never executed — the input buffer. The
+    /// lesson was not "be careful"; it was that a declaration which looks live and is
+    /// not will be believed by the next person to read it. So nothing in `Reserved` can
+    /// be read without the call site saying `reserved.` out loud, and
+    /// `settings-are-wired.test.js` fails if a field outside this struct has no
+    /// consumer.
+    public struct Reserved: Codable, Equatable {
+        /// Widens every timing window. Never changes what decisions exist, only the
+        /// bandwidth needed to make them. NOT WIRED: it belongs inside the simulation,
+        /// so it has to land in the JavaScript oracle and the Swift port together, with
+        /// re-baselined traces. Adding it to the port alone would break the one
+        /// guarantee the port has.
+        public var timingWindowScale: Double = 1.0
+        /// Draws state cues that do not rely on colour alone. NOT WIRED: the renderer
+        /// is a scaffold with no cue layer to make colour-independent yet.
+        public var colourIndependentCues = false
+        /// Captions for combat audio, for players who cannot hear the breathing.
+        /// NOT WIRED: nothing in the app draws text.
+        public var combatCaptions = false
+        public init() {}
+    }
+    public var reserved = Reserved()
 
     public init() {}
 }
@@ -53,9 +73,47 @@ public final class SettingsStore {
         if let data = try? Data(contentsOf: fileURL),
            let decoded = try? JSONDecoder().decode(GameSettings.self, from: data) {
             settings = SettingsStore.migrate(decoded)
+            hasStoredSettings = true
         } else {
             settings = GameSettings()
+            hasStoredSettings = false
         }
+        adoptSystemAccessibilityDefaults()
+        observeSystemAccessibility()
+    }
+
+    /// Whether the player has ever expressed a preference of their own.
+    private var hasStoredSettings: Bool
+
+    /// Take the system's answer when the player has not given one here.
+    ///
+    /// There is no settings screen in Native M1, so without this the accessibility
+    /// switches are unreachable — which would make "accessibility from the beginning"
+    /// a data structure rather than a feature. Someone who needs Reduce Motion has
+    /// already turned it on once, system-wide; asking them to find an in-app toggle
+    /// that does not exist is not accessibility.
+    ///
+    /// A stored file wins: once a player has chosen, the system stops overriding them.
+    private func adoptSystemAccessibilityDefaults() {
+        #if canImport(UIKit)
+        guard !hasStoredSettings else { return }
+        settings.reduceMotion = UIAccessibility.isReduceMotionEnabled
+        if UIAccessibility.isReduceMotionEnabled { settings.hapticIntensity = 0.5 }
+        #endif
+    }
+
+    /// The switch can be flipped while the game is open, and a fight in progress must
+    /// respond to it rather than waiting for a relaunch.
+    private func observeSystemAccessibility() {
+        #if canImport(UIKit)
+        NotificationCenter.default.addObserver(
+            forName: UIAccessibility.reduceMotionStatusDidChangeNotification,
+            object: nil, queue: .main
+        ) { [weak self] _ in
+            guard let self, !self.hasStoredSettings else { return }
+            self.settings.reduceMotion = UIAccessibility.isReduceMotionEnabled
+        }
+        #endif
     }
 
     /// Migration exists from version 1 so that adding a field later is routine rather
@@ -68,6 +126,7 @@ public final class SettingsStore {
 
     public func update(_ mutate: (inout GameSettings) -> Void) {
         mutate(&settings)
+        hasStoredSettings = true      // the player has now chosen; stop tracking the system
         save()
     }
 
