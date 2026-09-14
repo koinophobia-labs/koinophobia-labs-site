@@ -27,10 +27,19 @@ export function ProductCard({
   showNotYet?: boolean;
 }) {
   const screen = product.screens[0];
+  // A stretched link covers the card; the App Store badge sits above it as
+  // its own anchor. Two links, never nested, both keyboard-reachable.
   return (
-    <Link className="pcard s" href={product.href} style={{ "--i": index } as React.CSSProperties} data-tilt data-analytics="product_card_click" data-analytics-label={product.slug}>
+    <article className="pcard s" style={{ "--i": index } as React.CSSProperties} data-tilt>
+      <Link
+        className="pcard__cover"
+        href={product.href}
+        aria-label={`${product.name}: ${product.blurb}`}
+        data-analytics="product_card_click"
+        data-analytics-label={product.slug}
+      />
       {screen ? <DeviceFrame src={screen.src} alt={screen.alt} /> : null}
-      <span className="pcard__txt">
+      <div className="pcard__txt">
         <span className="pcard__meta">
           <span className="chip chip--live">{product.platforms}</span>
           <span className="chip">{product.chip}</span>
@@ -48,8 +57,8 @@ export function ProductCard({
             </span>
           ) : null}
         </span>
-      </span>
-    </Link>
+      </div>
+    </article>
   );
 }
 

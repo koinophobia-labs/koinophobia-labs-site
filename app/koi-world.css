@@ -2129,3 +2129,38 @@ body:has(.kw) > .koi-companion {
   display: block;
   filter: saturate(0.85);
 }
+
+/* Proof and terms rails on the homepage (dl of dt/dd pairs). */
+.kw__trust-rail {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem 2rem;
+  margin: 1.6rem 0 0;
+  padding-top: 1.2rem;
+  border-top: 1px solid var(--kw-line-soft);
+}
+.kw__trust-rail > div {
+  display: grid;
+  gap: 0.15rem;
+}
+.kw__trust-rail dt {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 0.78rem;
+  color: var(--kw-ink);
+  font-variant-numeric: tabular-nums;
+}
+.kw__trust-rail dt::before {
+  content: "";
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--kw-accent);
+  margin-right: 0.55rem;
+  vertical-align: middle;
+}
+.kw__trust-rail dd {
+  margin: 0;
+  font-size: 0.86rem;
+  color: var(--kw-dim);
+}

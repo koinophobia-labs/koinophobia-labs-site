@@ -426,6 +426,20 @@
 .pcard:hover::after {
   opacity: 0.12;
 }
+.pcard__cover {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+}
+.pcard__cover:focus-visible {
+  outline: 2px solid var(--live);
+  outline-offset: -2px;
+}
+.pcard__go {
+  position: relative;
+  z-index: 2;
+}
 .pcard__txt {
   display: grid;
   gap: 0.55rem;
@@ -1001,5 +1015,54 @@
   }
   .pcard .device {
     max-width: 200px;
+  }
+}
+
+/* ---------- specificity guards against legacy globals.css and .kw a rules ---------- */
+.site .btn,
+.kw .btn,
+.mast .btn,
+.sticky .btn {
+  color: var(--ink);
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-pill);
+  font-size: 0.92rem;
+  padding: 0.7em 1.25em;
+  text-transform: none;
+  letter-spacing: 0;
+  box-shadow: none;
+}
+.site .btn--small,
+.kw .btn--small,
+.mast .btn--small {
+  font-size: 0.82rem;
+  padding: 0.55em 1em;
+}
+.site .btn--grand,
+.kw .btn--grand {
+  font-size: 1.05rem;
+  padding: 0.85em 1.6em;
+}
+.site .btn--primary,
+.kw .btn--primary,
+.mast .btn--primary,
+.sticky .btn--primary {
+  background: var(--ink);
+  color: var(--void);
+  border-color: var(--ink);
+}
+.site .store__badge,
+.kw .store__badge {
+  color: #fff;
+}
+.mast .mast__sheet-cta {
+  display: none;
+}
+@media (max-width: 1024px) {
+  .mast .mast__sheet-cta {
+    display: inline-flex;
+    margin-top: 1rem;
+    justify-content: center;
   }
 }
