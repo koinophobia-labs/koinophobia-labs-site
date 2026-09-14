@@ -982,6 +982,24 @@ economy, and the first thing any of them could break is an ordinary fight. Both
 directions are mutation-verified: put the Inch threshold out of reach, or halve will
 damage, and it fails.
 
+### 9.15 N-22, priced
+
+The three candidate fixes are no longer prose. `reference/tools/experiments/n22.mjs`
+applies each to a throwaway copy of the simulation and measures it — passive stalls,
+whether ordinary fights still resolve, fight length, how many fixtures need
+re-baselining, and which endings become reachable. Full table in `OPEN_DECISIONS.md`.
+
+The short version: **option 1 halves the stalls, is the only candidate that brings the
+`unconscious` ending back to life, needs 2 of 8 traces re-baselined against option 3's
+7, and makes ordinary fights slightly quicker.** Option 2 is struck — a weighted sum of
+non-negative terms reaches zero only when every weighted term does, so no weighting can
+end a fight while an untouched arm carries positive weight. That is a proof, not a
+measurement, and it should have been visible without running anything.
+
+The decision that remains is not which number is better. It is whether head damage
+should be decisive, because option 1 makes it so. That is a revaluation of every strike
+in the game, and it is the author's call.
+
 ## 10. Known issues
 
 | # | Issue | Severity |

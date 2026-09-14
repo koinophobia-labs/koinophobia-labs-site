@@ -242,12 +242,40 @@ designing the Final Inch's threshold economy by trial and error. The narrow half
 no regeneration on the tick the gassed drain applies — was a straightforward correctness
 fix and has shipped (`NATIVE_M1_REPORT.md` §9.12).
 
-**Recommendation: 1, and look hard at 3.** Option 1 is a correctness fix — the aggregate
-was never meant to let an untouched arm keep a destroyed torso fighting. Option 3 is the
-more interesting design question, and it is about the Final Inch, so it is worth your
-time rather than mine.
+### All three are now measured — choose by reading, not by reasoning
 
-**Not chosen here.** This is core balance, and core balance is yours.
+`node reference/tools/experiments/n22.mjs` applies each candidate to a throwaway copy of
+the simulation, runs the same three measurements, and discards it. The real tree is never
+touched. Adding a fourth idea is four lines, deliberately.
+
+| | stalls | engaged fights | median | traces to re-baseline | endings reachable |
+| --- | --- | --- | --- | --- | --- |
+| **baseline** | 4/18 | all resolve | 13.0s | — | `finished` only |
+| **option 1** | **2/18** | all resolve | 11.8s | **2 of 8** | `finished` + **`unconscious`** |
+| **option 2** | 4/18 | all resolve | 13.0s | 0 of 8 | `finished` only |
+| **option 3** | 3/18 | all resolve | 11.0s | **7 of 8** | `finished` only |
+| **1 + 3** | **2/18** | all resolve | 10.9s | 7 of 8 | `finished` + **`unconscious`** |
+
+**Option 2 cannot work, and that is a proof rather than a result.** `vitalityFraction`
+is a weighted sum of non-negative terms, and such a sum is zero only when every term
+with a non-zero weight is zero. So no weighting reaches zero while an untouched arm has
+a positive weight — and a weighting that gives limbs weight zero *is* option 1, with
+extra steps and a worse name. Strike it.
+
+**Option 1 is the strongest on every axis measured.** It halves the stalls, is the only
+candidate that brings a second ending back to life, costs the fewest re-baselined
+fixtures by a wide margin, and makes ordinary fights slightly *quicker* rather than
+slower. Option 3 does less, for three and a half times the blast radius.
+
+**What option 1 actually asks you to accept:** head damage becomes decisive. A fighter
+whose head reaches zero is finished on the spot, regardless of the rest of them. That is
+faithful to `COMBAT_SYSTEM.md` §32 — *"Vitality reaching zero means unconscious or
+unable to continue"* — read as the located model §34 describes, and it changes what every
+head strike is worth. That revaluation is the decision, and it is the part I should not
+make for you.
+
+**Still not chosen here.** Say the word and it is one pass: implement, port to Swift,
+re-baseline the two traces, and extend the tests.
 
 ---
 
