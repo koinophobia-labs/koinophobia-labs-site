@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
 import LabPage from "@/components/site/LabPage";
 import { getSiteProduct } from "@/lib/products";
-import { STUDIO_URL } from "@/lib/seo";
+import { STUDIO_URL, socialCard } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "Teacher's Pet",
   description:
     "A homeschool for one computer. A mapped K–12 curriculum of 1,273 objectives, with the first course, Algebra Foundations, running as a Mac app today.",
   alternates: { canonical: `${STUDIO_URL}/lab/teachers-pet` },
+  openGraph: { url: `${STUDIO_URL}/lab/teachers-pet`, images: [socialCard("A homeschool for one computer.", "The lab")] },
 };
 
 export default function TeachersPetPage() {

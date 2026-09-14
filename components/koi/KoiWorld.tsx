@@ -63,7 +63,16 @@ function clipFor(destination: Destination, t: number): ClipKey {
 }
 
 function markCurrentDestination(shell: HTMLElement, id: string) {
+  const previous = shell.dataset.koiDestination;
   shell.dataset.koiDestination = id;
+  if (previous !== id) {
+    // The analytics bridge turns this into journey_depth, once per band.
+    window.dispatchEvent(
+      new CustomEvent("koinophobia:destination", {
+        detail: { id, motion: shell.querySelector<HTMLElement>(".koi-world")?.dataset.motion ?? "pending" },
+      }),
+    );
+  }
   for (const link of shell.querySelectorAll<HTMLElement>("[data-koi-link]")) {
     if (link.dataset.koiLink === id) link.setAttribute("aria-current", "location");
     else link.removeAttribute("aria-current");

@@ -5,14 +5,14 @@ import SiteFooter from "@/components/site/SiteFooter";
 import StickyStart from "@/components/site/StickyStart";
 import { experiments } from "@/lib/dev/lab";
 import { labProducts } from "@/lib/products";
-import { STUDIO_URL } from "@/lib/seo";
+import { STUDIO_URL, socialCard } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "The Lab",
   description:
     "Experiments at their real stage: a K–12 curriculum engine, a language model trained from random weights, a sports-argument game, and the small machines that keep the studio honest.",
   alternates: { canonical: `${STUDIO_URL}/lab` },
-  openGraph: { url: `${STUDIO_URL}/lab`, title: "The Lab · Koinophobia Labs" },
+  openGraph: { url: `${STUDIO_URL}/lab`, title: "The Lab · Koinophobia Labs", images: [socialCard("Small machines and large bets, at their real stage.", "The lab")] },
 };
 
 /** Visitor-facing names for the six small machines already in lab.ts. */

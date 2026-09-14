@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
 import LabPage from "@/components/site/LabPage";
 import { getSiteProduct } from "@/lib/products";
-import { STUDIO_URL } from "@/lib/seo";
+import { STUDIO_URL, socialCard } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "KOI",
   description:
     "A language model taught to read from random weights on a laptop. The tokenizer, transformer, training loop, and inference server are all the studio's own code. It is not useful yet; that is the thing being measured.",
   alternates: { canonical: `${STUDIO_URL}/lab/koi` },
+  openGraph: { url: `${STUDIO_URL}/lab/koi`, images: [socialCard("Teaching a model to read, from random weights, on a laptop.", "The lab")] },
 };
 
 export default function KoiPage() {

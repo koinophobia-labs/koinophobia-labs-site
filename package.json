@@ -13,7 +13,7 @@
     "test:crm": "tsx --test tests/crm-auth.test.ts tests/crm.test.ts tests/crm-routes.test.ts tests/proposals.test.ts tests/audits.test.ts tests/audit-persistence.test.ts tests/audit-crawler.test.ts tests/payments.test.ts tests/intake-abuse.test.ts tests/redaction.test.ts tests/founder-packet.test.ts tests/resume.test.ts tests/you-know-ball.test.ts tests/legal-pages.test.ts tests/products.test.ts",
     "test:ykb": "tsx --test tests/you-know-ball.test.ts",
     "test:legal": "tsx --test tests/legal-pages.test.ts",
-    "test:products": "tsx --test tests/products.test.ts tests/dev-universe.test.ts",
+    "test:products": "tsx --test tests/products.test.ts tests/dev-universe.test.ts tests/analytics.test.ts",
     "test:commercial": "tsx --test tests/koi-world.test.ts tests/redirects.test.ts",
     "test:seo": "tsx --test tests/seo-discovery.test.ts",
     "test:concierge": "tsx --test tests/concierge-routing.test.ts tests/concierge-isolation.test.ts tests/concierge-intake.test.ts",

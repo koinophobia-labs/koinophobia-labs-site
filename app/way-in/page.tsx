@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import ProductPage from "@/components/site/ProductPage";
 import { getSiteProduct } from "@/lib/products";
 import { wayInRelease } from "@/lib/releases";
-import { STUDIO_URL } from "@/lib/seo";
+import { withLiveListing } from "@/lib/app-store";
+import { STUDIO_URL, socialCard } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "Way In, a private career workspace for iPhone and iPad",
@@ -15,7 +16,7 @@ export const metadata: Metadata = {
     url: `${STUDIO_URL}/way-in`,
     title: "Way In, a private career workspace for iPhone and iPad",
     description: "Your experience. A clearer next move.",
-    images: [{ url: "/way-in/store/1.jpg", width: 600, height: 1304, alt: "Way In Today view from the current App Store listing" }],
+    images: [socialCard("Your experience. A clearer next move.", "Way In · iPhone + iPad")],
   },
 };
 
@@ -37,8 +38,8 @@ const schema = {
   ],
 };
 
-export default function WayInPage() {
-  const product = getSiteProduct("career-forge")!;
+export default async function WayInPage() {
+  const product = await withLiveListing(getSiteProduct("career-forge")!);
   return (
     <>
       <ProductPage product={product} analyticsId="way-in" />

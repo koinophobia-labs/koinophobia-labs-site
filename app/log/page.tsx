@@ -4,12 +4,13 @@ import SiteFooter from "@/components/site/SiteFooter";
 import { shortDate } from "@/components/site/NowStrip";
 import { logEntries, logKindLabel, logLastUpdated } from "@/lib/dev/log";
 import { getProduct } from "@/lib/dev/universe";
-import { STUDIO_URL } from "@/lib/seo";
+import { STUDIO_URL, socialCard } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "Build log",
   description: "The chronological record of what actually happened across the studio's products, dated and sourced. Nothing is deleted to make it look better.",
-  alternates: { canonical: `${STUDIO_URL}/log` },
+  alternates: { canonical: `${STUDIO_URL}/log`, types: { "application/rss+xml": `${STUDIO_URL}/log/feed.xml` } },
+  openGraph: { url: `${STUDIO_URL}/log`, title: "Build log · Koinophobia Labs", images: [socialCard("What actually happened.", "Build log")] },
 };
 
 const surfaceName = (slug: string) =>
@@ -31,7 +32,7 @@ export default function LogPage() {
           <p className="lede s" style={{ "--i": 2 } as React.CSSProperties}>
             Dated entries with sources. Entries before 26 July 2026 were backfilled from release
             records. A wrong entry is corrected by a newer entry that says what was wrong; nothing
-            is deleted.
+            is deleted. <a href="/log/feed.xml">RSS feed</a>.
           </p>
         </header>
         <section className="log-list" aria-label="Entries">

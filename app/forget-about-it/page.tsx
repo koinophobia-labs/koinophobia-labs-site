@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import ProductPage from "@/components/site/ProductPage";
 import { getSiteProduct } from "@/lib/products";
 import { forgetRelease } from "@/lib/releases";
-import { STUDIO_URL } from "@/lib/seo";
+import { withLiveListing } from "@/lib/app-store";
+import { STUDIO_URL, socialCard } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "Forget About It, a memory journal for iPhone and Apple Watch",
@@ -15,7 +16,7 @@ export const metadata: Metadata = {
     url: `${STUDIO_URL}/forget-about-it`,
     title: "Forget About It, a memory journal for iPhone and Apple Watch",
     description: "Keep the thought. Come back to your day.",
-    images: [{ url: "/forget-about-it/store/1.jpg", width: 600, height: 1304, alt: "Forget About It Today view from the current App Store listing" }],
+    images: [socialCard("Keep the thought. Come back to your day.", "Forget About It · iPhone + Apple Watch")],
   },
 };
 
@@ -33,8 +34,8 @@ const schema = {
   offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
 };
 
-export default function ForgetAboutItPage() {
-  const product = getSiteProduct("forget-about-it")!;
+export default async function ForgetAboutItPage() {
+  const product = await withLiveListing(getSiteProduct("forget-about-it")!);
   return (
     <>
       <ProductPage product={product} analyticsId="forget-about-it" />

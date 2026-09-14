@@ -87,7 +87,8 @@ test("the commercial offer is three shapes with proof, and one reply promise", (
 test("the homepage reads products from the registry and shows no agency offer", () => {
   const page = read("app/page.tsx");
   assert.match(page, /from "@\/lib\/products"/);
-  assert.match(page, /shippedProducts\.map/);
+  assert.match(page, /withLiveListings\(shippedProducts\)/);
+  assert.match(page, /shipped\.map/);
   assert.match(page, /labProducts\.map/);
   assert.doesNotMatch(page, /Revenue Leak|audit|Quick Fix|Landing Page Rebuild|\$250/i);
   assert.doesNotMatch(page, /from "@\/lib\/commercial"/);

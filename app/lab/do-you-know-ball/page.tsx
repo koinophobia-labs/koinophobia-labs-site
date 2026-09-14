@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
 import LabPage from "@/components/site/LabPage";
 import { getSiteProduct } from "@/lib/products";
-import { STUDIO_URL } from "@/lib/seo";
+import { STUDIO_URL, socialCard } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "Do You Know Ball?",
   description:
     "A sports-argument game where the opponent keeps score and remembers. Live as a web demo; iOS builds accepted by Apple, not yet released.",
   alternates: { canonical: `${STUDIO_URL}/lab/do-you-know-ball` },
+  openGraph: { url: `${STUDIO_URL}/lab/do-you-know-ball`, images: [socialCard("Somebody who lives in your phone, disagrees with you about everything, and keeps score.", "The lab")] },
 };
 
 export default function DoYouKnowBallPage() {

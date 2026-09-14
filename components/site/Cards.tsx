@@ -35,8 +35,6 @@ export function ProductCard({
         className="pcard__cover"
         href={product.href}
         aria-label={`${product.name}: ${product.blurb}`}
-        data-analytics="product_card_click"
-        data-analytics-label={product.slug}
       />
       {screen ? <DeviceFrame src={screen.src} alt={screen.alt} /> : null}
       <div className="pcard__txt">

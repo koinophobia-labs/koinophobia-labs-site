@@ -15,6 +15,7 @@ import {
   replyPromise,
   shippedProducts,
 } from "@/lib/products";
+import { withLiveListings } from "@/lib/app-store";
 import {
   STUDIO_DESCRIPTION,
   STUDIO_SCHEMA,
@@ -57,7 +58,8 @@ const bandStyle = (index: number) => {
  * lib/products.ts, which reads from lib/dev/universe.ts. See the rebuild
  * document, sections 3 and 4.
  */
-export default function Home() {
+export default async function Home() {
+  const shipped = await withLiveListings(shippedProducts);
   return (
     <div className="kw" data-koi-destination="surface" data-motion-shell>
       <a className="kw__skip" href="#surface-copy">
@@ -160,7 +162,7 @@ export default function Home() {
                 and one honest line each about what it doesn&apos;t do yet.
               </p>
               <div className="cards">
-                {shippedProducts.map((product, index) => (
+                {shipped.map((product, index) => (
                   <ProductCard key={product.slug} product={product} index={index} placement="home" />
                 ))}
               </div>

@@ -2,18 +2,19 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import Masthead from "@/components/site/Masthead";
+import PageView from "@/components/site/PageView";
 import SiteFooter from "@/components/site/SiteFooter";
 import StickyStart from "@/components/site/StickyStart";
 import { LINKS } from "@/lib/links";
 import { engagementShapes, engagementTerms, replyPromise } from "@/lib/products";
-import { STUDIO_URL } from "@/lib/seo";
+import { STUDIO_URL, socialCard } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "Work with Koinophobia Labs",
   description:
     "Hire the studio that shipped Trendi, Forget About It, and Way In. Native Apple apps, working prototypes, and AI features with a deterministic frame. Fixed price, in writing, before anything is built.",
   alternates: { canonical: `${STUDIO_URL}/work-with-me` },
-  openGraph: { url: `${STUDIO_URL}/work-with-me`, title: "Work with Koinophobia Labs" },
+  openGraph: { url: `${STUDIO_URL}/work-with-me`, title: "Work with Koinophobia Labs", images: [socialCard("Hire the studio that shipped three apps this summer.", "Work with me")] },
 };
 
 const steps = [
@@ -27,6 +28,7 @@ const steps = [
 export default function WorkWithMePage() {
   return (
     <div className="site" data-motion-shell>
+      <PageView event="work_with_me_view" />
       <Masthead />
       <main className="shell page">
         <header className="page-head">
@@ -55,7 +57,7 @@ export default function WorkWithMePage() {
           </h2>
           <div className="shapes">
             {engagementShapes.map((shape, index) => (
-              <div className="shape glass s" key={shape.slug} style={{ "--i": index } as React.CSSProperties} data-analytics-view={`engagement_shape_view_${shape.slug}`}>
+              <div className="shape glass s" key={shape.slug} style={{ "--i": index } as React.CSSProperties} data-analytics-view="engagement_shape_view" data-analytics-label={shape.slug}>
                 <h3>{shape.title}</h3>
                 <p>{shape.body}</p>
                 <span className="shape__t">{shape.timeline}</span>

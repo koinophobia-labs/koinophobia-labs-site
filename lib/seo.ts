@@ -21,6 +21,18 @@ export const STUDIO_HOME_LAST_MODIFIED = "2026-09-13";
 
 export const PERSON_ID = `${STUDIO_URL}/blake#person`;
 
+/** The social card for a page: the koi plate with this title set in Sora. */
+export function socialCard(title: string, kicker?: string) {
+  const params = new URLSearchParams({ title });
+  if (kicker) params.set("kicker", kicker);
+  return {
+    url: `/brand/social-card?${params.toString()}`,
+    width: 1200,
+    height: 630,
+    alt: `${title} · Koinophobia Labs`,
+  };
+}
+
 /**
  * One entity graph: the studio (an Organization, not a ProfessionalService —
  * it ships products), the founder, and the website. Each shipped app adds

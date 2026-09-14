@@ -55,6 +55,8 @@ export type SiteMeta = {
     poster: string;
     seconds: number;
     master: string;
+    /** The untouched master, hosted, so anyone can pause a frame and check. */
+    masterSrc: string;
     captions: string[];
     alt: string;
   };
@@ -98,6 +100,7 @@ const site: Record<string, SiteMeta> = {
       poster: "/demo/trendi-hooks.jpg",
       seconds: 20,
       master: "01_Trendi_Idea_To_Hooks.mp4 · 0.2.2 (148) · QA PASS 2026-09-10",
+      masterSrc: "/demo/masters/01-trendi-idea-to-hooks.mp4",
       captions: ["One messy thought goes in", "The coach works on it", "Three real hooks come back"],
       alt: "A rough idea about resetting a messy desk is typed into Trendi, the coach runs, and a Coach Pack returns with an angle and three opening hooks.",
     },
@@ -145,6 +148,7 @@ const site: Record<string, SiteMeta> = {
       poster: "/demo/forget-capture-find.jpg",
       seconds: 16,
       master: "08_Forget_About_It_Capture_Thought.mp4 + 09_Find_A_Memory.mp4 · 1.0 (22) · QA PASS 2026-09-10",
+      masterSrc: "/demo/masters/08-forget-about-it-capture-thought.mp4",
       captions: ["Say it, or type it", "It's kept, in your words", "Find it later by one word"],
       alt: "A thought is typed into Forget About It and saved into the day's timeline; later, Memory is searched for one word and the exact original is found.",
     },
@@ -190,6 +194,7 @@ const site: Record<string, SiteMeta> = {
       poster: "/demo/way-in-fit.jpg",
       seconds: 18,
       master: "06_Way_In_Check_Experience_Fit.mp4 · 1.0 (9) · QA PASS 2026-09-10",
+      masterSrc: "/demo/masters/06-way-in-check-experience-fit.mp4",
       captions: ["A real posting", "Checked against your real experience", "Supported, related, or not found yet"],
       alt: "A saved job posting is checked against a career profile in Way In; each requirement is marked supported with its source excerpt, related, or not found yet.",
     },

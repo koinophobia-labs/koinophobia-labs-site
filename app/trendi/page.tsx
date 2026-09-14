@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import ProductPage from "@/components/site/ProductPage";
 import { getSiteProduct } from "@/lib/products";
 import { trendiRelease } from "@/lib/releases";
-import { STUDIO_URL } from "@/lib/seo";
+import { withLiveListing } from "@/lib/app-store";
+import { STUDIO_URL, socialCard } from "@/lib/seo";
 
 // The Trendi product page. Every fact is read from lib/products.ts and
 // lib/dev/universe.ts; the App Store link is trendiRelease.url. The July 2026
@@ -19,13 +20,13 @@ export const metadata: Metadata = {
     url: `${STUDIO_URL}/trendi`,
     title: "Trendi, a content coach for iPhone",
     description: "Say it messy. Leave with words you can say on camera.",
-    images: [{ url: "/trendi/store/04-own-the-script.jpg", width: 600, height: 1304, alt: "Trendi script editor from the current App Store listing" }],
+    images: [socialCard("Say it messy. Leave with words you can say on camera.", "Trendi · content coach for iPhone")],
   },
   twitter: {
     card: "summary_large_image",
     title: "Trendi, a content coach for iPhone",
     description: "Say it messy. Leave with words you can say on camera.",
-    images: ["/trendi/store/04-own-the-script.jpg"],
+    images: [socialCard("Say it messy. Leave with words you can say on camera.", "Trendi · content coach for iPhone").url],
   },
 };
 
@@ -46,8 +47,8 @@ const schema = {
   ],
 };
 
-export default function TrendiPage() {
-  const product = getSiteProduct("trendi")!;
+export default async function TrendiPage() {
+  const product = await withLiveListing(getSiteProduct("trendi")!);
   return (
     <>
       <ProductPage product={product} analyticsId="trendi" />

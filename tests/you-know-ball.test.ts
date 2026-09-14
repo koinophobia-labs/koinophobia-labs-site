@@ -35,7 +35,7 @@ test("the koi-first homepage leads with shipped apps, then the lab, then the off
   assert.ok(shippedScene > 0, "the shipped chapter must exist");
   assert.ok(shippedScene < labScene, "shipped apps come before the lab");
   assert.ok(labScene < workScene, "the lab leads into the offer");
-  assert.match(page, /shippedProducts\.map\(\(product, index\) =>/);
+  assert.match(page, /shipped\.map\(\(product, index\) =>/);
   assert.match(page, /labProducts\.map\(\(product, index\) =>/);
   // You Know Ball is a lab card read from the registry, never a hardcoded status.
   assert.doesNotMatch(page, /Internal Product · /);

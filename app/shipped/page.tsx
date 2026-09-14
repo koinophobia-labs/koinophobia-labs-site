@@ -5,18 +5,20 @@ import { ProductCard } from "@/components/site/Cards";
 import Masthead from "@/components/site/Masthead";
 import SiteFooter from "@/components/site/SiteFooter";
 import StickyStart from "@/components/site/StickyStart";
+import { withLiveListings } from "@/lib/app-store";
 import { shippedProducts } from "@/lib/products";
-import { STUDIO_URL } from "@/lib/seo";
+import { STUDIO_URL, socialCard } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "Shipped",
   description:
     "Trendi, Forget About It, and Way In: three apps built by one person, on the App Store now, with what each one can't do yet.",
   alternates: { canonical: `${STUDIO_URL}/shipped` },
-  openGraph: { url: `${STUDIO_URL}/shipped`, title: "Shipped · Koinophobia Labs" },
+  openGraph: { url: `${STUDIO_URL}/shipped`, title: "Shipped · Koinophobia Labs", images: [socialCard("Three apps. One builder. On the App Store now.", "Shipped")] },
 };
 
-export default function ShippedPage() {
+export default async function ShippedPage() {
+  const shipped = await withLiveListings(shippedProducts);
   return (
     <div className="site" data-motion-shell>
       <Masthead />
@@ -37,7 +39,7 @@ export default function ShippedPage() {
         </header>
 
         <section className="cards" aria-label="Shipped products">
-          {shippedProducts.map((product, index) => (
+          {shipped.map((product, index) => (
             <ProductCard key={product.slug} product={product} index={index} placement="shipped" showNotYet />
           ))}
         </section>
@@ -51,7 +53,7 @@ export default function ShippedPage() {
             with a deterministic frame.
           </p>
           <div className="actions s" style={{ "--i": 2 } as React.CSSProperties}>
-            <Link className="btn btn--primary ai" href="/work-with-me" data-analytics="work_with_me_view" data-analytics-label="shipped">
+            <Link className="btn btn--primary ai" href="/work-with-me">
               Work with me <ArrowRight size={15} aria-hidden="true" />
             </Link>
           </div>

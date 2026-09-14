@@ -122,7 +122,7 @@ export default function LabPage({
             Have a strange idea of your own?
           </h2>
           <div className="actions s" style={{ "--i": 1 } as React.CSSProperties}>
-            <Link className="btn btn--primary ai" href="/work-with-me" data-analytics="work_with_me_view" data-analytics-label={`lab_${product.slug}`}>
+            <Link className="btn btn--primary ai" href="/work-with-me">
               Work with me <ArrowRight size={15} aria-hidden="true" />
             </Link>
             <Link className="btn ai" href="/lab">

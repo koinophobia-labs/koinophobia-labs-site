@@ -5,14 +5,14 @@ import Masthead from "@/components/site/Masthead";
 import SiteFooter from "@/components/site/SiteFooter";
 import StickyStart from "@/components/site/StickyStart";
 import { LINKS } from "@/lib/links";
-import { STUDIO_URL } from "@/lib/seo";
+import { STUDIO_URL, socialCard } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "Blake Taylor",
   description:
     "Laid off in July, three apps on the App Store by September. The person who designs, builds, tests, and ships everything at Koinophobia Labs.",
   alternates: { canonical: `${STUDIO_URL}/blake` },
-  openGraph: { type: "profile", url: `${STUDIO_URL}/blake`, title: "Blake Taylor · Koinophobia Labs" },
+  openGraph: { type: "profile", url: `${STUDIO_URL}/blake`, title: "Blake Taylor · Koinophobia Labs", images: [socialCard("The fear of an ordinary life, and what I did about it.", "Blake Taylor · founder")] },
 };
 
 const method = [
@@ -125,7 +125,7 @@ export default function BlakePage() {
             </a>
           </div>
           <div className="actions s" style={{ "--i": 2 } as React.CSSProperties}>
-            <Link className="btn btn--primary ai" href="/work-with-me" data-analytics="work_with_me_view" data-analytics-label="blake">
+            <Link className="btn btn--primary ai" href="/work-with-me">
               Work with me <ArrowRight size={15} aria-hidden="true" />
             </Link>
           </div>

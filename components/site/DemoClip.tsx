@@ -105,6 +105,11 @@ export default function DemoClip({ product }: { product: SiteProduct }) {
           ))}
         </ol>
         <p className="receipt">Cut from {demo.master}. Nothing in the frame is generated.</p>
+        <p className="receipt">
+          <a href={demo.masterSrc} target="_blank" rel="noreferrer" onClick={() => track("master_link_click", { product: product.slug })}>
+            Open the untouched master ↗
+          </a>
+        </p>
       </div>
     </div>
   );

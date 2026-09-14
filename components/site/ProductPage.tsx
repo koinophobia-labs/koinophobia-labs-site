@@ -171,7 +171,7 @@ export default function ProductPage({ product, analyticsId }: { product: SitePro
           </h2>
           <div className="actions s" style={{ "--i": 1 } as React.CSSProperties}>
             <AppStoreBadge product={product.slug} url={store.url} placement="product_end" priceLine={store.priceLine} />
-            <Link className="btn ai" href="/work-with-me" data-analytics="work_with_me_view" data-analytics-label={`product_${product.slug}`}>
+            <Link className="btn ai" href="/work-with-me">
               Build something like this <ArrowRight size={15} aria-hidden="true" />
             </Link>
           </div>
