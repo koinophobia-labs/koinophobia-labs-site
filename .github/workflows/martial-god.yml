@@ -58,7 +58,10 @@ jobs:
     name: Swift port and parity gate
     runs-on: ubuntu-latest
     timeout-minutes: 20
-    container: swift:5.10-noble
+    # Google's mirror of the official image rather than docker.io directly: anonymous
+    # Docker Hub pulls are rate-limited, and a CI job that intermittently cannot fetch
+    # its toolchain is a CI job people learn to ignore.
+    container: mirror.gcr.io/library/swift:5.10-noble
     steps:
       - uses: actions/checkout@v4
 
