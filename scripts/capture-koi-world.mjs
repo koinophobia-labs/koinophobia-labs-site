@@ -115,7 +115,7 @@ const architecture = await evaluate(`(() => {
     ready: shell?.dataset.koiReady,
     motion: document.querySelector(".koi-world")?.dataset.motion,
     destinationIds,
-    primaryLinks: document.querySelectorAll(".kw__nav [data-koi-link]").length,
+    mastheadLinks: document.querySelectorAll(".mast .mast__nav a[href^='/']").length,
     journeyLinks: document.querySelectorAll(".kw__map [data-koi-link]").length,
     productNodes: document.querySelectorAll(".cards .pcard").length,
     hasWater: Boolean(document.querySelector(".koi-world__water")),
@@ -129,8 +129,8 @@ if (
   architecture.ready !== "true" ||
   architecture.motion !== "cinematic" ||
   JSON.stringify(architecture.destinationIds) !== JSON.stringify(expectedIds) ||
-  // The masthead lists every destination except the surface itself.
-  architecture.primaryLinks !== expectedIds.length - 1 ||
+  // The shared masthead carries the five site sections plus its Start CTA.
+  architecture.mastheadLinks < 5 ||
   architecture.journeyLinks !== expectedIds.length ||
   architecture.productNodes !== 3 ||
   !architecture.hasWater ||
@@ -162,7 +162,7 @@ for (const [id, filename] of destinations) {
     const heading = content?.querySelector("h1, h2");
     const headingRect = heading?.getBoundingClientRect();
     const currentLinks = [
-      ...document.querySelectorAll('.kw__nav [data-koi-link][aria-current="location"], .kw__map [data-koi-link][aria-current="location"]'),
+      ...document.querySelectorAll('.kw__map [data-koi-link][aria-current="location"]'),
     ].map((link) => link.dataset.koiLink);
     const mapTargets = [...document.querySelectorAll(".kw__map [data-koi-link]")];
     return {
@@ -192,9 +192,9 @@ for (const [id, filename] of destinations) {
     scene.contentOpacity < 0.7 ||
     scene.pointerEvents === "none" ||
     !scene.headingVisible ||
-    // The surface has a journey-map link only; every other destination is
-    // also in the masthead, so two links point at it.
-    scene.currentLinks.length !== (id === "surface" ? 1 : 2) ||
+    // The journey map marks exactly one destination current; the shared
+    // masthead links to pages, not bands.
+    scene.currentLinks.length !== 1 ||
     scene.currentLinks.some((link) => link !== id) ||
     !scene.mapTargetsAccessible ||
     scene.clips < 1 ||
@@ -236,15 +236,17 @@ for (const frame of frameCases) {
   await wait(500);
 
   const chrome = await evaluate(`(() => {
-    const masthead = document.querySelector(".kw__masthead")?.getBoundingClientRect();
+    const masthead = document.querySelector(".mast")?.getBoundingClientRect();
     const map = document.querySelector(".kw__map")?.getBoundingClientRect();
-    const nav = document.querySelector(".kw__nav");
+    const nav = document.querySelector(".mast__nav");
     const labels = [...document.querySelectorAll(".kw__map-label")];
     const wideShell = document.querySelector("#start .dest__inner")?.getBoundingClientRect();
     const koiClips = [...document.querySelectorAll(".koi-world__clip[data-koi-clip]")];
     return {
       overflow: document.documentElement.scrollWidth > window.innerWidth + 1,
-      navDisplay: nav ? getComputedStyle(nav).display : "missing",
+      // On phones the nav is a closed sheet: hidden, not removed.
+      navHidden: nav ? getComputedStyle(nav).visibility === "hidden" || getComputedStyle(nav).display === "none" : false,
+      mapHidden: map ? map.width === 0 && map.height === 0 : true,
       mapInsideFrame: Boolean(
         map && map.left >= -1 && map.right <= innerWidth + 1 && map.top >= -1 && map.bottom <= innerHeight + 1
       ),
@@ -257,8 +259,8 @@ for (const frame of frameCases) {
 
   if (
     chrome.overflow ||
-    !chrome.mapInsideFrame ||
-    (frame.width <= 1024 && (chrome.navDisplay !== "none" || !chrome.mapClearsMasthead)) ||
+    (frame.width > 1024 && (!chrome.mapInsideFrame || !chrome.mapClearsMasthead)) ||
+    (frame.width <= 1024 && (!chrome.navHidden || !chrome.mapHidden)) ||
     (frame.width > 1024 && frame.width <= 1320 && !chrome.labelsHidden) ||
     (frame.width >= 2800 && (chrome.shellWidthRatio < 0.48 || !chrome.koiContained))
   ) {
@@ -267,7 +269,7 @@ for (const frame of frameCases) {
     );
   }
 
-  await evaluate(`document.querySelector('.kw__nav [data-koi-link="start"]')?.click()`);
+  await evaluate(`document.querySelector('.kw__map [data-koi-link="start"]')?.click()`);
   await waitFor(
     `document.querySelector(".kw")?.dataset.koiDestination === "start" && document.querySelector(".kw")?.dataset.koiPhase === "hold" && document.querySelector(".kw")?.dataset.koiRest === "true"`,
     `${frame.name} navigation to reach the Start reading rest`,
@@ -350,7 +352,7 @@ for (const frame of frameCases) {
     const landing = await evaluate(`(() => {
       const section = document.getElementById(${JSON.stringify(id)});
       const heading = section?.querySelector("h1, h2")?.getBoundingClientRect();
-      const masthead = document.querySelector(".kw__masthead")?.getBoundingClientRect();
+      const masthead = document.querySelector(".mast")?.getBoundingClientRect();
       const map = document.querySelector(".kw__map")?.getBoundingClientRect();
       const intersects = (a, b) => Boolean(
         a && b && a.left < b.right && a.right > b.left && a.top < b.bottom && a.bottom > b.top
@@ -383,7 +385,7 @@ for (const frame of frameCases) {
       // their own; the cards sit in a horizontal snap row on phones.
       const nodes = [...document.querySelectorAll(${JSON.stringify(`#${id} .dest__inner a, #${id} .dest__inner button`)})]
         .filter((node) => !node.classList.contains("pcard__cover"));
-      const masthead = document.querySelector(".kw__masthead")?.getBoundingClientRect();
+      const masthead = document.querySelector(".mast")?.getBoundingClientRect();
       const map = document.querySelector(".kw__map")?.getBoundingClientRect();
       const intersects = (a, b) => Boolean(
         a && b && a.left < b.right && a.right > b.left && a.top < b.bottom && a.bottom > b.top

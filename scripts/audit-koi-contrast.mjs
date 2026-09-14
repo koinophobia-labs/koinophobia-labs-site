@@ -14,7 +14,7 @@ await p.waitForTimeout(2500);
 const samples = await p.evaluate(() => {
   const out = [];
   const parse = s => (s.match(/[\d.]+/g)||[0,0,0]).slice(0,3).map(Number);
-  for (const el of document.querySelectorAll('.kw h1, .kw h2, .kw h3, .kw p, .kw li, .kw small, .kw dd, .kw dt, .kw__kicker, .kw__marker, .kw__btn, .kw__node-meta, .kw__tag, .kw__price-note, .kw__nav a, .kw__map a, .kw__footer a, .kw__service b')) {
+  for (const el of document.querySelectorAll('.kw h1, .kw h2, .kw h3, .kw p, .kw li, .kw small, .kw dd, .kw dt, .kw__kicker, .kw__marker, .kw__btn, .kw__node-meta, .kw__tag, .kw__price-note, .mast__nav a, .kw__map a, .kw__footer a, .kw__service b')) {
     const cs = getComputedStyle(el);
     if (!el.textContent.trim()) continue;
     // Walk up for the nearest painted background.

@@ -100,10 +100,11 @@ export default async function Home() {
                 <p className="kw__kicker">A one-person software studio · Chicago</p>
                 <h1 id="surface-title">Nothing here stayed an idea.</h1>
                 <p className="kw__lede">
-                  I’m Blake Taylor. I build apps, websites, and AI tools—from the first
-                  prototype to release. Three of my apps are on the App Store. In the lab:
-                  an experimental Mac learning app with its first course built, and a language
-                  model trained from scratch. Have a project in mind? Let’s build it.
+                  Koinophobia Labs is Blake Taylor, building apps, websites, and AI tools
+                  from first prototype to release. Three of those apps are on the App Store.
+                  In the lab: an experimental Mac learning app with its first course built,
+                  and a language model trained from scratch. Have a project in mind? Blake
+                  builds for other people too.
                 </p>
                 <div className="kw__actions">
                   <a className="kw__btn kw__btn--primary kw__btn--dive ai" href="#shipped" data-koi-link="shipped">
