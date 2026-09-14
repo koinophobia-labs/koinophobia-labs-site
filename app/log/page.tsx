@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Masthead from "@/components/site/Masthead";
+import EvidenceDetails from "@/components/site/EvidenceDetails";
 import SiteFooter from "@/components/site/SiteFooter";
 import { shortDate } from "@/components/site/NowStrip";
 import { logEntries, logKindLabel, logLastUpdated } from "@/lib/dev/log";
@@ -17,7 +18,7 @@ const surfaceName = (slug: string) =>
   slug === "site" ? "This site" : slug === "studio" ? "The studio" : (getProduct(slug)?.name ?? slug);
 
 export default function LogPage() {
-  const entries = [...logEntries].sort((a, b) => (a.date < b.date ? 1 : -1));
+  const entries = [...logEntries].sort((a, b) => b.date.localeCompare(a.date));
   return (
     <div className="site" data-motion-shell>
       <Masthead />
@@ -44,6 +45,7 @@ export default function LogPage() {
                   {surfaceName(entry.product)} · {logKindLabel[entry.kind]}
                 </p>
                 <h3>{entry.title}</h3>
+                {entry.supersededBy ? <p className="log-update">Historical status. <a href={`#${entry.supersededBy}`}>Read the later release update.</a></p> : null}
                 <p>{entry.what}</p>
                 <p>
                   <strong>Why.</strong> {entry.why}
@@ -52,14 +54,7 @@ export default function LogPage() {
                   <strong>Next.</strong> {entry.next}
                 </p>
                 {entry.evidence?.length ? (
-                  <ul className="evidence" aria-label="Evidence" style={{ marginTop: "0.8rem", paddingLeft: 0 }}>
-                    {entry.evidence.map((item) => (
-                      <li key={item.claim}>
-                        <b>{item.claim}</b>
-                        {item.source}
-                      </li>
-                    ))}
-                  </ul>
+                  <EvidenceDetails evidence={entry.evidence} />
                 ) : null}
               </div>
             </article>

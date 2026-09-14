@@ -49,6 +49,7 @@ export type LogEntry = {
   /** What was decided next. */
   next: string;
   evidence?: Evidence[];
+  supersededBy?: string;
 };
 
 export const logEntries: LogEntry[] = [
@@ -69,6 +70,7 @@ export const logEntries: LogEntry[] = [
   },
   {
     slug: "one-studio-rebuild-pull-request",
+    supersededBy: "one-studio-rebuild-live",
     date: "2026-09-14",
     title: "The rebuild reaches a pull request",
     product: "site",

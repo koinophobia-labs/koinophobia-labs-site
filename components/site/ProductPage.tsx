@@ -7,6 +7,7 @@ import Masthead from "@/components/site/Masthead";
 import { ProductPageView, type ProductId } from "@/components/products/ProductAnalytics";
 import SiteFooter from "@/components/site/SiteFooter";
 import StickyStart from "@/components/site/StickyStart";
+import EvidenceDetails from "@/components/site/EvidenceDetails";
 import { stageLabel } from "@/lib/dev/universe";
 import type { SiteProduct } from "@/lib/products";
 
@@ -132,7 +133,7 @@ export default function ProductPage({ product, analyticsId }: { product: SitePro
 
         {decision ? (
           <section className="sec" aria-labelledby="decision-title">
-            <p className="k s">A decision that hurt</p>
+            <p className="k s">Behind the product</p>
             <h2 id="decision-title" className="s" style={{ "--i": 1 } as React.CSSProperties}>
               {decision.call}
             </h2>
@@ -145,7 +146,7 @@ export default function ProductPage({ product, analyticsId }: { product: SitePro
         <section className="sec" aria-labelledby="status-title">
           <p className="k s">Status and limits</p>
           <h2 id="status-title" className="s" style={{ "--i": 1 } as React.CSSProperties}>
-            {product.status}.
+            Available on the App Store · v{store.version}
           </h2>
           <p className="lede s" style={{ "--i": 2 } as React.CSSProperties}>
             {page.statusBody}
@@ -155,14 +156,7 @@ export default function ProductPage({ product, analyticsId }: { product: SitePro
               <li key={line}>{line}</li>
             ))}
           </ul>
-          <ul className="evidence s" style={{ "--i": 4 } as React.CSSProperties} aria-label="Evidence">
-            {product.evidence.map((item) => (
-              <li key={item.claim}>
-                <b>{item.claim}</b>
-                {item.source}
-              </li>
-            ))}
-          </ul>
+          <EvidenceDetails evidence={product.evidence} />
         </section>
 
         <section className="sec glass" aria-labelledby="end-title">

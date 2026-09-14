@@ -1,9 +1,8 @@
 import type { SiteProduct } from "@/lib/products";
 
-// Build-time read of the public App Store listing, so the site can never
-// drift from the store again. The registry's literal version remains the
-// verified claim (a human looked); this only refreshes the number shown next
-// to a badge. Any failure falls back to the registry, silently.
+// Refresh the public version for badges and the product status heading.
+// Other feature claims retain their independent verification dates.
+// Offline builds fall back to the last verified release record.
 
 const LOOKUP = "https://itunes.apple.com/lookup";
 const TIMEOUT_MS = 5000;
@@ -28,8 +27,6 @@ type LookupResult = {
 export function appStoreId(url: string): string | undefined {
   return url.match(/\/id(\d+)/)?.[1];
 }
-
-let inflight: Promise<Map<string, Listing>> | undefined;
 
 async function lookup(ids: string[]): Promise<Map<string, Listing>> {
   const map = new Map<string, Listing>();
@@ -62,11 +59,8 @@ async function lookup(ids: string[]): Promise<Map<string, Listing>> {
 
 /** Fetch every shipped product's listing once per build. */
 export function liveListings(products: SiteProduct[]): Promise<Map<string, Listing>> {
-  if (!inflight) {
-    const ids = products.map((p) => p.appStore && appStoreId(p.appStore.url)).filter((id): id is string => Boolean(id));
-    inflight = lookup(ids);
-  }
-  return inflight;
+  const ids = products.map((p) => p.appStore && appStoreId(p.appStore.url)).filter((id): id is string => Boolean(id));
+  return lookup(ids);
 }
 
 /** The same products, with the store's current version where it answered. */

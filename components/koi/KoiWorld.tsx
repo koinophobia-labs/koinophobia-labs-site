@@ -96,11 +96,15 @@ export default function KoiWorld() {
       const constrained =
         nav.connection?.saveData === true ||
         /^(slow-2g|2g)$/.test(nav.connection?.effectiveType ?? "");
-      setMode(reduced.matches || constrained ? "still" : "cinematic");
+      setMode(reduced.matches || constrained || window.location.hash === "#surface-copy" ? "still" : "cinematic");
     };
     decide();
     reduced.addEventListener("change", decide);
-    return () => reduced.removeEventListener("change", decide);
+    window.addEventListener("hashchange", decide);
+    return () => {
+      reduced.removeEventListener("change", decide);
+      window.removeEventListener("hashchange", decide);
+    };
   }, []);
 
   // ---- Mirror the chosen experience onto the page shell -----------------
@@ -108,6 +112,11 @@ export default function KoiWorld() {
     const shell = rootRef.current?.closest(".kw") as HTMLElement | null;
     if (!shell) return;
     shell.dataset.motion = mode;
+    if (mode === "still" && window.location.hash === "#surface-copy") {
+      const copy = document.getElementById("surface-copy");
+      copy?.focus({ preventScroll: true });
+      copy?.scrollIntoView({ block: "start", behavior: "instant" });
+    }
     return () => {
       delete shell.dataset.motion;
     };
@@ -335,8 +344,11 @@ export default function KoiWorld() {
         band.height - window.innerHeight,
         band.height * 0.45,
       );
+      const readingTop = band.el.querySelector<HTMLElement>(".dest__inner");
       const top = id === DESTINATIONS[0].id
         ? 0
+        : mobile && readingTop
+        ? window.scrollY + readingTop.getBoundingClientRect().top - 96
         : clamp(
             band.top + travel * READING_REST_PROGRESS - activationOffset,
             0,

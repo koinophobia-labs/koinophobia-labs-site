@@ -31,10 +31,8 @@ export default async function ShippedPage() {
             Three apps. One builder. On the App Store now.
           </h1>
           <p className="lede s" style={{ "--i": 2 } as React.CSSProperties}>
-            Each one is listed under Blake&apos;s developer account, which is why searching
-            &ldquo;Koinophobia Labs&rdquo; on the App Store finds nothing. Use the buttons. Each
-            card also says what the app can&apos;t do yet, because that line is where trust is
-            decided.
+            Choose an app, watch a short demo, or download it from the App Store.
+            The listings are published under Blake Taylor&apos;s developer account.
           </p>
         </header>
 

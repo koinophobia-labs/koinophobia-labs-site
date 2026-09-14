@@ -12,7 +12,7 @@ const surfaceName = (slug: string) =>
   slug === "site" ? "This site" : slug === "studio" ? "The studio" : (getProduct(slug)?.name ?? slug);
 
 export function GET() {
-  const entries = [...logEntries].sort((a, b) => (a.date < b.date ? 1 : -1));
+  const entries = [...logEntries].sort((a, b) => b.date.localeCompare(a.date));
   const items = entries
     .map((entry) => {
       const link = `${STUDIO_URL}/log#${entry.slug}`;

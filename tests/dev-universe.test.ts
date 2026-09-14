@@ -242,7 +242,7 @@ test("Trendi reflects its verified public release while the dated log preserves 
   const trendi = getProduct("trendi")!;
   assert.equal(trendi.reach, "public");
   assert.equal(trendi.stage, "public");
-  assert.match(trendi.status, /0\.2\.1/);
+  assert.match(trendi.status, /0\.2\.2/);
   assert.match(trendi.evidence.map(e => e.source).join(" "), /apps\.apple\.com.*6776299336/);
   assert.doesNotMatch(trendi.status, /release.candidate|invite.only|not on the app store/i);
   assert.match(read("lib/dev/log.ts"), /122/);

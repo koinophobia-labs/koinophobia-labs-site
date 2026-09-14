@@ -35,7 +35,7 @@ export default function AppStoreBadge({
         target="_blank"
         rel="noreferrer"
         onClick={onClick}
-        aria-label={`Download ${product} on the App Store`}
+        aria-label={`Download ${{ trendi: "Trendi", "forget-about-it": "Forget About It", "career-forge": "Way In" }[product] ?? product} on the App Store`}
       >
         <svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor">
           <path d="M12 3a1 1 0 0 1 1 1v8.59l2.3-2.3a1 1 0 1 1 1.4 1.42l-4 4a1 1 0 0 1-1.4 0l-4-4a1 1 0 1 1 1.4-1.42l2.3 2.3V4a1 1 0 0 1 1-1Zm-7 14a1 1 0 0 1 1 1v1h12v-1a1 1 0 1 1 2 0v2a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-2a1 1 0 0 1 1-1Z" />

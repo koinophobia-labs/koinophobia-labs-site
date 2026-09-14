@@ -11,7 +11,7 @@
 [data-motion="cinematic"] .s {
   opacity: 0.001;
   transform: translateY(22px);
-  filter: blur(6px);
+  filter: none;
 }
 [data-motion="cinematic"] .s.is-in {
   opacity: 1;

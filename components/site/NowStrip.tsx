@@ -10,7 +10,7 @@ export function shortDate(iso: string) {
 
 /** The last three log entries, generated at build. No hand-maintained "now". */
 export const nowEntries = [...logEntries]
-  .sort((a, b) => (a.date < b.date ? 1 : -1))
+  .sort((a, b) => b.date.localeCompare(a.date))
   .slice(0, 3);
 
 export default function NowStrip() {
