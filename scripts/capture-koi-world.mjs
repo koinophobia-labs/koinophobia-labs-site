@@ -3,11 +3,11 @@ import { setTimeout as wait } from "node:timers/promises";
 
 const outputDirectory = "artifacts/koi-visuals";
 const destinations = [
-  ["enter", "01-koi-world-enter.png"],
-  ["products", "02-product-constellation.png"],
-  ["systems", "03-systems.png"],
-  ["work", "04-work.png"],
-  ["founder", "05-founder.png"],
+  ["surface", "01-koi-world-surface.png"],
+  ["shipped", "02-shipped.png"],
+  ["lab", "03-lab.png"],
+  ["blake", "04-blake.png"],
+  ["work", "05-work-with-me.png"],
   ["start", "06-final-koi-contact.png"],
 ];
 
@@ -117,7 +117,7 @@ const architecture = await evaluate(`(() => {
     destinationIds,
     primaryLinks: document.querySelectorAll(".kw__nav [data-koi-link]").length,
     journeyLinks: document.querySelectorAll(".kw__map [data-koi-link]").length,
-    productNodes: document.querySelectorAll(".kw__constellation > a").length,
+    productNodes: document.querySelectorAll(".cards .pcard").length,
     hasWater: Boolean(document.querySelector(".koi-world__water")),
     hasStage: Boolean(document.querySelector(".koi-world__stage")),
     overflow: document.documentElement.scrollWidth > window.innerWidth + 1,
@@ -129,9 +129,10 @@ if (
   architecture.ready !== "true" ||
   architecture.motion !== "cinematic" ||
   JSON.stringify(architecture.destinationIds) !== JSON.stringify(expectedIds) ||
-  architecture.primaryLinks !== expectedIds.length ||
+  // The masthead lists every destination except the surface itself.
+  architecture.primaryLinks !== expectedIds.length - 1 ||
   architecture.journeyLinks !== expectedIds.length ||
-  architecture.productNodes !== 5 ||
+  architecture.productNodes !== 3 ||
   !architecture.hasWater ||
   !architecture.hasStage ||
   architecture.overflow
@@ -191,7 +192,9 @@ for (const [id, filename] of destinations) {
     scene.contentOpacity < 0.7 ||
     scene.pointerEvents === "none" ||
     !scene.headingVisible ||
-    scene.currentLinks.length !== 2 ||
+    // The surface has a journey-map link only; every other destination is
+    // also in the masthead, so two links point at it.
+    scene.currentLinks.length !== (id === "surface" ? 1 : 2) ||
     scene.currentLinks.some((link) => link !== id) ||
     !scene.mapTargetsAccessible ||
     scene.clips < 1 ||
@@ -207,7 +210,7 @@ for (const [id, filename] of destinations) {
 
 await evaluate(`window.scrollTo({ top: 0, behavior: "instant" })`);
 await waitFor(
-  `document.querySelector(".kw")?.dataset.koiDestination === "enter"`,
+  `document.querySelector(".kw")?.dataset.koiDestination === "surface"`,
   "reverse scrolling to restore the opening destination",
 );
 
@@ -339,7 +342,7 @@ for (const frame of frameCases) {
 
   const sectionIds = frame.width >= 2800
     ? destinations.map(([id]) => id)
-    : ["products", "systems"];
+    : ["shipped", "lab"];
   for (const id of sectionIds) {
     await evaluate(`document.getElementById(${JSON.stringify(id)})?.scrollIntoView({ block: "start", behavior: "instant" })`);
     await wait(200);
@@ -362,7 +365,7 @@ for (const frame of frameCases) {
       };
     })()`);
 
-    const expectedStage = frame.width <= 1024 || (["products", "systems"].includes(id) && frame.height <= 760)
+    const expectedStage = frame.width <= 1024 || (["shipped", "lab"].includes(id) && frame.height <= 760)
       ? ["static", "relative"]
       : ["sticky"];
     if (
