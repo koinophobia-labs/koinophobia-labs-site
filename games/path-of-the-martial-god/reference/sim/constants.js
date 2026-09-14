@@ -46,8 +46,10 @@ export const MOVE = {
   advance: 0.030,
   retreat: 0.024,   // Low River "does not retreat well"
   lateral: 0.026,
-  evadeBurst: 0.075,
   guardScale: 0.45, // moving while guarding is slow
+  // A slip's burst is NOT here. It belongs to the technique, in low-river.json
+  // (`evade.burst`), which is the value formMachine actually reads. A second copy in
+  // this file would be a number you could tune all day with no effect.
 };
 
 /** Structure recovery per tick, by what the fighter is doing (COMBAT_SYSTEM.md §2). */
@@ -74,10 +76,15 @@ export const BREATH = {
   recoverFocus: 0.62,
   recoverMoving: 0.09,
   guardDrainPerTick: 0.11,
-  lateGuardPenalty: 9,   // guard raised inside LATE_GUARD_TICKS of impact
-  lateGuardTicks: 8,
+  // A guard that went up too late costs this and protects nothing. "Too late" means
+  // the raise has not finished: resolve.js compares guardTicks against the settle
+  // technique's own startup, from low-river.json. There used to be a `lateGuardTicks`
+  // here claiming the window was 8 ticks. Nothing read it and it was wrong — the real
+  // window is settle's startup, which is 3. A tuning file that lies is worse than a
+  // tuning file that is silent, because the lie gets believed and acted on.
+  lateGuardPenalty: 9,
   deflectFailPenalty: 16,
-  evadeCost: 6,
+  // A slip's Breath cost is likewise the technique's own `frames.breath`, not a copy.
   impactAbsorb: 0.35,    // per point of structure force absorbed while guarding
 };
 
@@ -88,7 +95,10 @@ export const LINE = {
   decayPerTick: 0.006,
   structureBonusPerTier: 0.16,   // escalating structure damage
   recoveryCutPerTier: 0.06,      // shortened recovery
-  antiFlinchFromTier: 2,
+  // There was an `antiFlinchFromTier: 2` here, for a flinch mechanic that exists
+  // nowhere — not in this code, not in the Swift port, not in COMBAT_SYSTEM.md. If the
+  // Line should eventually let you eat a jab without breaking stride, that is a design
+  // decision to make and write down, not a number to leave lying about looking settled.
 };
 
 export const WILL = {

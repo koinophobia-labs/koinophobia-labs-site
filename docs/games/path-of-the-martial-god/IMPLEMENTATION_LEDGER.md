@@ -51,6 +51,42 @@ honours the commits it kept asking for and then punishes them; and the buffer do
 measurably help a player whose *decisions* are late, only one whose *press* is early.
 Full before/after in `NATIVE_M1_REPORT.md` §6.
 
+### D-2 — The same defect three times, and what was done about it
+
+After the input buffer (D-1), the codebase was swept for the same shape: a thing
+declared, documented, and never read. It was found twice more.
+
+**Five settings nothing consumed** — `timingWindowScale`, `colourIndependentCues`,
+`combatCaptions`, `musicVolume`, `debugOverlay` — in a build with no settings screen to
+reach even the working ones from. An accessibility switch that does nothing is worse
+than an absent one: it tells a player their need has been met.
+
+**Four tuning constants nothing consumed**, three of them second copies of numbers the
+simulation really reads from `low-river.json`. One of those, `BREATH.lateGuardTicks: 8`,
+**disagreed with the value actually in force** — the late-guard window is the settle
+technique's own startup, which is 3. Anyone tuning that window from `constants.js`
+would have been tuning nothing, from a wrong number. The fourth,
+`LINE.antiFlinchFromTier`, was a constant for a mechanic that exists nowhere in either
+implementation or in any design document.
+
+**Ruling: stop relying on care, and make the codebase notice.** Deleting the four and
+quarantining the five fixes today. Three tests fix the class, and all of them run in
+this environment with no toolchain:
+
+| Test | Catches |
+| --- | --- |
+| `input-buffer.test.js` + the positional check in `production-sync.test.js` | The buffer going dead again, in either language |
+| `settings-are-wired.test.js` | A setting with no consumer; a reserved one that starts working while still labelled as not; the system accessibility switches going unread |
+| `tuning-constants-are-read.test.js` | A constant nothing reads; a constant shadowing a name the technique data owns; a stale allowlist entry |
+
+Each was mutation-tested in both directions before being trusted.
+
+The reason this keeps happening is worth naming rather than just fixing: a declaration
+is the cheapest thing to write and the most authoritative thing to read. A constant in
+a tuning file, a field in a settings struct, a named window in a header — these are
+where a reader goes to find out what is true, and nothing about writing one makes it
+true. Care does not scale against that. A test does.
+
 ---
 
 ## Requirement → system → file

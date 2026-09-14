@@ -8,7 +8,9 @@ public enum Sim {
     /// Fixed simulation rate. All frame windows in technique data are in these ticks.
     /// Render rate is independent — ProMotion 120Hz changes presentation only.
     public static let tickHZ: Double = 60
-    public static let tickSeconds: Double = 1.0 / 60.0
+    /// Derived, not written out again. Two copies of 60 is one copy too many: the
+    /// second one is the one that goes stale.
+    public static let tickSeconds: Double = 1.0 / tickHZ
 }
 
 public enum Band: String, Codable, CaseIterable, Sendable {
