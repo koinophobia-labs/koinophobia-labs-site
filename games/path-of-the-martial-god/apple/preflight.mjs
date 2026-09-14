@@ -336,7 +336,10 @@ for (const f of swiftFiles) {
     const call = src.slice(i, end === -1 ? src.length : end + 1);
     i += 12;
     if (!call.includes('{')) continue;           // no block: nothing to be isolated
-    if (!/queue:\s*\.main/.test(call)) {
+    // Both spellings. Accepting only `.main` would have reported correct code as
+    // wrong the first time anyone wrote the queue out in full — a false alarm, which
+    // costs the same trust as a false pass.
+    if (!/queue:\s*(OperationQueue\s*\.\s*)?\.?main\b/.test(call)) {
       note(f, 'addObserver block without `queue: .main` — it may then run on any queue, '
             + 'and nothing inside it may touch main-actor state');
       continue;

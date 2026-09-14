@@ -216,19 +216,19 @@ export function decide(self, snap, brain) {
     terms.urgency = 0;
     if (brain.quiet > URGENCY.graceTicks) {
       const u = Math.min(1, (brain.quiet - URGENCY.graceTicks) / URGENCY.rampTicks);
-      // Scored on the option's own forward component rather than by category, so a
-      // retreating attack is not mistaken for an answer to a fight that will not
-      // start. `nail` and `check` commit backwards; under the first version of this
-      // term they scored as "doing something" and the opponent backed away swinging.
-      // Urgency closes distance. It does NOT decide to swing: `rangeFit` already
-      // knows which techniques can arrive, and an urgency bonus large enough to be
-      // felt is large enough to override its -2.0 "will simply not arrive" gate. The
-      // first version did exactly that — the opponent advanced to 1.4m, then spent
-      // half its ticks jabbing at air from out of reach, and a technique in progress
-      // is a technique not closing. It got closer and stopped getting closer.
+      // Urgency closes DISTANCE. It rewards moving toward them and penalises waiting,
+      // and then stops — the existing terms decide what to do on arrival. Two earlier
+      // versions did more than that and both failed, in ways worth keeping:
       //
-      // So: reward moving toward them, penalise waiting, and let the existing terms
-      // decide what to do on arrival.
+      //   Scoring by category rather than by forward component treated a retreating
+      //   attack as an answer. `nail` and `check` commit backwards, so the opponent
+      //   backed away swinging.
+      //
+      //   Adding an attack bonus overrode `rangeFit`'s -2.0 "will simply not arrive"
+      //   gate, because a bonus big enough to be felt is big enough to beat it. The
+      //   opponent advanced to 1.4m and then spent half its ticks jabbing at air, and
+      //   a technique in progress is a technique not closing. It got nearer, then
+      //   stopped getting nearer.
       terms.urgency = u * (
         o.fwd * URGENCY.advance
         - (o.id === 'hold' || o.id === 'guard' ? URGENCY.settle : 0)

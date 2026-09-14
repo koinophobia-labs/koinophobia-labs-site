@@ -41,7 +41,6 @@ export const MAX = {
   region: { head: 42, torso: 70, leadArm: 40, rearArm: 40, leadLeg: 46, rearLeg: 46 },
 };
 
-/** Locomotion, metres per tick. */
 /**
  * URGENCY — what happens when no opening is ever offered.
  *
@@ -66,6 +65,7 @@ export const URGENCY = {
   settle: 1.3,       // what waiting stops being worth
 };
 
+/** Locomotion, metres per tick. */
 export const MOVE = {
   advance: 0.030,
   retreat: 0.024,   // Low River "does not retreat well"
@@ -76,7 +76,6 @@ export const MOVE = {
   // this file would be a number you could tune all day with no effect.
 };
 
-/** Structure recovery per tick, by what the fighter is doing (COMBAT_SYSTEM.md §2). */
 /**
  * Structure recovery per tick, by what the fighter is doing (COMBAT_SYSTEM.md §2).
  *

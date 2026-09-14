@@ -55,7 +55,6 @@ public enum MaxValue {
     }
 }
 
-/// Locomotion, metres per tick.
 /// URGENCY — what happens when no opening is ever offered.
 ///
 /// Patience is waiting for an opening; it is not the same as standing still forever,
@@ -70,6 +69,7 @@ public enum Urgency {
     public static let settle: Double = 1.3
 }
 
+/// Locomotion, metres per tick.
 public enum Move {
     public static let advance: Double = 0.030
     public static let retreat: Double = 0.024   // Low River "does not retreat well"
