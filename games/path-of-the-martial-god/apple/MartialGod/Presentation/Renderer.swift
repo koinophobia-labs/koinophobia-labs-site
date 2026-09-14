@@ -137,8 +137,17 @@ public final class Renderer: NSObject, MTKViewDelegate {
         let count = min(scratch.count, Renderer.maxVertices)
         let buffer = vertexBuffers[frameIndex % vertexBuffers.count]
         frameIndex += 1
+        // `baseAddress` is nil for an empty Array, and a draw with nothing in it is a
+        // Metal validation error rather than a blank frame. Neither should be possible
+        // — buildGround always pushes — but "should be impossible" is not a reason to
+        // leave a force-unwrap on the one path that runs sixty times a second.
+        guard count > 0 else {
+            inFlight.signal()
+            return
+        }
         scratch.withUnsafeBufferPointer { src in
-            buffer.contents().copyMemory(from: src.baseAddress!,
+            guard let base = src.baseAddress else { return }
+            buffer.contents().copyMemory(from: base,
                                          byteCount: MemoryLayout<Vertex>.stride * count)
         }
 

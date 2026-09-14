@@ -354,6 +354,50 @@ the oldest supported device, allocation count per frame, touch-to-photon latency
 thermal behaviour over a ten-minute session. None of those are simulation questions,
 which is rather the point of the table above.
 
+### 9.1 The Metal path, read adversarially
+
+`Renderer.swift` cannot be compiled here, so it was read instead — specifically for the
+errors a compiler and a GPU catch and a reviewer normally does not. What was checked,
+and what it found:
+
+| Checked | Result |
+| --- | --- |
+| Shader source exists and is reachable | ✅ `Shaders.metal` is under the target's `sources` path, so Xcode compiles it into the default library |
+| Function names match `makeFunction(name:)` | ✅ `combat_vertex`, `combat_fragment` |
+| Vertex attribute indices match `[[attribute(n)]]` | ✅ 0/1/2 = position, normal, colour |
+| Vertex buffer index matches `setVertexBuffer` | ✅ both 0, and no layout collides with it |
+| Uniform buffer index matches `[[buffer(1)]]` | ✅ both 1 |
+| **`Uniforms` memory layout across the Swift/Metal boundary** | ✅ offsets 0 / 64 / 80 and stride 96 on both sides — `SIMD3<Float>` pads to 16 bytes exactly as Metal's `float3` does |
+| Semaphore balance on the early-return path | ✅ signalled; the abandoned command buffer is never committed, so its handler cannot double-signal |
+| Camera reaches the renderer | ✅ `CombatCamera` is a struct and is copied from the session every frame before `draw` |
+| Double camera update | ✅ not a bug — the frame-hold branch returns before the second call |
+| Empty vertex buffer | ❌ **fixed** — `src.baseAddress!` force-unwraps nil for an empty array, and a zero-vertex draw is a Metal validation error. Both are now guarded |
+
+The `Uniforms` row is the one worth dwelling on, because it is the classic way this
+fails: a `float3` in a Metal struct occupies 16 bytes, not 12, and a Swift struct that
+disagrees produces a renderer that draws with garbage transforms and no error message.
+It happens to be right here.
+
+**None of this is a substitute for compiling.** It rules out a specific list of failure
+modes. Anything not on that list is still unknown, and `Renderer.swift` remains the
+file to open first on the Mac.
+
+### 9.2 Two things in the project spec that would have cost a Mac session
+
+Found by reading `project.yml` against XcodeGen's actual schema rather than its
+plausible one:
+
+- **`info: path: .../Info.plist`** — XcodeGen's `info` key *generates* a plist at the
+  path it is given. Pointing it at the hand-written Info.plist would have overwritten
+  it with a minimal stub on the first `xcodegen generate`, silently, taking the
+  orientation lock, the controller declarations and the export-compliance answer with
+  it. Replaced with `INFOPLIST_FILE`.
+- **`resources:`** — not a target-level key in XcodeGen at all. The files were already
+  covered by the `sources` path, so listing them again bought nothing and risked
+  duplicate build-phase entries.
+
+Neither would have been visible until someone ran the generator.
+
 ## 10. Known issues
 
 | # | Issue | Severity |

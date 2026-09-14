@@ -38,13 +38,20 @@ targets:
     dependencies:
       - package: MartialGodCore
         product: MartialGodCore
-    resources:
-      - MartialGod/Resources/Assets.xcassets
-      - MartialGod/Resources/PrivacyInfo.xcprivacy
-    info:
-      path: MartialGod/Resources/Info.plist
+    # No `resources:` key and no `info:` key, both deliberately:
+    #
+    #   * XcodeGen has no target-level `resources:`. Everything goes through `sources`,
+    #     and Xcode assigns the build phase by file type — so Assets.xcassets and
+    #     PrivacyInfo.xcprivacy are already covered by the `MartialGod` path above and
+    #     listing them again risks duplicate build-phase entries.
+    #   * XcodeGen's `info:` GENERATES a plist at the path it is given. Pointing it at
+    #     the hand-written Info.plist would overwrite it on the first `xcodegen
+    #     generate` — silently, and with a minimal stub. The file is referenced through
+    #     INFOPLIST_FILE instead, and excluded from `sources` above so it is not also
+    #     treated as a compiled input.
     settings:
       base:
+        INFOPLIST_FILE: MartialGod/Resources/Info.plist
         # TEMPORARY BUNDLE IDENTIFIER. Replace with the real App Store Connect
         # identifier before the first TestFlight upload; see NATIVE_M1_REPORT.md.
         PRODUCT_BUNDLE_IDENTIFIER: com.koinophobialabs.martialgod
