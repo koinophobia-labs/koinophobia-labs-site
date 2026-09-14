@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Path of the Martial God — Milestone 1</title>
+<style>
+  :root{
+    --paper:#e8e9e4; --ink:#12161a; --slate:#79828a; --rule:#2a3136; --red:#a4161a;
+    --f-body:"Iowan Old Style",Georgia,serif;
+    --f-reg:ui-monospace,SFMono-Regular,Menlo,monospace;
+  }
+  *{box-sizing:border-box;}
+  html,body{height:100%;}
+  body{margin:0;background:#0b0e10;color:var(--paper);font-family:var(--f-body);overflow:hidden;}
+  #stage{position:fixed;inset:0;width:100vw;height:100vh;display:block;background:#12161a;cursor:crosshair;}
+
+  #overlay{
+    position:fixed;inset:0;display:grid;place-items:center;
+    background:rgba(8,10,12,0.90);z-index:10;
+    transition:opacity .45s ease, visibility .45s;
+    padding:24px;
+  }
+  #overlay.gone{opacity:0;visibility:hidden;pointer-events:none;}
+  .card{max-width:640px;width:100%;}
+  h1{
+    font-size:clamp(26px,5vw,40px);margin:0 0 4px;letter-spacing:-.02em;font-weight:600;
+    text-wrap:balance;
+  }
+  .eyebrow{
+    font-family:var(--f-reg);font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+    color:#8a7a4e;margin:0 0 18px;
+  }
+  .lede{color:#aeb5b1;margin:0 0 22px;line-height:1.55;font-size:16px;max-width:56ch;}
+  .lede b{color:var(--paper);font-weight:600;}
+  dl{
+    display:grid;grid-template-columns:max-content 1fr;gap:7px 16px;margin:0 0 24px;
+    font-size:13.5px;line-height:1.4;
+  }
+  dt{font-family:var(--f-reg);font-size:11.5px;color:#d8dbd4;white-space:nowrap;padding-top:2px;}
+  dd{margin:0;color:#8d959a;}
+  .go{
+    font-family:var(--f-reg);font-size:12px;letter-spacing:.1em;text-transform:uppercase;
+    border:1px solid #3a4248;background:transparent;color:var(--paper);
+    padding:11px 20px;cursor:pointer;
+  }
+  .go:hover{border-color:var(--red);}
+  .go:focus-visible{outline:2px solid var(--red);outline-offset:3px;}
+  .keys{font-family:var(--f-reg);font-size:11px;color:#5d666d;margin:16px 0 0;}
+
+  #outcome{
+    position:fixed;left:0;right:0;bottom:11vh;text-align:center;z-index:8;
+    opacity:0;transition:opacity .5s ease .35s;pointer-events:none;
+  }
+  #outcome.shown{opacity:1;}
+  #outcome b{display:block;font-size:clamp(20px,3.4vw,30px);font-weight:600;letter-spacing:-.01em;}
+  #outcome span{
+    display:block;margin-top:10px;font-family:var(--f-reg);font-size:11px;
+    letter-spacing:.14em;text-transform:uppercase;color:#79828a;
+  }
+  @media (max-width:640px){ dl{grid-template-columns:1fr;gap:2px 0;} dd{margin-bottom:8px;} }
+</style>
+</head>
+<body>
+  <canvas id="stage"></canvas>
+  <div id="outcome" aria-live="polite"></div>
+
+  <div id="overlay">
+    <div class="card">
+      <p class="eyebrow">Milestone 1 · combat prototype</p>
+      <h1>Path of the Martial God</h1>
+      <p class="lede">
+        One unarmed fight. <b>There are no bars.</b> Everything you need is in the
+        bodies: how he stands, where his weight is, how hard he is breathing, whether
+        he is stuck at the end of something he committed to.
+        <b>Guard only covers the quadrant you face</b> — walk around him and it stops
+        protecting him.
+      </p>
+      <dl id="controls"></dl>
+      <button class="go" id="start" type="button">Begin</button>
+      <p class="keys">` debug overlay · M sound · R restart</p>
+    </div>
+  </div>
+
+  <script type="module" src="../view/main.js"></script>
+  <script type="module">
+    document.getElementById('start').addEventListener('click', () => {
+      document.getElementById('overlay').classList.add('gone');
+      window.dispatchEvent(new KeyboardEvent('keydown', { code: 'Enter' }));
+      document.getElementById('stage').focus();
+    });
+  </script>
+</body>
+</html>
