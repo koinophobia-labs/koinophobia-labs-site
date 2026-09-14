@@ -35,12 +35,20 @@ export async function GET(request: Request) {
   const kicker = (searchParams.get("kicker") ?? "Koinophobia Labs · a one-person software studio").trim().slice(0, 80);
 
   const [plate, emblem, font] = await Promise.all([
-    fetch(new URL("/brand/social-plate.jpg", origin)).then((r) => r.arrayBuffer()),
-    fetch(new URL("/brand/koinophobia-labs-koi-640.webp", origin)).then((r) => r.arrayBuffer()).catch(() => undefined),
+    fetch(new URL("/brand/social-plate.jpg", origin)).then((r) => (r.ok ? r.arrayBuffer() : undefined)).catch(() => undefined),
+    fetch(new URL("/brand/koi-emblem-128.png", origin)).then((r) => (r.ok ? r.arrayBuffer() : undefined)).catch(() => undefined),
     soraBold(origin),
   ]);
-  const plateUrl = `data:image/jpeg;base64,${Buffer.from(plate).toString("base64")}`;
-  const emblemUrl = emblem ? `data:image/webp;base64,${Buffer.from(emblem).toString("base64")}` : undefined;
+  const toDataUrl = (type: string, data?: ArrayBuffer) => {
+    if (!data) return undefined;
+    // Chunked: spreading a large Uint8Array into fromCharCode blows the stack.
+    const bytes = new Uint8Array(data);
+    let binary = "";
+    for (let i = 0; i < bytes.length; i += 8192) binary += String.fromCharCode(...bytes.subarray(i, i + 8192));
+    return `data:${type};base64,${btoa(binary)}`;
+  };
+  const plateUrl = toDataUrl("image/jpeg", plate);
+  const emblemUrl = toDataUrl("image/png", emblem);
   const size = title.length > 60 ? 52 : title.length > 36 ? 62 : 74;
 
   return new ImageResponse(
@@ -56,8 +64,10 @@ export async function GET(request: Request) {
           color: "#eef4f7",
         }}
       >
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={plateUrl} width={WIDTH} height={HEIGHT} alt="" style={{ position: "absolute", inset: 0, objectFit: "cover" }} />
+        {plateUrl ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={plateUrl} width={WIDTH} height={HEIGHT} alt="" style={{ position: "absolute", inset: 0, objectFit: "cover" }} />
+        ) : null}
         <div
           style={{
             position: "absolute",
@@ -82,7 +92,8 @@ export async function GET(request: Request) {
     {
       width: WIDTH,
       height: HEIGHT,
-      fonts: font ? [{ name: "Sora", data: font, weight: 700, style: "normal" }] : undefined,
+      // ImageResponse iterates `fonts`; never hand it undefined.
+      ...(font ? { fonts: [{ name: "Sora", data: font, weight: 700 as const, style: "normal" as const }] } : {}),
       headers: {
         "Cache-Control": "public, max-age=86400, stale-while-revalidate=604800",
       },
