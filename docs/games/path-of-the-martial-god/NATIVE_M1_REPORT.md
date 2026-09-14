@@ -855,6 +855,47 @@ core balance, both are yours, and both are written up in `OPEN_DECISIONS.md`.
 Criterion 3 stays **blocked**. It is closer, and the remaining obstacle is now precisely
 located.
 
+### 9.12 A constant that delivered half of what it said
+
+`WILL.onGassed: 0.10` is documented in `constants.js` as *"per tick while at zero
+breath"*. It delivered **0.05**, because six lines below it — in the same loop, over the
+same fighter, in the same pass — will regeneration ran unconditionally:
+
+```js
+if (f.breath <= 0.001) f.will = Math.max(0, f.will - WILL.onGassed);   // -0.10
+...
+f.will = Math.min(MAX.will, f.will + WILL.regenPerTick);               // +0.05, always
+```
+
+This is the **fourth** variant of the defect class this project keeps producing, and the
+first where the constant was genuinely read. Being read is not the same as being in
+force. The others were the input buffer (declared, never executed), five settings with
+no screen to reach them, and four constants nothing consumed — one of which,
+`lateGuardTicks: 8`, disagreed with the value actually in force. The note in
+`constants.js` about that one says a tuning file that lies is worse than one that is
+silent. A value that is consumed and then silently cancelled is the same lie, better
+hidden.
+
+Fixed on both sides; two committed traces changed (`guard-under-pressure` and
+`feint-and-slip` — the two that reach zero breath) and were re-baselined; parity holds
+across all eight scenarios.
+
+**The test is positional, not behavioural, and that is worth explaining.** To observe
+this from outside you need a tick on which `fight.js` finds breath at exactly zero.
+Assigning `breath = 0` does not produce one: recovery runs earlier in the tick and lifts
+it to 0.14 before the check. It happens only when breath is spent to nothing *within*
+the tick — and on those ticks hits and structure breaks are moving will too, so the 0.10
+cannot be separated from them. **That is precisely why it survived**: the state is rare,
+and when it occurs it is crowded. So the test asserts the shape, in the same style as
+the existing input-buffer positional check, and says so.
+
+This does **not** close criterion 3. Stalls went 4 → 4; one case (`circles forever` at
+aggression 0.15) resolves under a broader version of the fix that I tried and reverted —
+gating regeneration on staggered and down as well. That version is a real balance change
+to the Final Inch's threshold economy, it still did not close the 414-hit case, and
+choosing it by running the numbers until a test passed would be designing the game's
+core by trial and error. It is written up as option 3 in `OPEN_DECISIONS.md` instead.
+
 ## 10. Known issues
 
 | # | Issue | Severity |
@@ -878,6 +919,7 @@ located.
 | N-17 | `#selector` target/action pairing. **Half closed** (§9.6): preflight verifies the method exists and is `@objc`. A selector naming a method on a *different* object is still invisible here. | Low, was a blind spot |
 | N-18 | ~~All four NotificationCenter observer blocks touched main-actor state from a `@Sendable` closure~~ (§9.7). **Fixed** — explicit hops, and a preflight rule because the harness structurally cannot see the real signature. | Closed |
 | N-21 | ~~A player who retreats and circles is never caught at any temperament~~ (§9.10). **Fixed** — URGENCY, an eleventh scoring term. Nine stalls become four, all seven original traces regenerate byte-identically, and an eighth fixture makes the parity gate able to see the term. | Closed |
+| N-23 | ~~`WILL.onGassed` delivered half its documented value~~ (§9.12), refunded by an unconditional regeneration in the same loop. **Fixed** both sides, two traces re-baselined. Fourth variant of the declared-but-not-in-force defect class, and the first where the constant was actually read. | Closed |
 | N-22 | **A fight can be comprehensively won and still not end** (§9.11). 414 clean hits, 137 structure breaks, torso destroyed — and no terminal route fires, because `vitalityFraction` sums six regions the arms keep afloat and will regenerates faster than it is taken. Criterion 3 stays blocked. Core balance; not mine to choose. | **Open — blocks M1, yours to decide** |
 | N-20 | ~~Nothing verified that the names in Info.plist and project.yml resolve to real asset sets~~ (§9.9). **Fixed** — six checks, mutation-verified. Everything already passed; now it stays that way. | Closed |
 | N-19 | **Audio session category is `.ambient`, so the ringer switch silences the game** (§9.8) — including breath, which the design names as the interface. Not changed: the argument runs both ways and it is a design call. **Decide before the first device test.** | Open — yours |

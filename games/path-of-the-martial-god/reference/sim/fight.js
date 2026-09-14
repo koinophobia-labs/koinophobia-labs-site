@@ -123,13 +123,20 @@ export function step(fight, playerInput, choice = {}) {
 
   // ---- gassing out is a state the world can hear ----------------------------------
   for (const f of [a, b]) {
-    if (f.breath <= 0.001) {
+    const gassedOut = f.breath <= 0.001;
+    if (gassedOut) {
       f.will = Math.max(0, f.will - WILL.onGassed);
       if (!f._gassedNoted) { f._gassedNoted = true; emit({ type: 'gassed', who: f.id }); }
     } else if (f.breath > 14) {
       f._gassedNoted = false;
     }
-    f.will = Math.min(MAX.will, f.will + WILL.regenPerTick);
+    // Composure does not recover on the same tick it is being spent. Without this
+    // guard the two lines above and below cancel: `onGassed` reads as 0.10 per tick
+    // and delivered 0.05, because the regen ran immediately afterwards on the same
+    // fighter in the same pass. A tuning value that means half what it says is the
+    // defect `lateGuardTicks` was — see the note in constants.js — and this file is
+    // where it was hiding.
+    if (!gassedOut) f.will = Math.min(MAX.will, f.will + WILL.regenPerTick);
   }
 
   // ---- has someone been finished? -------------------------------------------------

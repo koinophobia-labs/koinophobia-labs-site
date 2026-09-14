@@ -179,7 +179,8 @@ public final class Fight {
 
         // ---- gassing out is a state the world can hear -----------------------------
         for f in [a, b] {
-            if f.breath <= 0.001 {
+            let gassedOut = f.breath <= 0.001
+            if gassedOut {
                 f.will = max(0, f.will - WillRule.onGassed)
                 if !f.gassedNoted {
                     f.gassedNoted = true
@@ -188,7 +189,11 @@ public final class Fight {
             } else if f.breath > 14 {
                 f.gassedNoted = false
             }
-            f.will = min(MaxValue.will, f.will + WillRule.regenPerTick)
+            // Composure does not recover on the same tick it is being spent. Without
+            // this guard the two branches cancel: `onGassed` reads as 0.10 per tick
+            // and delivered 0.05, because the regen ran immediately afterwards on the
+            // same fighter in the same pass.
+            if !gassedOut { f.will = min(MaxValue.will, f.will + WillRule.regenPerTick) }
         }
 
         checkTermination(emit: emit)

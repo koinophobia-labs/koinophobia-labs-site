@@ -226,6 +226,22 @@ So the two values that decide endings both sit near maximum on a body that has l
 | 2 | **Weight the regions** in `vitalityFraction` — head and torso dominate, limbs contribute little | Keeps the aggregate model; one function changes | A weighting is a balance surface, and picking numbers is the whole job |
 | 3 | **Will stops regenerating while losing** — no answer bonus below some structural threshold | Goes at the mechanism directly: will is meant to model the decision to keep going, and a dismantled fighter deciding to keep going is the bug | Touches the Inch and the Stop, the game's centre |
 
+**Measured, for option 3.** Will never falls far enough for anything to fire: over
+twenty minutes against a passive player it bottoms out at **64.4**, and at **68.3** while
+staggered — the Inch needs below 55. The player is staggered for 4,658 ticks and never
+goes down once. At aggression 0.15 a blow lands roughly every 174 ticks, and
+regeneration returns 8.7 will in that gap against the 2-4 the blow took. **Composure
+outruns damage because the damage is sparse**, which may well be right for one light
+blow every three seconds — and is the reason this is a design question rather than a
+bug.
+
+I implemented option 3 in its broad form (no regeneration while gassed, staggered or
+down) as an experiment and reverted it: it took stalls from 4 to 3, did **not** close the
+414-hit case, and picking it by re-running the numbers until a test passed would be
+designing the Final Inch's threshold economy by trial and error. The narrow half of it —
+no regeneration on the tick the gassed drain applies — was a straightforward correctness
+fix and has shipped (`NATIVE_M1_REPORT.md` §9.12).
+
 **Recommendation: 1, and look hard at 3.** Option 1 is a correctness fix — the aggregate
 was never meant to let an untouched arm keep a destroyed torso fighting. Option 3 is the
 more interesting design question, and it is about the Final Inch, so it is worth your
