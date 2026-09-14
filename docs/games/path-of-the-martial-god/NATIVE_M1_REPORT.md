@@ -633,12 +633,47 @@ Verified by mutation in both directions: removing the isolation from `TouchGramm
 reproduces nine errors, and restoring the direct call in the haptics handler reproduces
 the cross-actor one.
 
+### 9.6 The shader ABI, and the selector — both checkable without hardware
+
+`Renderer.swift` and `Shaders.metal` are compiled by two different compilers that never
+see each other. Everything they agree on is agreed **by hand**: function names, vertex
+attribute indices and formats, buffer indices, and the field order of the uniform
+struct. None of it fails the build. A mismatch produces garbled geometry, a black
+screen, or a pipeline that silently fails to create — on a device, hours from the change
+that caused it. This is N-2, the highest-risk file, and its static half needs no GPU.
+
+`preflight.mjs` now cross-checks five things, each verified by mutation:
+
+| Check | Mutation |
+| --- | --- |
+| Every `makeFunction(name:)` exists in the shader, and every shader entry point is looked up | Rename `combat_vertex` → both directions reported |
+| Attribute index and format against the shader's declared type | Descriptor says `.float3` for a `float4` colour → named |
+| Attributes' `bufferIndex` has a `layouts[n].stride` and a `setVertexBuffer(index: n)` | — |
+| Every `[[buffer(n)]]` the shader reads is bound at `n` | Move uniforms to `buffer(2)` → "nothing is bound at index 2" |
+| `Uniforms` field-by-field **in order**, by type *and by name* | Swap `lightDirection` and `ambient` → caught. This is the worst case in the set: both sides compile, the struct is the same size, and every matrix is silently wrong. The name check is what catches it |
+
+The ABI turned out to be correct as written. It was correct by care, and nothing was
+checking it.
+
+**The `#selector` blind spot is now half closed.** The type-check harness rewrites
+`#selector(x)` into `Selector("x")` because Linux Swift has no Objective-C runtime, so
+the pairing goes unchecked there — and a selector naming a missing method passes every
+gate and crashes when the gesture fires. Preflight now verifies that each `#selector`
+names a method declared in the same file **and** that it is `@objc`; a correct name that
+is not exposed to the runtime is the more likely of the two mistakes and the harder to
+see. Both mutations are caught.
+
+Also fixed while building this: the shared source stripper removes string contents,
+which is right for counting braces and wrong for any check whose subject is a string
+literal. Asking it for shader function names returned none and reported that as three
+missing functions. A second, comment-only stripper now exists for those.
+
 ## 10. Known issues
 
 | # | Issue | Severity |
 | --- | --- | --- |
 | N-1 | ~~Nothing has been compiled.~~ **The core is compiled and green** — 43 tests, parity gate, strict concurrency. **All 13 presentation files now type-check** against stub frameworks (`./typecheck.sh`), the SwiftUI shell included; real-SDK behaviour still needs a Mac. | Open, narrowed further |
-| N-2 | `Renderer.swift` is still the highest-risk file: pipeline state, vertex descriptor and shader ABI are what a compiler and a GPU catch and a reviewer does not. It now **type-checks** against stub Metal, which is more than parsing and much less than building. | High |
+| N-2 | `Renderer.swift` is still the highest-risk file. Narrowed twice: it **type-checks** against stub Metal, and the **shader ABI is now cross-checked statically** (§9.6) — function names, attribute indices and formats, buffer bindings, and the uniform struct field by field. What remains needs a GPU: whether the pipeline actually creates, and whether the geometry is right once it does. | High, narrowed |
 | N-3 | The touch grammar is untested on glass. Tap-versus-flick disambiguation is the most likely tuning need. | High |
 | N-4 | ~~The input buffer is inert in both implementations.~~ **Fixed**, and the Swift half is now proven by a parity gate that actually ran — `bufferedVerb` matches the oracle on every one of 5,861 frames. | Closed |
 | N-5 | ~~`TechniqueDB` uses mutable static state.~~ **Fixed:** one immutable `Sendable` table in a `static let`. Verified clean under `-strict-concurrency=complete`, and CI fails on any new warning. | Closed |
@@ -652,6 +687,8 @@ the cross-actor one.
 | N-13 | ~~The native build said nothing when a fight ended.~~ **Fixed** — `OutcomeOverlay`, one sentence, timed to let the last image land first. | Closed |
 | N-14 | ~~Two overlays were missing `required init?(coder:)` and the stub harness was not asking for it~~ (§9.3). **Fixed on both sides**, and the harness now catches it by mutation. A reminder that every other stub is still only a stub. | Closed |
 | N-15 | ~~Nothing in the presentation layer declared main-actor isolation and the harness could not see it~~ (§9.5). **Fixed** — seven files, six annotations and one genuine off-main data race in the haptics engine handlers. | Closed |
+| N-16 | ~~The shader ABI was agreed by hand and checked by nobody~~ (§9.6). **Fixed** — five static cross-checks, all mutation-verified. The ABI was correct as written; it is now correct *and* guarded. | Closed |
+| N-17 | `#selector` target/action pairing. **Half closed** (§9.6): preflight verifies the method exists and is `@objc`. A selector naming a method on a *different* object is still invisible here. | Low, was a blind spot |
 
 ## 11. TestFlight readiness blockers
 
