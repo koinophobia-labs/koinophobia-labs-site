@@ -6,7 +6,7 @@
 
 ---
 
-## Conflicts found in the canonical package, and the rulings
+## Conflicts and defects found, and the rulings
 
 ### C-1 — What Milestone 1 actually is
 - `PRODUCTION_ROADMAP.md` M1: art-free, **"Debug HUD exposing every value"**, exit criteria are determinism / hot-reload / two-player / fun.
@@ -24,6 +24,32 @@
 
 ### C-3 — Animation pipeline (§11 step 3)
 Step 3 is "single skeleton, four proportion states, retarget, motion-matched footwork" — not meaningful without an engine and an animator. **Its readability *function* is delivered instead by procedural placeholder posture** driven directly from resource values (`view/pose.js`), which is the same contract `ANIMATION_REQUIREMENTS.md` §5 gives the additive layers. Step 4 (three fidelity tiers) is **stubbed as a real parameter, not implemented** — the `tiers` map exists in the data and `sound` is the only populated tier, per `PRODUCTION_ROADMAP.md` M1.
+
+### D-1 — The input buffer was written, documented, and never ran
+
+`INPUT_BUFFER_TICKS` and its capture shipped in M1 and were listed in
+`MILESTONE_1_REPORT.md` as a fix for the player being disadvantaged against the brain.
+Porting `tickFighter` to Swift exposed that the capture sat **below** the early returns
+for `acting`, `staggered`, `down` and `finished`, so its `!actionable(f)` test could
+never be true. It was unreachable. Measured: 474 of 1,747 presses (27.1%) across the
+trace scenarios were being thrown away, and the buffer was populated on 0 ticks.
+
+**Ruling: fix it, as its own change, with its own measurement.** It was first ported
+faithfully inert — the port's job was to preserve behaviour, not improve it mid-flight —
+and then fixed deliberately afterwards. The capture moved to the top of the tick in both
+trees; the parity traces were re-baselined (format v2, which adds `bufferedVerb`); and
+the rule it implements was written into `COMBAT_SYSTEM.md` §3.1, because a real input
+rule that lives only in a constant is how this happened in the first place.
+
+Two guards exist because only one of them can run without Xcode: behaviour tests in each
+language, and a **positional** assertion in `production-sync.test.js` that the capture
+sits above the early returns in *both* files. The defect was a line in the wrong place in
+a file that reads correctly either way, so position is the property worth asserting.
+
+Consequences recorded rather than hidden: a masher now loses faster, because the game
+honours the commits it kept asking for and then punishes them; and the buffer does not
+measurably help a player whose *decisions* are late, only one whose *press* is early.
+Full before/after in `NATIVE_M1_REPORT.md` §6.
 
 ---
 
@@ -47,6 +73,7 @@ Step 3 is "single skeleton, four proportion states, retarget, motion-matched foo
 | Evade i-frames conditional on direction | COMBAT §5 | `resolveHit()` | `sim/resolve.js` |
 | Commitment; no animation-cancel soup | brief §3 | `commitAt`, cancel windows | `sim/formMachine.js` |
 | The Lie (feint) — release before commitment | COMBAT §6.1 | feint branch | `sim/formMachine.js` |
+| A press made while the body is busy is honoured, not discarded | COMBAT §3.1 | `tickBuffer()`, above the early returns | `sim/formMachine.js` |
 | Opponent never sees the input buffer | COMBAT §11 | `Perception` (delayed, filtered) | `sim/ai/perception.js` |
 | Small inspectable decision model | brief (AI) | `OpponentBrain`, scored options | `sim/ai/brain.js` |
 | Read-model hook for false reads | brief §6 | `ReadMemory` tendencies | `sim/ai/brain.js` |

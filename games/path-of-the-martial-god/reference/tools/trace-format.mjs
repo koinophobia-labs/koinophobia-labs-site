@@ -27,7 +27,10 @@
  *              room for that.
  */
 
-export const FORMAT_VERSION = 1;
+export const FORMAT_VERSION = 2;
+// v2 added `bufferedVerb`. A port that gets the input buffer wrong diverges anyway —
+// but several ticks later, in `state`, where the cause is no longer visible. The
+// buffer decides a branch, so it is captured where the branch is decided.
 
 /** Absolute tolerances for continuous fields. Units are metres, radians, or points. */
 export const TOLERANCE = {
@@ -51,7 +54,7 @@ export const TOLERANCE = {
 
 /** Fields that must match exactly. A mismatch here means the branches diverged. */
 export const DISCRETE = [
-  'state', 'techniqueId', 'formTick', 'feint', 'landed',
+  'state', 'techniqueId', 'formTick', 'feint', 'landed', 'bufferedVerb',
   'collapse.fore', 'collapse.rear', 'collapse.leadSide', 'collapse.rearSide',
   'guardTicks', 'stateTicks',
 ];
@@ -64,6 +67,11 @@ export function captureFighter(f) {
     formTick: f.form.tick,
     feint: !!f.form.feint,
     landed: !!f.form.landed,
+    // The verb waiting to be honoured, if any. Hidden state, but state that decides
+    // what happens next — so the port has to reproduce it, not merely end up somewhere
+    // similar. The age is deliberately not captured: an off-by-one there shows up here
+    // one tick later as a buffer that fired or expired when it should not have.
+    bufferedVerb: f.buffer ? f.buffer.verb : null,
     pos: { x: f.pos.x, z: f.pos.z },
     facing: f.facing,
     structure: {

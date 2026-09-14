@@ -38,15 +38,17 @@ Real checks, really executed:
 
 | Check | Result |
 | --- | --- |
-| Reference oracle regression suite | ✅ 27/27 pass |
-| **Parity harness self-test** — corrupts a good trace 11 ways, every one must be caught | ✅ 13/13 pass |
-| Golden traces generated from the oracle | ✅ 7 scenarios, 6,484 frames, 417 events |
+| Reference oracle regression suite | ✅ **60/60 pass** — 19 simulation, 8 fairness, 17 parity harness, 12 input buffer, 4 cross-tree sync |
+| **Parity harness self-test** — corrupts a good trace every way a port defect would, including a wrong buffered verb | ✅ 17/17 pass |
+| Golden traces generated from the oracle | ✅ 7 scenarios, 5,861 frames, 407 events (format v2, re-baselined after the buffer fix) |
 | Oracle determinism (regenerating reproduces committed traces byte for byte) | ✅ pass |
 | Technique JSON identical between reference and Apple target | ✅ pass |
 | Parity fixtures identical between `reference/traces` and the Swift test bundle | ✅ pass |
 | **27 tuning constants identical between the Swift port and the oracle** | ✅ pass |
 | All 23 technique JSON keys represented in the Swift `Technique` type | ✅ pass |
-| Swift structural preflight (29 files: brace balance, imports, `guard`/`else`, keyword members, build-definition paths) | ✅ no problems |
+| Swift structural preflight (30 files: brace balance, imports, `guard`/`else`, keyword members, build-definition paths) | ✅ no problems |
+| Input buffer behaves, and the opponent still cannot use it | ✅ 12/12 pass; 9 of them fail against the pre-fix code |
+| The buffer capture sits above the early returns in **both** trees | ✅ pass (positional check, runs without Xcode) |
 | Site suites unaffected by the restructure | ✅ lint, typecheck, 193 tests pass |
 | Swift compiles | ⛔ no toolchain |
 | Swift unit tests / parity gate run | ⛔ no toolchain |
@@ -72,7 +74,7 @@ Real checks, really executed:
 | Final Inch + terminals + the Stop gate | `FinalInch.swift` | `sim/finalInch.js` |
 | Update-order fairness (shared pre-tick refs, alternating resolution) | `Fight.swift` | `sim/fight.js` |
 | Feint semantics | `FormMachine.swift` | `sim/formMachine.js` |
-| Input buffer | `FormMachine.swift` — **ported inert, see §6** | `sim/formMachine.js` |
+| Input buffer | `FormMachine.swift` — **fixed, see §6** | `sim/formMachine.js` |
 | Technique data | `Resources/low-river.json` (byte-identical) | `sim/data/low-river.json` |
 
 ### Production layers (new)
@@ -136,30 +138,110 @@ portrait would either crop the fighters or push them so far apart that distance 
 reading, and distance is the whole game. Declared in `Info.plist` for both idioms, with
 `UIRequiresFullScreen`, safe-area-aware layout, and system edge gestures deferred.
 
-## 6. A defect this port surfaced in the validated reference
+## 6. A defect this port surfaced in the validated reference — and its fix
 
 Porting `tickFighter` line by line exposed something the M1 work missed.
 
-**The input buffer is unreachable dead code.** Its set-site tests `!isActionable`, but
-every early return above it has already fired for `acting`, `staggered`, `down` and
-`finished` — so control only reaches that line when the state is `neutral` or `guard`,
-both of which are actionable. The condition can never be true.
+**The input buffer was unreachable dead code.** Its set-site tested `!isActionable`,
+but every early return above it had already fired for `acting`, `staggered`, `down` and
+`finished` — so control only reached that line when the state was `neutral` or `guard`,
+both of which are actionable. The condition could never be true. Verified at the time:
+**0 of 3,171 ticks** across three seeds ever populated the buffer.
 
-Verified: **0 of 3,171 ticks** across three seeds ever populated the buffer.
+That corrected a claim in `MILESTONE_1_REPORT.md`, which had listed the buffer among
+the fixes and said it addressed the player being strictly disadvantaged against the
+brain. It did not. When that milestone measured "no change" after adding it, that was
+the evidence, and I misread it as being masked by another bug.
 
-**This corrects a claim in `MILESTONE_1_REPORT.md`**, which listed the input buffer
-among the fixes and said it addressed the player being strictly disadvantaged against
-the brain. It does not. When I measured "no change" after adding it, that was the
-evidence and I misread it as being masked by another bug.
+It was first **ported faithfully inert**, because the instruction for the port was to
+preserve behaviour rather than improve it mid-flight. It has since been fixed as its
+own change, with its own measurement, and the parity traces have been re-baselined.
 
-**The underlying unfairness is real and still open:** the brain is consulted every tick
-and acts the frame it becomes free, while a human pressing during recovery has the
-press silently discarded.
+### 6.1 The fix
 
-It has been **ported faithfully, inert, with a comment saying so** — because the
-instruction was to preserve behaviour, not to improve it mid-port. Fixing it is a
-deliberate change to validated behaviour that must re-baseline the parity traces, and
-it should be its own task with its own before/after measurement. It is listed in §10.
+The defect was **positional, not logical**. The capture read correctly; it simply sat
+below the early returns. It now runs at the top of the tick, in both implementations:
+
+```
+tick(f, input, opp, emit):
+    stateTicks++
+    tickBuffer(f, input)        <- here, above everything that returns early
+    ...face the opponent
+    if staggered: ...return
+    if down: ...return
+    if finished: return
+    if acting: ...return
+    ...new action: honour the buffer, or the live press
+```
+
+`tickBuffer` captures a verb pressed while the body is busy, ages it one tick at a
+time, and drops it once it is older than `INPUT_BUFFER_TICKS`. The consume site stayed
+where it was, because the place control reaches when the body is free is exactly the
+moment the buffer exists for.
+
+Three properties keep it from becoming an action queue, all of them tested:
+
+- **The verb only.** Movement and `held` are read from the hand as it is now, so a
+  buffered press resolves through the grammar against the stick's current position —
+  and a verb tapped during a recovery and released still produces a feint, exactly as
+  tapping it in neutral does. That is not a special case; it is the Lie applying
+  uniformly, and it means commitment is still expressed by holding.
+- **A live press beats a remembered one.**
+- **One press is one action.** A press made at the start of a knockdown is forgotten
+  long before the fighter stands up.
+
+**The opponent still cannot use it.** `Brain.decide` returns a nil verb whenever it is
+not actionable, so it never captures anything. That asymmetry is the entire point: the
+brain already acts on the exact frame it becomes free, and the buffer is what gives a
+pair of hands the same privilege. A test asserts the opponent's buffer stays empty
+across every scenario, because a buffer handed to both sides closes none of the gap.
+
+### 6.2 What it actually changed
+
+Measured before and after against the same scripted fights.
+
+| | Before | After |
+| --- | --- | --- |
+| Presses thrown away because the body was busy | **474 of 1,747 (27.1%)** | 0 thrown away at the press; a captured press that outlives its window is then forgotten on purpose |
+| Ticks on which the buffer held anything | **0** | 127 capture events across the seven scenarios |
+| Idle gap after a press made 3 ticks early | 1.94 ticks | 1.44 ticks |
+| Idle gap after a press made 6 ticks early | 3.87 ticks | 1.09 ticks |
+| Idle gap after a press made 9 ticks early | **44.89 ticks** | **1.56 ticks** |
+
+The last row is the mechanic. A player who pressed 150ms early used to have the press
+thrown away and then stood there for three quarters of a second, because the only way
+back was to notice they were free and press again. Now it comes out on the next tick.
+
+Two results worth stating plainly, because neither is the flattering one:
+
+**It does not rescue a player who is simply late.** Driving the player seat with the
+opponent's own brain and adding motor lag, the win rate barely moves (at 4 ticks of
+lag: 2/24 before, 3/24 after; at 6 ticks: 0/24 both). That is the correct result and it
+is worth understanding — the buffer fixes *delivery*, not *decision staleness*. A
+player acting on a world six ticks old will act wrongly whether or not the press lands.
+
+**It makes a masher lose faster.** The scripted balance battery went from 19 losses and
+5 stalemates to 23 losses and 1. Those fights are shorter because the player now
+actually throws the commits it kept asking for, back to back, and a fighter who is
+committed 100% of the time never recovers structure (recovery is 0 while acting) and
+never breathes. That is the design working: the buffer honours the input, and the game
+punishes the input. It is not a reason to withhold the fix, but it is a reason not to
+read "the player got worse" as a regression.
+
+### 6.3 What now guards it
+
+| Guard | Runs here? |
+| --- | --- |
+| `reference/tests/input-buffer.test.js` — 12 tests, 9 of which fail against the pre-fix code | ✅ |
+| `InputBufferTests.swift` — 11 of the same 12, in Swift | ⛔ needs Xcode |
+| `production-sync.test.js` — asserts the call sits **above** the early returns in *both* files | ✅ |
+| `parity-harness.test.js` — asserts the committed traces still exercise the buffer | ✅ |
+| `bufferedVerb` in the parity trace (format v2) | ✅ produced / ⛔ compared against Swift |
+
+The positional check is the important one. The defect was a line in the wrong place, in
+a file that reads correctly either way, and nothing in this environment can compile
+Swift — so a behaviour test on the Swift side cannot catch a regression here. A
+position test can, in both languages, today.
 
 ## 7. How the two implementations are kept honest
 
@@ -239,10 +321,10 @@ thermal behaviour over a ten-minute session.
 
 | # | Issue | Severity |
 | --- | --- | --- |
-| N-1 | **Nothing has been compiled.** Expect ordinary first-build errors across 29 files. | Blocking |
+| N-1 | **Nothing has been compiled.** Expect ordinary first-build errors across 30 files. | Blocking |
 | N-2 | `Renderer.swift` is the highest-risk file: pipeline state, vertex descriptor and shader ABI are exactly what a compiler and a GPU catch and a human reviewer does not. | High |
 | N-3 | The touch grammar is untested on glass. Tap-versus-flick disambiguation is the most likely tuning need. | High |
-| N-4 | The input buffer is inert in both implementations (§6). The fairness problem it was meant to solve is open. | Medium |
+| N-4 | ~~The input buffer is inert in both implementations.~~ **Fixed (§6)** in both trees, measured, traces re-baselined to format v2. The Swift half has never been compiled, so the positional guard in `production-sync.test.js` is what stands behind it until a Mac runs `./parity.sh`. | Low |
 | N-5 | `TechniqueDB` uses mutable static state. Fine today; Swift 6 strict concurrency will require a `let`-loaded or actor-isolated form. | Medium |
 | N-6 | No app icon artwork. The asset catalog has the slot and no image. | Blocks TestFlight |
 | N-7 | Bundle identifier `com.koinophobialabs.martialgod` is a placeholder pending App Store Connect. | Blocks TestFlight |

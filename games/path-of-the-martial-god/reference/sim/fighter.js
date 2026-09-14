@@ -25,6 +25,9 @@ import { freshStructure, cloneStructure, lineTier as tierOf } from './structure.
  * @property {number} stateTicks
  * @property {string} moveMode
  * @property {{x:number,z:number}} lastMove
+ * @property {null|{verb:string,age:number}} buffer a verb pressed while the body was
+ *   busy, waiting for the first tick it can be honoured (human only — the brain
+ *   never presses while it is committed)
  * @property {number} reaction perception latency in ticks (AI only)
  */
 
@@ -57,7 +60,7 @@ export function makeFighter(id, pos, facing, over = {}) {
     moveMode: 'idle',
     lastMove: { x: 0, z: 0 },
     staggerTicks: 0,
-    buffer: /** @type {null|{verb:string,ttl:number}} */ (null),
+    buffer: /** @type {null|{verb:string,age:number}} */ (null),
     reaction: 16,
     ...over,
   };

@@ -92,6 +92,12 @@ public enum FormMachine {
     public static func tick(_ f: Fighter, input: InputIntent, opp: Ref, emit: (CombatEvent) -> Void) {
         f.stateTicks += 1
 
+        // ---- input buffer -------------------------------------------------------
+        // Must run BEFORE the early returns below, because the states a buffer exists
+        // to serve — acting, staggered, down — are exactly the states those returns
+        // exit from. This position is load-bearing; see tickBuffer.
+        tickBuffer(f, input)
+
         // ---- face the opponent (soft lock: biases facing, never welds it) --------
         //
         // These rates decide whether ANGLING IS A REAL MECHANIC. Circling at mid range
@@ -172,32 +178,14 @@ public enum FormMachine {
         let d = distance(f, opp)
         let band = bandFor(d)
 
-        // Input buffer — PORTED FAITHFULLY, AND CURRENTLY INERT.
-        //
-        // This block is unreachable in the oracle and therefore here too: the set-site
-        // below tests `!isActionable`, but every early return above has already fired
-        // for `acting`, `staggered`, `down` and `finished`, so control only reaches
-        // this line when the state is `neutral` or `guard` — both actionable. The
-        // condition can never be true and the buffer is never populated (verified:
-        // 0 of 3171 ticks).
-        //
-        // It is kept exactly as-is because the port's job is to preserve behaviour,
-        // not to improve it. The underlying fairness problem it was meant to solve is
-        // REAL AND STILL OPEN: the brain is consulted every tick and acts the frame it
-        // becomes free, while a human pressing during recovery has the press
-        // discarded. Fixing it is a deliberate change to validated behaviour that must
-        // re-baseline the parity traces — see NATIVE_M1_REPORT.md.
-        if let v = input.verb, !f.isActionable {
-            f.buffer = InputBuffer(verb: v, ttl: inputBufferTicks)
-        }
+        // Honour a buffered verb. Control only arrives here when the body is free,
+        // which is precisely the moment the buffer exists for. A live press always
+        // wins over a remembered one: what you are doing now beats what you meant a
+        // tenth of a second ago.
         var verb = input.verb
-        if verb == nil, f.isActionable, let b = f.buffer, b.ttl > 0 {
+        if verb == nil, let b = f.buffer {
             verb = b.verb
             f.buffer = nil
-        }
-        if var b = f.buffer {
-            b.ttl -= 1
-            f.buffer = b.ttl <= 0 ? nil : b
         }
 
         if f.isActionable, let v = verb,
@@ -239,6 +227,42 @@ public enum FormMachine {
         recoverStructure(&f.structure, f.isGassed ? .gassed : mode, lineTier: lineTier(f.line))
         breathe(f, mode)
         buildLine(f, mode, input)
+    }
+
+    /// Input buffer — COMBAT_SYSTEM.md §3.1, tuned by `inputBufferTicks`.
+    ///
+    /// A verb pressed while the body is busy is remembered and honoured on the first
+    /// tick the body is free. Without it the human is strictly disadvantaged: the
+    /// brain is consulted every tick and therefore acts on the exact frame it becomes
+    /// actionable, while a person pressing during a recovery has the press thrown away.
+    ///
+    /// Only the human is served by this. `Brain.decide` returns a nil verb whenever it
+    /// is not actionable, so the opponent never captures anything — which is the whole
+    /// point. It is not a handicap given to the player; it is the player being given
+    /// the same frame-accuracy the opponent already had for free.
+    ///
+    /// THIS WAS DEAD CODE THROUGHOUT M1, in the oracle and in the first cut of this
+    /// port. The capture used to live in the new-action block, which control only
+    /// reaches once `acting`, `staggered`, `down` and `finished` have each already
+    /// returned — so its `!isActionable` test could never be true. Measured across the
+    /// seven trace scenarios before the fix: 474 of 1747 presses (27.1%) were thrown
+    /// away and the buffer was populated on 0 ticks.
+    static func tickBuffer(_ f: Fighter, _ input: InputIntent) {
+        if f.state == .finished { f.buffer = nil; return }
+
+        // Capture. A press made this tick has its whole window ahead of it, so it does
+        // not also age on the tick it arrives.
+        if let v = input.verb, !f.isActionable {
+            f.buffer = InputBuffer(verb: v, age: 0)
+            return
+        }
+
+        // Age. The memory is deliberately short: a press from half a second ago is not
+        // what you mean now, and firing it would feel like the game moving on its own.
+        if var b = f.buffer {
+            b.age += 1
+            f.buffer = b.age > inputBufferTicks ? nil : b
+        }
     }
 
     /// Gate on Line requirements and on a base that cannot bear the technique.

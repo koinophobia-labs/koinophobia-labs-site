@@ -112,13 +112,23 @@ export const INCH = {
 export const PERCEPTION = { minLatencyTicks: 11, maxLatencyTicks: 23 };
 
 /**
- * Input buffer, in ticks.
+ * Input buffer, in ticks. 10 ticks is 167ms at 60Hz. COMBAT_SYSTEM.md §3.1.
  *
  * Without this the player is strictly disadvantaged against the opponent: the brain
  * is consulted every tick and therefore acts on the exact frame it becomes free,
  * while a human pressing a button during recovery has the press silently discarded.
- * A verb pressed slightly early fires when the body is next able to honour it.
+ * A verb pressed this early fires on the first tick the body is able to honour it.
  * It buffers the VERB only — movement is continuous, so intent is always read from
- * the stick as it is now.
+ * the stick as it is now, and so is `held`, which is what decides the Lie. Tapping a
+ * verb during a recovery and letting go therefore still produces a feint, exactly as
+ * tapping it in neutral does: commitment is expressed by holding, buffered or not.
+ *
+ * This window is long enough to cover a missed frame or a press made just before the
+ * body frees, and short enough that it cannot queue an action from across a whole
+ * knockdown. Above roughly 15 ticks the game starts acting on intentions you have
+ * already abandoned; below about 5 it stops being felt at all.
+ *
+ * See `formMachine.js:tickBuffer` for where this is applied, and why the position of
+ * that call in the tick is load-bearing.
  */
 export const INPUT_BUFFER_TICKS = 10;

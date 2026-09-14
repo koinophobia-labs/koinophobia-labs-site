@@ -12,6 +12,9 @@ public struct TraceFighter: Codable {
     public let formTick: Int
     public let feint: Bool
     public let landed: Bool
+    /// The verb waiting to be honoured, if any. Hidden state, but state that decides
+    /// what happens next, so the gate compares it directly.
+    public let bufferedVerb: String?
     public let pos: TracePos
     public let facing: Double
     public let structure: TraceStructure
@@ -139,6 +142,7 @@ public enum Trace {
             formTick: f.form.tick,
             feint: f.form.feint,
             landed: f.form.landed,
+            bufferedVerb: f.buffer?.verb.rawValue,
             pos: TracePos(x: f.pos.x, z: f.pos.z),
             facing: f.facing,
             structure: TraceStructure(fore: f.structure.fore, rear: f.structure.rear,

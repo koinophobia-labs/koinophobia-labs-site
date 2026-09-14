@@ -122,9 +122,16 @@ public enum PerceptionRule {
     public static let maxLatencyTicks = 23
 }
 
-/// Input buffer, in ticks. Without it a human is strictly disadvantaged: the brain is
-/// consulted every tick and acts the frame it becomes free, while a press made during
-/// recovery is silently discarded. Buffers the VERB only.
+/// Input buffer, in ticks. 10 ticks is 167ms at 60Hz.
+///
+/// Without it a human is strictly disadvantaged: the brain is consulted every tick and
+/// acts the frame it becomes free, while a press made during recovery is silently
+/// discarded. Buffers the VERB only — movement and `held` are always read from the
+/// hand as it is now, so tapping a verb during a recovery and letting go still
+/// produces a feint, exactly as tapping it in neutral does.
+///
+/// Long enough to cover a press made just before the body frees; short enough that it
+/// cannot queue an action from across a whole knockdown.
 public let inputBufferTicks = 10
 
 /// How long a quadrant stays collapsed once emptied.

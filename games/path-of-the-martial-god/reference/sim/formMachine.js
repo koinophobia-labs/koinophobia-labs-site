@@ -101,6 +101,11 @@ const DOWN_TICKS = 78;
 export function tickFighter(f, input, opp, emit) {
   f.stateTicks++;
 
+  // ---- input buffer --------------------------------------------------------------
+  // Must run BEFORE the early returns below, because the states a buffer exists to
+  // serve — acting, staggered, down — are exactly the states those returns exit from.
+  tickBuffer(f, input);
+
   // ---- face the opponent (soft lock: biases facing, never welds it) -------------
   //
   // These rates decide whether ANGLING IS A REAL MECHANIC. Circling at mid range wins
@@ -173,12 +178,11 @@ export function tickFighter(f, input, opp, emit) {
   const d = distance(f, opp);
   const band = bandFor(d);
 
-  // Input buffer — see INPUT_BUFFER_TICKS. Hold a verb pressed while committed and
-  // honour it on the first tick the body is free.
-  if (input.verb && !actionable(f)) f.buffer = { verb: input.verb, ttl: INPUT_BUFFER_TICKS };
+  // Honour a buffered verb. Control only arrives here when the body is free, which is
+  // precisely the moment the buffer exists for. A live press always wins over a
+  // remembered one: what you are doing now beats what you meant a tenth of a second ago.
   let verb = input.verb;
-  if (!verb && actionable(f) && f.buffer && f.buffer.ttl > 0) { verb = f.buffer.verb; f.buffer = null; }
-  if (f.buffer) { f.buffer.ttl--; if (f.buffer.ttl <= 0) f.buffer = null; }
+  if (!verb && f.buffer) { verb = f.buffer.verb; f.buffer = null; }
 
   if (actionable(f) && verb) {
     const t = resolve(f.style, verb, intentFromMove(input.forward, input.lateral), band);
@@ -216,6 +220,47 @@ export function tickFighter(f, input, opp, emit) {
   recoverStructure(f.structure, gassed(f) ? 'gassed' : mode, tierOf(f.line));
   breathe(f, mode);
   buildLine(f, mode, input);
+}
+
+/**
+ * Input buffer — COMBAT_SYSTEM.md §3.1, tuned by INPUT_BUFFER_TICKS.
+ *
+ * A verb pressed while the body is busy is remembered and honoured on the first tick
+ * the body is free. Without it the human is strictly disadvantaged: the brain is
+ * consulted every tick and therefore acts on the exact frame it becomes actionable,
+ * while a person pressing during a recovery has the press silently thrown away.
+ *
+ * Only the human is served by this. `ai/brain.js` returns `verb: null` whenever it is
+ * not actionable, so the opponent never captures anything — which is the whole point.
+ * It is not a handicap given to the player; it is the player being given the same
+ * frame-accuracy the opponent already had for free.
+ *
+ * THIS WAS DEAD CODE THROUGHOUT M1. The capture used to live in the new-action block
+ * below, where control only arrives once `acting`, `staggered`, `down` and `finished`
+ * have already returned — so its `!actionable(f)` test could never be true. Measured
+ * across the seven trace scenarios before the fix: 474 of 1747 presses (27.1%) were
+ * thrown away and the buffer was populated on 0 ticks. Hence the position of the call
+ * at the top of the tick, and hence `input-buffer.test.js`, which fails if it moves.
+ *
+ * @param {import('./fighter.js').Fighter} f
+ * @param {InputIntent} input
+ */
+function tickBuffer(f, input) {
+  if (f.state === 'finished') { f.buffer = null; return; }
+
+  // Capture. A press made this tick has its whole window ahead of it, so it does not
+  // also age on the tick it arrives.
+  if (input.verb && !actionable(f)) {
+    f.buffer = { verb: input.verb, age: 0 };
+    return;
+  }
+
+  // Age. The memory is deliberately short: a press from half a second ago is not what
+  // you mean now, and firing it would feel like the game moving on its own.
+  if (f.buffer) {
+    f.buffer.age++;
+    if (f.buffer.age > INPUT_BUFFER_TICKS) f.buffer = null;
+  }
 }
 
 function isOffensive(t) {

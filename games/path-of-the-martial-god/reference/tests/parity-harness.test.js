@@ -114,6 +114,44 @@ test('a fight that ends early fails on length', async () => {
   assert.ok(r.problems.some((p) => p.kind === 'length'));
 });
 
+test('a wrong buffered verb fails — hidden state is still state', async () => {
+  const t = await load();
+  const a = clone(actualOf(t));
+  const i = a.frames.findIndex((f) => f.a.bufferedVerb !== null);
+  assert.ok(i >= 0, 'this fixture no longer exercises the input buffer at all');
+  a.frames[i].a.bufferedVerb = null;
+  const r = compare(t, a);
+  assert.equal(r.pass, false);
+  assert.equal(r.firstDiscrete.path, 'a.bufferedVerb');
+  assert.equal(r.firstDiscrete.tick, i);
+});
+
+test('a port that omits its null keys is not thereby wrong', async () => {
+  // Swift's synthesised Codable encodes optionals with `encodeIfPresent`, so a nil
+  // techniqueId or bufferedVerb produces no key at all. That is the encoder's habit,
+  // not a simulation difference, and it describes most frames of most fights.
+  const t = await load();
+  const a = clone(actualOf(t));
+  for (const f of a.frames) {
+    for (const who of ['a', 'b']) {
+      if (f[who].techniqueId === null) delete f[who].techniqueId;
+      if (f[who].bufferedVerb === null) delete f[who].bufferedVerb;
+    }
+  }
+  const r = compare(t, a);
+  assert.equal(r.pass, true, JSON.stringify(r.problems.slice(0, 3)));
+});
+
+test('but a genuinely missing value still fails', async () => {
+  const t = await load();
+  const a = clone(actualOf(t));
+  const i = a.frames.findIndex((f) => f.a.techniqueId !== null);
+  delete a.frames[i].a.techniqueId;
+  const r = compare(t, a);
+  assert.equal(r.pass, false, 'dropping a key that carried a real value must fail');
+  assert.equal(r.firstDiscrete.path, 'a.techniqueId');
+});
+
 test('every committed trace verifies against itself and covers its mechanic', async () => {
   for (const s of SCENARIOS) {
     const path = new URL(`../traces/${s.name}.json`, import.meta.url).pathname;
@@ -134,4 +172,19 @@ test('the trace set exercises breaks, the Inch and a terminal', async () => {
   for (const required of ['hit', 'guarded', 'whiff', 'break', 'feint', 'gassed', 'inch_open', 'terminal', 'over']) {
     assert.ok(seen.has(required), `no committed trace exercises "${required}"`);
   }
+});
+
+test('the committed traces exercise the input buffer', async () => {
+  // Without this the fixtures can quietly stop covering the buffer, and a port would
+  // pass the gate with the same dead code the reference shipped for all of M1.
+  let buffered = 0, scenarios = 0;
+  for (const s of SCENARIOS) {
+    const path = new URL(`../traces/${s.name}.json`, import.meta.url).pathname;
+    const t = JSON.parse(await readFile(path, 'utf8'));
+    const n = t.frames.filter((f) => f.a.bufferedVerb !== null).length;
+    buffered += n;
+    if (n > 0) scenarios++;
+  }
+  assert.ok(buffered > 50, `only ${buffered} frames across all traces hold a buffered press`);
+  assert.ok(scenarios >= 4, `only ${scenarios} scenarios exercise the buffer`);
 });

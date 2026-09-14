@@ -19,6 +19,11 @@ final class ParityTests: XCTestCase {
         "angle-and-strike", "feint-and-slip", "breath-to-empty", "to-the-final-inch",
     ]
 
+    /// Mirrors FORMAT_VERSION in trace-format.mjs. Bumped to 2 when `bufferedVerb` was
+    /// added. A port that reads a newer fixture with older field expectations would
+    /// otherwise pass by ignoring what it does not know about.
+    static let expectedFormatVersion = 2
+
     /// Mirrors TOLERANCE in trace-format.mjs. Keep the two in step.
     static let tolerance: [String: Double] = [
         "pos.x": 1e-4, "pos.z": 1e-4, "facing": 1e-4,
@@ -65,6 +70,25 @@ final class ParityTests: XCTestCase {
         }
     }
 
+    func testFixturesAreTheFormatThisPortExpects() throws {
+        for name in Self.scenarios {
+            let f = try loadFixture(name)
+            XCTAssertEqual(f.formatVersion, Self.expectedFormatVersion,
+                "\(name) is format v\(f.formatVersion) and this port expects v\(Self.expectedFormatVersion) — regenerate the traces or update the port")
+        }
+    }
+
+    func testFixturesExerciseTheInputBuffer() throws {
+        // The buffer was dead code for the whole of M1. Without this the fixtures can
+        // quietly stop covering it, and the gate would go green on a port with the
+        // same defect.
+        var frames = 0
+        for name in Self.scenarios {
+            frames += try loadFixture(name).frames.filter { $0.a.bufferedVerb != nil }.count
+        }
+        XCTAssertGreaterThan(frames, 50, "no committed fixture holds a buffered press")
+    }
+
     private func assertParity(name: String, expected: TraceFixture, actual: TraceOutput) {
         XCTAssertEqual(actual.frames.count, expected.frames.count,
                        "\(name): frame count differs — a discrete branch diverged, so everything after is meaningless")
@@ -105,6 +129,7 @@ final class ParityTests: XCTestCase {
         XCTAssertEqual(g.formTick, e.formTick, "\(at).formTick")
         XCTAssertEqual(g.feint, e.feint, "\(at).feint")
         XCTAssertEqual(g.landed, e.landed, "\(at).landed")
+        XCTAssertEqual(g.bufferedVerb, e.bufferedVerb, "\(at).bufferedVerb")
         XCTAssertEqual(g.guardTicks, e.guardTicks, "\(at).guardTicks")
         XCTAssertEqual(g.stateTicks, e.stateTicks, "\(at).stateTicks")
         XCTAssertEqual(g.collapse.fore, e.collapse.fore, "\(at).collapse.fore")

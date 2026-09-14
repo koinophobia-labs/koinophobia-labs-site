@@ -45,6 +45,9 @@ export function digest(fight) {
       f.breath.toFixed(4), f.will.toFixed(4), f.line.toFixed(4),
       Object.keys(f.vitality).sort().map((k) => `${k}:${f.vitality[k].toFixed(3)}`).join(','),
       f.form.techniqueId ?? '-', String(f.form.tick),
+      // The buffered verb decides what happens on the next tick, so it belongs in a
+      // fingerprint that claims to catch a divergence of one tick in one quadrant.
+      f.buffer ? `b:${f.buffer.verb}@${f.buffer.age}` : 'b:-',
     );
   }
   parts.push(fight.over ? `${fight.over.winnerId}/${fight.over.reason}/${fight.over.terminal}` : 'live');

@@ -96,6 +96,20 @@ Designed for a standard dual-stick controller. Mouse+keyboard is supported and f
 
 **No combo strings to memorise.** There are no "□□△○" notation tables. Sequences emerge because actions have cancel windows and because the intent grammar chains naturally. Nothing in the UI ever shows a combo list, because there are none.
 
+### 3.1 The input buffer — 10 ticks
+
+A verb pressed while the body is still busy is **remembered and honoured on the first tick the body is free**, for up to 10 ticks (167ms). Past that it is forgotten rather than fired late.
+
+This is not generosity, and it is not a difficulty setting. It is the correction for a structural asymmetry: the opponent's brain is consulted every tick and therefore acts on the exact frame it becomes actionable, while a person pressing during a recovery has the press silently thrown away. Without the buffer a human is playing a strictly worse version of the same game. **The opponent does not get one** — it does not need one, and giving it one would reopen the gap the buffer exists to close.
+
+Three rules keep it from becoming a queue:
+
+- **It buffers the verb only.** Movement and `held` are always read from the hand as it is now. So a buffered press still resolves through the intent grammar against the stick's *current* position, and a verb tapped during a recovery and released still produces a feint (§6.1), exactly as tapping it in neutral does. Commitment is expressed by holding, buffered or not.
+- **A live press beats a remembered one.** What you are doing now outranks what you meant a sixth of a second ago.
+- **One press is one action.** The window is short enough that you cannot queue an attack from across a knockdown, and nothing ever fires twice.
+
+Above roughly 15 ticks the game starts acting on intentions the player has already abandoned; below about 5 it stops being felt. 10 is the working value.
+
 ---
 
 ## 4. The intent grammar — the core innovation

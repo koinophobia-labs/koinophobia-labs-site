@@ -62,9 +62,13 @@ public struct Form: Sendable {
     public init() {}
 }
 
+/// A verb pressed while the body was busy, waiting for the first tick it can be
+/// honoured. Human only: the brain returns a nil verb whenever it is not actionable,
+/// so it never captures one.
 public struct InputBuffer: Sendable {
     public var verb: Verb
-    public var ttl: Int
+    /// Ticks since the press. Dropped once this passes `inputBufferTicks`.
+    public var age: Int
 }
 
 /// A positional snapshot of the other fighter. Both fighters are ticked against refs

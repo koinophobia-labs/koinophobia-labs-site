@@ -125,14 +125,22 @@ Recorded so they can be overruled rather than inherited silently.
 1. **The collapse latch** (defect 2) is an addition to canon. Canon specifies the two-stage break but not what holds a quadrant at zero long enough for stage two to happen. 100 ticks (1.67 s).
 2. **Minimum separation of 1.02 m** is a consequence of M1 having no clinch. When Custody arrives, this must drop and the contact grammar must fill in.
 3. ~~**An input buffer of 10 ticks.**~~ **CORRECTION (2026-09-14).** This entry was
-   wrong. Porting the machine to Swift line by line exposed that the buffer is
-   **unreachable dead code**: its set-site tests `!actionable(f)`, but every early
-   return above it has already fired for `acting`, `staggered`, `down` and `finished`,
-   so control only reaches that line when the state is `neutral` or `guard` — both
+   wrong. Porting the machine to Swift line by line exposed that the buffer was
+   **unreachable dead code**: its set-site tested `!actionable(f)`, but every early
+   return above it had already fired for `acting`, `staggered`, `down` and `finished`,
+   so control only reached that line when the state was `neutral` or `guard` — both
    actionable. Verified: 0 of 3,171 ticks ever populated it. When this milestone
    measured "no change" after adding it, that was the evidence and I misread it as
-   being masked by another bug. **The unfairness it was meant to fix is real and still
-   open.** See `NATIVE_M1_REPORT.md` §6.
+   being masked by another bug.
+
+   **RESOLVED (2026-09-14, same day).** The buffer now runs, as a deliberate change to
+   validated behaviour with its own measurement and its own re-baselined traces. The
+   capture moved to the top of the tick, above the early returns. Before: 474 of 1,747
+   presses across the seven trace scenarios (27.1%) were thrown away. After: a press
+   made 9 ticks early acts in 1.6 ticks instead of 45. The rule it implements is now
+   written down in `COMBAT_SYSTEM.md` §3.1 rather than living only in a constant.
+   `reference/tests/input-buffer.test.js` is the regression: 9 of its 12 tests fail
+   against the code this milestone shipped. Full account in `NATIVE_M1_REPORT.md` §6.
 4. **Guard absorbs 62% of structure force and 86% of vitality**, and covers `fore` only. Tuned so a static guard loses slowly, per "guarding does not save you; it postpones."
 5. **Leg strikes attack the quadrant that leg carries**, wherever the attacker stands. This is the one place technique overrides pure geometry.
 6. **Will is hidden from perception.** The opponent infers pressure from posture and breath, never from the number.

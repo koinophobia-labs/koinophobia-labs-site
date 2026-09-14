@@ -57,7 +57,13 @@ export function compare(fixture, actual) {
     const exp = flatten(expFrames[i]);
     const got = flatten(gotFrames[i]);
     for (const [path, ev] of Object.entries(exp)) {
-      const gv = got[path];
+      // An absent key and an explicit null mean the same thing, and which one a port
+      // emits is a property of its JSON encoder rather than of its simulation. Swift's
+      // synthesised Codable conformance encodes optionals with `encodeIfPresent`, so a
+      // nil `techniqueId` or `bufferedVerb` simply does not appear — which describes
+      // most frames of most fights. Treating that as a divergence would fail the gate
+      // on nearly every tick for a reason that has nothing to do with the port.
+      const gv = path in got ? got[path] : null;
       const cls = classOf(path);
       if (cls === 'continuous') {
         const tol = TOLERANCE[fieldKey(path)];
