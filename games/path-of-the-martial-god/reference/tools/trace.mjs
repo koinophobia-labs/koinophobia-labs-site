@@ -28,6 +28,17 @@ export const SCENARIOS = [
     input: () => N(),
   },
   {
+    name: 'refuses-to-engage',
+    note: 'Player backs away and circles, forever, offering nothing. Exercises URGENCY — '
+        + 'the only scenario long enough to cross the grace period and see the opponent '
+        + 'stop waiting. Without it the parity gate cannot see that term at all.',
+    // Long on purpose. Grace is 300 ticks and the ramp is 600, so a shorter scenario
+    // would leave the whole mechanic at zero and prove nothing about it.
+    ticks: 1500,
+    opts: { reaction: 16, aggression: 0.5 },
+    input: () => ({ ...N(), forward: -1, lateral: 1, held: true }),
+  },
+  {
     name: 'guard-under-pressure',
     note: 'Static guard. Exercises guard drain, late guard, spatial bypass, collapse, break.',
     ticks: 1200,

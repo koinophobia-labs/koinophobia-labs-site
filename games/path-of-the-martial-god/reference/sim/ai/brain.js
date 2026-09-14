@@ -16,6 +16,7 @@ import { resolve } from '../grammar.js';
 import { weakest, quadrantFromIncoming } from '../structure.js';
 import { technique } from '../techniques.js';
 import { actionable, lineTier } from '../fighter.js';
+import { URGENCY } from '../constants.js';
 
 /**
  * The option set. Each is a (verb, movement) pair — the player's own vocabulary.
@@ -52,6 +53,8 @@ export function makeBrain(opts = {}) {
     aggression: opts.aggression ?? 0.5,   // authored temperament, not a difficulty knob
     patience: opts.patience ?? 0.5,
     dwell: 0,
+    /** Ticks since either body last did anything. See URGENCY in constants.js. */
+    quiet: 0,
     lastChoice: 'hold',
     /** Tendency counts keyed by observed tell. The Read hook — feints poison this. */
     tendencies: /** @type {Record<string, number>} */ ({}),
@@ -82,6 +85,21 @@ function noteTendency(brain, snap) {
  */
 export function decide(self, snap, brain) {
   noteTendency(brain, snap);
+
+  // --- how long since anything happened ----------------------------------------
+  // Judged only from what a fighter can see: whether either body is doing something.
+  // `snap` is the DELAYED, filtered view, so this inherits perception's limits rather
+  // than reaching around them — a fighter notices a lull late, like everything else.
+  // Only the OPPONENT responding counts as the fight having started. Throwing a
+  // technique into empty air is not evidence that it has — it is evidence of the
+  // opposite — so a fighter's own swing must not reset its own sense of a lull, or
+  // urgency builds, spends itself on one whiff, and collapses back to waiting.
+  // Mid-technique the count is frozen rather than reset: busy, but nothing landed.
+  const contact =
+    self.state === 'staggered' || self.state === 'down' ||
+    (snap != null && (snap.phase != null || snap.state === 'staggered' || snap.state === 'down'));
+  if (contact) brain.quiet = 0;
+  else if (actionable(self)) brain.quiet++;
 
   // Commitment is real for the AI too. It cannot cancel out of a technique.
   if (!actionable(self)) {
@@ -191,6 +209,31 @@ export function decide(self, snap, brain) {
     // 10. REPETITION — a fighter who only ever does one thing is not readable as a
     // fighter. This is not adaptation (that is M3); it is refusing to be a machine.
     terms.repetition = ATTACKS.has(o.id) ? -Math.min(2.2, (brain.recent[o.id] ?? 0) * 0.30) : 0;
+
+    // 11. URGENCY — nothing has happened for a while and that is itself information.
+    // Ramps rather than switches, so an opponent who has been given nothing to work
+    // with starts pressing the way a person does: gradually, and then decisively.
+    terms.urgency = 0;
+    if (brain.quiet > URGENCY.graceTicks) {
+      const u = Math.min(1, (brain.quiet - URGENCY.graceTicks) / URGENCY.rampTicks);
+      // Scored on the option's own forward component rather than by category, so a
+      // retreating attack is not mistaken for an answer to a fight that will not
+      // start. `nail` and `check` commit backwards; under the first version of this
+      // term they scored as "doing something" and the opponent backed away swinging.
+      // Urgency closes distance. It does NOT decide to swing: `rangeFit` already
+      // knows which techniques can arrive, and an urgency bonus large enough to be
+      // felt is large enough to override its -2.0 "will simply not arrive" gate. The
+      // first version did exactly that — the opponent advanced to 1.4m, then spent
+      // half its ticks jabbing at air from out of reach, and a technique in progress
+      // is a technique not closing. It got closer and stopped getting closer.
+      //
+      // So: reward moving toward them, penalise waiting, and let the existing terms
+      // decide what to do on arrival.
+      terms.urgency = u * (
+        o.fwd * URGENCY.advance
+        - (o.id === 'hold' || o.id === 'guard' ? URGENCY.settle : 0)
+      );
+    }
 
     const score = Object.values(terms).reduce((a, b) => a + b, 0);
     scored.push({ id: o.id, score, terms, technique: tech?.id ?? null });

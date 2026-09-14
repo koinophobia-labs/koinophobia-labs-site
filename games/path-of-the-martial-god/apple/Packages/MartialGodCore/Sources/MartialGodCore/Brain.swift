@@ -69,6 +69,8 @@ public struct ScoreTerms {
     public var temperament = 0.0
     public var dwell = 0.0
     public var repetition = 0.0
+    /// Assigned LAST in the oracle, so it sums last here. See `total`.
+    public var urgency = 0.0
 
     /// Summation order matches `Object.values(terms)` in the oracle exactly.
     public var total: Double {
@@ -82,6 +84,7 @@ public struct ScoreTerms {
         s += temperament
         s += dwell
         s += repetition
+        s += urgency
         return s
     }
 }
@@ -98,6 +101,8 @@ public final class Brain {
     /// Authored temperament, not a difficulty knob.
     public var aggression: Double
     public var patience: Double
+    /// Ticks since either body last did anything. See `Urgency` in Constants.swift.
+    public var quiet = 0
     public var lastChoice = "hold"
     /// Tendency counts keyed by observed tell. The Read hook — feints poison this.
     /// An ordered array, not a dictionary: the oracle's object preserves insertion
@@ -148,6 +153,19 @@ public final class Brain {
 
     public func decide(for selfF: Fighter, snap: Snapshot?) -> InputIntent {
         noteTendency(snap)
+
+        // How long since anything happened. Judged only from what a fighter can see,
+        // and from the DELAYED snapshot, so it inherits perception's limits rather
+        // than reaching around them. Only the opponent responding counts: a swing
+        // into empty air is evidence the fight has NOT started, so it must not reset
+        // the count. Mid-technique the count freezes — busy, but nothing landed.
+        //
+        // Must run before the early return below, for the same reason the input
+        // buffer must: the states it exists to measure are the ones that return here.
+        let contact =
+            selfF.state == .staggered || selfF.state == .down ||
+            (snap.map { $0.phase != nil || $0.state == .staggered || $0.state == .down } ?? false)
+        if contact { quiet = 0 } else if selfF.isActionable { quiet += 1 }
 
         // Commitment is real for the AI too. It cannot cancel out of a technique.
         if !selfF.isActionable {
@@ -255,6 +273,18 @@ public final class Brain {
 
             // 10. REPETITION — refusing to be a one-move machine. Not adaptation.
             terms.repetition = attackIDs.contains(o.id) ? -min(2.2, recentCount(o.id) * 0.30) : 0
+
+            // 11. URGENCY — nothing has happened for a while, and that is information.
+            // Closes distance only; `rangeFit` already knows which techniques arrive,
+            // and a bonus big enough to be felt is big enough to override its -2.0.
+            terms.urgency = 0
+            if quiet > Urgency.graceTicks {
+                let u = min(1, Double(quiet - Urgency.graceTicks) / Urgency.rampTicks)
+                terms.urgency = u * (
+                    o.fwd * Urgency.advance
+                    - ((o.id == "hold" || o.id == "guard") ? Urgency.settle : 0)
+                )
+            }
 
             scored.append(ScoredOption(id: o.id, score: terms.total, terms: terms, techniqueId: tech?.id))
         }

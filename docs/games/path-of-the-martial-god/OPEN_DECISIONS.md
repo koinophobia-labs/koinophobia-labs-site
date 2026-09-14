@@ -186,12 +186,52 @@ forever.
 | 2 | **Opponent cuts the angle** | Interception rather than pure pursuit, or escalating commitment after N quiet seconds. Leaves the player's own numbers alone | A cleverer opponent is a harder game; and it fixes the symptom, leaving "not fighting is free" true |
 | 3 | **A round limit** | Cheapest | The design has no scoring, so a decision needs a judging rule invented for it. Least in keeping |
 
-**Recommendation: 1, possibly with a light version of 2.** The design already says
-breath is the interface and that footwork costs; the one thing it does not charge for is
-the footwork that avoids the fight entirely. Making that cost something is not a new
-rule so much as the missing half of an existing one.
+**Resolved by a fourth option that was not on the list: URGENCY.** None of the three was
+right, because all three treated a symptom. The real absence was that nothing in the
+model measured *how long since anything happened*, so a fighter could not tell a
+considered pause from a fight that had stopped. Adding that measurement — an eleventh
+scoring term, ramping after five seconds of no contact — takes nine stalls to four and
+changes nothing about any fight that was already working: all seven committed traces
+regenerate byte-identically. Option 1 was rejected on reading `COMBAT_SYSTEM.md` §66,
+which makes footwork the *recovery* loop; charging breath for it would have inverted a
+stated rule.
 
-**Not chosen here.** This is balance, and balance is yours.
+See `NATIVE_M1_REPORT.md` §9.10.
+
+---
+
+## Should a body that is beaten be able to keep fighting forever?
+
+**Raised by:** `NATIVE_M1_REPORT.md` §9.11, found once URGENCY stopped hiding it.
+**Status:** open, and it is what now blocks Native M1 criterion 3.
+**Reproduce:** `node reference/tools/endurance.mjs`
+
+Over twenty simulated minutes a passive player absorbs **414 clean hits and 137
+structure breaks**, has their torso destroyed outright, and the fight does not end. No
+terminal route can be reached:
+
+- **`unconscious`** needs `vitalityFraction <= 0`, and that sums **all six regions**. An
+  opponent striking head and torso never touches the arms, so the total stays high while
+  the parts that matter are gone.
+- **The Final Inch** and **`yielded`** both need `will` to fall, and will regenerates —
+  the attacker gains it on every answered blow, and the defender's recovers.
+
+So the two values that decide endings both sit near maximum on a body that has lost.
+
+**The options:**
+
+| | Fix | For | Against |
+| --- | --- | --- | --- |
+| 1 | **A destroyed vital region ends it** — head or torso at zero is finished, regardless of the total | Matches the fiction: nobody fights on with a destroyed torso because their arms are fine. Smallest change | Makes head damage decisive, which changes what every technique is worth |
+| 2 | **Weight the regions** in `vitalityFraction` — head and torso dominate, limbs contribute little | Keeps the aggregate model; one function changes | A weighting is a balance surface, and picking numbers is the whole job |
+| 3 | **Will stops regenerating while losing** — no answer bonus below some structural threshold | Goes at the mechanism directly: will is meant to model the decision to keep going, and a dismantled fighter deciding to keep going is the bug | Touches the Inch and the Stop, the game's centre |
+
+**Recommendation: 1, and look hard at 3.** Option 1 is a correctness fix — the aggregate
+was never meant to let an untouched arm keep a destroyed torso fighting. Option 3 is the
+more interesting design question, and it is about the Final Inch, so it is worth your
+time rather than mine.
+
+**Not chosen here.** This is core balance, and core balance is yours.
 
 ---
 

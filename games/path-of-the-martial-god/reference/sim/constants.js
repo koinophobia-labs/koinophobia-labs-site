@@ -42,6 +42,30 @@ export const MAX = {
 };
 
 /** Locomotion, metres per tick. */
+/**
+ * URGENCY — what happens when no opening is ever offered.
+ *
+ * Patience is waiting for an opening. It is not the same thing as standing still
+ * forever, and the difference only shows against an opponent who never gives one: a
+ * player who backs away and circles was never caught at any temperament, and the fight
+ * ran for twenty simulated minutes without a single event (NATIVE_M1_REPORT.md §9.10).
+ *
+ * The fighter could not see that anything was wrong, because nothing in the model
+ * measured "how long since anything happened". This is that measurement. A fighter who
+ * lets someone dance in front of them for a quarter of a minute is not being patient,
+ * they are being passive — and the same note already exists in `finalInch.js` about
+ * mercy: "A fighter who lets every finish lapse is not merciful, it is broken."
+ *
+ * Quiet is judged only from what a fighter can SEE: whether either body is doing
+ * something. Not events, not resources, and never the opponent's input buffer.
+ */
+export const URGENCY = {
+  graceTicks: 300,   // five seconds of no contact is ordinary circling, not a stall
+  rampTicks: 600,    // ten more to reach full pressure, so it arrives as a mood
+  advance: 1.6,      // enough to beat `hold`'s patience term and the circle options
+  settle: 1.3,       // what waiting stops being worth
+};
+
 export const MOVE = {
   advance: 0.030,
   retreat: 0.024,   // Low River "does not retreat well"

@@ -36,25 +36,39 @@ export const CASES = [
 
 export const TEMPERAMENTS = [0.15, 0.5, 0.9];
 
-/** Run one case to resolution or to the cap. */
+/**
+ * Run one case to resolution or to the cap.
+ *
+ * Events are read from `fight.log`, the cumulative record. NOTE for anyone extending
+ * this: `step(fight, input, choice)` takes NO emit callback — `fight.events` is cleared
+ * every tick and `fight.log` is the history. Passing a fourth argument is silently
+ * ignored, which is how the first version of this tool reported "not one event in five
+ * minutes" for a fight that was landing blows.
+ */
 export function endure(input, aggression, cap = CAP) {
   const f = makeFight({ aggression, patience: 0.5, reaction: 12, playerMastery: 0.25 });
   let n = 0;
   while (!f.over && n < cap) { step(f, input(), {}); n++; }
-  return { over: f.over, ticks: n, fight: f };
+  const types = new Map();
+  for (const e of f.log) types.set(e.type, (types.get(e.type) ?? 0) + 1);
+  return { over: f.over, ticks: n, fight: f, events: f.log.length, types };
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {
   let stalled = 0;
   for (const [name, input] of CASES) {
     for (const aggression of TEMPERAMENTS) {
-      const { over, ticks, fight } = endure(input, aggression);
+      const r = endure(input, aggression);
+      const { over, ticks, fight } = r;
       if (!over) stalled++;
+      const { events, types } = r;
       const sep = Math.hypot(fight.a.pos.x - fight.b.pos.x, fight.a.pos.z - fight.b.pos.z);
       console.log(
         `${over ? 'ends ' : 'NEVER'}  ${name.padEnd(23)} aggression ${aggression}  ` +
         `${(ticks / 60).toFixed(1).padStart(7)}s  ` +
-        (over ? over.reason : `both standing, ${sep.toFixed(2)}m apart`));
+        (over ? over.reason
+              : `${sep.toFixed(2)}m apart, ${events} events` +
+                (events ? ` (${[...types].sort((a, b) => b[1] - a[1]).slice(0, 3).map(([k, c]) => `${k} ${c}`).join(' ')})` : '')));
     }
   }
   console.log(`\n${stalled} of ${CASES.length * TEMPERAMENTS.length} never resolved ` +

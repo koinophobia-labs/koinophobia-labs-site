@@ -56,6 +56,20 @@ public enum MaxValue {
 }
 
 /// Locomotion, metres per tick.
+/// URGENCY — what happens when no opening is ever offered.
+///
+/// Patience is waiting for an opening; it is not the same as standing still forever,
+/// and the difference only shows against an opponent who never gives one. Nothing in
+/// the model measured "how long since anything happened", so a player who backed away
+/// and circled was never caught. See `reference/sim/constants.js` and
+/// NATIVE_M1_REPORT.md §9.10 — these values are the oracle's, to the digit.
+public enum Urgency {
+    public static let graceTicks = 300    // five seconds of no contact is ordinary
+    public static let rampTicks: Double = 600
+    public static let advance: Double = 1.6
+    public static let settle: Double = 1.3
+}
+
 public enum Move {
     public static let advance: Double = 0.030
     public static let retreat: Double = 0.024   // Low River "does not retreat well"
