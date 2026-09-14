@@ -1,0 +1,113 @@
+/* Motion system. Four ideas in priority order: surfacing, the koi journey
+   (koi-world.css), the electric after-image, refraction. Everything has one
+   off switch: [data-motion="still"] on the shell, or prefers-reduced-motion. */
+
+/* 1 · Surfacing — content arrives from depth. The resting state is fully
+   visible; the observer in components/motion/Surface.tsx adds .is-in. Until
+   the client claims the page, nothing is hidden. */
+.s {
+  --i: 0;
+}
+[data-motion="cinematic"] .s {
+  opacity: 0.001;
+  transform: translateY(22px);
+  filter: blur(6px);
+}
+[data-motion="cinematic"] .s.is-in {
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0);
+  transition:
+    opacity var(--surface-ms) var(--ease-out),
+    transform var(--surface-ms) var(--ease-out),
+    filter var(--surface-ms) var(--ease-out);
+  transition-delay: calc(var(--i) * 60ms);
+}
+
+/* 3 · The electric after-image — one violet ghost of a moving element,
+   offset against the pointer's velocity, decaying in 240ms. Never on body
+   text. The only place the emblem's violet enters the interface. */
+.ai {
+  position: relative;
+  isolation: isolate;
+}
+.ai::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--pulse);
+  opacity: 0;
+  pointer-events: none;
+  mix-blend-mode: screen;
+  filter: blur(1.5px);
+  z-index: -1;
+  transform: translate(0, 0);
+  transition:
+    opacity var(--ghost-ms) ease-out,
+    transform var(--ghost-ms) ease-out;
+}
+.ai:hover::after,
+.ai:focus-visible::after,
+.ai.is-moving::after {
+  opacity: 0.55;
+  transform: translate(calc(var(--vx) * -7px), calc(var(--vy) * -7px));
+  transition:
+    opacity 40ms linear,
+    transform 40ms linear;
+}
+
+/* The hero headline fires one ghost on first load, then never again. */
+.ghost-once {
+  position: relative;
+  display: inline-block;
+}
+.ghost-once::after {
+  content: attr(data-ghost);
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: var(--pulse);
+  opacity: 0;
+  pointer-events: none;
+  mix-blend-mode: screen;
+  filter: blur(0.8px);
+  white-space: pre-wrap;
+}
+.ghost-once.is-fired::after {
+  animation: ghost-once 420ms ease-out 1;
+}
+@keyframes ghost-once {
+  0% {
+    opacity: 0.7;
+    transform: translate(-10px, 3px);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(0, 0);
+  }
+}
+
+/* 4 · Refraction — glass over moving water bends the koi slightly. Desktop
+   only; the first thing cut when a frame budget slips. */
+@media (min-width: 1025px) {
+  [data-motion="cinematic"] .glass-refract {
+    backdrop-filter: blur(18px) url("#koi-refract");
+    -webkit-backdrop-filter: blur(18px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-motion="cinematic"] .s {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+  [data-motion="cinematic"] .s.is-in {
+    transition: opacity 200ms ease;
+  }
+  .ai::after,
+  .ghost-once::after {
+    display: none;
+  }
+}

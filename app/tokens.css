@@ -1,0 +1,67 @@
+/* Koinophobia Labs design tokens.
+   Black water, one koi, two signals. Cyan means a stranger can use it now.
+   Violet means the studio is still finding out. Primary buttons are ink on
+   void so the only coloured objects on any screen are status and the
+   after-image. See the rebuild document, section 5. */
+
+:root {
+  --void: #04060a;
+  --deep: #080d14;
+  --panel: #0d131c;
+  --panel-2: #111925;
+  --ink: #eef4f7;
+  --dim: #9db0bd;
+  --faint: #6f8291;
+  --line: rgba(173, 214, 235, 0.14);
+  --line-soft: rgba(173, 214, 235, 0.08);
+  --glass: rgba(7, 12, 18, 0.52);
+  --glass-strong: rgba(6, 10, 16, 0.74);
+  --live: #7fd8ea;
+  --live-deep: #35b6d6;
+  --pulse: #9d6bff;
+  --pulse-deep: #6b3fe0;
+  --amber: #e2b45a;
+
+  --font-studio: var(--font-sora), system-ui, sans-serif;
+  --font-voice: var(--font-newsreader), Georgia, serif;
+  --font-receipt: var(--font-mono), ui-monospace, Menlo, monospace;
+
+  --shell: min(1220px, 92vw);
+  --gutter: clamp(1.25rem, 4vw, 3rem);
+  --radius: 18px;
+  --radius-pill: 999px;
+  --radius-code: 6px;
+
+  --s-1: 4px;
+  --s-2: 8px;
+  --s-3: 12px;
+  --s-4: 16px;
+  --s-5: 24px;
+  --s-6: 32px;
+  --s-7: 48px;
+  --s-8: 64px;
+  --s-9: 96px;
+  --s-10: 128px;
+
+  --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --surface-ms: 720ms;
+  --ghost-ms: 240ms;
+
+  /* Pointer velocity, written by components/motion/Velocity.tsx. */
+  --vx: 0;
+  --vy: 0;
+}
+
+/* The koi world reads the same palette through its own prefixes. */
+.kw {
+  --kw-void: var(--void);
+  --kw-ink: var(--ink);
+  --kw-dim: var(--dim);
+  --kw-faint: var(--faint);
+  --kw-line: var(--line);
+  --kw-line-soft: var(--line-soft);
+  --kw-glass: var(--glass);
+  --kw-glass-strong: var(--glass-strong);
+  --kw-accent: var(--live);
+  --kw-accent-deep: var(--live-deep);
+}
