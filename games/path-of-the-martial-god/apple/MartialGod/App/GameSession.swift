@@ -6,6 +6,12 @@ import MartialGodCore
 /// The simulation runs at exactly 60 Hz whatever the display does. On a ProMotion
 /// device the renderer may present at 120 Hz; that changes interpolation and nothing
 /// else. Timing truth belongs to the simulation, never to the frame.
+/// Main-actor isolated. It owns the audio, the haptics and the camera, drives all
+/// three from `GameViewController.draw(in:)`, and reads `SettingsStore` — every one of
+/// those is main-actor state. The simulation it steps is not, and deliberately so:
+/// `MartialGodCore` has no isolation and no platform, which is what lets the parity
+/// gate run it on Linux.
+@MainActor
 public final class GameSession {
 
     public private(set) var fight: Fight

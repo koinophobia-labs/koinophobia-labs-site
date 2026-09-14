@@ -114,9 +114,14 @@ public final class MTLDepthStencilDescriptor {
 
 public final class MTLRenderPassDescriptor { public init() {} }
 
+/// The real `MTKViewDelegate` is an Objective-C protocol imported `@preconcurrency`,
+/// so its requirements are nominally nonisolated and Xcode nonetheless accepts a
+/// `@MainActor` witness. The stub models the accepted OUTCOME rather than the
+/// mechanism: these callbacks arrive on the main thread for an on-screen view, and a
+/// renderer that mutates `MTKView` state has to say so.
 public protocol MTKViewDelegate: AnyObject {
-    func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize)
-    func draw(in view: MTKView)
+    @MainActor func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize)
+    @MainActor func draw(in view: MTKView)
 }
 
 open class MTKView: UIView {

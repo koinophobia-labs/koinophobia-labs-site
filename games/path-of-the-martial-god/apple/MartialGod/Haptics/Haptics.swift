@@ -7,6 +7,10 @@ import MartialGodCore
 /// Six events earn a tap, and they are the six that change what you should do next.
 /// Everything else is silent, because a device that buzzes on every frame teaches
 /// nothing. Intensity is scaled by the accessibility setting and can be zeroed.
+/// Main-actor isolated: `scale` reads `SettingsStore`, and every call site is the
+/// render loop. The two engine handlers below are the exception, and they are the
+/// reason this annotation is worth having.
+@MainActor
 public final class Haptics {
     private var engine: CHHapticEngine?
     private var available: Bool { CHHapticEngine.capabilitiesForHardware().supportsHaptics }
@@ -17,8 +21,24 @@ public final class Haptics {
         guard available else { return }
         engine = try? CHHapticEngine()
         // The system stops the engine on interruption; restart rather than go silent.
-        engine?.stoppedHandler = { [weak self] _ in self?.restart() }
-        engine?.resetHandler = { [weak self] in self?.restart() }
+        //
+        // These two fire on an ARBITRARY QUEUE — Apple documents the reset handler as
+        // called on a background queue — and `restart()` touches `engine`, which is
+        // main-actor state. Before this they reached straight into it from whatever
+        // thread CoreHaptics happened to use: a data race that would never reproduce
+        // on demand, because it needs an audio-session interruption to land in the
+        // same instant as a frame. The hop is explicit now.
+        // `weak self` is a var, and a var cannot cross into concurrently-executing code;
+        // bound to a let first, which is also the only form that reads correctly — the
+        // engine either still exists when the hop lands or the work is not worth doing.
+        engine?.stoppedHandler = { [weak self] _ in
+            guard let me = self else { return }
+            Task { @MainActor in me.restart() }
+        }
+        engine?.resetHandler = { [weak self] in
+            guard let me = self else { return }
+            Task { @MainActor in me.restart() }
+        }
         try? engine?.start()
     }
 

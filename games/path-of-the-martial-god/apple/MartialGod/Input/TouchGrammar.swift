@@ -29,6 +29,12 @@ import MartialGodCore
 ///     back" is the same act expressed as a gesture rather than a button.
 ///   * SLIP's i-frames are conditional on direction, so the flick direction feeding
 ///     the slip direction means the gesture carries the mechanic instead of naming it.
+/// Main-actor isolated, because every input it reads is: `UITouch.location(in:)`,
+/// `UITouch.timestamp` and `UIView.bounds` are all main-actor state in UIKit. Declaring
+/// that here rather than relying on it being true in practice is what makes the
+/// obligation checkable — and it was not true in practice: this file's methods were
+/// nonisolated and touching all three, which Xcode rejects outright.
+@MainActor
 public final class TouchGrammar {
 
     public struct Tuning {

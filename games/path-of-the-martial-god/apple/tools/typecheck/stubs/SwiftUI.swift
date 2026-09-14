@@ -15,11 +15,15 @@ import UIKit
 
 // MARK: - the view/scene protocols
 
-public protocol View {}
-public protocol Scene {}
+// SwiftUI's core protocols are `@MainActor @preconcurrency` in the real SDK, and that
+// isolation is the whole reason a scene-phase closure may touch a view controller at
+// all. A stub that omits it reports errors on correct code — see README, "This has
+// already happened once", for the opposite and worse failure.
+@MainActor public protocol View {}
+@MainActor public protocol Scene {}
 
 @resultBuilder
-public struct ViewBuilder {
+@MainActor public struct ViewBuilder {
     public static func buildBlock<C: View>(_ c: C) -> C { c }
     public static func buildBlock() -> EmptyView { EmptyView() }
 }
@@ -41,7 +45,7 @@ public enum Visibility: Sendable { case automatic, visible, hidden }
 
 // MARK: - app entry
 
-public protocol App {
+@MainActor public protocol App {
     associatedtype Body: Scene
     @SceneBuilder var body: Self.Body { get }
     init()
@@ -52,7 +56,7 @@ extension App {
 }
 
 @resultBuilder
-public struct SceneBuilder {
+@MainActor public struct SceneBuilder {
     public static func buildBlock<S: Scene>(_ s: S) -> S { s }
 }
 
@@ -99,7 +103,7 @@ public struct Environment<Value> {
 
 // MARK: - the UIKit bridge
 
-public protocol UIViewControllerRepresentable: View {
+@MainActor public protocol UIViewControllerRepresentable: View {
     associatedtype UIViewControllerType: UIViewController
     func makeUIViewController(context: Context) -> UIViewControllerType
     func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context)

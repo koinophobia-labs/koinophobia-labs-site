@@ -36,8 +36,11 @@ public final class CHHapticEngine {
     // A class METHOD on Apple, not a property — the call site was right and this
     // stub was wrong the first time round.
     public static func capabilitiesForHardware() -> CHHapticDeviceCapability { CHHapticDeviceCapability() }
-    public var resetHandler: (() -> Void)?
-    public var stoppedHandler: ((StoppedReason) -> Void)?
+    // Both fire on an arbitrary queue, NOT the main thread — Apple documents the reset
+    // handler as called on a background queue. Typed `@Sendable` here so the harness
+    // asks the question the real SDK asks: whatever these touch must be safe off-main.
+    public var resetHandler: (@Sendable () -> Void)?
+    public var stoppedHandler: (@Sendable (StoppedReason) -> Void)?
     public var playsHapticsOnly = false
     public enum StoppedReason: Int { case audioSessionInterrupt, applicationSuspended, idleTimeout, systemError, notifyWhenFinished, engineDestroyed, gameControllerDisconnect }
     public init() throws {}

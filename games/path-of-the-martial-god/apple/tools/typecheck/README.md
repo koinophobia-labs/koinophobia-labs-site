@@ -55,6 +55,24 @@ wiring is the last place you want finding its first error on a Mac.
 `@Observable` is **not** stubbed: the Observation module ships with the open-source
 toolchain and works on Linux, so the real macro runs.
 
+## What the stubs now model beyond bare shape
+
+Two obligations that a "minimum declarations" stub would leave out, both added because
+leaving them out produced a green run on code Xcode rejects:
+
+- **Required initializers.** `UIView`, `UIViewController` and `MTKView` declare
+  `required init?(coder:)`, so a subclass with a designated initializer of its own must
+  supply one.
+- **Main-actor isolation.** `UIResponder` and everything under it, `UIGestureRecognizer`,
+  `UITouch`, `UIEvent`, `UIAccessibility.isReduceMotionEnabled`, and SwiftUI's `View`,
+  `Scene`, `App`, the two result builders and `UIViewControllerRepresentable`. The app
+  target builds in Swift 5.9 mode, where touching main-actor state from a nonisolated
+  synchronous context is an error. Modelling this found seven files that would not have
+  compiled, one of them a real off-main data race.
+
+`CHHapticEngine`'s `stoppedHandler` and `resetHandler` are typed `@Sendable` for the
+same reason: they fire on an arbitrary queue, and a stub that hides that hides a race.
+
 ## The one remaining blind spot
 
 `#selector`. Linux Swift has no Objective-C runtime, so the harness rewrites

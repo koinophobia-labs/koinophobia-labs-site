@@ -62,6 +62,19 @@ public struct GameSettings: Codable, Equatable {
     public init() {}
 }
 
+/// Main-actor isolated, because it reads main-actor state.
+///
+/// `UIAccessibility.isReduceMotionEnabled` is a main-actor query, and this type calls
+/// it in two places: once from `init` and once from a notification block. The block
+/// already registers on `.main`, but the initializer runs on whatever thread first
+/// touches `shared` — a lazy `static let` makes no promise about which — so asserting
+/// main-thread-ness there would have been a claim rather than a fact.
+///
+/// Isolating the store states the requirement instead of assuming it. Everything that
+/// reads settings today is already on the main actor: the view controller, the audio
+/// setup and the session. The cost is that the small JSON write happens on the main
+/// thread, which is what it was doing anyway.
+@MainActor
 public final class SettingsStore {
     public static let shared = SettingsStore()
 

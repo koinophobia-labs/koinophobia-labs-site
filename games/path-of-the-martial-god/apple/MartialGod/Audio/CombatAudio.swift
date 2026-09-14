@@ -10,6 +10,11 @@ import MartialGodCore
 ///
 /// Everything is synthesised from generated buffers. No audio assets exist yet and
 /// none are needed to prove the channel works.
+/// Main-actor isolated. Every cue is driven synchronously from the render loop, and
+/// every volume decision reads `SettingsStore`, which is main-actor state. Nothing here
+/// runs on an audio callback — `scheduleBuffer` is called with no completion handler —
+/// so there is no off-main path into this type to preserve.
+@MainActor
 public final class CombatAudio {
     private let engine = AVAudioEngine()
     private let mixer = AVAudioMixerNode()

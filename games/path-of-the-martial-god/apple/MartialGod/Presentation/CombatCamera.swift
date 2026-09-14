@@ -11,6 +11,10 @@ import MartialGodCore
 /// It sits slightly OFF the fighters' axis rather than on it, so that angling reads as
 /// real ground travelled rather than as two silhouettes overlapping, and it never
 /// crosses the line between them.
+/// Main-actor isolated: it reads `SettingsStore` for Reduce Motion, and it is stepped
+/// once per frame from the render loop. A struct rather than a class because a camera
+/// is a value that gets recomputed, not an object that gets mutated from elsewhere.
+@MainActor
 public struct CombatCamera {
     /// Radians off the duel axis. Small on purpose: most of the separation stays
     /// horizontal, which is what makes distance readable.

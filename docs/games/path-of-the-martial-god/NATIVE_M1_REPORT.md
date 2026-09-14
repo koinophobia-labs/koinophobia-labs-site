@@ -588,6 +588,51 @@ Fixed by teaching the stripper the raw-string delimiter rule (`#`-run, quote, ma
 file that tripped it, and still reports the imbalance when a stray brace is added to
 that same file.
 
+### 9.5 Main-actor isolation: seven files that would not have compiled
+
+The presentation layer contained **no `@MainActor` annotations at all**, and neither did
+the stubs. UIKit is main-actor-isolated from `UIResponder` down; the app target builds
+in Swift 5.9 mode, where calling main-actor state from a nonisolated synchronous context
+is an **error**, not a warning. So the harness was silent about an entire category of
+first-build failure.
+
+Modelling it — `@MainActor` on `UIResponder`, `UIGestureRecognizer`, `UITouch`,
+`UIEvent`, `UIAccessibility.isReduceMotionEnabled`, and on SwiftUI's `View`, `Scene`,
+`App`, `ViewBuilder`, `SceneBuilder` and `UIViewControllerRepresentable`, which are
+`@MainActor @preconcurrency` in the real SDK — produced errors in seven files:
+
+| File | What it was doing |
+| --- | --- |
+| `Input/TouchGrammar.swift` | Nonisolated methods reading `UITouch.location(in:)`, `UITouch.timestamp` and `UIView.bounds` — the file every touch passes through |
+| `Presentation/Renderer.swift` | Mutating `MTKView.device`, both pixel formats, `clearColor`, `sampleCount`; reading `currentDrawable` and `currentRenderPassDescriptor` |
+| `Persistence/Settings.swift` | `UIAccessibility.isReduceMotionEnabled` from `init` and from a notification block |
+| `Audio/CombatAudio.swift` | Reading `SettingsStore` on every cue |
+| `App/GameSession.swift` | Driving audio, haptics and camera |
+| `Presentation/CombatCamera.swift` | Reading Reduce Motion per frame |
+| `Haptics/Haptics.swift` | **A real data race — see below** |
+
+Six of those are annotations: the types were always main-thread in fact, and now say so
+where the compiler can check it. The seventh was a bug.
+
+**`CHHapticEngine.stoppedHandler` and `resetHandler` fire on an arbitrary queue** —
+Apple documents the reset handler as called on a background queue. Both were wired
+straight to `restart()`, which touches `engine`, main-actor state:
+
+```swift
+engine?.stoppedHandler = { [weak self] _ in self?.restart() }   // off-main → main state
+```
+
+It would never have reproduced on demand: it needs an audio-session interruption to land
+in the same instant as a frame. The hop is explicit now, and the stub types both
+handlers `@Sendable` so the harness asks the question the real SDK asks.
+
+`MartialGodCore` is deliberately **not** isolated and stays that way. It has no platform
+and no actor, which is exactly what lets the parity gate run it on Linux.
+
+Verified by mutation in both directions: removing the isolation from `TouchGrammar`
+reproduces nine errors, and restoring the direct call in the haptics handler reproduces
+the cross-actor one.
+
 ## 10. Known issues
 
 | # | Issue | Severity |
@@ -606,6 +651,7 @@ that same file.
 | N-12 | **The browser reference narrates two of its four endings with the wrong subject** (§8.10) — a knockout win reads "You could not continue." The native build does not inherit it and `OutcomeSubjectTests` prevents a third implementation from doing so. Left unfixed in `reference/view/main.js` on purpose: the browser build is a frozen, parity-verified reference and this is presentation copy, not simulation. | Open in the reference, closed in the port |
 | N-13 | ~~The native build said nothing when a fight ended.~~ **Fixed** — `OutcomeOverlay`, one sentence, timed to let the last image land first. | Closed |
 | N-14 | ~~Two overlays were missing `required init?(coder:)` and the stub harness was not asking for it~~ (§9.3). **Fixed on both sides**, and the harness now catches it by mutation. A reminder that every other stub is still only a stub. | Closed |
+| N-15 | ~~Nothing in the presentation layer declared main-actor isolation and the harness could not see it~~ (§9.5). **Fixed** — seven files, six annotations and one genuine off-main data race in the haptics engine handlers. | Closed |
 
 ## 11. TestFlight readiness blockers
 

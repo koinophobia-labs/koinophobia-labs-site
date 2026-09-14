@@ -60,7 +60,7 @@ public enum NSTextAlignment { case left, center, right }
 /// of the things this harness cannot see.
 public struct Selector: Sendable { public init(_ name: String) {} }
 
-open class UIResponder { public init() {} }
+@MainActor open class UIResponder { public init() {} }
 
 open class UIView: UIResponder {
     public var bounds = CGRect()
@@ -122,7 +122,7 @@ open class UIFont {
     public init() {}
 }
 
-open class UIGestureRecognizer {
+@MainActor open class UIGestureRecognizer {
     public var cancelsTouchesInView = true
     public var delaysTouchesBegan = false
     public var delaysTouchesEnded = true
@@ -133,7 +133,7 @@ open class UITapGestureRecognizer: UIGestureRecognizer {
     public var numberOfTapsRequired: Int = 1
 }
 
-open class UITouch: Hashable {
+@MainActor open class UITouch: Hashable {
     public var timestamp: TimeInterval = 0
     public var view: UIView? { nil }
     open func location(in view: UIView?) -> CGPoint { CGPoint() }
@@ -142,7 +142,7 @@ open class UITouch: Hashable {
     public init() {}
 }
 
-open class UIEvent { public init() {} }
+@MainActor open class UIEvent { public init() {} }
 
 open class UIViewController: UIResponder {
     public var view: UIView = UIView()
@@ -161,7 +161,9 @@ open class UIViewController: UIResponder {
 }
 
 public enum UIAccessibility {
-    public static var isReduceMotionEnabled: Bool { false }
+    /// Main-actor in the real SDK. The notification NAME is not — it is plain data —
+    /// so only the query is isolated here.
+    @MainActor public static var isReduceMotionEnabled: Bool { false }
     public static let reduceMotionStatusDidChangeNotification =
         Notification.Name("UIAccessibilityReduceMotionStatusDidChangeNotification")
 }

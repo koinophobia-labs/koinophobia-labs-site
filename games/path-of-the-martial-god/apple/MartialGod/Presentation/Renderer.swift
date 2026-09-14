@@ -12,6 +12,11 @@ import MartialGodCore
 /// The look follows ART_DIRECTION.md by removing things: matte flat colour, one soft
 /// directional term, no strike particles, no bloom, no post stack. Impact is weight —
 /// frame-holds and a short camera tick — never sparks.
+/// Main-actor isolated: it configures and reads `MTKView` — `device`, pixel formats,
+/// `clearColor`, `currentDrawable`, `currentRenderPassDescriptor` — every one of which
+/// is main-actor state. The delegate callbacks arrive there anyway; this makes the
+/// obligation something the compiler checks rather than something the code assumes.
+@MainActor
 public final class Renderer: NSObject, MTKViewDelegate {
 
     private struct Vertex {
