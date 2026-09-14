@@ -668,6 +668,68 @@ which is right for counting braces and wrong for any check whose subject is a st
 literal. Asking it for shader function names returned none and reported that as three
 missing functions. A second, comment-only stripper now exists for those.
 
+### 9.7 Four notification blocks that could not compile, and one open question
+
+The real Foundation signature is:
+
+```swift
+func addObserver(forName:object:queue:using block: @escaping @Sendable (Notification) -> Void)
+```
+
+A `@Sendable` closure **does not inherit the enclosing context's actor isolation**. So a
+block written inside a `@MainActor` type cannot touch that type's state — it is a compile
+error on a Mac. `swift-corelibs-foundation` on Linux carries no such annotation, so the
+type-check harness sees an ordinary closure that inherits isolation and reports a clean
+pass. All four observers in the tree were in that state:
+
+| File | Block touches |
+| --- | --- |
+| `Input/ControllerInput.swift` ×2 | `isConnected` — and captured a non-Sendable `self` besides |
+| `Audio/CombatAudio.swift` | `pause()` / `resume()` on audio-session interruption |
+| `Persistence/Settings.swift` | stored settings and `UIAccessibility.isReduceMotionEnabled` |
+
+All four already registered on `.main`, so the fix is to cash that promise in explicitly
+with `MainActor.assumeIsolated` — sound *because* the queue is `.main`, and the two
+halves are one decision. `ControllerInput` is now `@MainActor` like the rest.
+
+Because the harness structurally cannot see this, `preflight.mjs` enforces the
+convention instead: every `addObserver` block must register on `.main` **and** hop.
+Both halves are mutation-verified on all four sites.
+
+**A bug in my own check, worth recording.** The first version passed silently on all
+four observers. Swift puts a trailing closure *after* the call's closing paren, and the
+extractor stopped at depth zero there — so it examined the argument list, saw no block,
+and skipped. It reported "no structural problems found" while testing nothing. This is
+the third harness defect in two days and the same shape as the other two: **the check
+was not wrong about what it looked at; it was not looking.** Mutation-testing every new
+guard is the only reason any of them were caught, and it is cheap.
+
+### 9.8 An open question for you: the audio session category
+
+`CombatAudio.configureSession()` uses:
+
+```swift
+session.setCategory(.ambient, mode: .default, options: [.mixWithOthers])
+```
+
+`.ambient` is **silenced by the ringer switch**. `AUDIO_DIRECTION.md` §34 says the
+default presentation has no stamina bar, *"which means breath is the interface"* — so a
+player with their phone on silent loses a channel the design deliberately did not
+duplicate in a HUD, and is told nothing.
+
+I have **not** changed it, because the argument does not go one way:
+
+- **Keep `.ambient`.** Exhaustion is also carried by posture — breath drives the pose as
+  well as the sound — so a silenced player is not blind, only reading one channel. And
+  M1 has no settings screen, so `.playback` would give a player who deliberately muted
+  their phone game audio they cannot turn off.
+- **Move to `.playback` + `.mixWithOthers`.** Plays through the ringer switch, still
+  lets their own music continue. Correct if you judge breath to be load-bearing rather
+  than reinforcing.
+
+It is a one-line change either way and it is a design call, not a defect. Worth deciding
+before the first device test, because it changes what that test is measuring.
+
 ## 10. Known issues
 
 | # | Issue | Severity |
@@ -689,6 +751,8 @@ missing functions. A second, comment-only stripper now exists for those.
 | N-15 | ~~Nothing in the presentation layer declared main-actor isolation and the harness could not see it~~ (§9.5). **Fixed** — seven files, six annotations and one genuine off-main data race in the haptics engine handlers. | Closed |
 | N-16 | ~~The shader ABI was agreed by hand and checked by nobody~~ (§9.6). **Fixed** — five static cross-checks, all mutation-verified. The ABI was correct as written; it is now correct *and* guarded. | Closed |
 | N-17 | `#selector` target/action pairing. **Half closed** (§9.6): preflight verifies the method exists and is `@objc`. A selector naming a method on a *different* object is still invisible here. | Low, was a blind spot |
+| N-18 | ~~All four NotificationCenter observer blocks touched main-actor state from a `@Sendable` closure~~ (§9.7). **Fixed** — explicit hops, and a preflight rule because the harness structurally cannot see the real signature. | Closed |
+| N-19 | **Audio session category is `.ambient`, so the ringer switch silences the game** (§9.8) — including breath, which the design names as the interface. Not changed: the argument runs both ways and it is a design call. **Decide before the first device test.** | Open — yours |
 
 ## 11. TestFlight readiness blockers
 

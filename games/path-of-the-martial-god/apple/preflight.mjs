@@ -295,6 +295,60 @@ for (const f of swiftFiles) {
   }
 }
 
+// ---------------------------------------------------------------------------------
+// NotificationCenter observer blocks.
+//
+// The real signature takes a `@Sendable` block:
+//
+//   addObserver(forName:object:queue:using block: @escaping @Sendable (Notification) -> Void)
+//
+// A `@Sendable` closure does NOT inherit the enclosing context's actor isolation, so a
+// block written inside a @MainActor type cannot touch that type's state — it is a
+// compile error on a Mac. swift-corelibs-foundation on Linux is not annotated, so the
+// type-check harness cannot see any of this and reports a clean pass.
+//
+// The convention here: register on `.main`, then hop explicitly. `assumeIsolated` is
+// sound precisely BECAUSE the queue is `.main` — the two halves are one decision and
+// this checks they stay together.
+// ---------------------------------------------------------------------------------
+for (const f of swiftFiles) {
+  const src = strip(readFileSync(f, 'utf8'));
+  // `removeObserver(` does not contain `addObserver(`, so no filtering is needed.
+  let i = 0;
+  while ((i = src.indexOf('addObserver(', i)) !== -1) {
+    // Consume the call AND its trailing closure. Swift puts the block after the
+    // closing paren, so a scan that stops at depth 0 there sees no block at all and
+    // silently passes every call — which is exactly what the first version of this
+    // check did, on all four of them.
+    let depth = 0, end = -1;
+    for (let j = i; j < src.length; j++) {
+      const c = src[j];
+      if (c === '(' || c === '{') depth++;
+      else if (c === ')' || c === '}') {
+        if (--depth === 0) {
+          let k = j + 1;
+          while (k < src.length && /\s/.test(src[k])) k++;
+          if (src[k] === '{') continue;          // trailing closure continues the call
+          end = j; break;
+        }
+      }
+    }
+    const call = src.slice(i, end === -1 ? src.length : end + 1);
+    i += 12;
+    if (!call.includes('{')) continue;           // no block: nothing to be isolated
+    if (!/queue:\s*\.main/.test(call)) {
+      note(f, 'addObserver block without `queue: .main` — it may then run on any queue, '
+            + 'and nothing inside it may touch main-actor state');
+      continue;
+    }
+    if (!call.includes('MainActor.assumeIsolated')) {
+      note(f, 'addObserver block on `.main` does not hop with MainActor.assumeIsolated — '
+            + 'the real signature is @Sendable, so the block inherits no isolation and '
+            + 'this will not compile on a Mac');
+    }
+  }
+}
+
 console.log(`preflight: ${swiftFiles.length} Swift files checked`);
 if (problems.length === 0) {
   console.log('no structural problems found');

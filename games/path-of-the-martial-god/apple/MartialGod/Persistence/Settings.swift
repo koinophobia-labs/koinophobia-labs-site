@@ -141,8 +141,13 @@ public final class SettingsStore {
             forName: UIAccessibility.reduceMotionStatusDidChangeNotification,
             object: nil, queue: .main
         ) { [weak self] _ in
-            guard let self, !self.hasStoredSettings else { return }
-            self.settings.reduceMotion = UIAccessibility.isReduceMotionEnabled
+            // `@Sendable` block: no inherited isolation, and everything below it —
+            // the stored settings and the accessibility query alike — is main-actor.
+            // Registered on `.main`, so the assumption is a fact about this call site.
+            MainActor.assumeIsolated {
+                guard let self, !self.hasStoredSettings else { return }
+                self.settings.reduceMotion = UIAccessibility.isReduceMotionEnabled
+            }
         })
         #endif
     }

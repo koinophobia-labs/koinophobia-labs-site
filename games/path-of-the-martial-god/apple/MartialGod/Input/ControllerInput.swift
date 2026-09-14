@@ -6,6 +6,11 @@ import MartialGodCore
 /// Controllers are supported because the design is controller-first in spirit, but
 /// they are explicitly NOT a substitute for a credible touch experience: the touch
 /// grammar is the primary scheme and ships whether or not a controller is present.
+/// Main-actor isolated: `sample()` is called from the render loop and `isConnected` is
+/// mutated from two notification blocks registered on `.main`. Without the annotation
+/// those blocks capture a non-Sendable `self` in a `@Sendable` closure, which the real
+/// Foundation signature rejects.
+@MainActor
 public final class ControllerInput {
     public private(set) var isConnected = false
     private var pad: GCExtendedGamepad? { GCController.current?.extendedGamepad }
@@ -28,13 +33,17 @@ public final class ControllerInput {
     }
 
     public init() {
+        // `addObserver(forName:object:queue:using:)` takes a `@Sendable` block, so the
+        // body does NOT inherit this initializer's isolation the way an ordinary
+        // closure would. `assumeIsolated` is sound here and only here because the
+        // block is registered on `.main`: that is the promise being cashed in.
         observers.append(NotificationCenter.default.addObserver(
             forName: .GCControllerDidConnect, object: nil, queue: .main) { [weak self] _ in
-                self?.isConnected = true
+                MainActor.assumeIsolated { self?.isConnected = true }
             })
         observers.append(NotificationCenter.default.addObserver(
             forName: .GCControllerDidDisconnect, object: nil, queue: .main) { [weak self] _ in
-                self?.isConnected = GCController.controllers().isEmpty == false
+                MainActor.assumeIsolated { self?.isConnected = GCController.controllers().isEmpty == false }
             })
         isConnected = !GCController.controllers().isEmpty
     }

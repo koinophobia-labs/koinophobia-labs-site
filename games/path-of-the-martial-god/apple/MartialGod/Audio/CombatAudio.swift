@@ -57,17 +57,22 @@ public final class CombatAudio {
                 guard let info = note.userInfo,
                       let raw = info[AVAudioSessionInterruptionTypeKey] as? UInt,
                       let type = AVAudioSession.InterruptionType(rawValue: raw) else { return }
-                switch type {
-                case .began:
-                    self?.pause()
-                case .ended:
-                    // Only resume if the system says we may.
-                    if let opt = info[AVAudioSessionInterruptionOptionKey] as? UInt,
-                       AVAudioSession.InterruptionOptions(rawValue: opt).contains(.shouldResume) {
-                        self?.resume()
+                // The block is `@Sendable`, so it does not inherit this method's
+                // isolation; `pause()` and `resume()` are main-actor. Registered on
+                // `.main`, which is what makes the assumption true rather than hopeful.
+                MainActor.assumeIsolated {
+                    switch type {
+                    case .began:
+                        self?.pause()
+                    case .ended:
+                        // Only resume if the system says we may.
+                        if let opt = info[AVAudioSessionInterruptionOptionKey] as? UInt,
+                           AVAudioSession.InterruptionOptions(rawValue: opt).contains(.shouldResume) {
+                            self?.resume()
+                        }
+                    @unknown default:
+                        break
                     }
-                @unknown default:
-                    break
                 }
             })
     }
