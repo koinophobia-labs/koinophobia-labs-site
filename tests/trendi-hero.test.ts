@@ -124,18 +124,18 @@ test("re-swims happen every 15 seconds, and only when nothing interferes", () =>
   assert.equal(canReswim({ ...clear, openingDone: false }), false);
 });
 
-test("the hero page keeps the approved positioning and a clickable CTA", async () => {
+test("the Trendi page is registry-driven and never claims a beta", async () => {
   const page = await readFile(new URL("../app/trendi/page.tsx", import.meta.url), "utf8");
-  assert.ok(page.includes("Type the thought. Get words to say on camera."));
-  assert.ok(page.includes("Your content coach"));
-  assert.ok(page.includes('id="trendi-hero-cta"'));
-  assert.ok(page.includes("mailto:koinophobia999@gmail.com"));
-  assert.ok(page.includes('href={trendiRelease.url}'));
-  assert.ok(page.includes('<AppStoreLink product="trendi" placement="hero"'));
+  const template = await readFile(new URL("../components/site/ProductPage.tsx", import.meta.url), "utf8");
+  assert.ok(page.includes('getSiteProduct("trendi")'));
+  assert.ok(page.includes("installUrl: trendiRelease.url"));
+  assert.ok(page.includes('"@type": "SoftwareApplication"'));
   assert.ok(!page.match(/launch updates|availability news/i));
   assert.ok(!page.match(/TestFlight|beta access|limited beta/i));
-  // Semantic heading order: the h1 is the promise, not the decorative mark.
-  assert.ok(page.indexOf('id="trendi-identity"') < page.indexOf("<h1"));
+  // The badge is the store link, tracked, in the hero and at the end.
+  assert.ok(template.includes('placement="product_hero"'));
+  assert.ok(template.includes('placement="product_end"'));
+  assert.ok(template.includes("<ProductPageView product={analyticsId} />"));
 });
 
 test("Trendi privacy and support routes are publication-ready and discoverable", async () => {

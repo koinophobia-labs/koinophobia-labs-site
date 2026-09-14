@@ -6,6 +6,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
   // /connect and /resume canonicalize to koinophobia.dev, so they are not listed here.
   const routes = [
     { path: "", lastModified: STUDIO_HOME_LAST_MODIFIED },
+    { path: "/shipped", lastModified: "2026-09-13" },
+    { path: "/lab", lastModified: "2026-09-13" },
+    { path: "/lab/teachers-pet", lastModified: "2026-09-13" },
+    { path: "/lab/koi", lastModified: "2026-09-13" },
+    { path: "/lab/do-you-know-ball", lastModified: "2026-09-13" },
+    { path: "/log", lastModified: "2026-09-13" },
+    { path: "/blake", lastModified: "2026-09-13" },
+    { path: "/work-with-me", lastModified: "2026-09-13" },
+    { path: "/start", lastModified: "2026-09-13" },
     { path: "/services", lastModified: "2026-07-18" },
     { path: "/work", lastModified: "2026-08-13" },
     { path: "/products", lastModified: "2026-09-10" },
@@ -31,7 +40,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority:
         index === 0
           ? 1
-          : path === "/services" || path === "/work" || path === "/audit"
+          : path === "/shipped" || path === "/work-with-me" || path === "/trendi" || path === "/forget-about-it" || path === "/way-in"
             ? 0.9
             : 0.7,
     })),
