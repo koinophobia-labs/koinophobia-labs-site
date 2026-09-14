@@ -356,6 +356,29 @@ the oldest supported device, allocation count per frame, touch-to-photon latency
 thermal behaviour over a ten-minute session. None of those are simulation questions,
 which is rather the point of the table above.
 
+### 8.9 Terminal resolution — the last image of the fight
+
+`.finished` had no pose. It fell through to the default case, so at the moment the
+fight ended the loser was drawn standing in a normal fighting guard, as though nothing
+had happened. Fixing that exposed the larger problem underneath: **both terminals set
+`.finished`, so a knockout and a Stop rendered identically.**
+
+That is not polish. `COMBAT_SYSTEM.md` §10 calls the Stop "the hardest thing in the
+game", and the thesis of the entire design is that mercy is gated behind competence —
+*"restraint is not a moral choice available to the weak."* If the two outcomes look the
+same, the game cannot state its own argument, and the single moment it exists to be
+about becomes invisible.
+
+| Terminal | What the body now says |
+| --- | --- |
+| `strike_through` | Down, flat, lower than a knockdown and not getting up. Chest and head are overwritten rather than offset, which removes the breathing motion entirely |
+| `stop` | Still standing. Hands down, head down, weight off the front foot — beaten, conscious, and aware of what did not happen to them. **Breathing is deliberately preserved** |
+
+The difference between the two images is, exactly, whether the body is still moving.
+`terminal-resolution-reads.test.js` asserts the branch exists, that the Stop does not
+put them on the floor, and that the renderer actually reads `fight.over?.terminal` —
+because the pose can only tell them apart if something passes it the answer.
+
 ### 9.0 The Final Inch, built to its own spec
 
 `COMBAT_SYSTEM.md` §10 specifies four things for the Inch. Three were present and one

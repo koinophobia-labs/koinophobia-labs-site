@@ -76,7 +76,9 @@ private let extend: [String: (hand: Bool, reach: SIMD3<Float>)] = [
 
 public enum PoseBuilder {
 
-    public static func pose(for f: Fighter, time: Double) -> Skeleton {
+    /// - Parameter terminal: how the fight ended, if it has. `"stop"` and
+    ///   `"strike_through"` mean opposite things and must not look alike.
+    public static func pose(for f: Fighter, time: Double, terminal: String? = nil) -> Skeleton {
         var p = Skeleton()
         let breathFrac = Float(f.breath / MaxValue.breath)
         let vit = Float(f.vitality.fraction)
@@ -132,6 +134,46 @@ public enum PoseBuilder {
 
         // ---- state overrides ----------------------------------------------------
         switch f.state {
+        case .finished:
+            // THE LAST IMAGE OF THE FIGHT, and the one that carries the whole thesis.
+            //
+            // Both terminals set `.finished`, so without this branch a knockout and a
+            // Stop rendered identically — and before that, `.finished` fell through to
+            // the default case entirely, which left a fighter standing in a normal
+            // guard at the moment the game had just ended. The culmination of the
+            // design, drawn as though nothing had happened.
+            //
+            // COMBAT_SYSTEM.md §10 calls the Stop "the hardest thing in the game", and
+            // the thesis is that mercy is gated behind competence. If the two choices
+            // look the same, the game cannot state its own argument.
+            if terminal == "stop" {
+                // Let go. Still on their feet, hands down, head down, weight off the
+                // front foot — beaten and conscious, and they know what just did not
+                // happen to them. Breathing from Layer 1 is deliberately preserved:
+                // it is the clearest evidence that this person is still here.
+                p.leadHand = [0.16, 0.86, 0.22]
+                p.rearHand = [0.02, 0.82, -0.22]
+                p.lean -= 0.30
+                p.crouch += 0.26
+                p.weight = 0.30
+                p.head.x -= 0.14
+                p.leadFoot.x -= 0.10
+                return finish(p)
+            }
+            // Knocked out. Lower and flatter than a knockdown, and not getting up.
+            // Chest and head are overwritten rather than offset, which removes the
+            // breathing motion — the difference between the two images is, exactly,
+            // whether the body is still moving.
+            p.isDown = true
+            p.pelvis = [-0.26, 0.15, 0.04]
+            p.chest = [-0.50, 0.19, 0.02]
+            p.neck = [-0.62, 0.20, 0]
+            p.head = [-0.74, 0.20, -0.02]
+            p.leadHand = [-0.30, 0.07, 0.34]
+            p.rearHand = [-0.62, 0.06, -0.26]
+            p.leadFoot = [0.16, 0.05, 0.26]
+            p.rearFoot = [-0.02, 0.05, -0.28]
+            return finish(p)
         case .down:
             p.isDown = true
             p.pelvis = [-0.2, 0.22, 0]; p.chest = [-0.42, 0.32, 0]

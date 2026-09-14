@@ -131,8 +131,9 @@ public final class Renderer: NSObject, MTKViewDelegate {
 
         scratch.removeAll(keepingCapacity: true)
         buildGround()
-        buildFighter(fight.a, isPlayer: true, right: right)
-        buildFighter(fight.b, isPlayer: false, right: right)
+        let terminal = fight.over?.terminal
+        buildFighter(fight.a, isPlayer: true, right: right, terminal: terminal)
+        buildFighter(fight.b, isPlayer: false, right: right, terminal: terminal)
 
         let count = min(scratch.count, Renderer.maxVertices)
         let buffer = vertexBuffers[frameIndex % vertexBuffers.count]
@@ -235,8 +236,9 @@ public final class Renderer: NSObject, MTKViewDelegate {
         }
     }
 
-    private func buildFighter(_ f: Fighter, isPlayer: Bool, right: SIMD3<Float>) {
-        let pose = PoseBuilder.pose(for: f, time: renderTime)
+    private func buildFighter(_ f: Fighter, isPlayer: Bool, right: SIMD3<Float>,
+                              terminal: String? = nil) {
+        let pose = PoseBuilder.pose(for: f, time: renderTime, terminal: terminal)
         let body = isPlayer ? playerColour : opponentColour
         let limbColour = isPlayer ? playerLimb : opponentLimb
 
