@@ -20,7 +20,14 @@ gate, builds and runs on Linux:
 ```bash
 ./test.sh          # the Swift unit suite
 ./parity.sh        # THE PORT GATE, against the oracle's own recorded inputs
+./typecheck.sh     # type-checks the presentation layer against stub frameworks
 ```
+
+`typecheck.sh` is the one to read the caveats on: it builds minimal stand-ins for
+UIKit, Metal, AVFoundation, CoreHaptics, GameController and simd so `swiftc -typecheck`
+will accept the presentation files without an iOS SDK. It catches our own mistakes and
+says nothing at all about whether the stubs match Apple. See
+`tools/typecheck/README.md`.
 
 Both use a local `swift` if there is one and the official Swift image if there is not.
 Only the presentation layer needs a Mac, and that is exactly the part still unproven.

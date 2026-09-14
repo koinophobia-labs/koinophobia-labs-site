@@ -94,3 +94,10 @@ jobs:
       - name: Parity gate
         working-directory: games/path-of-the-martial-god/apple
         run: ./parity.sh
+
+      # Type-checks the presentation layer against stub modules, because the real
+      # frameworks need an iOS SDK. It catches our own mistakes, never Apple's API
+      # shape — see tools/typecheck/README.md for exactly what a pass does not mean.
+      - name: Presentation layer type-check
+        working-directory: games/path-of-the-martial-god/apple
+        run: ./typecheck.sh

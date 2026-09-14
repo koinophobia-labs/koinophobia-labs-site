@@ -68,9 +68,11 @@ Real checks, really executed:
 | Worst continuous deviation across the whole set | ✅ 1.3e-15 against a 1e-4 tolerance (0.0% of budget) |
 | Strict concurrency (`-strict-concurrency=complete`) | ✅ clean in MartialGodCore |
 | Simulation frame cost | ✅ **7.4µs/tick**, 0.045% of a 60Hz frame (release, x86_64 Linux) |
-| Presentation layer parses (`swiftc -parse`, 11 files) | ✅ syntax only — no Apple SDK here |
+| Presentation layer parses (`swiftc -parse`, 11 files) | ✅ syntax only |
+| **Presentation layer TYPE-CHECKS against stub frameworks (10 of 11 files)** | ✅ `./typecheck.sh` — our own types, optionality, labels and conformances. Not Apple's API shape |
 | App icon meets App Store requirements | ✅ 1024×1024, opaque, no alpha |
-| Presentation layer **type-checks** or links | ⛔ needs the iOS SDK |
+| Presentation layer links, or type-checks against the REAL frameworks | ⛔ needs the iOS SDK |
+| `MartialGodApp.swift` (the SwiftUI shell) checked at all | ⛔ excluded — stubbing the SwiftUI DSL would give false signal in both directions |
 | Launches on simulator or device | ⛔ needs Xcode |
 | Render / audio / haptics performance | ⛔ needs a device |
 
@@ -402,8 +404,8 @@ Neither would have been visible until someone ran the generator.
 
 | # | Issue | Severity |
 | --- | --- | --- |
-| N-1 | ~~Nothing has been compiled.~~ **The core is compiled and green** — 37 tests, parity gate, strict concurrency. The 11 presentation files parse but do not type-check; they need the iOS SDK. | Open, narrowed |
-| N-2 | `Renderer.swift` is still the highest-risk file: pipeline state, vertex descriptor and shader ABI are exactly what a compiler and a GPU catch and a reviewer does not. It parses; nothing more. | High |
+| N-1 | ~~Nothing has been compiled.~~ **The core is compiled and green** — 37 tests, parity gate, strict concurrency. **10 of the 11 presentation files now type-check** against stub frameworks (`./typecheck.sh`); the SwiftUI shell and all real-SDK behaviour still need a Mac. | Open, narrowed further |
+| N-2 | `Renderer.swift` is still the highest-risk file: pipeline state, vertex descriptor and shader ABI are what a compiler and a GPU catch and a reviewer does not. It now **type-checks** against stub Metal, which is more than parsing and much less than building. | High |
 | N-3 | The touch grammar is untested on glass. Tap-versus-flick disambiguation is the most likely tuning need. | High |
 | N-4 | ~~The input buffer is inert in both implementations.~~ **Fixed**, and the Swift half is now proven by a parity gate that actually ran — `bufferedVerb` matches the oracle on every one of 5,861 frames. | Closed |
 | N-5 | ~~`TechniqueDB` uses mutable static state.~~ **Fixed:** one immutable `Sendable` table in a `static let`. Verified clean under `-strict-concurrency=complete`, and CI fails on any new warning. | Closed |

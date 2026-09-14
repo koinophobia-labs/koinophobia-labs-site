@@ -16,6 +16,7 @@ person can make.
 | | Item | Where |
 | --- | --- | --- |
 | ✅ | Swift core compiles | `apple/Packages/MartialGodCore` |
+| ✅ | **Presentation layer type-checks (10 of 11 files)** against stub frameworks | `apple/typecheck.sh` |
 | ✅ | 37 Swift tests pass | `apple/test.sh` |
 | ✅ | **Parity gate passes** — 5,861 frames, 407 events, 0 divergences | `apple/parity.sh` |
 | ✅ | Strict concurrency clean (Swift 6 ready) | CI enforces it |
@@ -36,9 +37,17 @@ is eleven orders of magnitude, so a failure there would be genuinely informative
 ## B. Needs a Mac — in this order
 
 1. **`cd apple && ./bootstrap.sh`.** XcodeGen generates the project; then build.
-2. **Fix the first-build errors in the 11 presentation files.** They parse, and nothing
-   more. They have never been type-checked, because that needs the iOS SDK. Expect
-   ordinary porting errors — argument labels, optionality, protocol conformance.
+2. **Fix the first-build errors in the presentation files.** Ten of the eleven now
+   type-check against stub frameworks, so the ordinary self-inflicted errors — wrong
+   types, misspelled members, missing conformances, bad optionality — should already
+   be gone. What the stubs cannot vouch for is **Apple's actual API shape**: if a
+   signature differs from what the stub asserts, it compiles here and fails there.
+   Expect the survivors to be exactly that, plus anything in the two blind spots:
+   - `MartialGodApp.swift`, excluded because stubbing the SwiftUI DSL gives false
+     signal in both directions. **Check the app entry point, `scenePhase` wiring and
+     the SwiftUI-to-UIKit bridge first.**
+   - Every `#selector` target/action pair, rewritten away by the harness because
+     Linux Swift has no Objective-C runtime.
    - `Presentation/Renderer.swift` is the one to open first and read hardest. Pipeline
      state, vertex descriptor and shader ABI are exactly the class of thing a compiler
      and a GPU catch and a careful reader does not.

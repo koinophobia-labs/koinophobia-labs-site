@@ -104,15 +104,29 @@ public final class SettingsStore {
 
     /// The switch can be flipped while the game is open, and a fight in progress must
     /// respond to it rather than waiting for a relaunch.
+    /// Notification tokens, kept so they can be removed.
+    ///
+    /// `addObserver(forName:...)` hands back a token and registers a block that the
+    /// centre retains forever. Discarding the token means the observer can never be
+    /// removed and a second registration silently doubles up. These objects happen to
+    /// live for the app's lifetime today, so nothing leaks in practice — but "happens
+    /// to be a singleton" is not a memory-management strategy, and the compiler was
+    /// right to say so.
+    private var observers: [NSObjectProtocol] = []
+
+    deinit {
+        for o in observers { NotificationCenter.default.removeObserver(o) }
+    }
+
     private func observeSystemAccessibility() {
         #if canImport(UIKit)
-        NotificationCenter.default.addObserver(
+        observers.append(NotificationCenter.default.addObserver(
             forName: UIAccessibility.reduceMotionStatusDidChangeNotification,
             object: nil, queue: .main
         ) { [weak self] _ in
             guard let self, !self.hasStoredSettings else { return }
             self.settings.reduceMotion = UIAccessibility.isReduceMotionEnabled
-        }
+        })
         #endif
     }
 

@@ -13,15 +13,29 @@ public final class ControllerInput {
     /// Rising-edge tracking, so holding a button does not machine-gun techniques.
     private var wasPressed: [String: Bool] = [:]
 
+    /// Notification tokens, kept so they can be removed.
+    ///
+    /// `addObserver(forName:...)` hands back a token and registers a block that the
+    /// centre retains forever. Discarding the token means the observer can never be
+    /// removed and a second registration silently doubles up. These objects happen to
+    /// live for the app's lifetime today, so nothing leaks in practice — but "happens
+    /// to be a singleton" is not a memory-management strategy, and the compiler was
+    /// right to say so.
+    private var observers: [NSObjectProtocol] = []
+
+    deinit {
+        for o in observers { NotificationCenter.default.removeObserver(o) }
+    }
+
     public init() {
-        NotificationCenter.default.addObserver(
+        observers.append(NotificationCenter.default.addObserver(
             forName: .GCControllerDidConnect, object: nil, queue: .main) { [weak self] _ in
                 self?.isConnected = true
-            }
-        NotificationCenter.default.addObserver(
+            })
+        observers.append(NotificationCenter.default.addObserver(
             forName: .GCControllerDidDisconnect, object: nil, queue: .main) { [weak self] _ in
                 self?.isConnected = GCController.controllers().isEmpty == false
-            }
+            })
         isConnected = !GCController.controllers().isEmpty
     }
 

@@ -27,12 +27,26 @@ public final class CombatAudio {
 
     /// `.ambient` on purpose: this game must never stop someone's music, and it must
     /// never claim the session in a way that complicates review.
+    /// Notification tokens, kept so they can be removed.
+    ///
+    /// `addObserver(forName:...)` hands back a token and registers a block that the
+    /// centre retains forever. Discarding the token means the observer can never be
+    /// removed and a second registration silently doubles up. These objects happen to
+    /// live for the app's lifetime today, so nothing leaks in practice — but "happens
+    /// to be a singleton" is not a memory-management strategy, and the compiler was
+    /// right to say so.
+    private var observers: [NSObjectProtocol] = []
+
+    deinit {
+        for o in observers { NotificationCenter.default.removeObserver(o) }
+    }
+
     public func configureSession() {
         let session = AVAudioSession.sharedInstance()
         try? session.setCategory(.ambient, mode: .default, options: [.mixWithOthers])
         try? session.setActive(true)
 
-        NotificationCenter.default.addObserver(
+        observers.append(NotificationCenter.default.addObserver(
             forName: AVAudioSession.interruptionNotification,
             object: session, queue: .main) { [weak self] note in
                 guard let info = note.userInfo,
@@ -50,7 +64,7 @@ public final class CombatAudio {
                 @unknown default:
                     break
                 }
-            }
+            })
     }
 
     public func start() {
