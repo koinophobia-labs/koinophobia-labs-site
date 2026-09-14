@@ -102,11 +102,27 @@ private struct StyleFile: Codable {
     let techniques: [Technique]
 }
 
+/// Every technique the game knows, indexed the three ways the simulation asks for it.
+///
+/// A value type, immutable once built, and `Sendable` all the way down — which is what
+/// lets `TechniqueDB` hand it out from any thread without a lock.
+public struct TechniqueTable: Sendable {
+    public let all: [Technique]
+    let byId: [String: Technique]
+    /// (style, verb, intent) -> technique. The style is part of the key, so adding
+    /// Standing Water in M2 is another file in this same table, not another global.
+    let byGrammar: [String: Technique]
+
+    static let empty = TechniqueTable(all: [], byId: [:], byGrammar: [:])
+
+    init(all: [Technique], byId: [String: Technique], byGrammar: [String: Technique]) {
+        self.all = all; self.byId = byId; self.byGrammar = byGrammar
+    }
+}
+
 public enum TechniqueDB {
-    public private(set) static var byId: [String: Technique] = [:]
-    /// (style, verb, intent) -> technique. Built once at load.
-    private static var byGrammar: [String: Technique] = [:]
-    public private(set) static var all: [Technique] = []
+    public static var byId: [String: Technique] { table.byId }
+    public static var all: [Technique] { table.all }
 
     static func grammarKey(_ style: String, _ verb: Verb, _ intent: Intent) -> String {
         "\(style)|\(verb.rawValue)|\(intent.rawValue)"
@@ -153,35 +169,56 @@ public enum TechniqueDB {
         }
     }
 
-    /// Load from the package resource. Idempotent; safe to call from app start.
-    public static func loadDefault() throws {
+    /// The loaded table, built exactly once.
+    ///
+    /// Swift initialises a `static let` lazily under `swift_once`, so this is
+    /// thread-safe to create and every read afterwards is a plain load with no lock.
+    /// That is the whole reason the table is a value type rather than three mutable
+    /// dictionaries: the hot path stays free AND becomes concurrency-correct, which
+    /// are usually competing goals and here are the same one, because the data is
+    /// genuinely immutable after load.
+    ///
+    /// Held as a `Result` so a missing or invalid resource still fails loudly at
+    /// `loadDefault()`, rather than trapping halfway through a fight.
+    private static let loaded: Result<TechniqueTable, Error> = Result {
         guard let url = Bundle.module.url(forResource: "low-river", withExtension: "json") else {
             throw LoadError.missingResource
         }
-        try load(data: Data(contentsOf: url))
+        return try makeTable(from: Data(contentsOf: url))
     }
 
-    public static func load(data: Data) throws {
+    private static let table: TechniqueTable = (try? loaded.get()) ?? .empty
+
+    /// Load from the package resource. Idempotent — and now idempotent by construction
+    /// rather than by discipline, since there is nothing left to mutate. Safe to call
+    /// from app start, from every test's setUp, and from both at once.
+    public static func loadDefault() throws {
+        _ = try loaded.get()
+    }
+
+    /// Decode and validate a style file into a table. Pure: it touches no global state,
+    /// which is what keeps the validation path testable without a loaded game.
+    public static func makeTable(from data: Data) throws -> TechniqueTable {
         let file = try JSONDecoder().decode(StyleFile.self, from: data)
         var errors: [String] = []
         for t in file.techniques { errors.append(contentsOf: validate(t, style: file.style)) }
         if !errors.isEmpty { throw LoadError.invalid(errors) }
 
-        byId.removeAll()
-        byGrammar.removeAll()
-        all = file.techniques
+        var byId: [String: Technique] = [:]
+        var byGrammar: [String: Technique] = [:]
         for t in file.techniques {
             byId[t.id] = t
             byGrammar[grammarKey(file.style, t.verb, t.intent)] = t
         }
+        return TechniqueTable(all: file.techniques, byId: byId, byGrammar: byGrammar)
     }
 
     public static func technique(_ id: String) -> Technique {
-        guard let t = byId[id] else { preconditionFailure("unknown technique: \(id)") }
+        guard let t = table.byId[id] else { preconditionFailure("unknown technique: \(id)") }
         return t
     }
 
     static func grammar(_ style: String, _ verb: Verb, _ intent: Intent) -> Technique? {
-        byGrammar[grammarKey(style, verb, intent)]
+        table.byGrammar[grammarKey(style, verb, intent)]
     }
 }
