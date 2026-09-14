@@ -63,7 +63,9 @@ public struct Structure: Sendable, Equatable {
     public func isCollapsed(_ q: Quadrant) -> Bool { collapse(q) > 0 }
 }
 
-private let tau = Double.pi * 2
+/// `@usableFromInline` rather than `private`: `wrapAngle` is `@inlinable`, and an
+/// inlinable body may only touch symbols a client module can also see.
+@usableFromInline let tau = Double.pi * 2
 
 /// Wrap to (-PI, PI].
 @inlinable public func wrapAngle(_ a: Double) -> Double {

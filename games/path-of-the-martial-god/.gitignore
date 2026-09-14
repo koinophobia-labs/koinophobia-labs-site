@@ -4,3 +4,6 @@ shots/
 scratch/
 DerivedData/
 *.xcuserdatad/
+
+# SwiftPM build products
+.build/
