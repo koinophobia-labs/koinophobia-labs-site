@@ -32,7 +32,7 @@ c = canvas.Canvas(OUT, pagesize=letter)
 c.setTitle("Blake Taylor — Résumé")
 c.setAuthor("Blake Taylor")
 c.setSubject(DATA["headline"])
-c.setCreator("koinophobia.dev")
+c.setCreator("koinophobialabs.com")
 
 y = PH - MARGIN
 
@@ -125,7 +125,7 @@ link_row([
     (contact["email"], f"mailto:{contact['email']}"),
     ("linkedin.com/in/bt77", contact["linkedin"]),
     ("github.com/koinophobia-labs", contact["github"]),
-    ("koinophobia.dev", contact["site"]),
+    ("koinophobialabs.com/blake", contact["site"]),
 ])
 
 # ---- Summary ----
