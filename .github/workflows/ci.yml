@@ -43,14 +43,11 @@ jobs:
       - name: Test concierge behavior
         run: npm run test:concierge
 
-      - name: Test commercial surfaces
+      - name: Test the koi world and redirects
         run: npm run test:commercial
 
-      - name: Test Founder OS routing
-        run: npm run test:dev-routing
-
-      - name: Test current-state truth
-        run: npm run test:now
+      - name: Test the product registry
+        run: npm run test:products
 
       - name: Test migrations
         run: npm run test:migrations

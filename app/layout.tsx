@@ -1,58 +1,29 @@
 import type { Metadata, Viewport } from "next";
-import {
-  Archivo,
-  IBM_Plex_Mono,
-  Inter,
-  JetBrains_Mono,
-  Newsreader,
-  Sora,
-} from "next/font/google";
+import { JetBrains_Mono, Newsreader, Sora } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
-import BrandIntro from "@/components/brand/BrandIntro";
 import "./globals.css";
-import "./founder.css";
-import "./ecosystem-pages-refresh.css";
-import "./home.css";
-import "./career-forge-home.css";
-import "./you-know-ball-home-fix.css";
-import "./trendi-feature.css";
-import "./trendi-hero-visual.css";
+import "./tokens.css";
+import "./site.css";
+import "./motion.css";
 import "./brand.css";
-import "./brand-intro.css";
-import "./founder-editorial.css";
-import "./product-worlds.css";
-import "./commercial.css";
 import "./koi-world.css";
-import "./dev-system.css";
-import "./dev-home.css";
-import "./dev-product.css";
-import "./dev-pages.css";
-import "./dev-log.css";
-import "./dev-koi.css";
-import "./front-office.css";
-import "./connect-card.css";
 import "./resume-dev.css";
-import "./now-dev.css";
 import AnalyticsBridge from "@/components/studio/AnalyticsBridge";
-import KoiCompanion from "@/components/companion/KoiCompanion";
+import Motion from "@/components/motion/Motion";
 import {
   STUDIO_DESCRIPTION,
   STUDIO_SOCIAL_IMAGE,
   STUDIO_TITLE,
   STUDIO_URL,
 } from "@/lib/seo";
-import "./koi-companion.css";
 
+// Three families, each with one job: Sora is the studio voice, Newsreader
+// italic is Blake's voice, JetBrains Mono is receipts. See the rebuild
+// document, section 5.
 const sora = Sora({
   variable: "--font-sora",
   subsets: ["latin"],
-  weight: ["600", "700"],
-});
-
-const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
-  weight: ["400", "500", "600"],
+  weight: ["400", "600", "700"],
 });
 
 const jetbrains = JetBrains_Mono({
@@ -61,15 +32,11 @@ const jetbrains = JetBrains_Mono({
   weight: ["400", "500", "700"],
 });
 
-const archivo = Archivo({ variable: "--font-archivo", subsets: ["latin"] });
 const newsreader = Newsreader({
   variable: "--font-newsreader",
   subsets: ["latin"],
-});
-const ibmPlexMono = IBM_Plex_Mono({
-  variable: "--font-ibm-plex-mono",
-  subsets: ["latin"],
-  weight: ["400", "500", "600"],
+  style: ["italic"],
+  weight: ["400"],
 });
 
 export const metadata: Metadata = {
@@ -105,7 +72,7 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   colorScheme: "dark",
-  themeColor: "#080511",
+  themeColor: "#04060a",
 };
 
 export default function RootLayout({
@@ -117,14 +84,13 @@ export default function RootLayout({
     <html
       lang="en"
       data-scroll-behavior="smooth"
-      className={`${sora.variable} ${inter.variable} ${jetbrains.variable} ${archivo.variable} ${newsreader.variable} ${ibmPlexMono.variable}`}
+      className={`${sora.variable} ${jetbrains.variable} ${newsreader.variable}`}
     >
       <body>
-        <BrandIntro />
         <AnalyticsBridge />
         <Analytics />
         {children}
-        <KoiCompanion />
+        <Motion />
       </body>
     </html>
   );

@@ -68,7 +68,15 @@ function conciergeFromForm(form: FormData, input: LeadInput, desiredOutcome: str
   } };
 }
 
+/**
+ * The /start form asks for two paragraphs and an email, not a business
+ * profile. It posts as `variant=start`; the fields the older form required
+ * are filled with honest placeholders so the lead lands in the same pipeline.
+ */
+const startRequiredFields = ["name", "email", "biggestProblem"] as const;
+
 export function validateIntake(form: FormData): { input?: LeadInput; errors?: Record<string, string> } {
+  const isStart = intakeFormValue(form, "variant") === "start";
   const desiredOutcome = intakeFormValue(form, "desiredOutcome");
   const currentTools = intakeFormValue(form, "currentTools");
   const additionalNotes = intakeFormValue(form, "notes");
@@ -82,8 +90,16 @@ export function validateIntake(form: FormData): { input?: LeadInput; errors?: Re
     currentTools,
     source: "website intake",
   };
+  if (isStart) {
+    input.businessName ||= "Not given";
+    input.industry ||= "Not given";
+    input.serviceInterest ||= "Start form: idea";
+    input.timeline ||= "No deadline";
+    input.websiteOrSocial ||= "";
+    input.source = "start form";
+  }
   const errors: Record<string, string> = {};
-  for (const key of requiredFields) if (!input[key]) errors[key] = "This field is required.";
+  for (const key of isStart ? startRequiredFields : requiredFields) if (!input[key]) errors[key] = "This field is required.";
   if (desiredOutcome.length > 2000) errors.desiredOutcome = "Must be 2000 characters or fewer.";
   if (currentTools.length > 2000) errors.currentTools = "Must be 2000 characters or fewer.";
   if (additionalNotes.length > 4000) errors.notes = "Must be 4000 characters or fewer.";

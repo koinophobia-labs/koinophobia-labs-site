@@ -1,4 +1,4 @@
-import { serviceOffers } from "@/lib/commercial";
+import { serviceOffers } from "@/lib/acquisition/offers";
 import { classifyProblemKind } from "@/lib/front-office/extract";
 import { scoreConcierge } from "@/lib/concierge/routing";
 import type {

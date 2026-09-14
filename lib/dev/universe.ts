@@ -24,7 +24,7 @@ import { LINKS } from "@/lib/links";
 // certified free-launch candidate, while You Know Ball's historical Apple
 // acceptance was preserved without guessing at its current distribution state.
 
-export const universeLastUpdated = "September 10, 2026";
+export const universeLastUpdated = "September 13, 2026";
 
 /** Who owns keeping these statuses honest. Rendered nowhere; asserted in tests. */
 export const statusOwner = "Blake Taylor";
@@ -154,7 +154,7 @@ export type Evidence = {
 };
 
 export type ProductIdentity = {
-  theme: "forge" | "signal" | "arena" | "cave" | "studio" | "memory";
+  theme: "forge" | "signal" | "arena" | "cave" | "studio" | "memory" | "school" | "model" | "keeper";
   register: string;
 };
 
@@ -475,6 +475,175 @@ export const products: Product[] = [
     notYet: [
       "No public download is offered here.",
       "The July 2026 signing, operator-loop, and mail-sync notes have not been reverified for a newer build.",
+    ],
+  },
+  {
+    slug: "teachers-pet",
+    name: "Teacher's Pet",
+    tagline: "A homeschool for one computer.",
+    identity: { theme: "school", register: "Patient · one course at a time" },
+    reach: "internal",
+    stage: "local",
+    status:
+      "A macOS build (0.2.0, build 5) runs the first course, Algebra Foundations, on Blake's machine. The K–12 map is complete; the school is not",
+    verifiedAt: "2026-09-13",
+    evidence: [
+      {
+        claim: "The curriculum map counts 13 grades, 4 subjects, 52 courses, 318 units, 1,273 objectives",
+        source:
+          "curriculum/sealed/v3.267.0/K12_CURRICULUM_REGISTRY.json in teachers-pet-personal-school-0.266, counted directly on 2026-09-13; matches curriculum/school/inventory.json",
+      },
+      {
+        claim: "100 objectives are complete; 864 have had substantive review across 36 courses",
+        source:
+          "curriculum/school/inventory.json (COMPLETE 100 · PARTIAL 1173) and README status 'PARTIAL SCHOOL — EXPANSION IN PROGRESS', read 2026-09-13",
+      },
+      {
+        claim: "Algebra Foundations runs as a macOS app and its golden path passed QA",
+        source:
+          "macos/ALGEBRA_RELEASE_QA.md (build 4 golden-path checks all Pass) and macos/TeachersPet.xcodeproj MARKETING_VERSION 0.2.0 / CURRENT_PROJECT_VERSION 5, read 2026-09-13",
+      },
+      {
+        claim: "No TestFlight upload has been made",
+        source:
+          "macos/ALGEBRA_RELEASE_QA.md: 'No TestFlight upload was performed'; Apple package validation only (macos/release-evidence/build-4/apple-validation.json)",
+      },
+    ],
+    problem:
+      "A full education for one child, on one Mac, that never asks a parent to be the teacher. The map for that is thirteen grades wide. Building it is a course at a time.",
+    thesis:
+      "The size of the promise and the size of the product should sit on the same page until they match. 1,273 is the map. 100 is the school.",
+    state: [
+      "The sealed curriculum registry maps 13 grades, 4 subjects, 52 courses, 318 units, and 1,273 objectives. The registry labels itself a structurally validated draft map and claims no jurisdictional alignment, no credit, and no learning-improvement outcome.",
+      "Algebra Foundations is the first complete course: four lessons, guided practice, independent checks, cumulative review, explicit unlocks, and device-local save and resume.",
+      "100 objectives are complete and 864 have had substantive review across 36 courses. The rest are mapped, not built.",
+      "Grade 7 synchronisation evidence was recorded on 2026-09-13.",
+    ],
+    decisions: [
+      {
+        call: "Seal the map before building the school.",
+        why: "A curriculum that grows while it's being taught can't be checked. The registry is versioned and sealed so every objective has one identity, and the inventory counts against it instead of against a mood.",
+      },
+      {
+        call: "Ship one course to a real device before touching the second.",
+        why: "A macOS app that teaches algebra end to end is a smaller claim than a K–12 school, and it's a claim a person can verify in an afternoon.",
+      },
+    ],
+    learned:
+      "The map was the easy part and it looked like the hard part. Turning one course into something that survives a child pressing the wrong button is where the time goes.",
+    actions: [],
+    notYet: [
+      "No TestFlight or App Store distribution of any kind; the macOS build runs only on Blake's machine.",
+      "No child has learned from it, and no learning outcome is claimed.",
+      "1,173 of the 1,273 objectives are mapped but not complete.",
+    ],
+  },
+  {
+    slug: "koi",
+    name: "KOI",
+    tagline: "A language model taught to read from random weights, on a laptop.",
+    identity: { theme: "model", register: "Measured · rejections are receipts" },
+    reach: "internal",
+    stage: "local",
+    status:
+      "A from-scratch pretraining program running on one Apple M4. The largest documented runs are a few million parameters; the README says it is not useful yet",
+    verifiedAt: "2026-09-13",
+    evidence: [
+      {
+        claim: "Weights began random, on a corpus the studio owns; no external weights",
+        source:
+          "koi-model README and run manifests (initialization: random, external_weights_used: false), read 2026-09-13",
+      },
+      {
+        claim: "koi-0.1 is 869,504 parameters, trained 1,500 steps in 75 s, held-out perplexity 2.11",
+        source: "koi-model README run record for koi-0.1 (4 layers, 4 heads, 128 dims, block 128, vocab 512), read 2026-09-13",
+      },
+      {
+        claim: "Most versioned experiments end in rejection, and the latest reverted itself",
+        source:
+          "koi-model EXPERIMENTS.md (~25 versioned verdicts, e.g. 'koi-0.10 — REJECTED for promotion, falsifier fired') and the 2026-08-24 commit 'MORPH-1 VERDICT: bar FAILED at diagnose 5/8 — reverted per the rule'",
+      },
+      {
+        claim: "The receipts exist on disk",
+        source:
+          "~20 *-receipt.json files at the koi-model root and 76 receipt files in koi-epoch3-receipts; 18 experiment worktrees governed by koi-lanes/LANES.md, listed 2026-09-13",
+      },
+    ],
+    problem:
+      "Everyone uses language models. Almost nobody outside a lab has trained one from nothing and watched what a small one actually learns. I wanted to know, with numbers I produced myself, instead of taking the field's word for it.",
+    thesis:
+      "A model this size is not a product. It is an instrument for finding out how learning fails, and a negative result written down is worth more than a demo that flatters.",
+    state: [
+      "The tokenizer, the decoder-only transformer, the training loop, and the local inference server on 127.0.0.1:11500 are all the studio's own code.",
+      "koi-0.1: 869,504 parameters, loss 6.24 to 0.743 over 1,500 steps, held-out perplexity 2.11, verdict-rule accuracy 0.85 against a 0.50 baseline.",
+      "Later runs reach roughly 4.9 million parameters; a 30-million-parameter variant is referenced in the experiment log.",
+      "Not learned: long-range agent closure (0.12 against a 0.10 baseline) and free-generation format validity (0.00). Verbatim echo failed and the copy wall is characterised.",
+      "Eighteen experiment lanes run as git worktrees against one certified baseline, one heavy job at a time, because the machine has one GPU.",
+    ],
+    decisions: [
+      {
+        call: "A falsifier that reverts the change when the bar isn't cleared.",
+        why: "A research log where every experiment succeeds is a diary. The rule is written down, the bar is written down, and the commit that fails it reverts itself.",
+      },
+      {
+        call: "Own corpus, random weights, no shortcuts.",
+        why: "Fine-tuning someone else's model would answer a different question. The point is to watch learning start from nothing and know exactly what went in.",
+      },
+    ],
+    learned:
+      "The interesting results were the failures. The model learned to satisfy a verdict rule quickly and could not write a well-formed sentence at all, which says more about what a small model finds easy than any success would have.",
+    actions: [],
+    notYet: [
+      "It cannot generate useful text. The README says so and this page says so.",
+      "No model has been published, served to anyone but Blake, or compared against an external benchmark.",
+      "The 30-million-parameter variant is referenced in the log but its results are not summarised here.",
+    ],
+  },
+  {
+    slug: "preaching-to-the-choir",
+    name: "Preaching to the Choir",
+    tagline: "A keeper, not a journal.",
+    identity: { theme: "keeper", register: "Quiet · returns to what you noticed" },
+    reach: "limited",
+    stage: "external-testers",
+    status:
+      "Version 1.0 (66) is approved and available to external testers through an open TestFlight link",
+    verifiedAt: "2026-09-13",
+    evidence: [
+      {
+        claim: "Build 66 is approved for external testing with a public join link",
+        source:
+          "docs/release/Release-verification.md in preaching-to-the-choir: Apple reports VALID, APPROVED, IN_BETA_TESTING; public link https://testflight.apple.com/join/1eUCSez8, read 2026-09-13",
+      },
+      {
+        claim: "The preflight suite passes",
+        source: "docs/release/Release-verification.md: 543 tests, 1 skip, 0 failures; implementation through Slice 38 (98a885c)",
+      },
+    ],
+    problem:
+      "Journals ask you to write. Most days you don't. What you do have is a handful of things you noticed, and nowhere that keeps them without demanding an entry.",
+    thesis:
+      "Keep what you noticed, notice what returns, and never ask for a paragraph. The app should be quieter than the thought.",
+    state: [
+      "Modules: Capture, Noticing, Returns, Horizons, Sync, Export, Telemetry, Commerce, governed by a spec whose spine outranks every other document.",
+      "iPhone and iPad primary, with a Mac target and a widget extension. SQLite with full-text search, a job runner, and a banned-word linter that refuses any user-visible string that reads like a literal.",
+      "A Keeper tier is configured in StoreKit at $2.99 a month, $24.99 a year, or $79 once. It is not on sale anywhere yet.",
+    ],
+    decisions: [
+      {
+        call: "A linter for the words, not just the code.",
+        why: "The product's voice is the product. If a string can fail a build, the voice can't drift while nobody is looking.",
+      },
+    ],
+    learned:
+      "TestFlight approval is not release. It is the last place a stranger can tell you the thing you built is not the thing you described, and it is worth staying there a while.",
+    actions: [
+      { label: "Join the TestFlight", href: "https://testflight.apple.com/join/1eUCSez8", external: true, primary: true },
+    ],
+    notYet: [
+      "Not on the App Store, and no App Store submission is claimed.",
+      "The Keeper tier is configured, not sold; no purchase has been made by anyone.",
+      "No tester feedback is summarised here.",
     ],
   },
 ];

@@ -23,25 +23,20 @@ test("betting requests pause scoring", () => {
   assert.equal(score.points, 0);
 });
 
-test("the koi-first homepage leads with the internal product constellation", async () => {
+test("the koi-first homepage leads with shipped apps, then the lab, then the offer", async () => {
   const page = await readFile(
     new URL("../app/page.tsx", import.meta.url),
     "utf8",
   );
-  const productsScene = page.indexOf('className="dest dest--products"');
-  const systemsScene = page.indexOf('className="dest dest--systems"');
+  const shippedScene = page.indexOf('className="dest dest--shipped"');
+  const labScene = page.indexOf('className="dest dest--lab"');
   const workScene = page.indexOf('className="dest dest--work"');
 
-  assert.ok(productsScene > 0, "the product constellation must exist");
-  assert.ok(
-    productsScene < systemsScene,
-    "the product constellation should follow the hero before the services chapter",
-  );
-  assert.ok(
-    systemsScene < workScene,
-    "the systems chapter should lead into the work chapter",
-  );
-  assert.match(page, /className="kw__constellation"/);
-  assert.match(page, /constellation\.map\(\(node, index\) =>/);
-  assert.match(page, /product\.status\.replace\("Internal Product · ", ""\)/);
+  assert.ok(shippedScene > 0, "the shipped chapter must exist");
+  assert.ok(shippedScene < labScene, "shipped apps come before the lab");
+  assert.ok(labScene < workScene, "the lab leads into the offer");
+  assert.match(page, /shipped\.map\(\(product, index\) =>/);
+  assert.match(page, /labProducts\.map\(\(product, index\) =>/);
+  // You Know Ball is a lab card read from the registry, never a hardcoded status.
+  assert.doesNotMatch(page, /Internal Product · /);
 });

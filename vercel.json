@@ -4,7 +4,7 @@
     {
       "source": "/:path*",
       "has": [{ "type": "host", "value": "www.koinophobia.dev" }],
-      "destination": "https://koinophobia.dev/:path*",
+      "destination": "https://koinophobialabs.com/:path*",
       "permanent": true
     },
     {

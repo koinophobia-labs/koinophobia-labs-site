@@ -11,7 +11,7 @@ import Image from "next/image";
 import Link from "next/link";
 import resume from "@/lib/resume.json";
 
-// koinophobia.dev/resume — the truthful résumé, rendered in the personal home's
+// /resume — the truthful résumé, rendered in the founder's
 // dark identity (.resumedev mirrors the .devhome palette). All facts come from
 // lib/resume.json (single source of truth); the ATS PDF at PDF_PATH is generated
 // from the same file via scripts/generate-resume-pdf.py. Content is not edited here.
@@ -21,22 +21,22 @@ export const metadata: Metadata = {
   description:
     "Résumé for Blake Taylor: AI product builder with a customer-experience and trust & safety background. Founder of Koinophobia Labs, formerly DraftKings.",
   alternates: {
-    canonical: "https://koinophobia.dev/resume",
+    canonical: "https://koinophobialabs.com/resume",
   },
   openGraph: {
     type: "profile",
-    siteName: "koinophobia.dev",
+    siteName: "Koinophobia Labs",
     title: "Blake Taylor — Résumé",
     description:
       "AI product builder with a customer-experience and trust & safety background.",
-    url: "https://koinophobia.dev/resume",
-    images: [{ url: "https://koinophobia.dev/og-founder.png", width: 1200, height: 630 }],
+    url: "https://koinophobialabs.com/resume",
+    images: [{ url: "https://koinophobialabs.com/og-founder.png", width: 1200, height: 630 }],
   },
   twitter: {
     card: "summary_large_image",
     title: "Blake Taylor — Résumé",
     description: "AI product builder with a customer-experience and trust & safety background.",
-    images: ["https://koinophobia.dev/og-founder.png"],
+    images: ["https://koinophobialabs.com/og-founder.png"],
   },
 };
 
@@ -49,7 +49,7 @@ export default function ResumePage() {
       <main className="resumedev__inner">
         <header className="resumedev__top">
           <Link className="resumedev__home" href="/">
-            <ArrowLeft size={15} aria-hidden="true" /> koinophobia.dev
+            <ArrowLeft size={15} aria-hidden="true" /> Koinophobia Labs
           </Link>
           <span className="resumedev__loc">{resume.contact.location}</span>
         </header>
@@ -236,7 +236,7 @@ export default function ResumePage() {
           <p>
             {resume.name} · {resume.contact.location} ·{" "}
             <a href={`mailto:${resume.contact.email}`}>{resume.contact.email}</a> ·{" "}
-            <Link href="/">koinophobia.dev</Link> ·{" "}
+            <Link href="/blake">Blake Taylor</Link> ·{" "}
             <a href={resume.contact.company} target="_blank" rel="noopener noreferrer">
               koinophobialabs.com
             </a>
