@@ -20,6 +20,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/work-with-me", lastModified: "2026-09-13", priority: 0.9, changeFrequency: "monthly" as const },
     { path: "/resume", lastModified: "2026-09-10", priority: 0.4, changeFrequency: "monthly" as const },
     { path: "/privacy", lastModified: "2026-09-13", priority: 0.3, changeFrequency: "yearly" as const },
+    { path: "/preaching-to-the-choir/privacy", lastModified: "2026-09-16", priority: 0.3, changeFrequency: "yearly" as const },
+    { path: "/preaching-to-the-choir/support", lastModified: "2026-09-16", priority: 0.3, changeFrequency: "yearly" as const },
     { path: "/trendi/privacy", lastModified: "2026-08-31", priority: 0.3, changeFrequency: "yearly" as const },
     { path: "/trendi/support", lastModified: "2026-08-13", priority: 0.3, changeFrequency: "yearly" as const },
     { path: "/forget-about-it/privacy", lastModified: "2026-09-10", priority: 0.3, changeFrequency: "yearly" as const },
