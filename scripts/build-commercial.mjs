@@ -1,5 +1,5 @@
 import {statfsSync} from 'node:fs';
-import {spawnSync} from 'node:child_process';
+import {spawn} from 'node:child_process';
 
 // Keep the founder's 10 GB reserve on every build worker. Estimates include
 // Next output, file tracing, and transient files; dependency installation is
@@ -17,5 +17,18 @@ for (const destination of destinations) {
 }
 // The hosted Turbopack Google-font resolver failed on the production baseline.
 // Next's supported webpack build avoids that failure without changing fonts.
-const result = spawnSync(process.execPath, ['node_modules/next/dist/bin/next','build','--webpack'], {stdio:'inherit'});
-process.exit(result.status ?? 1);
+const child = spawn(process.execPath, ['node_modules/next/dist/bin/next','build','--webpack'], {stdio:'inherit'});
+let stoppedForHeadroom = false;
+const monitor = setInterval(() => {
+  for (const destination of destinations) {
+    const disk = statfsSync(destination);
+    if (disk.bavail * disk.bsize < 10_500_000_000) {
+      console.error('Infrastructure blocker: stopping this build before the 10 GB reserve is breached. Evidence preserved.');
+      stoppedForHeadroom = true;
+      child.kill('SIGTERM');
+      break;
+    }
+  }
+}, 2000);
+child.on('error', error => { clearInterval(monitor); console.error(error); process.exit(1); });
+child.on('close', code => { clearInterval(monitor); process.exit(stoppedForHeadroom ? 1 : code ?? 1); });

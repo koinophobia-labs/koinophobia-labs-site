@@ -159,11 +159,11 @@ const site: Record<string, SiteMeta> = {
         "The idea between errands. The name you just heard. Capture it on iPhone or Apple Watch and find your exact words later.",
       insightTitle: "Fast capture only matters if you can return to what you kept.",
       insightBody:
-        "Most note apps solve the first half. Forget About It keeps your exact words, in order, and writes a short account of the day beside them, with the names and subjects that kept coming up and the things you said you'd return to. Your words and the app's reading of them never merge.",
+        "Forget About It keeps your exact words in a dated timeline, with basic text search when you want to return. Separately labeled on-device reflections add context without rewriting the original thought.",
       blocks: [
         { title: "Capture", body: "Type or dictate on iPhone. Speak, scribble, or type on the Watch. Watch captures queue offline and sync when the phone is back." },
         { title: "Read back", body: "Today, History, Memory. The day in order, a short account beside it, the loose ends you named." },
-        { title: "Keep it yours", body: "No account, no analytics, no server. Export your own copy from Settings." },
+        { title: "Keep it yours", body: "No app account or developer analytics. Thoughts stay on your devices. Apple handles optional Plus purchases. Export your own copy from Settings." },
       ],
       statusBody:
         "Version 1.1 is free with optional Plus subscriptions in the US and Canada. Plus adds date/source filters, capture patterns, and earlier reflections for new users. Capture, original history, text search, and export stay free. The journal is excluded from device backups; export a copy before changing phones.",
