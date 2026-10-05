@@ -242,13 +242,13 @@ export const products: Product[] = [
   {
     slug: "trendi",
     name: "Trendi",
-    tagline: "The gap between having an idea and pressing record.",
+    tagline: "Turn your business expertise into a script you can record.",
     identity: { theme: "signal", register: "Kinetic · spoken out loud" },
     reach: "public",
     stage: "public",
     status: `Available on the App Store for iPhone: version ${trendiRelease.version}, ${trendiRelease.minimumOS} or later. Free with optional Trendi Pro`,
-    verifiedAt: "2026-09-10",
-    evidence: [{ claim: "Public release, compatibility, Free and Pro allowances", source: "https://apps.apple.com/us/app/trendi-content-coach/id6776299336 — public US listing and Apple Lookup API, checked 2026-09-10" }],
+    verifiedAt: "2026-10-05",
+    evidence: [{ claim: "Public release, compatibility, Free and Pro allowances", source: "https://apps.apple.com/us/app/trendi-content-coach/id6776299336 — public US listing and Apple Lookup API, checked 2026-10-05" }],
     problem:
       "Most creators don't run out of ideas. They stall in the ninety seconds between having one and pressing record, because a thought in your head is not the same thing as words you can say on camera. I watched people abandon good ideas at exactly that gap, including me.",
     thesis:
