@@ -20,7 +20,7 @@
     "test:release-qa": "node scripts/blake-release-qa.mjs",
     "db:migrate-crm": "node scripts/migrate-crm.mjs",
     "test:migrations": "node --test tests/database-migrations.test.mjs",
-    "vercel-build": "next build",
+    "vercel-build": "node scripts/build-commercial.mjs",
     "koi:verify": "node scripts/verify-koi-world.mjs",
     "qa:rebuild": "node scripts/qa-rebuild.mjs",
     "koi:contrast": "node scripts/audit-koi-contrast.mjs"
