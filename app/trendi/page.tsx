@@ -47,8 +47,8 @@ export default async function TrendiPage() {
           <p className={styles.eyebrow}>For business owners with something to say</p>
           <h1 id="hero-title">You know<br />your business.<br /><em>Know what to say.</em></h1>
           <p className={styles.lede}>Turn a customer question, a lesson from your work, or a rough idea into a script you can record. Then open the teleprompter and make the video.</p>
-          <p className={styles.category}>Your idea-to-camera workspace for iPhone.</p>
           <div className={styles.actions}><AppStoreBadge product="trendi" url={trendiRelease.url} placement="product_hero" /><a className={styles.textLink} href="#demo">See the real app ↓</a></div>
+          <p className={styles.category}>Your idea-to-camera workspace for iPhone.</p>
           <p className={styles.small}>Start free · 3 Coach Packs a week · iOS 17 or later</p>
         </div>
         <figure className={styles.heroVisual}>

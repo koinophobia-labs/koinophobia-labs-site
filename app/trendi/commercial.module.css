@@ -5,3 +5,6 @@
 @media(prefers-reduced-motion:reduce){.page *{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
 
 .note p{color:var(--dark)}.plan>p:not(.price):not(.eyebrow){color:var(--muted)}.pro>p:not(.price):not(.eyebrow){color:#5b4b56}
+
+@media(max-width:600px){.nav{padding:20px 0}.nav nav a:last-child{display:none}.hero{padding-top:36px}.category{margin:18px 0 6px}.hero .small{margin-top:8px}}
+@media(max-width:380px){.page h1{font-size:2.6rem}.lede{font-size:17px;line-height:1.55}.nav nav{gap:12px}.wordmark span{font-size:9px}}
