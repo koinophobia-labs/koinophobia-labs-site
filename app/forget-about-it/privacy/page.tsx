@@ -18,16 +18,16 @@ export default function ForgetAboutItPrivacyPage() {
       </Link>
       <p className="kicker kicker-orange">ForgetAboutIt</p>
       <h1>Privacy Policy</h1>
-      <p className="legal-note">Effective August 26, 2026</p>
+      <p className="legal-note">Effective September 20, 2026</p>
 
       <section>
         <h2>The short version</h2>
         <p>
           ForgetAboutIt is a private memory journal from Koinophobia Labs. Every
           thought you capture stays on your iPhone and Apple Watch. The app has no
-          account system, no analytics, and no server of its own — it contains no
-          networking code at all. Koinophobia Labs never receives, stores, or sees
-          anything you capture.
+          account system, no analytics, and no server of its own. Apple handles
+          Plus purchases through the App Store. Your captured words are not sent
+          to Koinophobia Labs or to a remote AI service.
         </p>
       </section>
 
@@ -39,8 +39,8 @@ export default function ForgetAboutItPrivacyPage() {
             you captured them, and which device they came from are stored in a
             local database on your iPhone. Thoughts captured on the Watch queue
             locally and transfer to your iPhone over Apple&apos;s private
-            device-to-device connection (WatchConnectivity); they do not travel
-            through the internet.
+            connection (WatchConnectivity). They remain queued on the Watch
+            until the iPhone confirms receipt.
           </li>
           <li>
             <strong>Everything derived from them.</strong> The daily story,
@@ -67,9 +67,19 @@ export default function ForgetAboutItPrivacyPage() {
         <p>
           ForgetAboutIt has no accounts, no sign-in, no analytics or crash SDKs,
           no advertising, no tracking, and no third-party AI processing. It does
-          not collect names, email addresses, locations, identifiers, usage data,
-          or diagnostics. Because the app makes no network requests, no data can
-          leave your device through it.
+          not send your captured words, location, usage data, or diagnostics to
+          Koinophobia Labs. You control any copies you share or export and where
+          they go.
+        </p>
+      </section>
+
+      <section>
+        <h2>Plus purchases</h2>
+        <p>
+          Apple handles payments and subscription management. The app uses
+          StoreKit to request prices and verify purchase status. This
+          communication does not include your captured memory text.
+          Koinophobia Labs does not receive your payment-card details.
         </p>
       </section>
 
@@ -101,8 +111,10 @@ export default function ForgetAboutItPrivacyPage() {
         <p>
           Delete any thought inside the app — deletions offer a brief undo, then
           are removed permanently. <strong>Settings → Erase everything</strong> erases
-          the entire journal. Removing the app from your devices removes all of
-          its data with it, because nothing exists anywhere else.
+          the iPhone journal. Copies you exported or shared remain wherever you
+          put them. Watch captures waiting to sync remain on the Watch and can
+          arrive after reconnection. Removing the app from a device removes its
+          local data.
         </p>
       </section>
 
@@ -111,8 +123,8 @@ export default function ForgetAboutItPrivacyPage() {
         <p>
           The ForgetAboutIt pages on this site are hosted by Vercel, whose
           infrastructure can process technical data such as IP address, request
-          time, and browser type to serve the pages. The app itself never talks
-          to this website.
+          time, and browser type to serve the pages. Opening a support or privacy
+          link from the app loads this website in your browser.
         </p>
       </section>
 
@@ -129,7 +141,7 @@ export default function ForgetAboutItPrivacyPage() {
         <h2>Children</h2>
         <p>
           ForgetAboutIt is a general-audience journal and is not directed to
-          children. It collects no personal information from anyone.
+          children. The app does not send captured thoughts to Koinophobia Labs.
         </p>
       </section>
 

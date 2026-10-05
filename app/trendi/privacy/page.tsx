@@ -18,12 +18,12 @@ export default function TrendiPrivacyPage() {
       </Link>
       <p className="kicker kicker-orange">Trendi</p>
       <h1>Privacy Policy</h1>
-      <p className="legal-note">Effective August 31, 2026</p>
+      <p className="legal-note">Effective October 5, 2026</p>
 
       <section>
         <h2>Scope</h2>
         <p>
-          Trendi is a creator-coaching app from Koinophobia Labs. This policy
+          Trendi is an idea-to-camera workspace from Koinophobia Labs. This policy
           explains how the Trendi iPhone app, its Coach service, and the Trendi
           public web pages process information.
         </p>
@@ -69,7 +69,8 @@ export default function TrendiPrivacyPage() {
           <li>
             <strong>Technical data.</strong> Hosting and network providers can
             process information such as IP address, request time, device or browser
-            type, and diagnostics. The public Trendi web pages also use Vercel
+            type, and diagnostics. App interaction diagnostics use event names without
+            the text of your ideas, scripts, or recordings. The public Trendi web pages also use Vercel
             Analytics to understand page visits and performance.
           </li>
         </ul>
@@ -136,10 +137,8 @@ export default function TrendiPrivacyPage() {
             and outputs are automatically deleted within 30 days, except where a
             different service or retention arrangement applies, law requires longer
             retention, or content is retained for safety or usage-policy enforcement.
-            Anthropic says flagged inputs and outputs may be retained for up to two
-            years and related trust-and-safety classification scores for up to seven
-            years. See Anthropic&apos;s{" "}
-            <a href="https://privacy.anthropic.com/en/articles/7996866-how-long-do-you-store-my-organization-s-data">
+            See Anthropic&apos;s current{" "}
+            <a href="https://privacy.claude.com/en/articles/7996866-how-long-do-you-store-my-organization-s-data">
               commercial data-retention notice
             </a>
             .
@@ -150,10 +149,9 @@ export default function TrendiPrivacyPage() {
           </li>
         </ul>
         <p>
-          Koinophobia Labs confirms that every third party with whom Trendi shares
-          user data provides the same or equal protection of user data described in
-          this policy and required by Apple&apos;s App Review Guidelines. Trendi uses
-          each provider only for the purposes described above.
+          Trendi uses these providers for the purposes described above. Their
+          service terms and retention rules apply to the information they process;
+          local storage does not mean that a requested Coach Pack stays on device.
         </p>
       </section>
 
@@ -171,8 +169,9 @@ export default function TrendiPrivacyPage() {
             record. A generated Coach result can reflect that text. An unacknowledged
             result is scheduled for deletion 24 hours after delivery; after first
             acknowledgement, it is scheduled for deletion at the end of a seven-day
-            recovery window. Recurring cleanup removes due results. A failed provider
-            deletion remains inaccessible and is retried by later cleanup runs.
+            recovery window. Cleanup is scheduled daily; deletion happens after the
+            deadline when that cleanup processes the result. Failed or deferred
+            deletions can take longer and are retried on later runs.
           </li>
           <li>
             Content-free delivery, allowance, idempotency, and similar control
@@ -217,18 +216,10 @@ export default function TrendiPrivacyPage() {
           to seven days as described above.
         </p>
         <p>
-          Trendi also attempts to revoke its Sign in with Apple authorization.
-          Apple credential availability or a revocation error does not prevent
-          Trendi from deleting your data. If Trendi still appears in your Sign in
-          with Apple settings, open iPhone Settings, tap your name, tap Sign in with
+          To also remove Trendi&apos;s Sign in with Apple authorization, open
+          iPhone Settings, tap your name, tap Sign in with
           Apple, select Trendi or Koinophobia Labs, then tap Delete and confirm Stop
           Using.
-        </p>
-        <p>
-          After deletion, Trendi may retain content-free deletion and revoked-session
-          safeguards for up to 24 hours solely to prevent existing sessions from
-          restoring the deleted account. These safeguards then expire. A fresh Sign
-          in with Apple can intentionally create a new Trendi service account.
         </p>
         <p>
           Deleting a Trendi account cannot delete copies you previously saved to

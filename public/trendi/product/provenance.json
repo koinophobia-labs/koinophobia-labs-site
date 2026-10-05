@@ -1,0 +1,14 @@
+{
+  "version": "0.2.3",
+  "build": "150",
+  "captureDate": "2026-09-14",
+  "type": "Native SwiftUI screenshots with example fixtures, preserved release evidence; not customer content or a new live generation",
+  "source": "/Volumes/KoiDev/TrendiPR7-validation/Final150/VisualComparison",
+  "files": {
+    "home": "700173A9-4BDB-425E-9873-ECB6D9C3BD2C.png",
+    "coach-pack": "8E7C10F4-6C28-47FA-82C0-2D28DCD856A5.png",
+    "hooks": "199C9CD4-CE74-4E1D-991B-5C593EBBC236.png",
+    "vault": "F61B2CED-CAC9-44F9-ACE7-8C79AB1DAF35.png",
+    "record": "BD198AA8-40FC-4630-9AE5-ECAD668E88C4.png"
+  }
+}

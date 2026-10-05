@@ -78,7 +78,7 @@ const site: Record<string, SiteMeta> = {
     section: "shipped",
     href: "/trendi",
     blurb:
-      "A content coach for iPhone. Say a messy thought; get one angle, three hooks, a script, a caption, and a shot plan. Then record it with the teleprompter.",
+      "Turn a customer question or lesson from your business into a script you can record. Hooks, scripts, teleprompter, and saved ideas in one iPhone workspace.",
     platforms: "iPhone",
     chip: "Free · Pro $7.99/mo",
     notYetShort: "Not yet: posting, scheduling, or connecting social accounts. No promises about views.",

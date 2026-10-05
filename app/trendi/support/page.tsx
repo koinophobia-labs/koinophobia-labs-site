@@ -18,7 +18,7 @@ export default function TrendiSupportPage() {
       </Link>
       <p className="kicker kicker-orange">Trendi</p>
       <h1>Support</h1>
-      <p className="legal-note">Help with sign-in, Coach Packs, recording, and data</p>
+      <p className="legal-note">Help with Coach Packs, purchases, recording, and data</p>
 
       <section>
         <h2>Contact</h2>
@@ -55,8 +55,53 @@ export default function TrendiSupportPage() {
           </li>
         </ul>
         <p>
-          This version does not offer a subscription or other in-app purchase. Free
-          Coach Pack availability resets on the schedule shown in the app.
+          Free includes 3 successfully delivered Coach Packs each week. Trendi Pro
+          includes 100 per subscription month. The app shows your remaining
+          allowance and reset time. Failed generation does not use a successful pack.
+        </p>
+      </section>
+
+      <section>
+        <h2>Trendi Pro, billing, and Restore Purchases</h2>
+        <p>
+          Trendi Pro is one optional monthly subscription. The US price is $7.99 per
+          month; Apple shows your local price and billing terms before purchase.
+          It renews automatically until cancelled. There is no separate paid tier
+          for the teleprompter, recording, or Vault.
+        </p>
+        <ul>
+          <li>Open Profile, then the Trendi Pro subscription screen, and tap Restore Purchases using the Apple Account that made the purchase.</li>
+          <li>If payment succeeded but Pro did not unlock, use Restore Purchases before trying to buy again.</li>
+          <li>A purchase awaiting approval stays pending. Free remains available while you wait.</li>
+          <li>If Apple&apos;s catalog is unavailable, reconnect and retry. Do not reinstall to troubleshoot: local content can be lost.</li>
+          <li>Manage or cancel in iPhone Settings → your name → Subscriptions → Trendi Pro. Access continues until the paid period ends, subject to Apple&apos;s status.</li>
+          <li>Request billing help or a refund through <a href="https://reportaproblem.apple.com/">Apple&apos;s purchase support</a>. Refund eligibility is decided by Apple.</li>
+        </ul>
+        <p>Subscription terms: <a href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/">Apple Standard EULA</a>.</p>
+      </section>
+
+      <section>
+        <h2>Unfinished ideas, the Vault, and offline use</h2>
+        <p>
+          Your saved ideas and scripts stay on this device. Return to the Vault to
+          reopen a draft, edit it, and prepare another recording. Coach generation
+          needs internet; already saved work does not require a new generation.
+          Export anything you need before removing the app or deleting its data.
+        </p>
+        <p>
+          For a recording interruption, return to Record Mode and follow the recovery
+          prompt. Review a recovered clip before sharing it. Trendi does not post to
+          a social network for you.
+        </p>
+      </section>
+
+      <section>
+        <h2>Feedback</h2>
+        <p>
+          Email <a href={`mailto:${supportEmail}?subject=Trendi%20feedback`}>Trendi feedback</a>
+          {" "}with what you wanted to say, where you got stuck, and whether you reached
+          a recordable script. Share only material you are comfortable sending by email.
+          Your message will not be used as a testimonial without your permission.
         </p>
       </section>
 
@@ -81,14 +126,10 @@ export default function TrendiSupportPage() {
           your local data remains available so you can retry safely.
         </p>
         <p>
-          Limited content-free deletion and revoked-session safeguards may remain for
-          up to 24 hours; see the <Link href="/trendi/privacy">Privacy Policy</Link>.
-        </p>
-        <p>
-          Trendi attempts to revoke its Sign in with Apple authorization. If Trendi
-          still appears in Apple&apos;s list, open iPhone Settings, tap your name, tap
-          Sign in with Apple, select Trendi or Koinophobia Labs, then tap Delete and
-          confirm Stop Using.
+          To remove Sign in with Apple authorization as well, open iPhone Settings,
+          tap your name, tap Sign in with Apple, select Trendi or Koinophobia Labs,
+          then tap Delete and confirm Stop Using. Account deletion does not cancel
+          an Apple subscription; cancel separately in Settings → your name → Subscriptions.
         </p>
       </section>
 
@@ -113,7 +154,7 @@ export default function TrendiSupportPage() {
       <section>
         <h2>About Trendi</h2>
         <p>
-          Trendi helps creators turn a rough typed or spoken thought into one angle,
+          Trendi helps business owners turn a rough typed or spoken thought into one angle,
           three hook options, an editable script, a caption, a shot plan, and a
           record-ready workflow. Trendi does not automatically publish content.
         </p>

@@ -2,8 +2,8 @@
 // Website events measure visits and outbound clicks, never app outcomes.
 export const trendiRelease = {
   url: "https://apps.apple.com/us/app/trendi-content-coach/id6776299336",
-  version: "0.2.2",
-  verifiedAt: "2026-09-14",
+  version: "0.2.3",
+  verifiedAt: "2026-10-05",
   minimumOS: "iOS 17.0",
 } as const;
 

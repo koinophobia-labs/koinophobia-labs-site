@@ -39,15 +39,18 @@ export default function ForgetAboutItSupportPage() {
         <ul>
           <li>
             On iPhone, type into the field on Today, or tap the microphone to
-            dictate. Return saves the thought.
+            dictate. Tap Save to keep your thought; Return adds a new line.
+            Unsaved typed words are kept locally between launches when storage
+            is available.
           </li>
           <li>
-            On Apple Watch, the app opens straight into capture — speak, scribble,
-            or type, then tap Done.
+            On Apple Watch, tap the capture button to speak or enter text.
+            Captured words save on the Watch before transfer to iPhone.
           </li>
           <li>
             If on-device speech recognition is unavailable, the app falls back to
-            typing and says so; your words are never lost to a failed dictation.
+            typing and says so. If dictation is interrupted, review any recovered
+            text before saving.
           </li>
         </ul>
       </section>
@@ -61,8 +64,8 @@ export default function ForgetAboutItSupportPage() {
             devices reconnect.
           </li>
           <li>
-            &ldquo;N to sync&rdquo; on the Watch is a calm fact, not an error;
-            opening the iPhone app usually completes delivery.
+            &ldquo;Waiting for iPhone&rdquo; means the phone has not confirmed
+            receipt. Keep both apps installed and allow the devices to reconnect.
           </li>
           <li>Each thought carries a unique ID, so retries never duplicate it.</li>
         </ul>
@@ -71,10 +74,37 @@ export default function ForgetAboutItSupportPage() {
       <section>
         <h2>Evening reminder</h2>
         <p>
-          The reminder is opt-in during onboarding and lives at the top of
-          Settings. It only fires on days you actually captured something. Change
+          The reminder is optional and can be enabled in Settings. It only fires on days you actually captured something. Change
           notification permission any time in iPhone Settings → Apps →
           ForgetAboutIt.
+        </p>
+      </section>
+
+      <section>
+        <h2>Plus and purchases</h2>
+        <p>
+          Settings contains subscription status, Restore purchases, and Manage
+          subscription. Apple handles renewal and cancellation. Cancelling keeps
+          access through the paid period. Prices come from your App Store region.
+          Capture, all original history, literal search, and text export remain
+          free. Existing users keep previously available earlier reflections.
+        </p>
+      </section>
+
+      <section>
+        <h2>Finding a thought</h2>
+        <p>
+          Browse History or search your exact words in Memory. Open a thought to
+          see its complete original text and any separately labeled on-device
+          context. Your original words are never rewritten.
+        </p>
+      </section>
+
+      <section>
+        <h2>If a save fails</h2>
+        <p>
+          Keep the visible words and free storage before trying Save again. Do
+          not uninstall the app to repair an archive you have not exported.
         </p>
       </section>
 
@@ -93,7 +123,9 @@ export default function ForgetAboutItSupportPage() {
         <p>
           Swipe a thought to delete it (with a brief undo), use{" "}
           <strong>Settings → Erase everything</strong> to erase the whole journal, or
-          remove the app — nothing exists off your devices.
+          remove the app from a device to remove its local data. Exported or shared
+          copies remain where you put them. Watch captures waiting for transfer
+          can arrive after reconnection.
         </p>
       </section>
 
@@ -102,8 +134,8 @@ export default function ForgetAboutItSupportPage() {
         <p>
           Read the{" "}
           <Link href="/forget-about-it/privacy">ForgetAboutIt Privacy Policy</Link>{" "}
-          — the short version is that everything stays on your devices and the
-          app has no network code at all.
+          — captured thoughts stay on your devices, while Apple handles Plus
+          purchases through StoreKit.
         </p>
       </section>
 
@@ -112,7 +144,8 @@ export default function ForgetAboutItSupportPage() {
         <ul>
           <li>iPhone running iOS 17 or later.</li>
           <li>Optional Apple Watch app requires watchOS 10 or later.</li>
-          <li>No account, no sign-in, and no internet connection required.</li>
+          <li>No app account is required. Basic capture works offline.</li>
+          <li>Plus purchases and restoration require access to the App Store.</li>
         </ul>
       </section>
 

@@ -20,26 +20,27 @@ test("Trendi privacy and support routes are publication-ready and discoverable",
 
   assert.ok(privacy.includes('canonical: "/trendi/privacy"'));
   assert.ok(privacy.includes("Anthropic"));
-  assert.ok(privacy.includes("every third party with whom Trendi shares"));
-  assert.ok(privacy.includes("provides the same or equal protection of user data"));
-  assert.ok(privacy.includes("required by Apple&apos;s App Review Guidelines"));
   assert.ok(privacy.includes("on device or send it to Apple for recognition"));
   assert.ok(!privacy.includes("when recognition is not available on device"));
   assert.ok(privacy.includes("scheduled for deletion 24 hours after delivery"));
   assert.ok(privacy.includes("scheduled for deletion at the end of a seven-day"));
-  assert.ok(privacy.includes("Recurring cleanup removes due results"));
-  assert.ok(privacy.includes("content-free deletion and revoked-session"));
-  assert.ok(privacy.includes("safeguards for up to 24 hours solely"));
+  assert.ok(privacy.includes("Cleanup is scheduled daily"));
   assert.ok(privacy.includes("up to 90 days"));
   assert.ok(privacy.includes("account-scoped Coach results"));
   assert.ok(privacy.includes("Google"));
   assert.ok(privacy.includes("Support and inquiry messages"));
-  assert.ok(privacy.includes("flagged inputs and outputs may be retained for up to two"));
   assert.ok(privacy.includes("reset your AI"));
   assert.ok(privacy.includes("asks for consent again before sending another request"));
+  // Shipping 0.2.3 does not revoke Apple authorization or invalidate old
+  // sessions server-side. Disclosures must not promise absent safeguards.
+  assert.ok(!privacy.includes("revoked-session"));
+  assert.ok(!privacy.includes("attempts to revoke"));
+  assert.ok(!support.includes("does not offer a subscription"));
+  assert.ok(support.includes("Restore Purchases"));
+  assert.ok(support.includes("100 per subscription month"));
+  assert.ok(support.includes("does not cancel"));
   assert.ok(support.includes('href="/trendi/privacy"'));
   assert.ok(support.includes("Coach results and"));
-  assert.ok(support.includes("safeguards may remain for"));
   assert.ok(sitemap.includes('"/trendi/privacy"'));
   assert.ok(sitemap.includes('"/trendi/support"'));
 });
