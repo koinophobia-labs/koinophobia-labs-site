@@ -173,7 +173,7 @@ const site: Record<string, SiteMeta> = {
     section: "shipped",
     href: "/way-in",
     blurb:
-      "A private career workspace. Turn the experience you actually have into a résumé a stranger can judge in six seconds, then track every application. Nothing invented.",
+      "A private résumé and application workspace for people moving beyond service, retail, or gig work. Turn real experience into your next application.",
     platforms: "iPhone + iPad",
     chip: "Free · in-app purchases",
     notYetShort: "Not yet: applying to jobs for you. It won't promise interviews or offers, and it won't invent a line on your résumé.",
@@ -186,7 +186,7 @@ const site: Record<string, SiteMeta> = {
       url: wayInRelease.url,
       version: wayInRelease.version,
       verifiedAt: wayInRelease.verifiedAt,
-      priceLine: "Free · 30-Day Career Pass $29.99, does not renew · Resume Toolkit $9.99",
+      priceLine: "Free · Resume Toolkit $9.99 once · Career Pass $29.99 for 30 days, no auto-renewal",
     },
     demo: {
       src: "/demo/way-in-fit.mp4",

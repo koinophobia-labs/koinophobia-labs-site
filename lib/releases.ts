@@ -15,6 +15,6 @@ export const forgetRelease = {
 
 export const wayInRelease = {
   url: "https://apps.apple.com/us/app/way-in-career-hub/id6807942376",
-  version: "1.0.1",
-  verifiedAt: "2026-09-14",
+  version: "1.0.4",
+  verifiedAt: "2026-10-05",
 } as const;

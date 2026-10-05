@@ -35,7 +35,7 @@ export default function PrivacyPage() {
               <Link href="/forget-about-it/support">support</Link>
             </li>
             <li>
-              <a href="https://careerforge.koinophobialabs.com/privacy">Way In privacy policy</a>
+              <a href="/way-in/privacy">Way In privacy policy</a>
             </li>
             <li>
               <Link href="/you-know-ball/privacy">You Know Ball privacy policy</Link> ·{" "}
