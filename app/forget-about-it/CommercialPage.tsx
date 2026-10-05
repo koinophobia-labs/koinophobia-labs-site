@@ -50,13 +50,13 @@ export default function ForgetAboutItPage({version = forgetRelease.version}: {ve
       </section>
       <section className={styles.section} id="demo" aria-labelledby="demo-title">
         <p className={styles.eyebrow}>One small loop</p><h2 id="demo-title">A thought saved.<br />A thought you can find.</h2>
-        <p className={styles.intro}>Open Today, type the words, and tap Save. Later, open Memory and search a word you remember. Here is the actual interface, captured on an iPhone during the 1.1 release checks.</p>
+        <p className={styles.intro}>Open Today, type the words, and tap Save. Later, open Memory and search a word you remember. Keep the original words in your day, ready to return to.</p>
         <div className={styles.demoGrid}>
-          <figure><span className={styles.step}>01 / Capture</span><h3>One field. One Save.</h3><Image src="/forget-about-it/product/saved.png" width={2868} height={1320} sizes="(max-width: 700px) 94vw, 560px" alt="Forget About It Today composer with its Save button and the Saved confirmation." /><figcaption>Saved confirmation · real iPhone capture</figcaption></figure>
+          <figure><span className={styles.step}>01 / Capture</span><h3>One field. One Save.</h3><Image src="/forget-about-it/product/saved.png" width={2868} height={1320} sizes="(max-width: 700px) 94vw, 560px" alt="Forget About It Today composer with its Save button and the Saved confirmation." /><figcaption>Saved confirmation · real iPhone screen</figcaption></figure>
           <figure><span className={styles.step}>02 / Keep</span><h3>Your exact words, in your day.</h3><Image src="/forget-about-it/product/timeline.png" width={2868} height={1320} sizes="(max-width: 700px) 94vw, 560px" alt="The Today timeline preserves Call Marcus about the lease and Marcus said he would send it tonight as separate original captures." /><figcaption>Real app screen · example thoughts</figcaption></figure>
         </div>
         <div className={styles.find}><span className={styles.step}>03 / Find</span><h3>Search “Marcus.” There it is.</h3><p>The search result shown above returns the original thought. Basic text search is free. Date and source filters are optional Plus tools.</p></div>
-        <p className={styles.small}>These are retained 1.1 release-QA captures with example content, not a newly recorded App Store install or a timed speed test.</p>
+        <p className={styles.small}>Real iPhone screenshots · version 1.1 · example content · captured September 20, 2026.</p>
       </section>
       <section className={`${styles.section} ${styles.watch}`}>
         <div><p className={styles.eyebrow}>When your phone is out of reach</p><h2>A place on<br />your wrist, too.</h2></div>
