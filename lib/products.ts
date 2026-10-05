@@ -127,9 +127,9 @@ const site: Record<string, SiteMeta> = {
     section: "shipped",
     href: "/forget-about-it",
     blurb:
-      "A memory journal for your wrist. Raise the Watch, say the thought, and the day writes itself back to you that evening. No account. No server.",
+      "Catch a thought before it disappears. Capture on iPhone or Apple Watch, keep your exact words, and find them later. Free, with optional Plus.",
     platforms: "iPhone + Apple Watch",
-    chip: "Free",
+    chip: "Free · optional Plus",
     notYetShort: "Not yet: cloud backup. The journal lives on your devices; export your own copy from Settings.",
     screens: [
       { src: "/forget-about-it/store/1.jpg", alt: "Forget About It Today view: a dated list of captured thoughts with a short account of the day" },
@@ -140,7 +140,7 @@ const site: Record<string, SiteMeta> = {
       url: forgetRelease.url,
       version: forgetRelease.version,
       verifiedAt: forgetRelease.verifiedAt,
-      priceLine: "Free · no purchases · no account",
+      priceLine: "Free · optional Plus · no app account",
     },
     demo: {
       src: "/demo/forget-capture-find.mp4",
@@ -153,10 +153,10 @@ const site: Record<string, SiteMeta> = {
       alt: "A thought is typed into Forget About It and saved into the day's timeline; later, Memory is searched for one word and the exact original is found.",
     },
     page: {
-      kicker: "Forget About It · Memory journal · iPhone + Apple Watch",
-      h1: "Keep the thought. Come back to your day.",
+      kicker: "Forget About It · Quick thought capture · iPhone + Apple Watch",
+      h1: "Catch the thought before it goes.",
       lede:
-        "The thing you meant to remember disappears between the train, the meeting, and getting home. Raise your wrist and say it. That evening, the fragments come back as a day you can read.",
+        "The idea between errands. The name you just heard. Capture it on iPhone or Apple Watch and find your exact words later.",
       insightTitle: "Fast capture only matters if you can return to what you kept.",
       insightBody:
         "Most note apps solve the first half. Forget About It keeps your exact words, in order, and writes a short account of the day beside them, with the names and subjects that kept coming up and the things you said you'd return to. Your words and the app's reading of them never merge.",
@@ -166,7 +166,7 @@ const site: Record<string, SiteMeta> = {
         { title: "Keep it yours", body: "No account, no analytics, no server. Export your own copy from Settings." },
       ],
       statusBody:
-        "Free with no purchases. Apple also lists Mac and Vision compatibility; the app is built around iPhone and Apple Watch. There is no cloud recovery of a journal: the journal is excluded from backups on purpose, so export a copy if you'd miss it.",
+        "Version 1.1 is free with optional Plus subscriptions in the US and Canada. Plus adds date/source filters, capture patterns, and earlier reflections for new users. Capture, original history, text search, and export stay free. The journal is excluded from device backups; export a copy before changing phones.",
     },
   },
   "career-forge": {

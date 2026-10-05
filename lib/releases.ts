@@ -9,8 +9,8 @@ export const trendiRelease = {
 
 export const forgetRelease = {
   url: "https://apps.apple.com/us/app/forgetaboutit/id6804360983",
-  version: "1.0",
-  verifiedAt: "2026-09-10",
+  version: "1.1",
+  verifiedAt: "2026-10-05",
 } as const;
 
 export const wayInRelease = {
