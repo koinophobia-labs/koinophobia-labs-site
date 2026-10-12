@@ -101,9 +101,9 @@ export default async function Home() {
                 <h1 id="surface-title">Nothing here stayed an idea.</h1>
                 <p className="kw__lede">
                   Koinophobia Labs is Blake Taylor, building apps, websites, and AI tools
-                  from first prototype to release. Three of those apps are on the App Store.
-                  In the lab: an experimental Mac learning app with its first course built,
-                  and a language model trained from scratch. Have a project in mind? Blake
+                  from first prototype to release. Five of those apps are on the App Store,
+                  including Old Dog, a Mac learning app. In the lab: a language model trained
+                  from scratch. Have a project in mind? Blake
                   builds for other people too.
                 </p>
                 <div className="kw__actions">
