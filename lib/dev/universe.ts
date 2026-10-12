@@ -305,9 +305,9 @@ export const products: Product[] = [
     stage: "uploaded",
     status:
       "Public web demo. Apple's July 2026 upload responses prove iOS builds 26 and 27 were accepted; current processing, tester assignment and distribution are unverified",
-    verifiedAt: "2026-09-10",
+    verifiedAt: "2026-10-12",
     evidence: [
-      { claim: "The public web demo responds; native distribution remains unverified", source: "https://you-know-ball-orpin.vercel.app — HTTP 200, checked 2026-09-10. The Apple acceptance records below are explicitly July 2026 history, not current distribution receipts." },
+      { claim: "The public web demo responds; native distribution remains unverified", source: "https://you-know-ball-orpin.vercel.app — HTTP 200, checked 2026-10-12. The Apple acceptance records below are explicitly July 2026 history, not current distribution receipts." },
       {
         claim: "Builds 26 and 27 were accepted by App Store Connect",
         source:
@@ -376,9 +376,9 @@ export const products: Product[] = [
     stage: "public",
     status:
       "Available on both sites as the koi front office, with an existing studio inquiry path",
-    verifiedAt: "2026-09-10",
+    verifiedAt: "2026-10-12",
     evidence: [
-      { claim: "Public concierge and founder front-office entry points are available", source: "https://koinophobialabs.com/concierge and https://koinophobia.dev — HTTP 200 and public entry points checked 2026-09-10. Historical implementation evidence follows." },
+      { claim: "Public concierge and founder front-office entry points are available", source: "https://koinophobialabs.com/concierge and https://koinophobia.dev — HTTP 200 and public entry points checked 2026-10-12. Historical implementation evidence follows." },
       {
         claim: "The front office leads the studio's concierge page",
         source:
@@ -438,8 +438,8 @@ export const products: Product[] = [
     reach: "internal",
     stage: "local",
     status: "Private development project. No public download is offered here; the technical build record below is dated July 2026",
-    verifiedAt: "2026-09-10",
-    evidence: [{ claim: "Public site offers a development record, not a download", source: "https://koinophobia.dev/products/koi-cave — public development page and its absence of a download action checked 2026-09-10. Technical notes below are preserved as July 26, 2026 history; no newer binary or signing claim is made." }],
+    verifiedAt: "2026-10-12",
+    evidence: [{ claim: "Public site offers a development record, not a download", source: "https://koinophobia.dev/products/koi-cave — now HTTP 308-redirects to https://koinophobialabs.com/log (HTTP 200), which presents a Koi Cave development record and no Koi Cave download (checked 2026-10-12). Technical notes below are preserved as July 26, 2026 history; no newer binary or signing claim is made." }],
     problem:
       "Every tool that promises to organize your work wants your work on its servers, on a subscription, forever. I wanted the leverage without renting my own context back from someone else.",
     thesis:
