@@ -39,7 +39,7 @@ function replyWeekday() {
  * (origin check, honeypot, rate limit, redaction, idempotency, lead store,
  * email) as the "start" variant. The draft survives a reload until sent.
  */
-export default function StartForm({ entry = "start" }: { entry?: string }) {
+export default function StartForm({ entry = "start", readiness = false }: { entry?: string; readiness?: boolean }) {
   const [state, setState] = useState<State>({ status: "idle" });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const formRef = useRef<HTMLFormElement>(null);
@@ -100,6 +100,11 @@ export default function StartForm({ entry = "start" }: { entry?: string }) {
     body.set("name", String(data.get("name") || "").trim() || "Not given");
     body.set("email", email);
     body.set("biggestProblem", idea);
+    if (readiness) {
+      // Keep the offer in existing CRM fields; readiness needs no schema migration.
+      body.set("notes", "Offer: Build Readiness Review (offer=readiness)");
+      body.set("serviceInterest", "Build Readiness Review");
+    }
     body.set("desiredOutcome", String(data.get("today") || "").trim());
     body.set("timeline", String(data.get("when") || "Not sure yet"));
     body.set("budgetRange", String(data.get("budget") || "Let's talk"));
@@ -148,8 +153,8 @@ export default function StartForm({ entry = "start" }: { entry?: string }) {
   return (
     <form ref={formRef} className="glass form" onSubmit={onSubmit} onInput={saveDraft} noValidate>
       <div className={`field${errors.idea ? " field--error" : ""}`}>
-        <label htmlFor="start-idea">What do you want to exist?</label>
-        <textarea id="start-idea" name="idea" required maxLength={4000} placeholder="An app for… a tool that… a thing nobody has built because…" aria-describedby={errors.idea ? "start-idea-err" : undefined} />
+        <label htmlFor="start-idea">{readiness ? "What are we building?" : "What do you want to exist?"}</label>
+        <textarea id="start-idea" name="idea" required maxLength={4000} placeholder={readiness ? "Summarize the product, the customer and what you need implemented." : "An app for… a tool that… a thing nobody has built because…"} aria-describedby={errors.idea ? "start-idea-err" : undefined} />
         {errors.idea ? (
           <span className="field__err" id="start-idea-err">
             {errors.idea}
@@ -157,11 +162,11 @@ export default function StartForm({ entry = "start" }: { entry?: string }) {
         ) : null}
       </div>
       <div className="field">
-        <label htmlFor="start-today">What exists today?</label>
-        <textarea id="start-today" name="today" maxLength={2000} placeholder="Nothing yet is a fine answer." />
+        <label htmlFor="start-today">{readiness ? "Share your PRD, spec, Figma or prototype" : "What exists today?"}</label>
+        <textarea id="start-today" name="today" maxLength={2000} placeholder={readiness ? "Paste a link or a short excerpt of what you have." : "Nothing yet is a fine answer."} />
       </div>
       <div className="field">
-        <span className="field__label">When do you need it?</span>
+        <span className="field__label">{readiness ? "Timeline" : "When do you need it?"}</span>
         <div className="chips" role="group" aria-label="Timeline">
           {WHEN.map((option) => (
             <label key={option.value}>
@@ -172,7 +177,7 @@ export default function StartForm({ entry = "start" }: { entry?: string }) {
         </div>
       </div>
       <div className="field">
-        <span className="field__label">Budget range</span>
+        <span className="field__label">{readiness ? "Build budget range" : "Budget range"}</span>
         <div className="chips" role="group" aria-label="Budget">
           {BUDGET.map((option) => (
             <label key={option.value}>
@@ -202,7 +207,7 @@ export default function StartForm({ entry = "start" }: { entry?: string }) {
       </div>
       <div className="actions">
         <button className="btn btn--primary ai" type="submit" disabled={state.status === "submitting"}>
-          {state.status === "submitting" ? "Sending…" : "Send it"}
+          {state.status === "submitting" ? "Sending…" : readiness ? "Request my free review" : "Send it"}
         </button>
         {state.status === "error" ? (
           <p className="form__status form__status--err" role="alert">

@@ -3,7 +3,7 @@
 import { track } from "@vercel/analytics";
 import type { MouseEvent } from "react";
 
-export type Placement = "home" | "shipped" | "product_hero" | "product_end" | "mobile_row" | "lab";
+export type Placement = "home" | "shipped" | "product_hero" | "product_end" | "mobile_row" | "lab" | "work_with_me";
 
 /**
  * The link people trust. Always the store URL, always a new tab, always

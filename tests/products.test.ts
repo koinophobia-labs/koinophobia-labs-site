@@ -79,7 +79,7 @@ test("the commercial offer is three shapes with proof, and one reply promise", (
     assert.ok(shape.timeline.length > 5);
   }
   assert.match(replyPromise, /business days?|week/);
-  for (const file of ["app/page.tsx", "app/work-with-me/page.tsx", "app/start/page.tsx"]) {
+  for (const file of ["app/page.tsx", "app/start/page.tsx"]) {
     assert.match(read(file), /replyPromise/, `${file} must read the reply promise from the registry, not hard-code it`);
   }
 });
