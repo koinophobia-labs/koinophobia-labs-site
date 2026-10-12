@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
  * The mobile bottom bar. Appears after the visitor scrolls past `after`
  * (a section id) and hides again once `before` (the start section) is near.
  */
-export default function StickyStart({ after, before }: { after: string; before?: string }) {
+export default function StickyStart({ after, before, href = "/start", label = "Start a project" }: { after: string; before?: string; href?: string; label?: string }) {
   const [on, setOn] = useState(false);
   useEffect(() => {
     const mobile = window.matchMedia("(max-width: 1024px)");
@@ -25,8 +25,8 @@ export default function StickyStart({ after, before }: { after: string; before?:
   }, [after, before]);
   return (
     <div className={`sticky${on ? " is-on" : ""}`}>
-      <Link className="btn btn--primary" href="/start" data-analytics="inquiry_start" data-analytics-label="sticky_bar">
-        Start a project
+      <Link className="btn btn--primary" href={href} data-analytics="inquiry_start" data-analytics-label="sticky_bar">
+        {label}
       </Link>
     </div>
   );

@@ -20,21 +20,23 @@ export function ProductCard({
   index = 0,
   placement,
   showNotYet = false,
+  listingOnly = false,
 }: {
-  product: SiteProduct;
+  product: Pick<SiteProduct, "name" | "slug" | "href" | "screens" | "platforms" | "chip" | "blurb" | "notYetShort" | "appStore">;
   index?: number;
   placement: Placement;
   showNotYet?: boolean;
+  listingOnly?: boolean;
 }) {
   const screen = product.screens[0];
   // A stretched link covers the card; the App Store badge sits above it as
   // its own anchor. Two links, never nested, both keyboard-reachable.
   return (
-    <article className="pcard s" style={{ "--i": index } as React.CSSProperties} data-tilt>
+    <article className={`pcard s${screen ? "" : " pcard--listing"}`} style={{ "--i": index } as React.CSSProperties} data-tilt>
       <Link
         className="pcard__cover"
         href={product.href}
-        aria-label={`${product.name}: ${product.blurb}`}
+        aria-label={listingOnly ? `View ${product.name}` : `${product.name}: ${product.blurb}`}
       />
       {screen ? <DeviceFrame src={screen.src} alt={screen.alt} /> : null}
       <div className="pcard__txt">
@@ -43,7 +45,7 @@ export function ProductCard({
           <span className="chip">{product.chip}</span>
         </span>
         <h3>{product.name}</h3>
-        <p>{product.blurb}</p>
+        {listingOnly ? null : <p>{product.blurb}</p>}
         {showNotYet ? <span className="pcard__notyet">{product.notYetShort}</span> : null}
         <span className="pcard__go">
           {product.appStore ? (

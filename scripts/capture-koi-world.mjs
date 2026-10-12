@@ -1,5 +1,10 @@
 import fs from "node:fs";
 import { setTimeout as wait } from "node:timers/promises";
+import { require as tsxRequire } from "tsx/cjs/api";
+
+const { shippedProducts } = tsxRequire("../lib/products.ts", import.meta.url);
+// Home renders every shipped product; withLiveListings only refreshes metadata.
+const expectedProductNodes = shippedProducts.length;
 
 const outputDirectory = "artifacts/koi-visuals";
 const destinations = [
@@ -132,7 +137,7 @@ if (
   // The shared masthead carries the five site sections plus its Start CTA.
   architecture.mastheadLinks < 5 ||
   architecture.journeyLinks !== expectedIds.length ||
-  architecture.productNodes !== 3 ||
+  architecture.productNodes !== expectedProductNodes ||
   !architecture.hasWater ||
   !architecture.hasStage ||
   architecture.overflow

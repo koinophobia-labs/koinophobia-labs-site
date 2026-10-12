@@ -139,3 +139,36 @@ test("the versioned concierge migration is included in the migration runner", ()
   assert.match(migration, /create unique index/i);
   assert.match(runner, /007_ai_project_concierge\.sql/);
 });
+
+test("readiness intake uses existing notes and service fields through CRM and email", async () => {
+  const data = new FormData();
+  for (const [key, value] of Object.entries({
+    variant: "start", name: "Readiness Test", email: "readiness@example.com",
+    biggestProblem: "Implement the defined customer flows from our approved PRD.",
+    desiredOutcome: "PRD and Figma: https://example.com/spec",
+    timeline: "Soon", budgetRange: "Let's talk",
+    serviceInterest: "Straight Answer",
+    notes: "Offer: Straight Answer (offer=readiness)",
+  })) data.set(key, value);
+  const { input, errors } = validateIntake(data);
+  assert.equal(errors, undefined);
+  assert.ok(input);
+  assert.equal(input.source, "start form");
+  assert.equal(input.timeline, "Soon");
+  assert.equal(input.serviceInterest, "Straight Answer");
+  assert.match(input.notes || "", /offer=readiness/);
+  assert.match(input.notes || "", /https:\/\/example.com\/spec/);
+  assert.match(formatLeadEmailText(input), /Offer: Straight Answer/);
+  assert.match(formatLeadEmailHtml(input), /Offer: Straight Answer/);
+  let stored = false;
+  await storeLead(input, "readiness-test", {
+    async query(_sql: string, values: unknown[]) {
+      assert.equal(values[9], "Straight Answer");
+      assert.equal(values[11], "Soon");
+      assert.match(String(values[13]), /offer=readiness/);
+      stored = true;
+      return { rows: [{ id: "readiness-test", created_at: new Date(), updated_at: new Date(), created: true }] };
+    },
+  } as unknown as Parameters<typeof storeLead>[2]);
+  assert.ok(stored);
+});
