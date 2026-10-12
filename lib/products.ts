@@ -1,4 +1,4 @@
-import { forgetRelease, trendiRelease, wayInRelease } from "@/lib/releases";
+import { forgetRelease, oldDogRelease, preachingRelease, trendiRelease, wayInRelease } from "@/lib/releases";
 import {
   getProduct,
   products as universe,
@@ -14,7 +14,7 @@ import {
 // the short card copy, the real App Store screens it may show, and the store
 // link it points at. Nothing here may contradict the registry; tests check
 // that every shipped product is stage "public" there, carries a store URL,
-// and ships at least one authentic screenshot.
+// and uses authentic screenshots where available; listing-only cards need none.
 //
 // Two sections, split by honesty rather than category:
 //   shipped — a stranger can install it today.
@@ -28,6 +28,7 @@ export type AppStoreListing = {
   url: string;
   version: string;
   verifiedAt: string;
+  releasedAt?: string;
   /** One line under the badge. Prices come from the listing, never guessed. */
   priceLine: string;
 };
@@ -251,15 +252,25 @@ const site: Record<string, SiteMeta> = {
       { src: "/proof/you-know-ball/mobile-play.png", alt: "You Know Ball web demo on a phone: a take, a counter, a score" },
     ],
   },
-  "preaching-to-the-choir": {
-    section: "lab",
-    href: "https://testflight.apple.com/join/1eUCSez8",
-    blurb: "Keep the things you notice and return to them later, without writing a journal entry. Available to test through TestFlight.",
-    platforms: "iPhone · iPad · Mac",
-    chip: "TestFlight",
-    receipt: "1.0 (66) · 543 tests, 0 failures",
-    notYetShort: "Not yet: the App Store. Nothing is for sale.",
+  "old-dog": {
+    section: "shipped",
+    href: oldDogRelease.url,
+    blurb: "Old Dog 1.1.0 is live on the Mac App Store, released October 8, 2026.",
+    platforms: "macOS",
+    chip: "Live",
+    notYetShort: "",
     screens: [],
+    appStore: { ...oldDogRelease, priceLine: "" },
+  },
+  "preaching-to-the-choir": {
+    section: "shipped",
+    href: preachingRelease.url,
+    blurb: "Preaching to the Choir 1.0 is live on the App Store for iOS and iPadOS, released September 22, 2026.",
+    platforms: "iOS / iPadOS",
+    chip: "Live",
+    notYetShort: "",
+    screens: [],
+    appStore: { ...preachingRelease, priceLine: "" },
   },
 };
 
@@ -276,6 +287,7 @@ const ordered = [
   "teachers-pet",
   "koi",
   "you-know-ball",
+  "old-dog",
   "preaching-to-the-choir",
 ];
 

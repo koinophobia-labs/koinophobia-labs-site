@@ -18,21 +18,25 @@ const root = path.resolve(import.meta.dirname, "..");
 const exists = (rel: string) => fs.existsSync(path.join(root, rel));
 const read = (rel: string) => fs.readFileSync(path.join(root, rel), "utf8");
 
-test("every shipped product is public in the registry, links to the App Store, and ships a real screen", () => {
-  assert.equal(shippedProducts.length, 3);
+test("every shipped product is public in the registry, links to the App Store, and uses only authentic screens", () => {
+  assert.equal(shippedProducts.length, 5);
   for (const product of shippedProducts) {
     assert.equal(product.stage, "public", `${product.name} is shipped but not stage public`);
     assert.equal(product.reach, "public");
     assert.ok(product.appStore, `${product.name} has no App Store listing`);
     assert.match(product.appStore!.url, /^https:\/\/apps\.apple\.com\/us\/app\//);
     assert.match(product.appStore!.verifiedAt, /^\d{4}-\d{2}-\d{2}$/);
-    assert.ok(product.screens.length >= 1, `${product.name} shows no authentic screenshot`);
     for (const screen of product.screens) {
       assert.ok(exists(`public${screen.src}`), `missing public${screen.src}`);
       assert.ok(screen.alt.length > 10, `${screen.src} needs a real alt`);
     }
-    assert.ok(product.page, `${product.name} has no page copy`);
-    assert.ok(exists(`app${product.href}/page.tsx`), `${product.href} has no route`);
+    if (product.href.startsWith("/")) {
+      assert.ok(product.screens.length >= 1, `${product.name} shows no authentic screenshot`);
+      assert.ok(product.page, `${product.name} has no page copy`);
+      assert.ok(exists(`app${product.href}/page.tsx`), `${product.href} has no route`);
+    } else {
+      assert.equal(product.href, product.appStore!.url, "listing-only cards open the verified store listing");
+    }
   }
 });
 

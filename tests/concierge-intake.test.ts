@@ -147,23 +147,23 @@ test("readiness intake uses existing notes and service fields through CRM and em
     biggestProblem: "Implement the defined customer flows from our approved PRD.",
     desiredOutcome: "PRD and Figma: https://example.com/spec",
     timeline: "Soon", budgetRange: "Let's talk",
-    serviceInterest: "Build Readiness Review",
-    notes: "Offer: Build Readiness Review (offer=readiness)",
+    serviceInterest: "Straight Answer",
+    notes: "Offer: Straight Answer (offer=readiness)",
   })) data.set(key, value);
   const { input, errors } = validateIntake(data);
   assert.equal(errors, undefined);
   assert.ok(input);
   assert.equal(input.source, "start form");
   assert.equal(input.timeline, "Soon");
-  assert.equal(input.serviceInterest, "Build Readiness Review");
+  assert.equal(input.serviceInterest, "Straight Answer");
   assert.match(input.notes || "", /offer=readiness/);
   assert.match(input.notes || "", /https:\/\/example.com\/spec/);
-  assert.match(formatLeadEmailText(input), /Offer: Build Readiness Review/);
-  assert.match(formatLeadEmailHtml(input), /Offer: Build Readiness Review/);
+  assert.match(formatLeadEmailText(input), /Offer: Straight Answer/);
+  assert.match(formatLeadEmailHtml(input), /Offer: Straight Answer/);
   let stored = false;
   await storeLead(input, "readiness-test", {
     async query(_sql: string, values: unknown[]) {
-      assert.equal(values[9], "Build Readiness Review");
+      assert.equal(values[9], "Straight Answer");
       assert.equal(values[11], "Soon");
       assert.match(String(values[13]), /offer=readiness/);
       stored = true;

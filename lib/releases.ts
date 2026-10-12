@@ -18,3 +18,18 @@ export const wayInRelease = {
   version: "1.0.1",
   verifiedAt: "2026-09-14",
 } as const;
+
+// Public Apple lookup verified by Blake on 2026-10-12.
+export const oldDogRelease = {
+  url: "https://apps.apple.com/us/app/old-dog/id6813966822",
+  version: "1.1.0",
+  releasedAt: "2026-10-08",
+  verifiedAt: "2026-10-12",
+} as const;
+
+export const preachingRelease = {
+  url: "https://apps.apple.com/us/app/preaching-to-the-choir/id6808442357",
+  version: "1.0",
+  releasedAt: "2026-09-22",
+  verifiedAt: "2026-10-12",
+} as const;

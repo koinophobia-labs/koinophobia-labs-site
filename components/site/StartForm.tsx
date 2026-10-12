@@ -102,8 +102,8 @@ export default function StartForm({ entry = "start", readiness = false }: { entr
     body.set("biggestProblem", idea);
     if (readiness) {
       // Keep the offer in existing CRM fields; readiness needs no schema migration.
-      body.set("notes", "Offer: Build Readiness Review (offer=readiness)");
-      body.set("serviceInterest", "Build Readiness Review");
+      body.set("notes", "Offer: Straight Answer (offer=readiness)");
+      body.set("serviceInterest", "Straight Answer");
     }
     body.set("desiredOutcome", String(data.get("today") || "").trim());
     body.set("timeline", String(data.get("when") || "Not sure yet"));
@@ -207,7 +207,7 @@ export default function StartForm({ entry = "start", readiness = false }: { entr
       </div>
       <div className="actions">
         <button className="btn btn--primary ai" type="submit" disabled={state.status === "submitting"}>
-          {state.status === "submitting" ? "Sending…" : readiness ? "Request my free review" : "Send it"}
+          {state.status === "submitting" ? "Sending…" : readiness ? "Request my free Straight Answer" : "Send it"}
         </button>
         {state.status === "error" ? (
           <p className="form__status form__status--err" role="alert">

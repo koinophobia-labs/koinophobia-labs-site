@@ -191,7 +191,7 @@ export const products: Product[] = [
     reach: "public",
     stage: "public",
     status: `Way In is available on the App Store for iPhone and iPad, version ${wayInRelease.version}. The legacy Career Forge web destination now also displays Way In`,
-    verifiedAt: "2026-09-10",
+    verifiedAt: "2026-10-12",
     evidence: [
       { claim: "Public iPhone and iPad release", source: "https://apps.apple.com/us/app/way-in-career-hub/id6807942376 — public US listing and Apple Lookup API, checked 2026-09-10" },
       { claim: "Legacy web destination remains available under the Way In name", source: "https://career-forge-lite.vercel.app — HTTP 200 and Way In branding, checked 2026-09-10" },
@@ -247,7 +247,7 @@ export const products: Product[] = [
     reach: "public",
     stage: "public",
     status: `Available on the App Store for iPhone: version ${trendiRelease.version}, ${trendiRelease.minimumOS} or later. Free with optional Trendi Pro`,
-    verifiedAt: "2026-09-10",
+    verifiedAt: "2026-10-12",
     evidence: [{ claim: "Public release, compatibility, Free and Pro allowances", source: "https://apps.apple.com/us/app/trendi-content-coach/id6776299336 — public US listing and Apple Lookup API, checked 2026-09-10" }],
     problem:
       "Most creators don't run out of ideas. They stall in the ninety seconds between having one and pressing record, because a thought in your head is not the same thing as words you can say on camera. I watched people abandon good ideas at exactly that gap, including me.",
@@ -286,7 +286,7 @@ export const products: Product[] = [
     reach: "public",
     stage: "public",
     status: `Available on the App Store, version ${forgetRelease.version}. Free for iPhone with an Apple Watch companion; works offline`,
-    verifiedAt: "2026-09-10",
+    verifiedAt: "2026-10-12",
     evidence: [{ claim: "Public release, devices, and journal features", source: "https://apps.apple.com/us/app/forgetaboutit/id6804360983 — public US listing and Apple Lookup API, checked 2026-09-10" }],
     problem: "A thought can disappear before you reach somewhere to write it down. The fragments you do save can be just as hard to find again.",
     thesis: "Make capture quick enough for the moment, then let the day become something you can read back.",
@@ -601,16 +601,45 @@ export const products: Product[] = [
     ],
   },
   {
+    slug: "old-dog",
+    name: "Old Dog",
+    tagline: "Available on the Mac App Store.",
+    identity: { theme: "school", register: "macOS" },
+    reach: "public",
+    stage: "public",
+    status: "Old Dog 1.1.0 is public on the Mac App Store; current version released 2026-10-08",
+    verifiedAt: "2026-10-12",
+    evidence: [
+      {
+        claim: "Public macOS release, version 1.1.0, current version released 2026-10-08",
+        source: "https://apps.apple.com/us/app/old-dog/id6813966822 — Apple's public developer-account lookup, verified by Blake 2026-10-12",
+      },
+    ],
+    problem: "",
+    thesis: "",
+    state: ["Version 1.1.0 is available for macOS."],
+    decisions: [],
+    learned: "",
+    actions: [
+      { label: "View on the App Store", href: "https://apps.apple.com/us/app/old-dog/id6813966822", external: true, primary: true },
+    ],
+    notYet: ["Usage metrics have not been verified here.", "Learning outcomes have not been verified here."],
+  },
+  {
     slug: "preaching-to-the-choir",
     name: "Preaching to the Choir",
     tagline: "A keeper, not a journal.",
     identity: { theme: "keeper", register: "Quiet · returns to what you noticed" },
-    reach: "limited",
-    stage: "external-testers",
+    reach: "public",
+    stage: "public",
     status:
-      "Version 1.0 (66) is approved and available to external testers through an open TestFlight link",
-    verifiedAt: "2026-09-13",
+      "Version 1.0 is public on the App Store for iOS and iPadOS, released 2026-09-22",
+    verifiedAt: "2026-10-12",
     evidence: [
+      {
+        claim: "Public iOS and iPadOS release, version 1.0, released 2026-09-22",
+        source: "https://apps.apple.com/us/app/preaching-to-the-choir/id6808442357 — Apple's public developer-account lookup, verified by Blake 2026-10-12",
+      },
       {
         claim: "Build 66 is approved for external testing with a public join link",
         source:
@@ -628,7 +657,7 @@ export const products: Product[] = [
     state: [
       "Modules: Capture, Noticing, Returns, Horizons, Sync, Export, Telemetry, Commerce, governed by a spec whose spine outranks every other document.",
       "iPhone and iPad primary, with a Mac target and a widget extension. SQLite with full-text search, a job runner, and a banned-word linter that refuses any user-visible string that reads like a literal.",
-      "A Keeper tier is configured in StoreKit at $2.99 a month, $24.99 a year, or $79 once. It is not on sale anywhere yet.",
+      "The 2026-09-13 record configured a Keeper tier in StoreKit at $2.99 a month, $24.99 a year, or $79 once; current pricing and purchases have not been verified here.",
     ],
     decisions: [
       {
@@ -639,11 +668,10 @@ export const products: Product[] = [
     learned:
       "TestFlight approval is not release. It is the last place a stranger can tell you the thing you built is not the thing you described, and it is worth staying there a while.",
     actions: [
-      { label: "Join the TestFlight", href: "https://testflight.apple.com/join/1eUCSez8", external: true, primary: true },
+      { label: "View on the App Store", href: "https://apps.apple.com/us/app/preaching-to-the-choir/id6808442357", external: true, primary: true },
     ],
     notYet: [
-      "Not on the App Store, and no App Store submission is claimed.",
-      "The Keeper tier is configured, not sold; no purchase has been made by anyone.",
+      "Purchase activity has not been verified here.",
       "No tester feedback is summarised here.",
     ],
   },

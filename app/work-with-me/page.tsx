@@ -13,7 +13,7 @@ import { STUDIO_URL, socialCard } from "@/lib/seo";
 const headline = "You have the spec. I'll ship the app.";
 const description = "Bring your spec, Figma or prototype. I'll take it from architecture to App Store release.";
 const reviewHref = "/start?offer=readiness";
-const reviewLabel = "Get a free Build Readiness Review";
+const reviewLabel = "Get a free Straight Answer";
 
 export const metadata: Metadata = {
   title: "PRD → Release",
@@ -69,8 +69,9 @@ export default function WorkWithMePage() {
 
         <section className="sec glass" aria-labelledby="review-title">
           <p className="k s">The first step</p>
-          <h2 id="review-title" className="s">Start with a Build Readiness Review.</h2>
-          <p className="lede s">Send the PRD. I&apos;ll review what&apos;s buildable, what&apos;s missing, the risks and what it takes to ship.</p>
+          <h2 id="review-title" className="s">Start with a Straight Answer.</h2>
+          <p className="lede s">Send the spec. Get a straight answer.</p>
+          <p className="s">You get a short written review: what&apos;s buildable now, what&apos;s missing, the major risks, and what it takes to ship.</p>
           <p className="s"><strong>Free for my first five founders.</strong></p>
           <p className="s">“Not ready yet” is a valid result.</p>
         </section>
@@ -118,7 +119,7 @@ export default function WorkWithMePage() {
         </section>
 
         <section className="sec glass" id="work-end" aria-labelledby="end-title">
-          <h2 id="end-title" className="s">Bring the spec. Start with readiness.</h2>
+          <h2 id="end-title" className="s">Send the spec. Get a straight answer.</h2>
           <div className="actions s">
             <Link className="btn btn--primary ai" href={reviewHref} data-analytics="inquiry_start" data-analytics-label="work_with_me">
               {reviewLabel} <ArrowRight size={16} aria-hidden="true" />
