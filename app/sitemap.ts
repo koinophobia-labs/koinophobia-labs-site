@@ -20,6 +20,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/work-with-me", lastModified: "2026-09-13", priority: 0.9, changeFrequency: "monthly" as const },
     { path: "/resume", lastModified: "2026-09-10", priority: 0.4, changeFrequency: "monthly" as const },
     { path: "/privacy", lastModified: "2026-09-13", priority: 0.3, changeFrequency: "yearly" as const },
+    { path: "/dreamcatcher/privacy", lastModified: "2026-10-11", priority: 0.3, changeFrequency: "yearly" as const },
+    { path: "/dreamcatcher/support", lastModified: "2026-10-11", priority: 0.3, changeFrequency: "yearly" as const },
     { path: "/old-dog/privacy", lastModified: "2026-09-20", priority: 0.3, changeFrequency: "yearly" as const },
     { path: "/old-dog/support", lastModified: "2026-09-20", priority: 0.3, changeFrequency: "yearly" as const },
     { path: "/preaching-to-the-choir/privacy", lastModified: "2026-09-16", priority: 0.3, changeFrequency: "yearly" as const },
