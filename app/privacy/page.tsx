@@ -28,6 +28,10 @@ export default function PrivacyPage() {
         <section className="sec">
           <ul>
             <li>
+              <Link href="/dreamcatcher/privacy">Dreamcatcher privacy policy</Link> ·{" "}
+              <Link href="/dreamcatcher/support">support</Link>
+            </li>
+            <li>
               <Link href="/trendi/privacy">Trendi privacy policy</Link> · <Link href="/trendi/support">support</Link>
             </li>
             <li>
