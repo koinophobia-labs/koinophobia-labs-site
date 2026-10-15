@@ -1,0 +1,6 @@
+
+> koinophobia-labs@0.1.0 typecheck
+> tsc --noEmit
+
+tests/app-homes.test.ts(42,69): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type 'Record<"trendi" | "way-in" | "forget-about-it" | "preaching-to-the-choir" | "old-dog" | "teachers-pet" | "dreamcatcher", AppHome>'.
+  No index signature with a parameter of type 'string' was found on type 'Record<"trendi" | "way-in" | "forget-about-it" | "preaching-to-the-choir" | "old-dog" | "teachers-pet" | "dreamcatcher", AppHome>'.

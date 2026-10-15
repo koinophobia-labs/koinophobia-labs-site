@@ -59,9 +59,12 @@ test("the App Store version can be refreshed from the Lookup API at build time, 
   assert.match(source, /itunes\.apple\.com\/lookup/);
   assert.match(source, /revalidate/);
   assert.match(source, /catch/);
-  for (const page of ["app/page.tsx", "app/shipped/page.tsx", "app/trendi/page.tsx", "app/forget-about-it/page.tsx", "app/way-in/page.tsx"]) {
+  for (const page of ["app/page.tsx", "app/shipped/page.tsx"]) {
     assert.match(read(page), /withLiveListing/, `${page} does not read the live listing`);
   }
+  // App homes deliberately use the approved inventory; these pages show no live version claim.
+  assert.match(read("components/apps/AppHome.tsx"), /appHomes/);
+  assert.match(read("components/apps/AppHome.tsx"), /ProductPageView/);
 });
 
 test("the log has a feed and the social card takes a title", () => {

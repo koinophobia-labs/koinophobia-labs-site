@@ -1,0 +1,38 @@
+WO-0127b verification
+
+Source baseline: 6af8cb1d8666625c29a6b21dc8cafaf8ea799aef
+Branch: studio/WO-0127-app-homes
+PR: https://github.com/koinophobia-labs/koinophobia-labs-site/pull/68
+
+Final checks:
+- npm run lint: PASS (0 errors, 3 pre-existing unused-import warnings; lint-final.log).
+- npm run typecheck: PASS (typecheck-verified.log).
+- npm run build -- --webpack: PASS (build-final.log). Existing worktree uses a shared node_modules symlink; webpack matches prior successful WO-0127 builds.
+- node --import tsx --test --test-reporter=tap tests/*.test.ts tests/*.test.mjs: 233 tests, 231 pass, 2 known failures (tests-final.tap).
+- Known failures unchanged from baseline: no product status has gone stale for its stage (Teacher's Pet / KOI); Trendi privacy and support routes are publication-ready and discoverable.
+- All 9 app-home unit tests pass, including app-specific badge names, coming-soon pricing, rejected-claim exclusion, and optional founder notes.
+- Chrome production-build verification: 14/14 pages PASS, 1440x1000 desktop and 390x844 phone viewports (capture-verified.log; browser-qa.json).
+- Browser checks cover first-focus skip link and activation; all gallery image decoding; prices; live badge accessible names; coming-soon status and no store links; when-released wording; absent founder notes; factual sign-off in readable app ink; unique feature headings; iPhone casing; Old Dog main-link targets >=24px, labels >=13px, full-width snapping phone gallery; Dreamcatcher three populated desktop columns; mobile menu; no page errors or horizontal document overflow.
+- React review: shared server-rendered founder component, optional typed note, no new effects or client dependencies; no quote markup for factual sign-off.
+- lib/releases.ts is unchanged. CLAIMS.md records Director-verified FAI and Way In 2.1 release timestamps and the true prerelease publication flag.
+
+Evidence notes:
+Initial sandbox-only attempts and intermediate logs are retained. tsx CLI IPC and fixture socket restrictions were resolved by running Node directly and the full suite with local socket access. The first capture assertion counted an auto-fit grid's collapsed 0px track; the corrected assertion counts populated tracks. The intermediate capture overlapped the final CSS rebuild; only capture-verified.log and browser-qa.json describe the final completed build. Final screenshots include the corrected factual sign-off color.
+
+Disk allocation: existing workspace reused, estimated peak <2GB; free space remained above the 10GB reserve on KoiBuild and system volumes. No evidence was removed.
+
+Screenshots (full page; hashes in screenshots.sha256):
+- dreamcatcher-desktop.png
+- dreamcatcher-phone.png
+- forget-about-it-desktop.png
+- forget-about-it-phone.png
+- old-dog-desktop.png
+- old-dog-phone.png
+- preaching-to-the-choir-desktop.png
+- preaching-to-the-choir-phone.png
+- teachers-pet-desktop.png
+- teachers-pet-phone.png
+- trendi-desktop.png
+- trendi-phone.png
+- way-in-desktop.png
+- way-in-phone.png

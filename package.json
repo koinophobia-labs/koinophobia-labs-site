@@ -25,7 +25,8 @@
     "qa:rebuild": "node scripts/qa-rebuild.mjs",
     "koi:contrast": "node scripts/audit-koi-contrast.mjs",
     "test:services": "tsx --test tests/services.test.ts tests/audit-checkout.test.ts tests/payments.test.ts tests/payment-reliability.test.ts",
-    "test:audit-checkout": "tsx --test tests/audit-checkout.test.ts tests/payments.test.ts tests/payment-reliability.test.ts"
+    "test:audit-checkout": "tsx --test tests/audit-checkout.test.ts tests/payments.test.ts tests/payment-reliability.test.ts",
+    "test:app-homes": "tsx --test tests/app-homes.test.ts"
   },
   "dependencies": {
     "@vercel/analytics": "^2.0.1",

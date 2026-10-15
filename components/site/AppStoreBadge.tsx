@@ -5,6 +5,15 @@ import type { MouseEvent } from "react";
 
 export type Placement = "home" | "shipped" | "product_hero" | "product_end" | "mobile_row" | "lab" | "work_with_me";
 
+const appNames: Record<string, string> = {
+  trendi: "Trendi",
+  "forget-about-it": "Forget About It",
+  "career-forge": "Way In",
+  "way-in": "Way In",
+  "preaching-to-the-choir": "Preaching to the Choir",
+  "old-dog": "Old Dog",
+};
+
 /**
  * The link people trust. Always the store URL, always a new tab, always
  * tracked. Stops propagation so it can live inside a card that is itself a
@@ -23,6 +32,7 @@ export default function AppStoreBadge({
   priceLine?: string;
   version?: string;
 }) {
+  const storeName = product === "old-dog" ? "Mac App Store" : "App Store";
   const onClick = (event: MouseEvent) => {
     event.stopPropagation();
     track("app_store_click", { product, placement });
@@ -35,14 +45,14 @@ export default function AppStoreBadge({
         target="_blank"
         rel="noreferrer"
         onClick={onClick}
-        aria-label={`Download ${{ trendi: "Trendi", "forget-about-it": "Forget About It", "career-forge": "Way In" }[product] ?? product} on the App Store`}
+        aria-label={`Download ${appNames[product] ?? product} on the ${storeName}`}
       >
         <svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor">
           <path d="M12 3a1 1 0 0 1 1 1v8.59l2.3-2.3a1 1 0 1 1 1.4 1.42l-4 4a1 1 0 0 1-1.4 0l-4-4a1 1 0 1 1 1.4-1.42l2.3 2.3V4a1 1 0 0 1 1-1Zm-7 14a1 1 0 0 1 1 1v1h12v-1a1 1 0 1 1 2 0v2a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-2a1 1 0 0 1 1-1Z" />
         </svg>
         <span>
           <small>Download on the</small>
-          <span>App Store</span>
+          <span>{storeName}</span>
         </span>
       </a>
       {priceLine ? (

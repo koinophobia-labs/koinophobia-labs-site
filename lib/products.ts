@@ -1,3 +1,5 @@
+import { appHomes } from "@/lib/app-homes";
+import { priceLine } from "@/lib/app-prices";
 import { forgetRelease, oldDogRelease, preachingRelease, trendiRelease, wayInRelease } from "@/lib/releases";
 import {
   getProduct,
@@ -81,7 +83,7 @@ const site: Record<string, SiteMeta> = {
     blurb:
       "A content coach for iPhone. Say a messy thought; get one angle, three hooks, a script, a caption, and a shot plan. Then record it with the teleprompter.",
     platforms: "iPhone",
-    chip: "Free · Pro $7.99/mo",
+    chip: priceLine("trendi"),
     notYetShort: "Not yet: posting, scheduling, or connecting social accounts. No promises about views.",
     screens: [
       { src: "/trendi/store/01-say-it-messy.jpg", alt: "Trendi home screen: Say it messy, with the messy-thought field and an example hook" },
@@ -93,17 +95,7 @@ const site: Record<string, SiteMeta> = {
       url: trendiRelease.url,
       version: trendiRelease.version,
       verifiedAt: trendiRelease.verifiedAt,
-      priceLine: "Free · 3 Coach Packs a week · Trendi Pro $7.99/mo · 100 Coach Packs a month",
-    },
-    demo: {
-      src: "/demo/trendi-hooks.mp4",
-      srcSmall: "/demo/trendi-hooks-360.mp4",
-      poster: "/demo/trendi-hooks.jpg",
-      seconds: 20,
-      master: "01_Trendi_Idea_To_Hooks.mp4 · 0.2.2 (148) · QA PASS 2026-09-10",
-      masterSrc: "/demo/masters/01-trendi-idea-to-hooks.mp4",
-      captions: ["One messy thought goes in", "The coach works on it", "Three real hooks come back"],
-      alt: "A rough idea about resetting a messy desk is typed into Trendi, the coach runs, and a Coach Pack returns with an angle and three opening hooks.",
+      priceLine: priceLine("trendi"),
     },
     page: {
       kicker: "Trendi · Content coach · iPhone",
@@ -130,7 +122,7 @@ const site: Record<string, SiteMeta> = {
     blurb:
       "A memory journal for your wrist. Raise the Watch, say the thought, and the day writes itself back to you that evening. No account. No server.",
     platforms: "iPhone + Apple Watch",
-    chip: "Free",
+    chip: priceLine("forget-about-it"),
     notYetShort: "Not yet: cloud backup. The journal lives on your devices; export your own copy from Settings.",
     screens: [
       { src: "/forget-about-it/store/1.jpg", alt: "Forget About It Today view: a dated list of captured thoughts with a short account of the day" },
@@ -141,17 +133,7 @@ const site: Record<string, SiteMeta> = {
       url: forgetRelease.url,
       version: forgetRelease.version,
       verifiedAt: forgetRelease.verifiedAt,
-      priceLine: "Free · no purchases · no account",
-    },
-    demo: {
-      src: "/demo/forget-capture-find.mp4",
-      srcSmall: "/demo/forget-capture-find-360.mp4",
-      poster: "/demo/forget-capture-find.jpg",
-      seconds: 16,
-      master: "08_Forget_About_It_Capture_Thought.mp4 + 09_Find_A_Memory.mp4 · 1.0 (22) · QA PASS 2026-09-10",
-      masterSrc: "/demo/masters/08-forget-about-it-capture-thought.mp4",
-      captions: ["Say it, or type it", "It's kept, in your words", "Find it later by one word"],
-      alt: "A thought is typed into Forget About It and saved into the day's timeline; later, Memory is searched for one word and the exact original is found.",
+      priceLine: priceLine("forget-about-it"),
     },
     page: {
       kicker: "Forget About It · Memory journal · iPhone + Apple Watch",
@@ -167,7 +149,7 @@ const site: Record<string, SiteMeta> = {
         { title: "Keep it yours", body: "No account, no analytics, no server. Export your own copy from Settings." },
       ],
       statusBody:
-        "Free with no purchases. Apple also lists Mac and Vision compatibility; the app is built around iPhone and Apple Watch. There is no cloud recovery of a journal: the journal is excluded from backups on purpose, so export a copy if you'd miss it.",
+        "Free to download, with optional Plus subscriptions. Apple also lists Mac and Vision compatibility; the app is built around iPhone and Apple Watch. There is no cloud recovery of a journal: the journal is excluded from backups on purpose, so export a copy if you'd miss it.",
     },
   },
   "career-forge": {
@@ -187,17 +169,7 @@ const site: Record<string, SiteMeta> = {
       url: wayInRelease.url,
       version: wayInRelease.version,
       verifiedAt: wayInRelease.verifiedAt,
-      priceLine: "Free · 30-Day Career Pass $29.99, does not renew · Resume Toolkit $9.99",
-    },
-    demo: {
-      src: "/demo/way-in-fit.mp4",
-      srcSmall: "/demo/way-in-fit-360.mp4",
-      poster: "/demo/way-in-fit.jpg",
-      seconds: 18,
-      master: "06_Way_In_Check_Experience_Fit.mp4 · 1.0 (9) · QA PASS 2026-09-10",
-      masterSrc: "/demo/masters/06-way-in-check-experience-fit.mp4",
-      captions: ["A real posting", "Checked against your real experience", "Supported, related, or not found yet"],
-      alt: "A saved job posting is checked against a career profile in Way In; each requirement is marked supported with its source excerpt, related, or not found yet.",
+      priceLine: priceLine("way-in"),
     },
     page: {
       kicker: "Way In · Career workspace · iPhone + iPad",
@@ -254,23 +226,23 @@ const site: Record<string, SiteMeta> = {
   },
   "old-dog": {
     section: "shipped",
-    href: oldDogRelease.url,
+    href: "/old-dog",
     blurb: "An offline learning app for adults, live on the Mac App Store.",
     platforms: "macOS",
     chip: "Live",
     notYetShort: "",
     screens: [],
-    appStore: { ...oldDogRelease, priceLine: "" },
+    appStore: { ...oldDogRelease, priceLine: priceLine("old-dog") },
   },
   "preaching-to-the-choir": {
     section: "shipped",
-    href: preachingRelease.url,
+    href: "/preaching-to-the-choir",
     blurb: "A private prayer journal, live on the App Store for iPhone and iPad.",
     platforms: "iOS / iPadOS",
     chip: "Live",
     notYetShort: "",
     screens: [],
-    appStore: { ...preachingRelease, priceLine: "" },
+    appStore: { ...preachingRelease, priceLine: priceLine("preaching-to-the-choir") },
   },
 };
 
@@ -295,7 +267,11 @@ export const siteProducts: SiteProduct[] = ordered.map((slug) => {
   const product = getProduct(slug);
   const meta = site[slug];
   if (!product || !meta) throw new Error(`lib/products.ts: ${slug} is not in the registry`);
-  return { ...product, ...meta, family: familyOf(product) };
+  const home = Object.values(appHomes).find(app => `/${app.slug}` === meta.href);
+  return { ...product, ...meta, ...(home ? {
+    blurb: home.intro,
+    screens: home.screens.map((alt, index) => ({ src: `/apps/${home.slug}/shot-${index + 1}.png`, alt: `${home.name}: ${alt}` })),
+  } : {}), family: familyOf(product) };
 });
 
 export const shippedProducts = siteProducts.filter((p) => p.section === "shipped");

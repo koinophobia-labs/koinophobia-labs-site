@@ -1,0 +1,60 @@
+✖ every rendered price and billing term comes from the single prices config (7.616792ms)
+✔ no page or product copy contains the false no-purchases claim (6.524541ms)
+✖ unreleased homes stay off public navigation and discovery (1.779125ms)
+✔ all seven homes have original assets and three to five sourced features (0.420291ms)
+✔ app palettes meet WCAG AA for text, accents, and card copy (0.147459ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 3
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 748.140125
+
+✖ failing tests:
+
+test at tests/app-homes.test.ts:2:1815
+✖ every rendered price and billing term comes from the single prices config (7.616792ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    [
+      '9.99',
+  +   '29.9930'
+  -   '29.99'
+    ]
+  
+      at TestContext.<anonymous> (/Volumes/KoiBuild/koinophobia-labs-site/WO-0127/tests/app-homes.test.ts:20:12)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1306:25)
+      at Test.start (node:internal/test_runner/test:1177:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:385:17) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ '9.99', '29.9930' ],
+    expected: [ '9.99', '29.99' ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at tests/app-homes.test.ts:2:3269
+✖ unreleased homes stay off public navigation and discovery (1.779125ms)
+  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+  
+    assert.ok(!sitemap().some(entry => entry.url.endsWith(`/${slug}`)))
+  
+      at TestContext.<anonymous> (/Volumes/KoiBuild/koinophobia-labs-site/WO-0127/tests/app-homes.test.ts:41:63)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1306:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:897:18)
+      at Test.postRun (node:internal/test_runner/test:1447:19)
+      at Test.run (node:internal/test_runner/test:1372:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:897:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }

@@ -1,0 +1,13 @@
+✔ every rendered price and billing term comes from the single prices config (10.290917ms)
+✔ no page or product copy contains the false no-purchases claim (6.809916ms)
+✔ unreleased homes stay off public navigation and discovery (0.284333ms)
+✔ all seven homes have original assets and three to five sourced features (0.157375ms)
+✔ app palettes meet WCAG AA for text, accents, and card copy (0.16225ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 209.449167

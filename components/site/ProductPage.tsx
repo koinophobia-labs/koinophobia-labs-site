@@ -12,7 +12,7 @@ import { stageLabel } from "@/lib/dev/universe";
 import type { SiteProduct } from "@/lib/products";
 
 /**
- * One template for the three shipped apps. Problem, insight, the product,
+ * One template for the five shipped apps. Problem, insight, the product,
  * one key interaction on film, a decision that hurt, status and limits, the
  * badge. Every fact comes from the registry; the page adds no claim of its
  * own. See the rebuild document, sections 4 and 7.

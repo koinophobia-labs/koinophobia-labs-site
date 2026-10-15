@@ -1,0 +1,18 @@
+trendi @1440: PASS
+way-in @1440: PASS
+forget-about-it @1440: PASS
+preaching-to-the-choir @1440: PASS
+old-dog @1440: PASS
+teachers-pet @1440: PASS
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+4 !== 3
+
+    at main (/Volumes/KoiBuild/koinophobia-labs-site/WO-0127/scripts/capture-app-homes.ts:79:16) {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: 4,
+  expected: 3,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
