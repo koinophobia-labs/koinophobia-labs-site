@@ -87,7 +87,7 @@ export const appHomes: Record<AppSlug, AppHome> = {
       { title: "Learn. Practise. Demonstrate.", body: "Work through two units and four objectives in each course. Mastery is recorded per objective." },
       { title: "Find a starting point", body: "An optional placement check helps you begin. It never awards lesson mastery." },
       { title: "Keep learning", body: "The first course in each subject is free. A one-time purchase opens all courses, including future subjects." },
-    ], screens: ["Home and resume", "Choose a course", "Read a lesson", "Practise", "Your knowledge map"],
+    ], screens: ["Home and resume", "Choose a course", "Read a lesson", "Practise"],
     free: "The first course in each subject. People who used Old Dog before 1.2 keep all ten courses.",
     support: "/old-dog/support", privacy: "/old-dog/privacy",
   },
