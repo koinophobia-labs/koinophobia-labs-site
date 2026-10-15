@@ -54,8 +54,8 @@ test("webhook processing is idempotent", async () => {
   const q = {
     query: async (sql: string) => {
       calls++;
-      if (sql.startsWith("insert into stripe_webhook_events"))
-        return { rows: [] };
+      if (["begin", "commit"].includes(sql) || sql.startsWith("insert into stripe_webhook_events")) return { rows: [] };
+      if (sql.startsWith("select processed_at")) return { rows: [{ processed_at: new Date() }] };
       throw Error("duplicate should stop");
     },
   } as Queryable;
@@ -64,7 +64,7 @@ test("webhook processing is idempotent", async () => {
     q,
   );
   assert.equal(result.duplicate, true);
-  assert.equal(calls, 1);
+  assert.equal(calls, 4);
 });
 test("payment creation requires CRM authentication",async()=>{const r=await createPaymentRoute(new NextRequest("https://example.com/api/crm/proposals/p1/payments",{method:"POST",body:"{}"}),{params:Promise.resolve({id:"p1"})});assert.equal(r.status,401)});
 test("webhook rejects requests without a Stripe signature",async()=>{const r=await webhookRoute(new NextRequest("https://example.com/api/stripe/webhook",{method:"POST",body:"{}"}));assert.equal(r.status,400)});

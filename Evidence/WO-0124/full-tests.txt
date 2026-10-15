@@ -1,0 +1,290 @@
+✔ the bridge declares exactly sixteen events (0.317625ms)
+✔ every declared event is fired somewhere on the site (2.428125ms)
+✔ nothing fires an event that is not declared (0.686417ms)
+✔ the koi world reports journey depth with the motion mode (0.185125ms)
+✔ the App Store version can be refreshed from the Lookup API at build time, and falls back to the registry (0.190959ms)
+✔ the log has a feed and the social card takes a title (0.097625ms)
+{"scope":"audit-checkout","event":"checkout_unavailable"}
+✔ public route creates a CRM lead, $250 balance and Stripe session through createCheckout (4.361125ms)
+✔ checkout validates optional email/source, defaults source, and uses supplied email only (0.536ms)
+✔ checkout rejects cross-site, invalid, oversized, rate-limited and unavailable requests before Stripe (1.84775ms)
+✔ paid, unpaid, invalid and unrelated sessions render appropriate confirmation without customer data (4.251542ms)
+✔ existing checkout.session.completed processing marks audit payment and CRM summaries paid, once (0.34625ms)
+✔ booking stores verified session and Stripe contact on the same lead; validates required times (0.597834ms)
+✔ intake handoff rejects forged paid state and only notifies once after durable booking (3.106291ms)
+✔ an older paid tab books its own Stripe-verified session despite a newer cookie (0.52925ms)
+✔ controlled fixture crawl is bounded, same-origin, multi-page, and records broken pages (26.232333ms)
+✔ page limit is enforced (0.246542ms)
+✔ transparent scoring applies severity deductions and leaves unavailable categories unscored (0.110083ms)
+✔ queued creation stores normalized domain, requested pages, and report version (2.512292ms)
+✔ valid lifecycle persists progress and completes; invalid transition is rejected (0.398291ms)
+✔ failure, cancellation, archive and retry lineage persist (0.294959ms)
+✔ raw measurements are inserted independently of editable findings (0.216375ms)
+✔ founder findings and editable visibility, proposal selection, severity filters persist (0.236208ms)
+✔ finding reorder is persisted transactionally (0.11075ms)
+✔ shared limiter enforces, resets, and atomically caps concurrent consumption (3.315125ms)
+✔ proposal traceability links every selected finding (0.101709ms)
+✔ protected audit PDF rejects unauthenticated requests (2.064125ms)
+✔ SSRF guard rejects private and credentialed targets (0.422583ms)
+✔ audit edit validates enums and required evidence (0.095208ms)
+✔ audit PDF renders multiple findings and excludes internal notes (24.06775ms)
+✔ audit PDF excludes normalized findings hidden from clients (2.035583ms)
+✔ QR attribution survives hub, audit, intake, and arbitrary encoded sources (0.520292ms)
+✔ audit form validates contact and budget and preserves source and offer (0.872584ms)
+✔ founder and readiness paths retain source without imposing business fields (0.251917ms)
+✔ source and offer reach database columns and survive a read (2.948958ms)
+✔ different source or offer cannot silently deduplicate onto another inquiry (0.356833ms)
+✔ manual quick add accepts phone-only, defaults Chamber, and rejects bad fields (0.478833ms)
+✔ CRM source and due filters bind source and use Chicago day boundaries (0.784375ms)
+✔ quick add rejects anonymous requests before writing (4.481666ms)
+✔ canonical audit QR route is no longer redirected to the founder offer (0.35925ms)
+✔ quick add rejects cross-site requests even with an administrator session (0.845208ms)
+✔ existing standard intake remains backward compatible (9.381333ms)
+✔ intake rejects a non-http website value (0.191583ms)
+✔ concierge handoff is recomputed and stored as a structured lead (3.211333ms)
+✔ edited answers invalidate the token and the server recomputes a safer route (0.312333ms)
+✔ malformed concierge data fails closed instead of creating a forged concierge lead (0.114041ms)
+✔ concierge email notification contains qualification data and escapes visitor HTML (1.993167ms)
+✔ CRM persistence writes the concierge envelope to JSONB (2.23925ms)
+✔ the versioned concierge migration is included in the migration runner (6.216041ms)
+✔ readiness intake uses existing notes and service fields through CRM and email (2.04975ms)
+✔ a draft survives route changes in the same browser tab (0.44625ms)
+✔ two tabs on one browser origin cannot see each other's concierge drafts (0.21125ms)
+✔ a foreign concierge handoff identifier is rejected (0.208625ms)
+✔ upgrade migration deletes unowned origin-wide drafts (0.111542ms)
+✔ successful handoff cleanup removes only the current tab draft (0.141958ms)
+✔ unavailable browser storage fails closed (0.1275ms)
+✔ routes uncertainty to the Revenue Leak Audit (1.628208ms)
+✔ routes a material website problem to a rebuild (0.370042ms)
+✔ routes lead follow-up and repetitive work to automation (0.141209ms)
+✔ routes a portal or product to custom product development (0.077875ms)
+✔ routes an isolated repair to Quick Fix Sprint (0.236083ms)
+✔ routes conflicting website and custom-product signals to manual review (0.114875ms)
+✔ routes regulated requirements to manual review (0.156542ms)
+✔ routes harmful work and irreconcilable custom-product constraints to not a fit (0.138208ms)
+✔ empty and extremely short input fail validation (0.248417ms)
+✔ excessively long input and unsafe URLs fail validation (0.155042ms)
+✔ prompt injection and price manipulation do not control routing (0.065875ms)
+✔ AI provider outage leaves a complete deterministic response (10.164959ms)
+✔ malformed model output fails closed to the deterministic response (1.103041ms)
+✔ valid structured model output can enhance summary but not routing (0.691417ms)
+✔ AI timeout falls back without breaking evaluation (11.405083ms)
+✔ versioned session recovery accepts fresh drafts and rejects expired or malformed data (0.247875ms)
+✔ approved verified Google account is accepted (1.066709ms)
+✔ unapproved verified Google account is denied (0.143709ms)
+✔ unverified Google account is denied (0.106917ms)
+✔ missing email is denied (0.080667ms)
+✔ case and surrounding whitespace normalize to an exact allowlist match (0.749334ms)
+✔ partial email and same-domain users are denied (0.225666ms)
+✔ an unsupported provider never inherits Google authorization (0.103709ms)
+✔ session authorization requires every verified Google claim and the live allowlist (0.162459ms)
+✔ Auth.js uses JWT sessions, a 12-hour lifetime, and protected session cookies (0.273583ms)
+✔ approved and unapproved Auth.js sessions are enforced by page and API guards (3.819417ms)
+✔ legacy fallback can be retired by removing its secret (5.621709ms)
+✔ every private CRM surface contains its server-side authorization guard (1.052167ms)
+✔ login and OAuth error UI disclose no secret field, token, or configuration (0.117875ms)
+✔ sign-out clears both session paths and public intake remains outside the boundary (0.212333ms)
+✔ intake route validation accepts a complete CRM lead (0.721ms)
+✔ protected lead list rejects a request without a session (2.4455ms)
+✔ protected update rejects a request without a session (0.511375ms)
+✔ only an explicit idempotency key deduplicates retries (2.993625ms)
+✔ status follow-up and internal note update (0.160542ms)
+✔ legacy leads without founder packet columns still map safely (0.084125ms)
+✔ enum and date validation (0.3695ms)
+✔ signed session authorizes and rejects tampering (0.242833ms)
+✔ preview Vercel builds cannot execute migrations (0.669083ms)
+✔ ordinary production Vercel builds are application-only (0.109542ms)
+✔ a direct production Neon endpoint succeeds with every required guard (27.537542ms)
+✔ missing or vague approval refuses before connecting or executing SQL (0.171708ms)
+✔ target and runtime mismatches refuse before connecting (0.133125ms)
+✔ the database provider, direct URL, protocol, and TLS are mandatory (0.162333ms)
+✔ a wrong Neon endpoint is refused before connecting (0.091ms)
+✔ a preview endpoint is refused when production is expected (0.060833ms)
+✔ a pooled Neon hostname is refused before connecting (0.07025ms)
+✔ the expected endpoint ID must be supplied independently (0.079125ms)
+✔ the expected database name and migration role are mandatory (0.057459ms)
+✔ a URL database-name mismatch is refused before connecting (0.049333ms)
+✔ a connected database-name mismatch refuses before migration SQL (0.070167ms)
+✔ a connected role mismatch refuses before migration SQL (0.0625ms)
+✔ read-only and recovery connections refuse before migration SQL (0.133125ms)
+✔ an unexpected application baseline refuses before migration SQL (0.081542ms)
+✔ connection and identity failures expose no connection secrets (0.168ms)
+✔ successful output exposes only the safe target and migration filenames (0.325459ms)
+✔ test and development migrations allow an explicit loopback-only path (1.277ms)
+✔ the local override refuses remote and production targets (0.079083ms)
+✔ migration failures roll back, identify the file, and stop (0.267375ms)
+✔ the former custom database setting is not required anywhere (1120.277291ms)
+✔ migration 008 keeps idempotent guards for all columns and indexes (0.509333ms)
+Retained migration test fixture: /Volumes/KoiBuild/koinophobia-labs-site/tmp/koinophobia-migration-test-1vuB0l
+✔ a real PostgreSQL schema containing migration 008 is accepted unchanged (5783.351375ms)
+✔ every product carries verification metadata (0.518666ms)
+✖ no product status has gone stale for its stage (1.619375ms)
+✔ every stage has a freshness budget, and fast stages are tight (0.079625ms)
+✔ a stale status produces an actionable message (0.08825ms)
+✔ freshness is never auto-refreshed (0.167709ms)
+✔ a status owner is recorded (0.032125ms)
+✔ published dates are literals, never read from the clock (0.528916ms)
+✔ stage and reach never contradict each other (0.090541ms)
+✔ the stage ladder never collapses distinct release states (0.062167ms)
+✔ every stage maps to a display family, and the family never upgrades a stage (0.087166ms)
+✔ the front office is in the universe, honestly (0.095166ms)
+✔ TestFlight claims require TestFlight evidence (0.062417ms)
+✔ You Know Ball does not claim it was never uploaded (0.108ms)
+✔ Trendi reflects its verified public release while the dated log preserves beta history (24.321959ms)
+✔ Career Forge does not claim checkout is closed, or that anyone bought (0.164458ms)
+✔ unsourceable statistics stay out of published copy (78.869ms)
+✔ every product states what is not true yet (0.066042ms)
+✔ internal-only products offer nothing to click (0.050375ms)
+✔ no product uses launch language it cannot back (0.124166ms)
+✔ no product invents users, revenue, or testimonials (0.260375ms)
+✔ product slugs are unique and every one resolves (0.046083ms)
+✔ every product action link is usable by a stranger (0.097667ms)
+✔ no note publishes without BOTH gates (0.042166ms)
+✔ every first-person note is currently held for review (0.023625ms)
+✔ held notes are preserved, never emptied (0.04ms)
+✔ the review file still covers every note (70.226041ms)
+✔ published field notes are specific, dated, and resolvable (0.076666ms)
+✔ every experiment reports what it showed (0.032833ms)
+✔ the five required lead scenarios produce complete, bounded founder packets (3.465416ms)
+✔ every selected price, timeline, and scope item comes from the existing offer catalog (0.369667ms)
+✔ the audit intake maps to the existing $250 audit and its correct public link (0.086917ms)
+✔ concierge routing remains authoritative when the packet is attached (0.108167ms)
+✔ Resend receives one founder-only notification with Reply-To and the full draft packet (8.468458ms)
+✔ lead-controlled text is escaped in founder notification HTML (0.827833ms)
+✔ the CRM keeps the founder draft editable without a send action (0.133833ms)
+✔ the packet is persisted on the lead and smoke submissions remain non-prospects (0.748959ms)
+✔ the additive packet migration is in the migration runner (0.137416ms)
+✔ SITE-02: no Origin AND no sec-fetch-site is UNTRUSTED (scripted client) (7.313334ms)
+✔ SITE-02: same-origin sec-fetch-site is trusted (0.150958ms)
+✔ SITE-02: cross-site sec-fetch-site is rejected (0.052042ms)
+✔ SITE-02: a matching Origin is trusted, a foreign Origin is not (0.113333ms)
+✔ SITE-02: rate key prefers the platform-trusted x-real-ip (0.069042ms)
+✔ SITE-02: rotating the LEFTMOST x-forwarded-for token cannot change the key (0.064709ms)
+✔ SITE-01: identical content in the same window yields the SAME idempotency key (0.155917ms)
+✔ SITE-01: different content yields a different key (0.057125ms)
+✔ SITE-01: a concierge session or explicit key overrides the content key (0.053042ms)
+✔ SITE-01: email sends on a new lead, is SKIPPED on a confirmed dedupe, sends on storage failure (0.07325ms)
+✔ the koi world leads through six destinations and reads every fact from the registry (0.816958ms)
+✔ every koi clip referenced by the journey ships both renditions and a poster (0.240916ms)
+✔ the layout loads three font families and four site stylesheets, nothing from the agency era (0.158167ms)
+✖ Trendi privacy and support routes are publication-ready and discoverable (6.457708ms)
+✔ every shipped app's legal pages exist and are in the sitemap (1.681875ms)
+▶ payment reliability on real PostgreSQL
+  ✔ failure after payment mutation rolls back the event, payment, summaries and email reservation; retry pays (41.994916ms)
+  ✔ successful replay is a no-op and concurrent duplicate deliveries apply once (9.489792ms)
+  ✔ different event IDs for one payment send one alert, including async success and submitted booking (6.592ms)
+  ✔ legacy failed event rows with null processed_at remain retryable (4.152958ms)
+  ✔ unpaid completion and non-audit payments do not send paid audit mail (4.296916ms)
+Paid audit email: delivery uncertain { paymentId: 'b56cd6c9-82cf-43da-9cad-fad592a6bc75' }
+  ✔ uncertain email delivery is recorded without retrying mail or undoing payment (5.1495ms)
+  ✔ expiry hides only unpaid abandoned audit-checkout leads; show abandoned restores them without deletion (14.458666ms)
+✔ payment reliability on real PostgreSQL (6110.901125ms)
+ℹ Retained local PostgreSQL test fixture: /Volumes/KoiBuild/koinophobia-labs-site/tmp/wo-0124-postgres-2bdWJf
+✔ paid audit alert uses SITE-01 internal recipient, fixed content and no card data (6.8245ms)
+✔ accepted proposals calculate deterministic deposit and remaining balance (0.473875ms)
+✔ checkout creation uses server totals and durable metadata (0.898333ms)
+✔ webhook processing is idempotent (0.190334ms)
+✔ payment creation requires CRM authentication (2.238333ms)
+✔ webhook rejects requests without a Stripe signature (0.354666ms)
+✔ every shipped product is public in the registry, links to the App Store, and uses only authentic screens (1.179917ms)
+✔ every demo clip is cut from a QA-verified master and ships both renditions and a poster (0.336708ms)
+✔ lab products are never presented as shipped (0.1955ms)
+✔ the site never claims more than the registry (0.340792ms)
+✔ the commercial offer is three shapes with proof, and one reply promise (0.230792ms)
+✔ the homepage reads verified products and adds the approved B2B path (0.128625ms)
+✔ templates validate and pricing is calculated in cents (1.457542ms)
+✔ proposal field and enum validation rejects invalid data (0.095041ms)
+✔ status transitions make sent versions immutable (0.05925ms)
+✔ multi-line proposal PDF succeeds and excludes internal notes (42.461917ms)
+✔ redactSecrets masks obvious card, SSN, and key shapes (0.650708ms)
+✔ redactSecrets leaves ordinary business prose untouched (0.069792ms)
+✔ redactLeadFreeText masks free-text everywhere but preserves structured routing fields (0.153583ms)
+✔ storeLead persists redacted free-text to crm_leads (1.910833ms)
+✔ the lead email carries redacted free-text and still escapes HTML (0.863625ms)
+✔ no host-scoped rewrites remain; the personal host only redirects (0.581709ms)
+✔ the personal-host map lands on real studio pages (0.194959ms)
+✔ retired studio routes redirect to living pages (0.171625ms)
+✔ the www hosts collapse onto the studio host (0.1ms)
+✔ resume contains the complete Earlham education record (0.287709ms)
+✔ resume contains the complete structured publication (0.044375ms)
+✔ homepage search and social metadata tell one consistent story (0.347792ms)
+✔ structured data links the studio, founder, and website as one entity graph (0.139375ms)
+✔ every studio sitemap entry carries an honest last-modified signal (0.157792ms)
+✔ production canonicalization redirects are permanent (0.131041ms)
+✔ separate product lookups do not reuse the first product's cached result (9.624083ms)
+✔ same-day log milestones preserve the recorded release order (0.069291ms)
+✔ evidence links explicit URLs without inventing links for local files (3.310417ms)
+✔ a reasoned sports take earns more than a vague response (1.021875ms)
+✔ betting requests pause scoring (0.071334ms)
+✔ the koi-first homepage leads with shipped apps, then the lab, then the offer (2.257625ms)
+ℹ tests 214
+ℹ suites 0
+ℹ pass 212
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 8846.060875
+
+✖ failing tests:
+
+test at tests/dev-universe.test.ts:2:2383
+✖ no product status has gone stale for its stage (1.619375ms)
+  AssertionError [ERR_ASSERTION]: STALE STATUS: Teacher's Pet
+    stage:        local (Local development)
+    verified at:  2026-09-13 — 32 days ago
+    allowed age:  30 days for this stage
+    what to do:   re-check Teacher's Pet against release artifacts
+                  (archives, Apple delivery logs, live HTTP, signing),
+                  update status/evidence if it moved, then set
+                  verifiedAt to today in lib/dev/universe.ts.
+    do NOT just bump the date — the date is a claim that someone looked.
+  
+  STALE STATUS: KOI
+    stage:        local (Local development)
+    verified at:  2026-09-13 — 32 days ago
+    allowed age:  30 days for this stage
+    what to do:   re-check KOI against release artifacts
+                  (archives, Apple delivery logs, live HTTP, signing),
+                  update status/evidence if it moved, then set
+                  verifiedAt to today in lib/dev/universe.ts.
+    do NOT just bump the date — the date is a claim that someone looked.
+  + actual - expected
+  
+  + [
+  +   "Teacher's Pet",
+  +   'KOI'
+  + ]
+  - []
+  
+      at TestContext.<anonymous> (/Volumes/KoiBuild/koinophobia-labs-site/WO-0124/tests/dev-universe.test.ts:66:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1306:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:897:18)
+      at Test.postRun (node:internal/test_runner/test:1447:19)
+      at Test.run (node:internal/test_runner/test:1372:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: [ "Teacher's Pet", 'KOI' ],
+    expected: [],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at tests/legal-pages.test.ts:2:1215
+✖ Trendi privacy and support routes are publication-ready and discoverable (6.457708ms)
+  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+  
+    assert.ok(privacy.includes("every third party with whom Trendi shares"))
+  
+      at TestContext.<anonymous> (/Volumes/KoiBuild/koinophobia-labs-site/WO-0124/tests/legal-pages.test.ts:23:10)
+      at async Test.run (node:internal/test_runner/test:1313:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }

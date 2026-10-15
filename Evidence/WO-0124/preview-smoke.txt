@@ -1,0 +1,2 @@
+GET /audit: HTTP 200; expected content present
+GET /audit/paid?session_id=cs_test_unverified123: HTTP 200; expected content present; booking form absent for unverified session

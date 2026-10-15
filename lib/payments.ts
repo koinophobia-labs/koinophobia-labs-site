@@ -1,5 +1,6 @@
 import Stripe from "stripe";
 import { Pool, type QueryResultRow } from "pg";
+import { sendPaidAuditEmail, type PaidAuditNotice } from "./acquisition/intake";
 
 export const paymentStatuses = [
   "pending",
@@ -43,13 +44,16 @@ export type Queryable = {
     values?: unknown[],
   ): Promise<{ rows: QueryResultRow[]; rowCount?: number | null }>;
 };
+type TransactionDatabase = Queryable & {
+  connect?: () => Promise<Queryable & { release(): void }>;
+};
 let pool: Pool | undefined, stripeClient: Stripe | undefined;
 const db = () => {
   if (!process.env.DATABASE_URL) throw Error("DATABASE_URL is not configured");
   return (pool ??= new Pool({
     connectionString: process.env.DATABASE_URL,
     max: 5,
-  })) as unknown as Queryable;
+  }));
 };
 export { db as paymentDatabase };
 export const stripe = () => {
@@ -232,25 +236,38 @@ async function syncPaymentSummary(
 }
 export async function processStripeEvent(
   event: Stripe.Event,
-  q: Queryable = db(),
+  database: TransactionDatabase = db(),
+  notify = sendPaidAuditEmail,
 ) {
-  const inserted = await q.query(
-    "insert into stripe_webhook_events(event_id,event_type) values($1,$2) on conflict do nothing returning event_id",
-    [event.id, event.type],
-  );
-  if (!inserted.rows[0]) return { duplicate: true };
+  // Pool.query cannot keep a transaction on one connection.
+  const connection = database.connect ? await database.connect() : undefined;
+  const q = connection ?? database;
+  let notice: PaidAuditNotice | undefined;
   try {
+    await q.query("begin");
+    await q.query(
+      "insert into stripe_webhook_events(event_id,event_type) values($1,$2) on conflict do nothing",
+      [event.id, event.type],
+    );
+    const existing = await q.query(
+      "select processed_at from stripe_webhook_events where event_id=$1 for update",
+      [event.id],
+    );
+    if (existing.rows[0]?.processed_at) {
+      await q.query("commit");
+      return { duplicate: true };
+    }
     const object = event.data.object as Stripe.Checkout.Session | Stripe.Charge,
       paymentId = "metadata" in object ? object.metadata?.paymentId : undefined;
     let payment: QueryResultRow | undefined;
     if (paymentId) {
-      const found = await q.query("select * from crm_payments where id=$1", [
+      const found = await q.query("select * from crm_payments where id=$1 for update", [
         paymentId,
       ]);
       payment = found.rows[0];
     } else if ("payment_intent" in object && object.payment_intent) {
       const found = await q.query(
-        "select * from crm_payments where stripe_payment_intent_id=$1",
+        "select * from crm_payments where stripe_payment_intent_id=$1 for update",
         [
           typeof object.payment_intent === "string"
             ? object.payment_intent
@@ -260,6 +277,8 @@ export async function processStripeEvent(
       payment = found.rows[0];
     }
     if (payment) {
+      // Serialize summaries even when different payments belong to one proposal.
+      await q.query("select id from crm_proposals where id=$1 for update", [payment.proposal_id]);
       if (
         [
           "checkout.session.completed",
@@ -267,9 +286,9 @@ export async function processStripeEvent(
         ].includes(event.type)
       ) {
         const session = object as Stripe.Checkout.Session;
-        if (session.payment_status !== "unpaid")
-          await q.query(
-            "update crm_payments set status='paid',stripe_payment_intent_id=$1,paid_at=coalesce(paid_at,now()),updated_at=now() where id=$2 and status<>'refunded'",
+        if (session.payment_status === "paid") {
+          const updated = await q.query(
+            "update crm_payments set status='paid',stripe_payment_intent_id=$1,paid_at=coalesce(paid_at,now()),updated_at=now() where id=$2 and status not in ('paid','refunded') returning id",
             [
               typeof session.payment_intent === "string"
                 ? session.payment_intent
@@ -277,6 +296,26 @@ export async function processStripeEvent(
               payment.id,
             ],
           );
+          if (updated.rows[0] && session.metadata?.offer === "revenue_leak_audit" &&
+              payment.amount === 25000 && payment.currency === "usd" &&
+              payment.stripe_checkout_session_id === session.id) {
+            const lead = await q.query("select notes from crm_leads where id=$1 and service_interest='revenue_leak_audit'", [payment.lead_id]);
+            if (lead.rows[0]) {
+              // A durable per-payment reservation makes dispatch at most once,
+              // including different Stripe event IDs and retries after a crash.
+              const reserved = await q.query(
+                "insert into stripe_webhook_events(event_id,event_type,processing_error) values($1,'internal.audit_paid_notification','dispatch reserved; delivery not confirmed') on conflict do nothing returning event_id",
+                [`paid-audit:${payment.id}`],
+              );
+              if (reserved.rows[0]) notice = {
+                paymentId: payment.id, leadId: payment.lead_id,
+                bookingSubmitted: Boolean(lead.rows[0].notes),
+                name: session.custom_fields?.find(field => field.key === "buyer_name")?.text?.value || session.customer_details?.name || "",
+                email: session.customer_details?.email || session.customer_email || "",
+              };
+            }
+          }
+        }
       } else if (event.type === "checkout.session.async_payment_failed")
         await q.query(
           "update crm_payments set status='failed',failed_at=now(),updated_at=now() where id=$1 and status='pending'",
@@ -295,18 +334,32 @@ export async function processStripeEvent(
       await syncPaymentSummary(payment.proposal_id, payment.lead_id, q);
     }
     await q.query(
-      "update stripe_webhook_events set processed_at=now() where event_id=$1",
+      "update stripe_webhook_events set processed_at=now(),processing_error=null where event_id=$1",
       [event.id],
     );
-    return { duplicate: false };
+    await q.query("commit");
   } catch (error) {
-    await q.query(
-      "update stripe_webhook_events set processing_error=$1 where event_id=$2",
-      [
-        error instanceof Error ? error.message.slice(0, 1000) : "Unknown error",
-        event.id,
-      ],
-    );
+    await q.query("rollback");
     throw error;
+  } finally {
+    connection?.release();
   }
+  // Dispatch only after payment/event commit. Never hold a DB transaction over
+  // email I/O or roll back a paid payment because the mail provider is down.
+  // An ambiguous/crashed send is retained for manual reconciliation, not resent.
+  if (notice) {
+    let error: string | null = null;
+    try {
+      const delivery = await notify(notice);
+      if (!delivery.ok) error = `Paid audit email: ${delivery.reason}`;
+    } catch { error = "Paid audit email: delivery uncertain"; }
+    try {
+      await database.query(
+        "update stripe_webhook_events set processed_at=case when $1::text is null then now() else null end,processing_error=$1 where event_id=$2",
+        [error, `paid-audit:${notice.paymentId}`],
+      );
+    } catch { error = "Paid audit email: unable to record delivery outcome"; }
+    if (error) console.error(error, { paymentId: notice.paymentId });
+  }
+  return { duplicate: false };
 }

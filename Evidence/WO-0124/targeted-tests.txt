@@ -1,0 +1,38 @@
+
+> koinophobia-labs@0.1.0 test:audit-checkout
+> tsx --test tests/audit-checkout.test.ts tests/payments.test.ts tests/payment-reliability.test.ts
+
+{"scope":"audit-checkout","event":"checkout_unavailable"}
+✔ public route creates a CRM lead, $250 balance and Stripe session through createCheckout (6.446042ms)
+✔ checkout validates optional email/source, defaults source, and uses supplied email only (0.69025ms)
+✔ checkout rejects cross-site, invalid, oversized, rate-limited and unavailable requests before Stripe (2.089875ms)
+✔ paid, unpaid, invalid and unrelated sessions render appropriate confirmation without customer data (4.256958ms)
+✔ existing checkout.session.completed processing marks audit payment and CRM summaries paid, once (0.320792ms)
+✔ booking stores verified session and Stripe contact on the same lead; validates required times (0.569125ms)
+✔ intake handoff rejects forged paid state and only notifies once after durable booking (1.732208ms)
+✔ an older paid tab books its own Stripe-verified session despite a newer cookie (0.567625ms)
+▶ payment reliability on real PostgreSQL
+  ✔ failure after payment mutation rolls back the event, payment, summaries and email reservation; retry pays (899.402583ms)
+  ✔ successful replay is a no-op and concurrent duplicate deliveries apply once (8.672166ms)
+  ✔ different event IDs for one payment send one alert, including async success and submitted booking (5.425792ms)
+  ✔ legacy failed event rows with null processed_at remain retryable (3.3795ms)
+  ✔ unpaid completion and non-audit payments do not send paid audit mail (3.589ms)
+Paid audit email: delivery uncertain { paymentId: '5f695108-5050-47b1-8b9a-2924bae0292a' }
+  ✔ uncertain email delivery is recorded without retrying mail or undoing payment (4.294583ms)
+  ✔ expiry hides only unpaid abandoned audit-checkout leads; show abandoned restores them without deletion (13.82475ms)
+✔ payment reliability on real PostgreSQL (8993.129292ms)
+ℹ Retained local PostgreSQL test fixture: /Volumes/KoiBuild/koinophobia-labs-site/tmp/wo-0124-postgres-xHTFDn
+✔ paid audit alert uses SITE-01 internal recipient, fixed content and no card data (7.864625ms)
+✔ accepted proposals calculate deterministic deposit and remaining balance (0.410792ms)
+✔ checkout creation uses server totals and durable metadata (0.770583ms)
+✔ webhook processing is idempotent (0.171542ms)
+✔ payment creation requires CRM authentication (2.001333ms)
+✔ webhook rejects requests without a Stripe signature (0.363125ms)
+ℹ tests 22
+ℹ suites 0
+ℹ pass 22
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 9960.683791
