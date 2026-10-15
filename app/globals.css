@@ -2478,3 +2478,9 @@ p {
     background: var(--cyan);
   }
 }
+
+/* Revenue Leak Audit booking handoff. */
+.audit-booking { display: grid; gap: 1rem; max-width: 42rem; margin-top: 2rem; }
+.audit-booking label { display: grid; gap: .4rem; }
+.audit-booking input { width: 100%; padding: .8rem 1rem; border: 1px solid currentColor; border-radius: .35rem; background: transparent; color: inherit; font: inherit; }
+.audit-booking .btn { justify-self: start; }

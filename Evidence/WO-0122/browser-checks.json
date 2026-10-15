@@ -1,0 +1,17 @@
+{
+  "base": "http://127.0.0.1:3122",
+  "mockConfiguration": true,
+  "purchaseMade": false,
+  "checks": [
+    "pay button POSTs source",
+    "checkout error permits retry",
+    "query paid=true cannot confirm payment",
+    "unconfirmed page has no booking form",
+    "mocked production paid component renders required booking fields",
+    "hydrated booking form blocks empty submission and posts offer=audit/paid=true without a client session id",
+    "successful booking shows the one-business-day confirmation",
+    "desktop/mobile layouts fit viewport",
+    "no browser runtime errors"
+  ],
+  "failures": []
+}

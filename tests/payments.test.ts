@@ -1,3 +1,4 @@
+import { paymentFixture } from "./fixtures/payments";
 import test from "node:test";
 import assert from "node:assert/strict";
 import type Stripe from "stripe";
@@ -39,75 +40,15 @@ test("accepted proposals calculate deterministic deposit and remaining balance",
   );
 });
 test("checkout creation uses server totals and durable metadata", async () => {
-  const now = new Date(),
-    queries: string[] = [],
-    q = {
-      query: async (sql: string, values: unknown[] = []) => {
-        queries.push(sql);
-        if (sql.startsWith("select p.id"))
-          return {
-            rows: [
-              {
-                proposal_id: "p1",
-                lead_id: "l1",
-                proposal_status: "accepted",
-                proposal_title: "Website build",
-                total: 100000,
-                amount_paid: 0,
-                business_name: "Client",
-                email: "client@example.com",
-              },
-            ],
-          };
-        if (sql.startsWith("select * from crm_payments")) return { rows: [] };
-        if (sql.startsWith("update crm_payments set stripe"))
-          return {
-            rows: [
-              {
-                id: values[2],
-                proposal_id: "p1",
-                lead_id: "l1",
-                kind: "deposit",
-                status: "pending",
-                amount: 50000,
-                currency: "usd",
-                stripe_checkout_session_id: "cs_test",
-                stripe_payment_intent_id: null,
-                checkout_url: "https://checkout.stripe.test",
-                created_at: now,
-                updated_at: now,
-              },
-            ],
-          };
-        if (sql.startsWith("select coalesce"))
-          return { rows: [{ paid: 0, pending: true, refunded: false }] };
-        if (sql.startsWith("select total"))
-          return { rows: [{ total: 100000 }] };
-        return { rows: [] };
-      },
-    } as Queryable;
-  let options: unknown;
-  const client = {
-    checkout: {
-      sessions: {
-        create: async (input: unknown, o: unknown) => {
-          options = { input, o };
-          return { id: "cs_test", url: "https://checkout.stripe.test" };
-        },
-      },
-    },
-  } as never;
-  const payment = await createCheckout(
-    "p1",
-    { kind: "deposit" },
-    "https://example.com",
-    q,
-    client,
-  );
+  const { state, q, client } = paymentFixture();
+  const payment = await createCheckout("p1", { kind: "deposit" }, "https://example.com", q, client);
   assert.equal(payment.amount, 50000);
-  assert.match(JSON.stringify(options), /paymentId/);
-  assert.ok(queries.some((x) => x.includes("insert into crm_payments")));
+  assert.equal(state.sessionInput?.metadata?.paymentId, payment.id);
+  assert.equal(state.sessionInput?.success_url, "https://example.com/payment/success?session_id={CHECKOUT_SESSION_ID}");
+  assert.equal(state.sessionInput?.line_items?.[0].price_data?.product_data?.name, "Deposit: Website build");
+  assert.ok(state.queries.some(x => x.sql.includes("insert into crm_payments")));
 });
+
 test("webhook processing is idempotent", async () => {
   let calls = 0;
   const q = {

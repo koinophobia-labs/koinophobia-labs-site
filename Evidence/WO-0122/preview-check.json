@@ -1,0 +1,10 @@
+{
+  "preview": "https://koinophobia-labs-4ju6hkcuy-koinophobia999-8829s-projects.vercel.app",
+  "checkedAt": "2026-10-15T14:28:07.511Z",
+  "postCount": 1,
+  "status": 503,
+  "body": "{\"ok\":false,\"message\":\"Payment is temporarily unavailable. Please try again later or ask Blake a question.\"}",
+  "cacheControl": "no-store",
+  "stripeEnvironment": "No Stripe environment variables configured for Preview (verified via vercel env ls preview)",
+  "purchaseMade": false
+}
