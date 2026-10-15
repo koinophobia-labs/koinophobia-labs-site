@@ -51,6 +51,7 @@ const db = () => {
     max: 5,
   })) as unknown as Queryable;
 };
+export { db as paymentDatabase };
 export const stripe = () => {
   if (!process.env.STRIPE_SECRET_KEY)
     throw Error("STRIPE_SECRET_KEY is not configured");
@@ -125,6 +126,7 @@ export async function createCheckout(
   origin: string,
   q: Queryable = db(),
   client = stripe(),
+  options: { productName?: string; successPath?: string; cancelPath?: string; collectName?: boolean; offer?: string } = {},
 ) {
   const context = await getPaymentContext(proposalId, q);
   if (!context) throw Error("PROPOSAL_NOT_FOUND");
@@ -143,7 +145,8 @@ export async function createCheckout(
     const session = await client.checkout.sessions.create(
       {
         mode: "payment",
-        customer_email: context.email,
+        customer_email: context.email || undefined,
+        ...(options.collectName ? { custom_fields: [{ key: "buyer_name", label: { type: "custom" as const, custom: "Name" }, type: "text" as const }] } : {}),
         client_reference_id: proposalId,
         line_items: [
           {
@@ -151,13 +154,14 @@ export async function createCheckout(
               currency: "usd",
               unit_amount: amount,
               product_data: {
-                name: `${input.kind === "deposit" ? "Deposit" : "Remaining balance"}: ${context.proposalTitle}`,
+                name: options.productName ?? `${input.kind === "deposit" ? "Deposit" : "Remaining balance"}: ${context.proposalTitle}`,
               },
             },
             quantity: 1,
           },
         ],
         metadata: {
+          ...(options.offer ? { offer: options.offer } : {}),
           paymentId: id,
           proposalId,
           leadId: context.leadId,
@@ -171,8 +175,8 @@ export async function createCheckout(
             kind: input.kind,
           },
         },
-        success_url: `${origin}/payment/success?session_id={CHECKOUT_SESSION_ID}`,
-        cancel_url: `${origin}/payment/cancelled?proposal=${proposalId}`,
+        success_url: `${origin}${options.successPath ?? "/payment/success?session_id={CHECKOUT_SESSION_ID}"}`,
+        cancel_url: `${origin}${options.cancelPath ?? `/payment/cancelled?proposal=${proposalId}`}`,
       },
       { idempotencyKey: `crm-payment-${id}` },
     );

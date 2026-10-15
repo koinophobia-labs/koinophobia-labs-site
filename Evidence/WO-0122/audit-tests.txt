@@ -1,0 +1,25 @@
+
+> koinophobia-labs@0.1.0 test:audit-checkout
+> tsx --test tests/audit-checkout.test.ts tests/payments.test.ts
+
+{"scope":"audit-checkout","event":"checkout_unavailable"}
+✔ public route creates a CRM lead, $250 balance and Stripe session through createCheckout (4.538458ms)
+✔ checkout validates optional email/source, defaults source, and uses supplied email only (1.218125ms)
+✔ checkout rejects cross-site, invalid, oversized, rate-limited and unavailable requests before Stripe (1.997209ms)
+✔ paid, unpaid, invalid and unrelated sessions render appropriate confirmation without customer data (4.696917ms)
+✔ existing checkout.session.completed processing marks audit payment and CRM summaries paid, once (0.255666ms)
+✔ booking stores verified session and Stripe contact on the same lead; validates required times (0.621708ms)
+✔ intake handoff rejects forged paid state and only notifies once after durable booking (1.859583ms)
+✔ accepted proposals calculate deterministic deposit and remaining balance (1.238667ms)
+✔ checkout creation uses server totals and durable metadata (1.721542ms)
+✔ webhook processing is idempotent (0.135584ms)
+✔ payment creation requires CRM authentication (3.069292ms)
+✔ webhook rejects requests without a Stripe signature (0.437666ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 12
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 8925.868292

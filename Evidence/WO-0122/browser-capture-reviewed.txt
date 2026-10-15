@@ -1,0 +1,10 @@
+locator.waitFor: Error: strict mode violation: getByRole('alert') resolved to 2 elements:
+    1) <p role="alert">Payment is temporarily unavailable. Please try ag…</p> aka getByText('Payment is temporarily')
+    2) <div role="alert" aria-live="assertive" id="__next-route-announcer__"></div> aka locator('[id="__next-route-announcer__"]')
+
+Call log:
+[2m  - waiting for getByRole('alert') to be visible[22m
+
+    at main (/Volumes/KoiBuild/koinophobia-labs-site/WO-0122/scripts/capture-wo0122.ts:26:33) {
+  log: [ "  - waiting for getByRole('alert') to be visible" ]
+}
