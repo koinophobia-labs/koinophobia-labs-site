@@ -83,7 +83,7 @@ test("payment reliability on real PostgreSQL", { skip: !hasPostgres }, async (t)
       const { payment, event } = await fixture();
       await pool.query("update crm_leads set notes='Booking recorded' where id=$1", [payment.leadId]);
       const before = notices.length;
-      await Promise.all([processStripeEvent(event, pool, notify), processStripeEvent({ ...event, id: `${event.id}_async`, type: "checkout.session.async_payment_succeeded" }, pool, notify)]);
+      await Promise.all([processStripeEvent(event, pool, notify), processStripeEvent({ ...event, id: `${event.id}_async`, type: "checkout.session.async_payment_succeeded" } as unknown as Stripe.Event, pool, notify)]);
       assert.equal(notices.length, before + 1);
       assert.equal(notices.at(-1)?.bookingSubmitted, true);
       assert.equal(notices.at(-1)?.leadId, payment.leadId);
@@ -124,8 +124,8 @@ test("payment reliability on real PostgreSQL", { skip: !hasPostgres }, async (t)
       await pool.query("update crm_leads set dedupe_key='manual-test' where id=$1", [ordinary.payment.leadId]);
       await processStripeEvent(paid.event, pool, notify);
       await processStripeEvent(refunded.event, pool, notify);
-      await processStripeEvent({ ...refunded.event, id: `${refunded.event.id}_refund`, type: "charge.refunded" }, pool, notify);
-      for (const item of [expired, paid, ordinary, refunded]) await processStripeEvent({ ...item.event, id: `${item.event.id}_expire`, type: "checkout.session.expired" }, pool, notify);
+      await processStripeEvent({ ...refunded.event, id: `${refunded.event.id}_refund`, type: "charge.refunded" } as unknown as Stripe.Event, pool, notify);
+      for (const item of [expired, paid, ordinary, refunded]) await processStripeEvent({ ...item.event, id: `${item.event.id}_expire`, type: "checkout.session.expired" } as unknown as Stripe.Event, pool, notify);
       assert.equal((await paymentRow(expired.payment.id)).status, "expired");
       assert.equal((await paymentRow(paid.payment.id)).status, "paid");
       const visible = (await listLeads({}, pool)).map(lead => lead.id);
