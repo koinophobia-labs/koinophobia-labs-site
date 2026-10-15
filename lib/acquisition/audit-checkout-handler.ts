@@ -3,10 +3,12 @@ import { NextRequest, NextResponse } from "next/server";
 import { consumeAuditRateLimit } from "@/lib/audits";
 import { isTrustedMutationRequest } from "@/lib/security/origin";
 import { trustedClientKey } from "@/lib/acquisition/intake-abuse";
-import { AUDIT_SESSION_COOKIE, auditCheckoutAvailable, createAuditCheckout, parseAuditCheckout } from "./audit-checkout";
+import { auditCheckoutAvailable, createAuditCheckout, parseAuditCheckout } from "./audit-checkout";
+
+import { serviceSessionCookie, type ServiceOffer } from "./services-config";
 
 const dependencies = { available: auditCheckoutAvailable, create: createAuditCheckout, limit: consumeAuditRateLimit };
-export function auditCheckoutHandler(deps = dependencies) {
+export function auditCheckoutHandler(deps = dependencies, offer: ServiceOffer = "revenue_leak_audit") {
   return async (request: NextRequest) => {
     const fail = (message: string, status: number) => NextResponse.json({ ok: false, message }, { status, headers: { "cache-control": "no-store" } });
     if (!isTrustedMutationRequest(request)) return fail("The request origin was rejected.", 403);
@@ -26,7 +28,7 @@ export function auditCheckoutHandler(deps = dependencies) {
       const payment = await deps.create(input, request.nextUrl.origin);
       if (!payment.checkoutUrl || !payment.stripeCheckoutSessionId) throw Error("CHECKOUT_UNAVAILABLE");
       const response = NextResponse.json({ url: payment.checkoutUrl }, { headers: { "cache-control": "no-store" } });
-      response.cookies.set(AUDIT_SESSION_COOKIE, payment.stripeCheckoutSessionId, {
+      response.cookies.set(serviceSessionCookie(offer), payment.stripeCheckoutSessionId, {
         httpOnly: true, secure: request.nextUrl.protocol === "https:", sameSite: "lax", path: "/", maxAge: 60 * 60 * 24 * 7,
       });
       return response;

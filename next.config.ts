@@ -39,7 +39,6 @@ const PERSONAL_TO_STUDIO: Array<[string, string]> = [
  * does their job now.
  */
 const RETIRED_STUDIO_ROUTES: Array<[string, string]> = [
-  ["/services", "/work-with-me"],
   ["/process", "/work-with-me"],
   ["/revenue-leak-audit", "/audit"],
   ["/concierge", "/work-with-me"],

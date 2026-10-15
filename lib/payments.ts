@@ -1,4 +1,5 @@
 import Stripe from "stripe";
+import { recordSubscriptionEvent } from "./subscription-events";
 import { Pool, type QueryResultRow } from "pg";
 import { sendPaidAuditEmail, type PaidAuditNotice } from "./acquisition/intake";
 
@@ -130,7 +131,7 @@ export async function createCheckout(
   origin: string,
   q: Queryable = db(),
   client = stripe(),
-  options: { productName?: string; successPath?: string; cancelPath?: string; collectName?: boolean; offer?: string } = {},
+  options: { productName?: string; successPath?: string; cancelPath?: string; collectName?: boolean; offer?: string; mode?: "payment" | "subscription" } = {},
 ) {
   const context = await getPaymentContext(proposalId, q);
   if (!context) throw Error("PROPOSAL_NOT_FOUND");
@@ -148,7 +149,7 @@ export async function createCheckout(
   try {
     const session = await client.checkout.sessions.create(
       {
-        mode: "payment",
+        mode: options.mode ?? "payment",
         customer_email: context.email || undefined,
         ...(options.collectName ? { custom_fields: [{ key: "buyer_name", label: { type: "custom" as const, custom: "Name" }, type: "text" as const }] } : {}),
         client_reference_id: proposalId,
@@ -157,6 +158,7 @@ export async function createCheckout(
             price_data: {
               currency: "usd",
               unit_amount: amount,
+              ...(options.mode === "subscription" ? { recurring: { interval: "month" as const } } : {}),
               product_data: {
                 name: options.productName ?? `${input.kind === "deposit" ? "Deposit" : "Remaining balance"}: ${context.proposalTitle}`,
               },
@@ -171,14 +173,14 @@ export async function createCheckout(
           leadId: context.leadId,
           kind: input.kind,
         },
-        payment_intent_data: {
+        ...(options.mode === "subscription" ? { subscription_data: { metadata: { offer: options.offer ?? "", paymentId: id, proposalId, leadId: context.leadId, kind: input.kind } } } : { payment_intent_data: {
           metadata: {
             paymentId: id,
             proposalId,
             leadId: context.leadId,
             kind: input.kind,
           },
-        },
+        } }),
         success_url: `${origin}${options.successPath ?? "/payment/success?session_id={CHECKOUT_SESSION_ID}"}`,
         cancel_url: `${origin}${options.cancelPath ?? `/payment/cancelled?proposal=${proposalId}`}`,
       },
@@ -257,6 +259,7 @@ export async function processStripeEvent(
       await q.query("commit");
       return { duplicate: true };
     }
+    await recordSubscriptionEvent(event, q);
     const object = event.data.object as Stripe.Checkout.Session | Stripe.Charge,
       paymentId = "metadata" in object ? object.metadata?.paymentId : undefined;
     let payment: QueryResultRow | undefined;
@@ -276,7 +279,7 @@ export async function processStripeEvent(
       );
       payment = found.rows[0];
     }
-    if (payment) {
+    if (payment && event.type !== "customer.subscription.deleted" && event.type !== "invoice.paid") {
       // Serialize summaries even when different payments belong to one proposal.
       await q.query("select id from crm_proposals where id=$1 for update", [payment.proposal_id]);
       if (
@@ -287,6 +290,9 @@ export async function processStripeEvent(
       ) {
         const session = object as Stripe.Checkout.Session;
         if (session.payment_status === "paid") {
+          if (session.mode === "subscription") {
+            if (session.metadata?.offer !== "monthly_support" || session.amount_total !== 50000 || session.currency !== "usd" || payment.amount !== 50000 || payment.stripe_checkout_session_id !== session.id || !session.subscription) throw Error("SUBSCRIPTION_CHECKOUT_MISMATCH");
+          }
           const updated = await q.query(
             "update crm_payments set status='paid',stripe_payment_intent_id=$1,paid_at=coalesce(paid_at,now()),updated_at=now() where id=$2 and status not in ('paid','refunded') returning id",
             [
@@ -296,10 +302,14 @@ export async function processStripeEvent(
               payment.id,
             ],
           );
-          if (updated.rows[0] && session.metadata?.offer === "revenue_leak_audit" &&
-              payment.amount === 25000 && payment.currency === "usd" &&
+          if (updated.rows[0] && session.mode === "subscription") {
+            const subscriptionId = typeof session.subscription === "string" ? session.subscription : session.subscription!.id;
+            await q.query("update crm_leads set name=case when name='' then $1 else name end,email=$2,internal_notes=concat_ws(E'\\n',nullif(internal_notes,''),$3::text),updated_at=now() where id=$4", [session.custom_fields?.find(field => field.key === "buyer_name")?.text?.value || session.customer_details?.name || "", session.customer_details?.email || session.customer_email || "", `Subscription started: ${subscriptionId}; $500/month for up to 5 hours`, payment.lead_id]);
+          }
+          if (updated.rows[0] && ["revenue_leak_audit", "straight_answer", "monthly_support"].includes(session.metadata?.offer || "") &&
+              payment.amount === (session.metadata?.offer === "monthly_support" ? 50000 : 25000) && payment.currency === "usd" &&
               payment.stripe_checkout_session_id === session.id) {
-            const lead = await q.query("select notes from crm_leads where id=$1 and service_interest='revenue_leak_audit'", [payment.lead_id]);
+            const lead = await q.query("select notes from crm_leads where id=$1 and service_interest=$2", [payment.lead_id, session.metadata!.offer]);
             if (lead.rows[0]) {
               // A durable per-payment reservation makes dispatch at most once,
               // including different Stripe event IDs and retries after a crash.
@@ -308,7 +318,7 @@ export async function processStripeEvent(
                 [`paid-audit:${payment.id}`],
               );
               if (reserved.rows[0]) notice = {
-                paymentId: payment.id, leadId: payment.lead_id,
+                paymentId: payment.id, leadId: payment.lead_id, offer: session.metadata!.offer,
                 bookingSubmitted: Boolean(lead.rows[0].notes),
                 name: session.custom_fields?.find(field => field.key === "buyer_name")?.text?.value || session.customer_details?.name || "",
                 email: session.customer_details?.email || session.customer_email || "",

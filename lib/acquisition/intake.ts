@@ -194,9 +194,9 @@ export async function sendLeadEmail(input: LeadInput, leadId?: string) {
   return sendInternalEmail({ subject: `${subjectPrefix}: ${input.businessName}`, text: formatLeadEmailText(input, leadId), html: formatLeadEmailHtml(input, leadId), reply_to: input.email });
 }
 
-export type PaidAuditNotice = { paymentId: string; leadId: string; bookingSubmitted: boolean; name: string; email: string };
+export type PaidAuditNotice = { paymentId: string; leadId: string; bookingSubmitted: boolean; name: string; email: string; offer?: string };
 export async function sendPaidAuditEmail(notice: PaidAuditNotice) {
-  const subject = "Paid: Revenue Leak Audit $250";
+  const subject = notice.offer === "monthly_support" ? "Paid: Monthly support retainer $500/month" : notice.offer === "straight_answer" ? "Paid: Straight Answer $250" : "Paid: Revenue Leak Audit $250";
   const crmLink = `${(process.env.NEXT_PUBLIC_SITE_URL || "https://koinophobialabs.com").replace(/\/$/, "")}/crm/leads/${encodeURIComponent(notice.leadId)}`;
   const text = `${subject}\n\nCRM: ${crmLink}\nBooking form submitted: ${notice.bookingSubmitted ? "Yes" : "No"}\nName: ${notice.name || "Not provided"}\nEmail: ${notice.email || "Not provided"}`;
   return sendInternalEmail({ subject, text }, `paid-audit/${notice.paymentId}`);

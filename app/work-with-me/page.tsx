@@ -1,3 +1,4 @@
+import { freeStraightAnswerAvailable } from "@/lib/acquisition/services-config";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
@@ -12,8 +13,8 @@ import { STUDIO_URL, socialCard } from "@/lib/seo";
 
 const headline = "You have the spec. I'll ship the app.";
 const description = "Bring your spec, Figma or prototype. I'll take it from architecture to App Store release.";
-const reviewHref = "/start?offer=readiness";
-const reviewLabel = "Get a free Straight Answer";
+const reviewHref = freeStraightAnswerAvailable() ? "/start?offer=readiness" : "/services#straight-answer";
+const reviewLabel = freeStraightAnswerAvailable() ? "Get a free Straight Answer" : "Straight Answer · $250";
 
 export const metadata: Metadata = {
   title: "PRD → Release",
@@ -71,7 +72,7 @@ export default function WorkWithMePage() {
           <h2 id="review-title" className="s">Start with a Straight Answer.</h2>
           <p className="lede s">Send the spec. Get a straight answer.</p>
           <p className="s">You get a short written review: what&apos;s buildable now, what&apos;s missing, the major risks, and what it takes to ship.</p>
-          <p className="s"><strong>Free for my first five founders.</strong></p>
+          <p className="s"><strong>{freeStraightAnswerAvailable() ? "Free for my first five founders." : "Straight Answer · $250"}</strong></p>
           <p className="s">“Not ready yet” is a valid result.</p>
         </section>
 

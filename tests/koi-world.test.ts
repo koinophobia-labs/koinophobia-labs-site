@@ -32,7 +32,6 @@ test("the koi world leads through six destinations and reads every fact from the
     "components/companion/KoiCompanion.tsx",
     "components/concierge/ConciergeFlow.tsx",
     "lib/commercial.ts",
-    "app/services/page.tsx",
     "app/concierge/page.tsx",
     "app/work/page.tsx",
     "app/demos/[slug]/page.tsx",

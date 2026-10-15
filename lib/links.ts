@@ -1,5 +1,7 @@
+import { CONTACT_EMAIL } from "./contact";
+
 export const LINKS = {
-  email: "mailto:koinophobia999@gmail.com",
+  email: CONTACT_EMAIL ? `mailto:${CONTACT_EMAIL}` : "/start",
   site: "https://koinophobia-labs.vercel.app",
   labs: "https://koinophobialabs.com",
   instagram: "https://instagram.com/b.la.ke7",

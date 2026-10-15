@@ -1,3 +1,4 @@
+import { freeStraightAnswerAvailable } from "@/lib/acquisition/services-config";
 import type { Metadata } from "next";
 import Masthead from "@/components/site/Masthead";
 import SiteFooter from "@/components/site/SiteFooter";
@@ -36,13 +37,13 @@ export default async function StartPage({ searchParams }: { searchParams: Promis
                 <>Two paragraphs are plenty. You&apos;ll hear back {replyPromise}, and the reply might be a question, or &ldquo;don&apos;t build this yet.&rdquo;</>
               )}
             </p>
-            {readiness ? <p className="s"><strong>Free for my first five founders.</strong></p> : null}
+            {readiness ? <p className="s"><strong>{freeStraightAnswerAvailable() ? "Free for my first five founders." : "Straight Answer · $250"}</strong></p> : null}
             <p className="s" style={{ "--i": 3 } as React.CSSProperties}>
               {business ? <Link href={intakeHref(source, "readiness", false)}>Founder with a PRD? Use the Straight Answer path.</Link> : <Link href={intakeHref(source, "", true)}>Running a business? Use the business intake.</Link>}
             </p>
           </div>
           <div className="s" style={{ "--i": 2 } as React.CSSProperties}>
-            <StartForm key={`${source}:${offer}:${business}`} readiness={readiness} source={source} offer={offer} business={business} entry={business ? "business" : readiness ? "readiness" : "start"} />
+            {readiness && !freeStraightAnswerAvailable() ? <Link className="btn btn--primary" href="/services#straight-answer">Pay $250 for a Straight Answer</Link> : <StartForm key={`${source}:${offer}:${business}`} readiness={readiness} source={source} offer={offer} business={business} entry={business ? "business" : readiness ? "readiness" : "start"} />}
           </div>
         </section>
         <SiteFooter />
