@@ -7,7 +7,6 @@ import {
   INTAKE_RATE_WINDOW_MS,
   intakeFormValue,
   intakeOutcome,
-  leadMailto,
   sendLeadEmail,
   validateIntake,
 } from "@/lib/acquisition/intake";
@@ -46,7 +45,7 @@ export async function POST(request: NextRequest) {
   const idempotencyKey = resolveIntakeIdempotencyKey({
     conciergeSessionId: input.concierge?.sessionId,
     suppliedKey: request.headers.get("idempotency-key"),
-    content: { email: input.email, businessName: input.businessName, biggestProblem: input.biggestProblem },
+    content: { email: input.email, businessName: input.businessName, biggestProblem: input.biggestProblem, source: input.source, serviceInterest: input.serviceInterest },
     nowMs: Date.now(),
   })
   let saved = false;
@@ -61,7 +60,7 @@ export async function POST(request: NextRequest) {
   const delivery = emailThisSubmission ? await sendLeadEmail(input, leadId) : { ok: true as const };
   if (!emailThisSubmission) log("email_skipped_duplicate", requestId, { leadId });
   const outcome = intakeOutcome(saved, delivery.ok);
-  if (!outcome.ok) { log("persistence_failed", requestId, { providerAccepted: delivery.ok }); return failure(outcome.message, outcome.status, requestId, { mailto: leadMailto(input) }); }
+  if (!outcome.ok) { log("persistence_failed", requestId, { providerAccepted: delivery.ok }); return failure(outcome.message, outcome.status, requestId); }
   if (!delivery.ok) log("provider_failed", requestId, { reason: delivery.reason, status: "status" in delivery ? delivery.status : undefined, saved, source: input.source });
   else log("accepted", requestId, { providerAccepted: true, providerId: "providerId" in delivery ? delivery.providerId : undefined, emailSkipped: !emailThisSubmission, saved, created, source: input.source });
   return NextResponse.json({ ok: true, requestId, emailSent: outcome.emailSent, message: outcome.message }, { headers: { "x-request-id": requestId, "cache-control": "no-store", "x-content-type-options": "nosniff" } });

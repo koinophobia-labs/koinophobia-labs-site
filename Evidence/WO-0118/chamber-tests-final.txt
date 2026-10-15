@@ -1,0 +1,18 @@
+✔ QR attribution survives hub, audit, intake, and arbitrary encoded sources (0.502167ms)
+✔ audit form validates contact and budget and preserves source and offer (0.638375ms)
+✔ founder and readiness paths retain source without imposing business fields (0.086375ms)
+✔ source and offer reach database columns and survive a read (2.719459ms)
+✔ different source or offer cannot silently deduplicate onto another inquiry (0.15775ms)
+✔ manual quick add accepts phone-only, defaults Chamber, and rejects bad fields (0.342292ms)
+✔ CRM source and due filters bind source and use Chicago day boundaries (1.027417ms)
+✔ quick add rejects anonymous requests before writing (2.072375ms)
+✔ canonical audit QR route is no longer redirected to the founder offer (0.144667ms)
+✔ quick add rejects cross-site requests even with an administrator session (0.9025ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 10
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1209.42175

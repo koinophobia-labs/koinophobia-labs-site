@@ -1,0 +1,99 @@
+[
+  {
+    "route": "/work-with-us?src=chamber",
+    "device": "desktop",
+    "colorScheme": "light",
+    "status": 200,
+    "overflow": false
+  },
+  {
+    "route": "/audit?src=chamber",
+    "device": "desktop",
+    "colorScheme": "light",
+    "status": 200,
+    "overflow": false
+  },
+  {
+    "route": "/",
+    "device": "desktop",
+    "colorScheme": "light",
+    "status": 200,
+    "overflow": false
+  },
+  {
+    "route": "/work-with-us?src=chamber",
+    "device": "phone",
+    "colorScheme": "light",
+    "status": 200,
+    "overflow": false
+  },
+  {
+    "route": "/audit?src=chamber",
+    "device": "phone",
+    "colorScheme": "light",
+    "status": 200,
+    "overflow": false
+  },
+  {
+    "route": "/",
+    "device": "phone",
+    "colorScheme": "light",
+    "status": 200,
+    "overflow": false
+  },
+  {
+    "route": "/work-with-us?src=chamber",
+    "device": "desktop",
+    "colorScheme": "dark",
+    "status": 200,
+    "overflow": false
+  },
+  {
+    "route": "/audit?src=chamber",
+    "device": "desktop",
+    "colorScheme": "dark",
+    "status": 200,
+    "overflow": false
+  },
+  {
+    "route": "/",
+    "device": "desktop",
+    "colorScheme": "dark",
+    "status": 200,
+    "overflow": false
+  },
+  {
+    "route": "/work-with-us?src=chamber",
+    "device": "phone",
+    "colorScheme": "dark",
+    "status": 200,
+    "overflow": false
+  },
+  {
+    "route": "/audit?src=chamber",
+    "device": "phone",
+    "colorScheme": "dark",
+    "status": 200,
+    "overflow": false
+  },
+  {
+    "route": "/",
+    "device": "phone",
+    "colorScheme": "dark",
+    "status": 200,
+    "overflow": false
+  },
+  {
+    "test": "QR → audit intake → intercepted synthetic submission",
+    "passed": true,
+    "networkWrite": false
+  },
+  {
+    "test": "Founder readiness branch remains reachable",
+    "passed": true
+  },
+  {
+    "test": "Private quick add redirects anonymous browser to login",
+    "passed": true
+  }
+]

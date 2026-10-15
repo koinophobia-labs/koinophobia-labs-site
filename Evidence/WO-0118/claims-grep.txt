@@ -1,0 +1,131 @@
+app/blake/page.tsx:13:    "Laid off in July, five apps on the App Store now. The person who designs, builds, tests, and ships everything at Koinophobia Labs.",
+app/blake/page.tsx:45:            <img src="/blake/portrait-2026-09-14.jpg" alt="Blake Taylor on a bridge over the Chicago River" width={736} height={920} />
+app/blake/page.tsx:51:            <h1 id="blake-title" className="s" style={{ "--i": 1 } as React.CSSProperties}>
+app/blake/page.tsx:53:            </h1>
+app/blake/page.tsx:54:            <p className="voice s" style={{ "--i": 2 } as React.CSSProperties}>
+app/blake/page.tsx:58:            <p className="lede s" style={{ "--i": 3 } as React.CSSProperties}>
+app/blake/page.tsx:61:              In July 2026 the role ended. I had a list of tools I&apos;d wished existed for years, a
+app/blake/page.tsx:65:            <div className="rail s" style={{ "--i": 4 } as React.CSSProperties}>
+app/blake/page.tsx:81:          <h2 id="method-title" className="s" style={{ "--i": 1 } as React.CSSProperties}>
+app/blake/page.tsx:83:          </h2>
+app/blake/page.tsx:87:                <h3>{rule.title}</h3>
+app/blake/page.tsx:96:          <h2 id="ai-title" className="s" style={{ "--i": 1 } as React.CSSProperties}>
+app/blake/page.tsx:98:          </h2>
+app/blake/page.tsx:99:          <p className="lede s" style={{ "--i": 2 } as React.CSSProperties}>
+app/blake/page.tsx:107:          <h2 id="contact-title" className="s">
+app/blake/page.tsx:109:          </h2>
+app/blake/page.tsx:110:          <div className="rail rail--plain s" style={{ "--i": 1 } as React.CSSProperties}>
+app/blake/page.tsx:115:              <b>GitHub</b> <ArrowUpRight size={12} aria-hidden="true" />
+app/blake/page.tsx:118:              <b>Instagram</b> <ArrowUpRight size={12} aria-hidden="true" />
+app/blake/page.tsx:121:              <b>LinkedIn</b> <ArrowUpRight size={12} aria-hidden="true" />
+app/blake/page.tsx:127:          <div className="actions s" style={{ "--i": 2 } as React.CSSProperties}>
+app/blake/page.tsx:129:              Work with me <ArrowRight size={15} aria-hidden="true" />
+app/page.tsx:51:    "--band-desktop": `${destination.band.desktop * 100}svh`,
+app/page.tsx:52:    "--band-mobile": `${destination.band.mobile * 100}svh`,
+app/page.tsx:60: * document, sections 3 and 4.
+app/page.tsx:65:  preload(CLIPS[DESTINATIONS[0].clip].poster, { as: "image", fetchPriority: "high" });
+app/page.tsx:84:            aria-current={destination.index === 0 ? "location" : undefined}
+app/page.tsx:94:        {/* ---------------------------------------------------- 00 Surface */}
+app/page.tsx:95:        <section className="dest dest--surface" id="surface" style={bandStyle(0)} aria-labelledby="surface-title">
+app/page.tsx:97:            <div className="dest__inner" id="surface-copy" tabIndex={-1}>
+app/page.tsx:100:                <h1 id="surface-title">Nothing here stayed an idea.</h1>
+app/page.tsx:102:                  Koinophobia Labs is Blake Taylor, building apps, websites, and AI tools
+app/page.tsx:103:                  from first prototype to release. Five of those apps are on the App Store,
+app/page.tsx:110:                    See what shipped <ArrowDown size={16} aria-hidden="true" />
+app/page.tsx:113:                    Work with Blake <ArrowRight size={16} aria-hidden="true" />
+app/page.tsx:118:                    <dt>{shippedProducts.length} apps</dt>
+app/page.tsx:122:                    <dt>1 builder</dt>
+app/page.tsx:123:                    <dd>0 employees</dd>
+app/page.tsx:132:                  <h2>Find what’s slowing the business down.</h2>
+app/page.tsx:133:                  <p>Software, AI systems, and a $250 Revenue Leak Audit with a written plan.</p>
+app/page.tsx:141:        {/* ---------------------------------------------------- 01 Shipped */}
+app/page.tsx:142:        <section className="dest dest--shipped" id="shipped" style={bandStyle(1)} aria-labelledby="shipped-title">
+app/page.tsx:146:                <b>01</b> Shipped · on the App Store now
+app/page.tsx:148:              <h2 id="shipped-title">Built by one person. Downloadable by anyone.</h2>
+app/page.tsx:151:                Explore the apps and see them in action.
+app/page.tsx:160:                  Explore the apps{" "}
+app/page.tsx:161:                  <ArrowUpRight size={15} aria-hidden="true" />
+app/page.tsx:168:        {/* -------------------------------------------------------- 02 Lab */}
+app/page.tsx:169:        <section className="dest dest--lab" id="lab" style={bandStyle(2)} aria-labelledby="lab-title">
+app/page.tsx:173:                <b>02</b> The lab · experiments with receipts
+app/page.tsx:175:              <h2 id="lab-title">The part of the studio that isn&apos;t finished, on purpose.</h2>
+app/page.tsx:186:                  Open the lab <ArrowUpRight size={15} aria-hidden="true" />
+app/page.tsx:193:        {/* ------------------------------------------------------ 03 Blake */}
+app/page.tsx:194:        <section className="dest dest--blake" id="blake" style={bandStyle(3)} aria-labelledby="blake-title">
+app/page.tsx:198:                <b>03</b> The builder
+app/page.tsx:204:                    src="/blake/portrait-2026-09-14.jpg"
+app/page.tsx:206:                    width={736}
+app/page.tsx:207:                    height={920}
+app/page.tsx:213:                  <h2 id="blake-title">Laid off in July. Five apps on the App Store now.</h2>
+app/page.tsx:218:                    role ended in July 2026 he started building the tools he wished he&apos;d had,
+app/page.tsx:229:                    More about Blake <ArrowUpRight size={15} aria-hidden="true" />
+app/page.tsx:237:        {/* ------------------------------------------------- 04 Work with me */}
+app/page.tsx:238:        <section className="dest dest--work" id="work" style={bandStyle(4)} aria-labelledby="work-title">
+app/page.tsx:242:                <b>04</b> Hire the studio
+app/page.tsx:244:              <h2 id="work-title">Have an idea that deserves to exist? Bring it.</h2>
+app/page.tsx:249:                    <h3>{shape.title}</h3>
+app/page.tsx:269:                  Start a project <ArrowRight size={16} aria-hidden="true" />
+app/page.tsx:272:                  How engagements work <ArrowUpRight size={15} aria-hidden="true" />
+app/page.tsx:279:        {/* ------------------------------------------------------ 05 Start */}
+app/page.tsx:280:        <section className="dest dest--start" id="start" style={bandStyle(5)} aria-labelledby="start-title">
+app/page.tsx:284:                <b>05</b> Start a project
+app/page.tsx:286:              <h2 id="start-title">Tell me the idea. I&apos;ll tell you what it takes.</h2>
+app/page.tsx:294:                  Start a project <ArrowRight size={18} aria-hidden="true" />
+app/page.tsx:298:                Ask Blake a question <ArrowUpRight size={14} aria-hidden="true" />
+app/work-with-me/page.tsx:26:// Five listings verified in Evidence/WO-0118/apple-lookup.json, 2026-10-15.
+app/work-with-me/page.tsx:28:  { slug: "career-forge", name: "Way In: Resume & Job Search", platforms: "iOS", url: "https://apps.apple.com/us/app/way-in-resume-job-search/id6807942376", version: wayInRelease.version },
+app/work-with-me/page.tsx:29:  { slug: "trendi", name: "Trendi: Content Coach", platforms: "iOS", url: "https://apps.apple.com/us/app/trendi-content-coach/id6776299336", version: trendiRelease.version },
+app/work-with-me/page.tsx:30:  { slug: "forget-about-it", name: "ForgetAboutIt", platforms: "iOS + watchOS", url: "https://apps.apple.com/us/app/forgetaboutit/id6804360983", version: forgetRelease.version },
+app/work-with-me/page.tsx:31:  { slug: "old-dog", name: "Old Dog", platforms: "macOS", url: "https://apps.apple.com/us/app/old-dog/id6813966822", version: oldDogRelease.version },
+app/work-with-me/page.tsx:32:  { slug: "preaching-to-the-choir", name: "Preaching to the Choir", platforms: "iOS / iPadOS", url: "https://apps.apple.com/us/app/preaching-to-the-choir/id6808442357", version: preachingRelease.version },
+app/work-with-me/page.tsx:52:          <h1 className="s" style={{ "--i": 1 } as React.CSSProperties}>{headline}</h1>
+app/work-with-me/page.tsx:53:          <p className="lede s" style={{ "--i": 2 } as React.CSSProperties}>{description}</p>
+app/work-with-me/page.tsx:54:          <div className="actions s" style={{ "--i": 3 } as React.CSSProperties}>
+app/work-with-me/page.tsx:56:              {reviewLabel} <ArrowRight size={15} aria-hidden="true" />
+app/work-with-me/page.tsx:64:          <h2 id="fit-title" className="s">You’ve defined it. Now you need it built.</h2>
+app/work-with-me/page.tsx:71:          <h2 id="review-title" className="s">Start with a Straight Answer.</h2>
+app/work-with-me/page.tsx:80:          <h2 id="how-title" className="s">From your spec to a shipped product.</h2>
+app/work-with-me/page.tsx:81:          <ol className="pblocks" style={{ listStyle: "none", padding: 0 }}>
+app/work-with-me/page.tsx:84:                <span className="k">{String(index + 1).padStart(2, "0")}</span>
+app/work-with-me/page.tsx:85:                <h3>{step.title}</h3>
+app/work-with-me/page.tsx:94:          <h2 id="proof-title" className="s">Five apps. Live on the App Store.</h2>
+app/work-with-me/page.tsx:106:                  appStore: { url: listing.url, version: listing.version, verifiedAt: wayInRelease.verifiedAt, priceLine: "" },
+app/work-with-me/page.tsx:115:          <h2 id="scope-title" className="s">A fixed price. A written scope.</h2>
+app/work-with-me/page.tsx:121:          <h2 id="end-title" className="s">Send the spec. Get a straight answer.</h2>
+app/work-with-me/page.tsx:124:              {reviewLabel} <ArrowRight size={16} aria-hidden="true" />
+app/start/page.tsx:27:              <b>{business ? offer === "audit" ? "Revenue Leak Audit · $250" : "Work With Us" : readiness ? "Straight Answer" : "Start a project"}</b>
+app/start/page.tsx:29:            <h1 id="start-title" className="s" style={{ "--i": 1 } as React.CSSProperties}>
+app/start/page.tsx:31:            </h1>
+app/start/page.tsx:32:            <p className="lede s" style={{ "--i": 2 } as React.CSSProperties}>
+app/start/page.tsx:40:            <p className="s" style={{ "--i": 3 } as React.CSSProperties}>
+app/start/page.tsx:44:          <div className="s" style={{ "--i": 2 } as React.CSSProperties}>
+app/shipped/page.tsx:15:    "Trendi, Forget About It, Way In, Old Dog, and Preaching to the Choir: five apps built by one person, on the App Store now, with what each one can't do yet.",
+app/shipped/page.tsx:17:  openGraph: { url: `${STUDIO_URL}/shipped`, title: "Shipped · Koinophobia Labs", images: [socialCard("Five apps. One builder. On the App Store now.", "Shipped")] },
+app/shipped/page.tsx:30:          <h1 className="s" style={{ "--i": 1 } as React.CSSProperties}>
+app/shipped/page.tsx:31:            Five apps. One builder. On the App Store now.
+app/shipped/page.tsx:32:          </h1>
+app/shipped/page.tsx:33:          <p className="lede s" style={{ "--i": 2 } as React.CSSProperties}>
+app/shipped/page.tsx:46:          <h2 id="shipped-end" className="s">
+app/shipped/page.tsx:48:          </h2>
+app/shipped/page.tsx:49:          <p className="lede s" style={{ "--i": 1 } as React.CSSProperties}>
+app/shipped/page.tsx:50:            The same pipeline is for hire: native Apple apps, working prototypes, and AI features
+app/shipped/page.tsx:53:          <div className="actions s" style={{ "--i": 2 } as React.CSSProperties}>
+app/shipped/page.tsx:55:              Work with me <ArrowRight size={15} aria-hidden="true" />
+app/work-with-us/page.tsx:19:  return <div className="site" data-motion-shell><Masthead current="/work-with-us" /><main className="shell page b2b">
+app/work-with-us/page.tsx:20:    <section className="b2b-hero"><p className="k"><b>Work With Us</b> · Chicago owners & operators</p><h1>{BUSINESS_POSITIONING}</h1>
+app/work-with-us/page.tsx:23:      <p className="b2b-note">Revenue Leak Audit · $250 paid upfront · <Link href={`/audit?${new URLSearchParams({ src: source })}`}>See what’s included →</Link></p>
+app/work-with-us/page.tsx:25:    <section className="b2b-section"><p className="k">The work starts here</p><h2>Where is something slipping?</h2><div className="b2b-grid">{problems.map(([title, body], i) => <article className="b2b-card" key={title}><span className="b2b-number">0{i + 1}</span><h3>{title}</h3><p>{body}</p></article>)}</div></section>
+app/work-with-us/page.tsx:26:    <section className="b2b-section"><p className="k">A clear next step</p><h2>Start small. Build what’s worth building.</h2><div className="b2b-ladder">
+app/work-with-us/page.tsx:27:      {[["Revenue Leak Audit", "$250", "A 45-minute call, a written plan within 7 days of the call, and a results walkthrough."], ["Small projects", "Quoted after the audit", "Implement the agreed quick wins with a fixed price and written scope."], ["Custom software or AI systems", "By proposal", "Build around your process: an internal tool, portal, app, or automation."], ["Ongoing support", "Monthly retainer, scoped", "Support and improve what was built, when ongoing help makes sense."]].map(([name, price, detail], i) => <article key={name}><span className="b2b-number">0{i + 1}</span><div><h3>{name}</h3><p>{detail}</p></div><strong>{price}</strong></article>)}
+app/work-with-us/page.tsx:29:    <section className="b2b-section"><p className="k">Proof you can open</p><h2>Five shipped apps. One builder.</h2><p>These are the studio’s own products, live on the App Store.</p><div className="b2b-proof">{["career-forge", "trendi", "forget-about-it", "old-dog", "preaching-to-the-choir"].map(slug => { const app = shippedProducts.find(p => p.slug === slug)!; return <a key={slug} href={app.appStore!.url} target="_blank" rel="noreferrer"><strong>{slug === "career-forge" ? "Way In" : slug === "forget-about-it" ? "Forget About It" : app.name}</strong><span>View on the App Store ↗</span></a>; })}</div></section>
+app/work-with-us/page.tsx:30:    <section className="b2b-section b2b-close"><h2>Tell Blake what keeps getting delayed.</h2><p>Use the form to request an audit or ask a question. Blake will follow up to confirm fit and arrange a time.</p><div className="actions"><Link className="btn btn--primary" href={intakeHref(source, "audit")}>Book a Revenue Leak Audit</Link><Link className="btn" href={intakeHref(source)}>Ask a question</Link></div><p>Building a new product from a spec? <Link href="/work-with-me">PRD → Release for founders →</Link></p></section>
+app/audit/page.tsx:8:export const metadata: Metadata = { title: "Revenue Leak Audit · $250", description: "A 45-minute call and a written plan within 7 days: find gaps in leads, follow-ups, scheduling, quoting, invoicing, and admin.", alternates: { canonical: `${STUDIO_URL}/audit` } };
+app/audit/page.tsx:19: return <div className="site" data-motion-shell><Masthead current="/work-with-us"/><main className="shell page b2b">
+app/audit/page.tsx:20:  <section className="b2b-hero"><p className="k"><b>Revenue Leak Audit</b> · Chicago businesses</p><h1>Find the gaps.<br/>Leave with a plan.</h1><p className="lede">Find where leads, follow-ups, scheduling, quoting, invoicing, and admin are slipping. Get a written plan with the quick wins first.</p><p className="b2b-price">$250 <span>paid upfront · one location or service line</span></p><div className="actions"><Link className="btn btn--primary" href={intakeHref(source, "audit")}>Book a Revenue Leak Audit</Link><Link className="btn" href={intakeHref(source)}>Ask a question</Link>{AUDIT_PAYMENT_URL ? <a className="btn" href={AUDIT_PAYMENT_URL}>Pay $250</a> : null}</div><p className="b2b-note">Request an audit through the form. Blake will confirm fit, arrange payment, and agree a call time with you.</p></section>
+app/audit/page.tsx:21:  <section className="b2b-section"><p className="k">Who it helps</p><h2>Busy, but something’s slipping.</h2><p className="lede">For owners and operators of Chicago service businesses, shops, and studios with leads to answer, appointments to book, quotes to send, or data to re-type.</p><p>Start with one business location or one service line. A new product idea? <Link href="/work-with-me">Use the founder path →</Link></p></section>
+app/audit/page.tsx:22:  <section className="b2b-section"><p className="k">How it works</p><h2>A conversation. Evidence. Priorities.</h2><div className="b2b-grid">
+app/audit/page.tsx:23:   {[["01", "Intake & review", "Pay $250 upfront, then answer a short intake. Blake reviews your public website, business profile, booking or contact path, and the context you share."], ["02", "45-minute discovery call", "Walk through how an inquiry becomes paid work and where repetitive admin gets in the way. Aim to book within about 5 business days of payment, subject to both calendars."], ["03", "Written plan within 7 days", "Within 7 days of the call, receive your Revenue Leak Report as a PDF: evidence, priorities, quick wins, and estimated impact."], ["04", "30-minute results call", "Walk through the plan and ask questions within a few days of delivery. Decide what to do yourself, with your vendor, or with the studio."]].map(([n, title, body]) => <article className="b2b-card" key={n}><span className="b2b-number">{n}</span><h3>{title}</h3><p>{body}</p></article>)}
+app/audit/page.tsx:25:  <section className="b2b-section"><p className="k">Yours to keep</p><h2>A useful written plan.</h2><ul className="b2b-list"><li>A map of how a lead becomes a customer today.</li><li>Findings across response time, follow-up, scheduling, data entry, quoting and invoicing, review requests, website conversion, admin, and reporting.</li><li>Prioritized leaks with evidence, proposed fixes, and effort.</li><li>Quick wins for the next two weeks and a 30 / 60 / 90-day plan.</li><li>Estimated impact ranges, with assumptions and missing information made clear.</li><li>Next-step options, whoever does the implementation.</li></ul></section>
+app/audit/page.tsx:26:  <section className="b2b-section"><p className="k">The boundary</p><h2>What’s excluded</h2><p>Implementation, paid tools, and ad spend are separate. This is not a financial, tax, legal, accounting, compliance, IT-security, or penetration-test audit. It does not promise revenue or savings, and it does not require access to passwords or admin accounts.</p></section>
+app/audit/page.tsx:27:  <section className="b2b-section"><h2>Questions before you start</h2><div className="b2b-faq">{faq.map(([question, answer]) => <details key={question}><summary>{question}</summary><p>{answer}</p></details>)}</div></section>
+app/audit/page.tsx:28:  <section className="b2b-section b2b-close"><h2>Start with the process that needs attention.</h2><div className="actions"><Link className="btn btn--primary" href={intakeHref(source, "audit")}>Book a Revenue Leak Audit</Link><Link className="btn" href={intakeHref(source)}>Ask a question</Link></div><p><Link href={`/work-with-us?${new URLSearchParams({ src: source })}`}>Explore the full offer ladder →</Link></p></section><SiteFooter/>

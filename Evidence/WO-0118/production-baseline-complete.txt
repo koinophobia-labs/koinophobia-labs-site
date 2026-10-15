@@ -1,0 +1,101 @@
+✔ every product carries verification metadata (1.469417ms)
+✖ no product status has gone stale for its stage (6.87325ms)
+✔ every stage has a freshness budget, and fast stages are tight (0.325833ms)
+✔ a stale status produces an actionable message (0.397041ms)
+✔ freshness is never auto-refreshed (0.699708ms)
+✔ a status owner is recorded (0.148667ms)
+✔ published dates are literals, never read from the clock (0.905083ms)
+✔ stage and reach never contradict each other (0.358125ms)
+✔ the stage ladder never collapses distinct release states (0.232625ms)
+✔ every stage maps to a display family, and the family never upgrades a stage (1.096333ms)
+✔ the front office is in the universe, honestly (0.180458ms)
+✔ TestFlight claims require TestFlight evidence (0.324333ms)
+✔ You Know Ball does not claim it was never uploaded (0.252041ms)
+✔ Trendi reflects its verified public release while the dated log preserves beta history (0.395125ms)
+✔ Career Forge does not claim checkout is closed, or that anyone bought (0.169583ms)
+✔ unsourceable statistics stay out of published copy (1.82675ms)
+✔ every product states what is not true yet (1.999417ms)
+✔ internal-only products offer nothing to click (0.247041ms)
+✔ no product uses launch language it cannot back (0.249666ms)
+✔ no product invents users, revenue, or testimonials (0.72925ms)
+✔ product slugs are unique and every one resolves (0.313041ms)
+✔ every product action link is usable by a stranger (0.470334ms)
+✔ no note publishes without BOTH gates (0.0865ms)
+✔ every first-person note is currently held for review (0.037542ms)
+✔ held notes are preserved, never emptied (0.055292ms)
+✔ the review file still covers every note (0.122542ms)
+✔ published field notes are specific, dated, and resolvable (0.045709ms)
+✔ every experiment reports what it showed (0.029167ms)
+✖ Trendi privacy and support routes are publication-ready and discoverable (25.265916ms)
+✔ every shipped app's legal pages exist and are in the sitemap (39.556416ms)
+ℹ tests 30
+ℹ suites 0
+ℹ pass 28
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 159.610917
+
+✖ failing tests:
+
+test at tests/dev-universe.test.ts:2:2329
+✖ no product status has gone stale for its stage (6.87325ms)
+  AssertionError [ERR_ASSERTION]: STALE STATUS: Teacher's Pet
+    stage:        local (Local development)
+    verified at:  2026-09-13 — 32 days ago
+    allowed age:  30 days for this stage
+    what to do:   re-check Teacher's Pet against release artifacts
+                  (archives, Apple delivery logs, live HTTP, signing),
+                  update status/evidence if it moved, then set
+                  verifiedAt to today in lib/dev/universe.ts.
+    do NOT just bump the date — the date is a claim that someone looked.
+  
+  STALE STATUS: KOI
+    stage:        local (Local development)
+    verified at:  2026-09-13 — 32 days ago
+    allowed age:  30 days for this stage
+    what to do:   re-check KOI against release artifacts
+                  (archives, Apple delivery logs, live HTTP, signing),
+                  update status/evidence if it moved, then set
+                  verifiedAt to today in lib/dev/universe.ts.
+    do NOT just bump the date — the date is a claim that someone looked.
+  + actual - expected
+  
+  + [
+  +   "Teacher's Pet",
+  +   'KOI'
+  + ]
+  - []
+  
+      at TestContext.<anonymous> (/private/tmp/WO-0118-baseline/tests/dev-universe.test.ts:66:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1306:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:897:18)
+      at Test.postRun (node:internal/test_runner/test:1447:19)
+      at Test.run (node:internal/test_runner/test:1372:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: [ "Teacher's Pet", 'KOI' ],
+    expected: [],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at tests/legal-pages.test.ts:2:1161
+✖ Trendi privacy and support routes are publication-ready and discoverable (25.265916ms)
+  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+  
+    assert.ok(privacy.includes("every third party with whom Trendi shares"))
+  
+      at TestContext.<anonymous> (/private/tmp/WO-0118-baseline/tests/legal-pages.test.ts:23:10)
+      at async Test.run (node:internal/test_runner/test:1313:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }

@@ -39,7 +39,9 @@ function replyWeekday() {
  * (origin check, honeypot, rate limit, redaction, idempotency, lead store,
  * email) as the "start" variant. The draft survives a reload until sent.
  */
-export default function StartForm({ entry = "start", readiness = false }: { entry?: string; readiness?: boolean }) {
+export default function StartForm({ entry = "start", readiness = false, source = "", offer = "", business = false }: { entry?: string; readiness?: boolean; source?: string; offer?: string; business?: boolean }) {
+  const audit = offer === "audit";
+  const draftKey = `${DRAFT_KEY}:${business ? "business" : "founder"}:${offer}`;
   const [state, setState] = useState<State>({ status: "idle" });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const formRef = useRef<HTMLFormElement>(null);
@@ -49,7 +51,7 @@ export default function StartForm({ entry = "start", readiness = false }: { entr
     const form = formRef.current;
     if (!form) return;
     try {
-      const draft = JSON.parse(localStorage.getItem(DRAFT_KEY) || "null");
+      const draft = JSON.parse(localStorage.getItem(draftKey) || "null");
       if (draft) {
         for (const [name, value] of Object.entries(draft)) {
           const control = form.elements.namedItem(name);
@@ -59,7 +61,7 @@ export default function StartForm({ entry = "start", readiness = false }: { entr
     } catch {
       /* no draft */
     }
-  }, []);
+  }, [draftKey]);
 
   const saveDraft = () => {
     const form = formRef.current;
@@ -71,7 +73,7 @@ export default function StartForm({ entry = "start", readiness = false }: { entr
     try {
       const data = new FormData(form);
       localStorage.setItem(
-        DRAFT_KEY,
+        draftKey,
         JSON.stringify({ idea: data.get("idea"), today: data.get("today"), email: data.get("email"), name: data.get("name") }),
       );
     } catch {
@@ -87,8 +89,11 @@ export default function StartForm({ entry = "start", readiness = false }: { entr
     const idea = String(data.get("idea") || "").trim();
     const email = String(data.get("email") || "").trim();
     const next: Record<string, string> = {};
-    if (idea.length < 20) next.idea = "A sentence or two is enough, but it needs to be more than a title.";
+    if (idea.length < (business ? 5 : 20)) next.idea = "A sentence or two is enough, but it needs to be more than a title.";
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) next.email = "That doesn't look like an email address.";
+    if (business && !String(data.get("businessName") || "").trim()) next.businessName = "Enter your company.";
+    if (business && !String(data.get("role") || "").trim()) next.role = "Enter your role.";
+    if (business && data.get("preferredContact") !== "email" && !String(data.get("phone") || "").trim()) next.phone = "Enter a phone number for calls or texts.";
     setErrors(next);
     if (Object.keys(next).length) {
       track("inquiry_fail", { reason: "validation" });
@@ -100,12 +105,11 @@ export default function StartForm({ entry = "start", readiness = false }: { entr
     body.set("name", String(data.get("name") || "").trim() || "Not given");
     body.set("email", email);
     body.set("biggestProblem", idea);
-    if (readiness) {
-      // Keep the offer in existing CRM fields; readiness needs no schema migration.
-      body.set("notes", "Offer: Straight Answer (offer=readiness)");
-      body.set("serviceInterest", "Straight Answer");
-    }
-    body.set("desiredOutcome", String(data.get("today") || "").trim());
+    body.set("src", source);
+    body.set("offer", offer || (readiness ? "readiness" : ""));
+    body.set("audience", business ? "business" : "founder");
+    for (const key of ["businessName", "role", "preferredContact", "phone"]) body.set(key, String(data.get(key) || "").trim());
+    body.set(business ? "currentTools" : "desiredOutcome", String(data.get("today") || "").trim());
     body.set("timeline", String(data.get("when") || "Not sure yet"));
     body.set("budgetRange", String(data.get("budget") || "Let's talk"));
     body.set("companyWebsite", String(data.get("companyWebsite") || ""));
@@ -113,22 +117,24 @@ export default function StartForm({ entry = "start", readiness = false }: { entr
     try {
       response = await fetch("/api/intake", { method: "POST", body });
     } catch {
-      setState({ status: "error", message: "That didn't send. Nothing was lost; try again, or email koinophobia999@gmail.com." });
+      setState({ status: "error", message: "That didn’t send. Your entries are still here; please try again." });
       track("inquiry_fail", { reason: "server" });
       return;
     }
     if (response.status === 429) {
-      setState({ status: "error", message: "Two in a row is plenty. Email if it's urgent: koinophobia999@gmail.com." });
+      setState({ status: "error", message: "Too many attempts. Please wait 10 minutes and try again." });
       track("inquiry_fail", { reason: "rate_limit" });
       return;
     }
     if (!response.ok) {
-      setState({ status: "error", message: "That didn't send. Nothing was lost; try again, or email koinophobia999@gmail.com." });
+      const result = await response.json().catch(() => ({}));
+      if (result.errors) setErrors({ ...result.errors, idea: result.errors.biggestProblem });
+      setState({ status: "error", message: "That didn’t send. Your entries are still here; please try again." });
       track("inquiry_fail", { reason: "server" });
       return;
     }
     try {
-      localStorage.removeItem(DRAFT_KEY);
+      localStorage.removeItem(draftKey);
     } catch {
       /* ignore */
     }
@@ -152,9 +158,15 @@ export default function StartForm({ entry = "start", readiness = false }: { entr
 
   return (
     <form ref={formRef} className="glass form" onSubmit={onSubmit} onInput={saveDraft} noValidate>
+      {business ? <>
+        <div className="field"><label htmlFor="start-company">Company</label><input id="start-company" name="businessName" autoComplete="organization" maxLength={160} required />{errors.businessName ? <span className="field__err">{errors.businessName}</span> : null}</div>
+        <div className="field"><label htmlFor="start-role">Your role</label><input id="start-role" name="role" autoComplete="organization-title" maxLength={120} required />{errors.role ? <span className="field__err">{errors.role}</span> : null}</div>
+        <div className="field"><label htmlFor="start-contact">Preferred contact method</label><select id="start-contact" name="preferredContact"><option value="email">Email</option><option value="phone">Phone call</option><option value="text">Text message</option></select></div>
+        <div className="field"><label htmlFor="start-phone">Phone (required for a call or text)</label><input id="start-phone" name="phone" type="tel" autoComplete="tel" maxLength={40}/>{errors.phone ? <span className="field__err">{errors.phone}</span> : null}</div>
+      </> : null}
       <div className={`field${errors.idea ? " field--error" : ""}`}>
-        <label htmlFor="start-idea">{readiness ? "What are we building?" : "What do you want to exist?"}</label>
-        <textarea id="start-idea" name="idea" required maxLength={4000} placeholder={readiness ? "Summarize the product, the customer and what you need implemented." : "An app for… a tool that… a thing nobody has built because…"} aria-describedby={errors.idea ? "start-idea-err" : undefined} />
+        <label htmlFor="start-idea">{business ? "The problem in one line" : readiness ? "What are we building?" : "What do you want to exist?"}</label>
+        <textarea id="start-idea" name="idea" required maxLength={4000} placeholder={business ? "For example: quotes go out, but nobody remembers to follow up." : readiness ? "Summarize the product, the customer and what you need implemented." : "An app for… a tool that… a thing nobody has built because…"} aria-describedby={errors.idea ? "start-idea-err" : undefined} />
         {errors.idea ? (
           <span className="field__err" id="start-idea-err">
             {errors.idea}
@@ -162,7 +174,7 @@ export default function StartForm({ entry = "start", readiness = false }: { entr
         ) : null}
       </div>
       <div className="field">
-        <label htmlFor="start-today">{readiness ? "Share your PRD, spec, Figma or prototype" : "What exists today?"}</label>
+        <label htmlFor="start-today">{business ? "What tools or process do you use today? (optional)" : readiness ? "Share your PRD, spec, Figma or prototype" : "What exists today?"}</label>
         <textarea id="start-today" name="today" maxLength={2000} placeholder={readiness ? "Paste a link or a short excerpt of what you have." : "Nothing yet is a fine answer."} />
       </div>
       <div className="field">
@@ -179,9 +191,9 @@ export default function StartForm({ entry = "start", readiness = false }: { entr
       <div className="field">
         <span className="field__label">{readiness ? "Build budget range" : "Budget range"}</span>
         <div className="chips" role="group" aria-label="Budget">
-          {BUDGET.map((option) => (
+          {(audit ? [{ value: "$250 audit", label: "$250 audit" }, { value: "Not sure yet", label: "Not sure yet" }] : business ? [{ value: "Not sure yet", label: "Not sure yet" }] : BUDGET).map((option) => (
             <label key={option.value}>
-              <input type="radio" name="budget" value={option.value} defaultChecked={option.value === "Let's talk"} />
+              <input type="radio" name="budget" value={option.value} defaultChecked={option.value === (audit ? "$250 audit" : business ? "Not sure yet" : "Let's talk")} />
               <span>{option.label}</span>
             </label>
           ))}
@@ -207,7 +219,7 @@ export default function StartForm({ entry = "start", readiness = false }: { entr
       </div>
       <div className="actions">
         <button className="btn btn--primary ai" type="submit" disabled={state.status === "submitting"}>
-          {state.status === "submitting" ? "Sending…" : readiness ? "Request my free Straight Answer" : "Send it"}
+          {state.status === "submitting" ? "Sending…" : audit ? "Request an audit" : business ? "Send to Blake" : readiness ? "Request my free Straight Answer" : "Send it"}
         </button>
         {state.status === "error" ? (
           <p className="form__status form__status--err" role="alert">

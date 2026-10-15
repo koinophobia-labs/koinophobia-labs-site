@@ -60,8 +60,7 @@ test("retired studio routes redirect to living pages", async () => {
   const expected: Record<string, string> = {
     "/services": "/work-with-me",
     "/process": "/work-with-me",
-    "/audit": "/work-with-me",
-    "/revenue-leak-audit": "/work-with-me",
+    "/revenue-leak-audit": "/audit",
     "/concierge": "/work-with-me",
     "/intake": "/start",
     "/products": "/shipped",

@@ -5,7 +5,7 @@ import type { NextRequest } from "next/server";
 // resubmission folds onto the same lead instead of creating a duplicate.
 export const INTAKE_DEDUPE_WINDOW_MS = 60 * 60 * 1000; // 1 hour
 
-type IntakeContent = { email: string; businessName: string; biggestProblem: string };
+type IntakeContent = { email: string; businessName: string; biggestProblem: string; source?: string; serviceInterest?: string };
 
 /** SITE-01 — deterministic per-content dedupe key inside a time window. */
 export function deriveContentIdempotencyKey(
@@ -14,7 +14,7 @@ export function deriveContentIdempotencyKey(
   windowMs: number = INTAKE_DEDUPE_WINDOW_MS,
 ): string {
   const digest = createHash("sha256")
-    .update([content.email.toLowerCase().trim(), content.businessName.trim(), content.biggestProblem.trim()].join(" "))
+    .update([content.email.toLowerCase().trim(), content.businessName.trim(), content.biggestProblem.trim(), content.source || "", content.serviceInterest || ""].join("\n"))
     .digest("hex");
   return `content:${digest}:${Math.floor(nowMs / windowMs)}`;
 }

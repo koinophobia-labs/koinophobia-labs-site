@@ -1,0 +1,172 @@
+✔ every product carries verification metadata (0.617625ms)
+✖ no product status has gone stale for its stage (1.555208ms)
+✔ every stage has a freshness budget, and fast stages are tight (0.067917ms)
+✔ a stale status produces an actionable message (0.085709ms)
+✔ freshness is never auto-refreshed (0.234083ms)
+✔ a status owner is recorded (0.042041ms)
+✔ published dates are literals, never read from the clock (0.301167ms)
+✔ stage and reach never contradict each other (0.077625ms)
+✔ the stage ladder never collapses distinct release states (0.057042ms)
+✔ every stage maps to a display family, and the family never upgrades a stage (0.086ms)
+✔ the front office is in the universe, honestly (0.0925ms)
+✔ TestFlight claims require TestFlight evidence (0.0655ms)
+✔ You Know Ball does not claim it was never uploaded (0.130791ms)
+✔ Trendi reflects its verified public release while the dated log preserves beta history (0.12125ms)
+✔ Career Forge does not claim checkout is closed, or that anyone bought (0.128541ms)
+✖ unsourceable statistics stay out of published copy (0.205209ms)
+✔ every product states what is not true yet (0.027792ms)
+✔ internal-only products offer nothing to click (0.037917ms)
+✔ no product uses launch language it cannot back (0.118208ms)
+✔ no product invents users, revenue, or testimonials (0.230083ms)
+✔ product slugs are unique and every one resolves (0.040042ms)
+✖ every product action link is usable by a stranger (0.163292ms)
+✔ no note publishes without BOTH gates (0.04475ms)
+✔ every first-person note is currently held for review (0.025584ms)
+✔ held notes are preserved, never emptied (0.04275ms)
+✖ the review file still covers every note (1.982375ms)
+✔ published field notes are specific, dated, and resolvable (0.054917ms)
+✔ every experiment reports what it showed (0.033458ms)
+✖ Trendi privacy and support routes are publication-ready and discoverable (5.006ms)
+✖ every shipped app's legal pages exist and are in the sitemap (0.809084ms)
+ℹ tests 30
+ℹ suites 0
+ℹ pass 24
+ℹ fail 6
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 248.269625
+
+✖ failing tests:
+
+test at tests/dev-universe.test.ts:2:2329
+✖ no product status has gone stale for its stage (1.555208ms)
+  AssertionError [ERR_ASSERTION]: STALE STATUS: Teacher's Pet
+    stage:        local (Local development)
+    verified at:  2026-09-13 — 32 days ago
+    allowed age:  30 days for this stage
+    what to do:   re-check Teacher's Pet against release artifacts
+                  (archives, Apple delivery logs, live HTTP, signing),
+                  update status/evidence if it moved, then set
+                  verifiedAt to today in lib/dev/universe.ts.
+    do NOT just bump the date — the date is a claim that someone looked.
+  
+  STALE STATUS: KOI
+    stage:        local (Local development)
+    verified at:  2026-09-13 — 32 days ago
+    allowed age:  30 days for this stage
+    what to do:   re-check KOI against release artifacts
+                  (archives, Apple delivery logs, live HTTP, signing),
+                  update status/evidence if it moved, then set
+                  verifiedAt to today in lib/dev/universe.ts.
+    do NOT just bump the date — the date is a claim that someone looked.
+  + actual - expected
+  
+  + [
+  +   "Teacher's Pet",
+  +   'KOI'
+  + ]
+  - []
+  
+      at TestContext.<anonymous> (/private/tmp/WO-0118-baseline/tests/dev-universe.test.ts:66:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1306:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:897:18)
+      at Test.postRun (node:internal/test_runner/test:1447:19)
+      at Test.run (node:internal/test_runner/test:1372:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: [ "Teacher's Pet", 'KOI' ],
+    expected: [],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at tests/dev-universe.test.ts:2:10355
+✖ unsourceable statistics stay out of published copy (0.205209ms)
+  Error: ENOENT: no such file or directory, open '/private/tmp/WO-0118-baseline/app/page.tsx'
+      at readFileSync (node:fs:441:20)
+      at read (/private/tmp/WO-0118-baseline/tests/dev-universe.test.ts:34:31)
+      at TestContext.<anonymous> (/private/tmp/WO-0118-baseline/tests/dev-universe.test.ts:281:27)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1306:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:897:18)
+      at Test.postRun (node:internal/test_runner/test:1447:19)
+      at Test.run (node:internal/test_runner/test:1372:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:897:7) {
+    errno: -2,
+    code: 'ENOENT',
+    syscall: 'open',
+    path: '/private/tmp/WO-0118-baseline/app/page.tsx'
+  }
+
+test at tests/dev-universe.test.ts:2:12608
+✖ every product action link is usable by a stranger (0.163292ms)
+  AssertionError [ERR_ASSERTION]: You Know Ball: /you-know-ball/play resolves to nothing
+      at TestContext.<anonymous> (/private/tmp/WO-0118-baseline/tests/dev-universe.test.ts:354:14)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1306:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:897:18)
+      at Test.postRun (node:internal/test_runner/test:1447:19)
+      at Test.run (node:internal/test_runner/test:1372:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:897:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at tests/dev-universe.test.ts:2:14805
+✖ the review file still covers every note (1.982375ms)
+  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+  
+    assert.ok(exists("docs/FIELD-NOTES-REVIEW.md"))
+  
+      at TestContext.<anonymous> (/private/tmp/WO-0118-baseline/tests/dev-universe.test.ts:416:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1306:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:897:18)
+      at Test.postRun (node:internal/test_runner/test:1447:19)
+      at Test.run (node:internal/test_runner/test:1372:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:897:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at tests/legal-pages.test.ts:2:1161
+✖ Trendi privacy and support routes are publication-ready and discoverable (5.006ms)
+  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+  
+    assert.ok(privacy.includes("every third party with whom Trendi shares"))
+  
+      at TestContext.<anonymous> (/private/tmp/WO-0118-baseline/tests/legal-pages.test.ts:23:10)
+      at async Test.run (node:internal/test_runner/test:1313:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at tests/legal-pages.test.ts:2:3796
+✖ every shipped app's legal pages exist and are in the sitemap (0.809084ms)
+  Error: ENOENT: no such file or directory, open '/private/tmp/WO-0118-baseline/app/forget-about-it/privacy/page.tsx'
+      at async open (node:internal/fs/promises:640:25)
+      at async readFile (node:internal/fs/promises:1287:14)
+      at async TestContext.<anonymous> (/private/tmp/WO-0118-baseline/tests/legal-pages.test.ts:51:5)
+      at async Test.run (node:internal/test_runner/test:1313:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:897:7) {
+    errno: -2,
+    code: 'ENOENT',
+    syscall: 'open',
+    path: '/private/tmp/WO-0118-baseline/app/forget-about-it/privacy/page.tsx'
+  }

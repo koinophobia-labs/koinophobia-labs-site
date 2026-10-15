@@ -1,0 +1,85 @@
+
+> koinophobia-labs@0.1.0 build
+> next build
+
+▲ Next.js 16.2.12 (Turbopack)
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 8.1s
+  Running TypeScript ...
+  Finished TypeScript in 5.0s ...
+  Collecting page data using 9 workers ...
+⚠ Using edge runtime on a page currently disables static generation for that page
+  Generating static pages using 9 workers (0/45) ...
+  Generating static pages using 9 workers (11/45) 
+  Generating static pages using 9 workers (22/45) 
+  Generating static pages using 9 workers (33/45) 
+✓ Generating static pages using 9 workers (45/45) in 197ms
+  Finalizing page optimization ...
+
+Route (app)                           Revalidate  Expire
+┌ ○ /                                         1d      1y
+├ ○ /_not-found
+├ ƒ /api/auth/[...nextauth]
+├ ƒ /api/crm/audits/[id]
+├ ƒ /api/crm/audits/[id]/pdf
+├ ƒ /api/crm/audits/[id]/proposal
+├ ƒ /api/crm/leads
+├ ƒ /api/crm/leads/[id]
+├ ƒ /api/crm/leads/[id]/audits
+├ ƒ /api/crm/leads/[id]/proposals
+├ ƒ /api/crm/login
+├ ƒ /api/crm/proposals/[id]
+├ ƒ /api/crm/proposals/[id]/payments
+├ ƒ /api/crm/proposals/[id]/pdf
+├ ƒ /api/intake
+├ ƒ /api/stripe/webhook
+├ ƒ /audit
+├ ○ /blake
+├ ƒ /brand/apple-icon
+├ ƒ /brand/social-card
+├ ƒ /crm
+├ ƒ /crm/audits/[id]
+├ ƒ /crm/leads/[id]
+├ ƒ /crm/login
+├ ƒ /crm/proposals/[id]
+├ ƒ /crm/quick-add
+├ ○ /dreamcatcher/privacy
+├ ○ /dreamcatcher/support
+├ ○ /forget-about-it                          1d      1y
+├ ○ /forget-about-it/privacy
+├ ○ /forget-about-it/support
+├ ○ /lab
+├ ○ /lab/do-you-know-ball
+├ ○ /lab/koi
+├ ○ /lab/teachers-pet
+├ ○ /log
+├ ƒ /log/feed.xml
+├ ○ /manifest.webmanifest
+├ ○ /old-dog/privacy
+├ ○ /old-dog/support
+├ ○ /payment/cancelled
+├ ○ /payment/success
+├ ○ /preaching-to-the-choir/privacy
+├ ○ /preaching-to-the-choir/support
+├ ○ /privacy
+├ ○ /resume
+├ ○ /robots.txt
+├ ○ /shipped                                  1d      1y
+├ ○ /sitemap.xml
+├ ƒ /start
+├ ○ /trendi                                   1d      1y
+├ ○ /trendi/privacy
+├ ○ /trendi/support
+├ ○ /way-in                                   1d      1y
+├ ○ /work-with-me
+├ ƒ /work-with-us
+├ ○ /you-know-ball/play
+├ ○ /you-know-ball/privacy
+├ ○ /you-know-ball/safety
+└ ○ /you-know-ball/support
+
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+

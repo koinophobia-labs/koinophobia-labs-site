@@ -5,7 +5,7 @@ export const STUDIO_URL = "https://koinophobialabs.com";
 export const STUDIO_TITLE = "Koinophobia Labs";
 
 export const STUDIO_DESCRIPTION =
-  "A one-person software studio in Chicago. Three apps on the App Store, a curriculum engine, a language model trained from scratch, and a builder you can hire.";
+  "A one-person software studio in Chicago. Five apps on the App Store, a curriculum engine, a language model trained from scratch, and a builder you can hire.";
 
 export const STUDIO_SOCIAL_IMAGE = {
   url: "/brand/social-card",
@@ -17,7 +17,7 @@ export const STUDIO_SOCIAL_IMAGE = {
 // Update this only when the studio homepage materially changes. A stable,
 // truthful date is a better recrawl signal than a build-time timestamp that
 // changes on every deployment.
-export const STUDIO_HOME_LAST_MODIFIED = "2026-09-13";
+export const STUDIO_HOME_LAST_MODIFIED = "2026-10-15";
 
 export const PERSON_ID = `${STUDIO_URL}/blake#person`;
 
@@ -48,7 +48,6 @@ export const STUDIO_SCHEMA = {
       url: `${STUDIO_URL}/`,
       logo: `${STUDIO_URL}/koi-mark.png`,
       image: `${STUDIO_URL}/koi-mark.png`,
-      email: "koinophobia999@gmail.com",
       founder: { "@id": PERSON_ID },
       numberOfEmployees: { "@type": "QuantitativeValue", value: 1 },
       sameAs: [LINKS.github, "https://www.instagram.com/koinophobia_labs/"],

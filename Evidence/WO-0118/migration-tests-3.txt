@@ -1,0 +1,36 @@
+
+> koinophobia-labs@0.1.0 test:migrations
+> node --test tests/database-migrations.test.mjs
+
+✔ preview Vercel builds cannot execute migrations (0.657ms)
+✔ ordinary production Vercel builds are application-only (0.116958ms)
+✔ a direct production Neon endpoint succeeds with every required guard (9.501083ms)
+✔ missing or vague approval refuses before connecting or executing SQL (0.1715ms)
+✔ target and runtime mismatches refuse before connecting (0.1115ms)
+✔ the database provider, direct URL, protocol, and TLS are mandatory (0.192833ms)
+✔ a wrong Neon endpoint is refused before connecting (0.083334ms)
+✔ a preview endpoint is refused when production is expected (0.057208ms)
+✔ a pooled Neon hostname is refused before connecting (0.063917ms)
+✔ the expected endpoint ID must be supplied independently (0.086542ms)
+✔ the expected database name and migration role are mandatory (0.06025ms)
+✔ a URL database-name mismatch is refused before connecting (0.05175ms)
+✔ a connected database-name mismatch refuses before migration SQL (0.074334ms)
+✔ a connected role mismatch refuses before migration SQL (0.065791ms)
+✔ read-only and recovery connections refuse before migration SQL (0.1355ms)
+✔ an unexpected application baseline refuses before migration SQL (0.081625ms)
+✔ connection and identity failures expose no connection secrets (0.173375ms)
+✔ successful output exposes only the safe target and migration filenames (0.30525ms)
+✔ test and development migrations allow an explicit loopback-only path (0.424708ms)
+✔ the local override refuses remote and production targets (0.050167ms)
+✔ migration failures roll back, identify the file, and stop (0.132625ms)
+✔ the former custom database setting is not required anywhere (971.553583ms)
+✔ migration 008 keeps idempotent guards for all columns and indexes (0.620459ms)
+✔ a real PostgreSQL schema containing migration 008 is accepted unchanged (4269.636916ms)
+ℹ tests 24
+ℹ suites 0
+ℹ pass 24
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 5317.454916

@@ -12,9 +12,9 @@ import { STUDIO_URL, socialCard } from "@/lib/seo";
 export const metadata: Metadata = {
   title: "Shipped",
   description:
-    "Trendi, Forget About It, and Way In: three apps built by one person, on the App Store now, with what each one can't do yet.",
+    "Trendi, Forget About It, Way In, Old Dog, and Preaching to the Choir: five apps built by one person, on the App Store now, with what each one can't do yet.",
   alternates: { canonical: `${STUDIO_URL}/shipped` },
-  openGraph: { url: `${STUDIO_URL}/shipped`, title: "Shipped · Koinophobia Labs", images: [socialCard("Three apps. One builder. On the App Store now.", "Shipped")] },
+  openGraph: { url: `${STUDIO_URL}/shipped`, title: "Shipped · Koinophobia Labs", images: [socialCard("Five apps. One builder. On the App Store now.", "Shipped")] },
 };
 
 export default async function ShippedPage() {
@@ -28,7 +28,7 @@ export default async function ShippedPage() {
             <b>Shipped</b> · on the App Store now
           </p>
           <h1 className="s" style={{ "--i": 1 } as React.CSSProperties}>
-            Three apps. One builder. On the App Store now.
+            Five apps. One builder. On the App Store now.
           </h1>
           <p className="lede s" style={{ "--i": 2 } as React.CSSProperties}>
             Choose an app, watch a short demo, or download it from the App Store.

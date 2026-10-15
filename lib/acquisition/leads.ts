@@ -26,6 +26,7 @@ export type LeadRecord = LeadInput & {
   lastContactedAt: string | null; followUpAt: string | null;
   auditCompleted: boolean; proposalSentAt: string | null;
   outcome: LeadOutcome; internalNotes: string;
+  nextAction?: string;
   founderPacket?: FounderSalesPacket;
   isProspect: boolean;
   nonProspectReason: string;
@@ -33,7 +34,7 @@ export type LeadRecord = LeadInput & {
   paymentStatus: "not_started"|"deposit_pending"|"deposit_paid"|"balance_pending"|"paid"|"failed"|"refunded"; lastContacted?: string; nextFollowUpDate?: string;
 };
 
-export type LeadUpdate = Partial<Pick<LeadRecord, "status" | "lastContactedAt" | "followUpAt" | "auditCompleted" | "proposalSentAt" | "outcome" | "internalNotes">>;
+export type LeadUpdate = Partial<Pick<LeadRecord, "status" | "lastContactedAt" | "followUpAt" | "auditCompleted" | "proposalSentAt" | "outcome" | "internalNotes" | "nextAction">>;
 type Queryable = Pick<Pool, "query"> | Pick<PoolClient, "query">;
 let pool: Pool | undefined;
 
@@ -45,6 +46,7 @@ function database(): Pool {
 function map(row: QueryResultRow): LeadRecord {
   return {
     id: row.id, createdAt: new Date(row.created_at).toISOString(), updatedAt: new Date(row.updated_at).toISOString(),
+    nextAction: row.next_action || "",
     source: row.source, name: row.name, businessName: row.business_name, email: row.email,
     phone: row.phone || "", websiteOrSocial: row.website_or_social, industry: row.industry,
     serviceInterest: row.service_interest, budgetRange: row.budget_range || "", timeline: row.timeline,
@@ -120,10 +122,13 @@ export async function storeLead(input: LeadInput, idempotencyKey = crypto.random
   return { lead: map(result.rows[0]), created: Boolean(result.rows[0].created) };
 }
 
-export async function listLeads(options: { search?: string; status?: string; sort?: string } = {}, db: Queryable = database()) {
+export async function listLeads(options: { search?: string; status?: string; sort?: string; source?: string; due?: string } = {}, db: Queryable = database()) {
   const values: unknown[] = []; const where: string[] = [];
   if (options.search) { values.push(`%${options.search}%`); where.push(`(name ilike $${values.length} or business_name ilike $${values.length} or email ilike $${values.length})`); }
   if (options.status && leadStatuses.includes(options.status as LeadStatus)) { values.push(options.status); where.push(`status = $${values.length}`); }
+  if (options.source?.trim()) { values.push(options.source.trim()); where.push(`lower(source) = lower($${values.length})`); }
+  // Include all of today in Chicago, not just timestamps already passed in UTC.
+  if (options.due === "today") where.push("follow_up_at < ((date_trunc('day', now() at time zone 'America/Chicago') + interval '1 day') at time zone 'America/Chicago') and outcome = 'open' and status not in ('won','lost')");
   const order = options.sort === "follow-up" ? "follow_up_at asc nulls last, created_at desc" : "created_at desc";
   const result = await db.query(`select * from crm_leads ${where.length ? `where ${where.join(" and ")}` : ""} order by ${order}`, values);
   return result.rows.map(map);
@@ -145,13 +150,14 @@ export function validateLeadUpdate(value: unknown): { update?: LeadUpdate; error
     else errors.push(`Invalid ${key}`);
   }
   if ("auditCompleted" in raw) { if (typeof raw.auditCompleted === "boolean") update.auditCompleted = raw.auditCompleted; else errors.push("Invalid auditCompleted"); }
+  if ("nextAction" in raw) { if (typeof raw.nextAction === "string" && raw.nextAction.length <= 1000) update.nextAction = redactSecrets(raw.nextAction.trim()); else errors.push("Invalid nextAction"); }
   if ("internalNotes" in raw) { if (typeof raw.internalNotes === "string" && raw.internalNotes.length <= 10000) update.internalNotes = raw.internalNotes; else errors.push("Invalid internalNotes"); }
   return errors.length ? { errors } : { update };
 }
 
 export async function updateLead(id: string, update: LeadUpdate, db: Queryable = database()) {
   const fields: string[] = []; const values: unknown[] = [];
-  const columns: Record<keyof LeadUpdate, string> = { status:"status", lastContactedAt:"last_contacted_at", followUpAt:"follow_up_at", auditCompleted:"audit_completed", proposalSentAt:"proposal_sent_at", outcome:"outcome", internalNotes:"internal_notes" };
+  const columns: Record<keyof LeadUpdate, string> = { status:"status", lastContactedAt:"last_contacted_at", followUpAt:"follow_up_at", auditCompleted:"audit_completed", proposalSentAt:"proposal_sent_at", outcome:"outcome", internalNotes:"internal_notes", nextAction:"next_action" };
   for (const [key, column] of Object.entries(columns) as [keyof LeadUpdate,string][]) if (key in update) { values.push(update[key]); fields.push(`${column} = $${values.length}`); }
   if (!fields.length) return getLead(id, db);
   values.push(id); const result = await db.query(`update crm_leads set ${fields.join(", ")}, updated_at = now() where id = $${values.length} returning *`, values);
@@ -167,4 +173,16 @@ export function internalToolsAllowed(searchToken?: string) {
   if (process.env.NODE_ENV !== "production") return true;
   const expected=process.env.INTERNAL_TOOLS_TOKEN;
   return process.env.ENABLE_INTERNAL_TOOLS === "true" && Boolean(expected && searchToken === expected);
+}
+
+export async function createManualLead(input: LeadInput, update: LeadUpdate, idempotencyKey: string) {
+  const client = await database().connect();
+  try {
+    await client.query("begin");
+    const saved = await storeLead(input, `manual:${idempotencyKey}`, client);
+    const lead = saved.created ? await updateLead(saved.lead.id, update, client) : saved.lead;
+    await client.query("commit");
+    return lead;
+  } catch (error) { await client.query("rollback"); throw error; }
+  finally { client.release(); }
 }

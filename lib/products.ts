@@ -255,7 +255,7 @@ const site: Record<string, SiteMeta> = {
   "old-dog": {
     section: "shipped",
     href: oldDogRelease.url,
-    blurb: "Old Dog 1.1.0 is live on the Mac App Store, released October 8, 2026.",
+    blurb: "An offline learning app for adults, live on the Mac App Store.",
     platforms: "macOS",
     chip: "Live",
     notYetShort: "",
@@ -265,7 +265,7 @@ const site: Record<string, SiteMeta> = {
   "preaching-to-the-choir": {
     section: "shipped",
     href: preachingRelease.url,
-    blurb: "Preaching to the Choir 1.0 is live on the App Store for iOS and iPadOS, released September 22, 2026.",
+    blurb: "A private prayer journal, live on the App Store for iPhone and iPad.",
     platforms: "iOS / iPadOS",
     chip: "Live",
     notYetShort: "",

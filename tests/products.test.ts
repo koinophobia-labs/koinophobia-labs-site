@@ -88,12 +88,14 @@ test("the commercial offer is three shapes with proof, and one reply promise", (
   }
 });
 
-test("the homepage reads products from the registry and shows no agency offer", () => {
+test("the homepage reads verified products and adds the approved B2B path", () => {
   const page = read("app/page.tsx");
   assert.match(page, /from "@\/lib\/products"/);
   assert.match(page, /withLiveListings\(shippedProducts\)/);
   assert.match(page, /shipped\.map/);
   assert.match(page, /labProducts\.map/);
-  assert.doesNotMatch(page, /Revenue Leak|audit|Quick Fix|Landing Page Rebuild|\$250/i);
+  assert.match(page, /Revenue Leak Audit/);
+  assert.match(page, /work-with-us\?src=home/);
+  assert.doesNotMatch(page, /Quick Fix|Landing Page Rebuild/i);
   assert.doesNotMatch(page, /from "@\/lib\/commercial"/);
 });

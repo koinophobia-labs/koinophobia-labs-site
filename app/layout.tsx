@@ -4,6 +4,7 @@ import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import "./tokens.css";
 import "./site.css";
+import "./business.css";
 import "./motion.css";
 import "./brand.css";
 import "./koi-world.css";
