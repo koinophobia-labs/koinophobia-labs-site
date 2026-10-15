@@ -1,0 +1,137 @@
+
+> koinophobia-labs@0.1.0 dev
+> next dev --webpack -p 3128
+
+▲ Next.js 16.2.12 (webpack)
+- Local:         http://localhost:3128
+- Network:       http://10.0.0.211:3128
+✓ Ready in 351ms
+
+○ Compiling /trendi ...
+Request timed out after 3000ms
+
+Retrying 1/3...
+Request timed out after 3000ms
+
+Retrying 1/3...
+Request timed out after 3000ms
+
+Retrying 1/3...
+Request timed out after 3000ms
+
+Retrying 1/3...
+Request timed out after 3000ms
+
+Retrying 1/3...
+Request timed out after 3000ms
+
+Retrying 1/3...
+Request timed out after 3000ms
+
+Retrying 1/3...
+Request timed out after 3000ms
+
+Retrying 1/3...
+ GET /trendi 200 in 16.1s (next.js: 15.8s, application-code: 247ms)
+⚠ Blocked cross-origin request to Next.js dev resource /_next/webpack-hmr from "127.0.0.1".
+Cross-origin access to Next.js dev resources is blocked by default for safety.
+
+To allow this host in development, add it to "allowedDevOrigins" in next.config.js and restart the dev server:
+
+// next.config.js
+module.exports = {
+  allowedDevOrigins: ['127.0.0.1'],
+}
+
+Read more: https://nextjs.org/docs/app/api-reference/config/next-config-js/allowedDevOrigins
+⚠ Blocked cross-origin request to Next.js dev resource /__nextjs_font/geist-latin.woff2 from "127.0.0.1".
+Cross-origin access to Next.js dev resources is blocked by default for safety.
+
+To allow this host in development, add it to "allowedDevOrigins" in next.config.js and restart the dev server:
+
+// next.config.js
+module.exports = {
+  allowedDevOrigins: ['127.0.0.1'],
+}
+
+Read more: https://nextjs.org/docs/app/api-reference/config/next-config-js/allowedDevOrigins
+ GET /way-in 200 in 269ms (next.js: 173ms, application-code: 96ms)
+ GET /forget-about-it 200 in 306ms (next.js: 209ms, application-code: 97ms)
+ GET /preaching-to-the-choir 200 in 242ms (next.js: 166ms, application-code: 76ms)
+ GET /old-dog 200 in 283ms (next.js: 216ms, application-code: 67ms)
+ GET /teachers-pet 200 in 250ms (next.js: 186ms, application-code: 63ms)
+ GET /dreamcatcher 200 in 259ms (next.js: 199ms, application-code: 60ms)
+ GET /trendi 200 in 37ms (next.js: 6ms, application-code: 31ms)
+ GET /teachers-pet 200 in 462ms (next.js: 290ms, application-code: 172ms)
+ GET /teachers-pet 200 in 283ms (next.js: 68ms, application-code: 215ms)
+ GET /trendi 200 in 878ms (next.js: 760ms, application-code: 118ms)
+ GET /way-in 200 in 447ms (next.js: 276ms, application-code: 171ms)
+ GET /forget-about-it 200 in 255ms (next.js: 167ms, application-code: 88ms)
+ GET /preaching-to-the-choir 200 in 320ms (next.js: 230ms, application-code: 90ms)
+ GET /old-dog 200 in 355ms (next.js: 281ms, application-code: 74ms)
+[browser] Image with src "/apps/old-dog/shot-3.png" was detected as the Largest Contentful Paint (LCP). Please add the `loading="eager"` property if this image is above the fold.
+Read more: https://nextjs.org/docs/app/api-reference/components/image#loading
+ GET /teachers-pet 200 in 92ms (next.js: 26ms, application-code: 67ms)
+[browser] Image with src "/apps/teachers-pet/shot-3.png" was detected as the Largest Contentful Paint (LCP). Please add the `loading="eager"` property if this image is above the fold.
+Read more: https://nextjs.org/docs/app/api-reference/components/image#loading
+ GET /dreamcatcher 200 in 462ms (next.js: 381ms, application-code: 82ms)
+ GET /trendi 200 in 70ms (next.js: 19ms, application-code: 51ms)
+[browser] Image with src "/apps/trendi/shot-3.png" was detected as the Largest Contentful Paint (LCP). Please add the `loading="eager"` property if this image is above the fold.
+Read more: https://nextjs.org/docs/app/api-reference/components/image#loading
+[browser] Image with src "/apps/trendi/shot-4.png" was detected as the Largest Contentful Paint (LCP). Please add the `loading="eager"` property if this image is above the fold.
+Read more: https://nextjs.org/docs/app/api-reference/components/image#loading
+ GET /way-in 200 in 164ms (next.js: 87ms, application-code: 77ms)
+ GET /forget-about-it 200 in 89ms (next.js: 20ms, application-code: 69ms)
+ GET /forget-about-it 200 in 101ms (next.js: 70ms, application-code: 31ms)
+[browser] Image with src "/apps/forget-about-it/shot-3.png" was detected as the Largest Contentful Paint (LCP). Please add the `loading="eager"` property if this image is above the fold.
+Read more: https://nextjs.org/docs/app/api-reference/components/image#loading
+ GET /preaching-to-the-choir 200 in 71ms (next.js: 20ms, application-code: 52ms)
+[browser] Image with src "/apps/preaching-to-the-choir/shot-3.png" was detected as the Largest Contentful Paint (LCP). Please add the `loading="eager"` property if this image is above the fold.
+Read more: https://nextjs.org/docs/app/api-reference/components/image#loading
+[browser] Image with src "/apps/preaching-to-the-choir/shot-4.png" was detected as the Largest Contentful Paint (LCP). Please add the `loading="eager"` property if this image is above the fold.
+Read more: https://nextjs.org/docs/app/api-reference/components/image#loading
+ GET /old-dog 200 in 68ms (next.js: 9ms, application-code: 58ms)
+[browser] Image with src "/apps/old-dog/shot-3.png" was detected as the Largest Contentful Paint (LCP). Please add the `loading="eager"` property if this image is above the fold.
+Read more: https://nextjs.org/docs/app/api-reference/components/image#loading
+ GET /teachers-pet 200 in 62ms (next.js: 13ms, application-code: 49ms)
+ GET /teachers-pet 200 in 59ms (next.js: 9ms, application-code: 50ms)
+[browser] Image with src "/apps/teachers-pet/shot-3.png" was detected as the Largest Contentful Paint (LCP). Please add the `loading="eager"` property if this image is above the fold.
+Read more: https://nextjs.org/docs/app/api-reference/components/image#loading
+ GET /dreamcatcher 200 in 49ms (next.js: 1332µs, application-code: 47ms)
+ GET /trendi 200 in 1161ms (next.js: 990ms, application-code: 171ms)
+ GET /way-in 200 in 277ms (next.js: 208ms, application-code: 68ms)
+[browser] Can't perform a React state update on a component that hasn't mounted yet. This indicates that you have a side-effect in your render function that asynchronously tries to update the component. Move this work to useEffect instead. 
+ GET /way-in 200 in 83ms (next.js: 20ms, application-code: 63ms)
+ GET /forget-about-it 200 in 343ms (next.js: 239ms, application-code: 104ms)
+ GET /preaching-to-the-choir 200 in 725ms (next.js: 658ms, application-code: 68ms)
+ GET /old-dog 200 in 2.1s (next.js: 2000ms, application-code: 82ms)
+[browser] Image with src "/apps/old-dog/shot-3.png" was detected as the Largest Contentful Paint (LCP). Please add the `loading="eager"` property if this image is above the fold.
+Read more: https://nextjs.org/docs/app/api-reference/components/image#loading
+ GET /teachers-pet 200 in 402ms (next.js: 329ms, application-code: 73ms)
+[browser] Image with src "/apps/teachers-pet/shot-3.png" was detected as the Largest Contentful Paint (LCP). Please add the `loading="eager"` property if this image is above the fold.
+Read more: https://nextjs.org/docs/app/api-reference/components/image#loading
+ GET /dreamcatcher 200 in 4.0s (next.js: 3.9s, application-code: 60ms)
+ GET /trendi 200 in 67ms (next.js: 39ms, application-code: 28ms)
+ GET /trendi 200 in 28ms (next.js: 13ms, application-code: 15ms)
+[browser] Image with src "/apps/trendi/shot-3.png" was detected as the Largest Contentful Paint (LCP). Please add the `loading="eager"` property if this image is above the fold.
+Read more: https://nextjs.org/docs/app/api-reference/components/image#loading
+[browser] Image with src "/apps/trendi/shot-4.png" was detected as the Largest Contentful Paint (LCP). Please add the `loading="eager"` property if this image is above the fold.
+Read more: https://nextjs.org/docs/app/api-reference/components/image#loading
+ GET /way-in 200 in 73ms (next.js: 27ms, application-code: 46ms)
+ GET /forget-about-it 200 in 51ms (next.js: 25ms, application-code: 26ms)
+[browser] Image with src "/apps/forget-about-it/shot-3.png" was detected as the Largest Contentful Paint (LCP). Please add the `loading="eager"` property if this image is above the fold.
+Read more: https://nextjs.org/docs/app/api-reference/components/image#loading
+[browser] Image with src "/apps/forget-about-it/shot-4.png" was detected as the Largest Contentful Paint (LCP). Please add the `loading="eager"` property if this image is above the fold.
+Read more: https://nextjs.org/docs/app/api-reference/components/image#loading
+ GET /preaching-to-the-choir 200 in 49ms (next.js: 22ms, application-code: 27ms)
+[browser] Image with src "/apps/preaching-to-the-choir/shot-3.png" was detected as the Largest Contentful Paint (LCP). Please add the `loading="eager"` property if this image is above the fold.
+Read more: https://nextjs.org/docs/app/api-reference/components/image#loading
+[browser] Image with src "/apps/preaching-to-the-choir/shot-4.png" was detected as the Largest Contentful Paint (LCP). Please add the `loading="eager"` property if this image is above the fold.
+Read more: https://nextjs.org/docs/app/api-reference/components/image#loading
+ GET /old-dog 200 in 47ms (next.js: 19ms, application-code: 28ms)
+ GET /teachers-pet 200 in 85ms (next.js: 40ms, application-code: 45ms)
+ GET /teachers-pet 200 in 42ms (next.js: 11ms, application-code: 31ms)
+ GET /dreamcatcher 200 in 54ms (next.js: 12ms, application-code: 42ms)
+[browser] Image with src "/apps/dreamcatcher/shot-3.png" was detected as the Largest Contentful Paint (LCP). Please add the `loading="eager"` property if this image is above the fold.
+Read more: https://nextjs.org/docs/app/api-reference/components/image#loading
+[?25h

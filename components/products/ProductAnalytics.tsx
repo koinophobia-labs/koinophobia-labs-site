@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { track } from "@vercel/analytics";
 
-export type ProductId = "trendi" | "forget-about-it" | "way-in";
+export type ProductId = import("@/lib/app-prices").AppSlug;
 
 export function ProductPageView({ product, surface = "product" }: { product: ProductId; surface?: "product" | "story" }) {
   useEffect(() => {

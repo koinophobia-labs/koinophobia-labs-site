@@ -1,0 +1,50 @@
+[
+  {
+    "route": "/trendi",
+    "status": 200
+  },
+  {
+    "route": "/way-in",
+    "status": 200
+  },
+  {
+    "route": "/forget-about-it",
+    "status": 200
+  },
+  {
+    "route": "/preaching-to-the-choir",
+    "status": 200
+  },
+  {
+    "route": "/old-dog",
+    "status": 200
+  },
+  {
+    "route": "/teachers-pet",
+    "status": 404
+  },
+  {
+    "route": "/dreamcatcher",
+    "status": 404
+  },
+  {
+    "route": "/apps/dreamcatcher/icon.png",
+    "status": 404
+  },
+  {
+    "route": "/apps/teachers-pet/shot-1.png",
+    "status": 404
+  },
+  {
+    "route": "/_next/image?url=%2Fapps%2Fdreamcatcher%2Ficon.png&w=128&q=75",
+    "status": 404
+  },
+  {
+    "route": "/way-in/privacy",
+    "status": 200
+  },
+  {
+    "route": "/way-in/support",
+    "status": 200
+  }
+]

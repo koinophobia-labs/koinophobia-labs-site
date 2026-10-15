@@ -1,0 +1,292 @@
+{
+  "base": "http://localhost:3128",
+  "at": "2026-10-15T23:06:25.608Z",
+  "report": [
+    {
+      "slug": "trendi",
+      "width": 1440,
+      "screenshot": "Evidence/WO-0127/final/trendi-desktop.png",
+      "overflow": 0,
+      "headingFont": "Gelasio, \"Gelasio Fallback\", serif",
+      "imageSources": [
+        "http://localhost:3128/_next/image?url=%2Fapps%2Ftrendi%2Fshot-1.png&w=640&q=75",
+        "http://localhost:3128/_next/image?url=%2Fapps%2Ftrendi%2Fshot-2.png&w=640&q=75",
+        "http://localhost:3128/_next/image?url=%2Fapps%2Ftrendi%2Fshot-3.png&w=640&q=75",
+        "http://localhost:3128/_next/image?url=%2Fapps%2Ftrendi%2Fshot-4.png&w=640&q=75",
+        "http://localhost:3128/_next/image?url=%2Fapps%2Ftrendi%2Fshot-5.png&w=640&q=75"
+      ],
+      "prices": [
+        "$7.99"
+      ],
+      "introColor": "rgb(247, 242, 236)",
+      "galleryScrollable": true,
+      "errors": []
+    },
+    {
+      "slug": "way-in",
+      "width": 1440,
+      "screenshot": "Evidence/WO-0127/final/way-in-desktop.png",
+      "overflow": 0,
+      "headingFont": "\"Source Serif 4\", \"Source Serif 4 Fallback\", serif",
+      "imageSources": [
+        "http://localhost:3128/_next/image?url=%2Fapps%2Fway-in%2Fshot-1.png&w=640&q=75",
+        "http://localhost:3128/_next/image?url=%2Fapps%2Fway-in%2Fshot-2.png&w=640&q=75",
+        "http://localhost:3128/_next/image?url=%2Fapps%2Fway-in%2Fshot-3.png&w=640&q=75",
+        "http://localhost:3128/_next/image?url=%2Fapps%2Fway-in%2Fshot-4.png&w=640&q=75",
+        "http://localhost:3128/_next/image?url=%2Fapps%2Fway-in%2Fshot-5.png&w=640&q=75"
+      ],
+      "prices": [
+        "$9.99",
+        "$29.99"
+      ],
+      "introColor": "rgb(5, 51, 56)",
+      "galleryScrollable": true,
+      "errors": []
+    },
+    {
+      "slug": "forget-about-it",
+      "width": 1440,
+      "screenshot": "Evidence/WO-0127/final/forget-about-it-desktop.png",
+      "overflow": 0,
+      "headingFont": "Newsreader, \"Newsreader Fallback\", serif",
+      "imageSources": [
+        "http://localhost:3128/_next/image?url=%2Fapps%2Fforget-about-it%2Fshot-1.png&w=640&q=75",
+        "http://localhost:3128/_next/image?url=%2Fapps%2Fforget-about-it%2Fshot-2.png&w=640&q=75",
+        "http://localhost:3128/_next/image?url=%2Fapps%2Fforget-about-it%2Fshot-3.png&w=640&q=75",
+        "http://localhost:3128/_next/image?url=%2Fapps%2Fforget-about-it%2Fshot-4.png&w=640&q=75"
+      ],
+      "prices": [
+        "$2.99",
+        "$24.99"
+      ],
+      "introColor": "rgb(40, 28, 22)",
+      "galleryScrollable": false,
+      "errors": []
+    },
+    {
+      "slug": "preaching-to-the-choir",
+      "width": 1440,
+      "screenshot": "Evidence/WO-0127/final/preaching-to-the-choir-desktop.png",
+      "overflow": 0,
+      "headingFont": "Newsreader, \"Newsreader Fallback\", serif",
+      "imageSources": [
+        "http://localhost:3128/_next/image?url=%2Fapps%2Fpreaching-to-the-choir%2Fshot-1.png&w=640&q=75",
+        "http://localhost:3128/_next/image?url=%2Fapps%2Fpreaching-to-the-choir%2Fshot-2.png&w=640&q=75",
+        "http://localhost:3128/_next/image?url=%2Fapps%2Fpreaching-to-the-choir%2Fshot-3.png&w=640&q=75",
+        "http://localhost:3128/_next/image?url=%2Fapps%2Fpreaching-to-the-choir%2Fshot-4.png&w=640&q=75",
+        "http://localhost:3128/_next/image?url=%2Fapps%2Fpreaching-to-the-choir%2Fshot-5.png&w=640&q=75"
+      ],
+      "prices": [
+        "$2.99",
+        "$24.99",
+        "$79.00"
+      ],
+      "introColor": "rgb(23, 27, 37)",
+      "galleryScrollable": true,
+      "errors": []
+    },
+    {
+      "slug": "old-dog",
+      "width": 1440,
+      "screenshot": "Evidence/WO-0127/final/old-dog-desktop.png",
+      "overflow": 0,
+      "headingFont": "\"Source Serif 4\", \"Source Serif 4 Fallback\", serif",
+      "imageSources": [
+        "http://localhost:3128/_next/image?url=%2Fapps%2Fold-dog%2Fshot-1.png&w=750&q=75",
+        "http://localhost:3128/_next/image?url=%2Fapps%2Fold-dog%2Fshot-2.png&w=750&q=75",
+        "http://localhost:3128/_next/image?url=%2Fapps%2Fold-dog%2Fshot-3.png&w=750&q=75",
+        "http://localhost:3128/_next/image?url=%2Fapps%2Fold-dog%2Fshot-4.png&w=750&q=75",
+        "http://localhost:3128/_next/image?url=%2Fapps%2Fold-dog%2Fshot-5.png&w=750&q=75"
+      ],
+      "prices": [
+        "$9.99"
+      ],
+      "introColor": "rgb(24, 36, 58)",
+      "galleryScrollable": true,
+      "errors": []
+    },
+    {
+      "slug": "teachers-pet",
+      "width": 1440,
+      "screenshot": "Evidence/WO-0127/final/teachers-pet-desktop.png",
+      "overflow": 0,
+      "headingFont": "Gelasio, \"Gelasio Fallback\", serif",
+      "imageSources": [
+        "http://localhost:3128/_next/image?url=%2Fapps%2Fteachers-pet%2Fshot-1.png&w=750&q=75",
+        "http://localhost:3128/_next/image?url=%2Fapps%2Fteachers-pet%2Fshot-2.png&w=750&q=75",
+        "http://localhost:3128/_next/image?url=%2Fapps%2Fteachers-pet%2Fshot-3.png&w=750&q=75",
+        "http://localhost:3128/_next/image?url=%2Fapps%2Fteachers-pet%2Fshot-4.png&w=750&q=75",
+        "http://localhost:3128/_next/image?url=%2Fapps%2Fteachers-pet%2Fshot-5.png&w=750&q=75"
+      ],
+      "prices": [
+        "$34.99",
+        "$299.00",
+        "$199.00"
+      ],
+      "introColor": "rgb(22, 51, 47)",
+      "galleryScrollable": true,
+      "errors": []
+    },
+    {
+      "slug": "dreamcatcher",
+      "width": 1440,
+      "screenshot": "Evidence/WO-0127/final/dreamcatcher-desktop.png",
+      "overflow": 0,
+      "headingFont": "Newsreader, \"Newsreader Fallback\", serif",
+      "imageSources": [
+        "http://localhost:3128/_next/image?url=%2Fapps%2Fdreamcatcher%2Fshot-1.png&w=640&q=75",
+        "http://localhost:3128/_next/image?url=%2Fapps%2Fdreamcatcher%2Fshot-2.png&w=640&q=75",
+        "http://localhost:3128/_next/image?url=%2Fapps%2Fdreamcatcher%2Fshot-3.png&w=640&q=75"
+      ],
+      "prices": [
+        "$9.99"
+      ],
+      "introColor": "rgb(241, 230, 215)",
+      "galleryScrollable": false,
+      "errors": []
+    },
+    {
+      "slug": "trendi",
+      "width": 390,
+      "screenshot": "Evidence/WO-0127/final/trendi-phone.png",
+      "overflow": 0,
+      "headingFont": "Gelasio, \"Gelasio Fallback\", serif",
+      "imageSources": [
+        "http://localhost:3128/_next/image?url=%2Fapps%2Ftrendi%2Fshot-1.png&w=640&q=75",
+        "http://localhost:3128/_next/image?url=%2Fapps%2Ftrendi%2Fshot-2.png&w=640&q=75",
+        "http://localhost:3128/_next/image?url=%2Fapps%2Ftrendi%2Fshot-3.png&w=640&q=75",
+        "http://localhost:3128/_next/image?url=%2Fapps%2Ftrendi%2Fshot-4.png&w=640&q=75",
+        "http://localhost:3128/_next/image?url=%2Fapps%2Ftrendi%2Fshot-5.png&w=640&q=75"
+      ],
+      "prices": [
+        "$7.99"
+      ],
+      "introColor": "rgb(247, 242, 236)",
+      "galleryScrollable": true,
+      "errors": []
+    },
+    {
+      "slug": "way-in",
+      "width": 390,
+      "screenshot": "Evidence/WO-0127/final/way-in-phone.png",
+      "overflow": 0,
+      "headingFont": "\"Source Serif 4\", \"Source Serif 4 Fallback\", serif",
+      "imageSources": [
+        "http://localhost:3128/_next/image?url=%2Fapps%2Fway-in%2Fshot-1.png&w=640&q=75",
+        "http://localhost:3128/_next/image?url=%2Fapps%2Fway-in%2Fshot-2.png&w=640&q=75",
+        "http://localhost:3128/_next/image?url=%2Fapps%2Fway-in%2Fshot-3.png&w=640&q=75",
+        "http://localhost:3128/_next/image?url=%2Fapps%2Fway-in%2Fshot-4.png&w=640&q=75",
+        "http://localhost:3128/_next/image?url=%2Fapps%2Fway-in%2Fshot-5.png&w=640&q=75"
+      ],
+      "prices": [
+        "$9.99",
+        "$29.99"
+      ],
+      "introColor": "rgb(5, 51, 56)",
+      "galleryScrollable": true,
+      "errors": []
+    },
+    {
+      "slug": "forget-about-it",
+      "width": 390,
+      "screenshot": "Evidence/WO-0127/final/forget-about-it-phone.png",
+      "overflow": 0,
+      "headingFont": "Newsreader, \"Newsreader Fallback\", serif",
+      "imageSources": [
+        "http://localhost:3128/_next/image?url=%2Fapps%2Fforget-about-it%2Fshot-1.png&w=640&q=75",
+        "http://localhost:3128/_next/image?url=%2Fapps%2Fforget-about-it%2Fshot-2.png&w=640&q=75",
+        "http://localhost:3128/_next/image?url=%2Fapps%2Fforget-about-it%2Fshot-3.png&w=640&q=75",
+        "http://localhost:3128/_next/image?url=%2Fapps%2Fforget-about-it%2Fshot-4.png&w=640&q=75"
+      ],
+      "prices": [
+        "$2.99",
+        "$24.99"
+      ],
+      "introColor": "rgb(40, 28, 22)",
+      "galleryScrollable": true,
+      "errors": []
+    },
+    {
+      "slug": "preaching-to-the-choir",
+      "width": 390,
+      "screenshot": "Evidence/WO-0127/final/preaching-to-the-choir-phone.png",
+      "overflow": 0,
+      "headingFont": "Newsreader, \"Newsreader Fallback\", serif",
+      "imageSources": [
+        "http://localhost:3128/_next/image?url=%2Fapps%2Fpreaching-to-the-choir%2Fshot-1.png&w=640&q=75",
+        "http://localhost:3128/_next/image?url=%2Fapps%2Fpreaching-to-the-choir%2Fshot-2.png&w=640&q=75",
+        "http://localhost:3128/_next/image?url=%2Fapps%2Fpreaching-to-the-choir%2Fshot-3.png&w=640&q=75",
+        "http://localhost:3128/_next/image?url=%2Fapps%2Fpreaching-to-the-choir%2Fshot-4.png&w=640&q=75",
+        "http://localhost:3128/_next/image?url=%2Fapps%2Fpreaching-to-the-choir%2Fshot-5.png&w=640&q=75"
+      ],
+      "prices": [
+        "$2.99",
+        "$24.99",
+        "$79.00"
+      ],
+      "introColor": "rgb(23, 27, 37)",
+      "galleryScrollable": true,
+      "errors": []
+    },
+    {
+      "slug": "old-dog",
+      "width": 390,
+      "screenshot": "Evidence/WO-0127/final/old-dog-phone.png",
+      "overflow": 0,
+      "headingFont": "\"Source Serif 4\", \"Source Serif 4 Fallback\", serif",
+      "imageSources": [
+        "http://localhost:3128/_next/image?url=%2Fapps%2Fold-dog%2Fshot-1.png&w=640&q=75",
+        "http://localhost:3128/_next/image?url=%2Fapps%2Fold-dog%2Fshot-2.png&w=640&q=75",
+        "http://localhost:3128/_next/image?url=%2Fapps%2Fold-dog%2Fshot-3.png&w=640&q=75",
+        "http://localhost:3128/_next/image?url=%2Fapps%2Fold-dog%2Fshot-4.png&w=640&q=75",
+        "http://localhost:3128/_next/image?url=%2Fapps%2Fold-dog%2Fshot-5.png&w=640&q=75"
+      ],
+      "prices": [
+        "$9.99"
+      ],
+      "introColor": "rgb(24, 36, 58)",
+      "galleryScrollable": true,
+      "errors": []
+    },
+    {
+      "slug": "teachers-pet",
+      "width": 390,
+      "screenshot": "Evidence/WO-0127/final/teachers-pet-phone.png",
+      "overflow": 0,
+      "headingFont": "Gelasio, \"Gelasio Fallback\", serif",
+      "imageSources": [
+        "http://localhost:3128/_next/image?url=%2Fapps%2Fteachers-pet%2Fshot-1.png&w=640&q=75",
+        "http://localhost:3128/_next/image?url=%2Fapps%2Fteachers-pet%2Fshot-2.png&w=640&q=75",
+        "http://localhost:3128/_next/image?url=%2Fapps%2Fteachers-pet%2Fshot-3.png&w=640&q=75",
+        "http://localhost:3128/_next/image?url=%2Fapps%2Fteachers-pet%2Fshot-4.png&w=640&q=75",
+        "http://localhost:3128/_next/image?url=%2Fapps%2Fteachers-pet%2Fshot-5.png&w=640&q=75"
+      ],
+      "prices": [
+        "$34.99",
+        "$299.00",
+        "$199.00"
+      ],
+      "introColor": "rgb(22, 51, 47)",
+      "galleryScrollable": true,
+      "errors": []
+    },
+    {
+      "slug": "dreamcatcher",
+      "width": 390,
+      "screenshot": "Evidence/WO-0127/final/dreamcatcher-phone.png",
+      "overflow": 0,
+      "headingFont": "Newsreader, \"Newsreader Fallback\", serif",
+      "imageSources": [
+        "http://localhost:3128/_next/image?url=%2Fapps%2Fdreamcatcher%2Fshot-1.png&w=640&q=75",
+        "http://localhost:3128/_next/image?url=%2Fapps%2Fdreamcatcher%2Fshot-2.png&w=640&q=75",
+        "http://localhost:3128/_next/image?url=%2Fapps%2Fdreamcatcher%2Fshot-3.png&w=640&q=75"
+      ],
+      "prices": [
+        "$9.99"
+      ],
+      "introColor": "rgb(241, 230, 215)",
+      "galleryScrollable": true,
+      "errors": []
+    }
+  ]
+}

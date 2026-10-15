@@ -1,0 +1,10 @@
+
+> koinophobia-labs@0.1.0 dev
+> next dev --webpack -p 3128
+
+▲ Next.js 16.2.12 (webpack)
+- Local:         http://localhost:3128
+- Network:       http://10.0.0.211:3128
+✓ Ready in 699ms
+
+[?25h

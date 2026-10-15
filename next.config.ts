@@ -59,7 +59,7 @@ const RETIRED_STUDIO_ROUTES: Array<[string, string]> = [
 
 const nextConfig: NextConfig = {
   images: {
-    unoptimized: true,
+    // App screenshots use responsive next/image optimization.
   },
   async redirects() {
     return [

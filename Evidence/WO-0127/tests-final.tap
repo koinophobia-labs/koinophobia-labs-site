@@ -1,0 +1,1449 @@
+TAP version 13
+# Subtest: the bridge declares exactly sixteen events
+ok 1 - the bridge declares exactly sixteen events
+  ---
+  duration_ms: 0.770167
+  type: 'test'
+  ...
+# Subtest: every declared event is fired somewhere on the site
+ok 2 - every declared event is fired somewhere on the site
+  ---
+  duration_ms: 2.877666
+  type: 'test'
+  ...
+# Subtest: nothing fires an event that is not declared
+ok 3 - nothing fires an event that is not declared
+  ---
+  duration_ms: 0.775333
+  type: 'test'
+  ...
+# Subtest: the koi world reports journey depth with the motion mode
+ok 4 - the koi world reports journey depth with the motion mode
+  ---
+  duration_ms: 0.142375
+  type: 'test'
+  ...
+# Subtest: the App Store version can be refreshed from the Lookup API at build time, and falls back to the registry
+ok 5 - the App Store version can be refreshed from the Lookup API at build time, and falls back to the registry
+  ---
+  duration_ms: 0.193875
+  type: 'test'
+  ...
+# Subtest: the log has a feed and the social card takes a title
+ok 6 - the log has a feed and the social card takes a title
+  ---
+  duration_ms: 0.096708
+  type: 'test'
+  ...
+# Subtest: every rendered price and billing term comes from the single prices config
+ok 7 - every rendered price and billing term comes from the single prices config
+  ---
+  duration_ms: 14.908708
+  type: 'test'
+  ...
+# Subtest: no page or product copy contains the false no-purchases claim
+ok 8 - no page or product copy contains the false no-purchases claim
+  ---
+  duration_ms: 9.742541
+  type: 'test'
+  ...
+# Subtest: unreleased homes stay off public navigation and discovery
+ok 9 - unreleased homes stay off public navigation and discovery
+  ---
+  duration_ms: 0.523666
+  type: 'test'
+  ...
+# Subtest: all seven homes have original assets and three to five sourced features
+ok 10 - all seven homes have original assets and three to five sourced features
+  ---
+  duration_ms: 0.495708
+  type: 'test'
+  ...
+# Subtest: app palettes meet WCAG AA for text, accents, and card copy
+ok 11 - app palettes meet WCAG AA for text, accents, and card copy
+  ---
+  duration_ms: 0.649292
+  type: 'test'
+  ...
+# {"scope":"audit-checkout","event":"checkout_unavailable"}
+# Subtest: public route creates a CRM lead, $250 balance and Stripe session through createCheckout
+ok 12 - public route creates a CRM lead, $250 balance and Stripe session through createCheckout
+  ---
+  duration_ms: 3.959417
+  type: 'test'
+  ...
+# Subtest: checkout validates optional email/source, defaults source, and uses supplied email only
+ok 13 - checkout validates optional email/source, defaults source, and uses supplied email only
+  ---
+  duration_ms: 0.4125
+  type: 'test'
+  ...
+# Subtest: checkout rejects cross-site, invalid, oversized, rate-limited and unavailable requests before Stripe
+ok 14 - checkout rejects cross-site, invalid, oversized, rate-limited and unavailable requests before Stripe
+  ---
+  duration_ms: 1.422208
+  type: 'test'
+  ...
+# Subtest: paid, unpaid, invalid and unrelated sessions render appropriate confirmation without customer data
+ok 15 - paid, unpaid, invalid and unrelated sessions render appropriate confirmation without customer data
+  ---
+  duration_ms: 3.956917
+  type: 'test'
+  ...
+# Subtest: existing checkout.session.completed processing marks audit payment and CRM summaries paid, once
+ok 16 - existing checkout.session.completed processing marks audit payment and CRM summaries paid, once
+  ---
+  duration_ms: 0.418417
+  type: 'test'
+  ...
+# Subtest: booking stores verified session and Stripe contact on the same lead; validates required times
+ok 17 - booking stores verified session and Stripe contact on the same lead; validates required times
+  ---
+  duration_ms: 0.559666
+  type: 'test'
+  ...
+# Subtest: intake handoff rejects forged paid state and only notifies once after durable booking
+ok 18 - intake handoff rejects forged paid state and only notifies once after durable booking
+  ---
+  duration_ms: 1.654583
+  type: 'test'
+  ...
+# Subtest: an older paid tab books its own Stripe-verified session despite a newer cookie
+ok 19 - an older paid tab books its own Stripe-verified session despite a newer cookie
+  ---
+  duration_ms: 0.416917
+  type: 'test'
+  ...
+# Subtest: controlled fixture crawl is bounded, same-origin, multi-page, and records broken pages
+ok 20 - controlled fixture crawl is bounded, same-origin, multi-page, and records broken pages
+  ---
+  duration_ms: 42.346542
+  type: 'test'
+  ...
+# Subtest: page limit is enforced
+ok 21 - page limit is enforced
+  ---
+  duration_ms: 0.269708
+  type: 'test'
+  ...
+# Subtest: transparent scoring applies severity deductions and leaves unavailable categories unscored
+ok 22 - transparent scoring applies severity deductions and leaves unavailable categories unscored
+  ---
+  duration_ms: 0.552708
+  type: 'test'
+  ...
+# Subtest: queued creation stores normalized domain, requested pages, and report version
+ok 23 - queued creation stores normalized domain, requested pages, and report version
+  ---
+  duration_ms: 1.956834
+  type: 'test'
+  ...
+# Subtest: valid lifecycle persists progress and completes; invalid transition is rejected
+ok 24 - valid lifecycle persists progress and completes; invalid transition is rejected
+  ---
+  duration_ms: 0.392875
+  type: 'test'
+  ...
+# Subtest: failure, cancellation, archive and retry lineage persist
+ok 25 - failure, cancellation, archive and retry lineage persist
+  ---
+  duration_ms: 0.358708
+  type: 'test'
+  ...
+# Subtest: raw measurements are inserted independently of editable findings
+ok 26 - raw measurements are inserted independently of editable findings
+  ---
+  duration_ms: 0.201166
+  type: 'test'
+  ...
+# Subtest: founder findings and editable visibility, proposal selection, severity filters persist
+ok 27 - founder findings and editable visibility, proposal selection, severity filters persist
+  ---
+  duration_ms: 0.246208
+  type: 'test'
+  ...
+# Subtest: finding reorder is persisted transactionally
+ok 28 - finding reorder is persisted transactionally
+  ---
+  duration_ms: 0.106958
+  type: 'test'
+  ...
+# Subtest: shared limiter enforces, resets, and atomically caps concurrent consumption
+ok 29 - shared limiter enforces, resets, and atomically caps concurrent consumption
+  ---
+  duration_ms: 4.101625
+  type: 'test'
+  ...
+# Subtest: proposal traceability links every selected finding
+ok 30 - proposal traceability links every selected finding
+  ---
+  duration_ms: 0.124375
+  type: 'test'
+  ...
+# Subtest: protected audit PDF rejects unauthenticated requests
+ok 31 - protected audit PDF rejects unauthenticated requests
+  ---
+  duration_ms: 2.738917
+  type: 'test'
+  ...
+# Subtest: SSRF guard rejects private and credentialed targets
+ok 32 - SSRF guard rejects private and credentialed targets
+  ---
+  duration_ms: 0.533166
+  type: 'test'
+  ...
+# Subtest: audit edit validates enums and required evidence
+ok 33 - audit edit validates enums and required evidence
+  ---
+  duration_ms: 0.123083
+  type: 'test'
+  ...
+# Subtest: audit PDF renders multiple findings and excludes internal notes
+ok 34 - audit PDF renders multiple findings and excludes internal notes
+  ---
+  duration_ms: 29.701083
+  type: 'test'
+  ...
+# Subtest: audit PDF excludes normalized findings hidden from clients
+ok 35 - audit PDF excludes normalized findings hidden from clients
+  ---
+  duration_ms: 3.032625
+  type: 'test'
+  ...
+# Subtest: QR attribution survives hub, audit, intake, and arbitrary encoded sources
+ok 36 - QR attribution survives hub, audit, intake, and arbitrary encoded sources
+  ---
+  duration_ms: 0.92175
+  type: 'test'
+  ...
+# Subtest: audit form validates contact and budget and preserves source and offer
+ok 37 - audit form validates contact and budget and preserves source and offer
+  ---
+  duration_ms: 1.379708
+  type: 'test'
+  ...
+# Subtest: founder and readiness paths retain source without imposing business fields
+ok 38 - founder and readiness paths retain source without imposing business fields
+  ---
+  duration_ms: 0.100709
+  type: 'test'
+  ...
+# Subtest: source and offer reach database columns and survive a read
+ok 39 - source and offer reach database columns and survive a read
+  ---
+  duration_ms: 4.511875
+  type: 'test'
+  ...
+# Subtest: different source or offer cannot silently deduplicate onto another inquiry
+ok 40 - different source or offer cannot silently deduplicate onto another inquiry
+  ---
+  duration_ms: 0.393167
+  type: 'test'
+  ...
+# Subtest: manual quick add accepts phone-only, defaults Chamber, and rejects bad fields
+ok 41 - manual quick add accepts phone-only, defaults Chamber, and rejects bad fields
+  ---
+  duration_ms: 0.615291
+  type: 'test'
+  ...
+# Subtest: CRM source and due filters bind source and use Chicago day boundaries
+ok 42 - CRM source and due filters bind source and use Chicago day boundaries
+  ---
+  duration_ms: 0.470792
+  type: 'test'
+  ...
+# Subtest: quick add rejects anonymous requests before writing
+ok 43 - quick add rejects anonymous requests before writing
+  ---
+  duration_ms: 2.543291
+  type: 'test'
+  ...
+# Subtest: canonical audit QR route is no longer redirected to the founder offer
+ok 44 - canonical audit QR route is no longer redirected to the founder offer
+  ---
+  duration_ms: 0.501833
+  type: 'test'
+  ...
+# Subtest: quick add rejects cross-site requests even with an administrator session
+ok 45 - quick add rejects cross-site requests even with an administrator session
+  ---
+  duration_ms: 1.283292
+  type: 'test'
+  ...
+# Subtest: existing standard intake remains backward compatible
+ok 46 - existing standard intake remains backward compatible
+  ---
+  duration_ms: 9.874958
+  type: 'test'
+  ...
+# Subtest: intake rejects a non-http website value
+ok 47 - intake rejects a non-http website value
+  ---
+  duration_ms: 0.179208
+  type: 'test'
+  ...
+# Subtest: concierge handoff is recomputed and stored as a structured lead
+ok 48 - concierge handoff is recomputed and stored as a structured lead
+  ---
+  duration_ms: 1.767917
+  type: 'test'
+  ...
+# Subtest: edited answers invalidate the token and the server recomputes a safer route
+ok 49 - edited answers invalidate the token and the server recomputes a safer route
+  ---
+  duration_ms: 0.37075
+  type: 'test'
+  ...
+# Subtest: malformed concierge data fails closed instead of creating a forged concierge lead
+ok 50 - malformed concierge data fails closed instead of creating a forged concierge lead
+  ---
+  duration_ms: 0.12225
+  type: 'test'
+  ...
+# Subtest: concierge email notification contains qualification data and escapes visitor HTML
+ok 51 - concierge email notification contains qualification data and escapes visitor HTML
+  ---
+  duration_ms: 1.489708
+  type: 'test'
+  ...
+# Subtest: CRM persistence writes the concierge envelope to JSONB
+ok 52 - CRM persistence writes the concierge envelope to JSONB
+  ---
+  duration_ms: 0.974166
+  type: 'test'
+  ...
+# Subtest: the versioned concierge migration is included in the migration runner
+ok 53 - the versioned concierge migration is included in the migration runner
+  ---
+  duration_ms: 0.158
+  type: 'test'
+  ...
+# Subtest: readiness intake uses existing notes and service fields through CRM and email
+ok 54 - readiness intake uses existing notes and service fields through CRM and email
+  ---
+  duration_ms: 1.711
+  type: 'test'
+  ...
+# Subtest: a draft survives route changes in the same browser tab
+ok 55 - a draft survives route changes in the same browser tab
+  ---
+  duration_ms: 0.496125
+  type: 'test'
+  ...
+# Subtest: two tabs on one browser origin cannot see each other's concierge drafts
+ok 56 - two tabs on one browser origin cannot see each other's concierge drafts
+  ---
+  duration_ms: 0.279708
+  type: 'test'
+  ...
+# Subtest: a foreign concierge handoff identifier is rejected
+ok 57 - a foreign concierge handoff identifier is rejected
+  ---
+  duration_ms: 0.107791
+  type: 'test'
+  ...
+# Subtest: upgrade migration deletes unowned origin-wide drafts
+ok 58 - upgrade migration deletes unowned origin-wide drafts
+  ---
+  duration_ms: 0.1405
+  type: 'test'
+  ...
+# Subtest: successful handoff cleanup removes only the current tab draft
+ok 59 - successful handoff cleanup removes only the current tab draft
+  ---
+  duration_ms: 0.0845
+  type: 'test'
+  ...
+# Subtest: unavailable browser storage fails closed
+ok 60 - unavailable browser storage fails closed
+  ---
+  duration_ms: 0.071583
+  type: 'test'
+  ...
+# Subtest: routes uncertainty to the Revenue Leak Audit
+ok 61 - routes uncertainty to the Revenue Leak Audit
+  ---
+  duration_ms: 2.122917
+  type: 'test'
+  ...
+# Subtest: routes a material website problem to a rebuild
+ok 62 - routes a material website problem to a rebuild
+  ---
+  duration_ms: 0.517041
+  type: 'test'
+  ...
+# Subtest: routes lead follow-up and repetitive work to automation
+ok 63 - routes lead follow-up and repetitive work to automation
+  ---
+  duration_ms: 0.443834
+  type: 'test'
+  ...
+# Subtest: routes a portal or product to custom product development
+ok 64 - routes a portal or product to custom product development
+  ---
+  duration_ms: 0.213125
+  type: 'test'
+  ...
+# Subtest: routes an isolated repair to Quick Fix Sprint
+ok 65 - routes an isolated repair to Quick Fix Sprint
+  ---
+  duration_ms: 0.117959
+  type: 'test'
+  ...
+# Subtest: routes conflicting website and custom-product signals to manual review
+ok 66 - routes conflicting website and custom-product signals to manual review
+  ---
+  duration_ms: 0.180792
+  type: 'test'
+  ...
+# Subtest: routes regulated requirements to manual review
+ok 67 - routes regulated requirements to manual review
+  ---
+  duration_ms: 0.184916
+  type: 'test'
+  ...
+# Subtest: routes harmful work and irreconcilable custom-product constraints to not a fit
+ok 68 - routes harmful work and irreconcilable custom-product constraints to not a fit
+  ---
+  duration_ms: 0.112666
+  type: 'test'
+  ...
+# Subtest: empty and extremely short input fail validation
+ok 69 - empty and extremely short input fail validation
+  ---
+  duration_ms: 0.256041
+  type: 'test'
+  ...
+# Subtest: excessively long input and unsafe URLs fail validation
+ok 70 - excessively long input and unsafe URLs fail validation
+  ---
+  duration_ms: 0.175625
+  type: 'test'
+  ...
+# Subtest: prompt injection and price manipulation do not control routing
+ok 71 - prompt injection and price manipulation do not control routing
+  ---
+  duration_ms: 0.484708
+  type: 'test'
+  ...
+# Subtest: AI provider outage leaves a complete deterministic response
+ok 72 - AI provider outage leaves a complete deterministic response
+  ---
+  duration_ms: 10.567
+  type: 'test'
+  ...
+# Subtest: malformed model output fails closed to the deterministic response
+ok 73 - malformed model output fails closed to the deterministic response
+  ---
+  duration_ms: 0.794292
+  type: 'test'
+  ...
+# Subtest: valid structured model output can enhance summary but not routing
+ok 74 - valid structured model output can enhance summary but not routing
+  ---
+  duration_ms: 0.794917
+  type: 'test'
+  ...
+# Subtest: AI timeout falls back without breaking evaluation
+ok 75 - AI timeout falls back without breaking evaluation
+  ---
+  duration_ms: 12.692208
+  type: 'test'
+  ...
+# Subtest: versioned session recovery accepts fresh drafts and rejects expired or malformed data
+ok 76 - versioned session recovery accepts fresh drafts and rejects expired or malformed data
+  ---
+  duration_ms: 0.295708
+  type: 'test'
+  ...
+# Subtest: approved verified Google account is accepted
+ok 77 - approved verified Google account is accepted
+  ---
+  duration_ms: 1.800541
+  type: 'test'
+  ...
+# Subtest: unapproved verified Google account is denied
+ok 78 - unapproved verified Google account is denied
+  ---
+  duration_ms: 0.19625
+  type: 'test'
+  ...
+# Subtest: unverified Google account is denied
+ok 79 - unverified Google account is denied
+  ---
+  duration_ms: 0.11275
+  type: 'test'
+  ...
+# Subtest: missing email is denied
+ok 80 - missing email is denied
+  ---
+  duration_ms: 0.083292
+  type: 'test'
+  ...
+# Subtest: case and surrounding whitespace normalize to an exact allowlist match
+ok 81 - case and surrounding whitespace normalize to an exact allowlist match
+  ---
+  duration_ms: 0.356042
+  type: 'test'
+  ...
+# Subtest: partial email and same-domain users are denied
+ok 82 - partial email and same-domain users are denied
+  ---
+  duration_ms: 0.058792
+  type: 'test'
+  ...
+# Subtest: an unsupported provider never inherits Google authorization
+ok 83 - an unsupported provider never inherits Google authorization
+  ---
+  duration_ms: 0.195083
+  type: 'test'
+  ...
+# Subtest: session authorization requires every verified Google claim and the live allowlist
+ok 84 - session authorization requires every verified Google claim and the live allowlist
+  ---
+  duration_ms: 0.219125
+  type: 'test'
+  ...
+# Subtest: Auth.js uses JWT sessions, a 12-hour lifetime, and protected session cookies
+ok 85 - Auth.js uses JWT sessions, a 12-hour lifetime, and protected session cookies
+  ---
+  duration_ms: 0.259709
+  type: 'test'
+  ...
+# Subtest: approved and unapproved Auth.js sessions are enforced by page and API guards
+ok 86 - approved and unapproved Auth.js sessions are enforced by page and API guards
+  ---
+  duration_ms: 3.223834
+  type: 'test'
+  ...
+# Subtest: legacy fallback can be retired by removing its secret
+ok 87 - legacy fallback can be retired by removing its secret
+  ---
+  duration_ms: 5.323833
+  type: 'test'
+  ...
+# Subtest: every private CRM surface contains its server-side authorization guard
+ok 88 - every private CRM surface contains its server-side authorization guard
+  ---
+  duration_ms: 1.227
+  type: 'test'
+  ...
+# Subtest: login and OAuth error UI disclose no secret field, token, or configuration
+ok 89 - login and OAuth error UI disclose no secret field, token, or configuration
+  ---
+  duration_ms: 0.119667
+  type: 'test'
+  ...
+# Subtest: sign-out clears both session paths and public intake remains outside the boundary
+ok 90 - sign-out clears both session paths and public intake remains outside the boundary
+  ---
+  duration_ms: 0.213792
+  type: 'test'
+  ...
+# Subtest: intake route validation accepts a complete CRM lead
+ok 91 - intake route validation accepts a complete CRM lead
+  ---
+  duration_ms: 0.79125
+  type: 'test'
+  ...
+# Subtest: protected lead list rejects a request without a session
+ok 92 - protected lead list rejects a request without a session
+  ---
+  duration_ms: 2.1615
+  type: 'test'
+  ...
+# Subtest: protected update rejects a request without a session
+ok 93 - protected update rejects a request without a session
+  ---
+  duration_ms: 0.519834
+  type: 'test'
+  ...
+# Subtest: only an explicit idempotency key deduplicates retries
+ok 94 - only an explicit idempotency key deduplicates retries
+  ---
+  duration_ms: 3.181917
+  type: 'test'
+  ...
+# Subtest: status follow-up and internal note update
+ok 95 - status follow-up and internal note update
+  ---
+  duration_ms: 0.191292
+  type: 'test'
+  ...
+# Subtest: legacy leads without founder packet columns still map safely
+ok 96 - legacy leads without founder packet columns still map safely
+  ---
+  duration_ms: 0.115083
+  type: 'test'
+  ...
+# Subtest: enum and date validation
+ok 97 - enum and date validation
+  ---
+  duration_ms: 0.384916
+  type: 'test'
+  ...
+# Subtest: signed session authorizes and rejects tampering
+ok 98 - signed session authorizes and rejects tampering
+  ---
+  duration_ms: 0.252167
+  type: 'test'
+  ...
+# Subtest: preview Vercel builds cannot execute migrations
+ok 99 - preview Vercel builds cannot execute migrations
+  ---
+  duration_ms: 0.667625
+  type: 'test'
+  ...
+# Subtest: ordinary production Vercel builds are application-only
+ok 100 - ordinary production Vercel builds are application-only
+  ---
+  duration_ms: 0.100209
+  type: 'test'
+  ...
+# Subtest: a direct production Neon endpoint succeeds with every required guard
+ok 101 - a direct production Neon endpoint succeeds with every required guard
+  ---
+  duration_ms: 1.001291
+  type: 'test'
+  ...
+# Subtest: missing or vague approval refuses before connecting or executing SQL
+ok 102 - missing or vague approval refuses before connecting or executing SQL
+  ---
+  duration_ms: 0.124417
+  type: 'test'
+  ...
+# Subtest: target and runtime mismatches refuse before connecting
+ok 103 - target and runtime mismatches refuse before connecting
+  ---
+  duration_ms: 0.106708
+  type: 'test'
+  ...
+# Subtest: the database provider, direct URL, protocol, and TLS are mandatory
+ok 104 - the database provider, direct URL, protocol, and TLS are mandatory
+  ---
+  duration_ms: 0.139542
+  type: 'test'
+  ...
+# Subtest: a wrong Neon endpoint is refused before connecting
+ok 105 - a wrong Neon endpoint is refused before connecting
+  ---
+  duration_ms: 0.069625
+  type: 'test'
+  ...
+# Subtest: a preview endpoint is refused when production is expected
+ok 106 - a preview endpoint is refused when production is expected
+  ---
+  duration_ms: 0.057417
+  type: 'test'
+  ...
+# Subtest: a pooled Neon hostname is refused before connecting
+ok 107 - a pooled Neon hostname is refused before connecting
+  ---
+  duration_ms: 0.054709
+  type: 'test'
+  ...
+# Subtest: the expected endpoint ID must be supplied independently
+ok 108 - the expected endpoint ID must be supplied independently
+  ---
+  duration_ms: 0.076667
+  type: 'test'
+  ...
+# Subtest: the expected database name and migration role are mandatory
+ok 109 - the expected database name and migration role are mandatory
+  ---
+  duration_ms: 0.06225
+  type: 'test'
+  ...
+# Subtest: a URL database-name mismatch is refused before connecting
+ok 110 - a URL database-name mismatch is refused before connecting
+  ---
+  duration_ms: 0.049625
+  type: 'test'
+  ...
+# Subtest: a connected database-name mismatch refuses before migration SQL
+ok 111 - a connected database-name mismatch refuses before migration SQL
+  ---
+  duration_ms: 0.069209
+  type: 'test'
+  ...
+# Subtest: a connected role mismatch refuses before migration SQL
+ok 112 - a connected role mismatch refuses before migration SQL
+  ---
+  duration_ms: 0.078959
+  type: 'test'
+  ...
+# Subtest: read-only and recovery connections refuse before migration SQL
+ok 113 - read-only and recovery connections refuse before migration SQL
+  ---
+  duration_ms: 0.182833
+  type: 'test'
+  ...
+# Subtest: an unexpected application baseline refuses before migration SQL
+ok 114 - an unexpected application baseline refuses before migration SQL
+  ---
+  duration_ms: 0.131333
+  type: 'test'
+  ...
+# Subtest: connection and identity failures expose no connection secrets
+ok 115 - connection and identity failures expose no connection secrets
+  ---
+  duration_ms: 0.208042
+  type: 'test'
+  ...
+# Subtest: successful output exposes only the safe target and migration filenames
+ok 116 - successful output exposes only the safe target and migration filenames
+  ---
+  duration_ms: 0.323333
+  type: 'test'
+  ...
+# Subtest: test and development migrations allow an explicit loopback-only path
+ok 117 - test and development migrations allow an explicit loopback-only path
+  ---
+  duration_ms: 0.539167
+  type: 'test'
+  ...
+# Subtest: the local override refuses remote and production targets
+ok 118 - the local override refuses remote and production targets
+  ---
+  duration_ms: 0.082833
+  type: 'test'
+  ...
+# Subtest: migration failures roll back, identify the file, and stop
+ok 119 - migration failures roll back, identify the file, and stop
+  ---
+  duration_ms: 0.163792
+  type: 'test'
+  ...
+# Subtest: the former custom database setting is not required anywhere
+ok 120 - the former custom database setting is not required anywhere
+  ---
+  duration_ms: 1045.457125
+  type: 'test'
+  ...
+# Subtest: migration 008 keeps idempotent guards for all columns and indexes
+ok 121 - migration 008 keeps idempotent guards for all columns and indexes
+  ---
+  duration_ms: 0.568958
+  type: 'test'
+  ...
+# Subtest: a real PostgreSQL schema containing migration 008 is accepted unchanged
+ok 122 - a real PostgreSQL schema containing migration 008 is accepted unchanged
+  ---
+  duration_ms: 8087.95375
+  type: 'test'
+  ...
+# Subtest: every product carries verification metadata
+ok 123 - every product carries verification metadata
+  ---
+  duration_ms: 0.650334
+  type: 'test'
+  ...
+# Subtest: no product status has gone stale for its stage
+not ok 124 - no product status has gone stale for its stage
+  ---
+  duration_ms: 1.727041
+  type: 'test'
+  location: '/Volumes/KoiBuild/koinophobia-labs-site/WO-0127/tests/dev-universe.test.ts:2:2383'
+  failureType: 'testCodeFailure'
+  error: |-
+    STALE STATUS: Teacher's Pet
+      stage:        local (Local development)
+      verified at:  2026-09-13 — 32 days ago
+      allowed age:  30 days for this stage
+      what to do:   re-check Teacher's Pet against release artifacts
+                    (archives, Apple delivery logs, live HTTP, signing),
+                    update status/evidence if it moved, then set
+                    verifiedAt to today in lib/dev/universe.ts.
+      do NOT just bump the date — the date is a claim that someone looked.
+    
+    STALE STATUS: KOI
+      stage:        local (Local development)
+      verified at:  2026-09-13 — 32 days ago
+      allowed age:  30 days for this stage
+      what to do:   re-check KOI against release artifacts
+                    (archives, Apple delivery logs, live HTTP, signing),
+                    update status/evidence if it moved, then set
+                    verifiedAt to today in lib/dev/universe.ts.
+      do NOT just bump the date — the date is a claim that someone looked.
+    + actual - expected
+    
+    + [
+    +   "Teacher's Pet",
+    +   'KOI'
+    + ]
+    - []
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  actual:
+    0: "Teacher's Pet"
+    1: 'KOI'
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (/Volumes/KoiBuild/koinophobia-labs-site/WO-0127/tests/dev-universe.test.ts:66:10)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1306:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:897:18)
+    Test.postRun (node:internal/test_runner/test:1447:19)
+    Test.run (node:internal/test_runner/test:1372:12)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3)
+  ...
+# Subtest: every stage has a freshness budget, and fast stages are tight
+ok 125 - every stage has a freshness budget, and fast stages are tight
+  ---
+  duration_ms: 0.091083
+  type: 'test'
+  ...
+# Subtest: a stale status produces an actionable message
+ok 126 - a stale status produces an actionable message
+  ---
+  duration_ms: 0.122542
+  type: 'test'
+  ...
+# Subtest: freshness is never auto-refreshed
+ok 127 - freshness is never auto-refreshed
+  ---
+  duration_ms: 0.210792
+  type: 'test'
+  ...
+# Subtest: a status owner is recorded
+ok 128 - a status owner is recorded
+  ---
+  duration_ms: 0.056917
+  type: 'test'
+  ...
+# Subtest: published dates are literals, never read from the clock
+ok 129 - published dates are literals, never read from the clock
+  ---
+  duration_ms: 0.346709
+  type: 'test'
+  ...
+# Subtest: stage and reach never contradict each other
+ok 130 - stage and reach never contradict each other
+  ---
+  duration_ms: 0.086375
+  type: 'test'
+  ...
+# Subtest: the stage ladder never collapses distinct release states
+ok 131 - the stage ladder never collapses distinct release states
+  ---
+  duration_ms: 0.053167
+  type: 'test'
+  ...
+# Subtest: every stage maps to a display family, and the family never upgrades a stage
+ok 132 - every stage maps to a display family, and the family never upgrades a stage
+  ---
+  duration_ms: 0.092083
+  type: 'test'
+  ...
+# Subtest: the front office is in the universe, honestly
+ok 133 - the front office is in the universe, honestly
+  ---
+  duration_ms: 0.089917
+  type: 'test'
+  ...
+# Subtest: TestFlight claims require TestFlight evidence
+ok 134 - TestFlight claims require TestFlight evidence
+  ---
+  duration_ms: 0.090042
+  type: 'test'
+  ...
+# Subtest: You Know Ball does not claim it was never uploaded
+ok 135 - You Know Ball does not claim it was never uploaded
+  ---
+  duration_ms: 0.128875
+  type: 'test'
+  ...
+# Subtest: Trendi reflects its verified public release while the dated log preserves beta history
+ok 136 - Trendi reflects its verified public release while the dated log preserves beta history
+  ---
+  duration_ms: 0.122125
+  type: 'test'
+  ...
+# Subtest: Career Forge does not claim checkout is closed, or that anyone bought
+ok 137 - Career Forge does not claim checkout is closed, or that anyone bought
+  ---
+  duration_ms: 0.117166
+  type: 'test'
+  ...
+# Subtest: unsourceable statistics stay out of published copy
+ok 138 - unsourceable statistics stay out of published copy
+  ---
+  duration_ms: 0.892
+  type: 'test'
+  ...
+# Subtest: every product states what is not true yet
+ok 139 - every product states what is not true yet
+  ---
+  duration_ms: 0.0415
+  type: 'test'
+  ...
+# Subtest: internal-only products offer nothing to click
+ok 140 - internal-only products offer nothing to click
+  ---
+  duration_ms: 0.040375
+  type: 'test'
+  ...
+# Subtest: no product uses launch language it cannot back
+ok 141 - no product uses launch language it cannot back
+  ---
+  duration_ms: 0.111958
+  type: 'test'
+  ...
+# Subtest: no product invents users, revenue, or testimonials
+ok 142 - no product invents users, revenue, or testimonials
+  ---
+  duration_ms: 0.206709
+  type: 'test'
+  ...
+# Subtest: product slugs are unique and every one resolves
+ok 143 - product slugs are unique and every one resolves
+  ---
+  duration_ms: 0.040375
+  type: 'test'
+  ...
+# Subtest: every product action link is usable by a stranger
+ok 144 - every product action link is usable by a stranger
+  ---
+  duration_ms: 0.106542
+  type: 'test'
+  ...
+# Subtest: no note publishes without BOTH gates
+ok 145 - no note publishes without BOTH gates
+  ---
+  duration_ms: 0.041333
+  type: 'test'
+  ...
+# Subtest: every first-person note is currently held for review
+ok 146 - every first-person note is currently held for review
+  ---
+  duration_ms: 0.025
+  type: 'test'
+  ...
+# Subtest: held notes are preserved, never emptied
+ok 147 - held notes are preserved, never emptied
+  ---
+  duration_ms: 0.041791
+  type: 'test'
+  ...
+# Subtest: the review file still covers every note
+ok 148 - the review file still covers every note
+  ---
+  duration_ms: 0.068667
+  type: 'test'
+  ...
+# Subtest: published field notes are specific, dated, and resolvable
+ok 149 - published field notes are specific, dated, and resolvable
+  ---
+  duration_ms: 0.035125
+  type: 'test'
+  ...
+# Subtest: every experiment reports what it showed
+ok 150 - every experiment reports what it showed
+  ---
+  duration_ms: 0.025
+  type: 'test'
+  ...
+# Subtest: the five required lead scenarios produce complete, bounded founder packets
+ok 151 - the five required lead scenarios produce complete, bounded founder packets
+  ---
+  duration_ms: 3.501709
+  type: 'test'
+  ...
+# Subtest: every selected price, timeline, and scope item comes from the existing offer catalog
+ok 152 - every selected price, timeline, and scope item comes from the existing offer catalog
+  ---
+  duration_ms: 0.365959
+  type: 'test'
+  ...
+# Subtest: the audit intake maps to the existing $250 audit and its correct public link
+ok 153 - the audit intake maps to the existing $250 audit and its correct public link
+  ---
+  duration_ms: 0.086375
+  type: 'test'
+  ...
+# Subtest: concierge routing remains authoritative when the packet is attached
+ok 154 - concierge routing remains authoritative when the packet is attached
+  ---
+  duration_ms: 0.111209
+  type: 'test'
+  ...
+# Subtest: Resend receives one founder-only notification with Reply-To and the full draft packet
+ok 155 - Resend receives one founder-only notification with Reply-To and the full draft packet
+  ---
+  duration_ms: 11.770667
+  type: 'test'
+  ...
+# Subtest: lead-controlled text is escaped in founder notification HTML
+ok 156 - lead-controlled text is escaped in founder notification HTML
+  ---
+  duration_ms: 1.431834
+  type: 'test'
+  ...
+# Subtest: the CRM keeps the founder draft editable without a send action
+ok 157 - the CRM keeps the founder draft editable without a send action
+  ---
+  duration_ms: 0.243875
+  type: 'test'
+  ...
+# Subtest: the packet is persisted on the lead and smoke submissions remain non-prospects
+ok 158 - the packet is persisted on the lead and smoke submissions remain non-prospects
+  ---
+  duration_ms: 0.905791
+  type: 'test'
+  ...
+# Subtest: the additive packet migration is in the migration runner
+ok 159 - the additive packet migration is in the migration runner
+  ---
+  duration_ms: 0.322041
+  type: 'test'
+  ...
+# Subtest: SITE-02: no Origin AND no sec-fetch-site is UNTRUSTED (scripted client)
+ok 160 - SITE-02: no Origin AND no sec-fetch-site is UNTRUSTED (scripted client)
+  ---
+  duration_ms: 13.244625
+  type: 'test'
+  ...
+# Subtest: SITE-02: same-origin sec-fetch-site is trusted
+ok 161 - SITE-02: same-origin sec-fetch-site is trusted
+  ---
+  duration_ms: 0.451625
+  type: 'test'
+  ...
+# Subtest: SITE-02: cross-site sec-fetch-site is rejected
+ok 162 - SITE-02: cross-site sec-fetch-site is rejected
+  ---
+  duration_ms: 0.073042
+  type: 'test'
+  ...
+# Subtest: SITE-02: a matching Origin is trusted, a foreign Origin is not
+ok 163 - SITE-02: a matching Origin is trusted, a foreign Origin is not
+  ---
+  duration_ms: 0.320583
+  type: 'test'
+  ...
+# Subtest: SITE-02: rate key prefers the platform-trusted x-real-ip
+ok 164 - SITE-02: rate key prefers the platform-trusted x-real-ip
+  ---
+  duration_ms: 0.195125
+  type: 'test'
+  ...
+# Subtest: SITE-02: rotating the LEFTMOST x-forwarded-for token cannot change the key
+ok 165 - SITE-02: rotating the LEFTMOST x-forwarded-for token cannot change the key
+  ---
+  duration_ms: 0.715541
+  type: 'test'
+  ...
+# Subtest: SITE-01: identical content in the same window yields the SAME idempotency key
+ok 166 - SITE-01: identical content in the same window yields the SAME idempotency key
+  ---
+  duration_ms: 0.208917
+  type: 'test'
+  ...
+# Subtest: SITE-01: different content yields a different key
+ok 167 - SITE-01: different content yields a different key
+  ---
+  duration_ms: 0.077375
+  type: 'test'
+  ...
+# Subtest: SITE-01: a concierge session or explicit key overrides the content key
+ok 168 - SITE-01: a concierge session or explicit key overrides the content key
+  ---
+  duration_ms: 0.117417
+  type: 'test'
+  ...
+# Subtest: SITE-01: email sends on a new lead, is SKIPPED on a confirmed dedupe, sends on storage failure
+ok 169 - SITE-01: email sends on a new lead, is SKIPPED on a confirmed dedupe, sends on storage failure
+  ---
+  duration_ms: 0.340041
+  type: 'test'
+  ...
+# Subtest: the koi world leads through six destinations and reads every fact from the registry
+ok 170 - the koi world leads through six destinations and reads every fact from the registry
+  ---
+  duration_ms: 1.333708
+  type: 'test'
+  ...
+# Subtest: every koi clip referenced by the journey ships both renditions and a poster
+ok 171 - every koi clip referenced by the journey ships both renditions and a poster
+  ---
+  duration_ms: 0.601292
+  type: 'test'
+  ...
+# Subtest: the layout loads three font families and four site stylesheets, nothing from the agency era
+ok 172 - the layout loads three font families and four site stylesheets, nothing from the agency era
+  ---
+  duration_ms: 0.208125
+  type: 'test'
+  ...
+# Subtest: Trendi privacy and support routes are publication-ready and discoverable
+not ok 173 - Trendi privacy and support routes are publication-ready and discoverable
+  ---
+  duration_ms: 6.258042
+  type: 'test'
+  location: '/Volumes/KoiBuild/koinophobia-labs-site/WO-0127/tests/legal-pages.test.ts:2:1215'
+  failureType: 'testCodeFailure'
+  error: |-
+    The expression evaluated to a falsy value:
+    
+      assert.ok(privacy.includes("every third party with whom Trendi shares"))
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (/Volumes/KoiBuild/koinophobia-labs-site/WO-0127/tests/legal-pages.test.ts:23:10)
+    async Test.run (node:internal/test_runner/test:1313:7)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3)
+  ...
+# Subtest: every shipped app's legal pages exist and are in the sitemap
+ok 174 - every shipped app's legal pages exist and are in the sitemap
+  ---
+  duration_ms: 1.287834
+  type: 'test'
+  ...
+# Subtest: payment reliability on real PostgreSQL
+    # Subtest: retainer completion, renewal and cancellation dedupe concurrent and distinct event IDs
+    ok 1 - retainer completion, renewal and cancellation dedupe concurrent and distinct event IDs
+      ---
+      duration_ms: 56.803667
+      type: 'test'
+      ...
+    # Subtest: renewals roll back atomically, retry, and initial invoice delivered before checkout is not double-counted
+    ok 2 - renewals roll back atomically, retry, and initial invoice delivered before checkout is not double-counted
+      ---
+      duration_ms: 13.408375
+      type: 'test'
+      ...
+    # Subtest: failure after payment mutation rolls back the event, payment, summaries and email reservation; retry pays
+    ok 3 - failure after payment mutation rolls back the event, payment, summaries and email reservation; retry pays
+      ---
+      duration_ms: 7.433417
+      type: 'test'
+      ...
+    # Subtest: successful replay is a no-op and concurrent duplicate deliveries apply once
+    ok 4 - successful replay is a no-op and concurrent duplicate deliveries apply once
+      ---
+      duration_ms: 8.666875
+      type: 'test'
+      ...
+    # Subtest: different event IDs for one payment send one alert, including async success and submitted booking
+    ok 5 - different event IDs for one payment send one alert, including async success and submitted booking
+      ---
+      duration_ms: 5.412292
+      type: 'test'
+      ...
+    # Subtest: legacy failed event rows with null processed_at remain retryable
+    ok 6 - legacy failed event rows with null processed_at remain retryable
+      ---
+      duration_ms: 4.427333
+      type: 'test'
+      ...
+    # Subtest: unpaid completion and non-audit payments do not send paid audit mail
+    ok 7 - unpaid completion and non-audit payments do not send paid audit mail
+      ---
+      duration_ms: 4.392833
+      type: 'test'
+      ...
+# Paid audit email: delivery uncertain { paymentId: 'ca548f70-9b9b-48d6-873d-02a8a2730c1f' }
+    # Subtest: uncertain email delivery is recorded without retrying mail or undoing payment
+    ok 8 - uncertain email delivery is recorded without retrying mail or undoing payment
+      ---
+      duration_ms: 5.247
+      type: 'test'
+      ...
+    # Subtest: expiry hides only unpaid abandoned audit-checkout leads; show abandoned restores them without deletion
+    ok 9 - expiry hides only unpaid abandoned audit-checkout leads; show abandoned restores them without deletion
+      ---
+      duration_ms: 19.471166
+      type: 'test'
+      ...
+    1..9
+ok 175 - payment reliability on real PostgreSQL
+  ---
+  duration_ms: 3945.781041
+  type: 'test'
+  ...
+# Retained local PostgreSQL test fixture: /Volumes/KoiBuild/koinophobia-labs-site/tmp/WO-0127/wo-0124-postgres-RdfaSQ
+# Subtest: paid audit alert uses SITE-01 internal recipient, fixed content and no card data
+ok 176 - paid audit alert uses SITE-01 internal recipient, fixed content and no card data
+  ---
+  duration_ms: 8.10125
+  type: 'test'
+  ...
+# Subtest: accepted proposals calculate deterministic deposit and remaining balance
+ok 177 - accepted proposals calculate deterministic deposit and remaining balance
+  ---
+  duration_ms: 0.45
+  type: 'test'
+  ...
+# Subtest: checkout creation uses server totals and durable metadata
+ok 178 - checkout creation uses server totals and durable metadata
+  ---
+  duration_ms: 0.958916
+  type: 'test'
+  ...
+# Subtest: webhook processing is idempotent
+ok 179 - webhook processing is idempotent
+  ---
+  duration_ms: 0.246084
+  type: 'test'
+  ...
+# Subtest: payment creation requires CRM authentication
+ok 180 - payment creation requires CRM authentication
+  ---
+  duration_ms: 2.332042
+  type: 'test'
+  ...
+# Subtest: webhook rejects requests without a Stripe signature
+ok 181 - webhook rejects requests without a Stripe signature
+  ---
+  duration_ms: 0.384334
+  type: 'test'
+  ...
+# Subtest: every shipped product is public in the registry, links to the App Store, and uses only authentic screens
+ok 182 - every shipped product is public in the registry, links to the App Store, and uses only authentic screens
+  ---
+  duration_ms: 1.495375
+  type: 'test'
+  ...
+# Subtest: every demo clip is cut from a QA-verified master and ships both renditions and a poster
+ok 183 - every demo clip is cut from a QA-verified master and ships both renditions and a poster
+  ---
+  duration_ms: 0.301167
+  type: 'test'
+  ...
+# Subtest: lab products are never presented as shipped
+ok 184 - lab products are never presented as shipped
+  ---
+  duration_ms: 0.254208
+  type: 'test'
+  ...
+# Subtest: the site never claims more than the registry
+ok 185 - the site never claims more than the registry
+  ---
+  duration_ms: 0.400125
+  type: 'test'
+  ...
+# Subtest: the commercial offer is three shapes with proof, and one reply promise
+ok 186 - the commercial offer is three shapes with proof, and one reply promise
+  ---
+  duration_ms: 0.440792
+  type: 'test'
+  ...
+# Subtest: the homepage reads verified products and adds the approved B2B path
+ok 187 - the homepage reads verified products and adds the approved B2B path
+  ---
+  duration_ms: 0.236542
+  type: 'test'
+  ...
+# Subtest: templates validate and pricing is calculated in cents
+ok 188 - templates validate and pricing is calculated in cents
+  ---
+  duration_ms: 2.695083
+  type: 'test'
+  ...
+# Subtest: proposal field and enum validation rejects invalid data
+ok 189 - proposal field and enum validation rejects invalid data
+  ---
+  duration_ms: 0.18275
+  type: 'test'
+  ...
+# Subtest: status transitions make sent versions immutable
+ok 190 - status transitions make sent versions immutable
+  ---
+  duration_ms: 0.087083
+  type: 'test'
+  ...
+# Subtest: multi-line proposal PDF succeeds and excludes internal notes
+ok 191 - multi-line proposal PDF succeeds and excludes internal notes
+  ---
+  duration_ms: 70.998792
+  type: 'test'
+  ...
+# Subtest: redactSecrets masks obvious card, SSN, and key shapes
+ok 192 - redactSecrets masks obvious card, SSN, and key shapes
+  ---
+  duration_ms: 0.576792
+  type: 'test'
+  ...
+# Subtest: redactSecrets leaves ordinary business prose untouched
+ok 193 - redactSecrets leaves ordinary business prose untouched
+  ---
+  duration_ms: 0.062125
+  type: 'test'
+  ...
+# Subtest: redactLeadFreeText masks free-text everywhere but preserves structured routing fields
+ok 194 - redactLeadFreeText masks free-text everywhere but preserves structured routing fields
+  ---
+  duration_ms: 0.156834
+  type: 'test'
+  ...
+# Subtest: storeLead persists redacted free-text to crm_leads
+ok 195 - storeLead persists redacted free-text to crm_leads
+  ---
+  duration_ms: 1.753875
+  type: 'test'
+  ...
+# Subtest: the lead email carries redacted free-text and still escapes HTML
+ok 196 - the lead email carries redacted free-text and still escapes HTML
+  ---
+  duration_ms: 0.664375
+  type: 'test'
+  ...
+# Subtest: no host-scoped rewrites remain; the personal host only redirects
+ok 197 - no host-scoped rewrites remain; the personal host only redirects
+  ---
+  duration_ms: 0.524875
+  type: 'test'
+  ...
+# Subtest: the personal-host map lands on real studio pages
+ok 198 - the personal-host map lands on real studio pages
+  ---
+  duration_ms: 0.21375
+  type: 'test'
+  ...
+# Subtest: retired studio routes redirect to living pages
+ok 199 - retired studio routes redirect to living pages
+  ---
+  duration_ms: 0.169666
+  type: 'test'
+  ...
+# Subtest: the www hosts collapse onto the studio host
+ok 200 - the www hosts collapse onto the studio host
+  ---
+  duration_ms: 0.110584
+  type: 'test'
+  ...
+# Subtest: resume contains the complete Earlham education record
+ok 201 - resume contains the complete Earlham education record
+  ---
+  duration_ms: 0.342834
+  type: 'test'
+  ...
+# Subtest: resume contains the complete structured publication
+ok 202 - resume contains the complete structured publication
+  ---
+  duration_ms: 0.056792
+  type: 'test'
+  ...
+# Subtest: homepage search and social metadata tell one consistent story
+ok 203 - homepage search and social metadata tell one consistent story
+  ---
+  duration_ms: 0.291834
+  type: 'test'
+  ...
+# Subtest: structured data links the studio, founder, and website as one entity graph
+ok 204 - structured data links the studio, founder, and website as one entity graph
+  ---
+  duration_ms: 0.123084
+  type: 'test'
+  ...
+# Subtest: every studio sitemap entry carries an honest last-modified signal
+ok 205 - every studio sitemap entry carries an honest last-modified signal
+  ---
+  duration_ms: 0.131959
+  type: 'test'
+  ...
+# Subtest: production canonicalization redirects are permanent
+ok 206 - production canonicalization redirects are permanent
+  ---
+  duration_ms: 0.115667
+  type: 'test'
+  ...
+# Subtest: straight_answer: checkout has exact server price, mode, metadata and handoff
+ok 207 - straight_answer: checkout has exact server price, mode, metadata and handoff
+  ---
+  duration_ms: 1.683666
+  type: 'test'
+  ...
+# Subtest: straight_answer: paid, unpaid, invalid and unrelated paid pages fail closed
+ok 208 - straight_answer: paid, unpaid, invalid and unrelated paid pages fail closed
+  ---
+  duration_ms: 4.931792
+  type: 'test'
+  ...
+# Subtest: straight_answer: onboarding verifies the tab session, rejects forged state, saves once
+ok 209 - straight_answer: onboarding verifies the tab session, rejects forged state, saves once
+  ---
+  duration_ms: 3.670375
+  type: 'test'
+  ...
+# Subtest: monthly_support: checkout has exact server price, mode, metadata and handoff
+ok 210 - monthly_support: checkout has exact server price, mode, metadata and handoff
+  ---
+  duration_ms: 0.850625
+  type: 'test'
+  ...
+# Subtest: monthly_support: paid, unpaid, invalid and unrelated paid pages fail closed
+ok 211 - monthly_support: paid, unpaid, invalid and unrelated paid pages fail closed
+  ---
+  duration_ms: 1.046334
+  type: 'test'
+  ...
+# Subtest: monthly_support: onboarding verifies the tab session, rejects forged state, saves once
+ok 212 - monthly_support: onboarding verifies the tab session, rejects forged state, saves once
+  ---
+  duration_ms: 0.785375
+  type: 'test'
+  ...
+# Subtest: free slots default to five; zero and negative close free requests
+ok 213 - free slots default to five; zero and negative close free requests
+  ---
+  duration_ms: 0.063917
+  type: 'test'
+  ...
+# Subtest: services is a living route, not a retired redirect
+ok 214 - services is a living route, not a retired redirect
+  ---
+  duration_ms: 0.136625
+  type: 'test'
+  ...
+# Subtest: separate product lookups do not reuse the first product's cached result
+ok 215 - separate product lookups do not reuse the first product's cached result
+  ---
+  duration_ms: 14.422791
+  type: 'test'
+  ...
+# Subtest: same-day log milestones preserve the recorded release order
+ok 216 - same-day log milestones preserve the recorded release order
+  ---
+  duration_ms: 0.0755
+  type: 'test'
+  ...
+# Subtest: evidence links explicit URLs without inventing links for local files
+ok 217 - evidence links explicit URLs without inventing links for local files
+  ---
+  duration_ms: 3.726042
+  type: 'test'
+  ...
+# Subtest: a reasoned sports take earns more than a vague response
+ok 218 - a reasoned sports take earns more than a vague response
+  ---
+  duration_ms: 1.775791
+  type: 'test'
+  ...
+# Subtest: betting requests pause scoring
+ok 219 - betting requests pause scoring
+  ---
+  duration_ms: 0.085125
+  type: 'test'
+  ...
+# Subtest: the koi-first homepage leads with shipped apps, then the lab, then the offer
+ok 220 - the koi-first homepage leads with shipped apps, then the lab, then the offer
+  ---
+  duration_ms: 3.79575
+  type: 'test'
+  ...
+1..220
+# tests 229
+# suites 0
+# pass 227
+# fail 2
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 16979.429375

@@ -29,6 +29,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/old-dog/support", lastModified: "2026-09-20", priority: 0.3, changeFrequency: "yearly" as const },
     { path: "/preaching-to-the-choir/privacy", lastModified: "2026-09-16", priority: 0.3, changeFrequency: "yearly" as const },
     { path: "/preaching-to-the-choir/support", lastModified: "2026-09-16", priority: 0.3, changeFrequency: "yearly" as const },
+    { path: "/way-in/privacy", lastModified: "2026-10-05", priority: 0.3, changeFrequency: "yearly" as const },
+    { path: "/way-in/support", lastModified: "2026-10-05", priority: 0.3, changeFrequency: "yearly" as const },
     { path: "/trendi/privacy", lastModified: "2026-08-31", priority: 0.3, changeFrequency: "yearly" as const },
     { path: "/trendi/support", lastModified: "2026-08-13", priority: 0.3, changeFrequency: "yearly" as const },
     { path: "/forget-about-it/privacy", lastModified: "2026-09-10", priority: 0.3, changeFrequency: "yearly" as const },

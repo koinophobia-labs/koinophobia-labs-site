@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 import path from "node:path";
 import test from "node:test";
+import { appHomes } from "../lib/app-homes";
 import { getProduct } from "../lib/dev/universe";
 import {
   engagementShapes,
@@ -32,7 +33,7 @@ test("every shipped product is public in the registry, links to the App Store, a
     }
     if (product.href.startsWith("/")) {
       assert.ok(product.screens.length >= 1, `${product.name} shows no authentic screenshot`);
-      assert.ok(product.page, `${product.name} has no page copy`);
+      assert.ok(product.page || Object.values(appHomes).some(app => `/${app.slug}` === product.href), `${product.name} has no page copy`);
       assert.ok(exists(`app${product.href}/page.tsx`), `${product.href} has no route`);
     } else {
       assert.equal(product.href, product.appStore!.url, "listing-only cards open the verified store listing");

@@ -1,0 +1,102 @@
+
+> koinophobia-labs@0.1.0 build
+> next build --webpack
+
+▲ Next.js 16.2.12 (webpack)
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 14.3s
+  Running TypeScript ...
+  Finished TypeScript in 19.9s ...
+  Collecting page data using 9 workers ...
+⚠ Using edge runtime on a page currently disables static generation for that page
+  Generating static pages using 9 workers (0/55) ...
+  Generating static pages using 9 workers (13/55) 
+  Generating static pages using 9 workers (27/55) 
+  Generating static pages using 9 workers (41/55) 
+✓ Generating static pages using 9 workers (55/55) in 239ms
+  Finalizing page optimization ...
+  Collecting build traces ...
+
+Route (app)                                 Revalidate  Expire
+┌ ○ /                                               1d      1y
+├ ○ /_not-found
+├ ƒ /api/audit/checkout
+├ ƒ /api/auth/[...nextauth]
+├ ƒ /api/crm/audits/[id]
+├ ƒ /api/crm/audits/[id]/pdf
+├ ƒ /api/crm/audits/[id]/proposal
+├ ƒ /api/crm/leads
+├ ƒ /api/crm/leads/[id]
+├ ƒ /api/crm/leads/[id]/audits
+├ ƒ /api/crm/leads/[id]/proposals
+├ ƒ /api/crm/login
+├ ƒ /api/crm/proposals/[id]
+├ ƒ /api/crm/proposals/[id]/payments
+├ ƒ /api/crm/proposals/[id]/pdf
+├ ƒ /api/intake
+├ ƒ /api/services/retainer/checkout
+├ ƒ /api/services/straight-answer/checkout
+├ ƒ /api/stripe/webhook
+├ ƒ /audit
+├ ƒ /audit/paid
+├ ○ /blake
+├ ƒ /brand/apple-icon
+├ ƒ /brand/social-card
+├ ƒ /crm
+├ ƒ /crm/audits/[id]
+├ ƒ /crm/leads/[id]
+├ ƒ /crm/login
+├ ƒ /crm/proposals/[id]
+├ ƒ /crm/quick-add
+├ ○ /dreamcatcher
+├ ○ /dreamcatcher/privacy
+├ ○ /dreamcatcher/support
+├ ○ /forget-about-it
+├ ○ /forget-about-it/privacy
+├ ○ /forget-about-it/support
+├ ○ /lab
+├ ○ /lab/do-you-know-ball
+├ ○ /lab/koi
+├ ○ /lab/teachers-pet
+├ ○ /log
+├ ƒ /log/feed.xml
+├ ○ /manifest.webmanifest
+├ ○ /old-dog
+├ ○ /old-dog/privacy
+├ ○ /old-dog/support
+├ ○ /payment/cancelled
+├ ○ /payment/success
+├ ○ /preaching-to-the-choir
+├ ○ /preaching-to-the-choir/privacy
+├ ○ /preaching-to-the-choir/support
+├ ○ /privacy
+├ ○ /resume
+├ ○ /robots.txt
+├ ○ /services
+├ ƒ /services/retainer/paid
+├ ƒ /services/straight-answer/paid
+├ ○ /shipped                                        1d      1y
+├ ○ /sitemap.xml
+├ ƒ /start
+├ ○ /teachers-pet
+├ ○ /trendi
+├ ○ /trendi/privacy
+├ ○ /trendi/support
+├ ○ /way-in
+├ ○ /way-in/privacy
+├ ○ /way-in/support
+├ ○ /way-in/terms
+├ ○ /work-with-me
+├ ƒ /work-with-us
+├ ○ /you-know-ball/play
+├ ○ /you-know-ball/privacy
+├ ○ /you-know-ball/safety
+└ ○ /you-know-ball/support
+
+
+ƒ Proxy (Middleware)
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+

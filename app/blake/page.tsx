@@ -59,8 +59,8 @@ export default function BlakePage() {
               I&apos;m Blake. I spent three years in sportsbook operations in the sports-betting market, keeping
               high-volume systems and the people around them calm while a lot went wrong at once.
               In July 2026 the role ended. I had a list of tools I&apos;d wished existed for years, a
-              Mac, and a set of AI coding agents I&apos;d learned to direct like a small crew. By
-              September, three of those tools were on the App Store.
+              Mac, and a set of AI coding agents I&apos;d learned to direct like a small crew. Now
+              five of those tools are on the App Store.
             </p>
             <div className="rail s" style={{ "--i": 4 } as React.CSSProperties}>
               <span>
