@@ -68,7 +68,7 @@ export function serviceLabel(service: string) {
 
 export function intakeServiceFor(service: string) {
   const options: Record<string, string> = {
-    revenue_leak_audit: "Website audit",
+    revenue_leak_audit: "Revenue Leak Audit",
     website_rebuild: "Small-Business Website",
     ai_automation: "AI Workflow or Front Office",
     custom_product: "Custom Product Development",

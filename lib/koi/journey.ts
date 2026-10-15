@@ -222,7 +222,7 @@ export const DESTINATIONS: Destination[] = [
     index: 1,
     label: "Shipped",
     marker: "01",
-    hint: "Three apps on the App Store, built by one person",
+    hint: "Five apps on the App Store, built by one person",
     clip: "duo",
     transitionClip: "separate",
     band: { desktop: 2.75, mobile: 1.3 },

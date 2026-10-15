@@ -9,6 +9,7 @@ export const MIGRATION_FILES = Object.freeze([
   "006_stripe_payments.sql",
   "007_ai_project_concierge.sql",
   "008_founder_sales_packet.sql",
+  "009_chamber_next_action.sql",
 ]);
 
 const DATABASE_PROVIDER = "neon";

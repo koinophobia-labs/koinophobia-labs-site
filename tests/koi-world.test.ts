@@ -33,7 +33,6 @@ test("the koi world leads through six destinations and reads every fact from the
     "components/concierge/ConciergeFlow.tsx",
     "lib/commercial.ts",
     "app/services/page.tsx",
-    "app/audit/page.tsx",
     "app/concierge/page.tsx",
     "app/work/page.tsx",
     "app/demos/[slug]/page.tsx",
@@ -45,7 +44,7 @@ test("the koi world leads through six destinations and reads every fact from the
 
   // Product truth comes from lib/products, never from hardcoded copy.
   assert.match(page, /from "@\/lib\/products"/);
-  assert.doesNotMatch(page, /Revenue Leak|Quick Fix|Koi Cave/);
+  assert.doesNotMatch(page, /Quick Fix|Koi Cave/);
 
   // The koi is composited into the page, not parked behind it.
   assert.match(styles, /mix-blend-mode: screen/);

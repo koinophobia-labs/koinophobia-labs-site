@@ -1,0 +1,13 @@
+
+> koinophobia-labs@0.1.0 lint
+> eslint
+
+
+/Volumes/KoiBuild/koinophobia-labs-site/WO-0118/app/page.tsx
+  13:10  warning  'LINKS' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Volumes/KoiBuild/koinophobia-labs-site/WO-0118/auth.ts
+  4:3  warning  'CRM_GOOGLE_PROVIDER' is defined but never used  @typescript-eslint/no-unused-vars
+
+✖ 2 problems (0 errors, 2 warnings)
+

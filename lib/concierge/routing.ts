@@ -74,7 +74,7 @@ function deterministicReasons(answers: Partial<ConciergeAnswers>, service: Servi
 
 const copy: Record<ServiceType, { rationale: string; intervention: string; assumption?: string }> = {
   revenue_leak_audit: {
-    rationale: "You know there is business friction, but the answers do not yet prove that one specific build will fix it. A Revenue Leak Audit is the practical first move: inspect the customer path, find the highest-cost leaks, and decide what is worth changing.",
+    rationale: "You know there is business friction, but the answers do not yet prove that one specific build will fix it. A $250 Revenue Leak Audit includes a 45-minute call and a written plan within 7 days of the call: inspect the customer path, find the highest-cost leaks, and decide what is worth changing.",
     intervention: "A prioritized diagnosis of the website and customer journey, followed by a human-reviewed action plan.",
     assumption: "This assumes the uncertainty spans the public website or the path from interest to inquiry.",
   },

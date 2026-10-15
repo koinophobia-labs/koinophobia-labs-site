@@ -9,7 +9,6 @@ import Masthead from "@/components/site/Masthead";
 import NowStrip from "@/components/site/NowStrip";
 import StickyStart from "@/components/site/StickyStart";
 import { CLIPS, DESTINATIONS } from "@/lib/koi/journey";
-import { LINKS } from "@/lib/links";
 import {
   engagementShapes,
   engagementTerms,
@@ -128,6 +127,12 @@ export default async function Home() {
                     <dd>with the builder</dd>
                   </div>
                 </dl>
+                <aside className="business-band" aria-label="Work With Us">
+                  <p className="kw__kicker">For Chicago owners & operators</p>
+                  <h2>Find what’s slowing the business down.</h2>
+                  <p>Software, AI systems, and a $250 Revenue Leak Audit with a written plan.</p>
+                  <Link className="kw__text-link" href="/work-with-us?src=home">Work With Us →</Link>
+                </aside>
               </div>
             </div>
           </div>
@@ -205,11 +210,11 @@ export default async function Home() {
                 </div>
                 <div>
                   <p className="kw__kicker">Blake Taylor · founder</p>
-                  <h2 id="blake-title">Laid off in July. Three apps on the App Store by September.</h2>
+                  <h2 id="blake-title">Laid off in July. Five apps on the App Store now.</h2>
                   <p className="voice">&ldquo;The simulator votes. The device decides.&rdquo;</p>
                   <p>
                     Blake Taylor spent three years inside sportsbook operations in the sports-betting market, where
-                    the job was staying calm while thousands of things went wrong at once. When the
+                    the job was staying calm and resolving problems under pressure. When the
                     role ended in July 2026 he started building the tools he wished he&apos;d had,
                     and didn&apos;t stop. He designs, writes, builds, tests, and ships everything on
                     this site, using AI coding agents the way a woodworker uses power tools: for
@@ -289,8 +294,8 @@ export default async function Home() {
                   Start a project <ArrowRight size={18} aria-hidden="true" />
                 </Link>
               </div>
-              <a className="kw__finale-mail" href={`${LINKS.email}?subject=Project%20idea`} data-analytics="founder_link_click" data-analytics-label="email">
-                Email Blake instead <ArrowUpRight size={14} aria-hidden="true" />
+              <a className="kw__finale-mail" href="/start" data-analytics="founder_link_click" data-analytics-label="email">
+                Ask Blake a question <ArrowUpRight size={14} aria-hidden="true" />
               </a>
 
               <NowStrip />

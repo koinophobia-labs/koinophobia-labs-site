@@ -1,0 +1,97 @@
+
+> koinophobia-labs@0.1.0 test:migrations
+> node --test tests/database-migrations.test.mjs
+
+✔ preview Vercel builds cannot execute migrations (0.930417ms)
+✔ ordinary production Vercel builds are application-only (0.121792ms)
+✖ a direct production Neon endpoint succeeds with every required guard (13.645125ms)
+✔ missing or vague approval refuses before connecting or executing SQL (0.159708ms)
+✔ target and runtime mismatches refuse before connecting (0.131208ms)
+✔ the database provider, direct URL, protocol, and TLS are mandatory (0.171166ms)
+✔ a wrong Neon endpoint is refused before connecting (0.099459ms)
+✔ a preview endpoint is refused when production is expected (0.057875ms)
+✔ a pooled Neon hostname is refused before connecting (0.056709ms)
+✔ the expected endpoint ID must be supplied independently (0.082417ms)
+✔ the expected database name and migration role are mandatory (0.065666ms)
+✔ a URL database-name mismatch is refused before connecting (0.049417ms)
+✔ a connected database-name mismatch refuses before migration SQL (0.105375ms)
+✔ a connected role mismatch refuses before migration SQL (0.234167ms)
+✔ read-only and recovery connections refuse before migration SQL (0.182041ms)
+✔ an unexpected application baseline refuses before migration SQL (0.145625ms)
+✔ connection and identity failures expose no connection secrets (0.251375ms)
+✔ successful output exposes only the safe target and migration filenames (0.552833ms)
+✖ test and development migrations allow an explicit loopback-only path (0.479541ms)
+✔ the local override refuses remote and production targets (0.1005ms)
+✔ migration failures roll back, identify the file, and stop (0.209708ms)
+✔ the former custom database setting is not required anywhere (705.214041ms)
+✖ migration 008 keeps idempotent guards for all columns and indexes (1.060291ms)
+✔ a real PostgreSQL schema containing migration 008 is accepted unchanged (3893.731791ms)
+ℹ tests 24
+ℹ suites 0
+ℹ pass 21
+ℹ fail 3
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4728.549542
+
+✖ failing tests:
+
+test at tests/database-migrations.test.mjs:128:1
+✖ a direct production Neon endpoint succeeds with every required guard (13.645125ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  9 !== 8
+  
+      at TestContext.<anonymous> (file:///Volumes/KoiBuild/koinophobia-labs-site/WO-0118/tests/database-migrations.test.mjs:141:10)
+      at async Test.run (node:internal/test_runner/test:1313:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:897:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 9,
+    expected: 8,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/database-migrations.test.mjs:415:1
+✖ test and development migrations allow an explicit loopback-only path (0.479541ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  9 !== 8
+  
+      at TestContext.<anonymous> (file:///Volumes/KoiBuild/koinophobia-labs-site/WO-0118/tests/database-migrations.test.mjs:433:12)
+      at async Test.run (node:internal/test_runner/test:1313:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:897:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 9,
+    expected: 8,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/database-migrations.test.mjs:484:1
+✖ migration 008 keeps idempotent guards for all columns and indexes (1.060291ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    [
+  +   '009_chamber_next_action.sql'
+  -   '008_founder_sales_packet.sql'
+    ]
+  
+      at TestContext.<anonymous> (file:///Volumes/KoiBuild/koinophobia-labs-site/WO-0118/tests/database-migrations.test.mjs:500:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1306:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:897:18)
+      at Test.postRun (node:internal/test_runner/test:1447:19)
+      at Test.run (node:internal/test_runner/test:1372:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:897:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ '009_chamber_next_action.sql' ],
+    expected: [ '008_founder_sales_packet.sql' ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }

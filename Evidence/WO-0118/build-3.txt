@@ -1,0 +1,20 @@
+
+> koinophobia-labs@0.1.0 build
+> next build
+
+▲ Next.js 16.2.12 (Turbopack)
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 6.8s
+  Running TypeScript ...
+  Finished TypeScript in 4.2s ...
+  Collecting page data using 9 workers ...
+Error: Failed to load external module pg-587764f78a6c7a9c: Error [ERR_MODULE_NOT_FOUND]: Cannot find package 'pg-587764f78a6c7a9c' imported from /private/tmp/WO-0118-next-build/server/chunks/[turbopack]_runtime.js
+    at Context.externalImport [as y] (../../../../private/tmp/WO-0118-next-build/server/chunks/[turbopack]_runtime.js:607:15)
+    at async (../../../../private/tmp/WO-0118-next-build/server/chunks/[root-of-the-server]__00seqt_._.js:1:1816)
+
+> Build error occurred
+Error: Failed to collect page data for /api/crm/leads/[id]
+    at ignore-listed frames {
+  type: 'Error'
+}

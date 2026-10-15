@@ -1,0 +1,565 @@
+✔ the bridge declares exactly sixteen events (0.357166ms)
+✔ every declared event is fired somewhere on the site (6.127167ms)
+✔ nothing fires an event that is not declared (0.921625ms)
+✔ the koi world reports journey depth with the motion mode (0.176292ms)
+✔ the App Store version can be refreshed from the Lookup API at build time, and falls back to the registry (0.198416ms)
+✔ the log has a feed and the social card takes a title (0.104458ms)
+✔ controlled fixture crawl is bounded, same-origin, multi-page, and records broken pages (42.736833ms)
+✔ page limit is enforced (0.3495ms)
+✔ transparent scoring applies severity deductions and leaves unavailable categories unscored (0.142416ms)
+✔ queued creation stores normalized domain, requested pages, and report version (6.920292ms)
+✔ valid lifecycle persists progress and completes; invalid transition is rejected (0.695167ms)
+✔ failure, cancellation, archive and retry lineage persist (0.580792ms)
+✔ raw measurements are inserted independently of editable findings (0.258583ms)
+✔ founder findings and editable visibility, proposal selection, severity filters persist (0.306041ms)
+✔ finding reorder is persisted transactionally (0.198167ms)
+✔ shared limiter enforces, resets, and atomically caps concurrent consumption (3.841667ms)
+✔ proposal traceability links every selected finding (0.110542ms)
+✔ protected audit PDF rejects unauthenticated requests (2.339292ms)
+✔ SSRF guard rejects private and credentialed targets (0.47125ms)
+✔ audit edit validates enums and required evidence (0.109375ms)
+✔ audit PDF renders multiple findings and excludes internal notes (32.69375ms)
+✔ audit PDF excludes normalized findings hidden from clients (1.858292ms)
+✔ QR attribution survives hub, audit, intake, and arbitrary encoded sources (0.558792ms)
+✔ audit form validates contact and budget and preserves source and offer (0.813125ms)
+✔ founder and readiness paths retain source without imposing business fields (0.181042ms)
+✔ source and offer reach database columns and survive a read (3.420208ms)
+✔ different source or offer cannot silently deduplicate onto another inquiry (0.210708ms)
+✔ manual quick add accepts phone-only, defaults Chamber, and rejects bad fields (0.270167ms)
+✔ CRM source and due filters bind source and use Chicago day boundaries (0.479208ms)
+✔ quick add rejects anonymous requests before writing (2.692958ms)
+✔ canonical audit QR route is no longer redirected to the founder offer (0.176458ms)
+✔ existing standard intake remains backward compatible (8.718625ms)
+✔ intake rejects a non-http website value (0.174125ms)
+✔ concierge handoff is recomputed and stored as a structured lead (1.646625ms)
+✔ edited answers invalidate the token and the server recomputes a safer route (0.266417ms)
+✔ malformed concierge data fails closed instead of creating a forged concierge lead (0.099834ms)
+✔ concierge email notification contains qualification data and escapes visitor HTML (1.460333ms)
+✔ CRM persistence writes the concierge envelope to JSONB (0.916334ms)
+✔ the versioned concierge migration is included in the migration runner (14.330708ms)
+✔ readiness intake uses existing notes and service fields through CRM and email (2.694667ms)
+✔ a draft survives route changes in the same browser tab (0.628209ms)
+✔ two tabs on one browser origin cannot see each other's concierge drafts (0.152416ms)
+✔ a foreign concierge handoff identifier is rejected (0.07075ms)
+✔ upgrade migration deletes unowned origin-wide drafts (0.057041ms)
+✔ successful handoff cleanup removes only the current tab draft (0.112208ms)
+✔ unavailable browser storage fails closed (0.088708ms)
+✔ routes uncertainty to the Revenue Leak Audit (1.178542ms)
+✔ routes a material website problem to a rebuild (0.324959ms)
+✔ routes lead follow-up and repetitive work to automation (0.132459ms)
+✔ routes a portal or product to custom product development (0.063458ms)
+✔ routes an isolated repair to Quick Fix Sprint (0.055625ms)
+✔ routes conflicting website and custom-product signals to manual review (0.066541ms)
+✔ routes regulated requirements to manual review (0.116ms)
+✔ routes harmful work and irreconcilable custom-product constraints to not a fit (0.083125ms)
+✔ empty and extremely short input fail validation (0.241792ms)
+✔ excessively long input and unsafe URLs fail validation (0.145875ms)
+✔ prompt injection and price manipulation do not control routing (0.064333ms)
+✔ AI provider outage leaves a complete deterministic response (14.77575ms)
+✔ malformed model output fails closed to the deterministic response (0.834833ms)
+✔ valid structured model output can enhance summary but not routing (0.8285ms)
+✔ AI timeout falls back without breaking evaluation (9.596625ms)
+✔ versioned session recovery accepts fresh drafts and rejects expired or malformed data (0.276291ms)
+✔ approved verified Google account is accepted (0.447208ms)
+✔ unapproved verified Google account is denied (0.078ms)
+✔ unverified Google account is denied (0.049542ms)
+✔ missing email is denied (0.043167ms)
+✔ case and surrounding whitespace normalize to an exact allowlist match (0.42575ms)
+✔ partial email and same-domain users are denied (0.062958ms)
+✔ an unsupported provider never inherits Google authorization (0.036958ms)
+✔ session authorization requires every verified Google claim and the live allowlist (0.093834ms)
+✔ Auth.js uses JWT sessions, a 12-hour lifetime, and protected session cookies (0.083042ms)
+✔ approved and unapproved Auth.js sessions are enforced by page and API guards (1.962875ms)
+✔ legacy fallback can be retired by removing its secret (3.612083ms)
+✔ every private CRM surface contains its server-side authorization guard (1.849958ms)
+✔ login and OAuth error UI disclose no secret field, token, or configuration (0.133ms)
+✔ sign-out clears both session paths and public intake remains outside the boundary (0.402708ms)
+✔ intake route validation accepts a complete CRM lead (0.770709ms)
+✔ protected lead list rejects a request without a session (2.892208ms)
+✔ protected update rejects a request without a session (0.672583ms)
+✔ only an explicit idempotency key deduplicates retries (3.024458ms)
+✔ status follow-up and internal note update (0.167417ms)
+✔ legacy leads without founder packet columns still map safely (0.086625ms)
+✔ enum and date validation (0.376ms)
+✔ signed session authorizes and rejects tampering (0.3055ms)
+✔ every product carries verification metadata (0.867542ms)
+✖ no product status has gone stale for its stage (2.467667ms)
+✔ every stage has a freshness budget, and fast stages are tight (0.276792ms)
+✔ a stale status produces an actionable message (0.150583ms)
+✔ freshness is never auto-refreshed (0.335375ms)
+✔ a status owner is recorded (0.042ms)
+✔ published dates are literals, never read from the clock (0.308625ms)
+✔ stage and reach never contradict each other (0.082875ms)
+✔ the stage ladder never collapses distinct release states (0.054208ms)
+✔ every stage maps to a display family, and the family never upgrades a stage (0.133958ms)
+✔ the front office is in the universe, honestly (0.161458ms)
+✔ TestFlight claims require TestFlight evidence (0.108709ms)
+✔ You Know Ball does not claim it was never uploaded (0.158541ms)
+✖ Trendi reflects its verified public release while the dated log preserves beta history (0.507416ms)
+✔ Career Forge does not claim checkout is closed, or that anyone bought (0.275334ms)
+✔ unsourceable statistics stay out of published copy (16.326084ms)
+✔ every product states what is not true yet (0.082208ms)
+✔ internal-only products offer nothing to click (0.071208ms)
+✔ no product uses launch language it cannot back (0.212959ms)
+✔ no product invents users, revenue, or testimonials (0.6675ms)
+✔ product slugs are unique and every one resolves (0.06225ms)
+✔ every product action link is usable by a stranger (0.147791ms)
+✔ no note publishes without BOTH gates (0.116833ms)
+✔ every first-person note is currently held for review (0.050209ms)
+✔ held notes are preserved, never emptied (0.060416ms)
+✔ the review file still covers every note (8.92175ms)
+✔ published field notes are specific, dated, and resolvable (0.281333ms)
+✔ every experiment reports what it showed (0.148ms)
+✔ the five required lead scenarios produce complete, bounded founder packets (4.764ms)
+✔ every selected price, timeline, and scope item comes from the existing offer catalog (0.561792ms)
+✔ the audit intake maps to the existing $250 audit and its correct public link (0.124833ms)
+✔ concierge routing remains authoritative when the packet is attached (0.131875ms)
+✔ Resend receives one founder-only notification with Reply-To and the full draft packet (10.80175ms)
+✔ lead-controlled text is escaped in founder notification HTML (2.264875ms)
+✔ the CRM keeps the founder draft editable without a send action (8.301583ms)
+✔ the packet is persisted on the lead and smoke submissions remain non-prospects (1.471625ms)
+✔ the additive packet migration is in the migration runner (7.56775ms)
+✔ SITE-02: no Origin AND no sec-fetch-site is UNTRUSTED (scripted client) (14.22475ms)
+✔ SITE-02: same-origin sec-fetch-site is trusted (0.22375ms)
+✔ SITE-02: cross-site sec-fetch-site is rejected (0.081709ms)
+✔ SITE-02: a matching Origin is trusted, a foreign Origin is not (0.580292ms)
+✔ SITE-02: rate key prefers the platform-trusted x-real-ip (0.251375ms)
+✔ SITE-02: rotating the LEFTMOST x-forwarded-for token cannot change the key (0.101292ms)
+✔ SITE-01: identical content in the same window yields the SAME idempotency key (0.698958ms)
+✔ SITE-01: different content yields a different key (0.274667ms)
+✔ SITE-01: a concierge session or explicit key overrides the content key (0.087917ms)
+✔ SITE-01: email sends on a new lead, is SKIPPED on a confirmed dedupe, sends on storage failure (0.097958ms)
+✖ the koi world leads through six destinations and reads every fact from the registry (50.620292ms)
+✔ every koi clip referenced by the journey ships both renditions and a poster (0.383833ms)
+✔ the layout loads three font families and four site stylesheets, nothing from the agency era (0.219708ms)
+✖ Trendi privacy and support routes are publication-ready and discoverable (15.259375ms)
+✔ every shipped app's legal pages exist and are in the sitemap (25.936792ms)
+✔ accepted proposals calculate deterministic deposit and remaining balance (0.626ms)
+✔ checkout creation uses server totals and durable metadata (1.011708ms)
+✔ webhook processing is idempotent (0.138458ms)
+✔ payment creation requires CRM authentication (2.854458ms)
+✔ webhook rejects requests without a Stripe signature (0.449875ms)
+✔ every shipped product is public in the registry, links to the App Store, and uses only authentic screens (0.678958ms)
+✔ every demo clip is cut from a QA-verified master and ships both renditions and a poster (0.17175ms)
+✔ lab products are never presented as shipped (0.103041ms)
+✔ the site never claims more than the registry (0.261417ms)
+✔ the commercial offer is three shapes with proof, and one reply promise (0.216458ms)
+✖ the homepage reads products from the registry and shows no agency offer (2.38125ms)
+✔ templates validate and pricing is calculated in cents (1.51425ms)
+✔ proposal field and enum validation rejects invalid data (0.105917ms)
+✔ status transitions make sent versions immutable (0.07325ms)
+✔ multi-line proposal PDF succeeds and excludes internal notes (49.425666ms)
+✔ redactSecrets masks obvious card, SSN, and key shapes (0.680792ms)
+✔ redactSecrets leaves ordinary business prose untouched (0.077917ms)
+✔ redactLeadFreeText masks free-text everywhere but preserves structured routing fields (0.173375ms)
+✔ storeLead persists redacted free-text to crm_leads (2.201125ms)
+✔ the lead email carries redacted free-text and still escapes HTML (2.712709ms)
+✔ no host-scoped rewrites remain; the personal host only redirects (1.586166ms)
+✔ the personal-host map lands on real studio pages (0.647708ms)
+✖ retired studio routes redirect to living pages (1.623209ms)
+✔ the www hosts collapse onto the studio host (3.5255ms)
+✔ resume contains the complete Earlham education record (0.433417ms)
+✔ resume contains the complete structured publication (0.075292ms)
+/Volumes/KoiBuild/koinophobia-labs-site/WO-0118/app/business.css:1
+.b2b { max-width: 1180px; }
+^
+
+SyntaxError: Unexpected token '.'
+    at wrapSafe (node:internal/modules/cjs/loader:1787:18)
+    at Module._compile (node:internal/modules/cjs/loader:1828:20)
+    at node:internal/modules/cjs/loader:1985:10
+    at Object.transformer (/Volumes/KoiBuild/koinophobia-labs-site/WO-0118/node_modules/tsx/dist/register-BLUABhh3.cjs:9:2916)
+    at Module.load (node:internal/modules/cjs/loader:1577:32)
+    at Module._load (node:internal/modules/cjs/loader:1379:12)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+    at Module.require (node:internal/modules/cjs/loader:1600:12)
+    at require (node:internal/modules/helpers:153:16)
+    at <anonymous> (/Volumes/KoiBuild/koinophobia-labs-site/WO-0118/app/page.tsx:1:8)
+
+Node.js v24.16.0
+✖ tests/seo-discovery.test.ts (148.697125ms)
+✔ separate product lookups do not reuse the first product's cached result (8.730292ms)
+✔ same-day log milestones preserve the recorded release order (0.068959ms)
+✔ evidence links explicit URLs without inventing links for local files (3.438292ms)
+✔ a reasoned sports take earns more than a vague response (1.320167ms)
+✔ betting requests pause scoring (0.087208ms)
+✔ the koi-first homepage leads with shipped apps, then the lab, then the offer (3.248541ms)
+ℹ tests 169
+ℹ suites 0
+ℹ pass 162
+ℹ fail 7
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4646.720792
+
+✖ failing tests:
+
+test at tests/dev-universe.test.ts:2:2383
+✖ no product status has gone stale for its stage (2.467667ms)
+  AssertionError [ERR_ASSERTION]: STALE STATUS: Teacher's Pet
+    stage:        local (Local development)
+    verified at:  2026-09-13 — 32 days ago
+    allowed age:  30 days for this stage
+    what to do:   re-check Teacher's Pet against release artifacts
+                  (archives, Apple delivery logs, live HTTP, signing),
+                  update status/evidence if it moved, then set
+                  verifiedAt to today in lib/dev/universe.ts.
+    do NOT just bump the date — the date is a claim that someone looked.
+  
+  STALE STATUS: KOI
+    stage:        local (Local development)
+    verified at:  2026-09-13 — 32 days ago
+    allowed age:  30 days for this stage
+    what to do:   re-check KOI against release artifacts
+                  (archives, Apple delivery logs, live HTTP, signing),
+                  update status/evidence if it moved, then set
+                  verifiedAt to today in lib/dev/universe.ts.
+    do NOT just bump the date — the date is a claim that someone looked.
+  + actual - expected
+  
+  + [
+  +   "Teacher's Pet",
+  +   'KOI'
+  + ]
+  - []
+  
+      at TestContext.<anonymous> (/Volumes/KoiBuild/koinophobia-labs-site/WO-0118/tests/dev-universe.test.ts:66:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1306:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:897:18)
+      at Test.postRun (node:internal/test_runner/test:1447:19)
+      at Test.run (node:internal/test_runner/test:1372:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: [ "Teacher's Pet", 'KOI' ],
+    expected: [],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at tests/dev-universe.test.ts:2:9079
+✖ Trendi reflects its verified public release while the dated log preserves beta history (0.507416ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /0\.2\.2/. Input:
+  
+  'Available on the App Store for iPhone: version 0.2.4, iOS 17.0 or later. Free with optional Trendi Pro'
+  
+      at TestContext.<anonymous> (/Volumes/KoiBuild/koinophobia-labs-site/WO-0118/tests/dev-universe.test.ts:245:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1306:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:897:18)
+      at Test.postRun (node:internal/test_runner/test:1447:19)
+      at Test.run (node:internal/test_runner/test:1372:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:897:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'Available on the App Store for iPhone: version 0.2.4, iOS 17.0 or later. Free with optional Trendi Pro',
+    expected: /0\.2\.2/,
+    operator: 'match',
+    diff: 'simple'
+  }
+
+test at tests/koi-world.test.ts:2:1539
+✖ the koi world leads through six destinations and reads every fact from the registry (50.620292ms)
+  AssertionError [ERR_ASSERTION]: app/audit/page.tsx should have been removed
+  
+  true !== false
+  
+      at TestContext.<anonymous> (/Volumes/KoiBuild/koinophobia-labs-site/WO-0118/tests/koi-world.test.ts:43:12)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1306:25)
+      at Test.start (node:internal/test_runner/test:1177:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:385:17) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/legal-pages.test.ts:2:1215
+✖ Trendi privacy and support routes are publication-ready and discoverable (15.259375ms)
+  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+  
+    assert.ok(privacy.includes("every third party with whom Trendi shares"))
+  
+      at TestContext.<anonymous> (/Volumes/KoiBuild/koinophobia-labs-site/WO-0118/tests/legal-pages.test.ts:23:10)
+      at async Test.run (node:internal/test_runner/test:1313:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at tests/products.test.ts:2:5648
+✖ the homepage reads products from the registry and shows no agency offer (2.38125ms)
+  AssertionError [ERR_ASSERTION]: The input was expected to not match the regular expression /Revenue Leak|audit|Quick Fix|Landing Page Rebuild|\$250/i. Input:
+  
+  'import "./business.css";\n' +
+    'import type { Metadata } from "next";\n' +
+    'import Link from "next/link";\n' +
+    'import { preload } from "react-dom";\n' +
+    'import { ArrowDown, ArrowRight, ArrowUpRight } from "lucide-react";\n' +
+    'import KoiWorld from "@/components/koi/KoiWorld";\n' +
+    'import WaterText from "@/components/koi/WaterText";\n' +
+    'import { LabCard, ProductCard } from "@/components/site/Cards";\n' +
+    'import Masthead from "@/components/site/Masthead";\n' +
+    'import NowStrip from "@/components/site/NowStrip";\n' +
+    'import StickyStart from "@/components/site/StickyStart";\n' +
+    'import { CLIPS, DESTINATIONS } from "@/lib/koi/journey";\n' +
+    'import {\n' +
+    '  engagementShapes,\n' +
+    '  engagementTerms,\n' +
+    '  labProducts,\n' +
+    '  replyPromise,\n' +
+    '  shippedProducts,\n' +
+    '} from "@/lib/products";\n' +
+    'import { withLiveListings } from "@/lib/app-store";\n' +
+    'import {\n' +
+    '  STUDIO_DESCRIPTION,\n' +
+    '  STUDIO_SCHEMA,\n' +
+    '  STUDIO_SOCIAL_IMAGE,\n' +
+    '  STUDIO_TITLE,\n' +
+    '  STUDIO_URL,\n' +
+    '} from "@/lib/seo";\n' +
+    '\n' +
+    'export const metadata: Metadata = {\n' +
+    '  title: STUDIO_TITLE,\n' +
+    '  description: STUDIO_DESCRIPTION,\n' +
+    '  alternates: { canonical: `${STUDIO_URL}/` },\n' +
+    '  openGraph: {\n' +
+    '    type: "website",\n' +
+    '    siteName: "Koinophobia Labs",\n' +
+    '    url: `${STUDIO_URL}/`,\n' +
+    '    title: STUDIO_TITLE,\n' +
+    '    description: STUDIO_DESCRIPTION,\n' +
+    '    images: [STUDIO_SOCIAL_IMAGE],\n' +
+    '  },\n' +
+    '  twitter: {\n' +
+    '    card: "summary_large_image",\n' +
+    '    title: STUDIO_TITLE,\n' +
+    '    description: STUDIO_DESCRIPTION,\n' +
+    '    images: ["/brand/social-card"],\n' +
+    '  },\n' +
+    '};\n' +
+    '\n' +
+    'const bandStyle = (index: number) => {\n' +
+    '  const destination = DESTINATIONS[index];\n' +
+    '  return {\n' +
+    '    "--band-desktop": `${destination.band.desktop * 100}svh`,\n' +
+    '    "--band-mobile": `${destination.band.mobile * 100}svh`,\n' +
+    '  } as React.CSSProperties;\n' +
+    '};\n' +
+    '\n' +
+    '/**\n' +
+    ' * The homepage: six destinations, one dive. Surface, Shipped, Lab, Blake,\n' +
+    ' * Work with me, Start. Every fact on this page is read from the registry in\n' +
+    ' * lib/products.ts, which reads from lib/dev/universe.ts. See the rebuild\n' +
+    ' * document, sections 3 and 4.\n' +
+    ' */\n' +
+    'export default async function Home() {\n' +
+    '  // The first poster is the largest paint on a phone; fetch it before the\n' +
+    "  // koi engine's JavaScript creates the element that shows it.\n" +
+    '  preload(CLIPS[DESTINATIONS[0].clip].poster, { as: "image", fetchPriority: "high" });\n' +
+    '  const shipped = await withLiveListings(shippedProducts);\n' +
+    '  return (\n' +
+    '    <div className="kw" data-koi-destination="surface" data-motion-shell>\n' +
+    '      <a className="kw__skip" href="#surface-copy">\n' +
+    '        Skip the animation and read the page\n' +
+    '      </a>\n' +
+    '\n' +
+    '      <KoiWorld />\n' +
+    '      <WaterText />\n' +
+    '\n' +
+    '      <Masthead />\n' +
+    '\n' +
+    '      <nav className="kw__map" aria-label="Journey">\n' +
+    '        {DESTINATIONS.map((destination) => (\n' +
+    '          <a\n' +
+    '            key={destination.id}\n' +
+    '            href={`#${destination.id}`}\n' +
+    '            data-koi-link={destination.id}\n' +
+    '            aria-current={destination.index === 0 ? "location" : undefined}\n' +
+    '            aria-label={`${destination.marker} ${destination.label}: ${destination.hint}`}\n' +
+    '          >\n' +
+    '            <span className="kw__map-label">{destination.label}</span>\n' +
+    '            <span className="kw__map-dot" aria-hidden="true" />\n' +
+    '          </a>\n' +
+    '        ))}\n' +
+    '      </nav>\n' +
+    '\n' +
+    '      <main className="kw__main">\n' +
+    '        {/* ---------------------------------------------------- 00 Surface */}\n' +
+    '        <section className="dest dest--surface" id="surface" style={bandStyle(0)} aria-labelledby="surface-title">\n' +
+    '          <div className="dest__stage">\n' +
+    '            <div className="dest__inner" id="surface-copy" tabIndex={-1}>\n' +
+    '              <div>\n' +
+    '                <p className="kw__kicker">A one-person software studio · Chicago</p>\n' +
+    '                <h1 id="surface-title">Nothing here stayed an idea.</h1>\n' +
+    '                <p className="kw__lede">\n' +
+    '                  Koinophobia Labs is Blake Taylor, building apps, websites, and AI tools\n' +
+    '                  from first prototype to release. Five of those apps are on the App Store,\n' +
+    '                  including Old Dog, a Mac learning app. In the lab: a language model trained\n' +
+    '                  from scratch. Have a project in mind? Blake\n' +
+    '                  builds for other people too.\n' +
+    '                </p>\n' +
+    '                <div className="kw__actions">\n' +
+    '                  <a className="kw__btn kw__btn--primary kw__btn--dive ai" href="#shipped" data-koi-link="shipped">\n' +
+    '                    See what shipped <ArrowDown size={16} aria-hidden="true" />\n' +
+    '                  </a>\n' +
+    '                  <a className="kw__btn kw__btn--ghost ai" href="#work" data-koi-link="work">\n' +
+    '                    Work with Blake <ArrowRight size={16} aria-hidden="true" />\n' +
+    '                  </a>\n' +
+    '                </div>\n' +
+    '                <dl className="kw__trust-rail" aria-label="Proof">\n' +
+    '                  <div>\n' +
+    '                    <dt>{shippedProducts.length} apps</dt>\n' +
+    '                    <dd>on the App Store</dd>\n' +
+    '                  </div>\n' +
+    '                  <div>\n' +
+    '                    <dt>1 builder</dt>\n' +
+    '                    <dd>0 employees</dd>\n' +
+    '                  </div>\n' +
+    '                  <div>\n' +
+    '                    <dt>Work directly</dt>\n' +
+    '                    <dd>with the builder</dd>\n' +
+    '                  </div>\n' +
+    '                </dl>\n' +
+    '                <aside className="business-band" aria-label="Work With Us">\n' +
+    '                  <p className="kw__kicker">For Chicago owners & operators</p>\n' +
+    '                  <h2>Find what’s slowing the business down.</h2>\n' +
+    '                  <p>Software, AI systems, and a $250 Revenue Leak Audit with a written plan.</p>\n' +
+    '                  <Link className="kw__text-link" href="/work-with-us?src=home">Work With Us →</Link>\n' +
+    '                </aside>\n' +
+    '              </div>\n' +
+    '            </div>\n' +
+    '          </div>\n' +
+    '        </section>\n' +
+    '\n' +
+    '        {/* ---------------------------------------------------- 01 Shipped */}\n' +
+    '        <section className="dest dest--shipped" id="shipped" style={bandStyle(1)} aria-labelledby="shipped-title">\n' +
+    '          <div className="dest__stage">\n' +
+    '            <div className="dest__inner">\n' +
+    '              <p className="kw__marker">\n' +
+    '                <b>01</b> Shipped · on the App Store now\n' +
+    '              </p>\n' +
+    '              <h2 id="shipped-title">Built by one person. Downloadable by anyone.</h2>\n' +
+    '              <p>\n' +
+    '                Create a video, remember a thought, or plan your next career move.\n' +
+    '                Explore the apps and see them in action.\n' +
+    '              </p>\n' +
+    '              <div className="cards">\n' +
+    '                {shipped.map((product, index) => (\n' +
+    '                  <ProductCard key={product.slug} product={product} index={index} placement="home" />\n' +
+    '                ))}\n' +
+    '              </div>\n' +
+    '              <div className="kw__actions">\n' +
+    '                <Link className="kw__btn kw__btn--ghost ai" href="/shipped">\n' +
+    '                  Explore the apps{" "}\n' +
+    '                  <ArrowUpRight size={15} aria-hidden="true" />\n' +
+    '                </Link>\n' +
+    '              </div>\n' +
+    '            </div>\n' +
+    '          </div>\n' +
+    '        </section>\n' +
+    '\n' +
+    '        {/* -------------------------------------------------------- 02 Lab */}\n' +
+    '        <section className="dest dest--lab" id="lab" style={bandStyle(2)} aria-labelledby="lab-title">\n' +
+    '          <div className="dest__stage">\n' +
+    '            <div className="dest__inner">\n' +
+    '              <p className="kw__marker kw__marker--lab">\n' +
+    '                <b>02</b> The lab · experiments with receipts\n' +
+    '              </p>\n' +
+    '              <h2 id="lab-title">The part of the studio that isn&apos;t finished, on purpose.</h2>\n' +
+    '              <p>\n' +
+    '                Explore the experiments in progress, what works today, and what comes next.\n' +
+    '              </p>\n' +
+    '              <div className="lab-list">\n' +
+    '                {labProducts.map((product, index) => (\n' +
+    '                  <LabCard key={product.slug} product={product} index={index} />\n' +
+    '                ))}\n' +
+    '              </div>\n' +
+    '              <div className="kw__actions">\n' +
+    '                <Link className="kw__btn kw__btn--ghost ai" href="/lab">\n' +
+    '                  Open the lab <ArrowUpRight size={15} aria-hidden="true" />\n' +
+    '                </Link>\n' +
+    '              </div>\n' +
+    '            </div>\n' +
+    '          </div>\n' +
+    '        </section>\n' +
+    '\n' +
+    '        {/* ------------------------------------------------------ 03 Blake */}\n' +
+    '        <section className="dest dest--blake" id="blake" style={bandStyle(3)} aria-labelledby="blake-title">\n' +
+    '          <div className="dest__stage">\n' +
+    '            <div className="dest__inner">\n' +
+    '              <p className="kw__marker">\n' +
+    '                <b>03</b> The builder\n' +
+    '              </p>\n' +
+    '              <div className="kw__panel kw__founder">\n' +
+    '                <div className="kw__portrait">\n' +
+    '                  {/* eslint-disable-next-line @next/next/no-img-element */}\n' +
+    '                  <img\n' +
+    '                    src="/blake/portrait-2026-09-14.jpg"\n' +
+    '                    alt="Blake Taylor on a bridge over the Chicago River"\n' +
+    '                    width={736}\n' +
+    '                    height={920}\n' +
+    '                    loading="lazy"\n' +
+    '                  />\n' +
+    '                </div>\n' +
+    '                <div>\n' +
+    '                  <p className="kw__kicker">Blake Taylor · founder</p>\n' +
+    '                  <h2 id="blake-title">Laid off in July. Five apps on the App Store now.</h2>\n' +
+    '                  <p className="voice">&ldquo;The simulator votes. The device decides.&rdquo;</p>\n' +
+    '                  <p>\n' +
+    '                    Blake Taylor spent three years inside sportsbook operations in the sports-betting market, where\n' +
+    '                    the job was staying calm while thousands of things went wrong at once. When the\n' +
+    '                    role ended in July 2026 he started building the tools he wished he&apos;d had,\n' +
+    '                    and didn&apos;t stop. He designs, writes, builds, tests, and ships everything on\n' +
+    '                    this site, using AI coding agents the way a woodworker uses power tools: for\n' +
+    '                    speed, never for judgment.\n' +
+    '                  </p>\n' +
+    '                  <ul className="kw__founder-facts">\n' +
+    '                    <li>Chicago.</li>\n' +
+    '                    <li>Earlham College, B.A. Global Management.</li>\n' +
+    '                    <li>Sports betting, sportsbook operations, three years.</li>\n' +
+    '                  </ul>\n' +
+    '                  <Link className="kw__text-link ai" href="/blake">\n' +
+    '                    More about Blake <Arrow'... 4698 more characters
+  
+      at TestContext.<anonymous> (/Volumes/KoiBuild/koinophobia-labs-site/WO-0118/tests/products.test.ts:97:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1306:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:897:18)
+      at Test.postRun (node:internal/test_runner/test:1447:19)
+      at Test.run (node:internal/test_runner/test:1372:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:897:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'import "./business.css";\nimport type { Metadata } from "next";\nimport Link from "next/link";\nimport { preload } from "react-dom";\nimport { ArrowDown, ArrowRight, ArrowUpRight } from "lucide-react";\nimport KoiWorld from "@/components/koi/KoiWorld";\nimport WaterText from "@/components/koi/WaterText";\nimport { LabCard, ProductCard } from "@/components/site/Cards";\nimport Masthead from "@/components/site/Masthead";\nimport NowStrip from "@/components/site/NowStrip";\nimport StickyStart from "@/components/site/StickyStart";\nimport { CLIPS, DESTINATIONS } from "@/lib/koi/journey";\nimport {\n  engagementShapes,\n  engagementTerms,\n  labProducts,\n  replyPromise,\n  shippedProducts,\n} from "@/lib/products";\nimport { withLiveListings } from "@/lib/app-store";\nimport {\n  STUDIO_DESCRIPTION,\n  STUDIO_SCHEMA,\n  STUDIO_SOCIAL_IMAGE,\n  STUDIO_TITLE,\n  STUDIO_URL,\n} from "@/lib/seo";\n\nexport const metadata: Metadata = {\n  title: STUDIO_TITLE,\n  description: STUDIO_DESCRIPTION,\n  alternates: { canonical: `${STUDIO_URL}/` },\n  openGraph: {\n    type: "website",\n    siteName: "Koinophobia Labs",\n    url: `${STUDIO_URL}/`,\n    title: STUDIO_TITLE,\n    description: STUDIO_DESCRIPTION,\n    images: [STUDIO_SOCIAL_IMAGE],\n  },\n  twitter: {\n    card: "summary_large_image",\n    title: STUDIO_TITLE,\n    description: STUDIO_DESCRIPTION,\n    images: ["/brand/social-card"],\n  },\n};\n\nconst bandStyle = (index: number) => {\n  const destination = DESTINATIONS[index];\n  return {\n    "--band-desktop": `${destination.band.desktop * 100}svh`,\n    "--band-mobile": `${destination.band.mobile * 100}svh`,\n  } as React.CSSProperties;\n};\n\n/**\n * The homepage: six destinations, one dive. Surface, Shipped, Lab, Blake,\n * Work with me, Start. Every fact on this page is read from the registry in\n * lib/products.ts, which reads from lib/dev/universe.ts. See the rebuild\n * document, sections 3 and 4.\n */\nexport default async function Home() {\n  // The first poster is the largest paint on a phone; fetch it before the\n  // koi engine\'s JavaScript creates the element that shows it.\n  preload(CLIPS[DESTINATIONS[0].clip].poster, { as: "image", fetchPriority: "high" });\n  const shipped = await withLiveListings(shippedProducts);\n  return (\n    <div className="kw" data-koi-destination="surface" data-motion-shell>\n      <a className="kw__skip" href="#surface-copy">\n        Skip the animation and read the page\n      </a>\n\n      <KoiWorld />\n      <WaterText />\n\n      <Masthead />\n\n      <nav className="kw__map" aria-label="Journey">\n        {DESTINATIONS.map((destination) => (\n          <a\n            key={destination.id}\n            href={`#${destination.id}`}\n            data-koi-link={destination.id}\n            aria-current={destination.index === 0 ? "location" : undefined}\n            aria-label={`${destination.marker} ${destination.label}: ${destination.hint}`}\n          >\n            <span className="kw__map-label">{destination.label}</span>\n            <span className="kw__map-dot" aria-hidden="true" />\n          </a>\n        ))}\n      </nav>\n\n      <main className="kw__main">\n        {/* ---------------------------------------------------- 00 Surface */}\n        <section className="dest dest--surface" id="surface" style={bandStyle(0)} aria-labelledby="surface-title">\n          <div className="dest__stage">\n            <div className="dest__inner" id="surface-copy" tabIndex={-1}>\n              <div>\n                <p className="kw__kicker">A one-person software studio · Chicago</p>\n                <h1 id="surface-title">Nothing here stayed an idea.</h1>\n                <p className="kw__lede">\n                  Koinophobia Labs is Blake Taylor, building apps, websites, and AI tools\n                  from first prototype to release. Five of those apps are on the App Store,\n                  including Old Dog, a Mac learning app. In the lab: a language model trained\n                  from scratch. Have a project in mind? Blake\n                  builds for other people too.\n                </p>\n                <div className="kw__actions">\n                  <a className="kw__btn kw__btn--primary kw__btn--dive ai" href="#shipped" data-koi-link="shipped">\n                    See what shipped <ArrowDown size={16} aria-hidden="true" />\n                  </a>\n                  <a className="kw__btn kw__btn--ghost ai" href="#work" data-koi-link="work">\n                    Work with Blake <ArrowRight size={16} aria-hidden="true" />\n                  </a>\n                </div>\n                <dl className="kw__trust-rail" aria-label="Proof">\n                  <div>\n                    <dt>{shippedProducts.length} apps</dt>\n                    <dd>on the App Store</dd>\n                  </div>\n                  <div>\n                    <dt>1 builder</dt>\n                    <dd>0 employees</dd>\n                  </div>\n                  <div>\n                    <dt>Work directly</dt>\n                    <dd>with the builder</dd>\n                  </div>\n                </dl>\n                <aside className="business-band" aria-label="Work With Us">\n                  <p className="kw__kicker">For Chicago owners & operators</p>\n                  <h2>Find what’s slowing the business down.</h2>\n                  <p>Software, AI systems, and a $250 Revenue Leak Audit with a written plan.</p>\n                  <Link className="kw__text-link" href="/work-with-us?src=home">Work With Us →</Link>\n                </aside>\n              </div>\n            </div>\n          </div>\n        </section>\n\n        {/* ---------------------------------------------------- 01 Shipped */}\n        <section className="dest dest--shipped" id="shipped" style={bandStyle(1)} aria-labelledby="shipped-title">\n          <div className="dest__stage">\n            <div className="dest__inner">\n              <p className="kw__marker">\n                <b>01</b> Shipped · on the App Store now\n              </p>\n              <h2 id="shipped-title">Built by one person. Downloadable by anyone.</h2>\n              <p>\n                Create a video, remember a thought, or plan your next career move.\n                Explore the apps and see them in action.\n              </p>\n              <div className="cards">\n                {shipped.map((product, index) => (\n                  <ProductCard key={product.slug} product={product} index={index} placement="home" />\n                ))}\n              </div>\n              <div className="kw__actions">\n                <Link className="kw__btn kw__btn--ghost ai" href="/shipped">\n                  Explore the apps{" "}\n                  <ArrowUpRight size={15} aria-hidden="true" />\n                </Link>\n              </div>\n            </div>\n          </div>\n        </section>\n\n        {/* -------------------------------------------------------- 02 Lab */}\n        <section className="dest dest--lab" id="lab" style={bandStyle(2)} aria-labelledby="lab-title">\n          <div className="dest__stage">\n            <div className="dest__inner">\n              <p className="kw__marker kw__marker--lab">\n                <b>02</b> The lab · experiments with receipts\n              </p>\n              <h2 id="lab-title">The part of the studio that isn&apos;t finished, on purpose.</h2>\n              <p>\n                Explore the experiments in progress, what works today, and what comes next.\n              </p>\n              <div className="lab-list">\n                {labProducts.map((product, index) => (\n                  <LabCard key={product.slug} product={product} index={index} />\n                ))}\n              </div>\n              <div className="kw__actions">\n                <Link className="kw__btn kw__btn--ghost ai" href="/lab">\n                  Open the lab <ArrowUpRight size={15} aria-hidden="true" />\n                </Link>\n              </div>\n            </div>\n          </div>\n        </section>\n\n        {/* ------------------------------------------------------ 03 Blake */}\n        <section className="dest dest--blake" id="blake" style={bandStyle(3)} aria-labelledby="blake-title">\n          <div className="dest__stage">\n            <div className="dest__inner">\n              <p className="kw__marker">\n                <b>03</b> The builder\n              </p>\n              <div className="kw__panel kw__founder">\n                <div className="kw__portrait">\n                  {/* eslint-disable-next-line @next/next/no-img-element */}\n                  <img\n                    src="/blake/portrait-2026-09-14.jpg"\n                    alt="Blake Taylor on a bridge over the Chicago River"\n                    width={736}\n                    height={920}\n                    loading="lazy"\n                  />\n                </div>\n                <div>\n                  <p className="kw__kicker">Blake Taylor · founder</p>\n                  <h2 id="blake-title">Laid off in July. Five apps on the App Store now.</h2>\n                  <p className="voice">&ldquo;The simulator votes. The device decides.&rdquo;</p>\n                  <p>\n                    Blake Taylor spent three years inside sportsbook operations in the sports-betting market, where\n                    the job was staying calm while thousands of things went wrong at once. When the\n                    role ended in July 2026 he started building the tools he wished he&apos;d had,\n                    and didn&apos;t stop. He designs, writes, builds, tests, and ships everything on\n                    this site, using AI coding agents the way a woodworker uses power tools: for\n                    speed, never for judgment.\n                  </p>\n                  <ul className="kw__founder-facts">\n                    <li>Chicago.</li>\n                    <li>Earlham College, B.A. Global Management.</li>\n                    <li>Sports betting, sportsbook operations, three years.</li>\n                  </ul>\n                  <Link className="kw__text-link ai" href="/blake">\n                    More about Blake <Arrow'... 4698 more characters,
+    expected: /Revenue Leak|audit|Quick Fix|Landing Page Rebuild|\$250/i,
+    operator: 'doesNotMatch',
+    diff: 'simple'
+  }
+
+test at tests/redirects.test.ts:2:3403
+✖ retired studio routes redirect to living pages (1.623209ms)
+  AssertionError [ERR_ASSERTION]: no studio redirect for /audit
+      at TestContext.<anonymous> (/Volumes/KoiBuild/koinophobia-labs-site/WO-0118/tests/redirects.test.ts:75:12)
+      at async Test.run (node:internal/test_runner/test:1313:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:897:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at tests/seo-discovery.test.ts:1:1
+✖ tests/seo-discovery.test.ts (148.697125ms)
+  'test failed'

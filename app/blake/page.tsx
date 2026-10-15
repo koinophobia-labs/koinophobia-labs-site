@@ -10,7 +10,7 @@ import { STUDIO_URL, socialCard } from "@/lib/seo";
 export const metadata: Metadata = {
   title: "Blake Taylor",
   description:
-    "Laid off in July, three apps on the App Store by September. The person who designs, builds, tests, and ships everything at Koinophobia Labs.",
+    "Laid off in July, five apps on the App Store now. The person who designs, builds, tests, and ships everything at Koinophobia Labs.",
   alternates: { canonical: `${STUDIO_URL}/blake` },
   openGraph: { type: "profile", url: `${STUDIO_URL}/blake`, title: "Blake Taylor · Koinophobia Labs", images: [socialCard("The fear of an ordinary life, and what I did about it.", "Blake Taylor · founder")] },
 };
@@ -26,11 +26,11 @@ const method = [
   },
   {
     title: "Test on the device.",
-    body: "The simulator was green for weeks while the phone found two shipping defects in an hour.",
+    body: "The simulator was green for weeks while testing on a real phone found two shipping defects.",
   },
   {
     title: "Ship, then say exactly what's true.",
-    body: "Every product page on this site carries a verified date and a list of what it can't do, and a script fails the build when the date goes stale.",
+    body: "The product registry keeps evidence, verification dates, and known limits. Its freshness tests flag records that need another check.",
   },
 ];
 
@@ -108,8 +108,8 @@ export default function BlakePage() {
             Work with me, or just say hello.
           </h2>
           <div className="rail rail--plain s" style={{ "--i": 1 } as React.CSSProperties}>
-            <a href={`${LINKS.email}?subject=Hello`} data-analytics="founder_link_click" data-analytics-label="email">
-              <b>Email</b> · koinophobia999@gmail.com
+            <a href="/start?src=blake" data-analytics="founder_link_click" data-analytics-label="email">
+              <b>Contact</b> · Ask Blake a question
             </a>
             <a href={LINKS.github} target="_blank" rel="noreferrer" data-analytics="founder_link_click" data-analytics-label="github">
               <b>GitHub</b> <ArrowUpRight size={12} aria-hidden="true" />

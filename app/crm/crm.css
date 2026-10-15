@@ -172,3 +172,5 @@
     padding: 1.5rem;
   }
 }
+
+.crm-filters { grid-template-columns: repeat(auto-fit,minmax(160px,1fr)); }

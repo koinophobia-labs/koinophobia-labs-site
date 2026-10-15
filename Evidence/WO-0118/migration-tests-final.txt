@@ -1,0 +1,55 @@
+
+> koinophobia-labs@0.1.0 test:migrations
+> node --test tests/database-migrations.test.mjs
+
+✔ preview Vercel builds cannot execute migrations (0.867208ms)
+✔ ordinary production Vercel builds are application-only (0.154792ms)
+✖ a direct production Neon endpoint succeeds with every required guard (1.596584ms)
+✔ missing or vague approval refuses before connecting or executing SQL (0.262ms)
+✔ target and runtime mismatches refuse before connecting (0.113167ms)
+✔ the database provider, direct URL, protocol, and TLS are mandatory (0.136833ms)
+✔ a wrong Neon endpoint is refused before connecting (0.094375ms)
+✔ a preview endpoint is refused when production is expected (0.054834ms)
+✔ a pooled Neon hostname is refused before connecting (0.063416ms)
+✔ the expected endpoint ID must be supplied independently (0.084875ms)
+✔ the expected database name and migration role are mandatory (0.124ms)
+✔ a URL database-name mismatch is refused before connecting (0.08975ms)
+✔ a connected database-name mismatch refuses before migration SQL (0.095416ms)
+✔ a connected role mismatch refuses before migration SQL (0.0715ms)
+✔ read-only and recovery connections refuse before migration SQL (0.148083ms)
+✔ an unexpected application baseline refuses before migration SQL (0.079125ms)
+✔ connection and identity failures expose no connection secrets (0.173791ms)
+✔ successful output exposes only the safe target and migration filenames (0.394584ms)
+✔ test and development migrations allow an explicit loopback-only path (0.465292ms)
+✔ the local override refuses remote and production targets (0.057875ms)
+✔ migration failures roll back, identify the file, and stop (0.140208ms)
+✔ the former custom database setting is not required anywhere (581.309292ms)
+✔ migration 008 keeps idempotent guards for all columns and indexes (0.585583ms)
+✔ a real PostgreSQL schema containing migration 008 is accepted unchanged (3908.122583ms)
+ℹ tests 24
+ℹ suites 0
+ℹ pass 23
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4556.4375
+
+✖ failing tests:
+
+test at tests/database-migrations.test.mjs:128:1
+✖ a direct production Neon endpoint succeeds with every required guard (1.596584ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  9 !== 8
+  
+      at TestContext.<anonymous> (file:///Volumes/KoiBuild/koinophobia-labs-site/WO-0118/tests/database-migrations.test.mjs:141:10)
+      at async Test.run (node:internal/test_runner/test:1313:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:897:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 9,
+    expected: 8,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

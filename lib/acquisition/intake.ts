@@ -90,15 +90,33 @@ export function validateIntake(form: FormData): { input?: LeadInput; errors?: Re
     currentTools,
     source: "website intake",
   };
+  const source = intakeFormValue(form, "src");
+  const offer = intakeFormValue(form, "offer");
+  const business = isStart && (intakeFormValue(form, "audience") === "business" || offer === "audit");
+  const role = intakeFormValue(form, "role");
+  const preferredContact = intakeFormValue(form, "preferredContact") || "email";
   if (isStart) {
     input.businessName ||= "Not given";
     input.industry ||= "Not given";
     input.serviceInterest ||= "Start form: idea";
     input.timeline ||= "No deadline";
     input.websiteOrSocial ||= "";
-    input.source = "start form";
+    input.source = source || "start form";
+    if (offer === "audit") input.serviceInterest = "Revenue Leak Audit";
+    else if (offer === "readiness") input.serviceInterest = "Straight Answer";
+    else if (business) input.serviceInterest = "Business inquiry";
+    input.notes = [offer ? `Offer: ${offer}` : "", business ? `Role: ${role}\nPreferred contact: ${preferredContact}` : "", input.notes].filter(Boolean).join("\n\n");
   }
   const errors: Record<string, string> = {};
+  if (source.length > 160) errors.src = "Source must be 160 characters or fewer.";
+  if (offer.length > 80) errors.offer = "Offer must be 80 characters or fewer.";
+  if (business) {
+    if (!intakeFormValue(form, "businessName")) errors.businessName = "Enter your company.";
+    if (!role || role.length > 120) errors.role = "Enter your role (120 characters or fewer).";
+    if (!["email", "phone", "text"].includes(preferredContact)) errors.preferredContact = "Choose email, phone, or text.";
+    if (preferredContact !== "email" && !input.phone) errors.phone = "Enter a phone number for calls or texts.";
+    if (offer === "audit" && !["$250 audit", "Not sure yet"].includes(input.budgetRange || "")) errors.budgetRange = "Choose $250 audit or Not sure yet.";
+  }
   for (const key of isStart ? startRequiredFields : requiredFields) if (!input[key]) errors[key] = "This field is required.";
   if (desiredOutcome.length > 2000) errors.desiredOutcome = "Must be 2000 characters or fewer.";
   if (currentTools.length > 2000) errors.currentTools = "Must be 2000 characters or fewer.";
@@ -193,6 +211,6 @@ export function checkRateLimit(key: string, now = Date.now()) {
 }
 export function resetIntakeRouteStateForTests() { rateLimit.clear(); }
 export function intakeOutcome(saved: boolean, emailSent: boolean) {
-  if (!saved) return { ok: false as const, status: 503, message: "We could not safely record your intake right now. Please retry or use the email fallback." };
+  if (!saved) return { ok: false as const, status: 503, message: "We could not safely record your intake right now. Please wait a moment and retry." };
   return { ok: true as const, status: 200, emailSent, message: emailSent ? "Intake received and emailed to Blake. He will review fit, scope, and the next practical step." : "Intake received. Blake will review fit, scope, and the next practical step." };
 }

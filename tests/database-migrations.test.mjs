@@ -138,8 +138,8 @@ test("a direct production Neon endpoint succeeds with every required guard", asy
   assert.match(client.queries[0], /transaction_read_only/);
   assert.match(client.queries[0], /pg_is_in_recovery/);
   assert.match(client.queries[0], /public\.crm_leads/);
-  assert.equal(client.queries.filter((query) => query === "begin").length, 8);
-  assert.equal(client.queries.filter((query) => query === "commit").length, 8);
+  assert.equal(client.queries.filter((query) => query === "begin").length, MIGRATION_FILES.length);
+  assert.equal(client.queries.filter((query) => query === "commit").length, MIGRATION_FILES.length);
   assert.equal(client.queries.filter((query) => query === "rollback").length, 0);
   assert.ok(client.queries.some((query) => query.includes("founder_packet")));
 });
@@ -430,7 +430,7 @@ test("test and development migrations allow an explicit loopback-only path", asy
       },
       logger: quietLogger(),
     });
-    assert.equal(client.queries.filter((query) => query === "commit").length, 8);
+    assert.equal(client.queries.filter((query) => query === "commit").length, MIGRATION_FILES.length);
   }
 });
 
@@ -497,7 +497,7 @@ test("migration 008 keeps idempotent guards for all columns and indexes", () => 
     (migration.match(/create index if not exists/gi) ?? []).length,
     2,
   );
-  assert.deepEqual(MIGRATION_FILES.slice(-1), ["008_founder_sales_packet.sql"]);
+  assert.deepEqual(MIGRATION_FILES.slice(-2), ["008_founder_sales_packet.sql", "009_chamber_next_action.sql"]);
 });
 
 test(

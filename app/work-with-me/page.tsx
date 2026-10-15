@@ -6,7 +6,7 @@ import Masthead from "@/components/site/Masthead";
 import PageView from "@/components/site/PageView";
 import SiteFooter from "@/components/site/SiteFooter";
 import StickyStart from "@/components/site/StickyStart";
-import { LINKS } from "@/lib/links";
+import { trendiRelease, forgetRelease, wayInRelease, oldDogRelease, preachingRelease } from "@/lib/releases";
 import { getSiteProduct } from "@/lib/products";
 import { STUDIO_URL, socialCard } from "@/lib/seo";
 
@@ -23,14 +23,13 @@ export const metadata: Metadata = {
   twitter: { title: headline, description, images: [socialCard(headline, "PRD → Release")] },
 };
 
-// MARKETPLACE_PROFILE.md verified table, 2026-10-12. Keep this proof limited
-// to those listings; older site-wide registry copy is not release evidence.
+// Five listings verified in Evidence/WO-0118/apple-lookup.json, 2026-10-15.
 const listings = [
-  { slug: "career-forge", name: "Way In: Resume & Job Search", platforms: "iOS", url: "https://apps.apple.com/us/app/way-in-resume-job-search/id6807942376", version: "1.0.5" },
-  { slug: "trendi", name: "Trendi: Content Coach", platforms: "iOS", url: "https://apps.apple.com/us/app/trendi-content-coach/id6776299336", version: "0.2.3" },
-  { slug: "forget-about-it", name: "ForgetAboutIt", platforms: "iOS + watchOS", url: "https://apps.apple.com/us/app/forgetaboutit/id6804360983", version: "1.1" },
-  { slug: "old-dog", name: "Old Dog", platforms: "macOS", url: "https://apps.apple.com/us/app/old-dog/id6813966822", version: "1.1.0" },
-  { slug: "preaching-to-the-choir", name: "Preaching to the Choir", platforms: "iOS / iPadOS", url: "https://apps.apple.com/us/app/preaching-to-the-choir/id6808442357", version: "1.0" },
+  { slug: "career-forge", name: "Way In: Resume & Job Search", platforms: "iOS", url: "https://apps.apple.com/us/app/way-in-resume-job-search/id6807942376", version: wayInRelease.version },
+  { slug: "trendi", name: "Trendi: Content Coach", platforms: "iOS", url: "https://apps.apple.com/us/app/trendi-content-coach/id6776299336", version: trendiRelease.version },
+  { slug: "forget-about-it", name: "ForgetAboutIt", platforms: "iOS + watchOS", url: "https://apps.apple.com/us/app/forgetaboutit/id6804360983", version: forgetRelease.version },
+  { slug: "old-dog", name: "Old Dog", platforms: "macOS", url: "https://apps.apple.com/us/app/old-dog/id6813966822", version: oldDogRelease.version },
+  { slug: "preaching-to-the-choir", name: "Preaching to the Choir", platforms: "iOS / iPadOS", url: "https://apps.apple.com/us/app/preaching-to-the-choir/id6808442357", version: preachingRelease.version },
 ];
 
 const steps = [
@@ -56,7 +55,7 @@ export default function WorkWithMePage() {
             <Link className="btn btn--primary ai" href={reviewHref} data-analytics="inquiry_start" data-analytics-label="work_with_me_top">
               {reviewLabel} <ArrowRight size={15} aria-hidden="true" />
             </Link>
-            <a className="btn ai" href={`${LINKS.email}?subject=Project%20idea`} data-analytics="founder_link_click" data-analytics-label="email">Email me instead</a>
+            <a className="btn ai" href="/start?src=work-with-me" data-analytics="founder_link_click" data-analytics-label="email">Ask a question</a>
           </div>
         </header>
 
@@ -104,7 +103,7 @@ export default function WorkWithMePage() {
                   chip: "Live",
                   blurb: "",
                   notYetShort: "",
-                  appStore: { url: listing.url, version: listing.version, verifiedAt: "2026-10-12", priceLine: "" },
+                  appStore: { url: listing.url, version: listing.version, verifiedAt: wayInRelease.verifiedAt, priceLine: "" },
                 }} />
               );
             })}
@@ -124,7 +123,7 @@ export default function WorkWithMePage() {
             <Link className="btn btn--primary ai" href={reviewHref} data-analytics="inquiry_start" data-analytics-label="work_with_me">
               {reviewLabel} <ArrowRight size={16} aria-hidden="true" />
             </Link>
-            <a className="btn ai" href={`${LINKS.email}?subject=Project%20idea`} data-analytics="founder_link_click" data-analytics-label="email">Email me instead</a>
+            <a className="btn ai" href="/start?src=work-with-me" data-analytics="founder_link_click" data-analytics-label="email">Ask a question</a>
           </div>
         </section>
         <SiteFooter />
