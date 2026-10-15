@@ -1,0 +1,17 @@
+✔ every rendered price and billing term comes from the single prices config (11.779959ms)
+✔ no page or product copy contains the false no-purchases claim (11.584708ms)
+✔ coming-soon homes are public by Blake's decision, without App Store buttons (0.196791ms)
+✔ store badge accessible labels name each live app and the correct store (2.046125ms)
+✔ coming-soon price cards qualify free downloads with when released (1.016292ms)
+✔ app copy excludes the rejected claims and has distinct feature headings (0.109459ms)
+✔ founder notes are absent unless explicitly set, with a factual sign-off for every app (2.581958ms)
+✔ all seven homes have original assets and three to five sourced features (0.2075ms)
+✔ app palettes meet WCAG AA for text, accents, and card copy (0.392875ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 518.125958

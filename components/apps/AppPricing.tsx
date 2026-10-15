@@ -5,7 +5,7 @@ export default function AppPricing({ slug, free, prerelease }: { slug: AppSlug; 
   return <section className="app-home__pricing" id="pricing" aria-labelledby="pricing-title">
     <div><p className="app-home__eyebrow">The price, plainly · USA</p><h2 id="pricing-title">Start here.</h2><p>{prerelease ? "Planned App Store pricing. Not available to purchase yet." : "Download from the App Store. Choose a paid option if it fits what you need."}</p></div>
     <div className="app-home__price-card" data-prices={slug}>
-      <div className="app-home__free"><h3>{freePrice.name}</h3><p>{free}</p></div>
+      <div className="app-home__free"><h3>{freePrice.name}{prerelease ? " when released" : ""}</h3><p>{free}</p></div>
       <dl>{prices.map(price => <div className="app-home__price" key={`${price.name}-${price.term}`}>
         <dt>{price.name}<small>{price.detail}</small></dt>
         <dd><strong data-price={price.amount}>${price.amount}</strong><span>{price.term}</span></dd>

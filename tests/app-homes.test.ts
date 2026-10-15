@@ -6,6 +6,8 @@ import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { load } from "cheerio";
 import AppPricing from "../components/apps/AppPricing";
+import AppFounder from "../components/apps/AppFounder";
+import AppStoreBadge from "../components/site/AppStoreBadge";
 import { appHomes, APP_PAGES_PRERELEASE, publicAppHomes, showPrereleaseAppPages } from "../lib/app-homes";
 import { appPrices, priceLine } from "../lib/app-prices";
 import { shippedProducts } from "../lib/products";
@@ -37,10 +39,43 @@ test("no page or product copy contains the false no-purchases claim", () => {
 test("coming-soon homes are public by Blake's decision, without App Store buttons", () => {
   assert.equal(APP_PAGES_PRERELEASE, true);
   assert.deepEqual(publicAppHomes().map(app => app.slug).sort(), ["dreamcatcher", "forget-about-it", "old-dog", "preaching-to-the-choir", "teachers-pet", "trendi", "way-in"]);
-  for (const slug of ["teachers-pet", "dreamcatcher"]) assert.equal(appHomes[slug].store, undefined, `${slug} must not link to the App Store before approval`);
+  for (const slug of ["teachers-pet", "dreamcatcher"] as const) assert.equal(appHomes[slug].store, undefined, `${slug} must not link to the App Store before approval`);
   assert.equal(appHomes["old-dog"].platforms, "Mac");
   assert.equal(appHomes["teachers-pet"].coming, "Coming to the Mac App Store");
   assert.equal(appHomes.dreamcatcher.coming, "Coming to the App Store");
+});
+test("store badge accessible labels name each live app and the correct store", () => {
+  for (const app of Object.values(appHomes).filter(app => app.store)) {
+    const $ = load(renderToStaticMarkup(createElement(AppStoreBadge, { product: app.slug, url: app.store!, placement: "product_hero" })));
+    const store = app.slug === "old-dog" ? "Mac App Store" : "App Store";
+    assert.equal($("a").attr("aria-label"), `Download ${app.name} on the ${store}`);
+    assert.equal($("a > span > span").text(), store);
+  }
+});
+test("coming-soon price cards qualify free downloads with when released", () => {
+  for (const app of Object.values(appHomes).filter(app => app.prerelease)) {
+    const $ = load(renderToStaticMarkup(createElement(AppPricing, { slug: app.slug, free: app.free, prerelease: app.prerelease })));
+    assert.equal($("h3").text(), "Free to download when released");
+    assert.equal($("a[href*='apps.apple.com']").length, 0);
+  }
+});
+test("app copy excludes the rejected claims and has distinct feature headings", () => {
+  assert.doesNotMatch(JSON.stringify(appHomes), /Nothing is invented|Catch it\. Keep your words\./i);
+  assert.equal(new Set(Object.values(appHomes).map(app => app.featureHeading)).size, 7);
+  assert.match(appHomes["way-in"].free, /Full review, editing, and export of saved résumés require an eligible purchase\./);
+});
+test("founder notes are absent unless explicitly set, with a factual sign-off for every app", () => {
+  for (const app of Object.values(appHomes)) {
+    assert.equal(app.founderNote, undefined);
+    const $ = load(renderToStaticMarkup(createElement(AppFounder, { founderNote: app.founderNote })));
+    assert.equal($(".app-home__founder-note, blockquote").length, 0);
+    assert.doesNotMatch($.text(), /From Blake/);
+    assert.equal($(".app-home__sign-off").text(), "Designed, built and shipped by Blake Taylor in Chicago.");
+  }
+  const $ = load(renderToStaticMarkup(createElement(AppFounder, { founderNote: "A note supplied by Blake." })));
+  assert.equal($(".app-home__founder-note").text(), "A note supplied by Blake.");
+  assert.equal($("#founder-title").text(), "From Blake");
+  assert.equal($("blockquote").length, 0);
 });
 test("all seven homes have original assets and three to five sourced features", () => {
   for (const app of Object.values(appHomes)) {

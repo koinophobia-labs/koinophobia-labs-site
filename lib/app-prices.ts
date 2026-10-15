@@ -25,6 +25,7 @@ export const appPrices = {
 } as const;
 export type AppSlug = keyof typeof appPrices;
 export const freePrice = { name: "Free to download", amount: "0.00" } as const;
+export const wayInPurchaseRequirement = "Full review, editing, and export of saved résumés require an eligible purchase.";
 export function priceLine(slug: AppSlug) {
-  return `${freePrice.name} · ${appPrices[slug].map(p => `${p.name} $${p.amount} ${p.term}`).join(" · ")}`;
+  return `${freePrice.name}${slug === "way-in" ? `. ${wayInPurchaseRequirement}` : ""} · ${appPrices[slug].map(p => `${p.name} $${p.amount} ${p.term}`).join(" · ")}`;
 }

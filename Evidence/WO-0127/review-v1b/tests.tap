@@ -1,0 +1,335 @@
+✔ the bridge declares exactly sixteen events (0.352458ms)
+✔ every declared event is fired somewhere on the site (4.954458ms)
+✔ nothing fires an event that is not declared (0.783958ms)
+✔ the koi world reports journey depth with the motion mode (0.171958ms)
+✔ the App Store version can be refreshed from the Lookup API at build time, and falls back to the registry (0.187667ms)
+✔ the log has a feed and the social card takes a title (0.097208ms)
+✔ every rendered price and billing term comes from the single prices config (14.128833ms)
+✔ no page or product copy contains the false no-purchases claim (6.108875ms)
+✔ coming-soon homes are public by Blake's decision, without App Store buttons (0.10225ms)
+✔ store badge accessible labels name each live app and the correct store (2.171459ms)
+✔ coming-soon price cards qualify free downloads with when released (1.128375ms)
+✔ app copy excludes the rejected claims and has distinct feature headings (0.141125ms)
+✔ founder notes are absent unless explicitly set, with a factual sign-off for every app (2.974917ms)
+✔ all seven homes have original assets and three to five sourced features (0.202084ms)
+✔ app palettes meet WCAG AA for text, accents, and card copy (0.209042ms)
+{"scope":"audit-checkout","event":"checkout_unavailable"}
+✔ public route creates a CRM lead, $250 balance and Stripe session through createCheckout (4.049292ms)
+✔ checkout validates optional email/source, defaults source, and uses supplied email only (0.444458ms)
+✔ checkout rejects cross-site, invalid, oversized, rate-limited and unavailable requests before Stripe (1.612334ms)
+✔ paid, unpaid, invalid and unrelated sessions render appropriate confirmation without customer data (5.249041ms)
+✔ existing checkout.session.completed processing marks audit payment and CRM summaries paid, once (0.688417ms)
+✔ booking stores verified session and Stripe contact on the same lead; validates required times (0.854875ms)
+✔ intake handoff rejects forged paid state and only notifies once after durable booking (1.960875ms)
+✔ an older paid tab books its own Stripe-verified session despite a newer cookie (0.569ms)
+✖ controlled fixture crawl is bounded, same-origin, multi-page, and records broken pages (4.613417ms)
+✔ page limit is enforced (0.297792ms)
+✔ transparent scoring applies severity deductions and leaves unavailable categories unscored (0.144125ms)
+✔ queued creation stores normalized domain, requested pages, and report version (2.360083ms)
+✔ valid lifecycle persists progress and completes; invalid transition is rejected (0.409167ms)
+✔ failure, cancellation, archive and retry lineage persist (0.289459ms)
+✔ raw measurements are inserted independently of editable findings (0.223792ms)
+✔ founder findings and editable visibility, proposal selection, severity filters persist (0.22725ms)
+✔ finding reorder is persisted transactionally (0.110084ms)
+✔ shared limiter enforces, resets, and atomically caps concurrent consumption (3.730458ms)
+✔ proposal traceability links every selected finding (0.104208ms)
+✔ protected audit PDF rejects unauthenticated requests (2.123542ms)
+✔ SSRF guard rejects private and credentialed targets (0.456459ms)
+✔ audit edit validates enums and required evidence (0.115875ms)
+✔ audit PDF renders multiple findings and excludes internal notes (27.611ms)
+✔ audit PDF excludes normalized findings hidden from clients (1.757917ms)
+✔ QR attribution survives hub, audit, intake, and arbitrary encoded sources (0.52125ms)
+✔ audit form validates contact and budget and preserves source and offer (1.107084ms)
+✔ founder and readiness paths retain source without imposing business fields (0.09475ms)
+✔ source and offer reach database columns and survive a read (2.355417ms)
+✔ different source or offer cannot silently deduplicate onto another inquiry (0.136625ms)
+✔ manual quick add accepts phone-only, defaults Chamber, and rejects bad fields (0.182541ms)
+✔ CRM source and due filters bind source and use Chicago day boundaries (0.357584ms)
+✔ quick add rejects anonymous requests before writing (2.075ms)
+✔ canonical audit QR route is no longer redirected to the founder offer (0.139875ms)
+✔ quick add rejects cross-site requests even with an administrator session (0.646708ms)
+✔ existing standard intake remains backward compatible (10.115917ms)
+✔ intake rejects a non-http website value (0.208584ms)
+✔ concierge handoff is recomputed and stored as a structured lead (1.823ms)
+✔ edited answers invalidate the token and the server recomputes a safer route (0.664083ms)
+✔ malformed concierge data fails closed instead of creating a forged concierge lead (0.397208ms)
+✔ concierge email notification contains qualification data and escapes visitor HTML (1.635792ms)
+✔ CRM persistence writes the concierge envelope to JSONB (0.982167ms)
+✔ the versioned concierge migration is included in the migration runner (15.925417ms)
+✔ readiness intake uses existing notes and service fields through CRM and email (2.29775ms)
+✔ a draft survives route changes in the same browser tab (1.171375ms)
+✔ two tabs on one browser origin cannot see each other's concierge drafts (0.172667ms)
+✔ a foreign concierge handoff identifier is rejected (0.218167ms)
+✔ upgrade migration deletes unowned origin-wide drafts (0.158416ms)
+✔ successful handoff cleanup removes only the current tab draft (0.160084ms)
+✔ unavailable browser storage fails closed (0.129458ms)
+✔ routes uncertainty to the Revenue Leak Audit (0.870416ms)
+✔ routes a material website problem to a rebuild (0.266167ms)
+✔ routes lead follow-up and repetitive work to automation (0.105667ms)
+✔ routes a portal or product to custom product development (0.055583ms)
+✔ routes an isolated repair to Quick Fix Sprint (0.047959ms)
+✔ routes conflicting website and custom-product signals to manual review (0.054125ms)
+✔ routes regulated requirements to manual review (0.074291ms)
+✔ routes harmful work and irreconcilable custom-product constraints to not a fit (0.058333ms)
+✔ empty and extremely short input fail validation (0.227291ms)
+✔ excessively long input and unsafe URLs fail validation (0.122417ms)
+✔ prompt injection and price manipulation do not control routing (0.052042ms)
+✔ AI provider outage leaves a complete deterministic response (7.169292ms)
+✔ malformed model output fails closed to the deterministic response (0.603167ms)
+✔ valid structured model output can enhance summary but not routing (0.528625ms)
+✔ AI timeout falls back without breaking evaluation (12.709792ms)
+✔ versioned session recovery accepts fresh drafts and rejects expired or malformed data (0.192791ms)
+✔ approved verified Google account is accepted (0.4395ms)
+✔ unapproved verified Google account is denied (0.056958ms)
+✔ unverified Google account is denied (0.040208ms)
+✔ missing email is denied (0.036625ms)
+✔ case and surrounding whitespace normalize to an exact allowlist match (0.316583ms)
+✔ partial email and same-domain users are denied (0.055458ms)
+✔ an unsupported provider never inherits Google authorization (0.036917ms)
+✔ session authorization requires every verified Google claim and the live allowlist (0.063667ms)
+✔ Auth.js uses JWT sessions, a 12-hour lifetime, and protected session cookies (0.061041ms)
+✔ approved and unapproved Auth.js sessions are enforced by page and API guards (1.519416ms)
+✔ legacy fallback can be retired by removing its secret (3.286584ms)
+✔ every private CRM surface contains its server-side authorization guard (1.105166ms)
+✔ login and OAuth error UI disclose no secret field, token, or configuration (0.095958ms)
+✔ sign-out clears both session paths and public intake remains outside the boundary (0.189709ms)
+✔ intake route validation accepts a complete CRM lead (0.830208ms)
+✔ protected lead list rejects a request without a session (7.40325ms)
+✔ protected update rejects a request without a session (1.570416ms)
+✔ only an explicit idempotency key deduplicates retries (4.394667ms)
+✔ status follow-up and internal note update (0.178334ms)
+✔ legacy leads without founder packet columns still map safely (0.084125ms)
+✔ enum and date validation (0.42175ms)
+✔ signed session authorizes and rejects tampering (0.248083ms)
+✔ preview Vercel builds cannot execute migrations (1.811292ms)
+✔ ordinary production Vercel builds are application-only (0.155709ms)
+✔ a direct production Neon endpoint succeeds with every required guard (223.136792ms)
+✔ missing or vague approval refuses before connecting or executing SQL (0.166417ms)
+✔ target and runtime mismatches refuse before connecting (0.1135ms)
+✔ the database provider, direct URL, protocol, and TLS are mandatory (0.143833ms)
+✔ a wrong Neon endpoint is refused before connecting (0.0855ms)
+✔ a preview endpoint is refused when production is expected (0.052583ms)
+✔ a pooled Neon hostname is refused before connecting (0.062833ms)
+✔ the expected endpoint ID must be supplied independently (0.083ms)
+✔ the expected database name and migration role are mandatory (0.063625ms)
+✔ a URL database-name mismatch is refused before connecting (0.050792ms)
+✔ a connected database-name mismatch refuses before migration SQL (0.075208ms)
+✔ a connected role mismatch refuses before migration SQL (0.067541ms)
+✔ read-only and recovery connections refuse before migration SQL (0.122875ms)
+✔ an unexpected application baseline refuses before migration SQL (0.073334ms)
+✔ connection and identity failures expose no connection secrets (0.175041ms)
+✔ successful output exposes only the safe target and migration filenames (0.3245ms)
+✔ test and development migrations allow an explicit loopback-only path (0.428875ms)
+✔ the local override refuses remote and production targets (0.049083ms)
+✔ migration failures roll back, identify the file, and stop (0.1325ms)
+✔ the former custom database setting is not required anywhere (2210.842125ms)
+✔ migration 008 keeps idempotent guards for all columns and indexes (0.6745ms)
+✖ a real PostgreSQL schema containing migration 008 is accepted unchanged (4.214625ms)
+✔ every product carries verification metadata (0.59875ms)
+✖ no product status has gone stale for its stage (1.520375ms)
+✔ every stage has a freshness budget, and fast stages are tight (0.078208ms)
+✔ a stale status produces an actionable message (0.091ms)
+✔ freshness is never auto-refreshed (0.217834ms)
+✔ a status owner is recorded (0.038541ms)
+✔ published dates are literals, never read from the clock (0.293375ms)
+✔ stage and reach never contradict each other (0.076ms)
+✔ the stage ladder never collapses distinct release states (0.053375ms)
+✔ every stage maps to a display family, and the family never upgrades a stage (0.089792ms)
+✔ the front office is in the universe, honestly (0.092584ms)
+✔ TestFlight claims require TestFlight evidence (0.249458ms)
+✔ You Know Ball does not claim it was never uploaded (0.446875ms)
+✔ Trendi reflects its verified public release while the dated log preserves beta history (0.345417ms)
+✔ Career Forge does not claim checkout is closed, or that anyone bought (0.177125ms)
+✔ unsourceable statistics stay out of published copy (1.512083ms)
+✔ every product states what is not true yet (0.133ms)
+✔ internal-only products offer nothing to click (0.080542ms)
+✔ no product uses launch language it cannot back (0.135334ms)
+✔ no product invents users, revenue, or testimonials (0.965375ms)
+✔ product slugs are unique and every one resolves (0.049917ms)
+✔ every product action link is usable by a stranger (0.11625ms)
+✔ no note publishes without BOTH gates (0.049875ms)
+✔ every first-person note is currently held for review (0.027292ms)
+✔ held notes are preserved, never emptied (0.045084ms)
+✔ the review file still covers every note (6.758542ms)
+✔ published field notes are specific, dated, and resolvable (0.202792ms)
+✔ every experiment reports what it showed (0.059875ms)
+✔ the five required lead scenarios produce complete, bounded founder packets (3.273208ms)
+✔ every selected price, timeline, and scope item comes from the existing offer catalog (0.35725ms)
+✔ the audit intake maps to the existing $250 audit and its correct public link (0.100417ms)
+✔ concierge routing remains authoritative when the packet is attached (0.115792ms)
+✔ Resend receives one founder-only notification with Reply-To and the full draft packet (7.716083ms)
+✔ lead-controlled text is escaped in founder notification HTML (0.743875ms)
+✔ the CRM keeps the founder draft editable without a send action (0.140792ms)
+✔ the packet is persisted on the lead and smoke submissions remain non-prospects (0.652834ms)
+✔ the additive packet migration is in the migration runner (41.22925ms)
+✔ SITE-02: no Origin AND no sec-fetch-site is UNTRUSTED (scripted client) (8.024417ms)
+✔ SITE-02: same-origin sec-fetch-site is trusted (0.144125ms)
+✔ SITE-02: cross-site sec-fetch-site is rejected (0.0495ms)
+✔ SITE-02: a matching Origin is trusted, a foreign Origin is not (0.809667ms)
+✔ SITE-02: rate key prefers the platform-trusted x-real-ip (0.096875ms)
+✔ SITE-02: rotating the LEFTMOST x-forwarded-for token cannot change the key (0.076042ms)
+✔ SITE-01: identical content in the same window yields the SAME idempotency key (0.145333ms)
+✔ SITE-01: different content yields a different key (0.057958ms)
+✔ SITE-01: a concierge session or explicit key overrides the content key (0.056708ms)
+✔ SITE-01: email sends on a new lead, is SKIPPED on a confirmed dedupe, sends on storage failure (0.081208ms)
+✔ the koi world leads through six destinations and reads every fact from the registry (176.124625ms)
+✔ every koi clip referenced by the journey ships both renditions and a poster (0.310292ms)
+✔ the layout loads three font families and four site stylesheets, nothing from the agency era (0.187583ms)
+✖ Trendi privacy and support routes are publication-ready and discoverable (5.6185ms)
+✔ every shipped app's legal pages exist and are in the sitemap (1.203ms)
+✖ payment reliability on real PostgreSQL (4.931833ms)
+✔ paid audit alert uses SITE-01 internal recipient, fixed content and no card data (12.3895ms)
+✔ accepted proposals calculate deterministic deposit and remaining balance (0.708417ms)
+✔ checkout creation uses server totals and durable metadata (1.906083ms)
+✔ webhook processing is idempotent (0.508708ms)
+✔ payment creation requires CRM authentication (5.837208ms)
+✔ webhook rejects requests without a Stripe signature (1.17375ms)
+✔ every shipped product is public in the registry, links to the App Store, and uses only authentic screens (0.590875ms)
+✔ every demo clip is cut from a QA-verified master and ships both renditions and a poster (0.205334ms)
+✔ lab products are never presented as shipped (0.351292ms)
+✔ the site never claims more than the registry (0.444458ms)
+✔ the commercial offer is three shapes with proof, and one reply promise (0.572666ms)
+✔ the homepage reads verified products and adds the approved B2B path (0.376959ms)
+✔ templates validate and pricing is calculated in cents (1.415708ms)
+✔ proposal field and enum validation rejects invalid data (0.12675ms)
+✔ status transitions make sent versions immutable (0.080625ms)
+✔ multi-line proposal PDF succeeds and excludes internal notes (47.585041ms)
+✔ redactSecrets masks obvious card, SSN, and key shapes (0.657833ms)
+✔ redactSecrets leaves ordinary business prose untouched (0.084333ms)
+✔ redactLeadFreeText masks free-text everywhere but preserves structured routing fields (0.173584ms)
+✔ storeLead persists redacted free-text to crm_leads (3.349167ms)
+✔ the lead email carries redacted free-text and still escapes HTML (0.857958ms)
+✔ no host-scoped rewrites remain; the personal host only redirects (0.51375ms)
+✔ the personal-host map lands on real studio pages (0.191792ms)
+✔ retired studio routes redirect to living pages (0.158125ms)
+✔ the www hosts collapse onto the studio host (0.097959ms)
+✔ resume contains the complete Earlham education record (0.911792ms)
+✔ resume contains the complete structured publication (0.248708ms)
+✔ homepage search and social metadata tell one consistent story (0.309792ms)
+✔ structured data links the studio, founder, and website as one entity graph (0.140709ms)
+✔ every studio sitemap entry carries an honest last-modified signal (0.146583ms)
+✔ production canonicalization redirects are permanent (0.122334ms)
+✔ straight_answer: checkout has exact server price, mode, metadata and handoff (1.198709ms)
+✔ straight_answer: paid, unpaid, invalid and unrelated paid pages fail closed (4.313ms)
+✔ straight_answer: onboarding verifies the tab session, rejects forged state, saves once (3.176125ms)
+✔ monthly_support: checkout has exact server price, mode, metadata and handoff (0.423334ms)
+✔ monthly_support: paid, unpaid, invalid and unrelated paid pages fail closed (0.89425ms)
+✔ monthly_support: onboarding verifies the tab session, rejects forged state, saves once (0.583ms)
+✔ free slots default to five; zero and negative close free requests (0.049458ms)
+✔ services is a living route, not a retired redirect (0.119ms)
+✔ separate product lookups do not reuse the first product's cached result (10.407334ms)
+✔ same-day log milestones preserve the recorded release order (0.071791ms)
+✔ evidence links explicit URLs without inventing links for local files (4.579666ms)
+✔ a reasoned sports take earns more than a vague response (1.516042ms)
+✔ betting requests pause scoring (0.070083ms)
+✔ the koi-first homepage leads with shipped apps, then the lab, then the offer (3.194708ms)
+ℹ tests 224
+ℹ suites 0
+ℹ pass 219
+ℹ fail 5
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 7617.019416
+
+✖ failing tests:
+
+test at tests/audit-crawler.test.ts:2:2356
+✖ controlled fixture crawl is bounded, same-origin, multi-page, and records broken pages (4.613417ms)
+  Error: listen EPERM: operation not permitted 127.0.0.1
+      at Server.setupListenHandle [as _listen2] (node:net:1986:21)
+      at listenInCluster (node:net:2065:12)
+      at node:net:2274:7
+      at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+    code: 'EPERM',
+    errno: -1,
+    syscall: 'listen',
+    address: '127.0.0.1'
+  }
+
+test at tests/database-migrations.test.mjs:503:1
+✖ a real PostgreSQL schema containing migration 008 is accepted unchanged (4.214625ms)
+  Error: listen EPERM: operation not permitted 127.0.0.1
+      at Server.setupListenHandle [as _listen2] (node:net:1986:21)
+      at listenInCluster (node:net:2065:12)
+      at node:net:2274:7
+      at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+    code: 'EPERM',
+    errno: -1,
+    syscall: 'listen',
+    address: '127.0.0.1'
+  }
+
+test at tests/dev-universe.test.ts:2:2383
+✖ no product status has gone stale for its stage (1.520375ms)
+  AssertionError [ERR_ASSERTION]: STALE STATUS: Teacher's Pet
+    stage:        local (Local development)
+    verified at:  2026-09-13 — 32 days ago
+    allowed age:  30 days for this stage
+    what to do:   re-check Teacher's Pet against release artifacts
+                  (archives, Apple delivery logs, live HTTP, signing),
+                  update status/evidence if it moved, then set
+                  verifiedAt to today in lib/dev/universe.ts.
+    do NOT just bump the date — the date is a claim that someone looked.
+  
+  STALE STATUS: KOI
+    stage:        local (Local development)
+    verified at:  2026-09-13 — 32 days ago
+    allowed age:  30 days for this stage
+    what to do:   re-check KOI against release artifacts
+                  (archives, Apple delivery logs, live HTTP, signing),
+                  update status/evidence if it moved, then set
+                  verifiedAt to today in lib/dev/universe.ts.
+    do NOT just bump the date — the date is a claim that someone looked.
+  + actual - expected
+  
+  + [
+  +   "Teacher's Pet",
+  +   'KOI'
+  + ]
+  - []
+  
+      at TestContext.<anonymous> (/Volumes/KoiBuild/koinophobia-labs-site/WO-0127/tests/dev-universe.test.ts:66:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1306:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:897:18)
+      at Test.postRun (node:internal/test_runner/test:1447:19)
+      at Test.run (node:internal/test_runner/test:1372:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: [ "Teacher's Pet", 'KOI' ],
+    expected: [],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at tests/legal-pages.test.ts:2:1215
+✖ Trendi privacy and support routes are publication-ready and discoverable (5.6185ms)
+  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+  
+    assert.ok(privacy.includes("every third party with whom Trendi shares"))
+  
+      at TestContext.<anonymous> (/Volumes/KoiBuild/koinophobia-labs-site/WO-0127/tests/legal-pages.test.ts:23:10)
+      at async Test.run (node:internal/test_runner/test:1313:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at tests/payment-reliability.test.ts:2:1618
+✖ payment reliability on real PostgreSQL (4.931833ms)
+  Error: listen EPERM: operation not permitted 127.0.0.1
+      at Server.setupListenHandle [as _listen2] (node:net:1986:21)
+      at listenInCluster (node:net:2065:12)
+      at node:net:2274:7
+      at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+    code: 'EPERM',
+    errno: -1,
+    syscall: 'listen',
+    address: '127.0.0.1'
+  }

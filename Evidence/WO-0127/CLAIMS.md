@@ -2,17 +2,17 @@
 
 Source of truth: `/Users/koi/KoinophobiaLabs/reports/WO-0127/INVENTORY.md` (2026-10-15). A verbatim copy is retained as `INVENTORY-source.md`. D-0189 and D-0114 in `/Users/koi/KoinophobiaLabs/DECISIONS.md` govern this work. All prices are USA USD; ASC verification is the inventory’s 2026-10-15 read, not a new ASC check.
 
-The work-order instruction supersedes the older status snapshot for Way In and FAI: both are treated as live 2.1. Trendi and PttC are live 2.1; Old Dog is Mac 1.2 only. No version claim is printed on the new homes.
+The Director verified fresh public iTunes lookups at 19:2x CDT on 2026-10-15: Forget About It 2.1 released at `2026-10-15T21:45:11Z`; Way In 2.1 released at `2026-10-15T21:45:30Z`. This supersedes the stale inventory and claims-check cache. `lib/releases.ts` is unchanged; both remain live 2.1. Trendi and PttC are live 2.1; Old Dog is Mac 1.2 only. No version claim is printed on the new homes.
 
 The only pricing source in code is `lib/app-prices.ts`. App homes, studio cards, restored Way In terms, and SoftwareApplication offers derive their prices from it. Monthly and yearly renewals are disclosed; Career Pass explicitly does not renew; one-time products are labeled. No intro offer is invented.
 
 ## Shared copy and founder provenance
 
 - “Free to download”: inventory Summary and each Pricing subsection, base price $0.00.
-- “One builder. Chicago.”: inventory §8 origin facts (founder, builder, only employee; Chicago).
-- Founder notes below are adaptations from §8, not new quotations. They use only the needed-tools list, one-person studio, design/write/build/test/ship fact, and “Taste and judgment are the job.” No app-specific personal circumstance was invented.
+- Every app has the factual sign-off “Designed, built and shipped by Blake Taylor in Chicago.”, as directed in WO-0127b; inventory §8 supplies the builder and Chicago facts. It is plain prose, not a quotation.
+- All adapted founder notes have been removed. Each app supports `founderNote?: string`; every note is unset pending Blake’s own writing.
 - Studio footer, navigation and existing website privacy copy remain the shared studio frame.
-- “A look inside”, “Made to be used”, “Start here”, and gallery scroll instructions are navigation/editorial labels, not performance or outcome claims.
+- “A look inside”, “Start here”, and gallery scroll instructions are navigation/editorial labels, not performance or outcome claims.
 
 ## Trendi
 
@@ -29,7 +29,6 @@ Route: `/trendi`. Public.
 | Press record — Use the teleprompter section by section, or read the full script. | INVENTORY §1, Truth |
 | Come back to it — Keep drafts in the on-device Vault and add your own performance notes. | INVENTORY §1, Truth |
 | 3 Coach Packs per weekly allowance. | INVENTORY §1, Truth / Pricing |
-| Every product here started as something I needed the week I needed it. Trendi is one of those tools that made it off the list. | INVENTORY §8, lines 3, 6, 8 and origin facts |
 | Trendi Pro: $7.99 — monthly. 100 Coach Packs a month. | INVENTORY §1, Pricing (ASC); feature detail from Truth |
 | Screenshot 1: Say it messy | INVENTORY §1, Store screenshots / Screenshots; original source asset, unaltered |
 | Screenshot 2: Shape it into a video | INVENTORY §1, Store screenshots / Screenshots; original source asset, unaltered |
@@ -51,12 +50,11 @@ Route: `/way-in`. Public.
 | Your experience counts. | INVENTORY §2, Tone / Truth / approved claims |
 | Turn the work you have actually done into a clear next move. A résumé and application workspace for iPhone and iPad. | INVENTORY §2, Truth |
 | iPhone · iPad | INVENTORY §2, Status / platforms; work-order status instruction |
-| Start with what is true — Write from your experience or import a résumé. Nothing is invented. | INVENTORY §2, Truth |
+| Start with what is true — Write from your experience or import a résumé. Build from your own experience and review every suggestion before using it. | INVENTORY §2, Truth |
 | See what fits — Compare your experience with a saved posting: supported items, related experience and gaps. | INVENTORY §2, Truth |
 | Keep it together — Saved jobs, résumé versions, application progress, notes and follow-ups in one workspace. | INVENTORY §2, Truth |
 | You make the move — No account is required. Way In does not apply on your behalf. | INVENTORY §2, Truth |
-| Start your workspace. Resume Toolkit and the 30-Day Career Pass are separate paid purchases. | INVENTORY §2, Truth / Pricing |
-| I started with a list of tools I’d wished existed for years and a Mac. Way In is one of the things that didn’t stay an idea. | INVENTORY §8, lines 3, 6, 8 and origin facts |
+| Start your workspace. Full review, editing, and export of saved résumés require an eligible purchase. | INVENTORY §2, Truth / Pricing |
 | Resume Toolkit: $9.99 — one-time. One payment. | INVENTORY §2, Pricing (ASC); feature detail from Truth |
 | 30-Day Career Pass: $29.99 — 30 days. Does not renew. | INVENTORY §2, Pricing (ASC); feature detail from Truth |
 | Screenshot 1: Your profile | INVENTORY §2, Store screenshots / Screenshots; original source asset, unaltered |
@@ -76,7 +74,7 @@ Route: `/forget-about-it`. Public.
 | Displayed claim | Source |
 |---|---|
 | A place for the thought | INVENTORY §3, Tone / Truth |
-| Catch it. Keep your words. | INVENTORY §3, Tone / Truth / approved claims |
+| Catch a thought before it goes. | INVENTORY §3, Tone / Truth / approved claims |
 | Type it or say it. Keep your exact words in a journal on iPhone and Apple Watch, then carry on with your day. | INVENTORY §3, Truth |
 | iPhone · Apple Watch | INVENTORY §3, Status / platforms; work-order status instruction |
 | Catch the thought — Type or dictate on iPhone. Speak, scribble or type on Apple Watch. | INVENTORY §3, Truth |
@@ -84,7 +82,6 @@ Route: `/forget-about-it`. Public.
 | Read the day back — On-device, rule-based reflections sit visibly apart from your own words. | INVENTORY §3, Truth |
 | Take a copy — Plain-text export is included with the free download. | INVENTORY §3, Truth |
 | Unlimited capture, all history, text search, basic stats, today’s reflection and plain-text export. | INVENTORY §3, Truth / Pricing |
-| I build the tools I needed myself. Forget About It came from that same list, and I still do the design, writing, building and testing. | INVENTORY §8, lines 3, 6, 8 and origin facts |
 | Plus: $2.99 — monthly. Date and source filters, capture patterns, and earlier reflections. | INVENTORY §3, Pricing (ASC); feature detail from Truth |
 | Plus: $24.99 — yearly. The same Plus features, billed yearly. | INVENTORY §3, Pricing (ASC); feature detail from Truth |
 | Screenshot 1: Today in light | INVENTORY §3, Store screenshots / Screenshots; original source asset, unaltered |
@@ -111,7 +108,6 @@ Route: `/preaching-to-the-choir`. Public.
 | Keep a copy — Export with an optional passphrase. Recently Deleted keeps entries for 30 days. | INVENTORY §4, Truth |
 | Room for quiet — No account, analytics, ads or tracking. Add an optional device lock. | INVENTORY §4, Truth |
 | Every prayer stays yours to keep, read, search and export without Keeper. | INVENTORY §4, Truth / Pricing |
-| Every product here started as something I needed the week I needed it. I’m the one who designs, writes, builds, tests and ships it. | INVENTORY §8, lines 3, 6, 8 and origin facts |
 | Keeper: $2.99 — monthly. Similar wording in search, and a Year view. | INVENTORY §4, Pricing (ASC); feature detail from Truth |
 | Keeper: $24.99 — yearly. The same Keeper features, billed yearly. | INVENTORY §4, Pricing (ASC); feature detail from Truth |
 | Keeper lifetime: $79.00 — one-time. One payment for Keeper. | INVENTORY §4, Pricing (ASC); feature detail from Truth |
@@ -140,7 +136,6 @@ Route: `/old-dog`. Public.
 | Find a starting point — An optional placement check helps you begin. It never awards lesson mastery. | INVENTORY §5, Truth |
 | Keep learning — The first course in each subject is free. A one-time purchase opens all courses, including future subjects. | INVENTORY §5, Truth |
 | The first course in each subject. People who used Old Dog before 1.2 keep all ten courses. | INVENTORY §5, Truth / Pricing |
-| I had a list of tools I’d wished existed for years. Old Dog is one of them; taste and judgment are still the job. | INVENTORY §8, lines 3, 6, 8 and origin facts |
 | All courses: $9.99 — one-time. All courses, including future subjects. | INVENTORY §5, Pricing (ASC); feature detail from Truth |
 | Screenshot 1: Home and resume | INVENTORY §5, Store screenshots / Screenshots; original source asset, unaltered |
 | Screenshot 2: Choose a course | INVENTORY §5, Store screenshots / Screenshots; original source asset, unaltered |
@@ -154,7 +149,7 @@ Support: /old-dog/support; privacy: /old-dog/privacy.
 
 ## Teacher’s Pet
 
-Route: `/teachers-pet`. Unreleased; blocked publicly with APP_PAGES_PRERELEASE = false.
+Route: `/teachers-pet`. Unreleased; public coming-soon page with `APP_PAGES_PRERELEASE = true`, per Blake’s D-0189 addendum. No store link or purchase action.
 
 | Displayed claim | Source |
 |---|---|
@@ -167,7 +162,6 @@ Route: `/teachers-pet`. Unreleased; blocked publicly with APP_PAGES_PRERELEASE =
 | Lessons on the Mac — Lessons are bundled and saved on the Mac. | INVENTORY §6, Truth |
 | Family Sharing — Family Sharing is supported. No account, ads or tracking. | INVENTORY §6, Truth |
 | Free to download when released. Family subscriptions are planned; availability depends on App Store approval. | INVENTORY §6, Truth / Pricing |
-| Every product here started as something I needed the week I needed it. Teacher’s Pet is still being built by the same one person. | INVENTORY §8, lines 3, 6, 8 and origin facts |
 | Coming to the Mac App Store | INVENTORY §6, Status; work-order release gate |
 | Family: $34.99 — monthly. Family subscription. | INVENTORY §6, Pricing (ASC); feature detail from Truth |
 | Family: $299.00 — yearly. Annual family subscription. | INVENTORY §6, Pricing (ASC); feature detail from Truth |
@@ -184,7 +178,7 @@ Support: https://teachers-pet-school-sync.teachers-pet-school-sync.workers.dev/s
 
 ## Dreamcatcher
 
-Route: `/dreamcatcher`. Unreleased; blocked publicly with APP_PAGES_PRERELEASE = false.
+Route: `/dreamcatcher`. Unreleased; public coming-soon page with `APP_PAGES_PRERELEASE = true`, per Blake’s D-0189 addendum. No store link or purchase action.
 
 | Displayed claim | Source |
 |---|---|
@@ -196,7 +190,6 @@ Route: `/dreamcatcher`. Unreleased; blocked publicly with APP_PAGES_PRERELEASE =
 | Dream signs — A place for the signs you notice in your dreams. | INVENTORY §7, Truth and uploaded Screenshots (journal / signs / checks), without the unverified proposed privacy, microphone or Face ID claims |
 | Reality checks — Return to the Checks view alongside your journal and signs. | INVENTORY §7, Truth and uploaded Screenshots (journal / signs / checks), without the unverified proposed privacy, microphone or Face ID claims |
 | Free to download when released. The Lucid Toolkit is a separate one-time purchase, pending review. | INVENTORY §7, Truth / Pricing |
-| I started with a list of tools I wished existed. Dreamcatcher is another one I’m turning into something you can use. | INVENTORY §8, lines 3, 6, 8 and origin facts |
 | Coming to the App Store | INVENTORY §7, Status; work-order release gate |
 | Lucid Toolkit: $9.99 — one-time. One payment. | INVENTORY §7, Pricing (ASC); feature detail from Truth |
 | Screenshot 1: Your dream journal | INVENTORY §7, Store screenshots / Screenshots; original source asset, unaltered |
@@ -207,6 +200,22 @@ Theme: {"paper":"#12162C","ink":"#F1E6D7","accent":"#E7B76A","surface":"#262F57"
 
 Support: /dreamcatcher/support; privacy: /dreamcatcher/privacy.
 
+## WO-0127b feature headings and pricing qualifiers
+
+| App | Feature heading | Inventory source |
+|---|---|---|
+| Trendi | You stay in control of the words. | §1 Tone |
+| Way In | Your work, ready to send. | §2 Tone |
+| Forget About It | Open. Capture. Carry on. | §3 Tone |
+| Preaching to the Choir | A place for your words. | §4 Tone / Truth |
+| Old Dog | A little wiser, every day. | §5 approved taglines |
+| Teacher’s Pet | A place for each learner. | §6 learner profiles / patient teacher tone |
+| Dreamcatcher | Your exact words. | §7 Tone |
+
+- Way In’s hero, free price card, shared card price line and free structured offer carry: “Full review, editing, and export of saved résumés require an eligible purchase.” (WO-0127b explicit approved wording.)
+- Coming-soon hero and price card headings say “Free to download when released”. Status labels are non-interactive pills.
+- FAI’s replacement tagline is the live-description line in §3 Truth: “Catch a thought before it goes.”
+
 ## Exclusions and known gaps
 
 - All old product videos are omitted. No current approved real-build product recording is listed in the inventory.
@@ -214,11 +223,11 @@ Support: /dreamcatcher/support; privacy: /dreamcatcher/privacy.
 - Old Dog uses the Mac icon and Mac store screenshots only. iPhone assets and claims are omitted.
 - Dreamcatcher uses only the three uploaded screenshots. The retained fourth image with the floating accessibility control is excluded.
 - D-0114’s excluded FAI search.png is not used. The four supplied listing images are the inventory-approved sources.
-- Teacher’s Pet subscriptions are READY_TO_SUBMIT in the inventory; attachment/review must be checked before launch. Its home is gated and calls these planned prices. The $199 first-year offer is paid up front, followed by the standard yearly amount.
+- Teacher’s Pet subscriptions are READY_TO_SUBMIT in the inventory; attachment/review must be checked before launch. Its public coming-soon home calls these planned prices. The $199 first-year offer is paid up front, followed by the standard yearly amount.
 - Teacher’s Pet makes no content completeness, accreditation or learning-gain claims. Dreamcatcher makes no sleep, clinical, mystical or dream-control claims.
 - Way In’s existing support/privacy/terms routes were restored from `/Users/koi/Projects/way-in-commercial-site-20261005/app/way-in/`. Their existing legal copy is preserved; terms amounts now derive from app-prices. The source checkout was read only. These policies describe the native app and are not the old Career Forge web policy.
 - Teacher’s Pet’s existing Cloudflare support/privacy routes were confirmed HTTP 200 on 2026-10-15; source: school-service/docs/PRODUCTION_RUNBOOK.md and PROJECT_STATE.md policy deployment record. No policy was invented.
-- The existing `/lab/teachers-pet` historical page is outside the new gated home. Its old content counts remain a known pre-existing editorial gap; no release status is implied by this work.
+- The existing `/lab/teachers-pet` historical page is outside the new coming-soon home. Its old content counts remain a known pre-existing editorial gap; no release status is implied by this work.
 - `lib/resume.json:17` remains `2025 – Present`, which conflicts with the July 2026 origin narrative. Left unchanged as instructed.
 - Stale “By September, three…” biography wording is now “Now five…”. The unrelated three-year work-history statement is unchanged.
 
