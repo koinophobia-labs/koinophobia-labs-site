@@ -6,7 +6,9 @@ const dependencies = { verify: verifyAuditPayment, save: saveAuditBooking, email
 // Called only after the existing intake origin, rate-limit and honeypot checks.
 export async function handleAuditBooking(request: NextRequest, form: FormData, requestId: string, deps = dependencies) {
   const respond = (body: object, status = 200) => NextResponse.json({ ...body, requestId }, { status, headers: { "cache-control": "no-store" } });
-  const payment = await deps.verify(request.cookies.get(AUDIT_SESSION_COOKIE)?.value);
+  const submittedSession = form.get("session_id");
+  const sessionId = typeof submittedSession === "string" ? submittedSession : request.cookies.get(AUDIT_SESSION_COOKIE)?.value;
+  const payment = await deps.verify(sessionId);
   if (!payment) return respond({ ok: false, message: "We couldn't confirm a payment. Open the confirmation in the browser you used to pay, or contact Blake." }, 422);
   const parsed = auditBookingInput(form, payment);
   if (!parsed.input) return respond({ ok: false, message: "Please check your business and preferred times.", errors: parsed.errors }, 422);

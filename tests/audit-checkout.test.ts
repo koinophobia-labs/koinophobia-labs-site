@@ -119,11 +119,33 @@ test("intake handoff rejects forged paid state and only notifies once after dura
   const f = await fixture(), verified = (await verifyAuditPayment(f.session.id, f.q, f.retrievalClient))!;
   let emails = 0, saves = 0;
   const req = request({}, { cookie: `${AUDIT_SESSION_COOKIE}=${f.session.id}` });
+  const form = bookingForm(); form.delete("session_id");
   const deps = { verify: async (id?: string) => { assert.equal(id, f.session.id); return verified; }, save: async () => ({ created: ++saves === 1 }), email: async () => { emails++; return { ok: true as const, providerId: "mock-email" }; } };
-  assert.equal((await handleAuditBooking(req, bookingForm(), "req", deps)).status, 200);
-  assert.equal((await handleAuditBooking(req, bookingForm(), "req", deps)).status, 200);
+  assert.equal((await handleAuditBooking(req, form, "req", deps)).status, 200);
+  assert.equal((await handleAuditBooking(req, form, "req", deps)).status, 200);
   assert.equal(emails, 1);
-  assert.equal((await handleAuditBooking(req, bookingForm(), "req", { ...deps, verify: async () => null })).status, 422);
+  assert.equal((await handleAuditBooking(req, form, "req", { ...deps, verify: async () => null })).status, 422);
   const forged = new NextRequest(`${origin}/api/intake`, { method: "POST", headers: { origin }, body: bookingForm() });
   assert.equal((await intakeRoute(forged)).status, 422);
+});
+
+
+test("an older paid tab books its own Stripe-verified session despite a newer cookie", async () => {
+  const f = await fixture();
+  const form = bookingForm(); form.set("session_id", f.session.id);
+  let saves = 0;
+  const deps = {
+    verify: (id?: string) => verifyAuditPayment(id, f.q, f.retrievalClient),
+    save: async () => { saves++; return { created: true }; },
+    email: async () => ({ ok: true, providerId: "mock-email" }),
+  };
+  const req = request({}, { cookie: `${AUDIT_SESSION_COOKIE}=cs_test_newerunpaid123` });
+  assert.equal((await handleAuditBooking(req, form, "req", deps)).status, 200);
+  assert.equal((await handleAuditBooking(request(), form, "req", deps)).status, 200);
+  form.set("session_id", "forged");
+  assert.equal((await handleAuditBooking(req, form, "req", deps)).status, 422);
+  assert.equal(saves, 2);
+  form.set("session_id", f.session.id); f.session.payment_status = "unpaid";
+  assert.equal((await handleAuditBooking(req, form, "req", deps)).status, 422);
+  assert.equal(saves, 2);
 });

@@ -5,6 +5,9 @@ export default function AuditBookingForm() {
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault(); setBusy(true); setMessage("");
     const form = new FormData(event.currentTarget);
+    // Each tab retains its own paid session; the server re-verifies it with Stripe.
+    const sessionId = new URL(window.location.href).searchParams.get("session_id");
+    if (sessionId) form.set("session_id", sessionId);
     try {
       const response = await fetch("/api/intake", { method: "POST", body: form });
       const result = await response.json();

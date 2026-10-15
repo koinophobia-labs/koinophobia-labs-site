@@ -9,7 +9,7 @@ export function paymentFixture(total = 100000) {
     payment: undefined as Record<string, unknown> | undefined,
     sessionInput: undefined as Stripe.Checkout.SessionCreateParams | undefined,
     options: undefined as Stripe.RequestOptions | undefined,
-    queries: [] as { sql: string; values: unknown[] }[], events: new Set<string>(),
+    queries: [] as { sql: string; values: unknown[] }[], events: new Set<string>(), processed: new Set<string>(),
   };
   const q: Queryable = { query: async (sql, values = []) => {
     state.queries.push({ sql, values });
@@ -23,11 +23,13 @@ export function paymentFixture(total = 100000) {
     if (sql.startsWith("select * from crm_payments")) return { rows: sql.includes("where id=$1") && state.payment ? [state.payment] : [] };
     if (sql.startsWith("select coalesce")) return { rows: [{ paid: state.payment?.status === "paid" ? state.payment.amount : 0, pending: state.payment?.status === "pending", balance_pending: state.payment?.kind === "balance" && state.payment.status === "pending", refunded: false }] };
     if (sql.startsWith("select total")) return { rows: [{ total: state.total }] };
+    if (sql.startsWith("select processed_at")) return { rows: [{ processed_at: state.processed.has(String(values[0])) ? now : null }] };
+    if (sql.startsWith("update stripe_webhook_events set processed_at=now()")) state.processed.add(String(values[0]));
     if (sql.startsWith("insert into stripe_webhook_events")) {
       const id = String(values[0]); if (state.events.has(id)) return { rows: [] };
       state.events.add(id); return { rows: [{ event_id: id }] };
     }
-    if (sql.startsWith("update crm_payments set status='paid'")) state.payment!.status = "paid";
+    if (sql.startsWith("update crm_payments set status='paid'")) { state.payment!.status = "paid"; return { rows: [{ id: state.payment!.id }] }; }
     if (sql.startsWith("select p.lead_id")) return { rows: state.payment && state.payment.id === values[0] && state.payment.stripe_checkout_session_id === values[1] ? [{ lead_id: state.leadId, source: state.source }] : [] };
     return { rows: [] };
   } };

@@ -122,8 +122,13 @@ export async function storeLead(input: LeadInput, idempotencyKey = crypto.random
   return { lead: map(result.rows[0]), created: Boolean(result.rows[0].created) };
 }
 
-export async function listLeads(options: { search?: string; status?: string; sort?: string; source?: string; due?: string } = {}, db: Queryable = database()) {
+export async function listLeads(options: { search?: string; status?: string; sort?: string; source?: string; due?: string; abandoned?: string } = {}, db: Queryable = database()) {
   const values: unknown[] = []; const where: string[] = [];
+  if (options.abandoned !== "show") where.push(`not (
+    dedupe_key like 'audit-checkout:%' and service_interest = 'revenue_leak_audit'
+    and exists (select 1 from crm_payments p where p.lead_id=crm_leads.id and p.status='expired')
+    and not exists (select 1 from crm_payments p where p.lead_id=crm_leads.id and (p.paid_at is not null or p.status in ('pending','paid','refunded')))
+  )`);
   if (options.search) { values.push(`%${options.search}%`); where.push(`(name ilike $${values.length} or business_name ilike $${values.length} or email ilike $${values.length})`); }
   if (options.status && leadStatuses.includes(options.status as LeadStatus)) { values.push(options.status); where.push(`status = $${values.length}`); }
   if (options.source?.trim()) { values.push(options.source.trim()); where.push(`lower(source) = lower($${values.length})`); }

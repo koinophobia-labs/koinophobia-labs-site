@@ -187,16 +187,29 @@ export function formatLeadEmailHtml(rawInput: LeadInput, leadId?: string) {
 
 export function leadMailto(input: LeadInput) { return `mailto:${process.env.CONTACT_TO_EMAIL || "koinophobia999@gmail.com"}?subject=${encodeURIComponent(`Koinophobia Labs intake: ${input.businessName}`)}&body=${encodeURIComponent(formatLeadEmailText(input))}`; }
 export async function sendLeadEmail(input: LeadInput, leadId?: string) {
-  const apiKey = process.env.RESEND_API_KEY;
-  const to = process.env.CONTACT_TO_EMAIL;
-  const from = process.env.CONTACT_FROM_EMAIL || "Koinophobia Labs Leads <leads@koinophobialabs.com>";
-  if (!apiKey || !to) return { ok: false, reason: "not_configured" as const };
   const founderPacket = buildFounderSalesPacket(redactLeadFreeText(input));
   const subjectPrefix = founderPacket.disposition.label === "Spam or test"
     ? "Test / non-prospect intake"
     : input.concierge ? "New concierge lead" : "New website lead";
+  return sendInternalEmail({ subject: `${subjectPrefix}: ${input.businessName}`, text: formatLeadEmailText(input, leadId), html: formatLeadEmailHtml(input, leadId), reply_to: input.email });
+}
+
+export type PaidAuditNotice = { paymentId: string; leadId: string; bookingSubmitted: boolean; name: string; email: string };
+export async function sendPaidAuditEmail(notice: PaidAuditNotice) {
+  const subject = "Paid: Revenue Leak Audit $250";
+  const crmLink = `${(process.env.NEXT_PUBLIC_SITE_URL || "https://koinophobialabs.com").replace(/\/$/, "")}/crm/leads/${encodeURIComponent(notice.leadId)}`;
+  const text = `${subject}\n\nCRM: ${crmLink}\nBooking form submitted: ${notice.bookingSubmitted ? "Yes" : "No"}\nName: ${notice.name || "Not provided"}\nEmail: ${notice.email || "Not provided"}`;
+  return sendInternalEmail({ subject, text }, `paid-audit/${notice.paymentId}`);
+}
+
+// SITE-01 sender and recipient shared by lead and paid-audit notifications.
+async function sendInternalEmail(message: { subject: string; text: string; html?: string; reply_to?: string }, idempotencyKey?: string) {
+  const apiKey = process.env.RESEND_API_KEY;
+  const to = process.env.CONTACT_TO_EMAIL;
+  const from = process.env.CONTACT_FROM_EMAIL || "Koinophobia Labs Leads <leads@koinophobialabs.com>";
+  if (!apiKey || !to) return { ok: false, reason: "not_configured" as const };
   try {
-    const response = await fetch("https://api.resend.com/emails", { method: "POST", headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" }, body: JSON.stringify({ from, to, subject: `${subjectPrefix}: ${input.businessName}`, text: formatLeadEmailText(input, leadId), html: formatLeadEmailHtml(input, leadId), reply_to: input.email }) });
+    const response = await fetch("https://api.resend.com/emails", { method: "POST", headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json", ...(idempotencyKey ? { "Idempotency-Key": idempotencyKey } : {}) }, body: JSON.stringify({ from, to, ...message }), signal: AbortSignal.timeout(10000) });
     if (!response.ok) return { ok: false, reason: "provider_rejected" as const, status: response.status };
     const payload = await response.json().catch(() => ({}));
     return { ok: true, providerId: typeof payload.id === "string" ? payload.id : undefined };
