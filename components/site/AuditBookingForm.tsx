@@ -9,7 +9,7 @@ export default function AuditBookingForm() {
       const response = await fetch("/api/intake", { method: "POST", body: form });
       const result = await response.json();
       if (!response.ok) throw Error(result.errors ? Object.values(result.errors).join(" ") : result.message);
-      setDone(true); setMessage("Your preferred times are recorded. Blake will confirm your call within one business day.");
+      setDone(true); setMessage("Your preferred times are recorded. Blake will email you to confirm a call time.");
     } catch (error) { setMessage(error instanceof Error ? error.message : "We could not record your times. Please try again."); }
     finally { setBusy(false); }
   }

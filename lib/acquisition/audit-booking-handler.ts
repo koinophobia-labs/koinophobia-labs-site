@@ -13,6 +13,6 @@ export async function handleAuditBooking(request: NextRequest, form: FormData, r
   try {
     const saved = await deps.save(payment, parsed.input);
     const delivery = saved.created ? await deps.email(parsed.input, payment.leadId) : { ok: true };
-    return respond({ ok: true, emailSent: delivery.ok, message: "Your preferred times are recorded. Blake will confirm your call within one business day." });
+    return respond({ ok: true, emailSent: delivery.ok, message: "Your preferred times are recorded. Blake will email you to confirm a call time." });
   } catch { return respond({ ok: false, message: "We could not safely record your preferred times. Please try again." }, 503); }
 }

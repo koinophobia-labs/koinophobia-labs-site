@@ -75,7 +75,7 @@ test("paid, unpaid, invalid and unrelated sessions render appropriate confirmati
   const html = renderToStaticMarkup(createElement(AuditPaidContent, { paid: Boolean(verified), canBook: true }));
   assert.match(html, /Paid: Revenue Leak Audit, \$250/);
   assert.match(html, /Business name/); assert.match(html, /preferredTime2/);
-  assert.match(html, /within one business day/); assert.match(html, /receipt comes from Stripe/);
+  assert.match(html, /email you to confirm a call time/); assert.match(html, /receipt comes from Stripe/);
   assert.doesNotMatch(html, /private@example.com|Private Buyer|cs_test_|pi_fixture/);
   for (const changes of [{ payment_status: "unpaid" }, { amount_total: 1 }, { currency: "eur" }, { metadata: { ...f.session.metadata, offer: "other" } }]) {
     const client = { checkout: { sessions: { retrieve: async () => ({ ...f.session, ...changes }) } } } as unknown as Stripe;
