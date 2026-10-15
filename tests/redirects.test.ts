@@ -58,7 +58,6 @@ test("the personal-host map lands on real studio pages", async () => {
 test("retired studio routes redirect to living pages", async () => {
   const all = await rules();
   const expected: Record<string, string> = {
-    "/services": "/work-with-me",
     "/process": "/work-with-me",
     "/revenue-leak-audit": "/audit",
     "/concierge": "/work-with-me",

@@ -1,3 +1,5 @@
+import { handleServiceOnboarding } from "@/lib/acquisition/service-onboarding";
+import { freeStraightAnswerAvailable } from "@/lib/acquisition/services-config";
 import { handleAuditBooking } from "@/lib/acquisition/audit-booking-handler";
 import { createHash } from "node:crypto";
 import { NextRequest, NextResponse } from "next/server";
@@ -37,6 +39,9 @@ export async function POST(request: NextRequest) {
   try { form = await request.formData(); } catch { log("malformed_request", requestId); return failure("The submission format was invalid. Please refresh and try again.", 400, requestId); }
   if (intakeFormValue(form, "companyWebsite")) { log("honeypot_rejected", requestId); return failure("The submission was rejected.", 400, requestId); }
   if (intakeFormValue(form, "offer") === "audit" && intakeFormValue(form, "paid") === "true") return handleAuditBooking(request, form, requestId);
+  const offer = intakeFormValue(form, "offer");
+  if (offer === "straight_answer" || offer === "monthly_support") return handleServiceOnboarding(request, form, offer);
+  if (offer === "readiness" && !freeStraightAnswerAvailable()) return failure("Free reviews are currently closed. Pay $250 from the services page to request a Straight Answer.", 422, requestId);
   const parsed = validateIntake(form);
   if (!parsed.input) { log("validation_failed", requestId, { fields: Object.keys(parsed.errors || {}) }); return failure("Please correct the highlighted information and try again.", 422, requestId, { errors: parsed.errors }); }
   const input = parsed.input;

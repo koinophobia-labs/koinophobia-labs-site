@@ -1,0 +1,22 @@
+
+> koinophobia-labs@0.1.0 typecheck
+> tsc --noEmit
+
+tests/services.test.ts(62,71): error TS2345: Argument of type '{ verify: (_offer: NewServiceOffer, id?: string) => Promise<VerifiedOfferPayment>; save: (_payment: unknown, input: { email: string; }) => Promise<{ ...; }>; email: () => Promise<...>; }' is not assignable to parameter of type '{ verify: (offer: ServiceOffer, sessionId: string | undefined, q?: Queryable, client?: Stripe) => Promise<VerifiedOfferPayment | null>; save: (payment: VerifiedAuditPayment, input: LeadInput, q?: Queryable) => Promise<...>; email: (input: LeadInput, leadId?: string) => Promise<...>; }'.
+  Types of property 'verify' are incompatible.
+    Type '(_offer: NewServiceOffer, id?: string) => Promise<VerifiedOfferPayment>' is not assignable to type '(offer: "monthly_support" | "revenue_leak_audit" | "straight_answer", sessionId: string | undefined, q?: Queryable | undefined, client?: Stripe | undefined) => Promise<...>'.
+      Types of parameters '_offer' and 'offer' are incompatible.
+        Type '"monthly_support" | "revenue_leak_audit" | "straight_answer"' is not assignable to type 'NewServiceOffer'.
+          Type '"revenue_leak_audit"' is not assignable to type 'NewServiceOffer'.
+tests/services.test.ts(63,71): error TS2345: Argument of type '{ verify: (_offer: NewServiceOffer, id?: string) => Promise<VerifiedOfferPayment>; save: (_payment: unknown, input: { email: string; }) => Promise<{ ...; }>; email: () => Promise<...>; }' is not assignable to parameter of type '{ verify: (offer: ServiceOffer, sessionId: string | undefined, q?: Queryable, client?: Stripe) => Promise<VerifiedOfferPayment | null>; save: (payment: VerifiedAuditPayment, input: LeadInput, q?: Queryable) => Promise<...>; email: (input: LeadInput, leadId?: string) => Promise<...>; }'.
+  Types of property 'verify' are incompatible.
+    Type '(_offer: NewServiceOffer, id?: string) => Promise<VerifiedOfferPayment>' is not assignable to type '(offer: "monthly_support" | "revenue_leak_audit" | "straight_answer", sessionId: string | undefined, q?: Queryable | undefined, client?: Stripe | undefined) => Promise<...>'.
+      Types of parameters '_offer' and 'offer' are incompatible.
+        Type '"monthly_support" | "revenue_leak_audit" | "straight_answer"' is not assignable to type 'NewServiceOffer'.
+          Type '"revenue_leak_audit"' is not assignable to type 'NewServiceOffer'.
+tests/services.test.ts(67,71): error TS2345: Argument of type '{ verify: (_offer: NewServiceOffer, id?: string) => Promise<VerifiedOfferPayment>; save: (_payment: unknown, input: { email: string; }) => Promise<{ ...; }>; email: () => Promise<...>; }' is not assignable to parameter of type '{ verify: (offer: ServiceOffer, sessionId: string | undefined, q?: Queryable, client?: Stripe) => Promise<VerifiedOfferPayment | null>; save: (payment: VerifiedAuditPayment, input: LeadInput, q?: Queryable) => Promise<...>; email: (input: LeadInput, leadId?: string) => Promise<...>; }'.
+  Types of property 'verify' are incompatible.
+    Type '(_offer: NewServiceOffer, id?: string) => Promise<VerifiedOfferPayment>' is not assignable to type '(offer: "monthly_support" | "revenue_leak_audit" | "straight_answer", sessionId: string | undefined, q?: Queryable | undefined, client?: Stripe | undefined) => Promise<...>'.
+      Types of parameters '_offer' and 'offer' are incompatible.
+        Type '"monthly_support" | "revenue_leak_audit" | "straight_answer"' is not assignable to type 'NewServiceOffer'.
+          Type '"revenue_leak_audit"' is not assignable to type 'NewServiceOffer'.

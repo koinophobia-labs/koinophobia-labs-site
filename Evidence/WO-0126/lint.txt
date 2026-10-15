@@ -1,0 +1,10 @@
+
+> koinophobia-labs@0.1.0 lint
+> eslint
+
+
+/Volumes/KoiBuild/koinophobia-labs-site/WO-0126/auth.ts
+  4:3  warning  'CRM_GOOGLE_PROVIDER' is defined but never used  @typescript-eslint/no-unused-vars
+
+✖ 1 problem (0 errors, 1 warning)
+

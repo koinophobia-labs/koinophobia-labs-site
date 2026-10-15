@@ -1,0 +1,48 @@
+[
+  {
+    "page": "/services",
+    "device": "desktop",
+    "horizontalOverflow": false
+  },
+  {
+    "page": "/audit/paid",
+    "device": "desktop",
+    "fixture": "mocked Stripe + CRM verification; actual paid component in built page shell",
+    "horizontalOverflow": false
+  },
+  {
+    "page": "/services/straight-answer/paid",
+    "device": "desktop",
+    "fixture": "mocked Stripe + CRM verification; actual paid component in built page shell",
+    "horizontalOverflow": false
+  },
+  {
+    "page": "/services/retainer/paid",
+    "device": "desktop",
+    "fixture": "mocked Stripe + CRM verification; actual paid component in built page shell",
+    "horizontalOverflow": false
+  },
+  {
+    "page": "/services",
+    "device": "phone",
+    "horizontalOverflow": false
+  },
+  {
+    "page": "/audit/paid",
+    "device": "phone",
+    "fixture": "mocked Stripe + CRM verification; actual paid component in built page shell",
+    "horizontalOverflow": false
+  },
+  {
+    "page": "/services/straight-answer/paid",
+    "device": "phone",
+    "fixture": "mocked Stripe + CRM verification; actual paid component in built page shell",
+    "horizontalOverflow": false
+  },
+  {
+    "page": "/services/retainer/paid",
+    "device": "phone",
+    "fixture": "mocked Stripe + CRM verification; actual paid component in built page shell",
+    "horizontalOverflow": false
+  }
+]

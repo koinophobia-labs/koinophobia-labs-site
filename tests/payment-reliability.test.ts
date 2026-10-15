@@ -7,7 +7,8 @@ import { join } from "node:path";
 import { createServer } from "node:net";
 import { Pool } from "pg";
 import type Stripe from "stripe";
-import { createAuditCheckout } from "../lib/acquisition/audit-checkout";
+import { createOfferCheckout } from "../lib/acquisition/service-checkout";
+import { offers, type ServiceOffer } from "../lib/acquisition/services-config";
 import { listLeads } from "../lib/acquisition/leads";
 import { sendPaidAuditEmail, type PaidAuditNotice } from "../lib/acquisition/intake";
 import { processStripeEvent } from "../lib/payments";
@@ -24,16 +25,16 @@ test("payment reliability on real PostgreSQL", { skip: !hasPostgres }, async (t)
   const pool = new Pool({ host: "127.0.0.1", port, database: "postgres", max: 6 });
   const notices: PaidAuditNotice[] = [];
   const notify = async (notice: PaidAuditNotice) => { notices.push(notice); return { ok: true, providerId: "mock" }; };
-  async function fixture() {
+  async function fixture(offer: ServiceOffer = "revenue_leak_audit") {
     const id = `cs_test_${crypto.randomUUID().replaceAll("-", "")}`;
     let metadata: Stripe.MetadataParam | undefined;
     const stripe = { checkout: { sessions: { create: async (input: Stripe.Checkout.SessionCreateParams) => {
       metadata = input.metadata!;
       return { id, url: `https://checkout.stripe.com/c/pay/${id}` };
     } } } } as unknown as Stripe;
-    const payment = await createAuditCheckout({ source: "test", email: "buyer@example.com" }, "https://example.com", pool, stripe);
+    const payment = await createOfferCheckout(offer, { source: "test", email: "buyer@example.com" }, "https://example.com", pool, stripe);
     const event = { id: `evt_${crypto.randomUUID()}`, type: "checkout.session.completed", data: { object: {
-      id, metadata, payment_status: "paid", payment_intent: `pi_${payment.id}`,
+      id, metadata, mode: offers[offer].mode, amount_total: offers[offer].amount, currency: "usd", subscription: offer === "monthly_support" ? `sub_${id}` : null, payment_status: "paid", payment_intent: `pi_${payment.id}`,
       customer_details: { name: "Test Buyer", email: "buyer@example.com" },
     } } } as unknown as Stripe.Event;
     return { payment, event };
@@ -46,6 +47,46 @@ test("payment reliability on real PostgreSQL", { skip: !hasPostgres }, async (t)
     for (const file of ["001_crm_leads.sql", "002_crm_proposals.sql", "006_stripe_payments.sql"]) {
       await pool.query(readFileSync(join("db", file), "utf8"));
     }
+    await t.test("retainer completion, renewal and cancellation dedupe concurrent and distinct event IDs", async () => {
+      const { payment, event } = await fixture("monthly_support");
+      const session = event.data.object as Stripe.Checkout.Session;
+      const before = notices.length;
+      await Promise.all(Array.from({ length: 4 }, (_, i) => processStripeEvent({ ...event, id: `${event.id}_${i}` }, pool, notify)));
+      assert.equal(notices.length, before + 1);
+      assert.equal(notices.at(-1)?.offer, "monthly_support");
+      assert.equal((await paymentRow(payment.id)).status, "paid");
+      const invoice = { id: `in_${payment.id}`, status: "paid", amount_paid: 50000, currency: "usd", billing_reason: "subscription_cycle", parent: { subscription_details: { subscription: session.subscription, metadata: session.metadata } } };
+      const renewal = { id: `evt_invoice_${payment.id}`, type: "invoice.paid", created: 1792000000, data: { object: invoice } } as unknown as Stripe.Event;
+      await Promise.all([processStripeEvent(renewal, pool, notify), processStripeEvent(renewal, pool, notify), processStripeEvent({ ...renewal, id: `${renewal.id}_different` }, pool, notify)]);
+      assert.equal((await pool.query("select count(*)::int n,sum(amount)::int amount from crm_payments where lead_id=$1", [payment.leadId])).rows[0].n, 2);
+      assert.equal((await pool.query("select sum(amount_paid)::int amount from crm_proposals where lead_id=$1", [payment.leadId])).rows[0].amount, 100000);
+      assert.equal((await pool.query("select internal_notes from crm_leads where id=$1", [payment.leadId])).rows[0].internal_notes.match(/Renewal paid/g).length, 1);
+      const cancel = { id: `evt_cancel_${payment.id}`, type: "customer.subscription.deleted", created: 1792100000, data: { object: { id: session.subscription, metadata: session.metadata } } } as unknown as Stripe.Event;
+      await Promise.all([processStripeEvent(cancel, pool, notify), processStripeEvent(cancel, pool, notify), processStripeEvent({ ...cancel, id: `${cancel.id}_different` }, pool, notify)]);
+      assert.equal((await pool.query("select internal_notes from crm_leads where id=$1", [payment.leadId])).rows[0].internal_notes.match(/Subscription cancelled/g).length, 1);
+      assert.equal(notices.length, before + 1);
+    });
+    await t.test("renewals roll back atomically, retry, and initial invoice delivered before checkout is not double-counted", async () => {
+      const { payment, event } = await fixture("monthly_support"), session = event.data.object as Stripe.Checkout.Session;
+      const initial = { id: `evt_first_${payment.id}`, type: "invoice.paid", created: 1792000000, data: { object: { id: `in_first_${payment.id}`, billing_reason: "subscription_create", parent: { subscription_details: { subscription: session.subscription, metadata: session.metadata } } } } } as unknown as Stripe.Event;
+      await processStripeEvent(initial, pool, notify);
+      assert.equal((await paymentRow(payment.id)).status, "pending");
+      await processStripeEvent(event, pool, notify);
+      const renewal = { ...initial, id: `${initial.id}_renewal`, data: { object: { ...initial.data.object, id: `in_renew_${payment.id}`, billing_reason: "subscription_cycle", status: "paid", amount_paid: 50000, currency: "usd" } } } as unknown as Stripe.Event;
+      let fail = true;
+      const database = { query: pool.query.bind(pool), connect: async () => {
+        const client = await pool.connect();
+        return { release: () => client.release(), query: async (sql: string, values?: unknown[]) => {
+          if (fail && sql.startsWith("update crm_leads set internal_notes")) { fail = false; throw Error("injected renewal failure"); }
+          return client.query(sql, values);
+        } };
+      } };
+      await assert.rejects(processStripeEvent(renewal, database, notify), /injected renewal failure/);
+      assert.equal((await pool.query("select count(*)::int n from crm_payments where lead_id=$1", [payment.leadId])).rows[0].n, 1);
+      assert.equal((await pool.query("select count(*)::int n from stripe_webhook_events where event_id=$1", [renewal.id])).rows[0].n, 0);
+      await processStripeEvent(renewal, database, notify);
+      assert.equal((await pool.query("select count(*)::int n from crm_payments where lead_id=$1", [payment.leadId])).rows[0].n, 2);
+    });
     await t.test("failure after payment mutation rolls back the event, payment, summaries and email reservation; retry pays", async () => {
       const { payment, event } = await fixture();
       let fail = true;

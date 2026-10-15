@@ -2484,3 +2484,12 @@ p {
 .audit-booking label { display: grid; gap: .4rem; }
 .audit-booking input { width: 100%; padding: .8rem 1rem; border: 1px solid currentColor; border-radius: .35rem; background: transparent; color: inherit; font: inherit; }
 .audit-booking .btn { justify-self: start; }
+
+/* WO-0126 services and verified handoff. */
+.service-offers { align-items: stretch; }
+.service-offers h2 { font-size: clamp(1.6rem, 3vw, 2.2rem); line-height: 1.15; }
+.service-offers .b2b-card { display: flex; flex-direction: column; align-items: flex-start; gap: .6rem; }
+.service-offers .b2b-card > :last-child { margin-top: auto; }
+.service-price { font-size: 2rem; font-weight: 650; color: var(--fg); }
+.service-price span { font-size: 1rem; font-weight: 400; }
+.audit-booking textarea { width: 100%; padding: .8rem 1rem; border: 1px solid currentColor; border-radius: .35rem; background: transparent; color: inherit; font: inherit; resize: vertical; }

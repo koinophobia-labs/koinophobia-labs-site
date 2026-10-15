@@ -15,7 +15,7 @@ export function paymentFixture(total = 100000) {
     state.queries.push({ sql, values });
     if (sql.startsWith("with lead")) {
       [state.leadId, , state.source, state.email, , state.proposalId] = values as string[];
-      state.title = "Revenue Leak Audit"; state.total = 25000;
+      state.title = String(values[6]); state.total = Number(values[8]);
     }
     if (sql.startsWith("select p.id")) return { rows: [{ proposal_id: state.proposalId, lead_id: state.leadId, proposal_status: "accepted", proposal_title: state.title, total: state.total, amount_paid: 0, business_name: "", email: state.email }] };
     if (sql.startsWith("insert into crm_payments")) state.payment = { id: values[0], proposal_id: values[1], lead_id: values[2], kind: values[3], amount: values[4], currency: "usd", status: "pending", created_at: now, updated_at: now };

@@ -1,0 +1,48 @@
+
+> koinophobia-labs@0.1.0 test:services
+> tsx --test tests/services.test.ts tests/audit-checkout.test.ts tests/payments.test.ts tests/payment-reliability.test.ts
+
+{"scope":"audit-checkout","event":"checkout_unavailable"}
+✔ public route creates a CRM lead, $250 balance and Stripe session through createCheckout (4.704042ms)
+✔ checkout validates optional email/source, defaults source, and uses supplied email only (0.4485ms)
+✔ checkout rejects cross-site, invalid, oversized, rate-limited and unavailable requests before Stripe (2.1195ms)
+✔ paid, unpaid, invalid and unrelated sessions render appropriate confirmation without customer data (4.944584ms)
+✔ existing checkout.session.completed processing marks audit payment and CRM summaries paid, once (0.59225ms)
+✔ booking stores verified session and Stripe contact on the same lead; validates required times (0.700625ms)
+✔ intake handoff rejects forged paid state and only notifies once after durable booking (2.249667ms)
+✔ an older paid tab books its own Stripe-verified session despite a newer cookie (0.479166ms)
+▶ payment reliability on real PostgreSQL
+  ✔ retainer completion, renewal and cancellation dedupe concurrent and distinct event IDs (24.5945ms)
+  ✔ renewals roll back atomically, retry, and initial invoice delivered before checkout is not double-counted (5.603625ms)
+  ✔ failure after payment mutation rolls back the event, payment, summaries and email reservation; retry pays (3.649458ms)
+  ✔ successful replay is a no-op and concurrent duplicate deliveries apply once (4.364417ms)
+  ✔ different event IDs for one payment send one alert, including async success and submitted booking (3.909458ms)
+  ✔ legacy failed event rows with null processed_at remain retryable (2.408083ms)
+  ✔ unpaid completion and non-audit payments do not send paid audit mail (2.728209ms)
+Paid audit email: delivery uncertain { paymentId: '72a6d8a4-710f-4827-8bc7-cab851c7c842' }
+  ✔ uncertain email delivery is recorded without retrying mail or undoing payment (3.38475ms)
+  ✔ expiry hides only unpaid abandoned audit-checkout leads; show abandoned restores them without deletion (11.568541ms)
+✔ payment reliability on real PostgreSQL (3291.251334ms)
+ℹ Retained local PostgreSQL test fixture: /Volumes/KoiBuild/koinophobia-labs-site/tmp/wo-0124-postgres-J7jcse
+✔ paid audit alert uses SITE-01 internal recipient, fixed content and no card data (7.434417ms)
+✔ accepted proposals calculate deterministic deposit and remaining balance (0.432584ms)
+✔ checkout creation uses server totals and durable metadata (0.893625ms)
+✔ webhook processing is idempotent (0.188583ms)
+✔ payment creation requires CRM authentication (2.174417ms)
+✔ webhook rejects requests without a Stripe signature (0.411291ms)
+✔ straight_answer: checkout has exact server price, mode, metadata and handoff (1.3755ms)
+✔ straight_answer: paid, unpaid, invalid and unrelated paid pages fail closed (5.179625ms)
+✔ straight_answer: onboarding verifies the tab session, rejects forged state, saves once (3.458375ms)
+✔ monthly_support: checkout has exact server price, mode, metadata and handoff (0.441ms)
+✔ monthly_support: paid, unpaid, invalid and unrelated paid pages fail closed (0.983ms)
+✔ monthly_support: onboarding verifies the tab session, rejects forged state, saves once (0.703625ms)
+✔ free slots default to five; zero and negative close free requests (0.05725ms)
+✔ services is a living route, not a retired redirect (0.129791ms)
+ℹ tests 32
+ℹ suites 0
+ℹ pass 32
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3778.865708
