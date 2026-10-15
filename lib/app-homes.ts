@@ -2,7 +2,8 @@ import { type AppSlug } from "./app-prices";
 import { forgetRelease, oldDogRelease, preachingRelease, trendiRelease, wayInRelease } from "./releases";
 
 // Blake controls publication. Never enable prerelease content via deployment environment variables.
-export const APP_PAGES_PRERELEASE = false;
+// Blake 2026-10-15 (D-0189 addendum): "Publish Coming-soon pages now" for Teacher's Pet and Dreamcatcher.
+export const APP_PAGES_PRERELEASE = true;
 export function showPrereleaseAppPages() {
   return APP_PAGES_PRERELEASE || (process.env.NODE_ENV === "development" && !process.env.VERCEL && process.env.APP_PAGES_LOCAL_PREVIEW === "1");
 }

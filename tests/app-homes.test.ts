@@ -34,11 +34,10 @@ test("no page or product copy contains the false no-purchases claim", () => {
     }
   }
 });
-test("unreleased homes stay off public navigation and discovery", () => {
-  assert.equal(APP_PAGES_PRERELEASE, false);
-  assert.equal(showPrereleaseAppPages(), false);
-  assert.deepEqual(publicAppHomes().map(app => app.slug).sort(), ["forget-about-it", "old-dog", "preaching-to-the-choir", "trendi", "way-in"]);
-  for (const slug of ["teachers-pet", "dreamcatcher"]) assert.ok(!sitemap().some(entry => new URL(entry.url).pathname === `/${slug}`));
+test("coming-soon homes are public by Blake's decision, without App Store buttons", () => {
+  assert.equal(APP_PAGES_PRERELEASE, true);
+  assert.deepEqual(publicAppHomes().map(app => app.slug).sort(), ["dreamcatcher", "forget-about-it", "old-dog", "preaching-to-the-choir", "teachers-pet", "trendi", "way-in"]);
+  for (const slug of ["teachers-pet", "dreamcatcher"]) assert.equal(appHomes[slug].store, undefined, `${slug} must not link to the App Store before approval`);
   assert.equal(appHomes["old-dog"].platforms, "Mac");
   assert.equal(appHomes["teachers-pet"].coming, "Coming to the Mac App Store");
   assert.equal(appHomes.dreamcatcher.coming, "Coming to the App Store");
