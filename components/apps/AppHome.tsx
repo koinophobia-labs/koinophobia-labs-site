@@ -53,7 +53,7 @@ export default function AppHome({ slug }: { slug: AppSlug }) {
     </main>
     <footer className="world-footer" data-source="WORLDS.md:13–20; INVENTORY.md:510–528">
       <p>Koinophobia Labs · Designed and built by Blake Taylor, Chicago.</p>
-      <nav className="app-home__other" aria-label="Other apps"><p>Also from Koinophobia Labs</p><div>{publicAppHomes().filter(other => other.slug !== slug).map(other => <Link key={other.slug} href={`/${other.slug}`} prefetch={false}><Image src={`/apps/${other.slug}/icon.png`} alt="" width={48} height={48} /><span>{other.name}</span></Link>)}</div></nav>
+      <nav className="app-home__other" aria-label="Other apps"><p>Also from Koinophobia Labs</p><div>{publicAppHomes().filter(other => other.slug !== slug).map(other => <Link key={other.slug} href={`/${other.slug}`} prefetch={false}><Image src={`/apps/${other.slug}/icon.png`} alt="" width={48} height={48} /><span>{other.name}<small>{other.tagline}</small></span></Link>)}</div></nav>
     </footer>
     <WorldBehavior />
     {!app.prerelease && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />}

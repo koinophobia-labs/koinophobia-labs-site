@@ -67,6 +67,7 @@ html:has(.app-home) { scroll-behavior: auto; }
 .app-home__other > div { display: grid; grid-template-columns: repeat(6, 1fr); gap: 20px; margin-top: 22px; }
 .app-home__other a { display: flex; gap: 10px; align-items: center; font-size: 10px; }
 .app-home__other img { flex: 0 0 48px; border-radius: 10px; }
+.app-home__other a small { display: block; margin-top: 3px; opacity: .78; line-height: 1.35; }
 .app-home__skip { position: fixed; top: -100px; left: 20px; z-index: 100; padding: 16px; color: var(--app-paper); background: var(--app-ink); }
 .app-home__skip:focus { top: 12px; }
 /* Trendi: the stage, storyboards and the teleprompter. */
@@ -198,6 +199,7 @@ html:has(.app-home) { scroll-behavior: auto; }
 .school-board h1 { font-weight: 700; font-size: clamp(50px,5.9vw,84px); margin-top: 16px; }
 .school-board mark { background: #F6C35B; color: #173F39; padding-inline: 10px; }
 .school-board .world-action { justify-content: center; }
+.app-home .school-board .world-oneliner { text-align: center; margin: 26px auto 4px; max-width: 640px; }
 .school-subjects { position: relative; width: min(72vw,1040px); margin: -80px auto 0; }
 .school-subjects .world-shot { background: #FAF9F4; padding: 14px; box-shadow: 0 15px 35px #173F3920; }
 .school-subjects > .world-icon { position: absolute; top: -55px; right: -38px; filter: drop-shadow(0 12px 9px #173F3933); }

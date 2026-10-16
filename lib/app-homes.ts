@@ -12,12 +12,12 @@ export type AppHome = {
   platforms: string; store?: string; coming?: string; prerelease?: boolean;
   landscape?: boolean;
   colors: { paper: string; ink: string; accent: string; surface: string; muted: string };
-  featureHeading: string; features: { title: string; body: string }[]; screens: string[]; free: string; founderNote?: string;
+  tagline: string; featureHeading: string; features: { title: string; body: string }[]; screens: string[]; free: string; founderNote?: string;
   support: string; privacy: string;
 };
 export const appHomes: Record<AppSlug, AppHome> = {
   trendi: {
-    slug: "trendi", founderNote: "Every product here started as something I needed the week I needed it.", name: "Trendi", category: "A content coach for iPhone", promise: "Say it messy. Make it yours.",
+    slug: "trendi", tagline: "Turn messy ideas into content worth posting.", founderNote: "Every product here started as something I needed the week I needed it.", name: "Trendi", category: "A content coach for iPhone", promise: "Say it messy. Make it yours.",
     intro: "A thought, an angle, three hooks. Shape what you want to say into words you can say on camera.",
     platforms: "iPhone", store: trendiRelease.url,
     colors: { paper: "#151017", ink: "#F7F2EC", accent: "#D95BA2", surface: "#251E29", muted: "#D6C5D9" },
@@ -32,7 +32,7 @@ export const appHomes: Record<AppSlug, AppHome> = {
     support: "/trendi/support", privacy: "/trendi/privacy",
   },
   "way-in": {
-    slug: "way-in", founderNote: "Nothing here stayed an idea.", name: "Way In", category: "Your next application starts here", promise: "Your experience. A clearer next move.",
+    slug: "way-in", tagline: "Turn a messy career search into a clear way forward.", founderNote: "Nothing here stayed an idea.", name: "Way In", category: "Your next application starts here", promise: "Your experience. A clearer next move.",
     intro: "Turn the work you have actually done into a clear next move. A résumé and application workspace for iPhone and iPad.",
     platforms: "iPhone · iPad", store: wayInRelease.url,
     colors: { paper: "#051419", ink: "#FAF5E6", accent: "#94DBCC", surface: "#0F262B", muted: "#C7DBD9" },
@@ -47,7 +47,7 @@ export const appHomes: Record<AppSlug, AppHome> = {
     support: "/way-in/support", privacy: "/way-in/privacy",
   },
   "forget-about-it": {
-    slug: "forget-about-it", founderNote: "The simulator votes. The device decides.", name: "Forget About It", category: "A place for the thought", promise: "Catch it before it goes.",
+    slug: "forget-about-it", tagline: "Turn scattered memories into something you can actually find again.", founderNote: "The simulator votes. The device decides.", name: "Forget About It", category: "A place for the thought", promise: "Catch it before it goes.",
     intro: "Type it or say it. Keep your exact words in a journal on iPhone and Apple Watch, then carry on with your day.",
     platforms: "iPhone · Apple Watch", store: forgetRelease.url,
     colors: { paper: "#F9F3E8", ink: "#281C16", accent: "#A42C1B", surface: "#F0E6D6", muted: "#6E5F52" },
@@ -62,7 +62,7 @@ export const appHomes: Record<AppSlug, AppHome> = {
     support: "/forget-about-it/support", privacy: "/forget-about-it/privacy",
   },
   "preaching-to-the-choir": {
-    slug: "preaching-to-the-choir", name: "Preaching to the Choir", category: "A journal for your prayers", promise: "What is on your heart?",
+    slug: "preaching-to-the-choir", tagline: "Turn scattered thoughts into a prayer you can return to.", name: "Preaching to the Choir", category: "A journal for your prayers", promise: "What is on your heart?",
     intro: "Keep a record of what you are praying through, in your own words.",
     platforms: "iPhone · iPad", store: preachingRelease.url,
     colors: { paper: "#F4F0E7", ink: "#171B25", accent: "#6B131B", surface: "#FBF9F2", muted: "#5B595B" },
@@ -77,7 +77,7 @@ export const appHomes: Record<AppSlug, AppHome> = {
     support: "/preaching-to-the-choir/support", privacy: "/preaching-to-the-choir/privacy",
   },
   "old-dog": {
-    slug: "old-dog", founderNote: "Taste and judgment are the job.", name: "Old Dog", category: "There’s more worth learning next", promise: "Old Dog. New Tricks.",
+    slug: "old-dog", tagline: "Turn “I should learn that” into actually knowing it.", founderNote: "Taste and judgment are the job.", name: "Old Dog", category: "There’s more worth learning next", promise: "Old Dog. New Tricks.",
     intro: "You are never too old to learn something new. Pick a subject and work through it on your Mac.",
     platforms: "Mac", store: oldDogRelease.url, landscape: true,
     colors: { paper: "#F5F4F1", ink: "#18243A", accent: "#87421F", surface: "#EEE9E2", muted: "#596476" },
@@ -92,7 +92,7 @@ export const appHomes: Record<AppSlug, AppHome> = {
     support: "/old-dog/support", privacy: "/old-dog/privacy",
   },
   "teachers-pet": {
-    slug: "teachers-pet", founderNote: "Fear ordinary.", name: "Teacher’s Pet", category: "Learning at home, on your Mac", promise: "Your personal school at home.",
+    slug: "teachers-pet", tagline: "Turn messy learning into a clear path through school.", founderNote: "I built Teacher’s Pet because learning shouldn’t feel like figuring out what you’re supposed to learn next.", name: "Teacher’s Pet", category: "Learning at home, on your Mac", promise: "Your personal school at home.",
     intro: "Lessons, practice and learner profiles for your family, on one Mac.",
     platforms: "Mac", coming: "Coming to the Mac App Store", prerelease: true, landscape: true,
     colors: { paper: "#FAF9F4", ink: "#16332F", accent: "#173F39", surface: "#EAF0E8", muted: "#52615C" },
@@ -107,7 +107,7 @@ export const appHomes: Record<AppSlug, AppHome> = {
     support: "https://teachers-pet-school-sync.teachers-pet-school-sync.workers.dev/support", privacy: "https://teachers-pet-school-sync.teachers-pet-school-sync.workers.dev/privacy",
   },
   dreamcatcher: {
-    slug: "dreamcatcher", founderNote: "The fear of an ordinary life, and what I did about it.", name: "Dreamcatcher", category: "A night journal", promise: "Catch the dreams you remember.",
+    slug: "dreamcatcher", tagline: "Turn half-remembered dreams into words you can keep.", founderNote: "The fear of an ordinary life, and what I did about it.", name: "Dreamcatcher", category: "A night journal", promise: "Catch the dreams you remember.",
     intro: "Your exact words. A place to return to them in the morning.",
     platforms: "iPhone · Apple Watch", coming: "Coming to the App Store", prerelease: true,
     colors: { paper: "#12162C", ink: "#F1E6D7", accent: "#E7B76A", surface: "#262F57", muted: "#D8CDBF" },
