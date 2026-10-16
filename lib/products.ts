@@ -269,7 +269,7 @@ export const siteProducts: SiteProduct[] = ordered.map((slug) => {
   if (!product || !meta) throw new Error(`lib/products.ts: ${slug} is not in the registry`);
   const home = Object.values(appHomes).find(app => `/${app.slug}` === meta.href);
   return { ...product, ...meta, ...(home ? {
-    blurb: home.intro,
+    blurb: home.tagline,
     screens: home.screens.map((alt, index) => ({ src: `/apps/${home.slug}/shot-${index + 1}.png`, alt: `${home.name}: ${alt}` })),
   } : {}), family: familyOf(product) };
 });

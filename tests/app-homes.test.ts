@@ -65,13 +65,13 @@ test("app copy excludes the rejected claims and has distinct feature headings", 
   assert.equal(new Set(Object.values(appHomes).map(app => app.featureHeading)).size, 7);
   assert.match(appHomes["way-in"].free, /Full review, editing, and export of saved résumés require an eligible purchase\./);
 });
-test("founder notes are verbatim inventory lines with a factual receipt", () => {
+test("founder notes are verbatim lines from Blake (inventory or chat) with a factual receipt", () => {
   const notes = {
     trendi: "Every product here started as something I needed the week I needed it.",
     "way-in": "Nothing here stayed an idea.",
     "forget-about-it": "The simulator votes. The device decides.",
     "old-dog": "Taste and judgment are the job.",
-    "teachers-pet": "Fear ordinary.",
+    "teachers-pet": "I built Teacher’s Pet because learning shouldn’t feel like figuring out what you’re supposed to learn next.", // Blake, chat, 2026-10-16
     dreamcatcher: "The fear of an ordinary life, and what I did about it.",
   };
   for (const app of Object.values(appHomes)) {
@@ -165,4 +165,17 @@ test("route-local fonts, shared shell, and motion constraints are explicit", () 
   const motion = fs.readFileSync(path.join(root, "components/apps/WorldBehavior.tsx"), "utf8");
   assert.doesNotMatch(motion, /requestAnimationFrame|setInterval/);
   assert.match(motion, /prefers-reduced-motion: no-preference/);
+});
+
+test("each app carries Blake's one-liner on its page, studio card and Also-from row", () => {
+  const lines = {
+    trendi: "Turn messy ideas into content worth posting.",
+    "way-in": "Turn a messy career search into a clear way forward.",
+    "forget-about-it": "Turn scattered memories into something you can actually find again.",
+    "preaching-to-the-choir": "Turn scattered thoughts into a prayer you can return to.",
+    "old-dog": "Turn \u201cI should learn that\u201d into actually knowing it.",
+    "teachers-pet": "Turn messy learning into a clear path through school.",
+    dreamcatcher: "Turn half-remembered dreams into words you can keep.",
+  };
+  for (const app of Object.values(appHomes)) assert.equal(app.tagline, lines[app.slug as keyof typeof lines]);
 });
