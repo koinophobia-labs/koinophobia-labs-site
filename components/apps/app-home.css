@@ -148,11 +148,9 @@ html:has(.app-home) { scroll-behavior: auto; }
 .loft .world-action { justify-content: center; }
 .choir-arc { display: flex; justify-content: center; align-items: end; gap: 26px; margin: 70px auto 0; max-width: 1200px; padding-top: 25px; }
 .choir-arc .world-shot { width: 19%; flex-shrink: 1; }
-.choir-arc .world-shot:nth-child(1) { width: 15%; transform: rotate(-6deg) translateY(35px); }
-.choir-arc .world-shot:nth-child(2) { width: 18%; transform: rotate(-3deg) translateY(15px); }
-.choir-arc .world-shot:nth-child(3) { width: 22%; }
-.choir-arc .world-shot:nth-child(4) { width: 18%; transform: rotate(3deg) translateY(15px); }
-.choir-arc .world-shot:nth-child(5) { width: 15%; transform: rotate(6deg) translateY(35px); }
+.choir-arc .world-shot:nth-child(1) { width: 22%; transform: rotate(-5deg) translateY(30px); }
+.choir-arc .world-shot:nth-child(2) { width: 27%; }
+.choir-arc .world-shot:nth-child(3) { width: 22%; transform: rotate(5deg) translateY(30px); }
 .choir-arc figcaption { display: none; }
 .app-home--preaching-to-the-choir .eyebrow { font-variant-caps: small-caps; }
 .order { text-align: center; }

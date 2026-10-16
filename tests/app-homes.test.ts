@@ -71,7 +71,7 @@ test("founder notes are verbatim inventory lines with a factual receipt", () => 
     "way-in": "Nothing here stayed an idea.",
     "forget-about-it": "The simulator votes. The device decides.",
     "old-dog": "Taste and judgment are the job.",
-    "teachers-pet": "The simulator was green for weeks while the phone found two shipping defects in an hour.",
+    "teachers-pet": "Fear ordinary.",
     dreamcatcher: "The fear of an ordinary life, and what I did about it.",
   };
   for (const app of Object.values(appHomes)) {

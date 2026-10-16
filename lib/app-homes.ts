@@ -92,7 +92,7 @@ export const appHomes: Record<AppSlug, AppHome> = {
     support: "/old-dog/support", privacy: "/old-dog/privacy",
   },
   "teachers-pet": {
-    slug: "teachers-pet", founderNote: "The simulator was green for weeks while the phone found two shipping defects in an hour.", name: "Teacher’s Pet", category: "Learning at home, on your Mac", promise: "Your personal school at home.",
+    slug: "teachers-pet", founderNote: "Fear ordinary.", name: "Teacher’s Pet", category: "Learning at home, on your Mac", promise: "Your personal school at home.",
     intro: "Lessons, practice and learner profiles for your family, on one Mac.",
     platforms: "Mac", coming: "Coming to the Mac App Store", prerelease: true, landscape: true,
     colors: { paper: "#FAF9F4", ink: "#16332F", accent: "#173F39", surface: "#EAF0E8", muted: "#52615C" },
@@ -103,7 +103,7 @@ export const appHomes: Record<AppSlug, AppHome> = {
       { title: "Lessons on the Mac", body: "Lessons are bundled and saved on the Mac." },
       { title: "Family Sharing", body: "Family Sharing is supported. No account, ads or tracking." },
     ], screens: ["Subjects", "A course", "Learn", "Get help", "A note for the adult"],
-    free: "Free to download when released. Family subscriptions are planned; availability depends on App Store approval.",
+    free: "Family subscriptions are planned; availability depends on App Store approval.",
     support: "https://teachers-pet-school-sync.teachers-pet-school-sync.workers.dev/support", privacy: "https://teachers-pet-school-sync.teachers-pet-school-sync.workers.dev/privacy",
   },
   dreamcatcher: {
@@ -117,7 +117,7 @@ export const appHomes: Record<AppSlug, AppHome> = {
       { title: "Dream signs", body: "A place for the signs you notice in your dreams." },
       { title: "Reality checks", body: "Return to the Checks view alongside your journal and signs." },
     ], screens: ["Your dream journal", "Dream signs", "Reality checks"],
-    free: "Free to download when released. The Lucid Toolkit is a separate one-time purchase, pending review.",
+    free: "The Lucid Toolkit is a separate one-time purchase, pending review.",
     support: "/dreamcatcher/support", privacy: "/dreamcatcher/privacy",
   },
 };

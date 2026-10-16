@@ -32,12 +32,12 @@ export function Shot({slug, n, label, hero = false}: {slug:AppSlug; n:number; la
   let height = app.landscape ? 900 : slug === "preaching-to-the-choir" ? 2778 : 2868;
   if (slug === "dreamcatcher") height = 1500;
   if (slug === "old-dog" && n === 5) height = 752;
-  if (slug === "teachers-pet" && n === 1) { width = 930; height = 245; }
+  if (slug === "teachers-pet" && n === 1) { width = 940; height = 253; }
   if (slug === "teachers-pet" && n === 2) { width = 1140; height = 445; }
   const caption = app.screens[n - 1];
   return <figure className={`world-shot${app.landscape ? " world-shot--wide" : ""}`} data-source={worldSources[slug]}>
     <Image src={`/apps/${slug}/shot-${n}${cropped ? "-crop" : ""}.png`} alt={`${app.name}: ${caption}${cropped ? " (cropped listing screenshot)" : ""}`} width={width} height={height} sizes={app.landscape ? "(max-width: 700px) 92vw, 900px" : "(max-width: 700px) 72vw, 360px"} loading={hero ? "eager" : "lazy"} />
-    <figcaption>{label || caption}{cropped && <span> · Crop</span>}</figcaption>
+    <figcaption>{label || caption}</figcaption>
   </figure>;
 }
 export function ListingLabel({slug}: {slug:AppSlug}) {
