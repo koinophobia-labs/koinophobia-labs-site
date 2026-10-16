@@ -73,7 +73,7 @@ function TeachersPet() {
     <section className="world-section school-learn" id="learn" data-school-step><p className="eyebrow">Learn</p><h2>A place for each learner.</h2><p>K–12 in math, ELA, science and social studies.</p><p>Lessons are bundled and saved on the Mac.</p><ListingLabel slug="teachers-pet" /><div className="school-pages"><Shot slug="teachers-pet" n={2}/><Shot slug="teachers-pet" n={3}/></div></section>
     <section className="world-section school-help" id="get-help" data-school-step><p className="eyebrow">Get help</p><h2>Choose your explanation.</h2><Shot slug="teachers-pet" n={4}/></section>
     <section className="world-section school-practice" id="practice" data-school-step><p className="eyebrow">Practice</p><h2>Learn with help.<br/>Check without it.</h2><div id="check" data-school-step><p className="eyebrow">Check</p><p className="supervised-note">This is one supervised check—not a mastery grade or proof of learning.</p></div></section>
-    <section className="world-section for-adult"><p className="eyebrow">For your adult</p><h2>An adult&apos;s role.</h2><p>Adult passphrase protection supports supervised learning. No account, ads or tracking.</p><Shot slug="teachers-pet" n={5}/><p>Family Sharing is supported.</p></section>
+    <section className="world-section for-adult"><p className="eyebrow">For your adult</p><h2>An adult&apos;s role.</h2><p>Adult passphrase protection supports supervised learning. No account, ads or tracking.</p><Shot slug="teachers-pet" n={5}/></section>
     <Prices slug="teachers-pet" />
   </>;
 }
