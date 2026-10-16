@@ -101,7 +101,7 @@ export const appHomes: Record<AppSlug, AppHome> = {
       { title: "A place for each learner", body: "Learner profiles keep each person’s work together." },
       { title: "An adult’s role", body: "Adult passphrase protection supports supervised learning." },
       { title: "Lessons on the Mac", body: "Lessons are bundled and saved on the Mac." },
-      { title: "Family Sharing", body: "Family Sharing is supported. No account, ads or tracking." },
+      { title: "No account needed", body: "No account, ads or tracking." },
     ], screens: ["Subjects", "A course", "Learn", "Get help", "A note for the adult"],
     free: "Family subscriptions are planned; availability depends on App Store approval.",
     support: "https://teachers-pet-school-sync.teachers-pet-school-sync.workers.dev/support", privacy: "https://teachers-pet-school-sync.teachers-pet-school-sync.workers.dev/privacy",
