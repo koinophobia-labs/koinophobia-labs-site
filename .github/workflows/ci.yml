@@ -14,6 +14,25 @@ permissions:
   contents: read
 
 jobs:
+  scope:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check out PR head and full base history
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Check work-order scope
+        run: node scripts/check-scope.mjs
+
   verify:
     runs-on: ubuntu-latest
     timeout-minutes: 20
@@ -30,6 +49,9 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+
+      - name: Test scope isolation
+        run: npx tsx --test tests/scope.test.ts
 
       - name: Lint
         run: npm run lint

@@ -1,0 +1,10 @@
+{
+  "wo": "WO-0134",
+  "owned": [
+    "scripts/check-scope.mjs",
+    "tests/scope.test.ts",
+    ".github/workflows/**",
+    ".studio/**",
+    "docs/scope-isolation.md"
+  ]
+}
