@@ -1,0 +1,44 @@
+[
+  {
+    "slug": "trendi",
+    "image": "https://koinophobialabs.com/apps/trendi/world-og.png",
+    "sha256": "5d9425da0f92ea94da43ecdb240c7b787c6af423f219d3e02a8d06723f3404d9",
+    "exactHeroCapture": true
+  },
+  {
+    "slug": "forget-about-it",
+    "image": "https://koinophobialabs.com/apps/forget-about-it/world-og.png",
+    "sha256": "80e3fe858d56b30d6485f7f3bfc74a0c8fc7a6da44a81828374d76600f2ada9c",
+    "exactHeroCapture": true
+  },
+  {
+    "slug": "way-in",
+    "image": "https://koinophobialabs.com/apps/way-in/world-og.png",
+    "sha256": "45b66df96b14c7e126bb90d237cd66ad6f8b79579e7d0a6fed4255d98e3777e9",
+    "exactHeroCapture": true
+  },
+  {
+    "slug": "preaching-to-the-choir",
+    "image": "https://koinophobialabs.com/apps/preaching-to-the-choir/world-og.png",
+    "sha256": "0e357dc3395138927479f37fa886fa659e8ca8f8674e3d900d52df952fbad84a",
+    "exactHeroCapture": true
+  },
+  {
+    "slug": "old-dog",
+    "image": "https://koinophobialabs.com/apps/old-dog/world-og.png",
+    "sha256": "7b006f52bbd63aeb6af12a3a9d56a87f1f80e5d5822cd5824ad3f7573d631f5c",
+    "exactHeroCapture": true
+  },
+  {
+    "slug": "teachers-pet",
+    "image": "https://koinophobialabs.com/apps/teachers-pet/world-og.png",
+    "sha256": "1d6357f66b3771a992b1c2235e7e4f5d556bce9fe70c9d6d8eadda9e7b0a9d41",
+    "exactHeroCapture": true
+  },
+  {
+    "slug": "dreamcatcher",
+    "image": "https://koinophobialabs.com/apps/dreamcatcher/world-og.png",
+    "sha256": "ecfd2ca0a61a3dd5bdab87976f1e588b7123070c81250594ae1c8adb82200294",
+    "exactHeroCapture": true
+  }
+]

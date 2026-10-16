@@ -17,6 +17,8 @@ import { useEffect } from "react";
  */
 export default function Motion() {
   useEffect(() => {
+    // App worlds own their event-driven motion; never attach studio pointer effects.
+    if (document.querySelector(".app-home")) return;
     const root = document.documentElement;
     const shell = document.querySelector<HTMLElement>("[data-motion-shell]");
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;

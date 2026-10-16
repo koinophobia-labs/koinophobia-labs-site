@@ -21,7 +21,7 @@ const config: Config = {
       },
       fontFamily: {
         display: ["var(--font-sora)", "sans-serif"],
-        sans: ["var(--font-inter)", "sans-serif"],
+        sans: ["var(--font-sora)", "sans-serif"],
         mono: ["var(--font-mono)", "monospace"],
       },
       boxShadow: {

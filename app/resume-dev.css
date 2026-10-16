@@ -30,7 +30,7 @@ body:has(.resumedev) {
   position: relative;
   min-height: 100dvh;
   color: var(--dh-text);
-  font-family: var(--font-inter), sans-serif;
+  font-family: var(--font-sora), sans-serif;
 }
 
 .resumedev__field {

@@ -10,16 +10,16 @@ export function showPrereleaseAppPages() {
 export type AppHome = {
   slug: AppSlug; name: string; category: string; promise: string; intro: string;
   platforms: string; store?: string; coming?: string; prerelease?: boolean;
-  font: "gelasio" | "source" | "newsreader"; landscape?: boolean;
+  landscape?: boolean;
   colors: { paper: string; ink: string; accent: string; surface: string; muted: string };
   featureHeading: string; features: { title: string; body: string }[]; screens: string[]; free: string; founderNote?: string;
   support: string; privacy: string;
 };
 export const appHomes: Record<AppSlug, AppHome> = {
   trendi: {
-    slug: "trendi", name: "Trendi", category: "A content coach for iPhone", promise: "Say it messy. Make it yours.",
+    slug: "trendi", founderNote: "Every product here started as something I needed the week I needed it.", name: "Trendi", category: "A content coach for iPhone", promise: "Say it messy. Make it yours.",
     intro: "A thought, an angle, three hooks. Shape what you want to say into words you can say on camera.",
-    platforms: "iPhone", store: trendiRelease.url, font: "gelasio",
+    platforms: "iPhone", store: trendiRelease.url,
     colors: { paper: "#151017", ink: "#F7F2EC", accent: "#D95BA2", surface: "#251E29", muted: "#D6C5D9" },
     featureHeading: "You stay in control of the words.",
     features: [
@@ -32,10 +32,10 @@ export const appHomes: Record<AppSlug, AppHome> = {
     support: "/trendi/support", privacy: "/trendi/privacy",
   },
   "way-in": {
-    slug: "way-in", name: "Way In", category: "Your next application starts here", promise: "Your experience counts.",
+    slug: "way-in", founderNote: "Nothing here stayed an idea.", name: "Way In", category: "Your next application starts here", promise: "Your experience. A clearer next move.",
     intro: "Turn the work you have actually done into a clear next move. A résumé and application workspace for iPhone and iPad.",
-    platforms: "iPhone · iPad", store: wayInRelease.url, font: "source",
-    colors: { paper: "#FAF5E6", ink: "#053338", accent: "#0D4A45", surface: "#F7F5ED", muted: "#385254" },
+    platforms: "iPhone · iPad", store: wayInRelease.url,
+    colors: { paper: "#051419", ink: "#FAF5E6", accent: "#94DBCC", surface: "#0F262B", muted: "#C7DBD9" },
     featureHeading: "Your work, ready to send.",
     features: [
       { title: "Start with what is true", body: "Write from your experience or import a résumé. Build from your own experience and review every suggestion before using it." },
@@ -47,9 +47,9 @@ export const appHomes: Record<AppSlug, AppHome> = {
     support: "/way-in/support", privacy: "/way-in/privacy",
   },
   "forget-about-it": {
-    slug: "forget-about-it", name: "Forget About It", category: "A place for the thought", promise: "Catch a thought before it goes.",
+    slug: "forget-about-it", founderNote: "The simulator votes. The device decides.", name: "Forget About It", category: "A place for the thought", promise: "Catch it before it goes.",
     intro: "Type it or say it. Keep your exact words in a journal on iPhone and Apple Watch, then carry on with your day.",
-    platforms: "iPhone · Apple Watch", store: forgetRelease.url, font: "newsreader",
+    platforms: "iPhone · Apple Watch", store: forgetRelease.url,
     colors: { paper: "#F9F3E8", ink: "#281C16", accent: "#A42C1B", surface: "#F0E6D6", muted: "#6E5F52" },
     featureHeading: "Open. Capture. Carry on.",
     features: [
@@ -62,9 +62,9 @@ export const appHomes: Record<AppSlug, AppHome> = {
     support: "/forget-about-it/support", privacy: "/forget-about-it/privacy",
   },
   "preaching-to-the-choir": {
-    slug: "preaching-to-the-choir", name: "Preaching to the Choir", category: "A journal for your prayers", promise: "Pray the way you already do.",
+    slug: "preaching-to-the-choir", name: "Preaching to the Choir", category: "A journal for your prayers", promise: "What is on your heart?",
     intro: "Keep a record of what you are praying through, in your own words.",
-    platforms: "iPhone · iPad", store: preachingRelease.url, font: "newsreader",
+    platforms: "iPhone · iPad", store: preachingRelease.url,
     colors: { paper: "#F4F0E7", ink: "#171B25", accent: "#6B131B", surface: "#FBF9F2", muted: "#5B595B" },
     featureHeading: "A place for your words.",
     features: [
@@ -77,9 +77,9 @@ export const appHomes: Record<AppSlug, AppHome> = {
     support: "/preaching-to-the-choir/support", privacy: "/preaching-to-the-choir/privacy",
   },
   "old-dog": {
-    slug: "old-dog", name: "Old Dog", category: "There’s more worth learning next", promise: "Old Dog. New Tricks.",
+    slug: "old-dog", founderNote: "Taste and judgment are the job.", name: "Old Dog", category: "There’s more worth learning next", promise: "Old Dog. New Tricks.",
     intro: "You are never too old to learn something new. Pick a subject and work through it on your Mac.",
-    platforms: "Mac", store: oldDogRelease.url, font: "source", landscape: true,
+    platforms: "Mac", store: oldDogRelease.url, landscape: true,
     colors: { paper: "#F5F4F1", ink: "#18243A", accent: "#87421F", surface: "#EEE9E2", muted: "#596476" },
     featureHeading: "A little wiser, every day.",
     features: [
@@ -87,14 +87,14 @@ export const appHomes: Record<AppSlug, AppHome> = {
       { title: "Learn. Practise. Demonstrate.", body: "Work through two units and four objectives in each course. Mastery is recorded per objective." },
       { title: "Find a starting point", body: "An optional placement check helps you begin. It never awards lesson mastery." },
       { title: "Keep learning", body: "The first course in each subject is free. A one-time purchase opens all courses, including future subjects." },
-    ], screens: ["Home and resume", "Choose a course", "Read a lesson", "Practise"],
+    ], screens: ["Home and resume", "Choose a course", "Read a lesson", "Practise", "Knowledge map"],
     free: "The first course in each subject. People who used Old Dog before 1.2 keep all ten courses.",
     support: "/old-dog/support", privacy: "/old-dog/privacy",
   },
   "teachers-pet": {
-    slug: "teachers-pet", name: "Teacher’s Pet", category: "Learning at home, on your Mac", promise: "Learn with help. Check without it.",
+    slug: "teachers-pet", founderNote: "The simulator was green for weeks while the phone found two shipping defects in an hour.", name: "Teacher’s Pet", category: "Learning at home, on your Mac", promise: "Your personal school at home.",
     intro: "Lessons, practice and learner profiles for your family, on one Mac.",
-    platforms: "Mac", coming: "Coming to the Mac App Store", prerelease: true, font: "gelasio", landscape: true,
+    platforms: "Mac", coming: "Coming to the Mac App Store", prerelease: true, landscape: true,
     colors: { paper: "#FAF9F4", ink: "#16332F", accent: "#173F39", surface: "#EAF0E8", muted: "#52615C" },
     featureHeading: "A place for each learner.",
     features: [
@@ -107,9 +107,9 @@ export const appHomes: Record<AppSlug, AppHome> = {
     support: "https://teachers-pet-school-sync.teachers-pet-school-sync.workers.dev/support", privacy: "https://teachers-pet-school-sync.teachers-pet-school-sync.workers.dev/privacy",
   },
   dreamcatcher: {
-    slug: "dreamcatcher", name: "Dreamcatcher", category: "A night journal", promise: "Catch the dreams you remember.",
+    slug: "dreamcatcher", founderNote: "The fear of an ordinary life, and what I did about it.", name: "Dreamcatcher", category: "A night journal", promise: "Catch the dreams you remember.",
     intro: "Your exact words. A place to return to them in the morning.",
-    platforms: "iPhone · Apple Watch", coming: "Coming to the App Store", prerelease: true, font: "newsreader",
+    platforms: "iPhone · Apple Watch", coming: "Coming to the App Store", prerelease: true,
     colors: { paper: "#12162C", ink: "#F1E6D7", accent: "#E7B76A", surface: "#262F57", muted: "#D8CDBF" },
     featureHeading: "Your exact words.",
     features: [

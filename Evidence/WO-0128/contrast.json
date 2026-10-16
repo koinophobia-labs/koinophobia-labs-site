@@ -1,0 +1,6070 @@
+[
+  {
+    "slug": "trendi",
+    "checks": 62,
+    "failures": [],
+    "results": [
+      {
+        "text": "Skip to app",
+        "foreground": "rgb(21, 16, 23)",
+        "background": [
+          247,
+          242,
+          236
+        ],
+        "ratio": 16.87,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Koinophobia Labs",
+        "foreground": "rgb(247, 242, 236)",
+        "background": [
+          21,
+          16,
+          24
+        ],
+        "ratio": 9.71,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Apps",
+        "foreground": "rgb(247, 242, 236)",
+        "background": [
+          21,
+          16,
+          24
+        ],
+        "ratio": 16.86,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Blake",
+        "foreground": "rgb(247, 242, 236)",
+        "background": [
+          21,
+          16,
+          24
+        ],
+        "ratio": 16.86,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Work with me",
+        "foreground": "rgb(247, 242, 236)",
+        "background": [
+          21,
+          16,
+          24
+        ],
+        "ratio": 16.86,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Trendi · A content coach for iPhone",
+        "foreground": "rgb(217, 91, 162)",
+        "background": [
+          21,
+          16,
+          23
+        ],
+        "ratio": 5.34,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "SAY ITMESSY.",
+        "foreground": "rgb(247, 242, 236)",
+        "background": [
+          21,
+          16,
+          23
+        ],
+        "ratio": 16.87,
+        "minimum": 3,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Make ityours.",
+        "foreground": "rgb(205, 156, 182)",
+        "background": [
+          21,
+          16,
+          23
+        ],
+        "ratio": 8.07,
+        "minimum": 3,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Download on the",
+        "foreground": "rgb(21, 16, 23)",
+        "background": [
+          21,
+          16,
+          23
+        ],
+        "ratio": 1,
+        "minimum": 4.5,
+        "gradient": true,
+        "pass": true
+      },
+      {
+        "text": "App Store",
+        "foreground": "rgb(21, 16, 23)",
+        "background": [
+          21,
+          16,
+          23
+        ],
+        "ratio": 1,
+        "minimum": 4.5,
+        "gradient": true,
+        "pass": true
+      },
+      {
+        "text": "USA pricing ↓",
+        "foreground": "rgb(247, 242, 236)",
+        "background": [
+          21,
+          16,
+          23
+        ],
+        "ratio": 16.87,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "You stay in control of the words.",
+        "foreground": "rgb(247, 242, 236)",
+        "background": [
+          21,
+          16,
+          23
+        ],
+        "ratio": 16.87,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "01 / The shot list",
+        "foreground": "rgb(217, 91, 162)",
+        "background": [
+          21,
+          16,
+          23
+        ],
+        "ratio": 5.34,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "A thought. An angle.Your words on camera.",
+        "foreground": "rgb(247, 242, 236)",
+        "background": [
+          21,
+          16,
+          23
+        ],
+        "ratio": 16.87,
+        "minimum": 3,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "From the App Store listing",
+        "foreground": "rgb(214, 197, 217)",
+        "background": [
+          21,
+          16,
+          23
+        ],
+        "ratio": 11.49,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "SHOT 01 · Say it messy",
+        "foreground": "rgb(214, 197, 217)",
+        "background": [
+          37,
+          30,
+          41
+        ],
+        "ratio": 9.91,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "SHOT 02 · Shape it into a video",
+        "foreground": "rgb(214, 197, 217)",
+        "background": [
+          37,
+          30,
+          41
+        ],
+        "ratio": 9.91,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "SHOT 03 · Pick your hook",
+        "foreground": "rgb(214, 197, 217)",
+        "background": [
+          37,
+          30,
+          41
+        ],
+        "ratio": 9.91,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "SHOT 04 · Own the script",
+        "foreground": "rgb(214, 197, 217)",
+        "background": [
+          37,
+          30,
+          41
+        ],
+        "ratio": 9.91,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "SHOT 05 · Press record",
+        "foreground": "rgb(214, 197, 217)",
+        "background": [
+          37,
+          30,
+          41
+        ],
+        "ratio": 9.91,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "02 / Your script",
+        "foreground": "rgb(217, 91, 162)",
+        "background": [
+          21,
+          16,
+          23
+        ],
+        "ratio": 5.34,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Opening",
+        "foreground": "rgb(217, 91, 162)",
+        "background": [
+          21,
+          16,
+          23
+        ],
+        "ratio": 5.34,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "One angle. Three hooks.",
+        "foreground": "rgb(247, 242, 236)",
+        "background": [
+          21,
+          16,
+          23
+        ],
+        "ratio": 16.87,
+        "minimum": 3,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Shape This Into a Video gives you one angle and three hooks to choose from.",
+        "foreground": "rgb(247, 242, 236)",
+        "background": [
+          21,
+          16,
+          23
+        ],
+        "ratio": 16.87,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Main idea",
+        "foreground": "rgb(217, 91, 162)",
+        "background": [
+          21,
+          16,
+          23
+        ],
+        "ratio": 5.34,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Keep your voice.",
+        "foreground": "rgb(247, 242, 236)",
+        "background": [
+          21,
+          16,
+          23
+        ],
+        "ratio": 16.87,
+        "minimum": 3,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Edit the script, caption and shot plan. The words are yours to change.",
+        "foreground": "rgb(247, 242, 236)",
+        "background": [
+          21,
+          16,
+          23
+        ],
+        "ratio": 16.87,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Example",
+        "foreground": "rgb(217, 91, 162)",
+        "background": [
+          21,
+          16,
+          23
+        ],
+        "ratio": 5.34,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Type it. Say it.",
+        "foreground": "rgb(247, 242, 236)",
+        "background": [
+          21,
+          16,
+          23
+        ],
+        "ratio": 16.87,
+        "minimum": 3,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Capture a thought with text or speech.",
+        "foreground": "rgb(247, 242, 236)",
+        "background": [
+          21,
+          16,
+          23
+        ],
+        "ratio": 16.87,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Takeaway",
+        "foreground": "rgb(217, 91, 162)",
+        "background": [
+          21,
+          16,
+          23
+        ],
+        "ratio": 5.34,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Press record.",
+        "foreground": "rgb(247, 242, 236)",
+        "background": [
+          21,
+          16,
+          23
+        ],
+        "ratio": 16.87,
+        "minimum": 3,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Use the teleprompter section by section, or read the full script.",
+        "foreground": "rgb(247, 242, 236)",
+        "background": [
+          21,
+          16,
+          23
+        ],
+        "ratio": 16.87,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Ending",
+        "foreground": "rgb(217, 91, 162)",
+        "background": [
+          21,
+          16,
+          23
+        ],
+        "ratio": 5.34,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Come back to it.",
+        "foreground": "rgb(247, 242, 236)",
+        "background": [
+          21,
+          16,
+          23
+        ],
+        "ratio": 16.87,
+        "minimum": 3,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Keep drafts in the on-device Vault and add your own performance notes.",
+        "foreground": "rgb(247, 242, 236)",
+        "background": [
+          21,
+          16,
+          23
+        ],
+        "ratio": 16.87,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "The price, plainly · USA",
+        "foreground": "rgb(247, 242, 236)",
+        "background": [
+          21,
+          16,
+          23
+        ],
+        "ratio": 16.87,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Coach Packs",
+        "foreground": "rgb(247, 242, 236)",
+        "background": [
+          21,
+          16,
+          23
+        ],
+        "ratio": 16.87,
+        "minimum": 3,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "You stay in control of the words.",
+        "foreground": "rgb(247, 242, 236)",
+        "background": [
+          21,
+          16,
+          23
+        ],
+        "ratio": 16.87,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Free to download",
+        "foreground": "rgb(247, 242, 236)",
+        "background": [
+          37,
+          30,
+          41
+        ],
+        "ratio": 14.55,
+        "minimum": 3,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "3 Coach Packs per weekly allowance.",
+        "foreground": "rgb(214, 197, 217)",
+        "background": [
+          37,
+          30,
+          41
+        ],
+        "ratio": 9.91,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Trendi Pro",
+        "foreground": "rgb(247, 242, 236)",
+        "background": [
+          37,
+          30,
+          41
+        ],
+        "ratio": 14.55,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "100 Coach Packs a month.",
+        "foreground": "rgb(214, 197, 217)",
+        "background": [
+          37,
+          30,
+          41
+        ],
+        "ratio": 9.91,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "$7.99",
+        "foreground": "rgb(247, 242, 236)",
+        "background": [
+          37,
+          30,
+          41
+        ],
+        "ratio": 14.55,
+        "minimum": 3,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "monthly",
+        "foreground": "rgb(247, 242, 236)",
+        "background": [
+          37,
+          30,
+          41
+        ],
+        "ratio": 14.55,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Renews unless cancelled.",
+        "foreground": "rgb(214, 197, 217)",
+        "background": [
+          37,
+          30,
+          41
+        ],
+        "ratio": 9.91,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Subscriptions renew unless cancelled in your App Store settings.",
+        "foreground": "rgb(247, 242, 236)",
+        "background": [
+          21,
+          16,
+          23
+        ],
+        "ratio": 16.87,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "From Blake",
+        "foreground": "rgb(247, 242, 236)",
+        "background": [
+          21,
+          16,
+          23
+        ],
+        "ratio": 16.87,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Every product here started as something I needed the week I needed it.",
+        "foreground": "rgb(247, 242, 236)",
+        "background": [
+          21,
+          16,
+          23
+        ],
+        "ratio": 16.87,
+        "minimum": 3,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Designed, built and shipped by Blake Taylor in Chicago.",
+        "foreground": "rgb(247, 242, 236)",
+        "background": [
+          21,
+          16,
+          23
+        ],
+        "ratio": 16.87,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Blake Taylor",
+        "foreground": "rgb(247, 242, 236)",
+        "background": [
+          21,
+          16,
+          23
+        ],
+        "ratio": 16.87,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Trendi",
+        "foreground": "rgb(247, 242, 236)",
+        "background": [
+          21,
+          16,
+          23
+        ],
+        "ratio": 16.87,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Support",
+        "foreground": "rgb(247, 242, 236)",
+        "background": [
+          21,
+          16,
+          23
+        ],
+        "ratio": 16.87,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Privacy",
+        "foreground": "rgb(247, 242, 236)",
+        "background": [
+          21,
+          16,
+          23
+        ],
+        "ratio": 16.87,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Koinophobia Labs · Designed and built by Blake Taylor, Chicago.",
+        "foreground": "rgb(247, 242, 236)",
+        "background": [
+          21,
+          16,
+          23
+        ],
+        "ratio": 16.87,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Also from Koinophobia Labs",
+        "foreground": "rgb(247, 242, 236)",
+        "background": [
+          21,
+          16,
+          23
+        ],
+        "ratio": 16.87,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Way In",
+        "foreground": "rgb(247, 242, 236)",
+        "background": [
+          21,
+          16,
+          23
+        ],
+        "ratio": 16.87,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Forget About It",
+        "foreground": "rgb(247, 242, 236)",
+        "background": [
+          21,
+          16,
+          23
+        ],
+        "ratio": 16.87,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Preaching to the Choir",
+        "foreground": "rgb(247, 242, 236)",
+        "background": [
+          21,
+          16,
+          23
+        ],
+        "ratio": 16.87,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Old Dog",
+        "foreground": "rgb(247, 242, 236)",
+        "background": [
+          21,
+          16,
+          23
+        ],
+        "ratio": 16.87,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Teacher’s Pet",
+        "foreground": "rgb(247, 242, 236)",
+        "background": [
+          21,
+          16,
+          23
+        ],
+        "ratio": 16.87,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Dreamcatcher",
+        "foreground": "rgb(247, 242, 236)",
+        "background": [
+          21,
+          16,
+          23
+        ],
+        "ratio": 16.87,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      }
+    ]
+  },
+  {
+    "slug": "forget-about-it",
+    "checks": 57,
+    "failures": [],
+    "results": [
+      {
+        "text": "Skip to app",
+        "foreground": "rgb(249, 243, 232)",
+        "background": [
+          40,
+          28,
+          22
+        ],
+        "ratio": 15,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Koinophobia Labs",
+        "foreground": "rgb(40, 28, 22)",
+        "background": [
+          249,
+          243,
+          231
+        ],
+        "ratio": 6.89,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Apps",
+        "foreground": "rgb(40, 28, 22)",
+        "background": [
+          249,
+          243,
+          231
+        ],
+        "ratio": 14.99,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Blake",
+        "foreground": "rgb(40, 28, 22)",
+        "background": [
+          249,
+          243,
+          231
+        ],
+        "ratio": 14.99,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Work with me",
+        "foreground": "rgb(40, 28, 22)",
+        "background": [
+          249,
+          243,
+          231
+        ],
+        "ratio": 14.99,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Forget About It · iPhone and Apple Watch",
+        "foreground": "rgb(164, 44, 27)",
+        "background": [
+          249,
+          243,
+          232
+        ],
+        "ratio": 6.44,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Catch itbefore it goes.",
+        "foreground": "rgb(40, 28, 22)",
+        "background": [
+          249,
+          243,
+          232
+        ],
+        "ratio": 15,
+        "minimum": 3,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Download on the",
+        "foreground": "rgb(249, 243, 232)",
+        "background": [
+          40,
+          28,
+          22
+        ],
+        "ratio": 11.12,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "App Store",
+        "foreground": "rgb(249, 243, 232)",
+        "background": [
+          40,
+          28,
+          22
+        ],
+        "ratio": 15,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "USA pricing ↓",
+        "foreground": "rgb(40, 28, 22)",
+        "background": [
+          249,
+          243,
+          232
+        ],
+        "ratio": 15,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Example entry",
+        "foreground": "rgb(164, 44, 27)",
+        "background": [
+          249,
+          243,
+          232
+        ],
+        "ratio": 6.44,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Halcyon pricing still feels off to me",
+        "foreground": "rgb(40, 28, 22)",
+        "background": [
+          249,
+          243,
+          232
+        ],
+        "ratio": 15,
+        "minimum": 3,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Open. Capture. Carry on.",
+        "foreground": "rgb(40, 28, 22)",
+        "background": [
+          249,
+          243,
+          232
+        ],
+        "ratio": 15,
+        "minimum": 3,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Today, History, Memory.",
+        "foreground": "rgb(40, 28, 22)",
+        "background": [
+          249,
+          243,
+          232
+        ],
+        "ratio": 15,
+        "minimum": 3,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "From the App Store listing",
+        "foreground": "rgb(110, 95, 82)",
+        "background": [
+          249,
+          243,
+          232
+        ],
+        "ratio": 5.56,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Today in light",
+        "foreground": "rgb(110, 95, 82)",
+        "background": [
+          249,
+          243,
+          232
+        ],
+        "ratio": 5.56,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "History",
+        "foreground": "rgb(110, 95, 82)",
+        "background": [
+          249,
+          243,
+          232
+        ],
+        "ratio": 5.56,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Memory",
+        "foreground": "rgb(110, 95, 82)",
+        "background": [
+          249,
+          243,
+          232
+        ],
+        "ratio": 5.56,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "A place for the thought.",
+        "foreground": "rgb(40, 28, 22)",
+        "background": [
+          249,
+          243,
+          232
+        ],
+        "ratio": 15,
+        "minimum": 3,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Catch the thought",
+        "foreground": "rgb(40, 28, 22)",
+        "background": [
+          249,
+          243,
+          232
+        ],
+        "ratio": 15,
+        "minimum": 3,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Type or dictate on iPhone. Speak, scribble or type on Apple Watch.",
+        "foreground": "rgb(40, 28, 22)",
+        "background": [
+          249,
+          243,
+          232
+        ],
+        "ratio": 15,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Find your words",
+        "foreground": "rgb(40, 28, 22)",
+        "background": [
+          249,
+          243,
+          232
+        ],
+        "ratio": 15,
+        "minimum": 3,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Return through Today and History, or use text search in Memory.",
+        "foreground": "rgb(40, 28, 22)",
+        "background": [
+          249,
+          243,
+          232
+        ],
+        "ratio": 15,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Read the day back",
+        "foreground": "rgb(40, 28, 22)",
+        "background": [
+          249,
+          243,
+          232
+        ],
+        "ratio": 15,
+        "minimum": 3,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "On-device, rule-based reflections sit visibly apart from your own words.",
+        "foreground": "rgb(40, 28, 22)",
+        "background": [
+          249,
+          243,
+          232
+        ],
+        "ratio": 15,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Take a copy",
+        "foreground": "rgb(40, 28, 22)",
+        "background": [
+          249,
+          243,
+          232
+        ],
+        "ratio": 15,
+        "minimum": 3,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Plain-text export is included with the free download.",
+        "foreground": "rgb(40, 28, 22)",
+        "background": [
+          249,
+          243,
+          232
+        ],
+        "ratio": 15,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "The price, plainly · USA",
+        "foreground": "rgb(40, 28, 22)",
+        "background": [
+          249,
+          243,
+          232
+        ],
+        "ratio": 15,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Every word. Every year.",
+        "foreground": "rgb(40, 28, 22)",
+        "background": [
+          249,
+          243,
+          232
+        ],
+        "ratio": 15,
+        "minimum": 3,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Free to download",
+        "foreground": "rgb(40, 28, 22)",
+        "background": [
+          249,
+          243,
+          232
+        ],
+        "ratio": 15,
+        "minimum": 3,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Unlimited capture, all history, text search, basic stats, today’s reflection and plain-text export.",
+        "foreground": "rgb(110, 95, 82)",
+        "background": [
+          249,
+          243,
+          232
+        ],
+        "ratio": 5.56,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Plus",
+        "foreground": "rgb(40, 28, 22)",
+        "background": [
+          249,
+          243,
+          232
+        ],
+        "ratio": 15,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Date and source filters, capture patterns, and earlier reflections.",
+        "foreground": "rgb(110, 95, 82)",
+        "background": [
+          249,
+          243,
+          232
+        ],
+        "ratio": 5.56,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "$2.99",
+        "foreground": "rgb(40, 28, 22)",
+        "background": [
+          249,
+          243,
+          232
+        ],
+        "ratio": 15,
+        "minimum": 3,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "monthly",
+        "foreground": "rgb(40, 28, 22)",
+        "background": [
+          249,
+          243,
+          232
+        ],
+        "ratio": 15,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Renews unless cancelled.",
+        "foreground": "rgb(110, 95, 82)",
+        "background": [
+          249,
+          243,
+          232
+        ],
+        "ratio": 5.56,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Plus",
+        "foreground": "rgb(40, 28, 22)",
+        "background": [
+          249,
+          243,
+          232
+        ],
+        "ratio": 15,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "The same Plus features, billed yearly.",
+        "foreground": "rgb(110, 95, 82)",
+        "background": [
+          249,
+          243,
+          232
+        ],
+        "ratio": 5.56,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "$24.99",
+        "foreground": "rgb(40, 28, 22)",
+        "background": [
+          249,
+          243,
+          232
+        ],
+        "ratio": 15,
+        "minimum": 3,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "yearly",
+        "foreground": "rgb(40, 28, 22)",
+        "background": [
+          249,
+          243,
+          232
+        ],
+        "ratio": 15,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Renews unless cancelled.",
+        "foreground": "rgb(110, 95, 82)",
+        "background": [
+          249,
+          243,
+          232
+        ],
+        "ratio": 5.56,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Subscriptions renew unless cancelled in your App Store settings.",
+        "foreground": "rgb(40, 28, 22)",
+        "background": [
+          249,
+          243,
+          232
+        ],
+        "ratio": 15,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "From Blake",
+        "foreground": "rgb(40, 28, 22)",
+        "background": [
+          249,
+          243,
+          232
+        ],
+        "ratio": 15,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "The simulator votes. The device decides.",
+        "foreground": "rgb(40, 28, 22)",
+        "background": [
+          249,
+          243,
+          232
+        ],
+        "ratio": 15,
+        "minimum": 3,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Designed, built and shipped by Blake Taylor in Chicago.",
+        "foreground": "rgb(40, 28, 22)",
+        "background": [
+          249,
+          243,
+          232
+        ],
+        "ratio": 15,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Blake Taylor",
+        "foreground": "rgb(40, 28, 22)",
+        "background": [
+          249,
+          243,
+          232
+        ],
+        "ratio": 15,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Forget About It",
+        "foreground": "rgb(40, 28, 22)",
+        "background": [
+          249,
+          243,
+          232
+        ],
+        "ratio": 15,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Support",
+        "foreground": "rgb(40, 28, 22)",
+        "background": [
+          249,
+          243,
+          232
+        ],
+        "ratio": 15,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Privacy",
+        "foreground": "rgb(40, 28, 22)",
+        "background": [
+          249,
+          243,
+          232
+        ],
+        "ratio": 15,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Koinophobia Labs · Designed and built by Blake Taylor, Chicago.",
+        "foreground": "rgb(40, 28, 22)",
+        "background": [
+          249,
+          243,
+          232
+        ],
+        "ratio": 15,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Also from Koinophobia Labs",
+        "foreground": "rgb(40, 28, 22)",
+        "background": [
+          249,
+          243,
+          232
+        ],
+        "ratio": 15,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Trendi",
+        "foreground": "rgb(40, 28, 22)",
+        "background": [
+          249,
+          243,
+          232
+        ],
+        "ratio": 15,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Way In",
+        "foreground": "rgb(40, 28, 22)",
+        "background": [
+          249,
+          243,
+          232
+        ],
+        "ratio": 15,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Preaching to the Choir",
+        "foreground": "rgb(40, 28, 22)",
+        "background": [
+          249,
+          243,
+          232
+        ],
+        "ratio": 15,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Old Dog",
+        "foreground": "rgb(40, 28, 22)",
+        "background": [
+          249,
+          243,
+          232
+        ],
+        "ratio": 15,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Teacher’s Pet",
+        "foreground": "rgb(40, 28, 22)",
+        "background": [
+          249,
+          243,
+          232
+        ],
+        "ratio": 15,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Dreamcatcher",
+        "foreground": "rgb(40, 28, 22)",
+        "background": [
+          249,
+          243,
+          232
+        ],
+        "ratio": 15,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      }
+    ]
+  },
+  {
+    "slug": "way-in",
+    "checks": 58,
+    "failures": [],
+    "results": [
+      {
+        "text": "Skip to app",
+        "foreground": "rgb(5, 20, 25)",
+        "background": [
+          250,
+          245,
+          230
+        ],
+        "ratio": 17.2,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Koinophobia Labs",
+        "foreground": "rgb(250, 245, 230)",
+        "background": [
+          5,
+          20,
+          25
+        ],
+        "ratio": 9.87,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Apps",
+        "foreground": "rgb(250, 245, 230)",
+        "background": [
+          5,
+          20,
+          25
+        ],
+        "ratio": 17.2,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Blake",
+        "foreground": "rgb(250, 245, 230)",
+        "background": [
+          5,
+          20,
+          25
+        ],
+        "ratio": 17.2,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Work with me",
+        "foreground": "rgb(250, 245, 230)",
+        "background": [
+          5,
+          20,
+          25
+        ],
+        "ratio": 17.2,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Way In · iPhone and iPad",
+        "foreground": "rgb(148, 219, 204)",
+        "background": [
+          5,
+          20,
+          25
+        ],
+        "ratio": 11.84,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Your experience.A clearer next move",
+        "foreground": "rgb(250, 245, 230)",
+        "background": [
+          5,
+          20,
+          25
+        ],
+        "ratio": 17.2,
+        "minimum": 3,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Turn the work you have actually done into a clear next move.",
+        "foreground": "rgb(250, 245, 230)",
+        "background": [
+          5,
+          20,
+          25
+        ],
+        "ratio": 17.2,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Download on the",
+        "foreground": "rgb(5, 20, 25)",
+        "background": [
+          250,
+          245,
+          230
+        ],
+        "ratio": 11.49,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "App Store",
+        "foreground": "rgb(5, 20, 25)",
+        "background": [
+          250,
+          245,
+          230
+        ],
+        "ratio": 17.2,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "USA pricing ↓",
+        "foreground": "rgb(250, 245, 230)",
+        "background": [
+          5,
+          20,
+          25
+        ],
+        "ratio": 17.2,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Welcome to Way In",
+        "foreground": "rgb(199, 219, 217)",
+        "background": [
+          5,
+          20,
+          25
+        ],
+        "ratio": 13,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Today",
+        "foreground": "rgb(199, 219, 217)",
+        "background": [
+          5,
+          20,
+          25
+        ],
+        "ratio": 13,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Your profile",
+        "foreground": "rgb(199, 219, 217)",
+        "background": [
+          5,
+          20,
+          25
+        ],
+        "ratio": 13,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "✓✓✓ Three steps up",
+        "foreground": "rgb(255, 194, 64)",
+        "background": [
+          5,
+          20,
+          25
+        ],
+        "ratio": 11.64,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "From the App Store listing",
+        "foreground": "rgb(199, 219, 217)",
+        "background": [
+          5,
+          20,
+          25
+        ],
+        "ratio": 13,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "ME / 01",
+        "foreground": "rgb(5, 51, 56)",
+        "background": [
+          148,
+          219,
+          204
+        ],
+        "ratio": 8.63,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Bring what you have",
+        "foreground": "rgb(250, 245, 230)",
+        "background": [
+          5,
+          20,
+          25
+        ],
+        "ratio": 17.2,
+        "minimum": 3,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Start from true sentences or import a résumé. Review every suggestion before using it.",
+        "foreground": "rgb(250, 245, 230)",
+        "background": [
+          5,
+          20,
+          25
+        ],
+        "ratio": 17.2,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Getting started",
+        "foreground": "rgb(199, 219, 217)",
+        "background": [
+          5,
+          20,
+          25
+        ],
+        "ratio": 13,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Welcome to Way In",
+        "foreground": "rgb(199, 219, 217)",
+        "background": [
+          5,
+          20,
+          25
+        ],
+        "ratio": 13,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "ME / 02",
+        "foreground": "rgb(5, 51, 56)",
+        "background": [
+          148,
+          219,
+          204
+        ],
+        "ratio": 8.63,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Keep the next move in view",
+        "foreground": "rgb(250, 245, 230)",
+        "background": [
+          5,
+          20,
+          25
+        ],
+        "ratio": 17.2,
+        "minimum": 3,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Compare your experience with a saved posting: supported items, related experience and gaps.",
+        "foreground": "rgb(250, 245, 230)",
+        "background": [
+          5,
+          20,
+          25
+        ],
+        "ratio": 17.2,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Today",
+        "foreground": "rgb(199, 219, 217)",
+        "background": [
+          5,
+          20,
+          25
+        ],
+        "ratio": 13,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "ME / 03",
+        "foreground": "rgb(5, 51, 56)",
+        "background": [
+          148,
+          219,
+          204
+        ],
+        "ratio": 8.63,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Keep every application together",
+        "foreground": "rgb(250, 245, 230)",
+        "background": [
+          5,
+          20,
+          25
+        ],
+        "ratio": 17.2,
+        "minimum": 3,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Saved jobs, résumé versions, application progress, notes and follow-ups in one workspace.",
+        "foreground": "rgb(250, 245, 230)",
+        "background": [
+          5,
+          20,
+          25
+        ],
+        "ratio": 17.2,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Applications",
+        "foreground": "rgb(199, 219, 217)",
+        "background": [
+          5,
+          20,
+          25
+        ],
+        "ratio": 13,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Way In does not apply on your behalf. No account is required.",
+        "foreground": "rgb(250, 245, 230)",
+        "background": [
+          5,
+          20,
+          25
+        ],
+        "ratio": 17.2,
+        "minimum": 3,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "The price, plainly · USA",
+        "foreground": "rgb(250, 245, 230)",
+        "background": [
+          5,
+          20,
+          25
+        ],
+        "ratio": 17.2,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "One payment each. Nothing renews.",
+        "foreground": "rgb(250, 245, 230)",
+        "background": [
+          5,
+          20,
+          25
+        ],
+        "ratio": 17.2,
+        "minimum": 3,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Free to download",
+        "foreground": "rgb(250, 245, 230)",
+        "background": [
+          5,
+          20,
+          25
+        ],
+        "ratio": 17.2,
+        "minimum": 3,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Start your workspace. Full review, editing, and export of saved résumés require an eligible purchase.",
+        "foreground": "rgb(199, 219, 217)",
+        "background": [
+          5,
+          20,
+          25
+        ],
+        "ratio": 13,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Resume Toolkit",
+        "foreground": "rgb(250, 245, 230)",
+        "background": [
+          15,
+          38,
+          43
+        ],
+        "ratio": 14.46,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "One payment.",
+        "foreground": "rgb(199, 219, 217)",
+        "background": [
+          15,
+          38,
+          43
+        ],
+        "ratio": 10.93,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "$9.99",
+        "foreground": "rgb(250, 245, 230)",
+        "background": [
+          15,
+          38,
+          43
+        ],
+        "ratio": 14.46,
+        "minimum": 3,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "one-time",
+        "foreground": "rgb(250, 245, 230)",
+        "background": [
+          15,
+          38,
+          43
+        ],
+        "ratio": 14.46,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "30-Day Career Pass",
+        "foreground": "rgb(250, 245, 230)",
+        "background": [
+          15,
+          38,
+          43
+        ],
+        "ratio": 14.46,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Does not renew.",
+        "foreground": "rgb(199, 219, 217)",
+        "background": [
+          15,
+          38,
+          43
+        ],
+        "ratio": 10.93,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "$29.99",
+        "foreground": "rgb(250, 245, 230)",
+        "background": [
+          15,
+          38,
+          43
+        ],
+        "ratio": 14.46,
+        "minimum": 3,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "30 days",
+        "foreground": "rgb(250, 245, 230)",
+        "background": [
+          15,
+          38,
+          43
+        ],
+        "ratio": 14.46,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Add one thing you're proud of.",
+        "foreground": "rgb(250, 245, 230)",
+        "background": [
+          5,
+          20,
+          25
+        ],
+        "ratio": 17.2,
+        "minimum": 3,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "From Blake",
+        "foreground": "rgb(250, 245, 230)",
+        "background": [
+          5,
+          20,
+          25
+        ],
+        "ratio": 17.2,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Nothing here stayed an idea.",
+        "foreground": "rgb(250, 245, 230)",
+        "background": [
+          5,
+          20,
+          25
+        ],
+        "ratio": 17.2,
+        "minimum": 3,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Designed, built and shipped by Blake Taylor in Chicago.",
+        "foreground": "rgb(250, 245, 230)",
+        "background": [
+          5,
+          20,
+          25
+        ],
+        "ratio": 17.2,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Blake Taylor",
+        "foreground": "rgb(250, 245, 230)",
+        "background": [
+          5,
+          20,
+          25
+        ],
+        "ratio": 17.2,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Way In",
+        "foreground": "rgb(250, 245, 230)",
+        "background": [
+          5,
+          20,
+          25
+        ],
+        "ratio": 17.2,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Support",
+        "foreground": "rgb(250, 245, 230)",
+        "background": [
+          5,
+          20,
+          25
+        ],
+        "ratio": 17.2,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Privacy",
+        "foreground": "rgb(250, 245, 230)",
+        "background": [
+          5,
+          20,
+          25
+        ],
+        "ratio": 17.2,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Koinophobia Labs · Designed and built by Blake Taylor, Chicago.",
+        "foreground": "rgb(250, 245, 230)",
+        "background": [
+          5,
+          20,
+          25
+        ],
+        "ratio": 17.2,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Also from Koinophobia Labs",
+        "foreground": "rgb(250, 245, 230)",
+        "background": [
+          5,
+          20,
+          25
+        ],
+        "ratio": 17.2,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Trendi",
+        "foreground": "rgb(250, 245, 230)",
+        "background": [
+          5,
+          20,
+          25
+        ],
+        "ratio": 17.2,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Forget About It",
+        "foreground": "rgb(250, 245, 230)",
+        "background": [
+          5,
+          20,
+          25
+        ],
+        "ratio": 17.2,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Preaching to the Choir",
+        "foreground": "rgb(250, 245, 230)",
+        "background": [
+          5,
+          20,
+          25
+        ],
+        "ratio": 17.2,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Old Dog",
+        "foreground": "rgb(250, 245, 230)",
+        "background": [
+          5,
+          20,
+          25
+        ],
+        "ratio": 17.2,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Teacher’s Pet",
+        "foreground": "rgb(250, 245, 230)",
+        "background": [
+          5,
+          20,
+          25
+        ],
+        "ratio": 17.2,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Dreamcatcher",
+        "foreground": "rgb(250, 245, 230)",
+        "background": [
+          5,
+          20,
+          25
+        ],
+        "ratio": 17.2,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      }
+    ]
+  },
+  {
+    "slug": "preaching-to-the-choir",
+    "checks": 66,
+    "failures": [],
+    "results": [
+      {
+        "text": "Skip to app",
+        "foreground": "rgb(244, 240, 231)",
+        "background": [
+          23,
+          27,
+          37
+        ],
+        "ratio": 15.14,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Koinophobia Labs",
+        "foreground": "rgb(23, 27, 37)",
+        "background": [
+          244,
+          240,
+          231
+        ],
+        "ratio": 7.06,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Apps",
+        "foreground": "rgb(23, 27, 37)",
+        "background": [
+          244,
+          240,
+          231
+        ],
+        "ratio": 15.14,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Blake",
+        "foreground": "rgb(23, 27, 37)",
+        "background": [
+          244,
+          240,
+          231
+        ],
+        "ratio": 15.14,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Work with me",
+        "foreground": "rgb(23, 27, 37)",
+        "background": [
+          244,
+          240,
+          231
+        ],
+        "ratio": 15.14,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Preaching to the Choir",
+        "foreground": "rgb(107, 19, 27)",
+        "background": [
+          244,
+          240,
+          231
+        ],
+        "ratio": 10.65,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "What is on your heart?",
+        "foreground": "rgb(23, 27, 37)",
+        "background": [
+          244,
+          240,
+          231
+        ],
+        "ratio": 15.14,
+        "minimum": 3,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Keep a record of what you are praying through, in your own words.",
+        "foreground": "rgb(23, 27, 37)",
+        "background": [
+          244,
+          240,
+          231
+        ],
+        "ratio": 15.14,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Download on the",
+        "foreground": "rgb(244, 240, 231)",
+        "background": [
+          23,
+          27,
+          37
+        ],
+        "ratio": 11.18,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "App Store",
+        "foreground": "rgb(244, 240, 231)",
+        "background": [
+          23,
+          27,
+          37
+        ],
+        "ratio": 15.14,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "USA pricing ↓",
+        "foreground": "rgb(23, 27, 37)",
+        "background": [
+          244,
+          240,
+          231
+        ],
+        "ratio": 15.14,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "I / Prayer record",
+        "foreground": "rgb(107, 19, 27)",
+        "background": [
+          244,
+          240,
+          231
+        ],
+        "ratio": 10.65,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Order of the day",
+        "foreground": "rgb(23, 27, 37)",
+        "background": [
+          244,
+          240,
+          231
+        ],
+        "ratio": 15.14,
+        "minimum": 3,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "From the App Store listing",
+        "foreground": "rgb(91, 89, 91)",
+        "background": [
+          244,
+          240,
+          231
+        ],
+        "ratio": 6.1,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "I · Today",
+        "foreground": "rgb(91, 89, 91)",
+        "background": [
+          244,
+          240,
+          231
+        ],
+        "ratio": 6.1,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "II · Write a prayer",
+        "foreground": "rgb(91, 89, 91)",
+        "background": [
+          244,
+          240,
+          231
+        ],
+        "ratio": 6.1,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "III · Your journal",
+        "foreground": "rgb(91, 89, 91)",
+        "background": [
+          244,
+          240,
+          231
+        ],
+        "ratio": 6.1,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "IV · A prayer in your own words",
+        "foreground": "rgb(91, 89, 91)",
+        "background": [
+          244,
+          240,
+          231
+        ],
+        "ratio": 6.1,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "V · Privacy",
+        "foreground": "rgb(91, 89, 91)",
+        "background": [
+          244,
+          240,
+          231
+        ],
+        "ratio": 6.1,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "II / Original prayer",
+        "foreground": "rgb(107, 19, 27)",
+        "background": [
+          244,
+          240,
+          231
+        ],
+        "ratio": 10.65,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Your words stay exactlyas you leave them.",
+        "foreground": "rgb(23, 27, 37)",
+        "background": [
+          244,
+          240,
+          231
+        ],
+        "ratio": 15.14,
+        "minimum": 3,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Your words, as you left them",
+        "foreground": "rgb(23, 27, 37)",
+        "background": [
+          244,
+          240,
+          231
+        ],
+        "ratio": 15.14,
+        "minimum": 3,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Write or record a prayer. On-device transcription is optional.",
+        "foreground": "rgb(23, 27, 37)",
+        "background": [
+          244,
+          240,
+          231
+        ],
+        "ratio": 15.14,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "A record to return to",
+        "foreground": "rgb(23, 27, 37)",
+        "background": [
+          244,
+          240,
+          231
+        ],
+        "ratio": 15.14,
+        "minimum": 3,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "A dated journal with search, reflection notes, names, labels and threads.",
+        "foreground": "rgb(23, 27, 37)",
+        "background": [
+          244,
+          240,
+          231
+        ],
+        "ratio": 15.14,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Keep a copy",
+        "foreground": "rgb(23, 27, 37)",
+        "background": [
+          244,
+          240,
+          231
+        ],
+        "ratio": 15.14,
+        "minimum": 3,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Export with an optional passphrase. Recently Deleted keeps entries for 30 days.",
+        "foreground": "rgb(23, 27, 37)",
+        "background": [
+          244,
+          240,
+          231
+        ],
+        "ratio": 15.14,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Room for quiet",
+        "foreground": "rgb(23, 27, 37)",
+        "background": [
+          244,
+          240,
+          231
+        ],
+        "ratio": 15.14,
+        "minimum": 3,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "No account, analytics, ads or tracking. Add an optional device lock.",
+        "foreground": "rgb(23, 27, 37)",
+        "background": [
+          244,
+          240,
+          231
+        ],
+        "ratio": 15.14,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "The price, plainly · USA",
+        "foreground": "rgb(23, 27, 37)",
+        "background": [
+          244,
+          240,
+          231
+        ],
+        "ratio": 15.14,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "III / Keeper",
+        "foreground": "rgb(23, 27, 37)",
+        "background": [
+          244,
+          240,
+          231
+        ],
+        "ratio": 15.14,
+        "minimum": 3,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Without Keeper, every prayer stays yours to keep, read, search and export.",
+        "foreground": "rgb(23, 27, 37)",
+        "background": [
+          244,
+          240,
+          231
+        ],
+        "ratio": 15.14,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Free to download",
+        "foreground": "rgb(23, 27, 37)",
+        "background": [
+          244,
+          240,
+          231
+        ],
+        "ratio": 15.14,
+        "minimum": 3,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Every prayer stays yours to keep, read, search and export without Keeper.",
+        "foreground": "rgb(91, 89, 91)",
+        "background": [
+          244,
+          240,
+          231
+        ],
+        "ratio": 6.1,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Keeper",
+        "foreground": "rgb(23, 27, 37)",
+        "background": [
+          244,
+          240,
+          231
+        ],
+        "ratio": 15.14,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Similar wording in search, and a Year view.",
+        "foreground": "rgb(91, 89, 91)",
+        "background": [
+          244,
+          240,
+          231
+        ],
+        "ratio": 6.1,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "$2.99",
+        "foreground": "rgb(23, 27, 37)",
+        "background": [
+          244,
+          240,
+          231
+        ],
+        "ratio": 15.14,
+        "minimum": 3,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "monthly",
+        "foreground": "rgb(23, 27, 37)",
+        "background": [
+          244,
+          240,
+          231
+        ],
+        "ratio": 15.14,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Renews unless cancelled.",
+        "foreground": "rgb(91, 89, 91)",
+        "background": [
+          244,
+          240,
+          231
+        ],
+        "ratio": 6.1,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Keeper",
+        "foreground": "rgb(23, 27, 37)",
+        "background": [
+          244,
+          240,
+          231
+        ],
+        "ratio": 15.14,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "The same Keeper features, billed yearly.",
+        "foreground": "rgb(91, 89, 91)",
+        "background": [
+          244,
+          240,
+          231
+        ],
+        "ratio": 6.1,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "$24.99",
+        "foreground": "rgb(23, 27, 37)",
+        "background": [
+          244,
+          240,
+          231
+        ],
+        "ratio": 15.14,
+        "minimum": 3,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "yearly",
+        "foreground": "rgb(23, 27, 37)",
+        "background": [
+          244,
+          240,
+          231
+        ],
+        "ratio": 15.14,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Renews unless cancelled.",
+        "foreground": "rgb(91, 89, 91)",
+        "background": [
+          244,
+          240,
+          231
+        ],
+        "ratio": 6.1,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Keeper lifetime",
+        "foreground": "rgb(23, 27, 37)",
+        "background": [
+          244,
+          240,
+          231
+        ],
+        "ratio": 15.14,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "One payment for Keeper.",
+        "foreground": "rgb(91, 89, 91)",
+        "background": [
+          244,
+          240,
+          231
+        ],
+        "ratio": 6.1,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "$79.00",
+        "foreground": "rgb(23, 27, 37)",
+        "background": [
+          244,
+          240,
+          231
+        ],
+        "ratio": 15.14,
+        "minimum": 3,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "one-time",
+        "foreground": "rgb(23, 27, 37)",
+        "background": [
+          244,
+          240,
+          231
+        ],
+        "ratio": 15.14,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Subscriptions renew unless cancelled in your App Store settings.",
+        "foreground": "rgb(23, 27, 37)",
+        "background": [
+          244,
+          240,
+          231
+        ],
+        "ratio": 15.14,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "IV / Privacy, plainly",
+        "foreground": "rgb(107, 19, 27)",
+        "background": [
+          244,
+          240,
+          231
+        ],
+        "ratio": 10.65,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Room for quiet.",
+        "foreground": "rgb(23, 27, 37)",
+        "background": [
+          244,
+          240,
+          231
+        ],
+        "ratio": 15.14,
+        "minimum": 3,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "No account, analytics, ads or tracking. iCloud sync is not available.",
+        "foreground": "rgb(23, 27, 37)",
+        "background": [
+          244,
+          240,
+          231
+        ],
+        "ratio": 15.14,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "The builder",
+        "foreground": "rgb(23, 27, 37)",
+        "background": [
+          244,
+          240,
+          231
+        ],
+        "ratio": 15.14,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Designed, built and shipped by Blake Taylor in Chicago.",
+        "foreground": "rgb(23, 27, 37)",
+        "background": [
+          244,
+          240,
+          231
+        ],
+        "ratio": 15.14,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Blake Taylor",
+        "foreground": "rgb(23, 27, 37)",
+        "background": [
+          244,
+          240,
+          231
+        ],
+        "ratio": 15.14,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Preaching to the Choir",
+        "foreground": "rgb(23, 27, 37)",
+        "background": [
+          244,
+          240,
+          231
+        ],
+        "ratio": 15.14,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Support",
+        "foreground": "rgb(23, 27, 37)",
+        "background": [
+          244,
+          240,
+          231
+        ],
+        "ratio": 15.14,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Privacy",
+        "foreground": "rgb(23, 27, 37)",
+        "background": [
+          244,
+          240,
+          231
+        ],
+        "ratio": 15.14,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Koinophobia Labs · Designed and built by Blake Taylor, Chicago.",
+        "foreground": "rgb(23, 27, 37)",
+        "background": [
+          244,
+          240,
+          231
+        ],
+        "ratio": 15.14,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Also from Koinophobia Labs",
+        "foreground": "rgb(23, 27, 37)",
+        "background": [
+          244,
+          240,
+          231
+        ],
+        "ratio": 15.14,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Trendi",
+        "foreground": "rgb(23, 27, 37)",
+        "background": [
+          244,
+          240,
+          231
+        ],
+        "ratio": 15.14,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Way In",
+        "foreground": "rgb(23, 27, 37)",
+        "background": [
+          244,
+          240,
+          231
+        ],
+        "ratio": 15.14,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Forget About It",
+        "foreground": "rgb(23, 27, 37)",
+        "background": [
+          244,
+          240,
+          231
+        ],
+        "ratio": 15.14,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Old Dog",
+        "foreground": "rgb(23, 27, 37)",
+        "background": [
+          244,
+          240,
+          231
+        ],
+        "ratio": 15.14,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Teacher’s Pet",
+        "foreground": "rgb(23, 27, 37)",
+        "background": [
+          244,
+          240,
+          231
+        ],
+        "ratio": 15.14,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Dreamcatcher",
+        "foreground": "rgb(23, 27, 37)",
+        "background": [
+          244,
+          240,
+          231
+        ],
+        "ratio": 15.14,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      }
+    ]
+  },
+  {
+    "slug": "old-dog",
+    "checks": 85,
+    "failures": [],
+    "results": [
+      {
+        "text": "Skip to app",
+        "foreground": "rgb(245, 244, 241)",
+        "background": [
+          24,
+          36,
+          58
+        ],
+        "ratio": 14.12,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Koinophobia Labs",
+        "foreground": "rgb(24, 36, 58)",
+        "background": [
+          244,
+          244,
+          241
+        ],
+        "ratio": 6.51,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Apps",
+        "foreground": "rgb(24, 36, 58)",
+        "background": [
+          244,
+          244,
+          241
+        ],
+        "ratio": 14.1,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Blake",
+        "foreground": "rgb(24, 36, 58)",
+        "background": [
+          244,
+          244,
+          241
+        ],
+        "ratio": 14.1,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Work with me",
+        "foreground": "rgb(24, 36, 58)",
+        "background": [
+          244,
+          244,
+          241
+        ],
+        "ratio": 14.1,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Old Dog",
+        "foreground": "rgb(243, 241, 236)",
+        "background": [
+          20,
+          33,
+          56
+        ],
+        "ratio": 14.26,
+        "minimum": 3,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": ".",
+        "foreground": "rgb(227, 186, 125)",
+        "background": [
+          20,
+          33,
+          56
+        ],
+        "ratio": 8.88,
+        "minimum": 3,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "LEARN SOMETHING NEW",
+        "foreground": "rgb(227, 186, 125)",
+        "background": [
+          20,
+          33,
+          56
+        ],
+        "ratio": 8.88,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Stay curious.",
+        "foreground": "rgb(243, 241, 236)",
+        "background": [
+          20,
+          33,
+          56
+        ],
+        "ratio": 14.26,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "The reading room",
+        "foreground": "rgb(243, 186, 145)",
+        "background": [
+          23,
+          29,
+          41
+        ],
+        "ratio": 9.84,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Old Dog.New Tricks.",
+        "foreground": "rgb(243, 241, 236)",
+        "background": [
+          23,
+          29,
+          41
+        ],
+        "ratio": 14.95,
+        "minimum": 3,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "On the Mac App Store · iPhone coming to the App Store.",
+        "foreground": "rgb(243, 241, 236)",
+        "background": [
+          23,
+          29,
+          41
+        ],
+        "ratio": 14.95,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Download on the",
+        "foreground": "rgb(20, 33, 56)",
+        "background": [
+          227,
+          186,
+          125
+        ],
+        "ratio": 6.49,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Mac App Store",
+        "foreground": "rgb(20, 33, 56)",
+        "background": [
+          227,
+          186,
+          125
+        ],
+        "ratio": 8.88,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "USA pricing ↓",
+        "foreground": "rgb(243, 241, 236)",
+        "background": [
+          23,
+          29,
+          41
+        ],
+        "ratio": 14.95,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Home and resume",
+        "foreground": "rgb(183, 193, 209)",
+        "background": [
+          23,
+          29,
+          41
+        ],
+        "ratio": 9.29,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Learn · Practice · Prove",
+        "foreground": "rgb(135, 66, 31)",
+        "background": [
+          245,
+          244,
+          241
+        ],
+        "ratio": 6.75,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "One lesson, start to finish.",
+        "foreground": "rgb(24, 36, 58)",
+        "background": [
+          245,
+          244,
+          241
+        ],
+        "ratio": 14.12,
+        "minimum": 3,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "From the App Store listing",
+        "foreground": "rgb(89, 100, 118)",
+        "background": [
+          245,
+          244,
+          241
+        ],
+        "ratio": 5.44,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "01 / Choose a course",
+        "foreground": "rgb(135, 66, 31)",
+        "background": [
+          245,
+          244,
+          241
+        ],
+        "ratio": 6.75,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Choose a course",
+        "foreground": "rgb(89, 100, 118)",
+        "background": [
+          245,
+          244,
+          241
+        ],
+        "ratio": 5.44,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "02 / Learn",
+        "foreground": "rgb(135, 66, 31)",
+        "background": [
+          245,
+          244,
+          241
+        ],
+        "ratio": 6.75,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Read a lesson",
+        "foreground": "rgb(89, 100, 118)",
+        "background": [
+          245,
+          244,
+          241
+        ],
+        "ratio": 5.44,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "03 / Practice",
+        "foreground": "rgb(135, 66, 31)",
+        "background": [
+          245,
+          244,
+          241
+        ],
+        "ratio": 6.75,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Practise",
+        "foreground": "rgb(89, 100, 118)",
+        "background": [
+          245,
+          244,
+          241
+        ],
+        "ratio": 5.44,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "04 / Your knowledge map",
+        "foreground": "rgb(135, 66, 31)",
+        "background": [
+          245,
+          244,
+          241
+        ],
+        "ratio": 6.75,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Knowledge map",
+        "foreground": "rgb(89, 100, 118)",
+        "background": [
+          245,
+          244,
+          241
+        ],
+        "ratio": 5.44,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "· Crop",
+        "foreground": "rgb(89, 100, 118)",
+        "background": [
+          245,
+          244,
+          241
+        ],
+        "ratio": 5.44,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "The card catalog",
+        "foreground": "rgb(135, 66, 31)",
+        "background": [
+          238,
+          233,
+          226
+        ],
+        "ratio": 6.15,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "There's more worth learning next.",
+        "foreground": "rgb(24, 36, 58)",
+        "background": [
+          238,
+          233,
+          226
+        ],
+        "ratio": 12.86,
+        "minimum": 3,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "01",
+        "foreground": "rgb(135, 66, 31)",
+        "background": [
+          245,
+          244,
+          241
+        ],
+        "ratio": 6.75,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Personal finance",
+        "foreground": "rgb(24, 36, 58)",
+        "background": [
+          245,
+          244,
+          241
+        ],
+        "ratio": 14.12,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "2 units · 4 objectives",
+        "foreground": "rgb(24, 36, 58)",
+        "background": [
+          245,
+          244,
+          241
+        ],
+        "ratio": 14.12,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "02",
+        "foreground": "rgb(135, 66, 31)",
+        "background": [
+          245,
+          244,
+          241
+        ],
+        "ratio": 6.75,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Credit and debt",
+        "foreground": "rgb(24, 36, 58)",
+        "background": [
+          245,
+          244,
+          241
+        ],
+        "ratio": 14.12,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "2 units · 4 objectives",
+        "foreground": "rgb(24, 36, 58)",
+        "background": [
+          245,
+          244,
+          241
+        ],
+        "ratio": 14.12,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "03",
+        "foreground": "rgb(135, 66, 31)",
+        "background": [
+          245,
+          244,
+          241
+        ],
+        "ratio": 6.75,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Economics",
+        "foreground": "rgb(24, 36, 58)",
+        "background": [
+          245,
+          244,
+          241
+        ],
+        "ratio": 14.12,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "2 units · 4 objectives",
+        "foreground": "rgb(24, 36, 58)",
+        "background": [
+          245,
+          244,
+          241
+        ],
+        "ratio": 14.12,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "04",
+        "foreground": "rgb(135, 66, 31)",
+        "background": [
+          245,
+          244,
+          241
+        ],
+        "ratio": 6.75,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "AI",
+        "foreground": "rgb(24, 36, 58)",
+        "background": [
+          245,
+          244,
+          241
+        ],
+        "ratio": 14.12,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "2 units · 4 objectives",
+        "foreground": "rgb(24, 36, 58)",
+        "background": [
+          245,
+          244,
+          241
+        ],
+        "ratio": 14.12,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "05",
+        "foreground": "rgb(135, 66, 31)",
+        "background": [
+          245,
+          244,
+          241
+        ],
+        "ratio": 6.75,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Computer literacy",
+        "foreground": "rgb(24, 36, 58)",
+        "background": [
+          245,
+          244,
+          241
+        ],
+        "ratio": 14.12,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "2 units · 4 objectives",
+        "foreground": "rgb(24, 36, 58)",
+        "background": [
+          245,
+          244,
+          241
+        ],
+        "ratio": 14.12,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "06",
+        "foreground": "rgb(135, 66, 31)",
+        "background": [
+          245,
+          244,
+          241
+        ],
+        "ratio": 6.75,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Cybersecurity",
+        "foreground": "rgb(24, 36, 58)",
+        "background": [
+          245,
+          244,
+          241
+        ],
+        "ratio": 14.12,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "2 units · 4 objectives",
+        "foreground": "rgb(24, 36, 58)",
+        "background": [
+          245,
+          244,
+          241
+        ],
+        "ratio": 14.12,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "07",
+        "foreground": "rgb(135, 66, 31)",
+        "background": [
+          245,
+          244,
+          241
+        ],
+        "ratio": 6.75,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Professional communication",
+        "foreground": "rgb(24, 36, 58)",
+        "background": [
+          245,
+          244,
+          241
+        ],
+        "ratio": 14.12,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "2 units · 4 objectives",
+        "foreground": "rgb(24, 36, 58)",
+        "background": [
+          245,
+          244,
+          241
+        ],
+        "ratio": 14.12,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "08",
+        "foreground": "rgb(135, 66, 31)",
+        "background": [
+          245,
+          244,
+          241
+        ],
+        "ratio": 6.75,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Cooking",
+        "foreground": "rgb(24, 36, 58)",
+        "background": [
+          245,
+          244,
+          241
+        ],
+        "ratio": 14.12,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "2 units · 4 objectives",
+        "foreground": "rgb(24, 36, 58)",
+        "background": [
+          245,
+          244,
+          241
+        ],
+        "ratio": 14.12,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "09",
+        "foreground": "rgb(135, 66, 31)",
+        "background": [
+          245,
+          244,
+          241
+        ],
+        "ratio": 6.75,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Home maintenance",
+        "foreground": "rgb(24, 36, 58)",
+        "background": [
+          245,
+          244,
+          241
+        ],
+        "ratio": 14.12,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "2 units · 4 objectives",
+        "foreground": "rgb(24, 36, 58)",
+        "background": [
+          245,
+          244,
+          241
+        ],
+        "ratio": 14.12,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "10",
+        "foreground": "rgb(135, 66, 31)",
+        "background": [
+          245,
+          244,
+          241
+        ],
+        "ratio": 6.75,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Critical thinking",
+        "foreground": "rgb(24, 36, 58)",
+        "background": [
+          245,
+          244,
+          241
+        ],
+        "ratio": 14.12,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "2 units · 4 objectives",
+        "foreground": "rgb(24, 36, 58)",
+        "background": [
+          245,
+          244,
+          241
+        ],
+        "ratio": 14.12,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Placement suggests a starting point. It never awards lesson mastery.",
+        "foreground": "rgb(24, 36, 58)",
+        "background": [
+          245,
+          244,
+          241
+        ],
+        "ratio": 14.12,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "The price, plainly · USA",
+        "foreground": "rgb(24, 36, 58)",
+        "background": [
+          245,
+          244,
+          241
+        ],
+        "ratio": 14.12,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Your bookplate",
+        "foreground": "rgb(24, 36, 58)",
+        "background": [
+          245,
+          244,
+          241
+        ],
+        "ratio": 14.12,
+        "minimum": 3,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "One-time purchase. Not a subscription.",
+        "foreground": "rgb(24, 36, 58)",
+        "background": [
+          245,
+          244,
+          241
+        ],
+        "ratio": 14.12,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Free to download",
+        "foreground": "rgb(24, 36, 58)",
+        "background": [
+          245,
+          244,
+          241
+        ],
+        "ratio": 14.12,
+        "minimum": 3,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "The first course in each subject. People who used Old Dog before 1.2 keep all ten courses.",
+        "foreground": "rgb(89, 100, 118)",
+        "background": [
+          245,
+          244,
+          241
+        ],
+        "ratio": 5.44,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "All courses",
+        "foreground": "rgb(24, 36, 58)",
+        "background": [
+          245,
+          244,
+          241
+        ],
+        "ratio": 14.12,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "All courses, including future subjects.",
+        "foreground": "rgb(89, 100, 118)",
+        "background": [
+          245,
+          244,
+          241
+        ],
+        "ratio": 5.44,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "$9.99",
+        "foreground": "rgb(24, 36, 58)",
+        "background": [
+          245,
+          244,
+          241
+        ],
+        "ratio": 14.12,
+        "minimum": 3,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "one-time",
+        "foreground": "rgb(24, 36, 58)",
+        "background": [
+          245,
+          244,
+          241
+        ],
+        "ratio": 14.12,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "From Blake",
+        "foreground": "rgb(24, 36, 58)",
+        "background": [
+          245,
+          244,
+          241
+        ],
+        "ratio": 14.12,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Taste and judgment are the job.",
+        "foreground": "rgb(24, 36, 58)",
+        "background": [
+          245,
+          244,
+          241
+        ],
+        "ratio": 14.12,
+        "minimum": 3,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Designed, built and shipped by Blake Taylor in Chicago.",
+        "foreground": "rgb(24, 36, 58)",
+        "background": [
+          245,
+          244,
+          241
+        ],
+        "ratio": 14.12,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Blake Taylor",
+        "foreground": "rgb(24, 36, 58)",
+        "background": [
+          245,
+          244,
+          241
+        ],
+        "ratio": 14.12,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Old Dog",
+        "foreground": "rgb(24, 36, 58)",
+        "background": [
+          245,
+          244,
+          241
+        ],
+        "ratio": 14.12,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Support",
+        "foreground": "rgb(24, 36, 58)",
+        "background": [
+          245,
+          244,
+          241
+        ],
+        "ratio": 14.12,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Privacy",
+        "foreground": "rgb(24, 36, 58)",
+        "background": [
+          245,
+          244,
+          241
+        ],
+        "ratio": 14.12,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Koinophobia Labs · Designed and built by Blake Taylor, Chicago.",
+        "foreground": "rgb(24, 36, 58)",
+        "background": [
+          245,
+          244,
+          241
+        ],
+        "ratio": 14.12,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Also from Koinophobia Labs",
+        "foreground": "rgb(24, 36, 58)",
+        "background": [
+          245,
+          244,
+          241
+        ],
+        "ratio": 14.12,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Trendi",
+        "foreground": "rgb(24, 36, 58)",
+        "background": [
+          245,
+          244,
+          241
+        ],
+        "ratio": 14.12,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Way In",
+        "foreground": "rgb(24, 36, 58)",
+        "background": [
+          245,
+          244,
+          241
+        ],
+        "ratio": 14.12,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Forget About It",
+        "foreground": "rgb(24, 36, 58)",
+        "background": [
+          245,
+          244,
+          241
+        ],
+        "ratio": 14.12,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Preaching to the Choir",
+        "foreground": "rgb(24, 36, 58)",
+        "background": [
+          245,
+          244,
+          241
+        ],
+        "ratio": 14.12,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Teacher’s Pet",
+        "foreground": "rgb(24, 36, 58)",
+        "background": [
+          245,
+          244,
+          241
+        ],
+        "ratio": 14.12,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Dreamcatcher",
+        "foreground": "rgb(24, 36, 58)",
+        "background": [
+          245,
+          244,
+          241
+        ],
+        "ratio": 14.12,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      }
+    ]
+  },
+  {
+    "slug": "teachers-pet",
+    "checks": 74,
+    "failures": [],
+    "results": [
+      {
+        "text": "Skip to app",
+        "foreground": "rgb(250, 249, 244)",
+        "background": [
+          22,
+          51,
+          47
+        ],
+        "ratio": 12.86,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Koinophobia Labs",
+        "foreground": "rgb(22, 51, 47)",
+        "background": [
+          250,
+          249,
+          244
+        ],
+        "ratio": 5.96,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Apps",
+        "foreground": "rgb(22, 51, 47)",
+        "background": [
+          250,
+          249,
+          244
+        ],
+        "ratio": 12.86,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Blake",
+        "foreground": "rgb(22, 51, 47)",
+        "background": [
+          250,
+          249,
+          244
+        ],
+        "ratio": 12.86,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Work with me",
+        "foreground": "rgb(22, 51, 47)",
+        "background": [
+          250,
+          249,
+          244
+        ],
+        "ratio": 12.86,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Teacher's Pet · Mac",
+        "foreground": "rgb(248, 248, 242)",
+        "background": [
+          23,
+          63,
+          57
+        ],
+        "ratio": 10.91,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Your personal at home.",
+        "foreground": "rgb(248, 248, 242)",
+        "background": [
+          23,
+          63,
+          57
+        ],
+        "ratio": 10.91,
+        "minimum": 3,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "school",
+        "foreground": "rgb(23, 63, 57)",
+        "background": [
+          246,
+          195,
+          91
+        ],
+        "ratio": 7.13,
+        "minimum": 3,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Coming to the Mac App Store",
+        "foreground": "rgb(248, 248, 242)",
+        "background": [
+          23,
+          63,
+          57
+        ],
+        "ratio": 10.91,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Planned pricing ↓",
+        "foreground": "rgb(248, 248, 242)",
+        "background": [
+          23,
+          63,
+          57
+        ],
+        "ratio": 10.91,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Subjects",
+        "foreground": "rgb(82, 97, 92)",
+        "background": [
+          250,
+          249,
+          244
+        ],
+        "ratio": 6.18,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "· Crop",
+        "foreground": "rgb(82, 97, 92)",
+        "background": [
+          250,
+          249,
+          244
+        ],
+        "ratio": 6.18,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "No diploma or accreditation. Lessons, practice and learner profiles for your family, on one Mac.",
+        "foreground": "rgb(22, 51, 47)",
+        "background": [
+          250,
+          249,
+          244
+        ],
+        "ratio": 12.86,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Learn",
+        "foreground": "rgb(23, 63, 57)",
+        "background": [
+          246,
+          195,
+          91
+        ],
+        "ratio": 7.13,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Get help",
+        "foreground": "rgb(22, 51, 47)",
+        "background": [
+          234,
+          240,
+          232
+        ],
+        "ratio": 11.71,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Practice",
+        "foreground": "rgb(22, 51, 47)",
+        "background": [
+          234,
+          240,
+          232
+        ],
+        "ratio": 11.71,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Check",
+        "foreground": "rgb(22, 51, 47)",
+        "background": [
+          234,
+          240,
+          232
+        ],
+        "ratio": 11.71,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Result",
+        "foreground": "rgb(22, 51, 47)",
+        "background": [
+          234,
+          240,
+          232
+        ],
+        "ratio": 11.71,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Learn",
+        "foreground": "rgb(23, 63, 57)",
+        "background": [
+          250,
+          249,
+          244
+        ],
+        "ratio": 11.03,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "A place for each learner.",
+        "foreground": "rgb(22, 51, 47)",
+        "background": [
+          250,
+          249,
+          244
+        ],
+        "ratio": 12.86,
+        "minimum": 3,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "K–12 in math, ELA, science and social studies.",
+        "foreground": "rgb(22, 51, 47)",
+        "background": [
+          250,
+          249,
+          244
+        ],
+        "ratio": 12.86,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Lessons are bundled and saved on the Mac.",
+        "foreground": "rgb(22, 51, 47)",
+        "background": [
+          250,
+          249,
+          244
+        ],
+        "ratio": 12.86,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "From the submitted listing",
+        "foreground": "rgb(82, 97, 92)",
+        "background": [
+          250,
+          249,
+          244
+        ],
+        "ratio": 6.18,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "A course",
+        "foreground": "rgb(82, 97, 92)",
+        "background": [
+          250,
+          249,
+          244
+        ],
+        "ratio": 6.18,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "· Crop",
+        "foreground": "rgb(82, 97, 92)",
+        "background": [
+          250,
+          249,
+          244
+        ],
+        "ratio": 6.18,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Learn",
+        "foreground": "rgb(82, 97, 92)",
+        "background": [
+          250,
+          249,
+          244
+        ],
+        "ratio": 6.18,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Get help",
+        "foreground": "rgb(23, 63, 57)",
+        "background": [
+          234,
+          240,
+          232
+        ],
+        "ratio": 10.03,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Choose your explanation.",
+        "foreground": "rgb(22, 51, 47)",
+        "background": [
+          234,
+          240,
+          232
+        ],
+        "ratio": 11.71,
+        "minimum": 3,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Get help",
+        "foreground": "rgb(82, 97, 92)",
+        "background": [
+          234,
+          240,
+          232
+        ],
+        "ratio": 5.62,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Practice",
+        "foreground": "rgb(23, 63, 57)",
+        "background": [
+          250,
+          249,
+          244
+        ],
+        "ratio": 11.03,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Learn with help.Check without it.",
+        "foreground": "rgb(22, 51, 47)",
+        "background": [
+          250,
+          249,
+          244
+        ],
+        "ratio": 12.86,
+        "minimum": 3,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Check",
+        "foreground": "rgb(23, 63, 57)",
+        "background": [
+          250,
+          249,
+          244
+        ],
+        "ratio": 11.03,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "This is one supervised check—not a mastery grade or proof of learning.",
+        "foreground": "rgb(22, 51, 47)",
+        "background": [
+          250,
+          249,
+          244
+        ],
+        "ratio": 12.86,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "For your adult",
+        "foreground": "rgb(23, 63, 57)",
+        "background": [
+          250,
+          249,
+          244
+        ],
+        "ratio": 11.03,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "An adult's role.",
+        "foreground": "rgb(22, 51, 47)",
+        "background": [
+          250,
+          249,
+          244
+        ],
+        "ratio": 12.86,
+        "minimum": 3,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Adult passphrase protection supports supervised learning. No account, ads or tracking.",
+        "foreground": "rgb(22, 51, 47)",
+        "background": [
+          250,
+          249,
+          244
+        ],
+        "ratio": 12.86,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "A note for the adult",
+        "foreground": "rgb(82, 97, 92)",
+        "background": [
+          250,
+          249,
+          244
+        ],
+        "ratio": 6.18,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Family Sharing is supported.",
+        "foreground": "rgb(22, 51, 47)",
+        "background": [
+          250,
+          249,
+          244
+        ],
+        "ratio": 12.86,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "The price, plainly · USA",
+        "foreground": "rgb(22, 51, 47)",
+        "background": [
+          250,
+          249,
+          244
+        ],
+        "ratio": 12.86,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Result / Family",
+        "foreground": "rgb(22, 51, 47)",
+        "background": [
+          250,
+          249,
+          244
+        ],
+        "ratio": 12.86,
+        "minimum": 3,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Planned pricing, pending App Review. Not available to buy yet.",
+        "foreground": "rgb(22, 51, 47)",
+        "background": [
+          250,
+          249,
+          244
+        ],
+        "ratio": 12.86,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Free to download when released",
+        "foreground": "rgb(22, 51, 47)",
+        "background": [
+          234,
+          240,
+          232
+        ],
+        "ratio": 11.71,
+        "minimum": 3,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Free to download when released. Family subscriptions are planned; availability depends on App Store approval.",
+        "foreground": "rgb(82, 97, 92)",
+        "background": [
+          234,
+          240,
+          232
+        ],
+        "ratio": 5.62,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Family",
+        "foreground": "rgb(22, 51, 47)",
+        "background": [
+          234,
+          240,
+          232
+        ],
+        "ratio": 11.71,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Family subscription.",
+        "foreground": "rgb(82, 97, 92)",
+        "background": [
+          234,
+          240,
+          232
+        ],
+        "ratio": 5.62,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "$34.99",
+        "foreground": "rgb(22, 51, 47)",
+        "background": [
+          234,
+          240,
+          232
+        ],
+        "ratio": 11.71,
+        "minimum": 3,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "monthly",
+        "foreground": "rgb(22, 51, 47)",
+        "background": [
+          234,
+          240,
+          232
+        ],
+        "ratio": 11.71,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Renews unless cancelled.",
+        "foreground": "rgb(82, 97, 92)",
+        "background": [
+          234,
+          240,
+          232
+        ],
+        "ratio": 5.62,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Family",
+        "foreground": "rgb(22, 51, 47)",
+        "background": [
+          234,
+          240,
+          232
+        ],
+        "ratio": 11.71,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Annual family subscription.",
+        "foreground": "rgb(82, 97, 92)",
+        "background": [
+          234,
+          240,
+          232
+        ],
+        "ratio": 5.62,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "$299.00",
+        "foreground": "rgb(22, 51, 47)",
+        "background": [
+          234,
+          240,
+          232
+        ],
+        "ratio": 11.71,
+        "minimum": 3,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "yearly",
+        "foreground": "rgb(22, 51, 47)",
+        "background": [
+          234,
+          240,
+          232
+        ],
+        "ratio": 11.71,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Renews unless cancelled.",
+        "foreground": "rgb(82, 97, 92)",
+        "background": [
+          234,
+          240,
+          232
+        ],
+        "ratio": 5.62,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Family introductory offer",
+        "foreground": "rgb(22, 51, 47)",
+        "background": [
+          234,
+          240,
+          232
+        ],
+        "ratio": 11.71,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "One year paid up front; then the standard yearly price. Eligibility applies.",
+        "foreground": "rgb(82, 97, 92)",
+        "background": [
+          234,
+          240,
+          232
+        ],
+        "ratio": 5.62,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "$199.00",
+        "foreground": "rgb(22, 51, 47)",
+        "background": [
+          234,
+          240,
+          232
+        ],
+        "ratio": 11.71,
+        "minimum": 3,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "first year",
+        "foreground": "rgb(22, 51, 47)",
+        "background": [
+          234,
+          240,
+          232
+        ],
+        "ratio": 11.71,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Renews unless cancelled.",
+        "foreground": "rgb(82, 97, 92)",
+        "background": [
+          234,
+          240,
+          232
+        ],
+        "ratio": 5.62,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Subscriptions renew unless cancelled in your App Store settings.",
+        "foreground": "rgb(22, 51, 47)",
+        "background": [
+          234,
+          240,
+          232
+        ],
+        "ratio": 11.71,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "From Blake",
+        "foreground": "rgb(22, 51, 47)",
+        "background": [
+          250,
+          249,
+          244
+        ],
+        "ratio": 12.86,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "The simulator was green for weeks while the phone found two shipping defects in an hour.",
+        "foreground": "rgb(22, 51, 47)",
+        "background": [
+          250,
+          249,
+          244
+        ],
+        "ratio": 12.86,
+        "minimum": 3,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Designed, built and shipped by Blake Taylor in Chicago.",
+        "foreground": "rgb(22, 51, 47)",
+        "background": [
+          250,
+          249,
+          244
+        ],
+        "ratio": 12.86,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Blake Taylor",
+        "foreground": "rgb(22, 51, 47)",
+        "background": [
+          250,
+          249,
+          244
+        ],
+        "ratio": 12.86,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Teacher’s Pet",
+        "foreground": "rgb(22, 51, 47)",
+        "background": [
+          250,
+          249,
+          244
+        ],
+        "ratio": 12.86,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Support",
+        "foreground": "rgb(22, 51, 47)",
+        "background": [
+          250,
+          249,
+          244
+        ],
+        "ratio": 12.86,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Privacy",
+        "foreground": "rgb(22, 51, 47)",
+        "background": [
+          250,
+          249,
+          244
+        ],
+        "ratio": 12.86,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Koinophobia Labs · Designed and built by Blake Taylor, Chicago.",
+        "foreground": "rgb(22, 51, 47)",
+        "background": [
+          250,
+          249,
+          244
+        ],
+        "ratio": 12.86,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Also from Koinophobia Labs",
+        "foreground": "rgb(22, 51, 47)",
+        "background": [
+          250,
+          249,
+          244
+        ],
+        "ratio": 12.86,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Trendi",
+        "foreground": "rgb(22, 51, 47)",
+        "background": [
+          250,
+          249,
+          244
+        ],
+        "ratio": 12.86,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Way In",
+        "foreground": "rgb(22, 51, 47)",
+        "background": [
+          250,
+          249,
+          244
+        ],
+        "ratio": 12.86,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Forget About It",
+        "foreground": "rgb(22, 51, 47)",
+        "background": [
+          250,
+          249,
+          244
+        ],
+        "ratio": 12.86,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Preaching to the Choir",
+        "foreground": "rgb(22, 51, 47)",
+        "background": [
+          250,
+          249,
+          244
+        ],
+        "ratio": 12.86,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Old Dog",
+        "foreground": "rgb(22, 51, 47)",
+        "background": [
+          250,
+          249,
+          244
+        ],
+        "ratio": 12.86,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Dreamcatcher",
+        "foreground": "rgb(22, 51, 47)",
+        "background": [
+          250,
+          249,
+          244
+        ],
+        "ratio": 12.86,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      }
+    ]
+  },
+  {
+    "slug": "dreamcatcher",
+    "checks": 61,
+    "failures": [],
+    "results": [
+      {
+        "text": "Skip to app",
+        "foreground": "rgb(18, 22, 44)",
+        "background": [
+          241,
+          230,
+          215
+        ],
+        "ratio": 14.48,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Koinophobia Labs",
+        "foreground": "rgb(241, 230, 215)",
+        "background": [
+          18,
+          22,
+          43
+        ],
+        "ratio": 8.53,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Apps",
+        "foreground": "rgb(241, 230, 215)",
+        "background": [
+          18,
+          22,
+          43
+        ],
+        "ratio": 14.5,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Blake",
+        "foreground": "rgb(241, 230, 215)",
+        "background": [
+          18,
+          22,
+          43
+        ],
+        "ratio": 14.5,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Work with me",
+        "foreground": "rgb(241, 230, 215)",
+        "background": [
+          18,
+          22,
+          43
+        ],
+        "ratio": 14.5,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Dreamcatcher · A night journal",
+        "foreground": "rgb(231, 183, 106)",
+        "background": [
+          18,
+          22,
+          44
+        ],
+        "ratio": 9.67,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "3 a.m. / Catch it",
+        "foreground": "rgb(231, 183, 106)",
+        "background": [
+          18,
+          22,
+          44
+        ],
+        "ratio": 9.67,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Catch the dreamsyou remember.",
+        "foreground": "rgb(241, 230, 215)",
+        "background": [
+          18,
+          22,
+          44
+        ],
+        "ratio": 14.48,
+        "minimum": 3,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Say it before it fades.Your exact words.",
+        "foreground": "rgb(241, 230, 215)",
+        "background": [
+          18,
+          22,
+          44
+        ],
+        "ratio": 14.48,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Coming to the App Store",
+        "foreground": "rgb(241, 230, 215)",
+        "background": [
+          18,
+          22,
+          44
+        ],
+        "ratio": 14.48,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Planned pricing ↓",
+        "foreground": "rgb(241, 230, 215)",
+        "background": [
+          18,
+          22,
+          44
+        ],
+        "ratio": 14.48,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "iPhone and Apple Watch",
+        "foreground": "rgb(241, 230, 215)",
+        "background": [
+          18,
+          22,
+          44
+        ],
+        "ratio": 14.48,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Your dream journal",
+        "foreground": "rgb(216, 205, 191)",
+        "background": [
+          18,
+          22,
+          44
+        ],
+        "ratio": 11.39,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "· Crop",
+        "foreground": "rgb(216, 205, 191)",
+        "background": [
+          18,
+          22,
+          44
+        ],
+        "ratio": 11.39,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "7 a.m. / Morning review",
+        "foreground": "rgb(128, 85, 25)",
+        "background": [
+          247,
+          241,
+          232
+        ],
+        "ratio": 5.79,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Your exact words.In the morning light.",
+        "foreground": "rgb(27, 33, 64)",
+        "background": [
+          247,
+          241,
+          232
+        ],
+        "ratio": 13.98,
+        "minimum": 3,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "A place to return to them in the morning.",
+        "foreground": "rgb(27, 33, 64)",
+        "background": [
+          247,
+          241,
+          232
+        ],
+        "ratio": 13.98,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "From the submitted listing",
+        "foreground": "rgb(58, 63, 92)",
+        "background": [
+          247,
+          241,
+          232
+        ],
+        "ratio": 9.14,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Your dream journal",
+        "foreground": "rgb(58, 63, 92)",
+        "background": [
+          247,
+          241,
+          232
+        ],
+        "ratio": 9.14,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "· Crop",
+        "foreground": "rgb(58, 63, 92)",
+        "background": [
+          247,
+          241,
+          232
+        ],
+        "ratio": 9.14,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Daytime / Reality check",
+        "foreground": "rgb(128, 85, 25)",
+        "background": [
+          247,
+          241,
+          232
+        ],
+        "ratio": 5.79,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Are you dreaming?",
+        "foreground": "rgb(27, 33, 64)",
+        "background": [
+          247,
+          241,
+          232
+        ],
+        "ratio": 13.98,
+        "minimum": 3,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Read some text. Look away. Read it again. Did it change?",
+        "foreground": "rgb(27, 33, 64)",
+        "background": [
+          247,
+          241,
+          232
+        ],
+        "ratio": 13.98,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Reality checks",
+        "foreground": "rgb(58, 63, 92)",
+        "background": [
+          247,
+          241,
+          232
+        ],
+        "ratio": 9.14,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "· Crop",
+        "foreground": "rgb(58, 63, 92)",
+        "background": [
+          247,
+          241,
+          232
+        ],
+        "ratio": 9.14,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Tonight / Dream signs",
+        "foreground": "rgb(231, 183, 106)",
+        "background": [
+          38,
+          47,
+          87
+        ],
+        "ratio": 7,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Notice the next.",
+        "foreground": "rgb(241, 230, 215)",
+        "background": [
+          38,
+          47,
+          87
+        ],
+        "ratio": 10.48,
+        "minimum": 3,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Notice one of these, and you might be dreaming.",
+        "foreground": "rgb(241, 230, 215)",
+        "background": [
+          38,
+          47,
+          87
+        ],
+        "ratio": 10.48,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Dream signs",
+        "foreground": "rgb(216, 205, 191)",
+        "background": [
+          38,
+          47,
+          87
+        ],
+        "ratio": 8.24,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "· Crop",
+        "foreground": "rgb(216, 205, 191)",
+        "background": [
+          38,
+          47,
+          87
+        ],
+        "ratio": 8.24,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "The nightstand / Lucid Toolkit",
+        "foreground": "rgb(231, 183, 106)",
+        "background": [
+          18,
+          22,
+          44
+        ],
+        "ratio": 9.67,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Notice the next dream.",
+        "foreground": "rgb(241, 230, 215)",
+        "background": [
+          18,
+          22,
+          44
+        ],
+        "ratio": 14.48,
+        "minimum": 3,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Reality-check program",
+        "foreground": "rgb(241, 230, 215)",
+        "background": [
+          38,
+          47,
+          87
+        ],
+        "ratio": 10.48,
+        "minimum": 3,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Wake-back-to-bed night",
+        "foreground": "rgb(241, 230, 215)",
+        "background": [
+          38,
+          47,
+          87
+        ],
+        "ratio": 10.48,
+        "minimum": 3,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Dream-sign insights",
+        "foreground": "rgb(241, 230, 215)",
+        "background": [
+          38,
+          47,
+          87
+        ],
+        "ratio": 10.48,
+        "minimum": 3,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Progress trends",
+        "foreground": "rgb(241, 230, 215)",
+        "background": [
+          38,
+          47,
+          87
+        ],
+        "ratio": 10.48,
+        "minimum": 3,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Everything else is included.",
+        "foreground": "rgb(241, 230, 215)",
+        "background": [
+          18,
+          22,
+          44
+        ],
+        "ratio": 14.48,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "The price, plainly · USA",
+        "foreground": "rgb(241, 230, 215)",
+        "background": [
+          18,
+          22,
+          44
+        ],
+        "ratio": 14.48,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Back to night",
+        "foreground": "rgb(241, 230, 215)",
+        "background": [
+          18,
+          22,
+          44
+        ],
+        "ratio": 14.48,
+        "minimum": 3,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Planned pricing, pending App Review. Not available to buy yet.",
+        "foreground": "rgb(241, 230, 215)",
+        "background": [
+          18,
+          22,
+          44
+        ],
+        "ratio": 14.48,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Free to download when released",
+        "foreground": "rgb(241, 230, 215)",
+        "background": [
+          38,
+          47,
+          87
+        ],
+        "ratio": 10.48,
+        "minimum": 3,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Free to download when released. The Lucid Toolkit is a separate one-time purchase, pending review.",
+        "foreground": "rgb(216, 205, 191)",
+        "background": [
+          38,
+          47,
+          87
+        ],
+        "ratio": 8.24,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Lucid Toolkit",
+        "foreground": "rgb(241, 230, 215)",
+        "background": [
+          38,
+          47,
+          87
+        ],
+        "ratio": 10.48,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "One payment.",
+        "foreground": "rgb(216, 205, 191)",
+        "background": [
+          38,
+          47,
+          87
+        ],
+        "ratio": 8.24,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "$9.99",
+        "foreground": "rgb(241, 230, 215)",
+        "background": [
+          38,
+          47,
+          87
+        ],
+        "ratio": 10.48,
+        "minimum": 3,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "one-time",
+        "foreground": "rgb(241, 230, 215)",
+        "background": [
+          38,
+          47,
+          87
+        ],
+        "ratio": 10.48,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "From Blake",
+        "foreground": "rgb(241, 230, 215)",
+        "background": [
+          18,
+          22,
+          44
+        ],
+        "ratio": 14.48,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "The fear of an ordinary life, and what I did about it.",
+        "foreground": "rgb(241, 230, 215)",
+        "background": [
+          18,
+          22,
+          44
+        ],
+        "ratio": 14.48,
+        "minimum": 3,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Designed, built and shipped by Blake Taylor in Chicago.",
+        "foreground": "rgb(241, 230, 215)",
+        "background": [
+          18,
+          22,
+          44
+        ],
+        "ratio": 14.48,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Blake Taylor",
+        "foreground": "rgb(241, 230, 215)",
+        "background": [
+          18,
+          22,
+          44
+        ],
+        "ratio": 14.48,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Dreamcatcher",
+        "foreground": "rgb(241, 230, 215)",
+        "background": [
+          18,
+          22,
+          44
+        ],
+        "ratio": 14.48,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Support",
+        "foreground": "rgb(241, 230, 215)",
+        "background": [
+          18,
+          22,
+          44
+        ],
+        "ratio": 14.48,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Privacy",
+        "foreground": "rgb(241, 230, 215)",
+        "background": [
+          18,
+          22,
+          44
+        ],
+        "ratio": 14.48,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Koinophobia Labs · Designed and built by Blake Taylor, Chicago.",
+        "foreground": "rgb(241, 230, 215)",
+        "background": [
+          18,
+          22,
+          44
+        ],
+        "ratio": 14.48,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Also from Koinophobia Labs",
+        "foreground": "rgb(241, 230, 215)",
+        "background": [
+          18,
+          22,
+          44
+        ],
+        "ratio": 14.48,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Trendi",
+        "foreground": "rgb(241, 230, 215)",
+        "background": [
+          18,
+          22,
+          44
+        ],
+        "ratio": 14.48,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Way In",
+        "foreground": "rgb(241, 230, 215)",
+        "background": [
+          18,
+          22,
+          44
+        ],
+        "ratio": 14.48,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Forget About It",
+        "foreground": "rgb(241, 230, 215)",
+        "background": [
+          18,
+          22,
+          44
+        ],
+        "ratio": 14.48,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Preaching to the Choir",
+        "foreground": "rgb(241, 230, 215)",
+        "background": [
+          18,
+          22,
+          44
+        ],
+        "ratio": 14.48,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Old Dog",
+        "foreground": "rgb(241, 230, 215)",
+        "background": [
+          18,
+          22,
+          44
+        ],
+        "ratio": 14.48,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      },
+      {
+        "text": "Teacher’s Pet",
+        "foreground": "rgb(241, 230, 215)",
+        "background": [
+          18,
+          22,
+          44
+        ],
+        "ratio": 14.48,
+        "minimum": 4.5,
+        "gradient": false,
+        "pass": true
+      }
+    ]
+  }
+]

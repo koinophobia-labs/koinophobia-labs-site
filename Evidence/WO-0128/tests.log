@@ -1,0 +1,28 @@
+✔ every rendered price and billing term comes from the single prices config (9.706625ms)
+✔ no page or product copy contains the false no-purchases claim (158.171708ms)
+✔ coming-soon homes are public by Blake's decision, without App Store buttons (0.11025ms)
+✔ store badge accessible labels name each live app and the correct store (1.820667ms)
+✔ coming-soon price cards qualify free downloads with when released (0.982333ms)
+✔ app copy excludes the rejected claims and has distinct feature headings (0.100917ms)
+✔ founder notes are verbatim inventory lines with a factual receipt (2.3935ms)
+✔ all seven homes have original assets and three to five sourced features (0.172917ms)
+✔ app palettes meet WCAG AA for text, accents, and card copy (0.186833ms)
+✔ seven worlds render distinct compositions with the correct listing provenance (20.153459ms)
+✔ rejected imagery and claims cannot reappear in world output (7.981125ms)
+✔ each subscription option carries renewal text and every original price remains exact (1.709667ms)
+✔ route-local fonts, shared shell, and motion constraints are explicit (0.395ms)
+✔ no host-scoped rewrites remain; the personal host only redirects (0.4615ms)
+✔ the personal-host map lands on real studio pages (0.176084ms)
+✔ retired studio routes redirect to living pages (0.132291ms)
+✔ the www hosts collapse onto the studio host (0.080875ms)
+✔ separate product lookups do not reuse the first product's cached result (8.852334ms)
+✔ same-day log milestones preserve the recorded release order (0.058375ms)
+✔ evidence links explicit URLs without inventing links for local files (3.44025ms)
+ℹ tests 20
+ℹ suites 0
+ℹ pass 20
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1340.850709

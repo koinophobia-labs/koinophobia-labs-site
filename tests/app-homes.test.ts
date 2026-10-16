@@ -7,6 +7,7 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { load } from "cheerio";
 import AppPricing from "../components/apps/AppPricing";
 import AppFounder from "../components/apps/AppFounder";
+import { appWorlds } from "../components/apps/AppWorlds";
 import AppStoreBadge from "../components/site/AppStoreBadge";
 import { appHomes, APP_PAGES_PRERELEASE, publicAppHomes, showPrereleaseAppPages } from "../lib/app-homes";
 import { appPrices, priceLine } from "../lib/app-prices";
@@ -64,18 +65,24 @@ test("app copy excludes the rejected claims and has distinct feature headings", 
   assert.equal(new Set(Object.values(appHomes).map(app => app.featureHeading)).size, 7);
   assert.match(appHomes["way-in"].free, /Full review, editing, and export of saved résumés require an eligible purchase\./);
 });
-test("founder notes are absent unless explicitly set, with a factual sign-off for every app", () => {
+test("founder notes are verbatim inventory lines with a factual receipt", () => {
+  const notes = {
+    trendi: "Every product here started as something I needed the week I needed it.",
+    "way-in": "Nothing here stayed an idea.",
+    "forget-about-it": "The simulator votes. The device decides.",
+    "old-dog": "Taste and judgment are the job.",
+    "teachers-pet": "The simulator was green for weeks while the phone found two shipping defects in an hour.",
+    dreamcatcher: "The fear of an ordinary life, and what I did about it.",
+  };
   for (const app of Object.values(appHomes)) {
-    assert.equal(app.founderNote, undefined);
+    const expected = notes[app.slug as keyof typeof notes];
+    assert.equal(app.founderNote, expected);
     const $ = load(renderToStaticMarkup(createElement(AppFounder, { founderNote: app.founderNote })));
-    assert.equal($(".app-home__founder-note, blockquote").length, 0);
-    assert.doesNotMatch($.text(), /From Blake/);
+    assert.equal($(".app-home__founder-note").text(), expected || "");
     assert.equal($(".app-home__sign-off").text(), "Designed, built and shipped by Blake Taylor in Chicago.");
+    assert.equal($("#founder-title").text(), expected ? "From Blake" : "The builder");
+    assert.equal($("blockquote").length, 0);
   }
-  const $ = load(renderToStaticMarkup(createElement(AppFounder, { founderNote: "A note supplied by Blake." })));
-  assert.equal($(".app-home__founder-note").text(), "A note supplied by Blake.");
-  assert.equal($("#founder-title").text(), "From Blake");
-  assert.equal($("blockquote").length, 0);
 });
 test("all seven homes have original assets and three to five sourced features", () => {
   for (const app of Object.values(appHomes)) {
@@ -96,4 +103,66 @@ test("app palettes meet WCAG AA for text, accents, and card copy", () => {
       assert.ok((values[0] + .05) / (values[1] + .05) >= 4.5, `${app.slug}: ${foreground} on ${background}`);
     }
   }
+});
+
+test("seven worlds render distinct compositions with the correct listing provenance", () => {
+  const compositions = { trendi: ".greenroom-stage", "way-in": ".path-waypoints", "forget-about-it": ".diary-entry", "preaching-to-the-choir": ".choir-arc", "old-dog": ".reading-desk", "teachers-pet": ".school-stepper", dreamcatcher: ".dream-phase" };
+  for (const app of Object.values(appHomes)) {
+    const $ = load(renderToStaticMarkup(createElement(appWorlds[app.slug])));
+    assert.ok($(compositions[app.slug]).length);
+    assert.equal($("h1").length, 1);
+    assert.equal($("#pricing").length, 1);
+    assert.match($.text(), app.prerelease ? /From the submitted listing/ : /From the App Store listing/);
+    assert.doesNotMatch($.text(), /A look inside\.|Made to be used\.|Start here\./);
+    if (app.prerelease) {
+      assert.equal($("a[href*='apps.apple.com']").length, 0);
+      assert.equal($(".app-home__coming").prop("tagName"), "P");
+    }
+    $(".world-art img").each((_, el) => assert.equal($(el).attr("alt"), ""));
+  }
+});
+test("rejected imagery and claims cannot reappear in world output", () => {
+  const render = (slug: keyof typeof appWorlds) => load(renderToStaticMarkup(createElement(appWorlds[slug])));
+  const old = render("old-dog");
+  assert.doesNotMatch(old.html(), /iphone-shot|Business|Courses planned/);
+  assert.ok(old("img[src*='shot-5-crop']").length);
+  assert.equal(old(".catalog-cards article").length, 10);
+  const dream = render("dreamcatcher");
+  dream(".world-shot img").each((_, el) => assert.match(dream(el).attr("src")!, /shot-[123]-crop/));
+  assert.equal(dream(".dream-hoop path").length, 8);
+  assert.equal(dream(".dream-hoop polygon").length, 2);
+  assert.equal(dream(".morning").length, 1);
+  assert.doesNotMatch(dream.text(), /sleep quality|better sleep|dream meaning|No analytics|Face ID/);
+  const school = render("teachers-pet");
+  assert.doesNotMatch(school.text(), /1,273|318 units|52 courses|13 grade levels/);
+  assert.ok(school("img[src*='shot-1-crop']").length);
+  assert.ok(school("img[src*='shot-2-crop']").length);
+  assert.match(school.text(), /one supervised check—not a mastery grade or proof of learning/);
+  assert.doesNotMatch(render("trendi").text(), /Take Two|viral|auto-post/);
+  assert.doesNotMatch(render("preaching-to-the-choir").text(), /unlock|premium|trial|nothing leaves the phone/i);
+});
+test("each subscription option carries renewal text and every original price remains exact", () => {
+  for (const app of Object.values(appHomes)) {
+    const $ = load(renderToStaticMarkup(createElement(AppPricing, { slug: app.slug, free: app.free, prerelease: app.prerelease })));
+    $("dl > div").each((i, row) => {
+      const term: string = appPrices[app.slug][i].term;
+      assert.equal($(row).find(".renewal").length, ["monthly", "yearly", "first year"].includes(term) ? 1 : 0);
+    });
+    assert.match($.text(), /USA/);
+  }
+});
+test("route-local fonts, shared shell, and motion constraints are explicit", () => {
+  for (const app of Object.values(appHomes)) {
+    const layout = fs.readFileSync(path.join(root, `app/${app.slug}/layout.tsx`), "utf8");
+    assert.match(layout, /next\/font\/google/);
+    assert.doesNotMatch(layout, /\bInter\b/);
+    assert.equal((layout.match(/const (body|display) = /g) || []).length, 2);
+  }
+  const home = fs.readFileSync(path.join(root, "components/apps/AppHome.tsx"), "utf8");
+  assert.doesNotMatch(home, /next\/font|Masthead|SiteFooter|Work With Us/);
+  assert.match(home, /width=\{48\}/);
+  assert.match(home, /prefetch=\{false\}/);
+  const motion = fs.readFileSync(path.join(root, "components/apps/WorldBehavior.tsx"), "utf8");
+  assert.doesNotMatch(motion, /requestAnimationFrame|setInterval/);
+  assert.match(motion, /prefers-reduced-motion: no-preference/);
 });
