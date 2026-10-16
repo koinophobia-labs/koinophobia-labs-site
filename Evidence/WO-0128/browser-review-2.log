@@ -1,0 +1,36 @@
+trendi-1440: OK
+forget-about-it-1440: OK
+way-in-1440: OK
+preaching-to-the-choir-1440: OK
+old-dog-1440: OK
+teachers-pet-1440: OK
+dreamcatcher-1440: OK
+trendi-1440-reduced: OK
+forget-about-it-1440-reduced: OK
+way-in-1440-reduced: OK
+preaching-to-the-choir-1440-reduced: OK
+old-dog-1440-reduced: OK
+teachers-pet-1440-reduced: OK
+dreamcatcher-1440-reduced: OK
+trendi-390: OK
+forget-about-it-390: OK
+way-in-390: OK
+preaching-to-the-choir-390: OK
+old-dog-390: OK
+teachers-pet-390: OK
+dreamcatcher-390: OK
+trendi-390-reduced: OK
+forget-about-it-390-reduced: OK
+way-in-390-reduced: OK
+preaching-to-the-choir-390-reduced: OK
+old-dog-390-reduced: OK
+teachers-pet-390-reduced: OK
+dreamcatcher-390-reduced: OK
+file:///Volumes/KoiBuild/koinophobia-labs-site/WO-0128/scripts/capture-app-worlds.mjs:77
+await fs.writeFile(path.join(output,'visible-copy.json'),JSON.stringify(claims,null,2)+'\n');
+                                                                        ^
+
+ReferenceError: claims is not defined
+    at file:///Volumes/KoiBuild/koinophobia-labs-site/WO-0128/scripts/capture-app-worlds.mjs:77:73
+
+Node.js v24.16.0

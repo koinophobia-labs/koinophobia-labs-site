@@ -1,0 +1,131 @@
+trendi-1440: OK
+forget-about-it-1440: OK
+way-in-1440: OK
+preaching-to-the-choir-1440: OK
+old-dog-1440: OK
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+page.evaluate: Target page, context or browser has been closed
+Browser logs:
+
+<launching> /Applications/Google Chrome.app/Contents/MacOS/Google Chrome --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-edgeupdater --disable-extensions --disable-features=AvoidUnnecessaryBeforeUnloadCheckSync,BoundaryEventDispatchTracksNodeRemoval,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,Translate,AutoDeElevate,RenderDocument,OptimizationHints,msForceBrowserSignIn,msEdgeUpdateLaunchServicesPreferredVersion --enable-features=CDPScreenshotNewSurface --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --disable-infobars --disable-search-engine-choice-screen --disable-sync --enable-unsafe-swiftshader --headless --hide-scrollbars --mute-audio --blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --no-sandbox --user-data-dir=/var/folders/mx/351vtng56nb06tsm14bvctzw0000gn/T/playwright_chromiumdev_profile-4RWJM2 --remote-debugging-pipe --no-startup-window
+<launched> pid=63923
+[pid=63923][err] Trying to load the allocator multiple times. This is *not* supported.
+[pid=63923][err] [63932:694642:1015/190149.754383:ERROR:ui/display/mac/cv_display_link_mac.mm:188] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670
+[pid=63923][err] [63932:694724:1015/190149.754628:ERROR:ui/display/mac/cv_display_link_mac.mm:188] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670
+[pid=63923][err] [63932:694642:1015/190149.755141:ERROR:ui/display/mac/cv_display_link_mac.mm:188] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670
+[pid=63923][err] [63932:694724:1015/190149.755200:ERROR:ui/display/mac/cv_display_link_mac.mm:188] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670
+[pid=63923][err] [63932:694642:1015/190149.755545:ERROR:ui/display/mac/cv_display_link_mac.mm:188] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670
+[pid=63923][err] [63932:694724:1015/190149.755598:ERROR:ui/display/mac/cv_display_link_mac.mm:188] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670
+[pid=63923][err] [63932:694642:1015/190149.755926:ERROR:ui/display/mac/cv_display_link_mac.mm:188] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670
+[pid=63923][err] [63932:694724:1015/190149.755979:ERROR:ui/display/mac/cv_display_link_mac.mm:188] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670
+[pid=63923][err] [63932:694642:1015/190149.756096:ERROR:ui/display/mac/cv_display_link_mac.mm:188] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670
+[pid=63923][err] [63932:694724:1015/190149.756153:ERROR:ui/display/mac/cv_display_link_mac.mm:188] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670
+[pid=63923][err] [63923:694627:1015/190152.091326:ERROR:google_apis/gcm/engine/registration_request.cc:291] Registration response error message: DEPRECATED_ENDPOINT
+[pid=63923][err] [63932:694642:1015/190152.202244:ERROR:ui/display/mac/cv_display_link_mac.mm:188] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670
+[pid=63923][err] [63932:694724:1015/190152.202293:ERROR:ui/display/mac/cv_display_link_mac.mm:188] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670
+[pid=63923][err] [63932:694642:1015/190152.203751:ERROR:ui/display/mac/cv_display_link_mac.mm:188] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670
+[pid=63923][err] [63932:694724:1015/190152.203786:ERROR:ui/display/mac/cv_display_link_mac.mm:188] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670
+[pid=63923][err] [63932:694642:1015/190152.206718:ERROR:ui/display/mac/cv_display_link_mac.mm:188] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670
+[pid=63923][err] [63932:694724:1015/190152.206804:ERROR:ui/display/mac/cv_display_link_mac.mm:188] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670
+[pid=63923][err] [63932:694642:1015/190152.207121:ERROR:ui/display/mac/cv_display_link_mac.mm:188] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670
+[pid=63923][err] [63932:694724:1015/190152.207691:ERROR:ui/display/mac/cv_display_link_mac.mm:188] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670
+[pid=63923][err] [63932:694642:1015/190152.208034:ERROR:ui/display/mac/cv_display_link_mac.mm:188] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670
+[pid=63923][err] [63932:694724:1015/190152.208280:ERROR:ui/display/mac/cv_display_link_mac.mm:188] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670
+[pid=63923][err] [63932:694642:1015/190155.085242:ERROR:ui/display/mac/cv_display_link_mac.mm:188] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670
+[pid=63923][err] [63932:694724:1015/190155.085295:ERROR:ui/display/mac/cv_display_link_mac.mm:188] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670
+[pid=63923][err] [63932:694642:1015/190155.086260:ERROR:ui/display/mac/cv_display_link_mac.mm:188] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670
+[pid=63923][err] [63932:694724:1015/190155.086322:ERROR:ui/display/mac/cv_display_link_mac.mm:188] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670
+[pid=63923][err] [63932:694642:1015/190155.087668:ERROR:ui/display/mac/cv_display_link_mac.mm:188] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670
+[pid=63923][err] [63932:694724:1015/190155.087710:ERROR:ui/display/mac/cv_display_link_mac.mm:188] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670
+[pid=63923][err] [63932:694642:1015/190155.087834:ERROR:ui/display/mac/cv_display_link_mac.mm:188] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670
+[pid=63923][err] [63932:694724:1015/190155.087884:ERROR:ui/display/mac/cv_display_link_mac.mm:188] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670
+[pid=63923][err] [63932:694642:1015/190155.087977:ERROR:ui/display/mac/cv_display_link_mac.mm:188] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670
+[pid=63923][err] [63932:694724:1015/190155.088018:ERROR:ui/display/mac/cv_display_link_mac.mm:188] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670
+[pid=63923][err] [63932:694642:1015/190156.953748:ERROR:ui/display/mac/cv_display_link_mac.mm:188] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670
+[pid=63923][err] [63932:694724:1015/190156.953801:ERROR:ui/display/mac/cv_display_link_mac.mm:188] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670
+[pid=63923][err] [63932:694642:1015/190156.955291:ERROR:ui/display/mac/cv_display_link_mac.mm:188] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670
+[pid=63923][err] [63932:694724:1015/190156.955346:ERROR:ui/display/mac/cv_display_link_mac.mm:188] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670
+[pid=63923][err] [63932:694642:1015/190156.956956:ERROR:ui/display/mac/cv_display_link_mac.mm:188] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670
+[pid=63923][err] [63932:694724:1015/190156.957000:ERROR:ui/display/mac/cv_display_link_mac.mm:188] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670
+[pid=63923][err] [63932:694642:1015/190156.957087:ERROR:ui/display/mac/cv_display_link_mac.mm:188] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670
+[pid=63923][err] [63932:694724:1015/190156.957121:ERROR:ui/display/mac/cv_display_link_mac.mm:188] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670
+[pid=63923][err] [63932:694642:1015/190156.957225:ERROR:ui/display/mac/cv_display_link_mac.mm:188] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670
+[pid=63923][err] [63932:694724:1015/190156.957284:ERROR:ui/display/mac/cv_display_link_mac.mm:188] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670
+[pid=63923][err] [63932:694642:1015/190159.072169:ERROR:ui/display/mac/cv_display_link_mac.mm:188] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670
+[pid=63923][err] [63932:694724:1015/190159.072216:ERROR:ui/display/mac/cv_display_link_mac.mm:188] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670
+[pid=63923][err] [63932:694642:1015/190159.074969:ERROR:ui/display/mac/cv_display_link_mac.mm:188] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670
+[pid=63923][err] [63932:694724:1015/190159.077391:ERROR:ui/display/mac/cv_display_link_mac.mm:188] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670
+[pid=63923][err] [63932:694642:1015/190159.077581:ERROR:ui/display/mac/cv_display_link_mac.mm:188] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670
+[pid=63923][err] [63932:694724:1015/190159.077625:ERROR:ui/display/mac/cv_display_link_mac.mm:188] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670
+[pid=63923][err] [63932:694642:1015/190159.077723:ERROR:ui/display/mac/cv_display_link_mac.mm:188] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670
+[pid=63923][err] [63932:694724:1015/190159.077761:ERROR:ui/display/mac/cv_display_link_mac.mm:188] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670
+[pid=63923][err] [63932:694642:1015/190159.077865:ERROR:ui/display/mac/cv_display_link_mac.mm:188] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670
+[pid=63923][err] [63932:694724:1015/190159.077921:ERROR:ui/display/mac/cv_display_link_mac.mm:188] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670
+[pid=63923][err] [63932:694642:1015/190200.899961:ERROR:ui/display/mac/cv_display_link_mac.mm:188] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670
+[pid=63923][err] [63932:694724:1015/190200.900012:ERROR:ui/display/mac/cv_display_link_mac.mm:188] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670
+[pid=63923][err] [63932:694642:1015/190200.902069:ERROR:ui/display/mac/cv_display_link_mac.mm:188] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670
+[pid=63923][err] [63932:694724:1015/190200.902116:ERROR:ui/display/mac/cv_display_link_mac.mm:188] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670
+[pid=63923][err] [63932:694642:1015/190200.903561:ERROR:ui/display/mac/cv_display_link_mac.mm:188] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670
+[pid=63923][err] [63932:694724:1015/190200.903602:ERROR:ui/display/mac/cv_display_link_mac.mm:188] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670
+[pid=63923][err] [63932:694642:1015/190200.903699:ERROR:ui/display/mac/cv_display_link_mac.mm:188] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670
+[pid=63923][err] [63932:694724:1015/190200.903735:ERROR:ui/display/mac/cv_display_link_mac.mm:188] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670
+[pid=63923][err] [63932:694642:1015/190200.903840:ERROR:ui/display/mac/cv_display_link_mac.mm:188] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670
+[pid=63923][err] [63932:694724:1015/190200.903874:ERROR:ui/display/mac/cv_display_link_mac.mm:188] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670
+[pid=63923][err] [63968:695307:1015/190207.780598:VERBOSE1:chrome/updater/updater.cc:375] Version: 157.0.8089.0, opt, ARM_64, command line: /Users/koi/Library/Application Support/Google/GoogleUpdater/157.0.8089.0/GoogleUpdater.app/Contents/MacOS/GoogleUpdater --wake-all --enable-logging --vmodule=*/components/update_client/*=2,*/chrome/enterprise_companion/*=2,*/chrome/updater/*=2
+[pid=63923][err] [63968:695307:1015/190207.781061:VERBOSE1:chrome/updater/updater.cc:378] OS version: 27.2.0, arch: arm64, System uptime (seconds): 26511, parent pid: 63923
+[pid=63923][err] [63968:695307:1015/190207.782440:VERBOSE1:chrome/updater/updater.cc:383] Available disk space in install directory (/Users/koi/Library/Application Support/Google/GoogleUpdater): 16583528448B (15.445GiB) / 245107195904B (228.274GiB)
+[pid=63923][err] [63968:695307:1015/190207.782466:VERBOSE1:chrome/updater/updater.cc:387] Available disk space in temporary directory (/var/folders/mx/351vtng56nb06tsm14bvctzw0000gn/T/): 16583528448B (15.445GiB) / 245107195904B (228.274GiB)
+[pid=63923][err] [63968:695307:1015/190207.782512:VERBOSE2:chrome/updater/event_history.cc:266] Emitted a UPDATER_PROCESS START event to the history log
+[pid=63923][err] [63970:695311:1015/190207.789190:VERBOSE1:chrome/updater/updater.cc:375] Version: 157.0.8089.0, opt, ARM_64, command line: /Users/koi/Library/Application Support/Google/GoogleUpdater/157.0.8089.0/GoogleUpdater.app/Contents/MacOS/GoogleUpdater --crash-handler --database=/Users/koi/Library/Application Support/Google/GoogleUpdater/157.0.8089.0/Crashpad --url=https://clients2.google.com/cr/report --annotation=prod=Update4 --annotation=ver=157.0.8089.0 --handshake-fd=6 --enable-logging --vmodule=*/components/update_client/*=2,*/chrome/enterprise_companion/*=2,*/chrome/updater/*=2
+[pid=63923][err] [63970:695311:1015/190207.789538:VERBOSE1:chrome/updater/updater.cc:378] OS version: 27.2.0, arch: arm64, System uptime (seconds): 26511, parent pid: 1
+[pid=63923][err] [63970:695311:1015/190207.790650:VERBOSE1:chrome/updater/updater.cc:383] Available disk space in install directory (/Users/koi/Library/Application Support/Google/GoogleUpdater): 16583528448B (15.445GiB) / 245107195904B (228.274GiB)
+[pid=63923][err] [63970:695311:1015/190207.790673:VERBOSE1:chrome/updater/updater.cc:387] Available disk space in temporary directory (/var/folders/mx/351vtng56nb06tsm14bvctzw0000gn/T/): 16583528448B (15.445GiB) / 245107195904B (228.274GiB)
+[pid=63923][err] [63970:695311:1015/190207.790715:VERBOSE2:chrome/updater/event_history.cc:266] Emitted a UPDATER_PROCESS START event to the history log
+[pid=63923][err] [63968:695307:1015/190207.791003:VERBOSE1:chrome/updater/crash_reporter.cc:123] Crash handler launched and ready.
+[pid=63923][err] [63968:695307:1015/190207.791460:VERBOSE1:chrome/updater/crash_client.cc:109] Found 0 completed crash reports
+[pid=63923][err] [63968:695307:1015/190207.791510:VERBOSE1:chrome/updater/crash_client.cc:132] Found 0 pending crash reports
+[pid=63923][err] [63968:695307:1015/190207.791565:ERROR:third_party/crashpad/crashpad/util/file/file_io_posix.cc:145] open /Users/koi/Library/Application Support/Google/RLZ/Crashpad/settings.dat: No such file or directory (2)
+[pid=63923][err] [63968:695307:1015/190207.791608:ERROR:third_party/crashpad/crashpad/util/file/file_io_posix.cc:145] open /Users/koi/Library/Application Support/Google/ChromeForTesting/Crashpad/settings.dat: No such file or directory (2)
+[pid=63923][err] [63968:695307:1015/190207.791617:ERROR:third_party/crashpad/crashpad/util/file/file_io_posix.cc:145] open /Users/koi/Library/Application Support/Google/Chrome-headless/Crashpad/settings.dat: No such file or directory (2)
+[pid=63923][err] [63968:695307:1015/190207.791627:VERBOSE1:chrome/updater/updater.cc:107] Crash reporting initialized.
+[pid=63923][err] [63968:695319:1015/190207.791845:VERBOSE1:chrome/updater/app/app_wakeall.cc:58] Launching `/Users/koi/Library/Application Support/Google/GoogleUpdater/157.0.8089.0/GoogleUpdater.app/Contents/MacOS/GoogleUpdater --wake`
+[pid=63923][err] [63971:695325:1015/190207.797448:VERBOSE1:chrome/updater/updater.cc:375] Version: 157.0.8089.0, opt, ARM_64, command line: /Users/koi/Library/Application Support/Google/GoogleUpdater/157.0.8089.0/GoogleUpdater.app/Contents/MacOS/GoogleUpdater --wake --enable-logging --vmodule=*/components/update_client/*=2,*/chrome/enterprise_companion/*=2,*/chrome/updater/*=2
+[pid=63923][err] [63971:695325:1015/190207.797805:VERBOSE1:chrome/updater/updater.cc:378] OS version: 27.2.0, arch: arm64, System uptime (seconds): 26511, parent pid: 63968
+[pid=63923][err] [63971:695325:1015/190207.798823:VERBOSE1:chrome/updater/updater.cc:383] Available disk space in install directory (/Users/koi/Library/Application Support/Google/GoogleUpdater): 16583528448B (15.445GiB) / 245107195904B (228.274GiB)
+[pid=63923][err] [63971:695325:1015/190207.798844:VERBOSE1:chrome/updater/updater.cc:387] Available disk space in temporary directory (/var/folders/mx/351vtng56nb06tsm14bvctzw0000gn/T/): 16583528448B (15.445GiB) / 245107195904B (228.274GiB)
+[pid=63923][err] [63971:695325:1015/190207.798881:VERBOSE2:chrome/updater/event_history.cc:266] Emitted a UPDATER_PROCESS START event to the history log
+[pid=63923][err] [63973:695329:1015/190207.804939:VERBOSE1:chrome/updater/updater.cc:375] Version: 157.0.8089.0, opt, ARM_64, command line: /Users/koi/Library/Application Support/Google/GoogleUpdater/157.0.8089.0/GoogleUpdater.app/Contents/MacOS/GoogleUpdater --crash-handler --database=/Users/koi/Library/Application Support/Google/GoogleUpdater/157.0.8089.0/Crashpad --url=https://clients2.google.com/cr/report --annotation=prod=Update4 --annotation=ver=157.0.8089.0 --handshake-fd=6 --enable-logging --vmodule=*/components/update_client/*=2,*/chrome/enterprise_companion/*=2,*/chrome/updater/*=2
+[pid=63923][err] [63973:695329:1015/190207.805272:VERBOSE1:chrome/updater/updater.cc:378] OS version: 27.2.0, arch: arm64, System uptime (seconds): 26511, parent pid: 1
+[pid=63923][err] [63973:695329:1015/190207.806290:VERBOSE1:chrome/updater/updater.cc:383] Available disk space in install directory (/Users/koi/Library/Application Support/Google/GoogleUpdater): 16583528448B (15.445GiB) / 245107195904B (228.274GiB)
+[pid=63923][err] [63973:695329:1015/190207.806312:VERBOSE1:chrome/updater/updater.cc:387] Available disk space in temporary directory (/var/folders/mx/351vtng56nb06tsm14bvctzw0000gn/T/): 16583528448B (15.445GiB) / 245107195904B (228.274GiB)
+[pid=63923][err] [63973:695329:1015/190207.806355:VERBOSE2:chrome/updater/event_history.cc:266] Emitted a UPDATER_PROCESS START event to the history log
+[pid=63923][err] [63971:695325:1015/190207.806663:VERBOSE1:chrome/updater/crash_reporter.cc:123] Crash handler launched and ready.
+[pid=63923][err] [63971:695325:1015/190207.807138:VERBOSE1:chrome/updater/crash_client.cc:109] Found 0 completed crash reports
+[pid=63923][err] [63971:695325:1015/190207.807187:VERBOSE1:chrome/updater/crash_client.cc:132] Found 0 pending crash reports
+[pid=63923][err] [63971:695325:1015/190207.807244:ERROR:third_party/crashpad/crashpad/util/file/file_io_posix.cc:145] open /Users/koi/Library/Application Support/Google/RLZ/Crashpad/settings.dat: No such file or directory (2)
+[pid=63923][err] [63971:695325:1015/190207.807287:ERROR:third_party/crashpad/crashpad/util/file/file_io_posix.cc:145] open /Users/koi/Library/Application Support/Google/ChromeForTesting/Crashpad/settings.dat: No such file or directory (2)
+[pid=63923][err] [63971:695325:1015/190207.807297:ERROR:third_party/crashpad/crashpad/util/file/file_io_posix.cc:145] open /Users/koi/Library/Application Support/Google/Chrome-headless/Crashpad/settings.dat: No such file or directory (2)
+[pid=63923][err] [63971:695325:1015/190207.807305:VERBOSE1:chrome/updater/updater.cc:107] Crash reporting initialized.
+[pid=63923][err] [63971:695325:1015/190207.807423:VERBOSE1:chrome/updater/ipc/update_service_internal_proxy_mojo.cc:61] Run
+[pid=63923][err] [63923:694627:1015/190218.317708:ERROR:google_apis/gcm/engine/registration_request.cc:291] Registration response error message: DEPRECATED_ENDPOINT
+[pid=63923][err] [63971:695325:1015/190224.790642:VERBOSE1:chrome/updater/app/app.cc:52] Shutdown: 0
+[pid=63923][err] [63971:695325:1015/190224.791402:VERBOSE2:chrome/updater/event_history.cc:266] Emitted a UPDATER_PROCESS END event to the history log
+[pid=63923][err] [63971:695325:1015/190224.791456:VERBOSE1:chrome/updater/updater.cc:420] UpdaterMain (--wake) returned 0.
+[pid=63923][err] [63968:695319:1015/190224.881108:VERBOSE1:chrome/updater/app/app_wakeall.cc:68] `/Users/koi/Library/Application Support/Google/GoogleUpdater/157.0.8089.0/GoogleUpdater.app/Contents/MacOS/GoogleUpdater --wake` exited 0
+[pid=63923][err] [63968:695307:1015/190224.881561:VERBOSE1:chrome/updater/app/app.cc:52] Shutdown: 0
+[pid=63923][err] [63968:695307:1015/190224.882691:VERBOSE2:chrome/updater/event_history.cc:266] Emitted a UPDATER_PROCESS END event to the history log
+[pid=63923][err] [63968:695307:1015/190224.882770:VERBOSE1:chrome/updater/updater.cc:420] UpdaterMain (--wake-all) returned 0.
+[pid=63923][err] [63973:695329:1015/190234.804593:VERBOSE2:chrome/updater/event_history.cc:266] Emitted a UPDATER_PROCESS END event to the history log
+[pid=63923][err] [63973:695329:1015/190234.804685:VERBOSE1:chrome/updater/updater.cc:420] UpdaterMain (--crash-handler) returned 0.
+[pid=63923][err] [63970:695311:1015/190234.807048:VERBOSE2:chrome/updater/event_history.cc:266] Emitted a UPDATER_PROCESS END event to the history log
+[pid=63923][err] [63970:695311:1015/190234.807156:VERBOSE1:chrome/updater/updater.cc:420] UpdaterMain (--crash-handler) returned 0.
+[pid=63923][err] [63923:694627:1015/190311.780056:ERROR:google_apis/gcm/engine/registration_request.cc:291] Registration response error message: DEPRECATED_ENDPOINT
+[pid=63923] <gracefully close start>
+    at /Volumes/KoiBuild/koinophobia-labs-site/WO-0128/scripts/capture-app-worlds.mjs:23:14 {
+  log: []
+}
+
+Node.js v24.16.0

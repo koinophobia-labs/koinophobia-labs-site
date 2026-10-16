@@ -1,0 +1,80 @@
+[
+  {
+    "input": "/Users/koi/KoinophobiaLabs/reports/WO-0127/assets/dreamcatcher-shot-1.png",
+    "output": "public/apps/dreamcatcher/shot-1-crop.png",
+    "rect": {
+      "left": 0,
+      "top": 370,
+      "width": 1320,
+      "height": 1500
+    },
+    "reason": "Exclude the top strip containing AssistiveTouch; retain the real app content.",
+    "sourceSHA256": "34bd84d99303037af1a8bfdced6a3e090d5a775c004f7618b0ecf48c89f4ff10",
+    "outputSHA256": "36d11a38bc17cab1e45b2bb8937205a5471b7bd2748111d44ac0c10f900053ff"
+  },
+  {
+    "input": "/Users/koi/KoinophobiaLabs/reports/WO-0127/assets/dreamcatcher-shot-2.png",
+    "output": "public/apps/dreamcatcher/shot-2-crop.png",
+    "rect": {
+      "left": 0,
+      "top": 370,
+      "width": 1320,
+      "height": 1500
+    },
+    "reason": "Exclude the top strip containing AssistiveTouch; retain the real app content.",
+    "sourceSHA256": "7e358c0623587ddf6cc500d69ac5f84b3e35778f21cf8745dab697017b82d649",
+    "outputSHA256": "46205dd290b402d0f9de42517d556fe51b9fd8b26b49391257d0f2cb13094070"
+  },
+  {
+    "input": "/Users/koi/KoinophobiaLabs/reports/WO-0127/assets/dreamcatcher-shot-3.png",
+    "output": "public/apps/dreamcatcher/shot-3-crop.png",
+    "rect": {
+      "left": 0,
+      "top": 370,
+      "width": 1320,
+      "height": 1500
+    },
+    "reason": "Exclude the top strip containing AssistiveTouch; retain the real app content.",
+    "sourceSHA256": "94353c25e7ad0d81c27d8421e620bae7c74d00956628e8e0dceefdeb1d031a22",
+    "outputSHA256": "1652148510b9e66678a3ce154e0053b1b0313f1231ff5a3d4a5a0d5dea15311c"
+  },
+  {
+    "input": "/Users/koi/KoinophobiaLabs/reports/WO-0127/assets/old-dog-shot-5.png",
+    "output": "public/apps/old-dog/shot-5-crop.png",
+    "rect": {
+      "left": 0,
+      "top": 0,
+      "width": 1440,
+      "height": 752
+    },
+    "reason": "End above the Business / Courses planned row.",
+    "sourceSHA256": "aec1b82da7474c67ae49882e81a54130143a751414fa059c46526ab57f3ff247",
+    "outputSHA256": "c7f4da015ccab84eaf0b1a1ea82b05184389cc23659b786fdca08cc95e5d3e60"
+  },
+  {
+    "input": "/Users/koi/KoinophobiaLabs/reports/WO-0127/assets/teachers-pet-shot-1.png",
+    "output": "public/apps/teachers-pet/shot-1-crop.png",
+    "rect": {
+      "left": 350,
+      "top": 120,
+      "width": 930,
+      "height": 245
+    },
+    "reason": "Subjects heading and first subject title; exclude all content counts.",
+    "sourceSHA256": "35cc6b9c16c9c74763345f78beced58237fdee91a5f192bcb5339996518b4b28",
+    "outputSHA256": "5781ee2538a1147b2c23032af98679315b96cfc6c9768137cddf68fcb2fbf340"
+  },
+  {
+    "input": "/Users/koi/KoinophobiaLabs/reports/WO-0127/assets/teachers-pet-shot-2.png",
+    "output": "public/apps/teachers-pet/shot-2-crop.png",
+    "rect": {
+      "left": 150,
+      "top": 50,
+      "width": 1140,
+      "height": 445
+    },
+    "reason": "Course and adult review note; exclude course and unit counts below.",
+    "sourceSHA256": "76d85e001c276f3370c4ce8659b743c782cbd59d0b5ac36c564f5573aa48697e",
+    "outputSHA256": "39b1f7c70e7ce9f573965b97eedcd05a2dfad78d210c3df978e84fc89a21a491"
+  }
+]

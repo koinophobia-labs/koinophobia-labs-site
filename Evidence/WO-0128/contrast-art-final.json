@@ -1,0 +1,73 @@
+[
+  {
+    "slug": "trendi",
+    "foreground": "#F7F2EC",
+    "scrim": 0.75,
+    "minRatio": 10.73,
+    "minimum": 4.5,
+    "pass": true
+  },
+  {
+    "slug": "trendi",
+    "foreground": "#CD9CB6",
+    "scrim": 0.75,
+    "minRatio": 5.14,
+    "minimum": 4.5,
+    "pass": true
+  },
+  {
+    "slug": "preaching-to-the-choir",
+    "foreground": "#171B25",
+    "scrim": 0.82,
+    "minRatio": 10.34,
+    "minimum": 4.5,
+    "pass": true
+  },
+  {
+    "slug": "preaching-to-the-choir",
+    "foreground": "#6B131B",
+    "scrim": 0.82,
+    "minRatio": 7.27,
+    "minimum": 4.5,
+    "pass": true
+  },
+  {
+    "slug": "dreamcatcher",
+    "foreground": "#F1E6D7",
+    "scrim": 0.82,
+    "minRatio": 10.35,
+    "minimum": 4.5,
+    "pass": true
+  },
+  {
+    "slug": "dreamcatcher",
+    "foreground": "#E7B76A",
+    "scrim": 0.82,
+    "minRatio": 6.91,
+    "minimum": 4.5,
+    "pass": true
+  },
+  {
+    "kind": "Trendi CTA gradient endpoint",
+    "background": "#D95BA2",
+    "foreground": "#151017",
+    "ratio": 5.336765981876591,
+    "minimum": 4.5,
+    "pass": true
+  },
+  {
+    "kind": "Trendi CTA gradient endpoint",
+    "background": "#D6C5D9",
+    "foreground": "#151017",
+    "ratio": 11.4878138564406,
+    "minimum": 4.5,
+    "pass": true
+  },
+  {
+    "kind": "Trendi inactive large heading",
+    "opacity": 0.45,
+    "ratio": 4.185267812740539,
+    "minimum": 3,
+    "pass": true
+  }
+]
