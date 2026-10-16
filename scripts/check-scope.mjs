@@ -21,41 +21,62 @@ function ownedPattern(pattern) {
 
 function checkScope() {
   const branch = process.env.GITHUB_HEAD_REF || git("branch", "--show-current").trim();
-  if (!branch.startsWith("studio/")) {
+  if (!branch.startsWith("studio/") && !branch.startsWith("codex/")) {
     console.log(`::notice::Scope check skipped for non-work-order branch ${JSON.stringify(branch)}.`);
     return;
   }
 
-  let raw;
+  const match = /^studio\/(WO-\d{4})-[^/\s]+$/.exec(branch);
+  const wo = match?.[1];
+  console.log(`Work order: ${wo || "unavailable (invalid branch name)"}`);
+  const errors = [];
+  let owned = [];
+  let patterns = [];
   try {
-    // Read the committed manifest; an untracked/local file must never authorize a PR.
-    raw = git("show", "HEAD:.studio/scope.json");
-  } catch {
-    throw new Error(`Missing committed .studio/scope.json on ${branch}. The Director must commit {"wo":"WO-NNNN","owned":[...]} for this work order.`);
-  }
-  const match = /^studio\/(WO-\d{4})-.+$/.exec(branch);
-  if (!match) {
-    console.log(`::notice::Scope check skipped for non-work-order branch ${JSON.stringify(branch)}.`);
-    return;
+    if (!wo) {
+      throw new Error(`Invalid work-order branch ${JSON.stringify(branch)}. Use studio/WO-NNNN-* with a non-empty topic; codex/ branches are not allowed.`);
+    }
+    const scopeFile = `.studio/scope/${wo}.json`;
+    let raw;
+    try {
+      // Read only this WO's committed manifest; local or other WO files cannot authorize a PR.
+      raw = git("show", `HEAD:${scopeFile}`);
+    } catch {
+      throw new Error(`Missing committed ${scopeFile} on ${branch}. The Director must commit {"wo":"${wo}","owned":[...]} for this work order.`);
+    }
+    let scope;
+    try {
+      scope = JSON.parse(raw);
+    } catch {
+      throw new Error(`${scopeFile} must contain valid JSON.`);
+    }
+    if (Array.isArray(scope?.owned)) owned = scope.owned;
+    if (!scope || scope.wo !== wo || !Array.isArray(scope.owned) || scope.owned.length === 0) {
+      throw new Error(`${scopeFile} must declare wo ${wo} and a non-empty owned array.`);
+    }
+    patterns = owned.map(ownedPattern);
+  } catch (error) {
+    errors.push(error.message);
   }
 
-  let scope;
-  try {
-    scope = JSON.parse(raw);
-  } catch {
-    throw new Error(".studio/scope.json must contain valid JSON.");
-  }
-  if (!scope || scope.wo !== match[1] || !Array.isArray(scope.owned) || scope.owned.length === 0) {
-    throw new Error(`.studio/scope.json must declare wo ${match[1]} and a non-empty owned array.`);
-  }
-  const patterns = scope.owned.map(ownedPattern);
+  console.log("Owned globs:");
+  for (const pattern of owned) console.log(`  - ${JSON.stringify(pattern)}`);
+  if (!owned.length) console.log("  (none available)");
+  console.log("Changed files (invalid or missing scope treats every file as unowned):");
   // NUL separators preserve unusual filenames; disabling renames checks the old path too.
   const changed = git("diff", "--name-only", "--no-renames", "-z", "origin/main...HEAD").split("\0").filter(Boolean);
-  const outside = changed.filter((file) => !patterns.some((pattern) => pattern.exec(file)?.[0] === file));
-  if (outside.length) {
-    throw new Error(`${match[1]} changed files outside its owned paths:\n${outside.map((file) => `  - ${JSON.stringify(file)}`).join("\n")}`);
+  const outside = [];
+  for (const file of changed) {
+    const isOwned = patterns.some((pattern) => pattern.exec(file)?.[0] === file);
+    console.log(`  ${isOwned ? "owned" : "unowned"}: ${JSON.stringify(file)}`);
+    if (!isOwned) outside.push(file);
   }
-  console.log(`Scope check passed for ${match[1]}: ${changed.length} changed file(s) are owned.`);
+  if (!changed.length) console.log("  (none)");
+  if (outside.length) {
+    errors.push(`${wo || "Invalid work-order branch"} changed files outside its owned paths:\n${outside.map((file) => `  - ${JSON.stringify(file)}`).join("\n")}`);
+  }
+  if (errors.length) throw new Error(errors.join("\n"));
+  console.log(`Scope check passed for ${wo}: ${changed.length} changed file(s) are owned.`);
 }
 
 try {
