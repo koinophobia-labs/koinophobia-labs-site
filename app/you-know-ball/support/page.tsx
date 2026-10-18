@@ -21,7 +21,7 @@ export default function YouKnowBallSupportPage() {
         <h2>Contact</h2>
         <p>
           Email{" "}
-          <a href="mailto:koinophobia999@gmail.com">koinophobia999@gmail.com</a>{" "}
+          <a href="mailto:blake@koinophobialabs.com">blake@koinophobialabs.com</a>{" "}
           with the device, iOS version, app build if known, and a short description
           of what happened.
         </p>

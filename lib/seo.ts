@@ -1,3 +1,4 @@
+import { CONTACT_EMAIL } from "@/lib/contact";
 import { LINKS } from "@/lib/links";
 
 export const STUDIO_URL = "https://koinophobialabs.com";
@@ -48,6 +49,7 @@ export const STUDIO_SCHEMA = {
       url: `${STUDIO_URL}/`,
       logo: `${STUDIO_URL}/koi-mark.png`,
       image: `${STUDIO_URL}/koi-mark.png`,
+      email: CONTACT_EMAIL,
       founder: { "@id": PERSON_ID },
       numberOfEmployees: { "@type": "QuantitativeValue", value: 1 },
       sameAs: [LINKS.github, "https://www.instagram.com/koinophobia_labs/"],

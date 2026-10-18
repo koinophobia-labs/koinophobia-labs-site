@@ -6,6 +6,8 @@ import StartForm from "@/components/site/StartForm";
 import Link from "next/link";
 import { intakeEntry, intakeHref, type EntryQuery } from "@/lib/acquisition/entry";
 import { replyPromise } from "@/lib/products";
+import { CONTACT_EMAIL } from "@/lib/contact";
+import { LINKS } from "@/lib/links";
 import { STUDIO_URL } from "@/lib/seo";
 
 export const metadata: Metadata = {
@@ -37,6 +39,7 @@ export default async function StartPage({ searchParams }: { searchParams: Promis
                 <>Two paragraphs are plenty. You&apos;ll hear back {replyPromise}, and the reply might be a question, or &ldquo;don&apos;t build this yet.&rdquo;</>
               )}
             </p>
+            <p className="s">Prefer email? <a href={`${LINKS.email}?subject=Project%20idea`}>{CONTACT_EMAIL}</a></p>
             {readiness ? <p className="s"><strong>{freeStraightAnswerAvailable() ? "Free for my first five founders." : "Straight Answer · $250"}</strong></p> : null}
             <p className="s" style={{ "--i": 3 } as React.CSSProperties}>
               {business ? <Link href={intakeHref(source, "readiness", false)}>Founder with a PRD? Use the Straight Answer path.</Link> : <Link href={intakeHref(source, "", true)}>Running a business? Use the business intake.</Link>}

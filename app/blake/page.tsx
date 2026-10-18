@@ -4,6 +4,7 @@ import { ArrowRight, ArrowUpRight } from "lucide-react";
 import Masthead from "@/components/site/Masthead";
 import SiteFooter from "@/components/site/SiteFooter";
 import StickyStart from "@/components/site/StickyStart";
+import { CONTACT_EMAIL } from "@/lib/contact";
 import { LINKS } from "@/lib/links";
 import { STUDIO_URL, socialCard } from "@/lib/seo";
 
@@ -108,8 +109,8 @@ export default function BlakePage() {
             Work with me, or just say hello.
           </h2>
           <div className="rail rail--plain s" style={{ "--i": 1 } as React.CSSProperties}>
-            <a href="/start?src=blake" data-analytics="founder_link_click" data-analytics-label="email">
-              <b>Contact</b> · Ask Blake a question
+            <a href={LINKS.email} data-analytics="founder_link_click" data-analytics-label="email">
+              <b>Email</b> · {CONTACT_EMAIL}
             </a>
             <a href={LINKS.github} target="_blank" rel="noreferrer" data-analytics="founder_link_click" data-analytics-label="github">
               <b>GitHub</b> <ArrowUpRight size={12} aria-hidden="true" />
