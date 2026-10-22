@@ -1,0 +1,14 @@
+{
+  "wo": "WO-0151",
+  "owned": [
+    ".studio/scope/WO-0151.json",
+    "components/apps/AppPricing.tsx",
+    "components/site/AppStoreBadge.tsx",
+    "lib/app-homes.ts",
+    "lib/dev/universe.ts",
+    "lib/products.ts",
+    "lib/releases.ts",
+    "tests/app-homes.test.ts",
+    "tests/products.test.ts"
+  ]
+}
