@@ -6,6 +6,7 @@ import type { MouseEvent } from "react";
 export type Placement = "home" | "shipped" | "product_hero" | "product_end" | "mobile_row" | "lab" | "work_with_me";
 
 const appNames: Record<string, string> = {
+  dreamcatcher: "Dreamcatcher",
   trendi: "Trendi",
   "forget-about-it": "Forget About It",
   "career-forge": "Way In",

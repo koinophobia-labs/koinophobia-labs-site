@@ -1,6 +1,6 @@
 import { appHomes } from "@/lib/app-homes";
 import { priceLine } from "@/lib/app-prices";
-import { forgetRelease, oldDogRelease, preachingRelease, trendiRelease, wayInRelease } from "@/lib/releases";
+import { dreamcatcherRelease, forgetRelease, oldDogRelease, preachingRelease, trendiRelease, wayInRelease } from "@/lib/releases";
 import {
   getProduct,
   products as universe,
@@ -77,6 +77,16 @@ export type SiteMeta = {
 };
 
 const site: Record<string, SiteMeta> = {
+  dreamcatcher: {
+    section: "shipped",
+    href: "/dreamcatcher",
+    blurb: appHomes.dreamcatcher.tagline,
+    platforms: appHomes.dreamcatcher.platforms,
+    chip: "Live",
+    notYetShort: "",
+    screens: [],
+    appStore: { ...dreamcatcherRelease, priceLine: priceLine("dreamcatcher") },
+  },
   trendi: {
     section: "shipped",
     href: "/trendi",
@@ -261,6 +271,7 @@ const ordered = [
   "you-know-ball",
   "old-dog",
   "preaching-to-the-choir",
+  "dreamcatcher",
 ];
 
 export const siteProducts: SiteProduct[] = ordered.map((slug) => {

@@ -1,5 +1,5 @@
 import { wayInPurchaseRequirement, type AppSlug } from "./app-prices";
-import { forgetRelease, oldDogRelease, preachingRelease, trendiRelease, wayInRelease } from "./releases";
+import { dreamcatcherRelease, forgetRelease, oldDogRelease, preachingRelease, trendiRelease, wayInRelease } from "./releases";
 
 // Blake controls publication. Never enable prerelease content via deployment environment variables.
 // Blake 2026-10-15 (D-0189 addendum): "Publish Coming-soon pages now" for Teacher's Pet and Dreamcatcher.
@@ -109,7 +109,7 @@ export const appHomes: Record<AppSlug, AppHome> = {
   dreamcatcher: {
     slug: "dreamcatcher", tagline: "Turn half-remembered dreams into words you can keep.", founderNote: "The fear of an ordinary life, and what I did about it.", name: "Dreamcatcher", category: "A night journal", promise: "Catch the dreams you remember.",
     intro: "Your exact words. A place to return to them in the morning.",
-    platforms: "iPhone · Apple Watch", coming: "Coming to the App Store", prerelease: true,
+    platforms: "iPhone · Apple Watch", store: dreamcatcherRelease.url,
     colors: { paper: "#12162C", ink: "#F1E6D7", accent: "#E7B76A", surface: "#262F57", muted: "#D8CDBF" },
     featureHeading: "Your exact words.",
     features: [
@@ -117,7 +117,7 @@ export const appHomes: Record<AppSlug, AppHome> = {
       { title: "Dream signs", body: "A place for the signs you notice in your dreams." },
       { title: "Reality checks", body: "Return to the Checks view alongside your journal and signs." },
     ], screens: ["Your dream journal", "Dream signs", "Reality checks"],
-    free: "The Lucid Toolkit is a separate one-time purchase, pending review.",
+    free: "The Lucid Toolkit is a separate one-time purchase.",
     support: "/dreamcatcher/support", privacy: "/dreamcatcher/privacy",
   },
 };

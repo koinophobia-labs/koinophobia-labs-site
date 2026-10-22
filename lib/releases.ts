@@ -29,3 +29,10 @@ export const preachingRelease = {
   "verifiedAt": "2026-10-15",
   "releasedAt": "2026-10-15"
 } as const;
+// WO-0151: public iTunes lookup verified by Blake on 2026-10-21.
+export const dreamcatcherRelease = {
+  "url": "https://apps.apple.com/us/app/dreamcatcher-night-journal/id6821750717",
+  "version": "1.0",
+  "verifiedAt": "2026-10-21",
+  "releasedAt": "2026-10-21"
+} as const;

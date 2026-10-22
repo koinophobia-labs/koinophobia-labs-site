@@ -4,6 +4,8 @@ import path from "node:path";
 import test from "node:test";
 import { appHomes } from "../lib/app-homes";
 import { getProduct } from "../lib/dev/universe";
+import { priceLine } from "../lib/app-prices";
+import { dreamcatcherRelease } from "../lib/releases";
 import {
   engagementShapes,
   labProducts,
@@ -20,7 +22,7 @@ const exists = (rel: string) => fs.existsSync(path.join(root, rel));
 const read = (rel: string) => fs.readFileSync(path.join(root, rel), "utf8");
 
 test("every shipped product is public in the registry, links to the App Store, and uses only authentic screens", () => {
-  assert.equal(shippedProducts.length, 5);
+  assert.equal(shippedProducts.length, 6);
   for (const product of shippedProducts) {
     assert.equal(product.stage, "public", `${product.name} is shipped but not stage public`);
     assert.equal(product.reach, "public");
@@ -39,6 +41,25 @@ test("every shipped product is public in the registry, links to the App Store, a
       assert.equal(product.href, product.appStore!.url, "listing-only cards open the verified store listing");
     }
   }
+});
+
+test("Dreamcatcher is shipped with its verified free App Store release; Teacher's Pet stays in the lab", () => {
+  const dreamcatcher = shippedProducts.find(product => product.slug === "dreamcatcher");
+  assert.ok(dreamcatcher);
+  assert.equal(dreamcatcher.stage, "public");
+  assert.equal(dreamcatcher.verifiedAt, "2026-10-21");
+  assert.deepEqual(dreamcatcher.appStore, {
+    url: "https://apps.apple.com/us/app/dreamcatcher-night-journal/id6821750717",
+    version: "1.0",
+    verifiedAt: "2026-10-21",
+    releasedAt: "2026-10-21",
+    priceLine: priceLine("dreamcatcher"),
+  });
+  assert.equal(dreamcatcher.appStore.url, dreamcatcherRelease.url);
+  assert.match(dreamcatcher.appStore.priceLine, /^Free to download/);
+  assert.equal(getProduct("dreamcatcher")?.actions[0].href, dreamcatcherRelease.url);
+  assert.ok(labProducts.some(product => product.slug === "teachers-pet"));
+  assert.ok(!shippedProducts.some(product => product.slug === "teachers-pet"));
 });
 
 test("every demo clip is cut from a QA-verified master and ships both renditions and a poster", () => {

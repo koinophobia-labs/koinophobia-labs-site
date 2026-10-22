@@ -12,6 +12,7 @@ import AppStoreBadge from "../components/site/AppStoreBadge";
 import { appHomes, APP_PAGES_PRERELEASE, publicAppHomes, showPrereleaseAppPages } from "../lib/app-homes";
 import { appPrices, priceLine } from "../lib/app-prices";
 import { shippedProducts } from "../lib/products";
+import { dreamcatcherRelease } from "../lib/releases";
 import sitemap from "../app/sitemap";
 
 const root = path.resolve(import.meta.dirname, "..");
@@ -40,10 +41,21 @@ test("no page or product copy contains the false no-purchases claim", () => {
 test("coming-soon homes are public by Blake's decision, without App Store buttons", () => {
   assert.equal(APP_PAGES_PRERELEASE, true);
   assert.deepEqual(publicAppHomes().map(app => app.slug).sort(), ["dreamcatcher", "forget-about-it", "old-dog", "preaching-to-the-choir", "teachers-pet", "trendi", "way-in"]);
-  for (const slug of ["teachers-pet", "dreamcatcher"] as const) assert.equal(appHomes[slug].store, undefined, `${slug} must not link to the App Store before approval`);
+  assert.equal(appHomes["teachers-pet"].store, undefined, "Teacher's Pet must not link to the App Store before approval");
+  assert.equal(appHomes["teachers-pet"].prerelease, true);
   assert.equal(appHomes["old-dog"].platforms, "Mac");
   assert.equal(appHomes["teachers-pet"].coming, "Coming to the Mac App Store");
-  assert.equal(appHomes.dreamcatcher.coming, "Coming to the App Store");
+});
+test("Dreamcatcher's live page renders its real store button and free download pricing", () => {
+  const app = appHomes.dreamcatcher;
+  assert.equal(app.store, dreamcatcherRelease.url);
+  assert.equal(app.prerelease, undefined);
+  assert.equal(app.coming, undefined);
+  const $ = load(renderToStaticMarkup(createElement(appWorlds.dreamcatcher)));
+  assert.equal($("a[aria-label='Download Dreamcatcher on the App Store']").attr("href"), dreamcatcherRelease.url);
+  assert.equal($(".app-home__free h3").text(), "Free to download");
+  assert.doesNotMatch($.text(), /coming to|when released|pending review|pending App Review|planned pricing|not available to buy/i);
+  assert.ok(sitemap().some(entry => entry.url.endsWith("/dreamcatcher")));
 });
 test("store badge accessible labels name each live app and the correct store", () => {
   for (const app of Object.values(appHomes).filter(app => app.store)) {

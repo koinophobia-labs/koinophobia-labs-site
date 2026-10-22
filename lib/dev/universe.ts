@@ -1,5 +1,5 @@
 import { LINKS } from "@/lib/links";
-import { trendiRelease, forgetRelease, wayInRelease } from "@/lib/releases";
+import { dreamcatcherRelease, trendiRelease, forgetRelease, wayInRelease } from "@/lib/releases";
 
 // Single source of truth for the koinophobia.dev product universe.
 //
@@ -183,6 +183,31 @@ export type Product = {
 };
 
 export const products: Product[] = [
+  {
+    slug: "dreamcatcher",
+    name: "Dreamcatcher",
+    tagline: "Turn half-remembered dreams into words you can keep.",
+    identity: { theme: "memory", register: "iPhone · Apple Watch" },
+    reach: "public",
+    stage: "public",
+    status: `Dreamcatcher: Night Journal ${dreamcatcherRelease.version} is public on the App Store, released ${dreamcatcherRelease.releasedAt}`,
+    verifiedAt: dreamcatcherRelease.verifiedAt,
+    evidence: [
+      {
+        claim: `Dreamcatcher: Night Journal is Free to download, version ${dreamcatcherRelease.version}, released ${dreamcatcherRelease.releasedAt}`,
+        source: `${dreamcatcherRelease.url} — public iTunes lookup for app 6821750717, verified by Blake ${dreamcatcherRelease.verifiedAt}`,
+      },
+    ],
+    problem: "",
+    thesis: "",
+    state: [`Version ${dreamcatcherRelease.version} is available on the App Store.`],
+    decisions: [],
+    learned: "",
+    actions: [
+      { label: "View on the App Store", href: dreamcatcherRelease.url, external: true, primary: true },
+    ],
+    notYet: ["Usage metrics have not been verified here.", "Purchase activity has not been verified here."],
+  },
   {
     slug: "career-forge",
     name: "Way In",
