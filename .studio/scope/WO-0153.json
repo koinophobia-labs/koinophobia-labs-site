@@ -1,0 +1,7 @@
+{
+  "wo": "WO-0153",
+  "owned": [
+    ".studio/scope/WO-0153.json",
+    "app/dreamcatcher/privacy/page.tsx"
+  ]
+}

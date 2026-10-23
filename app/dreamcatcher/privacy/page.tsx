@@ -19,7 +19,7 @@ export default function DreamcatcherPrivacyPage() {
       </Link>
       <p className="kicker kicker-orange">Dreamcatcher</p>
       <h1>Privacy Policy</h1>
-      <p className="legal-note">Effective October 14, 2026 · Dreamcatcher version 1.0</p>
+      <p className="legal-note">Effective October 23, 2026 · Dreamcatcher version 2.0</p>
 
       <section>
         <h2>Your journal on your devices</h2>
@@ -42,6 +42,37 @@ export default function DreamcatcherPrivacyPage() {
           Journal files use iOS protection that makes them unavailable until the first unlock after an iPhone
           restart. Voice recordings can’t be opened while your iPhone is locked, except a recording that’s
           already open, such as one in progress.
+        </p>
+      </section>
+
+      <section>
+        <h2>Apple Health sleep data</h2>
+        {/* H01 */}
+        <p>
+          Connecting Apple Health is optional. With your permission, Dreamcatcher reads sleep analysis,
+          including recorded awake, core, deep and REM intervals, to show your sleep timeline alongside dream
+          capture times, estimate a future REM window, and show associations between recorded sleep and journal
+          recall. It never writes to Health.
+        </p>
+        {/* H02 */}
+        <p>
+          Health sleep data and the insights calculated from it are processed only on your iPhone. Dreamcatcher
+          does not share them with Koinophobia Labs, advertising or analytics services, or any other party, and
+          does not store them in iCloud, journal backups, or journal exports. Sleep timelines and statistics are
+          kept in memory and reloaded from Health. A wake time you choose is scheduled locally through
+          Apple’s AlarmKit; alarm content contains no sleep stages or journal text.
+        </p>
+        {/* H03 */}
+        <p>
+          You can revoke sleep access in Settings → Health → Data Access &amp; Devices → Dreamcatcher.
+          Revoking access does not stop dream capture. Health may grant limited history; Dreamcatcher uses at
+          most the recent 30 days and explains when a limited-access boundary is reported.
+        </p>
+        {/* H04 */}
+        <p>
+          Sleep stages arrive after waking. REM windows are predictions from past nights, not live REM
+          detection, medical advice, or a promise of lucid dreaming. A capture timestamp does not prove when a
+          dream happened.
         </p>
       </section>
 
