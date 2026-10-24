@@ -2,6 +2,7 @@
 
 import { track } from "@vercel/analytics";
 import { FormEvent, useEffect, useRef, useState } from "react";
+import { appStoreBudgets, appStoreFields, validateAppStoreFields } from "@/lib/acquisition/app-store-intake";
 
 type State =
   | { status: "idle" }
@@ -35,12 +36,13 @@ function replyWeekday() {
 }
 
 /**
- * Six fields, no service picker. Posts to the existing /api/intake pipeline
+ * Posts founder, business and App Store inquiries to the existing /api/intake pipeline
  * (origin check, honeypot, rate limit, redaction, idempotency, lead store,
  * email) as the "start" variant. The draft survives a reload until sent.
  */
 export default function StartForm({ entry = "start", readiness = false, source = "", offer = "", business = false }: { entry?: string; readiness?: boolean; source?: string; offer?: string; business?: boolean }) {
   const audit = offer === "audit";
+  const appStore = offer === "app-store";
   const draftKey = `${DRAFT_KEY}:${business ? "business" : "founder"}:${offer}`;
   const [state, setState] = useState<State>({ status: "idle" });
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -89,7 +91,11 @@ export default function StartForm({ entry = "start", readiness = false, source =
     const idea = String(data.get("idea") || "").trim();
     const email = String(data.get("email") || "").trim();
     const next: Record<string, string> = {};
-    if (idea.length < (business ? 5 : 20)) next.idea = "A sentence or two is enough, but it needs to be more than a title.";
+    if (idea.length < (business || appStore ? 5 : 20)) next.idea = "A sentence or two is enough, but it needs to be more than a title.";
+    if (appStore) {
+      Object.assign(next, validateAppStoreFields(data));
+      if (!String(data.get("name") || "").trim()) next.name = "Enter your name.";
+    }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) next.email = "That doesn't look like an email address.";
     if (business && !String(data.get("businessName") || "").trim()) next.businessName = "Enter your company.";
     if (business && !String(data.get("role") || "").trim()) next.role = "Enter your role.";
@@ -113,6 +119,7 @@ export default function StartForm({ entry = "start", readiness = false, source =
     body.set("timeline", String(data.get("when") || "Not sure yet"));
     body.set("budgetRange", String(data.get("budget") || "Let's talk"));
     body.set("companyWebsite", String(data.get("companyWebsite") || ""));
+    if (appStore) for (const field of appStoreFields) body.set(field.name, String(data.get(field.name) || "").trim());
     let response: Response;
     try {
       response = await fetch("/api/intake", { method: "POST", body });
@@ -138,7 +145,7 @@ export default function StartForm({ entry = "start", readiness = false, source =
     } catch {
       /* ignore */
     }
-    track("inquiry_submit", { budget_band: String(data.get("budget") || ""), timeline_band: String(data.get("when") || "") });
+    track("inquiry_submit", { budget_band: String(data.get("budget") || ""), timeline_band: appStore ? "App Store inquiry" : String(data.get("when") || "") });
     setState({ status: "sent", weekday: replyWeekday() });
   }
 
@@ -158,6 +165,25 @@ export default function StartForm({ entry = "start", readiness = false, source =
 
   return (
     <form ref={formRef} className="glass form" onSubmit={onSubmit} onInput={saveDraft} noValidate>
+      {appStore ? <>
+        <p id="app-store-privacy">No passwords, Apple IDs, API keys or customer data. Paste only rejection text with private information removed. Access is arranged later by role invite.</p>
+        {appStoreFields.map((field) => (
+          <div className={`field${errors[field.name] ? " field--error" : ""}`} key={field.name}>
+            <label htmlFor={`start-${field.name}`}>{field.label}</label>
+            {field.options ? (
+              <select id={`start-${field.name}`} name={field.name} defaultValue="" required={!field.optional} aria-invalid={Boolean(errors[field.name])} aria-describedby={errors[field.name] ? `start-${field.name}-err` : undefined}>
+                <option value="" disabled>Choose an option</option>
+                {field.options.map((option) => <option key={option}>{option}</option>)}
+              </select>
+            ) : field.multiline ? (
+              <textarea id={`start-${field.name}`} name={field.name} maxLength={field.maxLength} aria-invalid={Boolean(errors[field.name])} aria-describedby={`app-store-privacy${errors[field.name] ? ` start-${field.name}-err` : ""}`} />
+            ) : (
+              <input id={`start-${field.name}`} name={field.name} maxLength={field.maxLength} required={!field.optional} aria-invalid={Boolean(errors[field.name])} aria-describedby={errors[field.name] ? `start-${field.name}-err` : undefined} />
+            )}
+            {errors[field.name] ? <span className="field__err" id={`start-${field.name}-err`}>{errors[field.name]}</span> : null}
+          </div>
+        ))}
+      </> : null}
       {business ? <>
         <div className="field"><label htmlFor="start-company">Company</label><input id="start-company" name="businessName" autoComplete="organization" maxLength={160} required />{errors.businessName ? <span className="field__err">{errors.businessName}</span> : null}</div>
         <div className="field"><label htmlFor="start-role">Your role</label><input id="start-role" name="role" autoComplete="organization-title" maxLength={120} required />{errors.role ? <span className="field__err">{errors.role}</span> : null}</div>
@@ -165,19 +191,22 @@ export default function StartForm({ entry = "start", readiness = false, source =
         <div className="field"><label htmlFor="start-phone">Phone (required for a call or text)</label><input id="start-phone" name="phone" type="tel" autoComplete="tel" maxLength={40}/>{errors.phone ? <span className="field__err">{errors.phone}</span> : null}</div>
       </> : null}
       <div className={`field${errors.idea ? " field--error" : ""}`}>
-        <label htmlFor="start-idea">{business ? "The problem in one line" : readiness ? "What are we building?" : "What do you want to exist?"}</label>
-        <textarea id="start-idea" name="idea" required maxLength={4000} placeholder={business ? "For example: quotes go out, but nobody remembers to follow up." : readiness ? "Summarize the product, the customer and what you need implemented." : "An app for… a tool that… a thing nobody has built because…"} aria-describedby={errors.idea ? "start-idea-err" : undefined} />
+        <label htmlFor="start-idea">{appStore ? "What does the app do? (one line)" : business ? "The problem in one line" : readiness ? "What are we building?" : "What do you want to exist?"}</label>
+        <textarea id="start-idea" name="idea" required maxLength={4000} placeholder={appStore ? "An app that helps people…" : business ? "For example: quotes go out, but nobody remembers to follow up." : readiness ? "Summarize the product, the customer and what you need implemented." : "An app for… a tool that… a thing nobody has built because…"} aria-describedby={errors.idea ? "start-idea-err" : undefined} />
         {errors.idea ? (
           <span className="field__err" id="start-idea-err">
             {errors.idea}
           </span>
         ) : null}
       </div>
-      <div className="field">
+      {!appStore ? <div className="field">
         <label htmlFor="start-today">{business ? "What tools or process do you use today? (optional)" : readiness ? "Share your PRD, spec, Figma or prototype" : "What exists today?"}</label>
         <textarea id="start-today" name="today" maxLength={2000} placeholder={readiness ? "Paste a link or a short excerpt of what you have." : "Nothing yet is a fine answer."} />
-      </div>
-      <div className="field">
+      </div> : null}
+      {appStore ? <div className="field">
+        <label htmlFor="start-deadline">Deadline (optional)</label>
+        <input id="start-deadline" name="when" maxLength={80} placeholder="A date, a window, or no deadline" />
+      </div> : <div className="field">
         <span className="field__label">{readiness ? "Timeline" : "When do you need it?"}</span>
         <div className="chips" role="group" aria-label="Timeline">
           {WHEN.map((option) => (
@@ -187,13 +216,13 @@ export default function StartForm({ entry = "start", readiness = false, source =
             </label>
           ))}
         </div>
-      </div>
+      </div>}
       <div className="field">
         <span className="field__label">{readiness ? "Build budget range" : "Budget range"}</span>
         <div className="chips" role="group" aria-label="Budget">
-          {(audit ? [{ value: "$250 audit", label: "$250 audit" }, { value: "Not sure yet", label: "Not sure yet" }] : business ? [{ value: "Not sure yet", label: "Not sure yet" }] : BUDGET).map((option) => (
+          {(appStore ? appStoreBudgets.map((value) => ({ value, label: value })) : audit ? [{ value: "$250 audit", label: "$250 audit" }, { value: "Not sure yet", label: "Not sure yet" }] : business ? [{ value: "Not sure yet", label: "Not sure yet" }] : BUDGET).map((option) => (
             <label key={option.value}>
-              <input type="radio" name="budget" value={option.value} defaultChecked={option.value === (audit ? "$250 audit" : business ? "Not sure yet" : "Let's talk")} />
+              <input type="radio" name="budget" value={option.value} defaultChecked={option.value === (appStore ? "Not sure yet" : audit ? "$250 audit" : business ? "Not sure yet" : "Let's talk")} />
               <span>{option.label}</span>
             </label>
           ))}
@@ -210,7 +239,8 @@ export default function StartForm({ entry = "start", readiness = false, source =
       </div>
       <div className="field">
         <label htmlFor="start-name">Name</label>
-        <input id="start-name" type="text" name="name" autoComplete="name" maxLength={120} />
+        <input id="start-name" type="text" name="name" autoComplete="name" maxLength={120} required={appStore} aria-invalid={Boolean(errors.name)} aria-describedby={errors.name ? "start-name-err" : undefined} />
+        {errors.name ? <span className="field__err" id="start-name-err">{errors.name}</span> : null}
       </div>
       {/* Honeypot: real people never see this. */}
       <div style={{ position: "absolute", left: "-10000px", width: 1, height: 1, overflow: "hidden" }} aria-hidden="true">
@@ -219,7 +249,7 @@ export default function StartForm({ entry = "start", readiness = false, source =
       </div>
       <div className="actions">
         <button className="btn btn--primary ai" type="submit" disabled={state.status === "submitting"}>
-          {state.status === "submitting" ? "Sending…" : audit ? "Request an audit" : business ? "Send to Blake" : readiness ? "Request my free Straight Answer" : "Send it"}
+          {state.status === "submitting" ? "Sending…" : appStore ? "Send my app details" : audit ? "Request an audit" : business ? "Send to Blake" : readiness ? "Request my free Straight Answer" : "Send it"}
         </button>
         {state.status === "error" ? (
           <p className="form__status form__status--err" role="alert">
