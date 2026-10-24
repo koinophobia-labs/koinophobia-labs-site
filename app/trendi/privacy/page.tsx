@@ -110,8 +110,9 @@ export default function TrendiPrivacyPage() {
           </li>
         </ul>
         <p>
-          A shared item waits on your iPhone for up to 24 hours, until you open
-          Trendi, and it is excluded from backups. Trendi never reads your
+          A shared item waits on your iPhone until you next open Trendi or share
+          something new, and Trendi discards it once it&apos;s more than 24 hours
+          old. It is excluded from backups. Trendi never reads your
           clipboard in the background; it receives only what you paste or share.
         </p>
         <p>
