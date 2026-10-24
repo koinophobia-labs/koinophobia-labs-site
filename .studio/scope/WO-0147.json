@@ -1,0 +1,32 @@
+{
+  "wo": "WO-0147",
+  "owned": [
+    ".studio/scope/WO-0147.json",
+    "app/blake/page.tsx",
+    "app/dreamcatcher/privacy/page.tsx",
+    "app/dreamcatcher/support/page.tsx",
+    "app/forget-about-it/privacy/page.tsx",
+    "app/forget-about-it/support/page.tsx",
+    "app/old-dog/privacy/page.tsx",
+    "app/old-dog/support/page.tsx",
+    "app/page.tsx",
+    "app/preaching-to-the-choir/privacy/page.tsx",
+    "app/preaching-to-the-choir/support/page.tsx",
+    "app/start/page.tsx",
+    "app/trendi/privacy/page.tsx",
+    "app/trendi/support/page.tsx",
+    "app/way-in/privacy/page.tsx",
+    "app/way-in/support/page.tsx",
+    "app/way-in/terms/page.tsx",
+    "app/you-know-ball/privacy/page.tsx",
+    "app/you-know-ball/safety/page.tsx",
+    "app/you-know-ball/support/page.tsx",
+    "components/site/SiteFooter.tsx",
+    "lib/contact.ts",
+    "lib/resume.json",
+    "lib/seo.ts",
+    "public/resume/Blake-Taylor-Resume.pdf",
+    "tests/legal-pages.test.ts",
+    "vercel.json"
+  ]
+}

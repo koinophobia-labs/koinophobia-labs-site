@@ -8,6 +8,8 @@ import { LabCard, ProductCard } from "@/components/site/Cards";
 import Masthead from "@/components/site/Masthead";
 import NowStrip from "@/components/site/NowStrip";
 import StickyStart from "@/components/site/StickyStart";
+import { CONTACT_EMAIL } from "@/lib/contact";
+import { LINKS } from "@/lib/links";
 import { CLIPS, DESTINATIONS } from "@/lib/koi/journey";
 import {
   engagementShapes,
@@ -313,6 +315,7 @@ export default async function Home() {
                   <Link href="/blake">Blake</Link>
                   <Link href="/work-with-me">Work with me</Link>
                   <Link href="/privacy">Privacy</Link>
+                  <a href={LINKS.email} data-analytics="founder_link_click" data-analytics-label="email">{CONTACT_EMAIL}</a>
                 </nav>
                 <span className="kw__footer-sign">Fear ordinary.</span>
               </footer>

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { CONTACT_EMAIL } from "@/lib/contact";
 import { LINKS } from "@/lib/links";
 import { NAV } from "@/lib/nav";
 
@@ -14,6 +15,9 @@ export default function SiteFooter() {
         <Link href="/privacy">Privacy</Link>
       </nav>
       <nav aria-label="Social">
+        <a href={LINKS.email} data-analytics="founder_link_click" data-analytics-label="email">
+          {CONTACT_EMAIL}
+        </a>
         <a href={LINKS.github} rel="noreferrer" target="_blank" data-analytics="founder_link_click" data-analytics-label="github">
           GitHub
         </a>

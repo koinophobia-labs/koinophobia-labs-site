@@ -76,7 +76,7 @@ export default function YouKnowBallPrivacyPage() {
         <h2>Contact</h2>
         <p>
           Questions or privacy requests can be sent to{" "}
-          <a href="mailto:koinophobia999@gmail.com">koinophobia999@gmail.com</a>.
+          <a href="mailto:blake@koinophobialabs.com">blake@koinophobialabs.com</a>.
         </p>
       </section>
 
