@@ -251,6 +251,16 @@ html:has(.app-home) { scroll-behavior: auto; }
 .toolkit ul { list-style: none; max-width: 650px; padding: 25px 36px; margin: 40px auto 25px; background: #262F57; border: 1px solid #A99BD666; text-align: left; }
 .toolkit li { padding: 18px 0; border-bottom: 1px solid #A99BD666; font-size: 25px; }
 .toolkit li:last-child { border: 0; }
+/* Dreamcatcher 2.0 (WO-0153): the night-sky home in the hero, Health and capture-anywhere phases. */
+.nightstand-phone { width: min(24vw,290px); }
+.nightstand-phone figcaption { display: none; }
+.last-night { display: grid; grid-template-columns: 1.4fr 1fr; gap: 100px; align-items: center; background: #141A2E; }
+.last-night .world-shot { max-width: 360px; }
+.anywhere { text-align: center; background: #0B0E1F; border-top: 1px solid #A99BD633; }
+.anywhere p { max-width: 640px; margin-inline: auto; }
+.dream-honest { margin-top: 28px; padding-left: 18px; border-left: 2px solid #E7B76A; font-size: 17px !important; color: var(--app-muted); }
+.toolkit .dream-honest { display: inline-block; text-align: left; }
+.toolkit .world-shot { width: min(100%,360px); margin: 10px auto 35px; }
 .app-home--dreamcatcher .app-home__price-card { border-top: 2px solid #E7B76A; }
 /* Motion is interaction / entry / scrolling only; the resting state is still. */
 @media (prefers-reduced-motion: no-preference) {
@@ -288,7 +298,7 @@ html:has(.app-home) { scroll-behavior: auto; }
   .reading-sidebar { padding-inline: 24px; }
   .catalog-cards { grid-template-columns: repeat(3,1fr); }
   .dream-title { max-width: 65%; }
-  .daytime, .tonight { gap: 45px; }
+  .daytime, .tonight, .last-night { gap: 45px; }
   .app-home__other > div { grid-template-columns: repeat(3,1fr); }
 }
 @media (max-width: 650px) {
@@ -404,7 +414,7 @@ html:has(.app-home) { scroll-behavior: auto; }
   .nightstand-phone { position: relative; width: 72%; max-width: 300px; right: auto; bottom: auto; margin: 45px 0 0 auto; }
   .dream-phase { padding: 65px 24px; }
   .dream-phase h2 { font-size: 60px; }
-  .daytime, .tonight { grid-template-columns: 1fr; gap: 40px; }
+  .daytime, .tonight, .last-night { grid-template-columns: 1fr; gap: 40px; }
   .dream-phase .world-shot { width: 85%; margin-inline: auto; }
   .toolkit ul { padding: 15px 22px; }
   .toolkit li { font-size: 21px; }

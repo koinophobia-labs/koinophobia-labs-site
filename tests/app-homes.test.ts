@@ -100,7 +100,9 @@ test("all seven homes have original assets and three to five sourced features", 
   for (const app of Object.values(appHomes)) {
     assert.ok(app.features.length >= 3 && app.features.length <= 5);
     assert.ok(fs.existsSync(path.join(root, `public/apps/${app.slug}/icon.png`)));
-    app.screens.forEach((_, i) => assert.ok(fs.existsSync(path.join(root, `public/apps/${app.slug}/shot-${i + 1}.png`))));
+    if (app.shots) assert.equal(app.shots.length, app.screens.length, `${app.slug}: one shot file per screen caption`);
+    app.screens.forEach((_, i) => assert.ok(fs.existsSync(path.join(root, `public/apps/${app.slug}/${app.shots?.[i] ?? `shot-${i + 1}.png`}`))));
+    for (const file of app.shots ?? []) assert.ok(fs.statSync(path.join(root, `public/apps/${app.slug}/${file}`)).size <= 300 * 1024, `${file} is over 300 KB`);
     assert.ok(!app.screens.some(caption => /device frame/i.test(caption)));
   }
 });
@@ -140,7 +142,9 @@ test("rejected imagery and claims cannot reappear in world output", () => {
   assert.ok(old("img[src*='shot-5-crop']").length);
   assert.equal(old(".catalog-cards article").length, 10);
   const dream = render("dreamcatcher");
-  dream(".world-shot img").each((_, el) => assert.match(dream(el).attr("src")!, /shot-[123]-crop/));
+  // Only the real 2.0 App Store screenshots (WO-0153) may appear.
+  dream(".world-shot img").each((_, el) => assert.match(dream(el).attr("src")!, /v2-shot-[1-6]\.webp/));
+  assert.equal(dream(".world-shot").length, 6);
   assert.equal(dream(".dream-hoop path").length, 8);
   assert.equal(dream(".dream-hoop polygon").length, 2);
   assert.equal(dream(".morning").length, 1);
@@ -152,6 +156,20 @@ test("rejected imagery and claims cannot reappear in world output", () => {
   assert.match(school.text(), /one supervised check—not a mastery grade or proof of learning/);
   assert.doesNotMatch(render("trendi").text(), /Take Two|viral|auto-post/);
   assert.doesNotMatch(render("preaching-to-the-choir").text(), /unlock|premium|trial|nothing leaves the phone/i);
+});
+test("Dreamcatcher 2.0 copy stays inside CREATIVE.md and D-0217", () => {
+  const dream = load(renderToStaticMarkup(createElement(appWorlds.dreamcatcher)));
+  const text = dream.text();
+  assert.match(text, /Dreamcatcher: Lucid Dreams/);
+  assert.match(text, /Dream journal, caught at 3AM/);
+  assert.match(text, /Apple Health is optional/);
+  assert.match(text, /never leaves it/);
+  assert.match(text, /not live detection or medical advice/);
+  // REM only as Health stage labels or predicted windows (D-0210 amendment).
+  assert.doesNotMatch(text, /detects REM|live REM|sleep tracking|smart alarm|sleep quality|\bAI\b|subscription/);
+  assert.deepEqual(dream(".toolkit li").map((_, el) => dream(el).text()).get(), ["Reality-check program", "Wake-back-to-bed at your predicted REM windows", "Dream-sign insights", "Progress trends", "Recall vs sleep insights"]);
+  assert.ok(dream(`a[href='${dreamcatcherRelease.url}']`).length >= 1);
+  assert.match(dreamcatcherRelease.url, /id6821750717$/);
 });
 test("each subscription option carries renewal text and every original price remains exact", () => {
   for (const app of Object.values(appHomes)) {

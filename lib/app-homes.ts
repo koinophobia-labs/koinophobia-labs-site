@@ -13,6 +13,8 @@ export type AppHome = {
   landscape?: boolean;
   colors: { paper: string; ink: string; accent: string; surface: string; muted: string };
   tagline: string; featureHeading: string; features: { title: string; body: string }[]; screens: string[]; free: string; founderNote?: string;
+  /** Optional per-screen files in public/apps/<slug>/, one per entry in `screens`. Defaults to shot-<n>.png. */
+  shots?: string[];
   support: string; privacy: string;
 };
 export const appHomes: Record<AppSlug, AppHome> = {
@@ -107,17 +109,21 @@ export const appHomes: Record<AppSlug, AppHome> = {
     support: "https://teachers-pet-school-sync.teachers-pet-school-sync.workers.dev/support", privacy: "https://teachers-pet-school-sync.teachers-pet-school-sync.workers.dev/privacy",
   },
   dreamcatcher: {
-    slug: "dreamcatcher", tagline: "Turn half-remembered dreams into words you can keep.", founderNote: "The fear of an ordinary life, and what I did about it.", name: "Dreamcatcher", category: "A night journal", promise: "Catch the dreams you remember.",
-    intro: "Your exact words. A place to return to them in the morning.",
+    // 2.0 copy (WO-0153): every line traces to projects/dreamcatcher/release/2.0-LISTING.md, CREATIVE.md (D-0210 REM rule) and D-0217 (free vs Toolkit).
+    // Store name "Dreamcatcher: Lucid Dreams", subtitle "Dream journal, caught at 3AM". Merge only after 2.0 is live (CREATIVE.md 2.0 claim rule).
+    slug: "dreamcatcher", tagline: "Turn half-remembered dreams into words you can keep.", founderNote: "The fear of an ordinary life, and what I did about it.", name: "Dreamcatcher", category: "Dream journal, caught at 3AM", promise: "Catch the dreams you remember.",
+    intro: "Catch your dreams. See the night they came from. A dream journal for iPhone, with an optional Apple Health sleep timeline that stays on your iPhone.",
     platforms: "iPhone · Apple Watch", store: dreamcatcherRelease.url,
     colors: { paper: "#12162C", ink: "#F1E6D7", accent: "#E7B76A", surface: "#262F57", muted: "#D8CDBF" },
-    featureHeading: "Your exact words.",
+    featureHeading: "Your night, with your dreams.",
     features: [
-      { title: "A dream journal", body: "Keep the dreams you remember in your own words." },
-      { title: "Dream signs", body: "A place for the signs you notice in your dreams." },
-      { title: "Reality checks", body: "Return to the Checks view alongside your journal and signs." },
-    ], screens: ["Your dream journal", "Dream signs", "Reality checks"],
-    free: "The Lucid Toolkit is a separate one-time purchase.",
+      { title: "Your night, with your dreams", body: "Connect Apple Health to see last night's sleep stages, with every dream pinned where you caught it." },
+      { title: "Catch from anywhere", body: "Use Siri, the Action button or a Lock Screen control. Locked capture is write-only." },
+      { title: "Night capture", body: "One press opens a dark, dimmed screen that's already listening. Your words are saved as you caught them." },
+      { title: "Lucid Toolkit", body: "A one-time purchase: the reality-check program, wake-back-to-bed timed to your predicted REM windows, dream-sign insights, progress trends, and recall vs sleep insights." },
+    ], screens: ["Last night, with dreams pinned", "Connect Apple Health (optional)", "All nights", "Trends (Lucid Toolkit)", "Reality checks", "Dream signs"],
+    shots: ["v2-shot-1.webp", "v2-shot-2.webp", "v2-shot-3.webp", "v2-shot-4.webp", "v2-shot-5.webp", "v2-shot-6.webp"],
+    free: "Free: night capture, the journal, morning review, dream signs, search, export and the Apple Health sleep timeline. The Lucid Toolkit is a separate one-time purchase.",
     support: "/dreamcatcher/support", privacy: "/dreamcatcher/privacy",
   },
 };
