@@ -271,6 +271,9 @@ export default async function Home() {
                 <Link className="kw__btn kw__btn--ghost ai" href="/work-with-me">
                   How engagements work <ArrowUpRight size={15} aria-hidden="true" />
                 </Link>
+                <Link className="kw__btn kw__btn--ghost ai" href="/work-with-me#app-store-packages">
+                  App Store launch packages <ArrowUpRight size={15} aria-hidden="true" />
+                </Link>
               </div>
             </div>
           </div>

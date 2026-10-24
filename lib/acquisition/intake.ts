@@ -9,6 +9,7 @@ import { deterministicQualificationSummary, scoreConcierge, splitTools } from "@
 import { verifyConciergeEvaluation } from "@/lib/concierge/signing";
 import type { ConciergeAnswers, ConciergeLeadData } from "@/lib/concierge/types";
 import { normalizeWebsiteUrl, validSessionId, validateConciergeAnswers } from "@/lib/concierge/validation";
+import { appStoreBudgets, appStoreFields, validateAppStoreFields } from "@/lib/acquisition/app-store-intake";
 
 const requiredFields = ["name", "businessName", "email", "websiteOrSocial", "industry", "serviceInterest", "timeline", "biggestProblem"] as const;
 const fieldLimits: Record<string, number> = { name: 120, businessName: 160, email: 254, phone: 40, websiteOrSocial: 500, industry: 120, serviceInterest: 160, budgetRange: 80, timeline: 80, biggestProblem: 4000, notes: 8400 };
@@ -92,7 +93,8 @@ export function validateIntake(form: FormData): { input?: LeadInput; errors?: Re
   };
   const source = intakeFormValue(form, "src");
   const offer = intakeFormValue(form, "offer");
-  const business = isStart && (intakeFormValue(form, "audience") === "business" || offer === "audit");
+  const appStore = isStart && offer === "app-store";
+  const business = isStart && !appStore && (intakeFormValue(form, "audience") === "business" || offer === "audit");
   const role = intakeFormValue(form, "role");
   const preferredContact = intakeFormValue(form, "preferredContact") || "email";
   if (isStart) {
@@ -104,10 +106,18 @@ export function validateIntake(form: FormData): { input?: LeadInput; errors?: Re
     input.source = source || "start form";
     if (offer === "audit") input.serviceInterest = "Revenue Leak Audit";
     else if (offer === "readiness") input.serviceInterest = "Straight Answer";
+    else if (appStore) input.serviceInterest = "App Store launch packages";
     else if (business) input.serviceInterest = "Business inquiry";
     input.notes = [offer ? `Offer: ${offer}` : "", business ? `Role: ${role}\nPreferred contact: ${preferredContact}` : "", input.notes].filter(Boolean).join("\n\n");
   }
   const errors: Record<string, string> = {};
+  if (appStore) {
+    Object.assign(errors, validateAppStoreFields(form));
+    if (!appStoreBudgets.includes(input.budgetRange || "")) errors.budgetRange = "Choose a budget range.";
+    // Keep every detail in the existing redacted CRM notes and SITE-01 email.
+    input.businessName = intakeFormValue(form, "appName");
+    input.notes = [input.notes, ...appStoreFields.map((field) => `${field.label}: ${intakeFormValue(form, field.name) || "Not provided"}`)].filter(Boolean).join("\n\n");
+  }
   if (source.length > 160) errors.src = "Source must be 160 characters or fewer.";
   if (offer.length > 80) errors.offer = "Offer must be 80 characters or fewer.";
   if (business) {

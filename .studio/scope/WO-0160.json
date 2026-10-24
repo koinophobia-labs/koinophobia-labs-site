@@ -1,0 +1,14 @@
+{
+  "wo": "WO-0160",
+  "owned": [
+    ".studio/scope/WO-0160.json",
+    "app/page.tsx",
+    "app/start/page.tsx",
+    "app/work-with-me/page.tsx",
+    "components/site/StartForm.tsx",
+    "lib/acquisition/app-store-intake.ts",
+    "lib/acquisition/entry.ts",
+    "lib/acquisition/intake.ts",
+    "tests/crm-routes.test.ts"
+  ]
+}
