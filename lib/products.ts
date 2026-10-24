@@ -281,7 +281,7 @@ export const siteProducts: SiteProduct[] = ordered.map((slug) => {
   const home = Object.values(appHomes).find(app => `/${app.slug}` === meta.href);
   return { ...product, ...meta, ...(home ? {
     blurb: home.tagline,
-    screens: home.screens.map((alt, index) => ({ src: `/apps/${home.slug}/shot-${index + 1}.png`, alt: `${home.name}: ${alt}` })),
+    screens: home.screens.map((alt, index) => ({ src: `/apps/${home.slug}/${home.shots?.[index] ?? `shot-${index + 1}.png`}`, alt: `${home.name}: ${alt}` })),
   } : {}), family: familyOf(product) };
 });
 

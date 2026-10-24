@@ -2,6 +2,13 @@
   "wo": "WO-0153",
   "owned": [
     ".studio/scope/WO-0153.json",
-    "app/dreamcatcher/privacy/page.tsx"
+    "app/dreamcatcher/privacy/page.tsx",
+    "lib/app-homes.ts",
+    "lib/products.ts",
+    "components/apps/AppWorlds.tsx",
+    "components/apps/WorldParts.tsx",
+    "components/apps/app-home.css",
+    "public/apps/dreamcatcher/v2-shot-?.webp",
+    "tests/app-homes.test.ts"
   ]
 }
