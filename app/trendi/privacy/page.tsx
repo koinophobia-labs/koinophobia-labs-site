@@ -18,7 +18,7 @@ export default function TrendiPrivacyPage() {
       </Link>
       <p className="kicker kicker-orange">Trendi</p>
       <h1>Privacy Policy</h1>
-      <p className="legal-note">Last updated: October 14, 2026</p>
+      <p className="legal-note">Last updated: October 23, 2026</p>
 
       <section>
         <h2>Scope</h2>
@@ -89,6 +89,30 @@ export default function TrendiPrivacyPage() {
           to the request sent to Anthropic. Anything you type yourself can still
           identify you, so avoid including information you don&apos;t want
           processed.
+        </p>
+        <p>
+          <strong>Pasted and shared material (Trendi 2.3).</strong> You can paste
+          or share something into Trendi, such as text, a link or an image, and ask
+          for an AI script about it. Trendi sends that material with your request,
+          only after you have allowed AI coaching:
+        </p>
+        <ul>
+          <li>
+            <strong>Images:</strong> text is recognized on your iPhone, and only
+            that text is sent. The image itself never leaves your iPhone.
+          </li>
+          <li>
+            <strong>Links:</strong> our Coach service fetches the page to read its
+            text. Like other request text, that page text and your pasted material
+            are not stored as a separate server record. Your finished script
+            follows the &ldquo;Generated Coach results&rdquo; schedule under
+            Retention below.
+          </li>
+        </ul>
+        <p>
+          A shared item waits on your iPhone for up to 24 hours, until you open
+          Trendi, and it is excluded from backups. Trendi never reads your
+          clipboard in the background; it receives only what you paste or share.
         </p>
         <p>
           <strong>Your choices.</strong>

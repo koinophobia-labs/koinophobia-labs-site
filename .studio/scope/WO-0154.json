@@ -1,0 +1,7 @@
+{
+  "wo": "WO-0154",
+  "owned": [
+    ".studio/scope/WO-0154.json",
+    "app/trendi/privacy/page.tsx"
+  ]
+}
