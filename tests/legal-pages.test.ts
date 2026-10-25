@@ -54,3 +54,41 @@ test("every shipped app's legal pages exist and are in the sitemap", async () =>
     await readFile(new URL(`../app${route}/page.tsx`, import.meta.url), "utf8");
   }
 });
+
+test("Way In privacy explains consent, guest sessions, and separate retention periods", async () => {
+  const privacy = await readFile(new URL("../app/way-in/privacy/page.tsx", import.meta.url), "utf8");
+  for (const disclosure of [
+    "Effective October 2026",
+    "Job links you choose to read.",
+    "When you approve a job-link read",
+    "full HTTPS link, including its query parameters",
+    "Vercel receives normal connection information, including your IP address",
+    "The job website receives a request from our server",
+    "You can cancel and paste the posting text instead",
+    "Sessions and abuse prevention.",
+    "session lasting up to 24 hours",
+    "cannot access Trendi accounts or routes",
+    "keyed hashes",
+    "each daily counter expires within 48 hours of its last update",
+    "They contain no job link, posting text, résumé or profile",
+    "session token is held in memory",
+    "typically up to 3 days for daily backups",
+    "manually created backups may remain until deleted",
+    "Backup retention is separate from the 48-hour expiry of active counters",
+    "Content and logs.",
+    "does not persist the link or posting, send them to an AI provider",
+    "runtime and request logs are retained for 30 days",
+    "Separate hosting security records follow the provider’s security retention policies",
+    "Your résumé and profile stay on your iPhone for tailoring",
+    "We do not use this feature for advertising or cross-app tracking",
+    "Optional Sign in with Apple does not upload your workspace",
+    "Job-link reading uses a separate guest session solely for the reading service",
+    "These local product events are separate from the job-link reader’s server logs",
+    "Opening a job website yourself still connects your device to that website",
+    "Export, Share and Files actions send the material you select to the destination you choose",
+  ]) {
+    assert.ok(privacy.includes(disclosure), `Missing Way In disclosure: ${disclosure}`);
+  }
+  assert.ok(!privacy.includes("The current public release has no configured account server"));
+  assert.ok(!privacy.includes("Opening or reading a saved job link connects to that website"));
+});
