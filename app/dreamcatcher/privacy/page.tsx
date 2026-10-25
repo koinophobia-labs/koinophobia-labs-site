@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
-const contactEmail = "koinophobia999@gmail.com";
+const contactEmail = "blake@koinophobialabs.com";
 
 export const metadata: Metadata = {
   title: "Dreamcatcher Privacy Policy",

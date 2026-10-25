@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
-const supportEmail = "koinophobia999@gmail.com";
+const supportEmail = "blake@koinophobialabs.com";
 
 export const metadata: Metadata = {
   title: "ForgetAboutIt Support",

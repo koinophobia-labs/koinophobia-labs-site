@@ -74,7 +74,7 @@ export default function YouKnowBallSafetyPage() {
         <h2>Report safety issues</h2>
         <p>
           Send examples to{" "}
-          <a href="mailto:koinophobia999@gmail.com">koinophobia999@gmail.com</a>{" "}
+          <a href="mailto:blake@koinophobialabs.com">blake@koinophobialabs.com</a>{" "}
           with the prompt, response, and any relevant screenshots.
         </p>
       </section>
