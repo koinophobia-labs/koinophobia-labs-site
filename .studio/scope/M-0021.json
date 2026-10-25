@@ -1,0 +1,8 @@
+{
+  "wo": "M-0021",
+  "owned": [
+    ".studio/scope/M-0021.json",
+    "app/way-in/privacy/page.tsx",
+    "tests/legal-pages.test.ts"
+  ]
+}
