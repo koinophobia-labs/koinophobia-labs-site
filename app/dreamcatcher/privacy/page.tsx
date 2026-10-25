@@ -19,7 +19,7 @@ export default function DreamcatcherPrivacyPage() {
       </Link>
       <p className="kicker kicker-orange">Dreamcatcher</p>
       <h1>Privacy Policy</h1>
-      <p className="legal-note">Effective October 23, 2026 · Dreamcatcher version 2.0</p>
+      <p className="legal-note">Effective October 24, 2026 · Dreamcatcher version 2.0</p>
 
       <section>
         <h2>Your journal on your devices</h2>
@@ -59,7 +59,10 @@ export default function DreamcatcherPrivacyPage() {
           Health sleep data and the insights calculated from it are processed only on your iPhone. Dreamcatcher
           does not share them with Koinophobia Labs, advertising or analytics services, or any other party, and
           does not store them in iCloud, journal backups, or journal exports. Sleep timelines and statistics are
-          kept in memory and reloaded from Health. A wake time you choose is scheduled locally through
+          reloaded from Health. To show last night&apos;s sleep in the Home Screen widget, Dreamcatcher stores a
+          small summary of your two most recent nights (sleep times and total sleep) in an on-device area shared
+          only with its own widget. This summary is excluded from backups and never leaves your iPhone.
+          A wake time you choose is scheduled locally through
           Apple’s AlarmKit; alarm content contains no sleep stages or journal text.
         </p>
         {/* H03 */}
