@@ -1,0 +1,7 @@
+{
+  "wo": "WO-0202",
+  "owned": [
+    ".studio/scope/WO-0202.json",
+    "app/forget-about-it/privacy/page.tsx"
+  ]
+}
