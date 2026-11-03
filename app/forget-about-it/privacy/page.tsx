@@ -6,7 +6,7 @@ const privacyEmail = "koinophobia999@gmail.com";
 export const metadata: Metadata = {
   title: "ForgetAboutIt Privacy Policy",
   description:
-    "ForgetAboutIt keeps every captured thought on your devices. This policy explains what stays local, how Plus purchases work through Apple, and what the app never collects.",
+    "How ForgetAboutIt stores your diary, handles optional AI day story with Anthropic, and checks Plus purchases through Apple.",
   alternates: { canonical: "/forget-about-it/privacy" },
 };
 
@@ -18,21 +18,25 @@ export default function ForgetAboutItPrivacyPage() {
       </Link>
       <p className="kicker kicker-orange">ForgetAboutIt</p>
       <h1>Privacy Policy</h1>
-      <p className="legal-note">Last updated: October 14, 2026</p>
+      <p className="legal-note">Last updated: November 3, 2026</p>
 
       <section>
         <h2>The short version</h2>
         <p>
-          ForgetAboutIt is a private memory journal from Koinophobia Labs. Every
-          thought you capture stays on your iPhone and Apple Watch. The app has no
-          accounts, no analytics, no advertising and no server of its own. Your
-          captured words are never sent to Koinophobia Labs or to any AI service.
+          Your diary is stored on your device. Capturing, viewing, searching and exporting your notes do not require an account or remote AI. We do not use your notes for advertising or tracking. AI day story is an optional Plus feature, off by default, that you can turn on or off in Settings.
+        </p>
+      </section>
+
+      <section>
+        <h2>Optional AI day story</h2>
+        <p>
+          If you turn on AI day story after reading its disclosure, that day&apos;s notes are sent securely to our server and to Anthropic (Claude) to write and check a short summary. Our server also receives your language setting, app version and signed App Store purchase proof to check Plus access. Anthropic receives the notes, language setting and candidate summaries, but not your purchase proof or a device identifier supplied by our app. Notes may contain personal information that you wrote. Tiny days and days matching our local safety checks do not use this feature. A failed or rejected summary leaves the ordinary on-device reflection in place.
         </p>
         <p>
-          The app connects to the internet for one thing only: ForgetAboutIt Plus
-          purchases. Those go through Apple&apos;s App Store using Apple&apos;s
-          StoreKit, and they never include your captured words. Koinophobia Labs
-          never receives, stores or sees anything you capture.
+          We do not store or log the notes or AI summaries on our server. A temporary transaction-derived counter limits requests. Your consent choice and its time are saved locally. The app temporarily caches a summary for the current set of notes; changing the notes or turning the feature off prevents that cached summary from being shown.
+        </p>
+        <p>
+          Anthropic&apos;s commercial terms prohibit training models on customer content. Its standard API policy provides for deletion of inputs and outputs within 30 days, with exceptions for safety enforcement, legal obligations and applicable agreements. Its structured-output documentation describes zero-retention processing, but we do not promise that all provider retention is zero; safety and legal exceptions still apply. Turning the feature off stops future sharing for AI day story and does not retract requests already processed.
         </p>
       </section>
 
@@ -48,12 +52,12 @@ export default function ForgetAboutItPrivacyPage() {
             (WatchConnectivity).
           </li>
           <li>
-            <strong>Everything derived from them.</strong> The daily story,
-            recognised names and subjects, open-loop suggestions, reflections,
-            statistics and Ask answers are all computed on your iPhone from your
-            own words, using Apple&apos;s on-device language tools. They are stored
-            beside your thoughts. Nothing is sent to any AI service or other
-            outside provider.
+            <strong>On-device reflections and other derived information.</strong>{" "}
+            The ordinary reflection, recognised names and subjects, open-loop
+            suggestions, statistics and Ask answers are computed on your iPhone
+            from your own words, using Apple&apos;s on-device language tools. They
+            are stored beside your thoughts. Optional AI day story uses the
+            processing described above.
           </li>
           <li>
             <strong>Preferences.</strong> Your onboarding answers, confirmation
@@ -81,22 +85,22 @@ export default function ForgetAboutItPrivacyPage() {
         <p>
           None of this includes your captured words. Apple processes your payment
           under Apple&apos;s own terms. Koinophobia Labs does not receive your
-          payment-card details, and it has no server that receives purchase
-          information from the app. Apple gives Koinophobia Labs its standard App
-          Store sales and subscription reports.
+          payment-card details. If you turn on AI day story, our server receives
+          signed App Store purchase proof to check Plus access, as described
+          above. Apple gives Koinophobia Labs its standard App Store sales and
+          subscription reports.
         </p>
         <p>Manage or cancel Plus in your Apple subscription settings.</p>
       </section>
 
       <section>
-        <h2>What the app never collects</h2>
+        <h2>Accounts, advertising and tracking</h2>
         <p>
           ForgetAboutIt has no accounts, no sign-in, no analytics or
-          crash-reporting SDKs, no advertising, no tracking and no third-party AI
-          processing. Koinophobia Labs does not collect your captured words, your
-          name, email address, location, identifiers, usage data or diagnostics
-          through the app. Anything you choose to share or export from the app
-          goes only where you send it.
+          crash-reporting SDKs, no advertising and no tracking. Optional AI day
+          story shares the information described above only after you turn it on.
+          Anything you choose to share or export from the app goes only where you
+          send it.
         </p>
       </section>
 
@@ -202,8 +206,7 @@ export default function ForgetAboutItPrivacyPage() {
         <h2>Children</h2>
         <p>
           ForgetAboutIt is a general-audience journal and is not directed to
-          children. Koinophobia Labs collects no personal information from anyone
-          through the app.
+          children.
         </p>
       </section>
 
