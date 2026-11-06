@@ -61,9 +61,10 @@ export default function PrivacyPage() {
             in-app analytics.
           </p>
           <p>
-            Account data is stored on the Saiikhotic game servers, run by the Taylor+Martin
-            partnership. The app connects to those servers only when you use the Line or Spades
-            features.
+            Your account data is stored on the operator&apos;s own personal computer — the machine
+            that runs the Saiikhotic Line and Spades games — and is reached over a secure tunnel
+            only when you use those features. It is not stored on Koinophobia Labs&apos; servers
+            or any app-maker&apos;s servers.
           </p>
           <p>
             You can delete your account and all its data at any time inside the app: go to
