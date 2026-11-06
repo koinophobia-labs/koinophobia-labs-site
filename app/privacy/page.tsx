@@ -47,6 +47,32 @@ export default function PrivacyPage() {
             </li>
           </ul>
         </section>
+        <section className="sec" id="saiikhotic">
+          <h2>Saiikhotic</h2>
+          <p>
+            Saiikhotic&apos;s Line queue collects a display name and a 4–6 digit PIN you choose.
+            These are stored with your account to identify you in the line and keep your place.
+            The planned Spades table will collect a profile name, PIN, and avatar to identify you
+            at the table when you use that feature.
+          </p>
+          <p>
+            This data is linked to your identity in the line or table and is used only for app
+            functionality. It is not sold or used for advertising or tracking. Saiikhotic has no
+            in-app analytics.
+          </p>
+          <p>
+            Account data is stored on the Saiikhotic game servers, run by the Taylor+Martin
+            partnership. The app connects to those servers only when you use the Line or Spades
+            features.
+          </p>
+          <p>
+            You can delete your account and all its data at any time inside the app: go to
+            Settings/Account → Delete Account. Deletion removes your account, its sessions, and
+            its queue entry from the server. You can also request deletion or ask privacy and
+            support questions by emailing{" "}
+            <a href="mailto:blake@koinophobialabs.com">blake@koinophobialabs.com</a>.
+          </p>
+        </section>
         <SiteFooter />
       </main>
     </div>
