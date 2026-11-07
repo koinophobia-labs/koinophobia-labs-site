@@ -1,0 +1,9 @@
+# build outputs
+dist/
+shots/
+scratch/
+DerivedData/
+*.xcuserdatad/
+
+# SwiftPM build products
+.build/

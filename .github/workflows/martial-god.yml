@@ -1,0 +1,103 @@
+# Path of the Martial God.
+#
+# Two implementations of one simulation have to be kept in step: the JavaScript
+# reference oracle and the Swift production port. Nothing but a gate does that, and a
+# gate nobody runs is not a gate — so it runs here, on every change to the game.
+#
+# The Swift half needs no Mac. MartialGodCore is platform-free by contract
+# (PortContractTests enforces it), so the whole simulation, its unit suite and the
+# parity gate build and run on Linux. Only the presentation layer needs Xcode, and
+# that is the one thing this workflow cannot cover.
+name: Martial God
+
+on:
+  pull_request:
+    paths:
+      - games/path-of-the-martial-god/**
+      - .github/workflows/martial-god.yml
+  push:
+    branches:
+      - main
+    paths:
+      - games/path-of-the-martial-god/**
+      - .github/workflows/martial-god.yml
+
+concurrency:
+  group: martial-god-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  reference:
+    name: Reference oracle
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      # 70 tests: the simulation, the fairness rules that are enforced rather than
+      # promised, the parity harness's own self-test, the input buffer, and the
+      # cross-tree checks that keep the Swift port's constants and gate honest.
+      - name: Reference suite
+        working-directory: games/path-of-the-martial-god/reference
+        run: npm test
+
+      # The hosted build must stay a packaging adapter and nothing more.
+      - name: Hosted adapter is byte-identical to the reference
+        working-directory: games/path-of-the-martial-god/reference
+        run: |
+          node build-artifact.mjs
+          node verify-parity.mjs
+
+  port:
+    name: Swift port and parity gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    # Google's mirror of the official image rather than docker.io directly: anonymous
+    # Docker Hub pulls are rate-limited, and a CI job that intermittently cannot fetch
+    # its toolchain is a CI job people learn to ignore.
+    container: mirror.gcr.io/library/swift:5.10-noble
+    steps:
+      - uses: actions/checkout@v4
+
+      # The verifier is deliberately language-neutral and lives on the JS side, so the
+      # comparison logic exists once rather than once per port.
+      - name: Node, for the language-neutral verifier
+        run: |
+          apt-get update -qq
+          apt-get install -y -qq nodejs >/dev/null
+
+      - name: Build
+        working-directory: games/path-of-the-martial-god/apple/Packages/MartialGodCore
+        run: swift build
+
+      - name: Swift suite
+        working-directory: games/path-of-the-martial-god/apple/Packages/MartialGodCore
+        run: swift test
+
+      # Swift 6 turns these into errors. Catching the drift now costs nothing; catching
+      # it during a toolchain upgrade costs a day.
+      - name: Strict concurrency has not regressed
+        working-directory: games/path-of-the-martial-god/apple/Packages/MartialGodCore
+        run: |
+          out=$(swift build -Xswiftc -strict-concurrency=complete 2>&1 | grep "Sources/MartialGodCore" || true)
+          if [ -n "$out" ]; then echo "$out"; echo "::error::new strict-concurrency warnings in MartialGodCore"; exit 1; fi
+
+      # THE PORT GATE. Replays the oracle's own recorded inputs through the Swift
+      # simulation and compares every field: discrete exactly, continuous inside a
+      # declared tolerance.
+      - name: Parity gate
+        working-directory: games/path-of-the-martial-god/apple
+        run: ./parity.sh
+
+      # Type-checks the presentation layer against stub modules, because the real
+      # frameworks need an iOS SDK. It catches our own mistakes, never Apple's API
+      # shape — see tools/typecheck/README.md for exactly what a pass does not mean.
+      - name: Presentation layer type-check
+        working-directory: games/path-of-the-martial-god/apple
+        run: ./typecheck.sh

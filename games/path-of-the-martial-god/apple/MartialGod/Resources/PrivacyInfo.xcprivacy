@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!-- The game does not track, does not collect, and has no third-party SDKs.
+	     That is a deliberate consequence of the native engine decision: there is no
+	     analytics runtime to disclose and nothing to justify at review.
+
+	     NSPrivacyAccessedAPITypes is empty because none of the required-reason APIs
+	     are used. Settings and diagnostics are written as a JSON file in Application
+	     Support rather than through UserDefaults, so no CA92.1 declaration is needed.
+	     If UserDefaults is ever introduced, this file must gain that entry. -->
+	<key>NSPrivacyTracking</key>
+	<false/>
+	<key>NSPrivacyTrackingDomains</key>
+	<array/>
+	<key>NSPrivacyCollectedDataTypes</key>
+	<array/>
+	<key>NSPrivacyAccessedAPITypes</key>
+	<array/>
+</dict>
+</plist>

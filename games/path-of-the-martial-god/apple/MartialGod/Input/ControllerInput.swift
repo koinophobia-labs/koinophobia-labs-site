@@ -1,0 +1,82 @@
+import GameController
+import MartialGodCore
+
+/// External controller support via Apple's GameController framework.
+///
+/// Controllers are supported because the design is controller-first in spirit, but
+/// they are explicitly NOT a substitute for a credible touch experience: the touch
+/// grammar is the primary scheme and ships whether or not a controller is present.
+/// Main-actor isolated: `sample()` is called from the render loop and `isConnected` is
+/// mutated from two notification blocks registered on `.main`. Without the annotation
+/// those blocks capture a non-Sendable `self` in a `@Sendable` closure, which the real
+/// Foundation signature rejects.
+@MainActor
+public final class ControllerInput {
+    public private(set) var isConnected = false
+    private var pad: GCExtendedGamepad? { GCController.current?.extendedGamepad }
+
+    /// Rising-edge tracking, so holding a button does not machine-gun techniques.
+    private var wasPressed: [String: Bool] = [:]
+
+    /// Notification tokens, kept so they can be removed.
+    ///
+    /// `addObserver(forName:...)` hands back a token and registers a block that the
+    /// centre retains forever. Discarding the token means the observer can never be
+    /// removed and a second registration silently doubles up. These objects happen to
+    /// live for the app's lifetime today, so nothing leaks in practice — but "happens
+    /// to be a singleton" is not a memory-management strategy, and the compiler was
+    /// right to say so.
+    private var observers: [NSObjectProtocol] = []
+
+    deinit {
+        for o in observers { NotificationCenter.default.removeObserver(o) }
+    }
+
+    public init() {
+        // `addObserver(forName:object:queue:using:)` takes a `@Sendable` block, so the
+        // body does NOT inherit this initializer's isolation the way an ordinary
+        // closure would. `assumeIsolated` is sound here and only here because the
+        // block is registered on `.main`: that is the promise being cashed in.
+        observers.append(NotificationCenter.default.addObserver(
+            forName: .GCControllerDidConnect, object: nil, queue: .main) { [weak self] _ in
+                MainActor.assumeIsolated { self?.isConnected = true }
+            })
+        observers.append(NotificationCenter.default.addObserver(
+            forName: .GCControllerDidDisconnect, object: nil, queue: .main) { [weak self] _ in
+                MainActor.assumeIsolated { self?.isConnected = GCController.controllers().isEmpty == false }
+            })
+        isConnected = !GCController.controllers().isEmpty
+    }
+
+    private func edge(_ key: String, _ pressed: Bool) -> Bool {
+        let was = wasPressed[key] ?? false
+        wasPressed[key] = pressed
+        return pressed && !was
+    }
+
+    /// Returns nil when no controller is attached, so the caller falls back to touch.
+    public func sample(opponentBearing: Double, fighterFacing: Double) -> InputIntent? {
+        guard let p = pad else { return nil }
+
+        // The stick is already in the fighter's own frame: up is toward the opponent
+        // because the duel camera keeps the axis stable.
+        let forward = Double(p.leftThumbstick.yAxis.value)
+        let lateral = Double(-p.leftThumbstick.xAxis.value)
+
+        var verb: Verb?
+        if edge("strike", p.buttonX.isPressed) { verb = .strike }
+        else if edge("commit", p.buttonY.isPressed) { verb = .commit }
+        else if edge("evade", p.buttonB.isPressed) { verb = .evade }
+        else if edge("deflect", p.rightShoulder.isPressed) { verb = .deflect }
+        else if edge("focus", p.buttonA.isPressed) { verb = .focus }
+
+        let guardHeld = p.leftShoulder.isPressed || p.leftTrigger.value > 0.4
+        // Held tracks the ACTUAL button, which is what makes release-before-commitment
+        // produce a feint on a controller exactly as the pull-back gesture does on glass.
+        let held = p.buttonX.isPressed || p.buttonY.isPressed || p.buttonB.isPressed
+            || p.rightShoulder.isPressed || p.buttonA.isPressed || verb != nil
+
+        return InputIntent(forward: forward, lateral: lateral, verb: verb,
+                           held: held, guardHeld: guardHeld)
+    }
+}
