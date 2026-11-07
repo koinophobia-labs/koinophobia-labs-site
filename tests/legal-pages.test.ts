@@ -15,8 +15,8 @@ test("Trendi privacy and support routes are publication-ready and discoverable",
   const privacy = privacySource.replace(/\s+/g, " ");
 
   for (const page of [privacy, support]) {
-    assert.ok(page.includes("koinophobia999@gmail.com"));
-    assert.ok(!page.includes("blake@koinophobialabs.com"));
+    assert.ok(page.includes("blake@koinophobialabs.com"));
+    assert.ok(!page.includes("koinophobia999@gmail.com"));
     assert.ok(!page.match(/placeholder|launch draft|do not publish/i));
   }
 

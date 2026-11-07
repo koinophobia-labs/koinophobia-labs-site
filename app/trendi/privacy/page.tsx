@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
-const privacyEmail = "koinophobia999@gmail.com";
+const privacyEmail = "blake@koinophobialabs.com";
 
 export const metadata: Metadata = {
   title: "Trendi Privacy Policy",
