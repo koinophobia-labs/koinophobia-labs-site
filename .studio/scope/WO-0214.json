@@ -1,0 +1,9 @@
+{
+  "wo": "WO-0214",
+  "owned": [
+    "app/blog/**",
+    "app/sitemap.ts",
+    "components/site/SiteFooter.tsx",
+    ".studio/scope/WO-0214.json"
+  ]
+}
