@@ -45,32 +45,55 @@ export default function PrivacyPage() {
               <Link href="/you-know-ball/privacy">You Know Ball privacy policy</Link> ·{" "}
               <Link href="/you-know-ball/safety">safety</Link>
             </li>
+            <li>
+              <Link href="#saiikhotic">Saiikhotic privacy policy</Link>
+            </li>
           </ul>
         </section>
         <section className="sec" id="saiikhotic">
-          <h2>Saiikhotic</h2>
+          <h2>Saiikhotic privacy policy</h2>
+          <p>Updated November 6, 2026 · Version 1</p>
           <p>
-            Saiikhotic&apos;s Line queue collects a display name and a 4–6 digit PIN you choose.
-            These are stored with your account to identify you in the line and keep your place.
-            The planned Spades table will collect a profile name, PIN, and avatar to identify you
-            at the table when you use that feature.
+            Saiikhotic (com.koinophobialabs.saiikhotic) is a native iOS Spades game made in
+            partnership with Koinophobia Labs. It is for ages 17+ and includes simulated gambling
+            with virtual coins. Coins have no cash value, and there are no real-money payouts.
           </p>
+          <h3>Solo play</h3>
           <p>
-            This data is linked to your identity in the line or table and is used only for app
-            functionality. It is not sold or used for advertising or tracking. Saiikhotic has no
-            in-app analytics.
+            Solo games against bots run entirely on your device. Solo play requires no account
+            or internet connection and collects no data.
           </p>
+          <h3>Online live table</h3>
           <p>
-            Your account data is stored on the operator&apos;s own personal computer — the machine
-            that runs the Saiikhotic Line and Spades games — and is reached over a secure tunnel
-            only when you use those features. It is not stored on Koinophobia Labs&apos; servers
-            or any app-maker&apos;s servers.
+            To join Saiikhotic&apos;s hosted live table, you enter a display name and a short
+            numeric PIN. The app sends both to the Saiikhotic game server to join the live table
+            and identify you within that room. The name and PIN are used only for joining and
+            identifying you in the live table, never for advertising or cross-app tracking.
           </p>
+          <h3>Optional purchases</h3>
           <p>
-            You can delete your account and all its data at any time inside the app: go to
-            Settings/Account → Delete Account. Deletion removes your account, its sessions, and
-            its queue entry from the server. You can also request deletion or ask privacy and
-            support questions by emailing{" "}
+            Optional coin packs are available through Apple In-App Purchase (StoreKit). Apple
+            handles payment; Saiikhotic does not collect or store your payment information.
+            Purchased coins are virtual in-app currency with no cash value.
+          </p>
+          <h3>Photo avatars</h3>
+          <p>
+            If you choose a photo avatar, it is stored only on your device and is never uploaded.
+          </p>
+          <h3>Notifications</h3>
+          <p>
+            Notifications are optional and local to your device. They use no push token, no
+            server and no analytics.
+          </p>
+          <h3>Analytics, advertising and tracking</h3>
+          <p>
+            The Saiikhotic app has no analytics, no third-party tracking SDKs and no ads. We do
+            not sell Saiikhotic data or use it for cross-app tracking. The website analytics
+            described above apply to this website, not to the Saiikhotic app.
+          </p>
+          <h3>Contact</h3>
+          <p>
+            For Saiikhotic privacy questions or requests, contact Koinophobia Labs at{" "}
             <a href="mailto:blake@koinophobialabs.com">blake@koinophobialabs.com</a>.
           </p>
         </section>
