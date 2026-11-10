@@ -12,6 +12,9 @@
     "tests/partner-payments.test.ts",
     "tests/payment-reliability.test.ts",
     "package.json",
-    "lib/acquisition/service-onboarding.ts"
+    "lib/acquisition/service-onboarding.ts",
+    "lib/dev/universe.ts",
+    "tests/dev-universe.test.ts",
+    "tests/products.test.ts"
   ]
 }
