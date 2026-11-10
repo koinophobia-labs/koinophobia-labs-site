@@ -172,6 +172,14 @@ export async function requestMagicLink(
     ])
   ).rows[0];
   if (!row) return;
+  // Atomic across requests and serverless instances; a UI-only lock is insufficient.
+  const claim = await q.query(
+    `insert into team_rate_limits(key,attempts,reset_at) values($1,1,now()+interval '60 seconds')
+     on conflict(key) do update set attempts=1,reset_at=excluded.reset_at
+     where team_rate_limits.reset_at<=now() returning key`,
+    [digest("magic-send:" + row.id)],
+  );
+  if (!claim.rows[0]) return;
   const value = token();
   await q.query(
     "insert into team_login_tokens(token_hash,partner_id,expires_at) values($1,$2,now()+interval '15 minutes')",
@@ -180,9 +188,8 @@ export async function requestMagicLink(
   try {
     await send(email, `${origin}/team?token=${encodeURIComponent(value)}`);
   } catch {
-    await q.query("delete from team_login_tokens where token_hash=$1", [
-      digest(value),
-    ]);
+    // A timeout may follow provider acceptance. Keep the link valid and the
+    // cooldown claimed: immediately retrying could deliver a second email.
     throw new Fault("Login email unavailable. Try again later.", 503);
   }
 }
@@ -194,16 +201,22 @@ async function sendMagicLink(email: string, url: string) {
     headers: {
       Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
       "Content-Type": "application/json",
+      "Idempotency-Key": "team-login/" + digest(url),
     },
     body: JSON.stringify({
-      from: process.env.CONTACT_FROM_EMAIL,
+      from: `Koinophobia Labs <${loginSender()}>`,
+      reply_to: loginSender(),
       to: email,
-      subject: "Your Koinophobia Labs team login",
-      text: `Sign in to your invited team account. This link expires in 15 minutes.\n\n${url}\n\nIgnore this email if you did not request it.`,
+      subject: "Sign in to your Koinophobia Labs team portal",
+      text: `Hello,\n\nYou requested access to your Koinophobia Labs team portal, where you can manage your leads, pipeline and commissions.\n\nUse this personal sign-in link within 15 minutes:\n${url}\n\nThis link works once. Keep it private. If you did not request it, you can ignore this email; no action is needed.\n\nNeed help? Reply to this email.\n\nKoinophobia Labs`,
     }),
     signal: AbortSignal.timeout(10000),
   });
   if (!response.ok) throw Error("Email provider rejected login request.");
+}
+function loginSender() {
+  const configured = process.env.CONTACT_FROM_EMAIL!.trim();
+  return emailInput(configured.match(/<([^<>]+)>$/)?.[1] || configured);
 }
 export async function consumeMagicLink(q: Queryable, value: string) {
   const r = await q.query(

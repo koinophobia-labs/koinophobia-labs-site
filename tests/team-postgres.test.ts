@@ -368,6 +368,7 @@ test("team portal real PostgreSQL acceptance", async (t) => {
           "https://example.test",
           send,
         );
+        assert.equal(links.length, 1, "one request sends exactly one email");
         const token = new URL(links[0]).searchParams.get("token")!;
         assert.equal(
           (await db.query("select token_hash from team_login_tokens")).rows[0]
@@ -379,6 +380,37 @@ test("team portal real PostgreSQL acceptance", async (t) => {
         await assert.rejects(consumeMagicLink(db, token));
       },
     );
+    await t.test("magic sends are deduplicated across concurrent requests for 60 seconds", async () => {
+      const email = "magic-dedup@example.test";
+      const invited = await invite(db, owner, { name: "Fake dedup", email });
+      const links: string[] = [];
+      const send = async (_email: string, url: string) => { links.push(url); };
+      await Promise.all(Array.from({ length: 8 }, () =>
+        requestMagicLink(db, email, "https://example.test", send),
+      ));
+      assert.equal(links.length, 1);
+      await requestMagicLink(db, email, "https://example.test", send);
+      assert.equal(links.length, 1, "fast repeat after response is suppressed too");
+      assert.equal((await db.query("select count(*)::int as n from team_login_tokens where partner_id=$1", [invited.id])).rows[0].n, 1);
+      await db.query("update team_rate_limits set reset_at=now()-interval '1 second' where key=$1", [digest("magic-send:" + invited.id)]);
+      await requestMagicLink(db, email, "https://example.test", send);
+      assert.equal(links.length, 2, "a deliberate request after the cooldown can resend");
+    });
+    await t.test("uncertain delivery does not resend immediately or invalidate a delivered link", async () => {
+      const email = "magic-timeout@example.test";
+      await invite(db, owner, { name: "Fake timeout", email });
+      let calls = 0, delivered = "";
+      const send = async (_email: string, url: string) => {
+        calls++;
+        delivered = new URL(url).searchParams.get("token")!;
+        throw Error("Simulated timeout after acceptance");
+      };
+      await assert.rejects(requestMagicLink(db, email, "https://example.test", send), /unavailable/);
+      await requestMagicLink(db, email, "https://example.test", send);
+      assert.equal(calls, 1);
+      const session = await consumeMagicLink(db, delivered);
+      assert.equal((await sessionActor(db, session))?.email, email);
+    });
     await t.test(
       "expired sessions and deactivated accounts lose access immediately",
       async () => {

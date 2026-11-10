@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { ArrowUpRight, ArrowRight, ShieldCheck } from "lucide-react";
 export function Login({
   preview,
@@ -14,7 +14,15 @@ export function Login({
   const [invite, setInvite] = useState(false),
     [message, setMessage] = useState(""),
     [busy, setBusy] = useState(false);
+  const inFlight = useRef(false);
+  const lastMagicRequest = useRef({ email: "", at: 0 });
   async function submit(action: string, body: object) {
+    if (inFlight.current) return;
+    const email = String((body as { email?: string }).email || "").trim().toLowerCase();
+    if (action === "magic" && lastMagicRequest.current.email === email &&
+        Date.now() - lastMagicRequest.current.at < 60_000) return;
+    inFlight.current = true;
+    if (action === "magic") lastMagicRequest.current = { email, at: Date.now() };
     setBusy(true);
     setMessage("");
     try {
@@ -30,6 +38,7 @@ export function Login({
     } catch (e) {
       setMessage((e as Error).message);
     } finally {
+      inFlight.current = false;
       setBusy(false);
     }
   }
