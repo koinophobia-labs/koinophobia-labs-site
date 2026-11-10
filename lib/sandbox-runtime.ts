@@ -8,8 +8,9 @@ export function assertSandboxIsolation(env: Record<string, string | undefined> =
   if (env.STRIPE_SANDBOX_E2E !== "true") return;
   if (env.VERCEL_ENV !== "preview" || env.VERCEL_GIT_COMMIT_REF !== sandboxBranch)
     throw Error("SANDBOX_PREVIEW_BRANCH_REQUIRED");
-  if (env.STRIPE_CONNECT_MODE !== "test" || !/^(sk|rk)_test_/.test(env.STRIPE_SECRET_KEY || ""))
-    throw Error("SANDBOX_TEST_KEY_REQUIRED");
+  if (env.STRIPE_CONNECT_MODE !== "test") throw Error("SANDBOX_TEST_MODE_REQUIRED");
+  if (!env.STRIPE_SECRET_KEY) throw Error("SANDBOX_SECRET_MISSING");
+  if (!/^(sk|rk)_test_/.test(env.STRIPE_SECRET_KEY)) throw Error("SANDBOX_TEST_KEY_REQUIRED");
   for (const key of ["DATABASE_URL", "DATABASE_URL_UNPOOLED"]) {
     let url: URL;
     try { url = new URL(env[key] || ""); } catch { throw Error("SANDBOX_DATABASE_REQUIRED"); }
