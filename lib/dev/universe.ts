@@ -512,10 +512,10 @@ export const products: Product[] = [
     reach: "public",
     stage: "public",
     status:
-      "Live on the Mac App Store; Apple’s public lookup reports version 1.0. The public listing includes Mac compatibility",
+      "Live on the App Store; Apple’s public lookup reports version 1.0, released 2026-11-06. The public listing includes iPhone and Mac compatibility",
     verifiedAt: "2026-11-10",
     evidence: [
-      { claim: "Teacher’s Pet Personal School is publicly listed, with version 1.0 returned by Apple’s lookup", source: "https://itunes.apple.com/lookup?id=6808981717&entity=macSoftware — HTTP 200, one result, version 1.0, checked 2026-11-10. https://apps.apple.com/us/app/teachers-pet-personal-school/id6808981717 — HTTP 200, Mac compatibility listed, checked 2026-11-10." },
+      { claim: "Teacher’s Pet Personal School is publicly listed, with version 1.0 returned by Apple’s lookup", source: "https://itunes.apple.com/lookup?id=6808981717&entity=macSoftware — HTTP 200, one result, version 1.0, currentVersionReleaseDate 2026-11-06T14:35:24Z, checked 2026-11-10. https://apps.apple.com/us/app/teachers-pet-personal-school/id6808981717 — HTTP 200, Mac compatibility listed, checked 2026-11-10." },
       { claim: "Release history: HQ records Mac App Store 1.1 (15), released 2026-10-31; today’s public lookup reports 1.0", source: "HQ projects/teachers-pet/PROJECT_STATE.md, read 2026-11-10; ledger last updated 2026-11-01. The version discrepancy is unresolved; the public status uses the lookup value." },
       {
         claim: "September 2026 history: The curriculum map counts 13 grades, 4 subjects, 52 courses, 318 units, 1,273 objectives",

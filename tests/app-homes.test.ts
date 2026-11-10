@@ -38,13 +38,13 @@ test("no page or product copy contains the false no-purchases claim", () => {
     }
   }
 });
-test("coming-soon homes are public by Blake's decision, without App Store buttons", () => {
+test("public homes include Teacher's Pet with its verified App Store release", () => {
   assert.equal(APP_PAGES_PRERELEASE, true);
   assert.deepEqual(publicAppHomes().map(app => app.slug).sort(), ["dreamcatcher", "forget-about-it", "old-dog", "preaching-to-the-choir", "teachers-pet", "trendi", "way-in"]);
-  assert.equal(appHomes["teachers-pet"].store, undefined, "Teacher's Pet must not link to the App Store before approval");
-  assert.equal(appHomes["teachers-pet"].prerelease, true);
+  assert.equal(appHomes["teachers-pet"].store, "https://apps.apple.com/us/app/teachers-pet-personal-school/id6808981717");
+  assert.equal(appHomes["teachers-pet"].prerelease, undefined);
   assert.equal(appHomes["old-dog"].platforms, "Mac");
-  assert.equal(appHomes["teachers-pet"].coming, "Coming to the Mac App Store");
+  assert.equal(appHomes["teachers-pet"].coming, undefined);
 });
 test("Dreamcatcher's live page renders its real store button and free download pricing", () => {
   const app = appHomes.dreamcatcher;

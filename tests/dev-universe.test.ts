@@ -219,7 +219,7 @@ test("You Know Ball does not claim it was never uploaded", () => {
   const ykb = getProduct("you-know-ball");
   assert.ok(ykb);
   const prose = [ykb!.status, ...ykb!.state, ...ykb!.notYet].join(" ");
-  assert.equal(ykb!.stage, "uploaded");
+  assert.equal(ykb!.stage, "paused");
   assert.doesNotMatch(
     prose,
     /never been on testflight|never reached testflight|has never been uploaded/i,

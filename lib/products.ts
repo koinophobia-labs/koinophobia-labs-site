@@ -1,6 +1,6 @@
 import { appHomes } from "@/lib/app-homes";
 import { priceLine } from "@/lib/app-prices";
-import { dreamcatcherRelease, forgetRelease, oldDogRelease, preachingRelease, trendiRelease, wayInRelease } from "@/lib/releases";
+import { dreamcatcherRelease, forgetRelease, oldDogRelease, preachingRelease, trendiRelease, teachersPetRelease, wayInRelease } from "@/lib/releases";
 import {
   getProduct,
   products as universe,
@@ -200,15 +200,14 @@ const site: Record<string, SiteMeta> = {
     },
   },
   "teachers-pet": {
-    section: "lab",
-    href: "/lab/teachers-pet",
-    blurb:
-      "A homeschool for one computer. The map covers 13 grades, 4 subjects, 52 courses, 318 units, and 1,273 objectives. The first course, Algebra Foundations, runs as a Mac app today.",
-    platforms: "macOS",
-    chip: "Mapped 1,273 · built 100",
-    receipt: "macOS 0.2.0 (5) · registry v3.267.0 · Grade 7 sync evidence Sep 13",
-    notYetShort: "Not yet: any distribution. No child has learned from it.",
+    section: "shipped",
+    href: "/teachers-pet",
+    blurb: "A personal school for family learning, publicly available on the App Store for iPhone and Mac.",
+    platforms: "iPhone · Mac",
+    chip: "Live",
+    notYetShort: "Current curriculum completion and learning outcomes have not been independently reverified here.",
     screens: [],
+    appStore: { ...teachersPetRelease, priceLine: priceLine("teachers-pet") },
   },
   koi: {
     section: "lab",

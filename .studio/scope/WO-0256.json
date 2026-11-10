@@ -15,6 +15,12 @@
     "lib/acquisition/service-onboarding.ts",
     "lib/dev/universe.ts",
     "tests/dev-universe.test.ts",
-    "tests/products.test.ts"
+    "tests/products.test.ts",
+    "lib/products.ts",
+    "lib/releases.ts",
+    "lib/app-homes.ts",
+    "app/lab/teachers-pet/page.tsx",
+    "tests/app-homes.test.ts",
+    "components/site/AppStoreBadge.tsx"
   ]
 }
