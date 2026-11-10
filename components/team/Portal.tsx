@@ -55,7 +55,7 @@ const headings: Record<string, [string, string]> = {
   ],
   commissions: [
     "Your work. Your share.",
-    "40% of client payments received, including Care Plan renewals.",
+    "40% of client payments received, including Care Plan renewals. Paid out per deal once the client's payment clears.",
   ],
   scripts: [
     "Sound like yourself.",
@@ -174,7 +174,7 @@ export function Portal({
           <div className="team-avatar">{data.me.name.slice(0, 1)}</div>
           <div>
             <strong>{data.me.name}</strong>
-            <small>{owner ? "Owner" : "Sales partner"} · 40% share</small>
+            <small>{owner ? "Owner" : "Sales partner · 40% share"}</small>
           </div>
           <button
             aria-label="Sign out"
