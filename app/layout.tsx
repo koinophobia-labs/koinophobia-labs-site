@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { JetBrains_Mono, Newsreader, Sora } from "next/font/google";
-import { Analytics } from "@vercel/analytics/next";
+import PrivateAwareAnalytics from "@/components/team/PrivateAwareAnalytics";
 import "./globals.css";
 import "./tokens.css";
 import "./site.css";
@@ -89,7 +89,7 @@ export default function RootLayout({
     >
       <body>
         <AnalyticsBridge />
-        <Analytics />
+        <PrivateAwareAnalytics />
         {children}
         <Motion />
       </body>

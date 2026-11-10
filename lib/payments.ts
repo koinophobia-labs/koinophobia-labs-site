@@ -1,3 +1,4 @@
+import { attributeTeamPayment } from "./team/commissions";
 import { isPartnerOffer, partnerOffers, type PartnerAttribution } from "./acquisition/partner-offers";
 import { offers } from "./acquisition/services-config";
 import Stripe from "stripe";
@@ -52,6 +53,7 @@ type TransactionDatabase = Queryable & {
 };
 let pool: Pool | undefined, stripeClient: Stripe | undefined;
 const db = () => {
+  if (process.env.VERCEL_ENV === "preview") throw Error("Preview payment database access is disabled.");
   if (!process.env.DATABASE_URL) throw Error("DATABASE_URL is not configured");
   return (pool ??= new Pool({
     connectionString: process.env.DATABASE_URL,
@@ -313,6 +315,7 @@ export async function processStripeEvent(
               payment.id,
             ],
           );
+          if (updated.rows[0]) await attributeTeamPayment(q, payment.id, session.metadata);
           if (updated.rows[0] && session.mode === "subscription") {
             const subscriptionId = typeof session.subscription === "string" ? session.subscription : session.subscription!.id;
             await q.query("update crm_leads set name=case when name='' then $1 else name end,email=$2,internal_notes=concat_ws(E'\\n',nullif(internal_notes,''),$3::text),updated_at=now() where id=$4", [session.custom_fields?.find(field => field.key === "buyer_name")?.text?.value || session.customer_details?.name || "", session.customer_details?.email || session.customer_email || "", `Subscription started: ${subscriptionId}; ${offer === "care" ? partnerOffers.care.terms : offers.monthly_support.terms}`, payment.lead_id]);

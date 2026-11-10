@@ -1,3 +1,4 @@
+import { attributeTeamPayment } from "./team/commissions";
 import { checkoutOffers } from "./acquisition/services-config";
 import type Stripe from "stripe";
 import type { Queryable } from "./payments";
@@ -36,6 +37,7 @@ export async function recordSubscriptionEvent(event: Stripe.Event, q: Queryable)
     await q.query(`insert into crm_proposals(id,lead_id,status,version,title,executive_summary,recommended_solution,timeline,pricing_model,subtotal,total,payment_terms,revision_policy,next_steps,internal_notes)
       select $1,$2,'accepted',coalesce(max(version),0)+1,$4,$4,$4,'Monthly','retainer',$5,$5,$6,'','', $3 from crm_proposals where lead_id=$2`, [proposalId, initial.lead_id, `Stripe invoice: ${invoice.id}; subscription: ${subscriptionId}`, `${config.name} renewal`, config.amount, config.terms]);
     await q.query(`insert into crm_payments(id,proposal_id,lead_id,kind,amount,status,paid_at) values($1,$2,$3,'balance',$4,'paid',now())`, [paymentId, proposalId, initial.lead_id, config.amount]);
+    await attributeTeamPayment(q, paymentId, metadata);
     await q.query("update crm_proposals set amount_paid=$2,payment_status='paid',updated_at=now() where id=$1", [proposalId, config.amount]);
     await q.query("update crm_leads set payment_status='paid',updated_at=now() where id=$1", [initial.lead_id]);
   }
