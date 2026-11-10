@@ -22,7 +22,7 @@ const exists = (rel: string) => fs.existsSync(path.join(root, rel));
 const read = (rel: string) => fs.readFileSync(path.join(root, rel), "utf8");
 
 test("every shipped product is public in the registry, links to the App Store, and uses only authentic screens", () => {
-  assert.equal(shippedProducts.length, 6);
+  assert.equal(shippedProducts.length, 7);
   for (const product of shippedProducts) {
     assert.equal(product.stage, "public", `${product.name} is shipped but not stage public`);
     assert.equal(product.reach, "public");
@@ -43,7 +43,7 @@ test("every shipped product is public in the registry, links to the App Store, a
   }
 });
 
-test("Dreamcatcher is shipped with its verified free App Store release; Teacher's Pet stays in the lab", () => {
+test("Dreamcatcher is shipped with its verified free App Store release; Teacher's Pet has its verified public release", () => {
   const dreamcatcher = shippedProducts.find(product => product.slug === "dreamcatcher");
   assert.ok(dreamcatcher);
   assert.equal(dreamcatcher.stage, "public");
@@ -58,8 +58,18 @@ test("Dreamcatcher is shipped with its verified free App Store release; Teacher'
   assert.equal(dreamcatcher.appStore.url, dreamcatcherRelease.url);
   assert.match(dreamcatcher.appStore.priceLine, /^Free to download/);
   assert.equal(getProduct("dreamcatcher")?.actions[0].href, dreamcatcherRelease.url);
-  assert.ok(labProducts.some(product => product.slug === "teachers-pet"));
-  assert.ok(!shippedProducts.some(product => product.slug === "teachers-pet"));
+  assert.ok(!labProducts.some(product => product.slug === "teachers-pet"));
+  const teachersPet = shippedProducts.find(product => product.slug === "teachers-pet");
+  assert.ok(teachersPet);
+  assert.equal(teachersPet.stage, "public");
+  assert.deepEqual(teachersPet.appStore, {
+    url: "https://apps.apple.com/us/app/teachers-pet-personal-school/id6808981717",
+    version: "1.0",
+    verifiedAt: "2026-11-10",
+    releasedAt: "2026-11-06",
+    priceLine: priceLine("teachers-pet"),
+  });
+  assert.ok(teachersPet.evidence.some(item => item.source.includes("6808981717")));
 });
 
 test("every demo clip is cut from a QA-verified master and ships both renditions and a poster", () => {
@@ -75,7 +85,7 @@ test("every demo clip is cut from a QA-verified master and ships both renditions
 });
 
 test("lab products are never presented as shipped", () => {
-  assert.ok(labProducts.length >= 3);
+  assert.ok(labProducts.length >= 2);
   for (const product of labProducts) {
     assert.notEqual(product.stage, "public", `${product.name} is public but listed in the lab`);
     assert.equal(product.appStore, undefined, `${product.name} carries an App Store listing in the lab`);

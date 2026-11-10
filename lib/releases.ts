@@ -36,3 +36,11 @@ export const dreamcatcherRelease = {
   "verifiedAt": "2026-10-21",
   "releasedAt": "2026-10-21"
 } as const;
+
+// WO-0256: public Apple lookup and listing checked 2026-11-10.
+export const teachersPetRelease = {
+  url: "https://apps.apple.com/us/app/teachers-pet-personal-school/id6808981717",
+  version: "1.0",
+  verifiedAt: "2026-11-10",
+  releasedAt: "2026-11-06",
+} as const;

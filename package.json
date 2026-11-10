@@ -9,7 +9,7 @@
     "start": "next start",
     "lint": "eslint",
     "test:auth": "tsx --test tests/crm-auth.test.ts tests/crm-routes.test.ts",
-    "test:crm": "tsx --test tests/crm-auth.test.ts tests/crm.test.ts tests/crm-routes.test.ts tests/proposals.test.ts tests/audits.test.ts tests/audit-persistence.test.ts tests/audit-crawler.test.ts tests/payments.test.ts tests/intake-abuse.test.ts tests/redaction.test.ts tests/founder-packet.test.ts tests/resume.test.ts tests/you-know-ball.test.ts tests/legal-pages.test.ts tests/products.test.ts",
+    "test:crm": "tsx --test tests/crm-auth.test.ts tests/crm.test.ts tests/crm-routes.test.ts tests/proposals.test.ts tests/audits.test.ts tests/audit-persistence.test.ts tests/audit-crawler.test.ts tests/payments.test.ts tests/intake-abuse.test.ts tests/redaction.test.ts tests/founder-packet.test.ts tests/resume.test.ts tests/you-know-ball.test.ts tests/legal-pages.test.ts tests/products.test.ts tests/partner-payments.test.ts tests/payment-reliability.test.ts",
     "test:ykb": "tsx --test tests/you-know-ball.test.ts",
     "test:legal": "tsx --test tests/legal-pages.test.ts",
     "test:products": "tsx --test tests/products.test.ts tests/dev-universe.test.ts tests/analytics.test.ts tests/site-audit.test.ts",
@@ -26,7 +26,11 @@
     "koi:contrast": "node scripts/audit-koi-contrast.mjs",
     "test:services": "tsx --test tests/services.test.ts tests/audit-checkout.test.ts tests/payments.test.ts tests/payment-reliability.test.ts",
     "test:audit-checkout": "tsx --test tests/audit-checkout.test.ts tests/payments.test.ts tests/payment-reliability.test.ts",
-    "test:app-homes": "tsx --test tests/app-homes.test.ts"
+    "test:app-homes": "tsx --test tests/app-homes.test.ts",
+    "test:team": "tsx --test tests/team-*.test.ts",
+    "db:migrate-team": "node scripts/migrate-team.mjs",
+    "test:connect": "tsx --test tests/team-connect*.test.ts",
+    "db:migrate-connect": "node scripts/migrate-connect.mjs"
   },
   "dependencies": {
     "@vercel/analytics": "^2.0.1",
@@ -39,7 +43,8 @@
     "pg": "^8.22.0",
     "react": "19.2.4",
     "react-dom": "19.2.4",
-    "stripe": "^18.5.0"
+    "stripe": "^18.5.0",
+    "ipaddr.js": "^2.2.0"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",

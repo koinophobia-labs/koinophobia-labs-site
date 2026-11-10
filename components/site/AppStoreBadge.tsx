@@ -13,6 +13,7 @@ const appNames: Record<string, string> = {
   "way-in": "Way In",
   "preaching-to-the-choir": "Preaching to the Choir",
   "old-dog": "Old Dog",
+  "teachers-pet": "Teacher’s Pet",
 };
 
 /**
