@@ -28,7 +28,9 @@
     "test:audit-checkout": "tsx --test tests/audit-checkout.test.ts tests/payments.test.ts tests/payment-reliability.test.ts",
     "test:app-homes": "tsx --test tests/app-homes.test.ts",
     "test:team": "tsx --test tests/team-*.test.ts",
-    "db:migrate-team": "node scripts/migrate-team.mjs"
+    "db:migrate-team": "node scripts/migrate-team.mjs",
+    "test:connect": "tsx --test tests/team-connect*.test.ts",
+    "db:migrate-connect": "node scripts/migrate-connect.mjs"
   },
   "dependencies": {
     "@vercel/analytics": "^2.0.1",

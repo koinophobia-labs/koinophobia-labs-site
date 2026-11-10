@@ -1,3 +1,4 @@
+import { connectPreview } from "./connect-preview";
 import { cookies } from "next/headers";
 import { cookieName, sessionActor } from "./auth";
 import { hostedPreview, teamDatabase } from "./db";
@@ -47,6 +48,7 @@ export async function currentSnapshot(): Promise<TeamSnapshot | null> {
     });
     return {
       ...scoped(data, me),
+      connect: connectPreview(me),
       me,
       fake: true,
       readonly: true,

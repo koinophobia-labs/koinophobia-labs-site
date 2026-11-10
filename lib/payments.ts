@@ -1,3 +1,5 @@
+import { connectEnabled, connectStripe, testEvent } from "./team/connect-client";
+import { queueConnectPayment, queueConnectLoss, updateAccount, drainConnect } from "./team/connect";
 import { attributeTeamPayment } from "./team/commissions";
 import { isPartnerOffer, partnerOffers, type PartnerAttribution } from "./acquisition/partner-offers";
 import { offers } from "./acquisition/services-config";
@@ -247,7 +249,9 @@ export async function processStripeEvent(
   event: Stripe.Event,
   database: TransactionDatabase = db(),
   notify = sendPaidAuditEmail,
+  connectClient: Stripe | undefined = connectEnabled() ? connectStripe() : undefined,
 ) {
+  if (connectClient) testEvent(event);
   // Pool.query cannot keep a transaction on one connection.
   const connection = database.connect ? await database.connect() : undefined;
   const q = connection ?? database;
@@ -264,9 +268,14 @@ export async function processStripeEvent(
     );
     if (existing.rows[0]?.processed_at) {
       await q.query("commit");
+      if (connectClient) await drainConnect(database as Pool, connectClient);
       return { duplicate: true };
     }
-    await recordSubscriptionEvent(event, q);
+    await recordSubscriptionEvent(event, q, Boolean(connectClient));
+    if (connectClient) {
+      await queueConnectLoss(q, event);
+      if (event.type === "account.updated") await updateAccount(q, (event.data.object as Stripe.Account).id, connectClient);
+    }
     const object = event.data.object as Stripe.Checkout.Session | Stripe.Charge,
       paymentId = "metadata" in object ? object.metadata?.paymentId : undefined;
     let payment: QueryResultRow | undefined;
@@ -316,6 +325,7 @@ export async function processStripeEvent(
             ],
           );
           if (updated.rows[0]) await attributeTeamPayment(q, payment.id, session.metadata);
+          if (connectClient) await queueConnectPayment(q, payment.id, "checkout", session.id);
           if (updated.rows[0] && session.mode === "subscription") {
             const subscriptionId = typeof session.subscription === "string" ? session.subscription : session.subscription!.id;
             await q.query("update crm_leads set name=case when name='' then $1 else name end,email=$2,internal_notes=concat_ws(E'\\n',nullif(internal_notes,''),$3::text),updated_at=now() where id=$4", [session.custom_fields?.find(field => field.key === "buyer_name")?.text?.value || session.customer_details?.name || "", session.customer_details?.email || session.customer_email || "", `Subscription started: ${subscriptionId}; ${offer === "care" ? partnerOffers.care.terms : offers.monthly_support.terms}`, payment.lead_id]);
@@ -353,7 +363,7 @@ export async function processStripeEvent(
           "update crm_payments set status='expired',expired_at=now(),updated_at=now() where id=$1 and status='pending'",
           [payment.id],
         );
-      else if (event.type === "charge.refunded")
+      else if (event.type === "charge.refunded" && (!connectClient || (object as Stripe.Charge).amount_refunded >= (object as Stripe.Charge).amount))
         await q.query(
           "update crm_payments set status='refunded',refunded_at=now(),updated_at=now() where id=$1",
           [payment.id],
@@ -371,6 +381,7 @@ export async function processStripeEvent(
   } finally {
     connection?.release();
   }
+  if (connectClient) await drainConnect(database as Pool, connectClient);
   // Dispatch only after payment/event commit. Never hold a DB transaction over
   // email I/O or roll back a paid payment because the mail provider is down.
   // An ambiguous/crashed send is retained for manual reconciliation, not resent.

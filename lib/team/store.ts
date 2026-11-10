@@ -1,3 +1,5 @@
+import { connectEnabled } from "./connect-client";
+import { connectSnapshot, type ConnectSnapshot } from "./connect";
 import { randomUUID } from "node:crypto";
 import type { Queryable } from "../payments";
 import type { Data, Partner, Lead, Deal, Stage } from "./types";
@@ -22,6 +24,7 @@ export type TeamLead = Lead & {
   evidence?: { check: string; measurement: string }[];
 };
 export type TeamSnapshot = Omit<Data, "leads"> & {
+  connect?: ConnectSnapshot;
   me: Partner;
   fake: boolean;
   readonly: boolean;
@@ -124,6 +127,7 @@ export async function snapshot(
       )
     ).rows[0]?.value || "";
   return {
+    ...(connectEnabled() ? {connect: await connectSnapshot(q,p)} : {}),
     me: p,
     fake: false,
     readonly: false,
@@ -279,6 +283,7 @@ export async function recordPayout(
   amount: unknown,
 ) {
   owner(p);
+  if (connectEnabled()) throw new Fault("Automatic Stripe transfers are enabled. Use the Connect ledger to reconcile payouts.",409);
   const d = await scopedDeal(q, p, id, true),
     value = cents(amount),
     data = await snapshot(q, p);

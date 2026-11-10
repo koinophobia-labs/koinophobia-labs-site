@@ -1,3 +1,11 @@
+import {
+  onboard,
+  expressLogin,
+  retryConnect,
+  updateAccount,
+  drainConnect,
+} from "@/lib/team/connect";
+import { connectStripe } from "@/lib/team/connect-client";
 import { isTrustedMutationRequest } from "@/lib/security/origin";
 import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
@@ -132,6 +140,23 @@ export async function POST(
     const p = await currentPartner();
     if (!p) throw new Fault("Please sign in.", 401);
     await rateLimit(teamDatabase(), "action:" + p.id, 100);
+    if (action === "connect-onboard")
+      return ok(await onboard(teamDatabase(), p, request.nextUrl.origin));
+    if (action === "connect-dashboard")
+      return ok(await expressLogin(teamDatabase(), p));
+    if (action === "connect-retry")
+      return ok(await retryConnect(teamDatabase(), p));
+    if (action === "connect-refresh") {
+      const client = connectStripe();
+      const a = (
+        await teamDatabase().query(
+          "select stripe_account_id from team_connect_accounts where partner_id=$1",
+          [p.id],
+        )
+      ).rows[0];
+      if (a) await updateAccount(teamDatabase(), a.stripe_account_id, client);
+      return ok(await drainConnect(teamDatabase(), client, p.id));
+    }
     if (action === "check") {
       await rateLimit(teamDatabase(), "site-check:" + p.id, 10);
       const result = await checkSite(

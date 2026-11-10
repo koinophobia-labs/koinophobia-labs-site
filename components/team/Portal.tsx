@@ -1,4 +1,5 @@
 "use client";
+import { ConnectPanel } from "./ConnectPanel";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -82,18 +83,30 @@ export function Portal({
     [script, setScript] = useState("Call"),
     [inviteCode, setInviteCode] = useState("");
   const owner = data.me.role === "owner";
-  const totals = data.deals.reduce(
-    (a, d) => {
-      const c = commission(data, d);
-      return {
-        received: a.received + c.received,
-        earned: a.earned + c.earned,
-        paid: a.paid + c.paid,
-        owed: a.owed + c.owed,
-      };
-    },
-    { received: 0, earned: 0, paid: 0, owed: 0 },
-  );
+  const totals = data.connect
+    ? data.connect.payments.reduce(
+        (a, p) => ({
+          received: a.received + p.amount - p.loss,
+          earned: a.earned + p.earned,
+          paid: a.paid + p.paid,
+          owed: a.owed + p.owed,
+        }),
+        { received: 0, earned: 0, paid: 0, owed: 0 },
+      )
+    : data.deals.reduce(
+        (a, d) => {
+          const c = commission(data, d);
+          return {
+            received: a.received + c.received,
+            earned: a.earned + c.earned,
+            paid: a.paid + c.paid,
+            owed: a.owed + c.owed,
+          };
+        },
+        { received: 0, earned: 0, paid: 0, owed: 0 },
+      );
+  const owedBack =
+    data.connect?.payments.reduce((sum, p) => sum + p.owed_back, 0) || 0;
   const name = (d: Deal) =>
     data.leads.find((l) => l.id === d.lead_id)?.business || "Lead";
   async function act(action: string, body: object) {
@@ -108,6 +121,10 @@ export function Portal({
         v = await r.json();
       if (!r.ok) throw Error(v.error);
       if (action === "invite") setInviteCode(v.code);
+      if (v.url && ["connect-onboard", "connect-dashboard"].includes(action)) {
+        window.location.assign(v.url);
+        return v;
+      }
       setMessage(
         action === "import"
           ? `${v.imported} imported · ${v.duplicates} duplicates · ${v.suppressed} opted out`
@@ -729,7 +746,16 @@ export function Portal({
                 <div>
                   <p className="team-eyebrow">COMMISSION OWED</p>
                   <div className="team-big-money">{money(totals.owed)}</div>
-                  <p>Your share of the work, ready for owner payout.</p>
+                  {owedBack > 0 && (
+                    <p>
+                      <strong>Owed back: {money(owedBack)}</strong> · deducted
+                      from that partner’s future transfers.
+                    </p>
+                  )}
+                  <p>
+                    Your share of client payments, after refunds and balance
+                    adjustments.
+                  </p>
                 </div>
                 <div className="team-share">
                   <strong>
@@ -752,73 +778,86 @@ export function Portal({
                 <Stat
                   title="Already paid out"
                   value={money(totals.paid)}
-                  note="Recorded by the owner"
+                  note={
+                    data.connect
+                      ? "Transfers and balance adjustments"
+                      : "Recorded by the owner"
+                  }
                 />
               </div>
-              <div className="team-section-title">
-                <h2>Commission ledger</h2>
-                <span className="team-tag">OVERRIDES OFF</span>
-              </div>
-              <div className="team-ledger">
-                {data.deals.map((d) => {
-                  const c = commission(data, d);
-                  return (
-                    <section className="team-ledger-row" key={d.id}>
-                      <div>
-                        <h3>{name(d)}</h3>
-                        <small>{d.stage}</small>
-                      </div>
-                      <div>
-                        <small>Received</small>
-                        <strong>{money(c.received)}</strong>
-                      </div>
-                      <div>
-                        <small>Earned</small>
-                        <strong>{money(c.earned)}</strong>
-                      </div>
-                      <div>
-                        <small>Paid out</small>
-                        <strong>{money(c.paid)}</strong>
-                      </div>
-                      <div>
-                        <small>Owed</small>
-                        <strong className="team-green">{money(c.owed)}</strong>
-                      </div>
-                      {owner && c.owed > 0 && (
-                        <form
-                          onSubmit={submit("payout", (f) => ({
-                            id: d.id,
-                            amount: Math.round(Number(f.get("amount")) * 100),
-                          }))}
-                        >
-                          <label>
-                            Payout amount (USD)
-                            <input
-                              name="amount"
-                              type="number"
-                              min="0.01"
-                              max={c.owed / 100}
-                              step="0.01"
-                              required
-                            />
-                          </label>
-                          <button
-                            disabled={disabled}
-                            className="secondary small"
-                          >
-                            Record payout
-                          </button>
-                        </form>
-                      )}
-                    </section>
-                  );
-                })}
-              </div>
-              <p className="team-fine">
-                Recording a payout does not move money. Refunded payments no
-                longer count toward earned commission; a negative balance
-                remains visible for reconciliation.
-              </p>
+              <ConnectPanel data={data} busy={busy} act={act} />
+              {!data.connect && (
+                <>
+                  <div className="team-section-title">
+                    <h2>Commission ledger</h2>
+                    <span className="team-tag">OVERRIDES OFF</span>
+                  </div>
+                  <div className="team-ledger">
+                    {data.deals.map((d) => {
+                      const c = commission(data, d);
+                      return (
+                        <section className="team-ledger-row" key={d.id}>
+                          <div>
+                            <h3>{name(d)}</h3>
+                            <small>{d.stage}</small>
+                          </div>
+                          <div>
+                            <small>Received</small>
+                            <strong>{money(c.received)}</strong>
+                          </div>
+                          <div>
+                            <small>Earned</small>
+                            <strong>{money(c.earned)}</strong>
+                          </div>
+                          <div>
+                            <small>Paid out</small>
+                            <strong>{money(c.paid)}</strong>
+                          </div>
+                          <div>
+                            <small>Owed</small>
+                            <strong className="team-green">
+                              {money(c.owed)}
+                            </strong>
+                          </div>
+                          {owner && c.owed > 0 && (
+                            <form
+                              onSubmit={submit("payout", (f) => ({
+                                id: d.id,
+                                amount: Math.round(
+                                  Number(f.get("amount")) * 100,
+                                ),
+                              }))}
+                            >
+                              <label>
+                                Payout amount (USD)
+                                <input
+                                  name="amount"
+                                  type="number"
+                                  min="0.01"
+                                  max={c.owed / 100}
+                                  step="0.01"
+                                  required
+                                />
+                              </label>
+                              <button
+                                disabled={disabled}
+                                className="secondary small"
+                              >
+                                Record payout
+                              </button>
+                            </form>
+                          )}
+                        </section>
+                      );
+                    })}
+                  </div>
+                  <p className="team-fine">
+                    Recording a payout does not move money. Refunded payments no
+                    longer count toward earned commission; a negative balance
+                    remains visible for reconciliation.
+                  </p>
+                </>
+              )}
             </>
           )}
           {screen === "scripts" && (
