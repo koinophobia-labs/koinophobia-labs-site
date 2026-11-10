@@ -1,3 +1,4 @@
+import { sandboxRequested } from "../sandbox-runtime";
 import { type LeadInput, redactLeadFreeText } from "@/lib/acquisition/leads";
 import {
   buildFounderSalesPacket,
@@ -214,6 +215,7 @@ export async function sendPaidAuditEmail(notice: PaidAuditNotice) {
 
 // SITE-01 sender and recipient shared by lead and paid-audit notifications.
 async function sendInternalEmail(message: { subject: string; text: string; html?: string; reply_to?: string }, idempotencyKey?: string) {
+  if (sandboxRequested()) return { ok: false, reason: "not_configured" as const };
   const apiKey = process.env.RESEND_API_KEY;
   const to = process.env.CONTACT_TO_EMAIL;
   const from = process.env.CONTACT_FROM_EMAIL || "Koinophobia Labs Leads <leads@koinophobialabs.com>";

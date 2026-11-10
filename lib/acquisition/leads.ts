@@ -1,3 +1,4 @@
+import { assertSandboxIsolation } from "../sandbox-runtime";
 import { Pool, type PoolClient, type QueryResultRow } from "pg";
 import type { ConciergeLeadData } from "@/lib/concierge/types";
 import {
@@ -39,6 +40,7 @@ type Queryable = Pick<Pool, "query"> | Pick<PoolClient, "query">;
 let pool: Pool | undefined;
 
 function database(): Pool {
+  assertSandboxIsolation();
   if (!process.env.DATABASE_URL) throw new Error("DATABASE_URL is not configured");
   return pool ??= new Pool({ connectionString: process.env.DATABASE_URL, max: 5 });
 }

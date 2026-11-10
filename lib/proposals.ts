@@ -1,3 +1,4 @@
+import { assertSandboxIsolation } from "./sandbox-runtime";
 import { Pool, type PoolClient, type QueryResultRow } from "pg";
 import type { LeadRecord } from "@/lib/acquisition/leads";
 
@@ -60,6 +61,7 @@ export type ProposalRecord = ProposalInput & {
 type Queryable = Pick<Pool, "query"> | Pick<PoolClient, "query">;
 let pool: Pool | undefined;
 const db = () => {
+  assertSandboxIsolation();
   if (!process.env.DATABASE_URL)
     throw new Error("DATABASE_URL is not configured");
   return (pool ??= new Pool({

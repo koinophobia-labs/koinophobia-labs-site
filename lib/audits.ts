@@ -1,3 +1,4 @@
+import { assertSandboxIsolation } from "./sandbox-runtime";
 import { Pool, type PoolClient, type QueryResultRow } from "pg";
 export const auditStatuses = ["queued", "running", "completed", "failed", "cancelled", "draft", "ready"] as const;
 export const findingSeverities = [
@@ -86,6 +87,7 @@ export type Queryable = {
 };
 let pool: Pool | undefined;
 const db = () => {
+  assertSandboxIsolation();
   if (!process.env.DATABASE_URL) throw Error("DATABASE_URL is not configured");
   return (pool ??= new Pool({
     connectionString: process.env.DATABASE_URL,

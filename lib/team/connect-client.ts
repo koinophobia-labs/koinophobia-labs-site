@@ -1,3 +1,4 @@
+import { assertSandboxIsolation, sandboxPreview } from "../sandbox-runtime";
 import Stripe from "stripe";
 export const connectEnabled = () =>
   process.env.STRIPE_CONNECT_ENABLED === "true";
@@ -11,12 +12,14 @@ export function connectMode() {
   return mode;
 }
 export function connectStripe() {
-  if (process.env.VERCEL_ENV === "preview")
+  assertSandboxIsolation();
+  if (process.env.VERCEL_ENV === "preview" && !sandboxPreview())
     throw Error("CONNECT_PREVIEW_DISABLED");
   const key = process.env.STRIPE_SECRET_KEY || "";
   const mode = connectMode();
   // Default is test. Live requires both an explicit owner-set mode and a
-  // production runtime; previews are always disabled. No flag is set by builds.
+  // production runtime; only the pinned isolated Sandbox preview is allowed.
+  // No flag is set by builds.
   if (!connectEnabled() || !new RegExp(`^(sk|rk)_${mode}_`).test(key))
     throw Error("CONNECT_TEST_KEY_OR_EXPLICIT_PRODUCTION_MODE_REQUIRED");
   return new Stripe(key, { maxNetworkRetries: 2, timeout: 15000 });

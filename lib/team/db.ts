@@ -1,8 +1,10 @@
+import { assertSandboxIsolation, sandboxPreview } from "../sandbox-runtime";
 import { Pool } from "pg";
 import type { Queryable } from "../payments";
-export const hostedPreview = () => process.env.VERCEL_ENV === "preview";
+export const hostedPreview = () => process.env.VERCEL_ENV === "preview" && !sandboxPreview();
 let pool: Pool | undefined;
 export function teamDatabase() {
+  assertSandboxIsolation();
   if (hostedPreview())
     throw Error(
       "Hosted review uses fake data only. Database access is disabled.",

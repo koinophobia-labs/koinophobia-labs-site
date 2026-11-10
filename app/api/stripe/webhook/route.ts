@@ -1,8 +1,9 @@
+import { sandboxPreview } from "@/lib/sandbox-runtime";
 import { NextRequest, NextResponse } from "next/server";
 import { processStripeEvent, stripe } from "@/lib/payments";
 export const maxDuration = 60;
 export async function POST(r: NextRequest) {
-  if (process.env.VERCEL_ENV === "preview")
+  if (process.env.VERCEL_ENV === "preview" && !sandboxPreview())
     return NextResponse.json({ ok: false }, { status: 409 });
   const signature = r.headers.get("stripe-signature");
   if (!signature) return NextResponse.json({ ok: false }, { status: 400 });

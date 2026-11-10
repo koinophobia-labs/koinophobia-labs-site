@@ -1,3 +1,4 @@
+import { assertSandboxIsolation, sandboxPreview } from "./sandbox-runtime";
 import { connectEnabled, connectStripe, testEvent } from "./team/connect-client";
 import { queueConnectPayment, queueConnectLoss, updateAccount, drainConnect } from "./team/connect";
 import { attributeTeamPayment } from "./team/commissions";
@@ -55,7 +56,8 @@ type TransactionDatabase = Queryable & {
 };
 let pool: Pool | undefined, stripeClient: Stripe | undefined;
 const db = () => {
-  if (process.env.VERCEL_ENV === "preview") throw Error("Preview payment database access is disabled.");
+  assertSandboxIsolation();
+  if (process.env.VERCEL_ENV === "preview" && !sandboxPreview()) throw Error("Preview payment database access is disabled.");
   if (!process.env.DATABASE_URL) throw Error("DATABASE_URL is not configured");
   return (pool ??= new Pool({
     connectionString: process.env.DATABASE_URL,
@@ -64,6 +66,7 @@ const db = () => {
 };
 export { db as paymentDatabase };
 export const stripe = () => {
+  assertSandboxIsolation();
   if (!process.env.STRIPE_SECRET_KEY)
     throw Error("STRIPE_SECRET_KEY is not configured");
   return (stripeClient ??= new Stripe(process.env.STRIPE_SECRET_KEY));
@@ -153,10 +156,18 @@ export async function createCheckout(
     [id, proposalId, context.leadId, input.kind, amount],
   );
   try {
+    // Test-clock customer belongs exclusively to the pinned isolated E2E preview.
+    let clockCustomer: string | undefined;
+    if (sandboxPreview() && options.mode === "subscription") {
+      clockCustomer = (await q.query("select value from team_settings where key='sandbox_clock_customer'")).rows[0]?.value;
+      if (!clockCustomer) throw Error("SANDBOX_CLOCK_CUSTOMER_REQUIRED");
+      const customer = await client.customers.retrieve(clockCustomer);
+      if (customer.deleted || customer.livemode || !customer.test_clock) throw Error("SANDBOX_CLOCK_CUSTOMER_INVALID");
+    }
     const session = await client.checkout.sessions.create(
       {
         mode: options.mode ?? "payment",
-        customer_email: context.email || undefined,
+        ...(clockCustomer ? { customer: clockCustomer } : { customer_email: context.email || undefined }),
         ...(options.collectName ? { custom_fields: [{ key: "buyer_name", label: { type: "custom" as const, custom: "Name" }, type: "text" as const }] } : {}),
         client_reference_id: proposalId,
         line_items: [
