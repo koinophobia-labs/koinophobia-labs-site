@@ -1,4 +1,5 @@
 "use client";
+import { AccountPassword } from "./AccountPassword";
 import { ConnectPanel } from "./ConnectPanel";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -35,9 +36,11 @@ const navigation = [
   ["pipeline", "Pipeline", Layers3],
   ["commissions", "Commissions", Wallet],
   ["scripts", "Scripts", MessageSquare],
+  ["account", "Account", ShieldCheck],
   ["admin", "Team admin", Settings2],
 ] as const;
 const headings: Record<string, [string, string]> = {
+  account: ["Your account.", "Manage how you sign in to the partner desk."],
   leads: [
     "Your next good conversation.",
     "A real problem is the beginning of useful work.",
@@ -70,9 +73,11 @@ const headings: Record<string, [string, string]> = {
 export function Portal({
   screen,
   initial: data,
+  account,
 }: {
   screen: string;
   initial: TeamSnapshot;
+  account?: { hasPassword: boolean; canReset: boolean; prompt: boolean };
 }) {
   const router = useRouter(),
     [busy, setBusy] = useState(false),
@@ -239,6 +244,7 @@ export function Portal({
               {message}
             </div>
           )}
+          {screen === "account" && account && <AccountPassword state={account} readonly={data.readonly} />}
           {screen === "leads" && (
             <>
               <div className="team-stats">

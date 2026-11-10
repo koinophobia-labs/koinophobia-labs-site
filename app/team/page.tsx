@@ -8,8 +8,9 @@ export default async function Team({
 }: {
   searchParams: Promise<{ token?: string }>;
 }) {
-  if (await currentPartner()) redirect("/team/leads");
   const { token } = await searchParams;
+  // A reset link must work even if the browser is already signed in.
+  if (!token && await currentPartner()) redirect("/team/leads");
   return (
     <Login
       preview={hostedPreview()}

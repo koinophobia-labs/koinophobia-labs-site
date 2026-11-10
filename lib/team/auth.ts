@@ -49,6 +49,61 @@ export async function verifyPassword(value: string, stored: string) {
   const expected = Buffer.from(hex, "hex");
   return expected.length === key.length && timingSafeEqual(key, expected);
 }
+// Passwords are exact strings: whitespace is meaningful, unlike other text inputs.
+export function passwordInput(value: unknown) {
+  if (typeof value !== "string" || !value.length || value.length > 256)
+    throw new Fault("Email or password is incorrect.", 401);
+  return value;
+}
+
+export async function passwordState(q: Queryable, session: string) {
+  const row = (await q.query(
+    `select p.password_hash is not null as has_password,
+      p.password_prompt_dismissed,
+      coalesce(s.password_reset_until>now(),false) as can_reset
+     from team_sessions s join team_partners p on p.id=s.partner_id
+     where s.token_hash=$1 and s.expires_at>now() and p.active`,
+    [digest(session)],
+  )).rows[0];
+  if (!row) throw new Fault("Please sign in.", 401);
+  return {
+    hasPassword: row.has_password === true,
+    canReset: row.can_reset === true,
+    prompt: !row.has_password && !row.password_prompt_dismissed && row.can_reset === true,
+  };
+}
+
+// Call inside transaction(): lock the account, recheck the session, and revoke
+// sessions atomically. A stale session cannot win a concurrent password change.
+export async function setPassword(q: Queryable, session: string, input: Record<string, unknown>) {
+  const row = (await q.query(
+    `select p.id,p.password_hash from team_partners p join team_sessions s on s.partner_id=p.id
+     where s.token_hash=$1 and s.expires_at>now() and p.active for update of p`,
+    [digest(session)],
+  )).rows[0];
+  if (!row) throw new Fault("Please sign in.", 401);
+  const state = await passwordState(q, session);
+  if (row.password_hash && !state.canReset) {
+    const current = typeof input.currentPassword === "string" ? input.currentPassword : "";
+    if (!(await verifyPassword(current, row.password_hash)))
+      throw new Fault("Current password is incorrect.", 401);
+  }
+  if (typeof input.password !== "string") throw new Fault("Use a password with 12–256 characters.");
+  const hash = await hashPassword(input.password);
+  await q.query("update team_partners set password_hash=$1,password_prompt_dismissed=true,invite_hash=null,invite_expires_at=null where id=$2", [hash,row.id]);
+  await q.query("delete from team_sessions where partner_id=$1 and token_hash<>$2", [row.id,digest(session)]);
+  await q.query("update team_sessions set password_reset_until=null where token_hash=$1", [digest(session)]);
+  // Outstanding links must not restore access after a password change.
+  await q.query("delete from team_login_tokens where partner_id=$1", [row.id]);
+  return { ok: true };
+}
+
+export async function dismissPasswordPrompt(q: Queryable, session: string) {
+  await passwordState(q, session);
+  await q.query(`update team_partners p set password_prompt_dismissed=true from team_sessions s
+    where s.partner_id=p.id and s.token_hash=$1 and s.expires_at>now() and p.active`, [digest(session)]);
+  return { ok: true };
+}
 export function actor(
   row: Record<string, unknown>,
 ): Partner & { email: string } {
@@ -224,5 +279,7 @@ export async function consumeMagicLink(q: Queryable, value: string) {
     [digest(value)],
   );
   if (!r.rows[0]) throw new Fault("Login link is invalid or expired.", 401);
-  return newSession(q, r.rows[0].partner_id);
+  const session = await newSession(q, r.rows[0].partner_id);
+  await q.query("update team_sessions set password_reset_until=now()+interval '15 minutes' where token_hash=$1", [digest(session)]);
+  return session;
 }

@@ -192,6 +192,7 @@ test("team portal real PostgreSQL acceptance", async (t) => {
         );
       },
     );
+    await db.query(readFileSync("db/012_team_password.sql", "utf8"));
     for (const p of fake.partners)
       await db.query(
         "insert into team_partners(id,name,email,role) values($1,$2,$3,$4)",

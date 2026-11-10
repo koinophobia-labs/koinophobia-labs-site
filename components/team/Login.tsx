@@ -34,7 +34,7 @@ export function Login({
         d = await r.json();
       if (!r.ok) throw Error(d.error);
       if (action === "magic") setMessage(d.message);
-      else window.location.assign("/team/leads");
+      else window.location.assign(d.next || "/team/leads");
     } catch (e) {
       setMessage((e as Error).message);
     } finally {
@@ -109,7 +109,9 @@ export function Login({
             onSubmit={(e) => {
               e.preventDefault();
               const f = new FormData(e.currentTarget);
-              void submit(magic ? "magic" : "login", Object.fromEntries(f));
+              const action = (e.nativeEvent as SubmitEvent).submitter?.getAttribute("value") || "login";
+              if (action === "magic") void submit(action, { email: f.get("email") });
+              else void submit("login", Object.fromEntries(f));
             }}
           >
             <label>
@@ -122,36 +124,41 @@ export function Login({
                 placeholder="you@company.com"
               />
             </label>
-            {!magic && (
-              <>
-                <label>
-                  Password
-                  <input
-                    name="password"
-                    type="password"
-                    autoComplete={invite ? "new-password" : "current-password"}
-                    required
-                    minLength={invite ? 12 : 1}
-                  />
-                </label>
-                {invite && (
-                  <label>
-                    Invite code
-                    <input name="code" autoComplete="off" required />
-                  </label>
-                )}
-              </>
+            <label>
+              Password
+              <input
+                name="password"
+                type="password"
+                autoComplete={invite ? "new-password" : "current-password"}
+                required
+                minLength={invite ? 12 : 1}
+                maxLength={256}
+              />
+            </label>
+            {invite && (
+              <label>
+                Invite code
+                <input name="code" autoComplete="off" required />
+              </label>
             )}
             <button disabled={busy}>
               {busy
                 ? "Signing in…"
-                : magic
-                  ? "Email me a login link"
-                  : invite
-                    ? "Accept invite & sign in"
-                    : "Sign in"}{" "}
+                : invite
+                  ? "Accept invite & sign in"
+                  : "Sign in"}{" "}
               <ArrowRight size={17} />
             </button>
+            {magic && (
+              <>
+                <button type="submit" value="magic" formNoValidate disabled={busy} className="secondary">
+                  Email me a login link
+                </button>
+                <button type="submit" value="magic" formNoValidate disabled={busy} className="text-button">
+                  Forgot password? Email me a link
+                </button>
+              </>
+            )}
             {!magic && (
               <button
                 type="button"

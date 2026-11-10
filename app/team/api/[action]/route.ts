@@ -21,6 +21,10 @@ import {
   mailConfigured,
   invite,
   digest,
+  passwordInput,
+  passwordState,
+  setPassword,
+  dismissPasswordPrompt,
 } from "@/lib/team/auth";
 import { currentPartner } from "@/lib/team/session";
 import { Fault, owner, textInput } from "@/lib/team/domain";
@@ -108,7 +112,8 @@ export async function POST(
         await rateLimit(db, "token:" + digest(value));
         const session = await transaction((q) => consumeMagicLink(q, value));
         jar.set(cookieName, session, cookieOptions);
-        return ok({ ok: true });
+        const state = await passwordState(db, session);
+        return ok({ ok: true, next: state.prompt || state.hasPassword ? "/team/account" : "/team/leads" });
       }
       const email = emailInput(body.email);
       await rateLimit(db, "login-email:" + email);
@@ -118,20 +123,27 @@ export async function POST(
             "Email login is unavailable here. Use your invite and password.",
             409,
           );
-        await requestMagicLink(db, email, "https://koinophobialabs.com");
+        // Keep the response identical for unknown, inactive, and active accounts,
+        // including provider errors. The delivered link remains usable on timeout.
+        try {
+          await requestMagicLink(db, email, "https://koinophobialabs.com");
+        } catch (e) {
+          if (!(e instanceof Fault && e.status === 503)) throw e;
+        }
         return ok({
           message:
             "If your email has an active invitation, a login link is on its way.",
         });
       }
-      if (mailConfigured() && process.env.VERCEL_ENV === "production")
-        throw new Fault("Use email-link login for this team.", 409);
       const session = await transaction((q) =>
         passwordLogin(
           q,
           email,
-          textInput(body.password, "Password", true, 256),
-          textInput(body.code, "Invite code", false, 100),
+          passwordInput(body.password),
+          // Preserve production's email verification requirement for invitations.
+          mailConfigured() && process.env.VERCEL_ENV === "production"
+            ? ""
+            : textInput(body.code, "Invite code", false, 100),
         ),
       );
       jar.set(cookieName, session, cookieOptions);
@@ -140,6 +152,12 @@ export async function POST(
     const p = await currentPartner();
     if (!p) throw new Fault("Please sign in.", 401);
     await rateLimit(teamDatabase(), "action:" + p.id, 100);
+    if (action === "password") {
+      await rateLimit(teamDatabase(), "password-change:" + p.id);
+      return ok(await transaction((q) => setPassword(q, jar.get(cookieName)!.value, body)));
+    }
+    if (action === "password-prompt-dismiss")
+      return ok(await transaction((q) => dismissPasswordPrompt(q, jar.get(cookieName)!.value)));
     if (action === "connect-onboard")
       return ok(await onboard(teamDatabase(), p, request.nextUrl.origin));
     if (action === "connect-dashboard")

@@ -15,6 +15,7 @@ async function main() {
       "002_crm_proposals.sql",
       "006_stripe_payments.sql",
       "010_team_portal.sql",
+      "012_team_password.sql",
     ])
       await db.query(readFileSync("db/" + file, "utf8"));
     const data = seed(true),
