@@ -40,5 +40,11 @@
     "components/site/AppStoreBadge.tsx",
     "components/apps/AppPricing.tsx",
     "components/apps/AppWorlds.tsx"
-  ]
+  ],
+  "production_baseline": "49d574c5a1382c5ff5d075e9f77b59f936111aa4",
+  "includes_work_orders": [
+    "WO-0256",
+    "WO-0257"
+  ],
+  "reconciliation": "WO-0256 head is already an ancestor of this branch; preserve pay routes and product corrections together with the portal and Director copy fix 172b340."
 }
