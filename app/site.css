@@ -1140,3 +1140,29 @@
   .studio-proof .pcard .device { width: 100%; }
   .studio-offer .sticky .btn { white-space: normal; text-align: center; }
 }
+
+/* Homepage Shipped cards: official icons, with no phone-shaped media slot. */
+.pcard.pcard--icon {
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto 1fr;
+  gap: 1.5rem;
+  padding: 1.5rem;
+}
+.pcard__icon {
+  display: block;
+  width: 160px;
+  max-width: 100%;
+  height: auto;
+  aspect-ratio: 1;
+  object-fit: contain;
+  border-radius: 22.5%;
+  justify-self: center;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.3), 0 0 24px rgba(136, 218, 204, 0.08);
+}
+.pcard--icon .pcard__txt {
+  grid-template-rows: auto auto 1fr auto;
+}
+.pcard--icon .chip {
+  white-space: normal;
+  max-width: 100%;
+}

@@ -55,7 +55,7 @@ try {
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.reload({ waitUntil: "networkidle" });
   check(await page.evaluate(() => {
-    const target = document.querySelector(".studio-button");
+    const target = document.querySelector(".kw__btn--primary");
     if (!target) return false;
     const style = getComputedStyle(target);
     return style.transitionDuration.split(",").every((duration) => Number.parseFloat(duration) <= 0.001);

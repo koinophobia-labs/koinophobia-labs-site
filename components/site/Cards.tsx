@@ -12,7 +12,7 @@ export function DeviceFrame({ src, alt, priority }: { src: string; alt: string; 
 }
 
 /**
- * A shipped product on a real screen. The whole card links to the product
+ * A shipped product, with its official icon on the homepage. The card links to the product
  * page; the App Store badge is its own link and stops propagation.
  */
 export function ProductCard({
@@ -29,16 +29,21 @@ export function ProductCard({
   listingOnly?: boolean;
 }) {
   const screen = product.screens[0];
+  const showIcon = placement === "home";
   // A stretched link covers the card; the App Store badge sits above it as
   // its own anchor. Two links, never nested, both keyboard-reachable.
   return (
-    <article className={`pcard s${screen ? "" : " pcard--listing"}`} style={{ "--i": index } as React.CSSProperties} data-tilt>
+    <article className={`pcard s${showIcon ? " pcard--icon" : screen ? "" : " pcard--listing"}`} style={{ "--i": index } as React.CSSProperties} data-tilt>
       <Link
         className="pcard__cover"
         href={product.href}
         aria-label={listingOnly ? `View ${product.name}` : `${product.name}: ${product.blurb}`}
       />
-      {screen ? <DeviceFrame src={screen.src} alt={screen.alt} /> : null}
+      {showIcon ? (
+        // Static, locally optimized artwork; explicit dimensions reserve its square.
+        // eslint-disable-next-line @next/next/no-img-element
+        <img className="pcard__icon" src={`/apps/icons/${product.slug}.webp`} alt={`${product.name} app icon`} width={512} height={512} loading="lazy" decoding="async" />
+      ) : screen ? <DeviceFrame src={screen.src} alt={screen.alt} /> : null}
       <div className="pcard__txt">
         <span className="pcard__meta">
           <span className="chip chip--live">{product.platforms}</span>
