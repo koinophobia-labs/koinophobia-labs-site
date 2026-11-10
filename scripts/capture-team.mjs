@@ -38,6 +38,8 @@ try {
       );
       await page.evaluate(() => document.fonts.ready);
       await page.locator("h1").waitFor();
+      await page.evaluate(() => { document.documentElement.style.scrollBehavior = "auto"; window.scrollTo(0, 0); });
+      await page.waitForFunction(() => window.scrollY === 0);
       const overflow = await page.evaluate(
         () => document.documentElement.scrollWidth > innerWidth,
       );
