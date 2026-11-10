@@ -1,3 +1,4 @@
+import { partnerOffers } from "./partner-offers";
 // D-0135: Blake/Director updates this remaining-slot count, then redeploys.
 // Requests are reviewed manually; submitting does not reserve a slot.
 export const STRAIGHT_ANSWER_FREE_SLOTS: number = 5;
@@ -10,3 +11,6 @@ export const offers = {
 export type ServiceOffer = keyof typeof offers;
 export type NewServiceOffer = Exclude<ServiceOffer, "revenue_leak_audit">;
 export const serviceSessionCookie = (offer: ServiceOffer) => offer === "revenue_leak_audit" ? "audit_checkout_session" : `${offer}_checkout_session`;
+
+export const checkoutOffers = { ...offers, ...partnerOffers } as const;
+export type CheckoutOffer = keyof typeof checkoutOffers;

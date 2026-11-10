@@ -1,0 +1,17 @@
+{
+  "wo": "WO-0256",
+  "owned": [
+    ".studio/scope/WO-0256.json",
+    "app/pay/**",
+    "lib/acquisition/partner-offers.ts",
+    "lib/acquisition/partner-checkout-handler.ts",
+    "lib/acquisition/service-checkout.ts",
+    "lib/acquisition/services-config.ts",
+    "lib/payments.ts",
+    "lib/subscription-events.ts",
+    "tests/partner-payments.test.ts",
+    "tests/payment-reliability.test.ts",
+    "package.json",
+    "lib/acquisition/service-onboarding.ts"
+  ]
+}

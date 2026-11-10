@@ -1,3 +1,5 @@
+import { isPartnerOffer, partnerOffers, type PartnerAttribution } from "./acquisition/partner-offers";
+import { offers } from "./acquisition/services-config";
 import Stripe from "stripe";
 import { recordSubscriptionEvent } from "./subscription-events";
 import { Pool, type QueryResultRow } from "pg";
@@ -131,7 +133,7 @@ export async function createCheckout(
   origin: string,
   q: Queryable = db(),
   client = stripe(),
-  options: { productName?: string; successPath?: string; cancelPath?: string; collectName?: boolean; offer?: string; mode?: "payment" | "subscription" } = {},
+  options: { productName?: string; successPath?: string; cancelPath?: string; collectName?: boolean; offer?: string; attribution?: PartnerAttribution; mode?: "payment" | "subscription" } = {},
 ) {
   const context = await getPaymentContext(proposalId, q);
   if (!context) throw Error("PROPOSAL_NOT_FOUND");
@@ -167,14 +169,17 @@ export async function createCheckout(
           },
         ],
         metadata: {
+          ...options.attribution,
           ...(options.offer ? { offer: options.offer } : {}),
           paymentId: id,
           proposalId,
           leadId: context.leadId,
           kind: input.kind,
         },
-        ...(options.mode === "subscription" ? { subscription_data: { metadata: { offer: options.offer ?? "", paymentId: id, proposalId, leadId: context.leadId, kind: input.kind } } } : { payment_intent_data: {
+        ...(options.mode === "subscription" ? { subscription_data: { metadata: { ...options.attribution, offer: options.offer ?? "", paymentId: id, proposalId, leadId: context.leadId, kind: input.kind } } } : { payment_intent_data: {
           metadata: {
+            ...options.attribution,
+            ...(options.offer ? { offer: options.offer } : {}),
             paymentId: id,
             proposalId,
             leadId: context.leadId,
@@ -290,8 +295,14 @@ export async function processStripeEvent(
       ) {
         const session = object as Stripe.Checkout.Session;
         if (session.payment_status === "paid") {
+          const offer = session.metadata?.offer ?? "";
+          if (isPartnerOffer(offer)) {
+            const config = partnerOffers[offer];
+            if (session.mode !== config.mode || session.amount_total !== config.amount || session.currency !== "usd" || payment.amount !== config.amount || payment.currency !== "usd" || payment.stripe_checkout_session_id !== session.id || session.metadata?.leadId !== payment.lead_id || session.metadata?.proposalId !== payment.proposal_id) throw Error("PARTNER_CHECKOUT_MISMATCH");
+          }
           if (session.mode === "subscription") {
-            if (session.metadata?.offer !== "monthly_support" || session.amount_total !== 50000 || session.currency !== "usd" || payment.amount !== 50000 || payment.stripe_checkout_session_id !== session.id || !session.subscription) throw Error("SUBSCRIPTION_CHECKOUT_MISMATCH");
+            const amount = offer === "care" ? partnerOffers.care.amount : offer === "monthly_support" ? offers.monthly_support.amount : null;
+            if (!amount || session.amount_total !== amount || session.currency !== "usd" || payment.amount !== amount || payment.stripe_checkout_session_id !== session.id || !session.subscription) throw Error("SUBSCRIPTION_CHECKOUT_MISMATCH");
           }
           const updated = await q.query(
             "update crm_payments set status='paid',stripe_payment_intent_id=$1,paid_at=coalesce(paid_at,now()),updated_at=now() where id=$2 and status not in ('paid','refunded') returning id",
@@ -304,7 +315,10 @@ export async function processStripeEvent(
           );
           if (updated.rows[0] && session.mode === "subscription") {
             const subscriptionId = typeof session.subscription === "string" ? session.subscription : session.subscription!.id;
-            await q.query("update crm_leads set name=case when name='' then $1 else name end,email=$2,internal_notes=concat_ws(E'\\n',nullif(internal_notes,''),$3::text),updated_at=now() where id=$4", [session.custom_fields?.find(field => field.key === "buyer_name")?.text?.value || session.customer_details?.name || "", session.customer_details?.email || session.customer_email || "", `Subscription started: ${subscriptionId}; $500/month for up to 5 hours`, payment.lead_id]);
+            await q.query("update crm_leads set name=case when name='' then $1 else name end,email=$2,internal_notes=concat_ws(E'\\n',nullif(internal_notes,''),$3::text),updated_at=now() where id=$4", [session.custom_fields?.find(field => field.key === "buyer_name")?.text?.value || session.customer_details?.name || "", session.customer_details?.email || session.customer_email || "", `Subscription started: ${subscriptionId}; ${offer === "care" ? partnerOffers.care.terms : offers.monthly_support.terms}`, payment.lead_id]);
+          }
+          if (updated.rows[0] && isPartnerOffer(offer) && session.mode !== "subscription") {
+            await q.query("update crm_leads set name=case when name='' then $1 else name end,email=$2,updated_at=now() where id=$3", [session.custom_fields?.find(field => field.key === "buyer_name")?.text?.value || session.customer_details?.name || "", session.customer_details?.email || session.customer_email || "", payment.lead_id]);
           }
           if (updated.rows[0] && ["revenue_leak_audit", "straight_answer", "monthly_support"].includes(session.metadata?.offer || "") &&
               payment.amount === (session.metadata?.offer === "monthly_support" ? 50000 : 25000) && payment.currency === "usd" &&
