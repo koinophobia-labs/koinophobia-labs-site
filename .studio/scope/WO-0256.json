@@ -21,6 +21,8 @@
     "lib/app-homes.ts",
     "app/lab/teachers-pet/page.tsx",
     "tests/app-homes.test.ts",
-    "components/site/AppStoreBadge.tsx"
+    "components/site/AppStoreBadge.tsx",
+    "components/apps/AppPricing.tsx",
+    "components/apps/AppWorlds.tsx"
   ]
 }

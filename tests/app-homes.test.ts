@@ -45,6 +45,10 @@ test("public homes include Teacher's Pet with its verified App Store release", (
   assert.equal(appHomes["teachers-pet"].prerelease, undefined);
   assert.equal(appHomes["old-dog"].platforms, "Mac");
   assert.equal(appHomes["teachers-pet"].coming, undefined);
+  const html = renderToStaticMarkup(createElement(appWorlds["teachers-pet"]));
+  const $ = load(html);
+  assert.equal($("a[aria-label='Download Teacher’s Pet on the App Store']").attr("href"), appHomes["teachers-pet"].store);
+  assert.doesNotMatch($.text(), /coming to|when released|pending review|pending App Review|planned pricing|not available to buy/i);
 });
 test("Dreamcatcher's live page renders its real store button and free download pricing", () => {
   const app = appHomes.dreamcatcher;
