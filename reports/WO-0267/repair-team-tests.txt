@@ -1,0 +1,93 @@
+
+> koinophobia-labs@0.1.0 test:team
+> tsx --test tests/team-*.test.ts
+
+✔ checker detects missing metadata and untappable visible number (5.114125ms)
+✔ checker recognizes valid metadata and matching phone link (2.976583ms)
+✔ error page is not misreported as missing client site metadata (0.901417ms)
+✔ no detected phone is unknown, not a defect (0.956166ms)
+✔ all private, loopback, metadata and mapped IPs rejected (1.109458ms)
+✔ URL validation rejects non-http, credentials, nonstandard ports and localhost (3.142833ms)
+✔ shared browser contract requires two delayed observations for links (343.302583ms)
+▶ Connect acceptance: real PostgreSQL, Stripe boundary mocked, no sends
+  ✔ onboarding is own-account, idempotent, hosted, flags only; Express login scopes (7.275416ms)
+  ✔ unconnected payment remains owed; account.updated backfills automatically (14.549583ms)
+  ✔ same and different event-ID concurrent replays make one transfer with charge and deal (12.638333ms)
+  ✔ partial refund reverses 40% once, then increasing cumulative refund is incremental (11.45475ms)
+  ✔ partial dispute overlap caps recovery; balance failure creates owed back (4.699416ms)
+  ✔ next payment nets negative balance atomically and does not recover twice (7.996291ms)
+  ✔ Care initial invoice not doubled; renewal pays once and resolves invoice payment charge (36.281292ms)
+  ✔ ambiguous Stripe success retries immutable operation key and makes exactly one transfer (11.753166ms)
+  ✔ role scope excludes other accounts, transfers and reversals; retries owner-only (4.702ms)
+  ✔ stale account.updated payload cannot restore disabled payouts (4.859458ms)
+  ✔ refund before payment webhook suppresses transfer (11.140584ms)
+  ✔ live event and key are refused; automatic mode blocks manual payout (0.561417ms)
+  ✔ disputed flag before its webhook holds funds until the proportional amount is known (10.6955ms)
+  ✔ database receipt failure after Stripe success retries the durable intent without duplicate transfer (17.838417ms)
+  ✔ partial refund before paid delivery transfers remaining proportional commission (11.395541ms)
+  ✔ full debt can consume a payment without a zero-dollar Stripe transfer (30.27075ms)
+  ✔ legacy manual payout holds a payment rather than paying it twice (13.859ms)
+  ✔ uncertain operation beyond retention freezes further money moves for owner review (9.664708ms)
+✔ Connect acceptance: real PostgreSQL, Stripe boundary mocked, no sends (1266.233708ms)
+✔ unpaid quote owes zero, money uses integer cents (12.2085ms)
+✔ 40 percent rounds aggregate cents, payouts reduce owed and overrides stay disabled (0.261917ms)
+✔ scoped reads exclude other partners and credential hashes (0.504041ms)
+✔ pipeline requires sequential stages and approval before quote sent (0.825084ms)
+✔ lost requires reason and closed deals are terminal (1.425625ms)
+✔ received payments prevent marking a deal lost; delivery is owner-only (1.250708ms)
+✔ bundle distinguishes initial charge and recurring cadence; custom work has no invented price (0.392958ms)
+✔ login email has consistent identity, explanatory plain text and provider idempotency (64.3925ms)
+✔ import retains measured evidence and assigns authenticated attribution (15.208875ms)
+✔ import rejects absent evidence, invented price, invalid route and score (4.042209ms)
+✔ email import requires MX record and matching contact (1.342209ms)
+✔ duplicates normalize name and website aliases and dedupe within a batch (0.400708ms)
+✔ nationwide import preserves city, state, time zone, draft and reply path (0.211417ms)
+✔ import rejects minor-only problems, invalid state, missing city and invalid time zone (0.243625ms)
+✔ outreach templates use remote US copy, real reply path, address placeholder and opt out (4.1375ms)
+▶ WO-0264 isolated PostgreSQL password acceptance
+  ✔ first password after email link, salted scrypt, exact whitespace, other sessions revoked (826.330291ms)
+  ✔ wrong or missing current password cannot change; valid change revokes other sessions (1273.320458ms)
+  ✔ 12–256 character boundaries, including passwords made of spaces (618.09625ms)
+  ✔ email-link reset is one-use; old sessions, pending links and old password lose access (593.243208ms)
+  ✔ reset permission expires; skipped setup prompt stays dismissed on future email logins (297.476667ms)
+  ✔ inactive, unknown, no-password and wrong-password logins share generic failures (917.098916ms)
+  ✔ concurrent first-password requests allow only one session to succeed (159.752291ms)
+✔ WO-0264 isolated PostgreSQL password acceptance (5920.10925ms)
+ℹ Retained fictional fixture: /Volumes/KoiArchive/WO-0267/tmp/wo0264-pg-7xFcs5
+✔ fix creates attributed production link (0.700791ms)
+✔ tune creates attributed production link (0.086375ms)
+✔ care creates attributed production link (0.058083ms)
+✔ unapproved, custom, bundled, changed-price, paid and malformed deals have no link (0.090083ms)
+▶ team portal real PostgreSQL acceptance
+  ✔ additive migration can run twice without altering CRM columns (23.768334ms)
+  ✔ salted strong KDF; no plaintext; correct and wrong passwords (639.339917ms)
+  ✔ owner creates invitation; partner cannot; forged owner role ignored (2.149125ms)
+  ✔ invite is one-use, expiring, and binds email; password then logs in (477.928416ms)
+  ✔ expired invite is rejected (4.776333ms)
+  ✔ concurrent invite replay grants exactly one session (162.7115ms)
+  ✔ durable rate limiter rejects concurrent excess attempts (8.982917ms)
+  ✔ magic link is invite-only, hashed, one-use; injected delivery only (5.023792ms)
+  ✔ magic sends are deduplicated across concurrent requests for 60 seconds (3.954875ms)
+  ✔ uncertain delivery does not resend immediately or invalidate a delivered link (4.165708ms)
+  ✔ expired sessions and deactivated accounts lose access immediately (317.767875ms)
+  ✔ SQL snapshot and direct reads isolate every partner and remove hashes (6.5645ms)
+  ✔ partners cannot approve quotes or record payouts or client paid (2.225ms)
+  ✔ quote creation is scoped and catalog price is server-owned (9.254584ms)
+  ✔ mocked paid checkout automatically advances and owes exactly 40%; retries dedupe (18.761583ms)
+  ✔ payout is bounded and serialized; commission uses CRM payment records (7.211958ms)
+  ✔ Care first invoice is not doubled; each renewal adds 40% exactly once (19.671292ms)
+  ✔ invalid attribution rolls back paid event and CRM payment; retry works (5.10825ms)
+  ✔ refund is reflected directly in earned and owed without duplicate payment data (13.808209ms)
+  ✔ owner-only import preserves format; rejects whole invalid batch; global dedupe (15.568625ms)
+  ✔ opt-outs cross partners and block new imports, quotes and outreach stages (6.38475ms)
+  ✔ down migration removes only portal tables; CRM payment history survives; up restores (18.571666ms)
+✔ team portal real PostgreSQL acceptance (2726.555208ms)
+ℹ Retained PostgreSQL fixture: /Volumes/KoiArchive/WO-0267/tmp/wo0257-postgres-30VN35
+ℹ tests 76
+ℹ suites 0
+ℹ pass 76
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 6169.229459
