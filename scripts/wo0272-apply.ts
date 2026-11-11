@@ -10,6 +10,7 @@ import {transaction} from '../lib/team/db';
 import {importRecheck} from '../lib/team/recheck-import';
 import type {Partner} from '../lib/team/types';
 import type {Audit} from '@koinophobia/site-auditor/model';
+async function main(){
 const root='/Volumes/KoiArchive/WO-0272',privateRoot=join(root,'private');
 const dir=join(privateRoot,'portal-final'),apply=process.argv.includes('--apply');
 const deadline=Date.parse('2026-11-11T14:30:00Z');
@@ -79,3 +80,6 @@ try{
  }
 }catch{console.error('WO-0272 data operation stopped; private evidence retained and provider details withheld.');process.exitCode=1;}
 finally{await db?.end().catch(()=>{});}
+
+}
+void main().catch(()=>{console.error('WO-0272 preparation failed; provider and private details withheld.');process.exitCode=1;});
