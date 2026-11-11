@@ -1,3 +1,4 @@
+import {CallPanel} from "@/components/team/CallPanel";
 import { notFound, redirect } from "next/navigation";
 import { currentSnapshot } from "@/lib/team/session";
 import { Portal } from "@/components/team/Portal";
@@ -13,6 +14,7 @@ export default async function Screen({
   if (
     ![
       "leads",
+      "call",
       "check",
       "quote",
       "pipeline",
@@ -26,6 +28,7 @@ export default async function Screen({
   const data = await currentSnapshot();
   if (!data) redirect("/team");
   if (screen === "admin" && data.me.role !== "owner") notFound();
+  if (screen === "call") return <main className="team-workspace call-phone-shell"><CallPanel compact data={JSON.parse(JSON.stringify(data))}/></main>;
   const account = screen === "account" ? hostedPreview()
     ? { hasPassword: false, canReset: false, prompt: false }
     : await passwordState(teamDatabase(), (await cookies()).get(cookieName)!.value)

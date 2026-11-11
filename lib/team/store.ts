@@ -18,6 +18,9 @@ import {confirmedLeverage,findingSummary,strongestOpener} from './leverage';
 import {verifyLink,type Check} from '@koinophobia/site-auditor/model';
 export interface LeadFinding {check:string;measurement:string;confidence?:string;impact?:string;verify_url?:string;leverage?:number;proof_url?:string}
 export type TeamLead = Lead & {
+  call_outcome?: string;
+  vertical?: string;
+  leverage_score?: number;
   recheck?: {status:'confirmed'|'re-check failed'; checked_at:string; confirmed_count:number;findings?:LeadFinding[]};
   opted_out?: boolean;
   city?: string;

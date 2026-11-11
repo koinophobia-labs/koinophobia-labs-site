@@ -1,3 +1,4 @@
+import {activeLead,saveCell,recordOutcome,publishDeal} from "@/lib/team/call-store";
 import {
   onboard,
   expressLogin,
@@ -196,6 +197,10 @@ export async function POST(
       switch (action) {
         case "recheck-import":
           return importRecheck(q,p,textInput(body.id,"Lead",true,80),body.audit as Audit);
+        case "active-lead": return activeLead(q,p,textInput(body.id,"Lead",true,80));
+        case "call-cell": return saveCell(q,p,textInput(body.id,"Lead",true,80),body.cell);
+        case "call-outcome": return recordOutcome(q,p,textInput(body.id,"Lead",true,80),body.outcome);
+        case "deal-page": return publishDeal(q,p,textInput(body.id,"Deal",true,80),body.proofReviewed===true);
         case "invite":
           return invite(q, p, body);
         case "import":

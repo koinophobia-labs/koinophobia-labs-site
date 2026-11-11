@@ -1,3 +1,4 @@
+import { paidCallDeal } from "./call-store";
 import type { Queryable } from "../payments";
 // Called only after verified payment mutation, within the same webhook transaction.
 // The mapping stores identity only; amounts and refunded state always come from CRM.
@@ -65,4 +66,5 @@ export async function attributeTeamPayment(
     "update team_deals set stage=case when stage='Delivered' then stage else 'Client paid' end,updated_at=now() where id=$1",
     [deal.id],
   );
+  await paidCallDeal(q, deal.id);
 }

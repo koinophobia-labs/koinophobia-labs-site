@@ -67,7 +67,8 @@ const nextConfig: NextConfig = {
       './node_modules/@sparticuz/chromium/bin/**/*',
     ],
   },
-  async headers() { return [{ source: "/team/:path*", headers: [{key:"X-Robots-Tag",value:"noindex, nofollow, noarchive"},{key:"Cache-Control",value:"private, no-store"},{key:"Referrer-Policy",value:"no-referrer"}] }]; },
+  async headers() { return ["/team/:path*", "/go/:path*", "/pay/:path*"].map(source => ({ source, headers: [{key:"X-Robots-Tag",value:"noindex, nofollow, noarchive"},{key:"Cache-Control",value:"private, no-store"},{key:"Referrer-Policy",value:"no-referrer"}] })); },
+
   images: {
     // App screenshots use responsive next/image optimization.
   },
