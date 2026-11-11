@@ -1,3 +1,4 @@
+import { resolveCallCheckout, callCheckoutStarted } from "@/lib/team/call-checkout";
 import { createHash } from "node:crypto";
 import { NextRequest, NextResponse } from "next/server";
 import { consumeAuditRateLimit } from "@/lib/audits";
@@ -18,14 +19,18 @@ export async function checkoutReadback(id: string) {
     recurring: session.line_items?.data[0]?.price?.recurring ?? null,
   };
 }
-const dependencies = { available: auditCheckoutAvailable, create: createOfferCheckout, limit: consumeAuditRateLimit, readback: checkoutReadback };
-export function partnerCheckoutHandler(deps = dependencies) {
+const dependencies = { resolve: resolveCallCheckout, started: callCheckoutStarted, available: auditCheckoutAvailable, create: createOfferCheckout, limit: consumeAuditRateLimit, readback: checkoutReadback };
+export function partnerCheckoutHandler(deps: Pick<typeof dependencies, "available" | "create" | "limit" | "readback"> & Partial<Pick<typeof dependencies, "resolve" | "started">> = dependencies) {
   return async (request: NextRequest, context: { params: Promise<{ offer: string }> }) => {
     const headers = { "cache-control": "no-store", "referrer-policy": "no-referrer" };
     const fail = (message: string, status: number) => NextResponse.json({ ok: false, message }, { status, headers });
     const { offer } = await context.params;
     if (!isPartnerOffer(offer)) return fail("Unknown offer.", 404);
-    const attribution = parsePartnerAttribution(request.nextUrl.searchParams);
+    const query = new URLSearchParams(request.nextUrl.searchParams);
+    const codes = query.getAll("go");
+    if (codes.length > 1) return fail("Invalid deal link.", 422);
+    const code = query.get("go"); query.delete("go");
+    const attribution = parsePartnerAttribution(query);
     if (!attribution) return fail("Invalid payment link. Ask your partner for a new link.", 422);
     if (!isTrustedMutationRequest(request)) return fail("The request origin was rejected.", 403);
     if (!deps.available()) return fail("Checkout is temporarily unavailable. Contact blake@koinophobialabs.com.", 503);
@@ -33,8 +38,10 @@ export function partnerCheckoutHandler(deps = dependencies) {
       const actorKey = `partner-checkout:${createHash("sha256").update(trustedClientKey(request)).digest("hex").slice(0, 32)}`;
       if (!(await deps.limit({ actorKey, limit: 5, windowSeconds: 600 })).allowed) return fail("Too many attempts. Please wait 10 minutes.", 429);
       // The request body is intentionally unused: prices and modes are server-owned.
-      const payment = await deps.create(offer, { source: "partner-payment", email: "", attribution }, request.nextUrl.origin);
+      const resolved = deps.resolve ? await deps.resolve(offer, attribution, code) : {email:"",code:undefined};
+      const payment = await deps.create(offer, { source: "partner-payment", email: resolved.email, attribution }, request.nextUrl.origin);
       if (!payment.checkoutUrl || !payment.stripeCheckoutSessionId) throw Error("CHECKOUT_UNAVAILABLE");
+      if (resolved.code && deps.started) await deps.started(resolved.code);
       if (request.headers.get("accept")?.includes("application/json")) {
         return NextResponse.json({ url: payment.checkoutUrl, checkout: await deps.readback(payment.stripeCheckoutSessionId) }, { headers });
       }

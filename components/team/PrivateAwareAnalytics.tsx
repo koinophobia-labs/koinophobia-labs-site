@@ -5,7 +5,7 @@ export default function PrivateAwareAnalytics() {
     <Analytics
       beforeSend={(event) => {
         const path = new URL(event.url).pathname;
-        return path === "/team" || path.startsWith("/team/") ? null : event;
+        return path === "/team" || path.startsWith("/team/") || path.startsWith("/go/") || path.startsWith("/pay/") ? null : event;
       }}
     />
   );

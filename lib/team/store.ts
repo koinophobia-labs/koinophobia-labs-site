@@ -15,6 +15,8 @@ import {
 } from "./domain";
 import { validateImport, importLeads } from "./lead-import";
 export type TeamLead = Lead & {
+  call_outcome?: string;
+  vertical?: string;
   opted_out?: boolean;
   city?: string;
   state?: string;

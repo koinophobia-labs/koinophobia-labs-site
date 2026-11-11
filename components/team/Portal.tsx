@@ -1,10 +1,12 @@
 "use client";
+import { CallPanel } from "./CallPanel";
+import { callNow } from "@/lib/team/call-domain";
 import { AccountPassword } from "./AccountPassword";
 import { ConnectPanel } from "./ConnectPanel";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   ArrowUpRight,
   ArrowRight,
@@ -32,6 +34,7 @@ import { quoteMessage } from "@/lib/team/quotes";
 import { SCRIPTS } from "@/lib/team/scripts";
 const navigation = [
   ["leads", "Leads", Users],
+  ["call", "Phone companion", MessageSquare],
   ["check", "Site check", ScanLine],
   ["quote", "Quote builder", FileText],
   ["pipeline", "Pipeline", Layers3],
@@ -83,11 +86,14 @@ export function Portal({
   const router = useRouter(),
     [busy, setBusy] = useState(false),
     [message, setMessage] = useState(""),
+    [callOnly,setCallOnly] = useState(false),
+    [clock,setClock] = useState<number|null>(null),
     [search, setSearch] = useState(""),
     [selected, setSelected] = useState(""),
     [services, setServices] = useState<string[]>(["fix"]),
     [script, setScript] = useState("Call"),
     [inviteCode, setInviteCode] = useState("");
+  useEffect(()=>{const tick=()=>setClock(Date.now());tick();const timer=setInterval(tick,30000);return()=>clearInterval(timer);},[]);
   const owner = data.me.role === "owner";
   const totals = data.connect
     ? data.connect.payments.reduce(
@@ -276,6 +282,7 @@ export function Portal({
                 <h2>
                   Lead desk <span>{data.leads.length}</span>
                 </h2>
+                <button className="team-button secondary" aria-pressed={callOnly} onClick={()=>setCallOnly(!callOnly)}>{callOnly?"Show all leads":"Call now"}</button>
                 <div className="team-search">
                   <Search size={16} />
                   <input
@@ -288,7 +295,7 @@ export function Portal({
               </div>
               <div className="team-lead-grid">
                 <div className="team-lead-list">
-                  {data.leads
+                  {(callOnly ? (clock ? callNow(data.leads,data.deals,new Date(clock)) : []) : data.leads)
                     .filter((l) =>
                       (l.business + " " + l.email)
                         .toLowerCase()
@@ -301,7 +308,7 @@ export function Portal({
                           (selectedLead?.id === l.id ? "selected" : "")
                         }
                         key={l.id}
-                        onClick={() => setSelected(l.id)}
+                        onClick={() => {setSelected(l.id);if(!data.readonly)void act("active-lead",{id:l.id});}}
                       >
                         <span className="team-lead-avatar">
                           {l.business.slice(0, 1)}
@@ -316,10 +323,12 @@ export function Portal({
                         <ArrowUpRight size={16} />
                       </button>
                     ))}
+                  {callOnly && clock && !callNow(data.leads,data.deals,new Date(clock)).length && <Empty text="No leads are in a calling window right now. Hours: 9–5 local; restaurants skip 11:30–1:30. Missing time zones stay out of this view."/>}
                   {!data.leads.length && (
                     <Empty text="Your next leads will appear here when Blake assigns them." />
                   )}
                 </div>
+                <div><CallPanel data={data} onLeadChange={setSelected}/>
                 {selectedLead && (
                   <section className="team-card team-lead-detail">
                     <div className="team-card-kicker">
@@ -374,7 +383,7 @@ export function Portal({
                     </small>
                   </section>
                 )}
-              </div>
+              </div></div>
             </>
           )}
           {screen === "check" && (

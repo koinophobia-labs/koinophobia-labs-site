@@ -326,6 +326,14 @@ export async function processStripeEvent(
           );
           if (updated.rows[0]) await attributeTeamPayment(q, payment.id, session.metadata);
           if (connectClient) await queueConnectPayment(q, payment.id, "checkout", session.id);
+          if (updated.rows[0] && isPartnerOffer(offer) && session.metadata?.deal &&
+              (await q.query("select to_regclass('public.team_owner_alerts') present")).rows[0]?.present) {
+            const team = (await q.query(`select l.business,p.email from team_payment_attributions a join team_deals d on d.id=a.deal_id join team_leads l on l.id=d.lead_id cross join team_partners p where a.payment_id=$1 and p.role='owner' and p.active order by p.created_at limit 1`,[payment.id])).rows[0];
+            if (team) {
+              const reserved = await q.query("insert into stripe_webhook_events(event_id,event_type,processing_error) values($1,'internal.audit_paid_notification','dispatch reserved; delivery not confirmed') on conflict do nothing returning event_id",[`paid-audit:${payment.id}`]);
+              if (reserved.rows[0]) notice={paymentId:payment.id,leadId:payment.lead_id,bookingSubmitted:false,name:'',email:'',offer,team:{business:team.business,ownerEmail:team.email}};
+            }
+          }
           if (updated.rows[0] && session.mode === "subscription") {
             const subscriptionId = typeof session.subscription === "string" ? session.subscription : session.subscription!.id;
             await q.query("update crm_leads set name=case when name='' then $1 else name end,email=$2,internal_notes=concat_ws(E'\\n',nullif(internal_notes,''),$3::text),updated_at=now() where id=$4", [session.custom_fields?.find(field => field.key === "buyer_name")?.text?.value || session.customer_details?.name || "", session.customer_details?.email || session.customer_email || "", `Subscription started: ${subscriptionId}; ${offer === "care" ? partnerOffers.care.terms : offers.monthly_support.terms}`, payment.lead_id]);
