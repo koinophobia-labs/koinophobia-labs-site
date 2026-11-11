@@ -33,7 +33,7 @@ let db:Pool|undefined;
 try{
  const fs=statfsSync(privateRoot);if(fs.bavail*fs.bsize<10_100_000_000)throw Error('Archive headroom');
  if(apply){
-  if(Date.now()>=deadline)throw Error('Deadline passed');
+  if(Date.now()>=deadline-120_000)throw Error('Insufficient transaction deadline reserve');
   const receipt=json(join(root,'evidence/release-verified.json'));
   const sha=execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim();
   if(receipt.verification_passed!==true||receipt.git_sha!==sha||Date.now()-Date.parse(receipt.at)>900_000)throw Error('Verified release receipt missing or stale');
@@ -61,13 +61,14 @@ try{
    if(locked.length!==targetRows.length||locked.some(r=>!prepared.some(p=>p.row.id===r.id&&p.row.website===r.website)))throw Error('Target changed');
    writeFileSync(backup,JSON.stringify(locked),{mode:0o600,flag:'wx'});
    for(const item of prepared){
-    if(Date.now()>=deadline)throw Error('Deadline passed during transaction');
+    if(Date.now()>=deadline-120_000)throw Error('Insufficient transaction deadline reserve');
     const result=await importRecheck(q,actor,item.row.id,item.audit);counts.updated+=result.updated;counts.replayed+=Number(result.replayed);counts[result.confirmed?'confirmed':'failed']++;
     const before=locked.find(r=>r.id===item.row.id)!.data;
     const after=(await q.query('select data from team_leads where id=$1',[item.row.id])).rows[0].data;
     const unrelated=(v:Record<string,unknown>)=>Object.fromEntries(Object.entries(v).filter(([k])=>!['recheck','evidence','opener','leverage_score'].includes(k)));
     if(JSON.stringify(unrelated(before))!==JSON.stringify(unrelated(after)))throw Error('Unrelated lead fields changed');
    }
+   if(Date.now()>=deadline-60_000)throw Error('Insufficient commit and readback reserve');
   },db);
   const readback=(await db.query("select data->'recheck'->>'status' status,count(*)::int count from team_leads where partner_id=$1 and data->'recheck'->>'work_order'='WO-0272' group by 1",[target])).rows;
   const receipt={at:new Date().toISOString(),...summary,...counts,readback};
