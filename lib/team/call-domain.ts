@@ -62,6 +62,7 @@ export function callScript(
 export function callableNow(lead: TeamLead, now = new Date()) {
   if (
     lead.opted_out ||
+    lead.recheck?.status === "re-check failed" ||
     lead.call_outcome === "Not interested" ||
     !phoneNumber(lead.phone) ||
     !lead.time_zone

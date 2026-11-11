@@ -1,3 +1,4 @@
+import {confirmedEvidence} from './auditor-fixtures';
 import test from "node:test";
 import assert from "node:assert/strict";
 import { validateImport, importLeads } from "../lib/team/lead-import";
@@ -20,17 +21,7 @@ const fixture = () => ({
   metro: "austin,TX",
   draft_email: "Fictional draft",
   reply_to: "blake@koinophobialabs.com",
-  evidence: [
-    {
-      check: "Mobile viewport",
-      url: "https://fictional.example/",
-      measured_at: "2026-11-10T12:00:00Z",
-      measurement: "No device-width viewport found in returned HTML.",
-      severity: 25,
-      impact:
-        "The missing viewport may make the page harder to use on a phone.",
-    },
-  ],
+  evidence: [confirmedEvidence()],
   contact_route: {
     kind: "phone",
     value: "3125550123",

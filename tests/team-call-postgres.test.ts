@@ -165,6 +165,16 @@ test("call mode real PostgreSQL integration", async (t) => {
         await assert.rejects(tx((q) => publishDeal(q, b, "deal-3", true)));
       },
     );
+    await t.test("failed rechecks suppress stale proof; latest canonical URL audit supplies fresh proof",async()=>{
+      await db.query("update team_leads set data=data||$1::jsonb where id='lead-0'",[JSON.stringify({recheck:{status:'re-check failed',checked_at:new Date().toISOString(),confirmed_count:0}})]);
+      assert.equal((await callState(db,a)).problem,null);
+      await db.query("update team_leads set website='https://example.test' where id='lead-0'");
+      await db.query("insert into team_site_checks(id,partner_id,data) values('fresh-proof','demo-a',$1)",[JSON.stringify({url:'https://example.test/',findings:[]})]);
+      assert.equal((await callState(db,a)).problem,null);
+      await db.query("update team_site_checks set data=$1 where id='fresh-proof'",[JSON.stringify({url:'https://example.test/',findings:[proof]})]);
+      assert.equal((await callState(db,a)).problem,proof.measurement);
+      await db.query("update team_leads set website='https://example.test/0',data=data||$1::jsonb where id='lead-0'",[JSON.stringify({recheck:{status:'confirmed',checked_at:new Date().toISOString(),confirmed_count:1}})]);
+    });
     await t.test(
       "checkout validates page, price, partner, demo flag and prefills email only server-side",
       async () => {

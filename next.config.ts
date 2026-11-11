@@ -58,6 +58,8 @@ const RETIRED_STUDIO_ROUTES: Array<[string, string]> = [
 ];
 
 const nextConfig: NextConfig = {
+  serverExternalPackages: ['@koinophobia/site-auditor','playwright-core','@sparticuz/chromium'],
+  outputFileTracingIncludes: {'/team/api/*':['./node_modules/@sparticuz/chromium/bin/**/*']},
   async headers() { return ["/team/:path*", "/go/:path*", "/pay/:path*"].map(source => ({ source, headers: [{key:"X-Robots-Tag",value:"noindex, nofollow, noarchive"},{key:"Cache-Control",value:"private, no-store"},{key:"Referrer-Policy",value:"no-referrer"}] })); },
   images: {
     // App screenshots use responsive next/image optimization.

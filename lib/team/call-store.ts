@@ -59,11 +59,13 @@ export function confirmedProof(findings: ProofFinding[]) {
 }
 export async function leadProof(q: Queryable, l: TeamLead) {
   // Prefer the latest audit, including a failed recheck: never fall back to stale positive proof.
+  const canonical = new URL(l.website); canonical.hash = "";
   const checks = await q.query(
-    "select data from team_site_checks where partner_id=$1 and (data->>'url'=$2 or data->>'final_url'=$2) order by created_at desc limit 1",
-    [l.partner_id, l.website],
+    "select data from team_site_checks where partner_id=$1 and (data->>'url'=any($2::text[]) or data->>'final_url'=any($2::text[])) order by created_at desc limit 1",
+    [l.partner_id, [...new Set([l.website, canonical.href])]],
   );
   if (checks.rows[0]) return confirmedProof(checks.rows[0].data.findings || []);
+  if (l.recheck?.status === "re-check failed") return null;
   return confirmedProof((l.evidence as ProofFinding[]) || []);
 }
 export async function callState(

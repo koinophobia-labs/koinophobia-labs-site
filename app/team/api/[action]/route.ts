@@ -39,7 +39,7 @@ import {
 import { checkSite } from "@/lib/team/checker";
 import { randomUUID } from "node:crypto";
 export const runtime = "nodejs";
-export const maxDuration = 60;
+export const maxDuration = 300;
 async function bodyOf(request: Request) {
   const reader = request.body?.getReader();
   if (!reader) throw new Fault("Request body required.");
@@ -178,9 +178,13 @@ export async function POST(
     }
     if (action === "check") {
       await rateLimit(teamDatabase(), "site-check:" + p.id, 10);
-      const result = await checkSite(
-        textInput(body.url, "Website", true, 2000),
+      const target = new URL(textInput(body.url, "Website", true, 2000));target.hash='';
+      const history=await teamDatabase().query(
+        "select data from team_site_checks where partner_id=$1 and data->>'url'=$2 and created_at>now()-interval '7 days' order by created_at desc limit 4",
+        [p.id,target.href],
       );
+      const previous=history.rows.flatMap(r=>r.data.observations??[]);
+      const result = await checkSite(target.href,previous);
       await teamDatabase().query(
         "insert into team_site_checks(id,partner_id,data) values($1,$2,$3)",
         [randomUUID(), p.id, result],

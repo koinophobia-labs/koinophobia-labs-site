@@ -317,7 +317,7 @@ export function Portal({
                           <strong>{l.business}</strong>
                           <small>
                             {l.city ? [l.city, l.state].join(", ") : l.channel}{" "}
-                            · {l.opted_out ? "Do not contact" : "Assigned lead"}
+                            · {l.recheck?.status==='re-check failed'?'Re-check failed':l.opted_out ? "Do not contact" : "Assigned lead"}
                           </small>
                         </span>
                         <ArrowUpRight size={16} />
@@ -355,8 +355,8 @@ export function Portal({
                     </dl>
                     <div className="team-inset">
                       <p className="team-eyebrow">THE REASON TO REACH OUT</p>
-                      <p>{selectedLead.opener || selectedLead.notes}</p>
-                      {selectedLead.evidence?.map((e, i) => (
+                      <p>{selectedLead.recheck?.status==='re-check failed'?'Re-check failed. The original qualifying problem did not reproduce; do not use the old opener.':selectedLead.recheck?.status==='confirmed'?selectedLead.recheck.findings?.map(f=>f.measurement).join(' '):selectedLead.evidence?.some(e=>e.confidence==='confirmed')?selectedLead.opener:'A confirmed browser re-check is required before using a website-problem opener.'}</p>
+                      {(selectedLead.recheck?.findings??selectedLead.evidence)?.filter(e=>e.confidence==='confirmed').map((e, i) => (
                         <p key={i}>
                           <strong>{e.check}:</strong> {e.measurement}
                         </p>
@@ -393,9 +393,9 @@ export function Portal({
                   <p className="team-eyebrow">FREE SITE CHECK</p>
                   <h2>Start with the evidence.</h2>
                   <p>
-                    Check HTTPS, mobile viewport, metadata, phone links and
-                    contact or booking links. Forms and browser performance
-                    still need a human check.
+                    Check rendered mobile and desktop pages, HTTPS, action links and measured speed.
+                    Only reproduced problems with screenshot proof appear as confirmed.
+                    Link failures need another check at least ten minutes later.
                   </p>
                 </div>
                 <ScanLine size={58} strokeWidth={1} />
@@ -433,7 +433,9 @@ export function Portal({
                         )}
                       </span>
                     </div>
-                    {check.findings.map((finding, i) => (
+                    <h3>What’s broken</h3>
+                    {!check.findings.some(f=>f.confidence==='confirmed') && <p>No confirmed problems. This is not a guarantee that every part of the site works.</p>}
+                    {check.findings.filter(f=>f.confidence==='confirmed').map((finding, i) => (
                       <div className="team-finding" key={i}>
                         <span
                           className={"team-finding-symbol " + finding.status}
@@ -449,15 +451,25 @@ export function Portal({
                         <div>
                           <strong>{finding.name}</strong>
                           <p>{finding.detail}</p>
+                          {finding.proof?.image && <figure>
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img src={finding.proof.image} alt={`Screenshot evidence: ${finding.name}`} style={{maxWidth:'100%',maxHeight:620,objectFit:'contain'}} loading="lazy" />
+                            <figcaption>{finding.proof.url} · {finding.proof.captured_at}</figcaption>
+                          </figure>}
                         </div>
-                        <span className="team-fine">{finding.status}</span>
+                        <span className="team-fine">{finding.confidence}</span>
                       </div>
                     ))}
+                    <details><summary>Notes and checks that couldn’t be verified</summary>
+                      {check.findings.filter(f=>f.confidence!=='confirmed').map((f,i)=><p key={i}>{f.name}: couldn’t verify. {f.detail}</p>)}
+                      {check.notes?.map((n,i)=><p key={i}>{n.name}: {n.detail}</p>)}
+                      {check.retry_after&&<p>Run this URL again after {check.retry_after} to verify possible link failures.</p>}
+                    </details>
                     <button
                       className="secondary"
                       onClick={() =>
                         copy(
-                          check.findings
+                          check.findings.filter(f=>f.confidence==='confirmed')
                             .map((f) => `${f.name}: ${f.detail}`)
                             .join("\n"),
                         )
@@ -975,7 +987,7 @@ export function Portal({
                 <Stat
                   title="Assigned leads"
                   value={String(data.leads.length)}
-                  note="Scoped to each partner"
+                  note={`${data.leads.filter(l=>l.recheck?.status==='re-check failed').length} re-check failed · retained for review`}
                 />
                 <Stat
                   title="Payouts owed"

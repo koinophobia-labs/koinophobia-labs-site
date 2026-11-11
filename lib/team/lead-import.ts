@@ -1,3 +1,4 @@
+import { isConfirmed, type Observation, type Proof } from "@koinophobia/site-auditor";
 import { randomUUID } from "node:crypto";
 import type { Lead, Partner, Data } from "./types";
 import { SERVICES } from "./config";
@@ -92,7 +93,12 @@ export function validateImport(body: unknown, actor: Partner) {
         Number(e.severity) > 40
       )
         throw new Fault("Invalid severity.");
+      const confidence=e.confidence==='confirmed'?'confirmed' as const:undefined;
+      const proof=e.proof as Proof|undefined;
+      const observations=e.observations as Observation[]|undefined;
+      if(!isConfirmed({confidence,proof,observations,check:String(e.check),key:String(e.key),url:String(e.url)}))throw new Fault("Confirmed browser proof from two runs is required.");
       return {
+        confidence,proof,observations,key:textInput(e.key,"Observation key",true,100),run_id:textInput(e.run_id,"Run",true,100),
         check: textInput(e.check, "Check", true, 100),
         url: url(e.url),
         measured_at: date(e.measured_at),
@@ -104,12 +110,11 @@ export function validateImport(body: unknown, actor: Partner) {
     if (
       !evidence.some((e) =>
         [
-          "HTTPS",
           "HTTPS failure",
-          "Mobile viewport",
+          "Mobile layout",
           "Dead contact / booking / order link",
           "Closed Google Form",
-          "Slow HTML response",
+          "Slow page",
         ].includes(e.check),
       )
     )

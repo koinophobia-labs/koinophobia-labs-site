@@ -61,11 +61,15 @@ export interface Payout {
   paid_at: string;
 }
 export interface Finding {
+  confidence?: 'confirmed' | "couldn't verify";
+  proof?: {image?:string;url:string;captured_at:string;sha256:string;viewport:{width:number;height:number}};
   name: string;
   status: "pass" | "review" | "unknown";
   detail: string;
 }
 export interface SiteCheck {
+  retry_after?:string;
+  notes?:{name:string;detail:string}[];
   id: string;
   partner_id: string;
   url: string;

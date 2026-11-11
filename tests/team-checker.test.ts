@@ -3,7 +3,6 @@ import assert from "node:assert/strict";
 import {
   publicAddress,
   inspectHtml,
-  checkSite,
   validateTarget,
 } from "../lib/team/checker";
 const page = (html: string) => ({
@@ -76,41 +75,9 @@ test("URL validation rejects non-http, credentials, nonstandard ports and localh
   ])
     await assert.rejects(validateTarget(url));
 });
-test("contact link 404 measured; 403 is unverified; no fabricated load metric", async () => {
-  const result = await checkSite("https://example.test", async (url) =>
-    url.endsWith("/book")
-      ? { ...page(""), url, status: 404 }
-      : url.endsWith("/contact")
-        ? { ...page(""), url, status: 403 }
-        : page('<a href="/book">Book</a><a href="/contact">Contact</a>'),
-  );
-  assert.ok(
-    result.findings.some(
-      (x) => x.status === "review" && x.detail.includes("404"),
-    ),
-  );
-  assert.ok(
-    result.findings.some(
-      (x) => x.status === "unknown" && x.detail.includes("403"),
-    ),
-  );
-  assert.ok(
-    result.findings.some((x) => x.detail.includes("not browser load time")),
-  );
-});
-test("link checks bounded to five and surplus disclosed", async () => {
-  let calls = 0;
-  const result = await checkSite("https://example.test", async (url) => {
-    calls++;
-    return page(
-      url === "https://example.test"
-        ? Array.from(
-            { length: 7 },
-            (_, i) => `<a href="/book/${i}">Book</a>`,
-          ).join("")
-        : "",
-    );
-  });
-  assert.equal(calls, 6);
-  assert.ok(result.findings.some((x) => x.name === "Check limit"));
+test("shared browser contract requires two delayed observations for links", async () => {
+  const {confirm}=await import('@koinophobia/site-auditor');
+  const o={run_id:'one',check:'Dead contact / booking / order link' as const,key:'http-404',url:'https://example.test/book',measured_at:'2026-11-10T12:00:00Z',measurement:'HTTP 404'};
+  assert.equal(confirm([o])[0].confidence,"couldn't verify");
+  assert.equal(confirm([{...o,run_id:'two',measured_at:'2026-11-10T12:11:00Z'}],[o])[0].confidence,"couldn't verify");
 });
