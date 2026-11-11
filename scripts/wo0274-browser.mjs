@@ -2,13 +2,17 @@
 import { Pool } from "pg";
 import { chromium } from "playwright";
 import fs from "node:fs";
+import { createHash } from "node:crypto";
 import assert from "node:assert/strict";
 import { createOfferCheckout } from "../lib/acquisition/service-checkout.ts";
 import { processStripeEvent } from "../lib/payments.ts";
-const root = "/Volumes/KoiArchive/WO-0274/evidence",
-  base = "http://localhost:3274";
+const root = process.env.WO0274_EVIDENCE || "/Volumes/KoiArchive/WO-0274/evidence",
+  base = process.env.WO0274_BASE || "http://localhost:3274";
+const database = process.env.DATABASE_URL || "postgresql://127.0.0.1:55474/postgres";
+assert.ok(["127.0.0.1","localhost"].includes(new URL(base).hostname));
+assert.equal(new URL(database).hostname,"127.0.0.1");
 const db = new Pool({
-  connectionString: "postgresql://127.0.0.1:55474/postgres",
+  connectionString: database,
 });
 const browser = await chromium.launch({
   headless: true,
@@ -25,23 +29,29 @@ try {
         `<body style="margin:0;background:#f4f1e9;font:22px system-ui;padding:50px;color:#21392e"><p>JUNIPER BICYCLE · FICTIONAL FIXTURE</p><h1>Book your next tune-up.</h1><section style="padding:40px;background:white;border:3px solid ${after ? "#438969" : "#b85540"};border-radius:18px"><h2>${after ? "Book an appointment" : "404 — Booking page not found"}</h2><p>${after ? "The booking page loads and shows available appointment options." : "The Book button opens this missing page."}</p></section><p>FAKE DATA · WO-0274 acceptance</p></body>`,
       );
       const b = await p.screenshot({
-        path: `${root}/${after ? "after" : "before"}-proof.png`,
+        type: "jpeg",
+        path: `${root}/${after ? "after" : "before"}-proof.jpg`,
       });
-      return "data:image/png;base64," + b.toString("base64");
+      return "data:image/jpeg;base64," + b.toString("base64");
     }
     const before = await proof(false);
     await proof(true);
+    const captured = new Date().toISOString();
     const finding = {
       check: "Dead contact / booking / order link",
       key: "http-404",
       url: "https://example.test/book",
       confidence: "confirmed",
       measurement: "The Book button opens a missing page (HTTP 404).",
-      proof: { image: before, captured_at: new Date().toISOString() },
+      proof: { image: before, captured_at: captured, url: "https://example.test/book", viewport: {width:1040,height:700}, sha256:createHash("sha256").update(Buffer.from(before.split(",")[1],"base64")).digest("hex") },
     };
+    finding.observations = [
+      {...finding, run_id:"fake-before", measured_at:new Date(Date.now()-700000).toISOString()},
+      {...finding, run_id:"fake-after", measured_at:captured},
+    ];
     await db.query(
       "update team_leads set data=data||$1::jsonb where id='lead-0'",
-      [JSON.stringify({ evidence: [finding] })],
+      [JSON.stringify({ evidence: [finding], platform: "Wix" })],
     );
     let metadata;
     const sid = "cs_test_fulfillment_synthetic";
@@ -100,6 +110,7 @@ try {
         isMobile: true,
         hasTouch: true,
       });
+    for (const context of [owner,client]) await context.route("**/*", r => new URL(r.request().url()).origin === base ? r.continue() : r.abort());
     const p = await owner.newPage(),
       c = await client.newPage();
     const errors = [];
@@ -117,16 +128,24 @@ try {
     assert.match(res.headers()["x-robots-tag"], /noindex/);
     assert.equal(res.headers()["referrer-policy"], "no-referrer");
     assert.equal(await c.locator('input[type="password"]').count(), 0);
+    assert.equal(await c.getByLabel("Website platform").inputValue(), "Wix");
+    assert.equal(await c.getByLabel("Best contact name").inputValue(), "Fake Client");
+    assert.match(await c.locator("h1").innerText(), /: fix the broken booking or contact link/);
+    assert.match(await c.locator("main").innerText(), /Done by [A-Z][a-z]{2}, [A-Z][a-z]{2} \d{1,2}/);
+    assert.equal(await c.getByLabel("Access status").count(), 0);
+    assert.equal(await c.getByRole("button", {name:"I need help",exact:true}).count(), 1);
+    assert.match(await c.locator("main").innerText(), /before\/after recording/);
+    assert.match(await c.locator("main").innerText(), /keep working or refund/);
+    assert.match(await c.locator("main").innerText(), /Questions\? Text or call your rep,/);
     await c.getByLabel("Website platform").selectOption("Wix");
     await c.getByLabel("Best contact name").fill("Casey · FAKE CLIENT");
     await c.getByLabel("Best contact email").fill("casey@example.test");
     await c.getByLabel("Cell for a call or text").fill("3125550101");
-    await c.getByLabel("Access status").selectOption("Invite sent");
     await c.screenshot({
       path: root + "/client-onboarding-phone.png",
       fullPage: true,
     });
-    await c.getByRole("button", { name: "Save next steps" }).click();
+    await c.getByRole("button", { name: "I sent the invite" }).click();
     await c
       .getByText("Received. Blake will confirm access and start the work.")
       .waitFor();
@@ -134,6 +153,11 @@ try {
       await c.evaluate(() => document.documentElement.scrollWidth > innerWidth),
       false,
     );
+    assert.equal((await db.query("select data->>'access' access from team_jobs where id=$1",[j.id])).rows[0].access,"Invite sent");
+    await c.reload();
+    await c.getByRole("button",{name:"I need help",exact:true}).click();
+    await c.getByText("Received. We’ll help you arrange access. Keep your password private.").waitFor();
+    assert.equal((await db.query("select data->>'access' access from team_jobs where id=$1",[j.id])).rows[0].access,"Need help");
     await db.query(
       "update team_jobs set deadline=now()+interval '20 hours',access_since=now()-interval '25 hours'",
     );
@@ -152,8 +176,8 @@ try {
     // Synthetic auditor outcomes only. Real checker predicates are separately tested.
     const now = Date.now(),
       after =
-        "data:image/png;base64," +
-        fs.readFileSync(root + "/after-proof.png").toString("base64");
+        "data:image/jpeg;base64," +
+        fs.readFileSync(root + "/after-proof.jpg").toString("base64");
     const pass = (at) => ({
       ok: true,
       at: new Date(at).toISOString(),
@@ -194,21 +218,10 @@ try {
       ).status(),
       200,
     );
-    assert.equal(
-      (
-        await partner.request.post(base + "/team/api/jobs", {
-          headers: { origin: base },
-          data: { id: j.id, action: "notes", notes: "Denied" },
-        })
-      ).status(),
-      403,
-    );
-    assert.equal(
-      (await partner.request.get(base + "/team/jobs/" + j.id)).status(),
-      404,
-    );
     const pp = await partner.newPage();
     await pp.goto(base + "/team/pipeline");
+    assert.equal(await pp.evaluate(async id => (await fetch("/team/api/jobs", {method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({id,action:"notes",notes:"Denied"})})).status,j.id),403);
+    assert.equal(await pp.evaluate(async id => (await fetch("/team/jobs/"+id)).status,j.id),404);
     await pp.getByText("Job: Delivered").waitFor();
     assert.equal((await pp.content()).includes("Casey · FAKE CLIENT"), false);
     await pp.screenshot({

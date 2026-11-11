@@ -213,7 +213,11 @@
     "vendor/koinophobia-site-auditor-2.0.2.tgz",
     "vendor/koinophobia-site-auditor-2.0.3.tgz",
     "vendor/koinophobia-site-auditor-2.0.4.tgz",
-    "vercel.json"
+    "vercel.json",
+    "scripts/wo0274-local.mjs",
+    "tests/team-resolution-browser.test.mjs",
+    "vendor/fulfillment-auditor/**",
+    "vendor/koinophobia-site-auditor-2.1.4-fulfillment.1.tgz"
   ],
   "production_baseline": "a2d16809835a1d7af172f746d3635d3984d8161c",
   "reconciliation": "Inherited production files are recorded for the lagging origin/main scope baseline. Fulfillment implementation is reviewed against a2d1680. Final production ancestry and WO-0272 integration are required before deployment."

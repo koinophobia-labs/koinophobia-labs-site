@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import {
   auditSite,
   blocked,
@@ -46,6 +47,9 @@ export function resolvedFinding(f: JobFinding, a: Audit) {
     case "HTTPS failure":
       return p.url.startsWith("https:") && p.mixedBroken === 0;
     case "Mobile layout":
+      if (f.key === "small-crowded-primary") return p.resolution?.primaryTargetsComfortable === true;
+      if (f.key === "tiny-primary-text") return p.resolution?.primaryTextReadable === true;
+      if (!["horizontal-overflow", "zoomed-out", "overlapping-targets"].includes(f.key)) return false;
       return (
         p.screen === 390 &&
         p.width > 0 &&
@@ -57,8 +61,37 @@ export function resolvedFinding(f: JobFinding, a: Audit) {
       return (
         a.samples.length >= 3 &&
         a.samples.every((s) => s.lcp !== null && s.load !== null) &&
-        a.samples.every((s) => s.lcp! < 4000 && s.load! < 10000)
+        a.samples.every((s) => s.lcp! < 4000 && s.load! <= 8000)
       );
+    case "Unfinished content":
+      return p.resolution?.finishedContent === true;
+    case "Broken image":
+      return p.resolution?.loadedImages.some(src => {
+        const key = `image-${src}`;
+        const recorded = key.length > 90 ? key.slice(0, 25) + "-" + createHash("sha256").update(key).digest("hex") : key;
+        return recorded === f.key;
+      }) === true;
+    case "Wrong key link":
+      return p.resolution?.socialLinks.some(link => {
+        const key = `social-home-${link.label.toLowerCase().replace(/\W+/g, "-")}`;
+        if (key !== f.key) return false;
+        try {
+          const url = new URL(link.href);
+          const network = link.label.toLowerCase().match(/instagram|facebook|tiktok|youtube|linkedin/)?.[0];
+          return url.protocol === "https:" && url.pathname !== "/" && !!network &&
+            (url.hostname === `${network}.com` || url.hostname === `www.${network}.com`);
+        } catch { return false; }
+      }) === true;
+    case "Mobile contact route":
+      return p.screen === 390 && p.resolution?.contactAboveFold === true;
+    case "Expiring certificate":
+      return p.url.startsWith("https:") && !!a.certificate?.fingerprint &&
+        Date.parse(a.certificate.expires_at) - Date.parse(a.measured_at) > 14 * 86400000;
+    // These scanners do not expose a positive functional/submission/score result.
+    // No error, a missing widget, or a withheld score must never unlock delivery.
+    case "Booking widget failure":
+    case "Insecure form":
+    case "Lighthouse mobile performance":
     default:
       return false;
   }

@@ -33,3 +33,19 @@ After seven days without access, or an out-of-scope flag, the owner can create a
 ## Evidence boundaries
 
 Local mocked Stripe events exercise real PostgreSQL transactions. Browser screenshots use fictional data and synthetic before/after outcomes, not a claim that a real client site was fixed. Test mail providers are mocked or disabled. No real account login, purchase, invitation, email, text, refund or Stripe setting change is part of acceptance.
+
+
+## Evening integration, 2026-11-11
+
+The release merges WO-0279 (and its WO-0272/0276 ancestry). Auditor 2.1.4-fulfillment.1 retains the 2.1.4 scanner and adds passive positive measurements for job verification; its complete source is retained under `vendor/fulfillment-auditor`. GET-only public-network, robots, TLS, bot-block, and Lighthouse-withholding controls remain in place. The two-pass ten-minute delivery gate remains mandatory.
+
+Positive resolution now covers finished visible content, the exact repaired image asset loaded in the viewport, a corrected native social profile link, a native contact link visible on mobile, a trusted certificate with more than fourteen days remaining, and the new mobile target/text measurements. Empty/missing measurements fail closed. Booking widget functionality, actual form transport and withheld Lighthouse scores cannot be certified by this passive scanner and continue to block delivery; removing an error alone does not prove those functions work. Image replacements with a different asset key remain unverified until supported by exact-target evidence.
+
+The client page uses a plain-language job title and Central-calendar date, checkout contact and recorded lead-platform prefills, and a single invitation acknowledgement with a separate help action. Both actions retain the existing access-status values; only Blake can confirm access. The before/after recording and refund wording follows the owner's requested copy.
+
+Official role references checked 2026-11-11:
+- Wix Website Manager: https://support.wix.com/en/article/roller-og-tillatelser-oversikt
+- Squarespace Website editor / Administrator: https://support.squarespace.com/hc/en-us/articles/206537297-Contributor-roles-and-permissions
+- WordPress Editor / Administrator: https://wordpress.com/support/invite-people/user-roles/
+- Shopify collaborator access (permissions selected per request): https://help.shopify.com/en/manual/your-account/users/security/collaborator-accounts
+- GoDaddy delegate access: https://www.godaddy.com/help/invite-a-delegate-to-access-my-godaddy-account-12376

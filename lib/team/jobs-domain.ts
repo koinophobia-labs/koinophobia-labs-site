@@ -12,13 +12,13 @@ export type Platform = (typeof platforms)[number];
 export const inviteSteps: Record<Platform, string[]> = {
   Wix: [
     "Open your site dashboard → Settings → Roles & Permissions.",
-    "Choose Invite People and enter blake@koinophobialabs.com.",
-    "Choose Website Manager (or the role needed for the agreed fix), then Send Invite.",
+    "Choose Invite Collaborators and enter blake@koinophobialabs.com.",
+    "Choose Website Manager, then Send Invites.",
   ],
   Squarespace: [
     "Open your website dashboard → Settings → Permissions & Ownership.",
     "Choose Invite Contributor and enter blake@koinophobialabs.com.",
-    "Grant Content Editor access for content changes, or Administrator if the agreed fix needs it. Send the invitation.",
+    "Grant Website editor access for content changes, or Administrator if the agreed fix needs it. Send the invitation.",
   ],
   WordPress: [
     "WordPress.com: open Users → Add New User and choose Invite user. For self-hosted WordPress, open Users → Add New.",
@@ -38,10 +38,10 @@ export const inviteSteps: Record<Platform, string[]> = {
   Other: [
     "Find Users, Team, Permissions or Collaborators in your site dashboard.",
     "Invite blake@koinophobialabs.com with permissions for the agreed fix.",
-    "If you cannot find an invitation option, select Need help below. Do not send a password.",
+    "If you cannot find an invitation option, choose I need help below. Do not send a password.",
   ],
   Unknown: [
-    "Choose Need help below. Blake will help identify your platform.",
+    "Choose I need help below. Blake will help identify your platform.",
     "Keep your login private. We will arrange contributor access together.",
   ],
 };
@@ -80,6 +80,7 @@ export type Job = {
   deal_id: string | null;
   partner_id: string | null;
   business: string;
+  partner_name?: string;
   website: string;
   offer: string;
   stage: string;
@@ -204,3 +205,31 @@ export const alertLabels: Record<string,string> = {
  'quote-deadline':'Set the quoted deadline','refund-review':'Refund review available','proof-needed':'Confirmed proof needed',
 };
 export const offerLabel = (offer:string) => ({fix:'The Fix','tune-up':'Site Tune-Up',care:'Care Plan','new-site':'New Site','per-quote':'Quoted project'}[offer]||offer);
+
+
+export function onboardingDate(deadline: string | null) {
+  if (!deadline || !Number.isFinite(Date.parse(deadline))) return null;
+  return new Date(deadline).toLocaleDateString("en-US", { timeZone: "America/Chicago", weekday: "short", month: "short", day: "numeric" });
+}
+export function onboardingTitle(j: Job) {
+  const check = j.data.findings?.[0]?.check;
+  const fixes: Record<string, string> = {
+    "Dead contact / booking / order link": "fix the broken booking or contact link",
+    "Closed Google Form": "reopen the response form",
+    "HTTPS failure": "fix the site security warning",
+    "Mobile layout": "make the site easier to use on a phone",
+    "Slow page": "speed up the website",
+    "Unfinished content": "replace the unfinished website text",
+    "Wrong key link": "fix the social media link",
+    "Broken image": "restore the missing image",
+    "Booking widget failure": "fix the booking tool",
+    "Expiring certificate": "renew the site security certificate",
+    "Insecure form": "secure the contact form",
+    "Mobile contact route": "make the contact option easy to find on a phone",
+    "Lighthouse mobile performance": "speed up the website on phones",
+  };
+  return `${j.business}: ${j.offer === "fix" && check ? fixes[check] || "fix the agreed website issue" : j.offer === "tune-up" ? "tune up your website" : "your agreed website work"}`;
+}
+export function knownPlatform(value: unknown): Platform {
+  return platforms.find(p => typeof value === "string" && p.toLowerCase() === value.trim().toLowerCase()) || "Unknown";
+}

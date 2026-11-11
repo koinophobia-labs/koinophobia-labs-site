@@ -8,12 +8,18 @@ import {
 } from "@/lib/team/jobs-domain";
 export function Onboarding({
   code,
-  needsSite,
+  needsSite, initialPlatform, initialContact, initialEmail, initialCell, deadlineLabel, partnerFirstName,
 }: {
   code: string;
   needsSite: boolean;
+  initialPlatform: Platform;
+  initialContact: string;
+  initialEmail: string;
+  initialCell: string;
+  deadlineLabel: string | null;
+  partnerFirstName: string;
 }) {
-  const [platform, setPlatform] = useState<Platform>("Unknown"),
+  const [platform, setPlatform] = useState<Platform>(initialPlatform),
     [message, setMessage] = useState(""),
     [busy, setBusy] = useState(false),
     [saved, setSaved] = useState(false);
@@ -23,7 +29,9 @@ export function Onboarding({
         e.preventDefault();
         setBusy(true);
         setMessage("");
-        const data = Object.fromEntries(new FormData(e.currentTarget));
+        const submitter = (e.nativeEvent as SubmitEvent).submitter as HTMLButtonElement | null;
+        const access = submitter?.value === "Need help" ? "Need help" : "Invite sent";
+        const data = { ...Object.fromEntries(new FormData(e.currentTarget)), access };
         try {
           const r = await fetch(`/start/${code}/submit`, {
             method: "POST",
@@ -33,7 +41,7 @@ export function Onboarding({
           const b = await r.json();
           if (!r.ok) throw Error(b.error);
           setSaved(true);
-          setMessage("Received. Blake will confirm access and start the work.");
+          setMessage(access === "Need help" ? "Received. We’ll help you arrange access. Keep your password private." : "Received. Blake will confirm access and start the work.");
         } catch (e) {
           setMessage(e instanceof Error ? e.message : "Please try again.");
         } finally {
@@ -73,11 +81,12 @@ export function Onboarding({
       </label>
       <label>
         Best contact name
-        <input name="contact" maxLength={100} autoComplete="name" required />
+        <input defaultValue={initialContact} name="contact" maxLength={100} autoComplete="name" required />
       </label>
       <label>
         Best contact email
         <input
+          defaultValue={initialEmail}
           name="contact_email"
           type="email"
           maxLength={254}
@@ -86,7 +95,7 @@ export function Onboarding({
       </label>
       <label>
         Cell for a call or text
-        <input name="cell" type="tel" maxLength={30} autoComplete="tel" />
+        <input defaultValue={initialCell} name="cell" type="tel" maxLength={30} autoComplete="tel" />
         <small>
           Blake or your partner may contact you from their own phone. No
           automated texts.
@@ -114,16 +123,17 @@ export function Onboarding({
           the work, you can remove contributor access.
         </p>
       </section>
-      <label>
-        Access status
-        <select name="access">
-          <option>Need help</option>
-          <option>Invite sent</option>
-        </select>
-      </label>
-      <button className="team-btn" disabled={busy || saved}>
-        {busy ? "Saving…" : saved ? "Saved" : "Save next steps"}
+      <button className="team-btn job-invite-button" name="access" value="Invite sent" disabled={busy || saved}>
+        {busy ? "Saving…" : saved ? "Received" : "I sent the invite"}
       </button>
+      <button className="job-help-link" name="access" value="Need help" disabled={busy || saved}>I need help</button>
+      <section aria-labelledby="next-steps-heading">
+        <h2 id="next-steps-heading">What happens next</h2>
+        <p>We fix it {deadlineLabel ? `by ${deadlineLabel}` : "on the timeline in your agreed quote"}.</p>
+        <p>You get a before/after recording of the fix.</p>
+        <p>If it isn’t fixed, we keep working or refund.</p>
+        <p>Questions? Text or call your rep, {partnerFirstName}.</p>
+      </section>
       <p role="status">{message}</p>
     </form>
   );

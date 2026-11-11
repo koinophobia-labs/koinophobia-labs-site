@@ -1,3 +1,4 @@
+import { confirmedEvidence } from "./auditor-fixtures";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
@@ -63,17 +64,7 @@ test("fulfillment on real PostgreSQL; fake payments and no mail sends", async (t
     transaction(fn, db);
   const data = seed(true),
     [owner, a, b] = data.partners;
-  const proof = {
-    check: "Dead contact / booking / order link",
-    key: "http-404",
-    url: "https://example.test/book",
-    confidence: "confirmed",
-    measurement: "FAKE booking button returns a 404 page.",
-    proof: {
-      image: "data:image/png;base64,YQ==",
-      captured_at: new Date().toISOString(),
-    },
-  };
+  const proof = { ...confirmedEvidence(), verify_url: "https://fictional.example/" };
   let code = "";
   try {
     for (const f of [
@@ -102,7 +93,7 @@ test("fulfillment on real PostgreSQL; fake payments and no mail sends", async (t
           l.email,
           "3125550100",
           l.website,
-          { ...l, evidence: [proof] },
+          { ...l, platform: "Wix", evidence: [proof] },
         ],
       );
     for (const d of data.deals)
@@ -421,6 +412,9 @@ test("fulfillment on real PostgreSQL; fake payments and no mail sends", async (t
           72 * 3600000,
         );
         assert.equal(j.data.findings.length, 1);
+        assert.equal(j.data.contact, "Fake buyer");
+        assert.equal(j.data.platform, "Wix");
+        assert.equal((await publicJob(db,j.code))?.partner_name,a.name);
         await assert.rejects(ownerJobs(db, a));
         await assert.rejects(ownerJob(db, b, j.id));
         await assert.rejects(
@@ -499,7 +493,7 @@ test("fulfillment on real PostgreSQL; fake payments and no mail sends", async (t
           at,
           reason: "Passed",
           proofs: [
-            { url: proof.url, image: proof.proof.image, captured_at: at },
+            { url: proof.url, image: proof.proof!.image, captured_at: at },
           ],
         });
         await runJobVerification(db, j.id, async () =>

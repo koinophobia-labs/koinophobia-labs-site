@@ -10,6 +10,7 @@ import {
   jobAlerts,
   type Job,
   type JobFinding,
+  knownPlatform,
 } from "./jobs-domain";
 
 export const newJobCode = () => randomBytes(32).toString("base64url");
@@ -18,6 +19,7 @@ export async function createPaidJob(
   paymentId: string,
   offer: string,
   buyerEmail: string,
+  buyerName = "",
 ) {
   // Keep older payment test databases and staged additive rollout compatible.
   if (
@@ -32,7 +34,7 @@ export async function createPaidJob(
   }
   const r = (
     await q.query(
-      `select p.*,l.business_name,l.website_or_social,a.deal_id,d.partner_id,t.business,t.website,t.data lead_data,d.services,d.scope from crm_payments p join crm_leads l on l.id=p.lead_id left join team_payment_attributions a on a.payment_id=p.id left join team_deals d on d.id=a.deal_id left join team_leads t on t.id=d.lead_id where p.id=$1 and p.status='paid'`,
+      `select p.*,l.name buyer_name,l.business_name,l.website_or_social,a.deal_id,d.partner_id,t.business,t.website,t.data lead_data,d.services,d.scope from crm_payments p join crm_leads l on l.id=p.lead_id left join team_payment_attributions a on a.payment_id=p.id left join team_deals d on d.id=a.deal_id left join team_leads t on t.id=d.lead_id where p.id=$1 and p.status='paid'`,
       [paymentId],
     )
   ).rows[0];
@@ -99,6 +101,8 @@ export async function createPaidJob(
       new Date(new Date(paidAt).getTime() + 30 * 86400000),
       JSON.stringify({
         buyer_email: buyerEmail,
+        contact: (buyerName || r.buyer_name || "").trim().slice(0, 100),
+        platform: knownPlatform(r.lead_data?.platform),
         findings,
         scope: r.scope || "",
       }),
@@ -142,7 +146,7 @@ export async function publicJob(q: Queryable, code: string) {
   return (
     ((
       await q.query(
-        "select * from team_jobs where code=$1 and code_expires_at>now() and stage<>'Closed'",
+        "select j.*,p.name partner_name from team_jobs j left join team_partners p on p.id=j.partner_id where j.code=$1 and j.code_expires_at>now() and j.stage<>'Closed'",
         [code],
       )
     ).rows[0] as Job | undefined) || null

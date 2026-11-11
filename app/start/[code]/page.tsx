@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { teamDatabase, hostedPreview } from "@/lib/team/db";
 import { publicJob } from "@/lib/team/jobs-store";
+import { onboardingDate, onboardingTitle, knownPlatform } from "@/lib/team/jobs-domain";
 import { Onboarding } from "@/components/team/Onboarding";
 import "../../team/team.css";
 import "../../team/jobs.css";
@@ -30,20 +31,20 @@ export default async function Start({
   return (
     <main className="job-shell">
       <p className="kicker">KOINOPHOBIA LABS · NEXT STEP</p>
-      <h1>Let’s get your site fixed.</h1>
-      <p>
-        {j.business} · {j.offer}
-      </p>
-      <p>
-        {j.deadline
-          ? `Due ${new Date(j.deadline).toLocaleString("en-US", { timeZone: "America/Chicago" })} Central`
-          : "Deadline: per your agreed quote."}
-      </p>
+      <h1>{onboardingTitle(j)}</h1>
+      <p>{onboardingDate(j.deadline) ? `Done by ${onboardingDate(j.deadline)}` : "Timing: as agreed in your quote."}</p>
       <p>
         Job status: <strong>{j.stage}</strong>
       </p>
       {["New", "Waiting on client access"].includes(j.stage) ? (
-        <Onboarding code={code} needsSite={!j.website} />
+        <Onboarding code={code} needsSite={!j.website}
+          initialPlatform={knownPlatform(j.data.platform)}
+          initialContact={j.data.contact || ""}
+          initialEmail={j.data.contact_email || j.data.buyer_email || ""}
+          initialCell={j.data.cell || ""}
+          deadlineLabel={onboardingDate(j.deadline)}
+          partnerFirstName={j.partner_name?.trim().split(/\s+/)[0] || "Blake"}
+        />
       ) : (
         <p>
           Blake has your next steps. Contact him if your access details change.

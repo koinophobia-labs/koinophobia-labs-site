@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import {
   deadlineFor,
+  onboardingDate, onboardingTitle, knownPlatform, inviteSteps,
   onboardingInput,
   jobAlerts,
   deliveryReady,
@@ -213,4 +214,44 @@ test("only paying buyer gets onboarding and handoff; internal alerts go only to 
     fixBrief({ ...j, data: { ...j.data, platform: "Wix" } })[0],
     /Wix Editor/,
   );
+});
+
+
+test("onboarding names the fix, uses a human Central date, documented roles and safe prefills", () => {
+  const j=job();
+  assert.match(onboardingTitle(j), /Fictional Workshop: fix the broken booking or contact link/);
+  assert.equal(onboardingDate(j.deadline), "Fri, Nov 13");
+  assert.equal(onboardingDate(null), null);
+  assert.equal(onboardingDate("invalid"), null);
+  assert.equal(knownPlatform("wix"), "Wix");
+  assert.equal(knownPlatform("not a platform"), "Unknown");
+  assert.match(inviteSteps.Wix.join(" "), /Website Manager/);
+  assert.match(inviteSteps.Squarespace.join(" "), /Website editor/);
+  assert.doesNotMatch(JSON.stringify(inviteSteps), /or the role needed/);
+});
+test("new measurement types require positive evidence; missing findings never suffice", () => {
+  const resolution = {finishedContent:true,loadedImages:["https://example.test/photo.jpg"],socialLinks:[{label:"Instagram",href:"https://www.instagram.com/fictional"}],contactAboveFold:true,primaryTargetsComfortable:true,primaryTextReadable:true};
+  for (const [check,key] of [["Unfinished content","placeholder-lorem-ipsum"],["Broken image","image-https://example.test/photo.jpg"],["Wrong key link","social-home-instagram"],["Mobile contact route","contact-below-fold"],["Mobile layout","small-crowded-primary"],["Mobile layout","tiny-primary-text"]]) {
+    const f={...finding,check,key},a=audit();
+    assert.equal(resolvedFinding(f,a),false,`${check} needs measurements`);
+    a.home!.resolution=resolution;
+    assert.equal(resolvedFinding(f,a),true,`${check} has positive measurements`);
+    a.findings=[{...f,confidence:"confirmed"} as Audit["findings"][0]];
+    assert.equal(resolvedFinding(f,a),false,`${check} still reproduces`);
+  }
+  const a=audit();a.home!.resolution=resolution;
+  assert.equal(resolvedFinding({...finding,check:"Broken image",key:"image-https://example.test/other.jpg"},a),false);
+  a.home!.resolution={...resolution,socialLinks:[{label:"Instagram",href:"https://www.instagram.com.evil.test/profile"}]};
+  assert.equal(resolvedFinding({...finding,check:"Wrong key link",key:"social-home-instagram"},a),false);
+});
+test("certificate expiry has a verified future bound; unsupported functional checks and withheld Lighthouse scores block", () => {
+  const a=audit(), f={...finding,check:"Expiring certificate"};
+  assert.equal(resolvedFinding(f,a),false);
+  a.certificate={expires_at:new Date(Date.parse(a.measured_at)+15*86400000).toISOString(),fingerprint:"fixture"};
+  assert.equal(resolvedFinding(f,a),true);
+  a.certificate.expires_at=new Date(Date.parse(a.measured_at)+14*86400000).toISOString();
+  assert.equal(resolvedFinding(f,a),false);
+  for(const check of ["Booking widget failure","Insecure form","Lighthouse mobile performance"])assert.equal(resolvedFinding({...finding,check},a),false);
+  a.samples=a.samples.map(s=>({...s,load:9000}));
+  assert.equal(resolvedFinding({...finding,check:"Slow page"},a),false);
 });

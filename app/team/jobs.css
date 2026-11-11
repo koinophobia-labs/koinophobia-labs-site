@@ -109,3 +109,6 @@
   border-top: 1px solid #35435b;
   margin: 28px 0;
 }
+
+.job-shell .job-invite-button { min-height: 54px; width: 100%; font-size: 19px; }
+.job-shell .job-help-link { background: none; color: #82dacd; text-decoration: underline; font-size: 15px; justify-self: center; padding: 4px 12px; }
