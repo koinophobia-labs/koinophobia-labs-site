@@ -1,3 +1,4 @@
+import {confirmedEvidence} from './auditor-fixtures';
 import test from "node:test";
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
@@ -48,16 +49,7 @@ const importFixture = (suffix = "one") => ({
   metro: "austin,TX",
   draft_email: "Fictional draft",
   reply_to: "blake@koinophobialabs.com",
-  evidence: [
-    {
-      check: "Mobile viewport",
-      url: `https://fake-import-${suffix}.test`,
-      measured_at: "2026-11-10T12:00:00Z",
-      measurement: "No device-width viewport.",
-      severity: 25,
-      impact: "May be hard to use on a phone.",
-    },
-  ],
+  evidence: [confirmedEvidence()],
   contact_route: {
     kind: "phone",
     value: "3125550199",

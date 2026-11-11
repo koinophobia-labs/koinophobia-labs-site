@@ -234,56 +234,16 @@ export function inspectHtml(page: PageResponse): {
   });
   return { findings, links: [...new Set(links)] };
 }
-export async function checkSite(raw: string, fetcher = fetchPage) {
-  const page = await fetcher(raw);
-  const { findings, links } = inspectHtml(page);
-  findings.push({
-    name: "HTML response time",
-    status: "pass",
-    detail: `${page.duration} ms to fetch the HTML response from this server, including redirects. This is not browser load time or Core Web Vitals.`,
-  });
-  for (const link of links.slice(0, 5)) {
-    try {
-      const result = await fetcher(link);
-      findings.push({
-        name: "Contact / booking link",
-        status:
-          result.status >= 200 && result.status < 400
-            ? "pass"
-            : result.status === 404 || result.status === 410
-              ? "review"
-              : "unknown",
-        detail: `${link} → HTTP ${result.status}. Forms and booking completion were not tested.`,
-      });
-    } catch (error) {
-      findings.push({
-        name: "Contact / booking link",
-        status: "unknown",
-        detail: `${link} → could not verify (${error instanceof Error ? error.message : "request failed"}).`,
-      });
-    }
-  }
-  if (
-    !links.length &&
-    !findings.some((x) => x.name.includes("Contact / booking"))
-  )
-    findings.push({
-      name: "Contact / booking links",
-      status: "unknown",
-      detail:
-        "No HTTP contact or booking links detected in the returned HTML. JavaScript-only links were not tested.",
-    });
-  if (links.length > 5)
-    findings.push({
-      name: "Check limit",
-      status: "unknown",
-      detail: `Checked 5 of ${links.length} detected contact / booking links.`,
-    });
+// Production checks use the exact packed shared checker used by leadgen.
+export async function checkSite(raw: string, previous: import('@koinophobia/site-auditor').Observation[] = []) {
+  const {auditSite}=await import('@koinophobia/site-auditor');
+  let executablePath:string|undefined;let args:string[]|undefined;
+  if(process.env.VERCEL){const chromium=(await import('@sparticuz/chromium')).default;executablePath=await chromium.executablePath();args=chromium.args;}
+  const result=await auditSite(raw,{previous,executablePath,args,maxLinks:2});
   return {
-    url: raw,
-    final_url: page.url,
-    measured_at: new Date().toISOString(),
-    duration_ms: page.duration,
-    findings,
+    version:result.version,run_id:result.run_id,url:result.url,final_url:result.final_url,
+    measured_at:result.measured_at,duration_ms:result.samples[0]?.load??0,
+    observations:result.observations,samples:result.samples,retry_after:result.retry_after,notes:result.notes,
+    findings:result.findings.map(f=>({...f,name:f.check,status:f.confidence==='confirmed'?'review' as const:'unknown' as const,detail:f.measurement})),
   };
 }

@@ -15,13 +15,14 @@ import {
 } from "./domain";
 import { validateImport, importLeads } from "./lead-import";
 export type TeamLead = Lead & {
+  recheck?: {status:'confirmed'|'re-check failed'; checked_at:string; confirmed_count:number;findings?:{check:string;measurement:string;confidence?:string}[]};
   opted_out?: boolean;
   city?: string;
   state?: string;
   time_zone?: string;
   fit_score?: number;
   opener?: string;
-  evidence?: { check: string; measurement: string }[];
+  evidence?: { check: string; measurement: string; confidence?:string }[];
 };
 export type TeamSnapshot = Omit<Data, "leads"> & {
   connect?: ConnectSnapshot;
@@ -80,6 +81,7 @@ export async function snapshot(
   for (const l of leads)
     shaped.push({
       ...l.data,
+      evidence: (l.data.evidence??[]).map((e:{check:string;measurement:string;confidence?:string})=>({check:e.check,measurement:e.measurement,confidence:e.confidence})),
       id: l.id,
       partner_id: l.partner_id,
       business: l.business,
@@ -118,7 +120,10 @@ export async function snapshot(
       "select id,partner_id,data from team_site_checks where ($1::text is null or partner_id=$1) order by created_at desc limit 30",
       [scope],
     )
-  ).rows.map((x) => ({ ...x.data, id: x.id, partner_id: x.partner_id }));
+  ).rows.map((x) => ({ ...x.data, home:undefined, observations:undefined, id: x.id, partner_id: x.partner_id,
+    findings:(x.data.findings??[]).map((f:import('./types').Finding,i:number)=>({name:f.name,status:f.status,detail:f.detail,confidence:f.confidence,
+      proof:f.proof?{...f.proof,image:`/team/proof/${x.id}/${i}`} :undefined})),
+  }));
   const address =
     (
       await q.query(
