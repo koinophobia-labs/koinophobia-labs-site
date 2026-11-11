@@ -1,4 +1,5 @@
 "use client";
+import {plainFinding} from "@/lib/team/plain-findings";
 import { CallPanel } from "./CallPanel";
 import { callNow } from "@/lib/team/call-domain";
 import { AccountPassword } from "./AccountPassword";
@@ -31,7 +32,7 @@ import { STAGES, type Deal } from "@/lib/team/types";
 import { commission } from "@/lib/team/domain";
 import { quotePaymentLink } from "@/lib/team/payment-links";
 import { quoteMessage } from "@/lib/team/quotes";
-import { SCRIPTS } from "@/lib/team/scripts";
+import { SCRIPTS, renderScript } from "@/lib/team/scripts";
 const navigation = [
   ["leads", "Leads", Users],
   ["call", "Phone companion", MessageSquare],
@@ -171,7 +172,7 @@ export function Portal({
   const selectedLead =
     data.leads.find((l) => l.id === selected) || data.leads[0];
   const activeScript = SCRIPTS.find((s) => s.id === script) || SCRIPTS[0];
-  const scriptBody = activeScript.body.replace(
+  const scriptBody = renderScript(activeScript.body, selectedLead?.recheck?.status === "re-check failed" ? undefined : (selectedLead?.recheck?.findings ?? selectedLead?.evidence)?.find(f => f.confidence === "confirmed"), data.me.name).replace(
     "[MAILING ADDRESS — Blake fills in]",
     data.mailingAddress || "[MAILING ADDRESS — Blake fills in]",
   );
@@ -343,6 +344,22 @@ export function Portal({
                     </div>
                     <h2>{selectedLead.business}</h2>
                     <p>{selectedLead.website}</p>
+                    <div className="team-inset">
+                      <p className="team-eyebrow">THE REASON TO REACH OUT</p>
+                      <p>{selectedLead.recheck?.status==='re-check failed'?'Re-check failed. Don’t call this lead. The original qualifying problem did not reproduce; a confirmed re-check is required.':(selectedLead.recheck?.findings??selectedLead.evidence)?.some(e=>e.confidence==='confirmed') ? null : 'A confirmed browser re-check is required before using a website-problem opener.'}</p>
+                      {(selectedLead.recheck?.status==='re-check failed'?[]:selectedLead.recheck?.findings??selectedLead.evidence)?.filter(e=>e.confidence==='confirmed').map((e, i) => (
+                        <div key={i}>
+                          {i===0&&<p className="team-eyebrow">STRONGEST CONFIRMED FINDING</p>}
+                          <p className="team-plain-finding">{e.plain ?? plainFinding(e)}</p>
+                          <details><summary>Technical details</summary><p><strong>{e.check}:</strong> {e.measurement}</p>{e.impact&&<p>{e.impact}</p>}</details>
+                          {e.verify_url&&<p><a href={e.verify_url} target="_blank" rel="noopener noreferrer">Check it yourself ↗</a></p>}
+                          {e.proof_url&&<figure>
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img src={e.proof_url} alt={`Screenshot evidence: ${e.check}`} style={{maxWidth:'100%',maxHeight:620,objectFit:'contain'}} loading="lazy" />
+                          </figure>}
+                        </div>
+                      ))}
+                    </div>
                     <dl>
                       <dt>Contact</dt>
                       <dd>{selectedLead.contact || "Business team"}</dd>
@@ -355,22 +372,6 @@ export function Portal({
                         {selectedLead.time_zone || "Confirm before calling"}
                       </dd>
                     </dl>
-                    <div className="team-inset">
-                      <p className="team-eyebrow">THE REASON TO REACH OUT</p>
-                      <p>{selectedLead.recheck?.status==='re-check failed'?'Re-check failed. Don’t call this lead. The original qualifying problem did not reproduce; a confirmed re-check is required.':selectedLead.opener??'A confirmed browser re-check is required before using a website-problem opener.'}</p>
-                      {(selectedLead.recheck?.status==='re-check failed'?[]:selectedLead.recheck?.findings??selectedLead.evidence)?.filter(e=>e.confidence==='confirmed').map((e, i) => (
-                        <div key={i}>
-                          {i===0&&<p className="team-eyebrow">STRONGEST CONFIRMED FINDING</p>}
-                          <strong>{e.check}:</strong> {e.measurement}
-                          {e.impact&&<p>{e.impact}</p>}
-                          {e.verify_url&&<p><a href={e.verify_url} target="_blank" rel="noopener noreferrer">Check it yourself ↗</a></p>}
-                          {e.proof_url&&<figure>
-                            {/* eslint-disable-next-line @next/next/no-img-element */}
-                            <img src={e.proof_url} alt={`Screenshot evidence: ${e.check}`} style={{maxWidth:'100%',maxHeight:620,objectFit:'contain'}} loading="lazy" />
-                          </figure>}
-                        </div>
-                      ))}
-                    </div>
                     <div className="team-actions">
                       <Link
                         href="/team/check"
@@ -458,9 +459,8 @@ export function Portal({
                           )}
                         </span>
                         <div>
-                          <strong>{finding.name}</strong>
-                          <p>{finding.detail}</p>
-                          {finding.impact&&<p>{finding.impact}</p>}
+                          <p className="team-plain-finding">{plainFinding(finding)}</p>
+                          <details><summary>Technical details</summary><strong>{finding.name}</strong><p>{finding.detail}</p>{finding.impact&&<p>{finding.impact}</p>}</details>
                           {finding.verify_url&&<p><a href={finding.verify_url} target="_blank" rel="noopener noreferrer">Check it yourself ↗</a></p>}
                           {finding.proof?.image && <figure>
                             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -481,7 +481,7 @@ export function Portal({
                       onClick={() =>
                         copy(
                           check.findings.filter(f=>f.confidence==='confirmed')
-                            .map((f) => `${f.name}: ${f.detail}`)
+                            .map((f) => plainFinding(f))
                             .join("\n"),
                         )
                       }

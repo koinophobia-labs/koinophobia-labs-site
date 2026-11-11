@@ -27,6 +27,8 @@ export interface CallState {
     expires_at: string;
   } | null;
   problem: string | null;
+  plain_problem?: string | null;
+  say_it?: string | null;
   impact?: string | null;
   verify_url?: string | null;
   proof_available: boolean;

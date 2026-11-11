@@ -1,3 +1,4 @@
+import {plainFinding} from "./plain-findings";
 import {isConfirmed,rankFindings,impactLine,verifyLink,leverageScore,type Finding as AuditFinding} from '@koinophobia/site-auditor/model';
 
 export function confirmedLeverage(rows:unknown):AuditFinding[]{
@@ -5,7 +6,7 @@ export function confirmedLeverage(rows:unknown):AuditFinding[]{
   return rankFindings(rows.filter((f):f is AuditFinding=>!!f&&typeof f==='object'&&isConfirmed(f)));
 }
 export function findingSummary(f:AuditFinding){
-  return {check:f.check,measurement:f.measurement,confidence:f.confidence,impact:impactLine(f),verify_url:verifyLink(f),leverage:leverageScore(f),measured_at:f.measured_at};
+  return {plain:plainFinding(f),key:f.key,check:f.check,measurement:f.measurement,confidence:f.confidence,impact:impactLine(f),verify_url:verifyLink(f),leverage:leverageScore(f),measured_at:f.measured_at};
 }
 export function strongestOpener(rows:unknown):string|undefined {
   const f=confirmedLeverage(rows)[0];

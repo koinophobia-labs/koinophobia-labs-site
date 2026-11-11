@@ -1,3 +1,5 @@
+import {plainFinding, sayFinding, slowSeconds, storedProblemFinding} from "./plain-findings";
+import {slowSiteScript} from "./scripts";
 import { randomInt, randomUUID, createHash } from "node:crypto";
 import {confirmedLeverage} from './leverage';
 import {impactLine,verifyLink,type Finding as AuditFinding} from '@koinophobia/site-auditor/model';
@@ -179,10 +181,12 @@ export async function callState(
     deal: d ?? null,
     page: (page ?? null) as CallState["page"],
     problem,
+    plain_problem: finding ? plainFinding(finding) : null,
+    say_it: finding ? sayFinding(finding) : null,
     impact:problem&&proof?impactLine(proof):null,
     verify_url:problem&&proof?verifyLink(proof):null,
     proof_available: Boolean(proof),
-    script: callScript(l, p.name, problem, Boolean(proof)),
+    script: finding && slowSeconds(finding) !== null ? slowSiteScript(slowSeconds(finding)!, p.name) : callScript(l, p.name, finding ? plainFinding(finding) : problem, Boolean(proof)),
     commission: Math.round(earned * 0.4),
   };
 }
@@ -344,6 +348,8 @@ export async function publicDeal(q: Queryable, raw: string) {
   const matches=meta&&meta.proof_sha256===hash;
   row.impact=matches&&typeof meta.impact==='string'?meta.impact:null;
   row.verify_url=matches?verifyLink({url:row.lead.website,check:'Dead contact / booking / order link',verify_url:meta.verify_url}):null;
+  const exact = confirmedLeverage(row.lead.data?.evidence).find(f => f.measurement === row.problem);
+  row.plain_problem = plainFinding(exact ?? storedProblemFinding(row.problem));
   return row;
 }
 export async function markEngagement(

@@ -17,7 +17,7 @@ import {
 import { validateImport, importLeads } from "./lead-import";
 import {confirmedLeverage,findingSummary,strongestOpener} from './leverage';
 import {verifyLink,type Check} from '@koinophobia/site-auditor/model';
-export interface LeadFinding {check:string;measurement:string;confidence?:string;impact?:string;verify_url?:string;leverage?:number;proof_url?:string}
+export interface LeadFinding {plain?:string;key?:string;check:string;measurement:string;confidence?:string;impact?:string;verify_url?:string;leverage?:number;proof_url?:string}
 export type TeamLead = Lead & {
   suggested_offer?: { id: string; price: number; name?: string; cadence?: string };
   call_outcome?: string;

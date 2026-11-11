@@ -1391,3 +1391,9 @@
 .team-root .call-proof-check {display:flex;flex-direction:row;align-items:start;gap:10px;margin:16px 0;}
 .team-root .call-proof-check input {width:20px;min-height:20px;flex:none;}
 .call-phone-shell .call-cell label {flex-basis:100%;}
+
+/* WO-0279: the spoken problem precedes the preserved measurement. */
+.team-inset .team-plain-finding, .team-finding .team-plain-finding {font-size:clamp(1.2rem, 2.3vw, 1.55rem);line-height:1.45;font-weight:650;overflow-wrap:anywhere;}
+.team-say-it {border-left:3px solid #a3cbb5;padding-left:1rem;margin:1rem 0;}
+.team-inset details {margin:1rem 0;}
+.team-inset summary {cursor:pointer;}
