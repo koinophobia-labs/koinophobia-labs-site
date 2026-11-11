@@ -1,3 +1,4 @@
+import { JobBoard } from "@/components/team/JobBoard";
 import {CallPanel} from "@/components/team/CallPanel";
 import { notFound, redirect } from "next/navigation";
 import { currentSnapshot } from "@/lib/team/session";
@@ -33,5 +34,5 @@ export default async function Screen({
     ? { hasPassword: false, canReset: false, prompt: false }
     : await passwordState(teamDatabase(), (await cookies()).get(cookieName)!.value)
     : undefined;
-  return <Portal screen={screen} initial={JSON.parse(JSON.stringify(data))} account={account} />;
+  return <Portal screen={screen} initial={JSON.parse(JSON.stringify(data))} account={account} jobs={screen === "admin" ? <JobBoard partner={data.me}/> : undefined} />;
 }

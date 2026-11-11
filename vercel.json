@@ -3,15 +3,31 @@
   "redirects": [
     {
       "source": "/:path*",
-      "has": [{ "type": "host", "value": "www.koinophobia.dev" }],
+      "has": [
+        {
+          "type": "host",
+          "value": "www.koinophobia.dev"
+        }
+      ],
       "destination": "https://koinophobialabs.com/:path*",
       "permanent": true
     },
     {
       "source": "/:path*",
-      "has": [{ "type": "host", "value": "www.koinophobialabs.com" }],
+      "has": [
+        {
+          "type": "host",
+          "value": "www.koinophobialabs.com"
+        }
+      ],
       "destination": "https://koinophobialabs.com/:path*",
       "permanent": true
+    }
+  ],
+  "crons": [
+    {
+      "path": "/api/jobs/tick",
+      "schedule": "*/10 * * * *"
     }
   ]
 }

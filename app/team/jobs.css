@@ -1,0 +1,111 @@
+.job-shell {
+  max-width: 1050px;
+  margin: 0 auto;
+  padding: 48px 24px;
+  color: #e8edf5;
+  line-height: 1.65;
+}
+.job-shell h1 {
+  font-size: clamp(28px, 5vw, 46px);
+  line-height: 1.15;
+  margin: 16px 0 24px;
+}
+.job-shell h2 {
+  font-size: 23px;
+  margin: 24px 0 12px;
+}
+.job-shell a {
+  color: #82dacd;
+}
+.job-shell form {
+  display: grid;
+  gap: 18px;
+}
+.job-shell label {
+  display: grid;
+  gap: 6px;
+  font-weight: 600;
+}
+.job-shell input,
+.job-shell select,
+.job-shell textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #4b586d;
+  border-radius: 8px;
+  background: #111a27;
+  color: #f3f6fc;
+  font: inherit;
+}
+.job-shell small {
+  font-size: 13px;
+  color: #b2bfd1;
+  font-weight: 400;
+}
+.job-instructions,
+.job-card {
+  padding: 24px;
+  border: 1px solid #3b485e;
+  border-radius: 14px;
+  background: #101824;
+  margin: 22px 0;
+}
+.job-instructions li {
+  margin: 10px 0;
+}
+.job-instructions ol {
+  padding-left: 24px;
+}
+.job-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 18px;
+}
+.job-alert {
+  color: #ffcf85;
+  font-weight: 600;
+}
+.job-proof {
+  width: 100%;
+  max-height: 480px;
+  object-fit: contain;
+  background: #fff;
+  border-radius: 8px;
+}
+.job-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 20px 0;
+}
+.job-shell button {
+  padding: 10px 18px;
+  background: #a4eee0;
+  color: #082520;
+  border: 0;
+  border-radius: 8px;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+.job-shell button:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+.job-shell dl {
+  display: grid;
+  grid-template-columns: minmax(100px, 1fr) 2fr;
+  gap: 12px;
+}
+.job-shell dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+.job-shell textarea {
+  min-height: 110px;
+}
+.job-shell hr {
+  border: 0;
+  border-top: 1px solid #35435b;
+  margin: 28px 0;
+}

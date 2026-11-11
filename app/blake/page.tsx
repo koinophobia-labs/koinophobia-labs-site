@@ -108,9 +108,9 @@ export default function BlakePage() {
             Work with me, or just say hello.
           </h2>
           <div className="rail rail--plain s" style={{ "--i": 1 } as React.CSSProperties}>
-            <a href="/start?src=blake" data-analytics="founder_link_click" data-analytics-label="email">
+            <Link href="/start?src=blake" data-analytics="founder_link_click" data-analytics-label="email">
               <b>Contact</b> · Ask Blake a question
-            </a>
+            </Link>
             <a href={LINKS.github} target="_blank" rel="noreferrer" data-analytics="founder_link_click" data-analytics-label="github">
               <b>GitHub</b> <ArrowUpRight size={12} aria-hidden="true" />
             </a>

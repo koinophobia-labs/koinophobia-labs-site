@@ -78,9 +78,11 @@ export function Portal({
   screen,
   initial: data,
   account,
+  jobs,
 }: {
   screen: string;
   initial: TeamSnapshot;
+  jobs?: React.ReactNode;
   account?: { hasPassword: boolean; canReset: boolean; prompt: boolean };
 }) {
   const router = useRouter(),
@@ -713,6 +715,7 @@ export function Portal({
                             {d.services.join(" + ")}
                           </p>
                           <h3>{name(d)}</h3>
+                          {data.jobStatuses?.find(j=>j.deal_id===d.id)&&<p className="team-fine">Job: {data.jobStatuses.find(j=>j.deal_id===d.id)?.stage}</p>}
                           <strong>
                             {d.price === null ? "Custom" : money(d.price)}
                           </strong>
@@ -737,7 +740,7 @@ export function Portal({
                                   {STAGES.filter(
                                     (s) =>
                                       s !== "Client paid" &&
-                                      (s !== "Delivered" || owner) &&
+                                      s !== "Delivered" &&
                                       s !== stage,
                                   ).map((s) => (
                                     <option key={s}>{s}</option>
@@ -767,7 +770,7 @@ export function Portal({
               </div>
               <p className="team-fine">
                 Client paid updates automatically from Stripe. Only the owner
-                marks work delivered.
+                delivers from Jobs after two auditor checks.
               </p>
             </>
           )}
@@ -830,6 +833,7 @@ export function Portal({
                         <section className="team-ledger-row" key={d.id}>
                           <div>
                             <h3>{name(d)}</h3>
+                          {data.jobStatuses?.find(j=>j.deal_id===d.id)&&<p className="team-fine">Job: {data.jobStatuses.find(j=>j.deal_id===d.id)?.stage}</p>}
                             <small>{d.stage}</small>
                           </div>
                           <div>
@@ -980,6 +984,7 @@ export function Portal({
           )}
           {screen === "admin" && owner && (
             <>
+              {jobs}
               <div className="team-stats">
                 <Stat
                   title="Team members"

@@ -20,7 +20,7 @@
     "test:release-qa": "node scripts/blake-release-qa.mjs",
     "db:migrate-crm": "node scripts/migrate-crm.mjs",
     "test:migrations": "node --test tests/database-migrations.test.mjs",
-    "vercel-build": "next build && node scripts/verify-auditor-trace.mjs --inventory-only",
+    "vercel-build": "next build && node scripts/verify-auditor-trace.mjs --inventory-only && node scripts/verify-fulfillment-trace.mjs",
     "koi:verify": "node scripts/verify-koi-world.mjs",
     "qa:rebuild": "node scripts/qa-rebuild.mjs",
     "koi:contrast": "node scripts/audit-koi-contrast.mjs",
@@ -31,7 +31,9 @@
     "db:migrate-team": "node scripts/migrate-team.mjs",
     "test:connect": "tsx --test tests/team-connect*.test.ts",
     "db:migrate-connect": "node scripts/migrate-connect.mjs",
-    "verify:auditor-trace": "node scripts/verify-auditor-trace.mjs"
+    "verify:auditor-trace": "node scripts/verify-auditor-trace.mjs",
+    "test:fulfillment": "tsx --test tests/team-jobs.test.ts tests/team-jobs-postgres.test.ts",
+    "db:migrate-fulfillment": "node scripts/migrate-team-fulfillment.mjs"
   },
   "dependencies": {
     "@koinophobia/site-auditor": "file:vendor/koinophobia-site-auditor-2.0.4.tgz",

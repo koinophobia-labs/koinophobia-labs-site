@@ -27,6 +27,7 @@ export type TeamLead = Lead & {
   evidence?: { check: string; measurement: string; confidence?:string }[];
 };
 export type TeamSnapshot = Omit<Data, "leads"> & {
+  jobStatuses?: {deal_id:string;stage:string}[];
   connect?: ConnectSnapshot;
   me: Partner;
   fake: boolean;
@@ -133,7 +134,10 @@ export async function snapshot(
         [],
       )
     ).rows[0]?.value || "";
+  const jobStatuses = (await q.query("select to_regclass('public.team_jobs') present")).rows[0]?.present
+    ? (await q.query("select deal_id,stage from team_jobs where deal_id is not null and ($1::text is null or partner_id=$1)",[scope])).rows as {deal_id:string;stage:string}[] : [];
   return {
+    jobStatuses,
     ...(connectEnabled() ? {connect: await connectSnapshot(q,p)} : {}),
     me: p,
     fake: false,
@@ -267,12 +271,13 @@ export async function updateDeal(
     );
   } else {
     const stage = textInput(body.stage, "Stage", true, 40) as Stage;
+    if (stage === "Delivered") throw new Fault("Deliver from Jobs after the auditor verifies the fix.");
     if (stage === "Client paid")
       throw new Fault(
         "Client paid is set automatically by verified Stripe payment.",
       );
     const l = await scopedLead(q, p, d.lead_id);
-    if (stage !== "Lost" && stage !== "Delivered" && (await isOptedOut(q, l)))
+    if (stage !== "Lost" && (await isOptedOut(q, l)))
       throw new Fault("This contact has opted out.");
     const data = await snapshot(q, p);
     transition(data, p, d, stage, textInput(body.reason, "Lost reason"));

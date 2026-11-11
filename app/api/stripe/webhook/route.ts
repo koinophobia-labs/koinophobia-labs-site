@@ -1,3 +1,5 @@
+import { drainJobMail } from "@/lib/team/jobs-mail";
+import { teamDatabase } from "@/lib/team/db";
 import { NextRequest, NextResponse } from "next/server";
 import { processStripeEvent, stripe } from "@/lib/payments";
 export const maxDuration = 60;
@@ -20,10 +22,9 @@ export async function POST(r: NextRequest) {
   }
   if (!event) return NextResponse.json({ ok: false }, { status: 400 });
   try {
-    return NextResponse.json({
-      ok: true,
-      ...(await processStripeEvent(event)),
-    });
+    const result = await processStripeEvent(event);
+    await drainJobMail(teamDatabase(),undefined,1).catch(() => {});
+    return NextResponse.json({ ok: true, ...result });
   } catch {
     return NextResponse.json({ ok: false }, { status: 500 });
   }

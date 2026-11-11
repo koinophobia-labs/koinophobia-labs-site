@@ -109,7 +109,7 @@ async function expectPreconnectRefusal(env, pattern) {
 }
 
 test("preview Vercel builds cannot execute migrations", async () => {
-  assert.equal(packageJson.scripts["vercel-build"], "next build && node scripts/verify-auditor-trace.mjs --inventory-only");
+  assert.equal(packageJson.scripts["vercel-build"], "next build && node scripts/verify-auditor-trace.mjs --inventory-only && node scripts/verify-fulfillment-trace.mjs");
   await expectPreconnectRefusal(
     {
       ...productionEnvironment,
@@ -120,7 +120,7 @@ test("preview Vercel builds cannot execute migrations", async () => {
 });
 
 test("ordinary production Vercel builds are application-only", () => {
-  assert.equal(packageJson.scripts["vercel-build"], "next build && node scripts/verify-auditor-trace.mjs --inventory-only");
+  assert.equal(packageJson.scripts["vercel-build"], "next build && node scripts/verify-auditor-trace.mjs --inventory-only && node scripts/verify-fulfillment-trace.mjs");
   assert.doesNotMatch(packageJson.scripts["vercel-build"], /migrat|database|sql/i);
 });
 
