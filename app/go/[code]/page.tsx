@@ -53,6 +53,7 @@ export default async function DealPage({
           <h2>{page.problem}</h2>
           {page.impact&&<p>{page.impact}</p>}
           {page.verify_url&&<p><a href={page.verify_url} target="_blank" rel="noopener noreferrer">Check it yourself ↗</a></p>}
+          {page.proof_reviewed_by && page.proof_image && <>
           <p>
             Screenshot captured{" "}
             {new Date(page.proof_at).toLocaleDateString("en-US", {
@@ -69,6 +70,7 @@ export default async function DealPage({
             src={`/go/${page.code}/proof`}
             alt="Auditor screenshot showing the confirmed website problem"
           />
+          </>}
         </div>
         <h2>
           {service.name} · {money(page.deal.price)}

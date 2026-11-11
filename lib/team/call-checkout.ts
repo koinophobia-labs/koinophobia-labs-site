@@ -55,3 +55,18 @@ export async function resolveCallCheckout(
 export async function callCheckoutStarted(code: string) {
   await transaction((q) => markEngagement(q, code, "checkout"));
 }
+
+// Reserve the selected offer under the same lock as offer switches, before
+// any payment session is created. A failed checkout stays locked for review.
+export async function reserveCallCheckout(
+  offer: string,
+  attribution: PartnerAttribution,
+  code?: string | null,
+  database = teamDatabase(),
+) {
+  return transaction(async q => {
+    const resolved = await resolveCallCheckout(offer, attribution, code, q);
+    if (resolved.code) await markEngagement(q, resolved.code, "checkout");
+    return resolved;
+  }, database);
+}

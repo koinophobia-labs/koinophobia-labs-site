@@ -55,7 +55,7 @@ const headings: Record<string, [string, string]> = {
   ],
   quote: [
     "Make the next step clear.",
-    "Build the scope. Get approval. Share the payment link.",
+    "Choose a catalog offer. Share the payment link.",
   ],
   pipeline: [
     "Keep the work moving.",
@@ -557,7 +557,7 @@ export function Portal({
                         disabled || !data.leads.length || !services.length
                       }
                     >
-                      <Plus size={16} /> Create quote for approval
+                      <Plus size={16} /> Create quote
                     </button>
                   </form>
                 </section>
@@ -569,7 +569,7 @@ export function Portal({
                     No surprises.
                   </h2>
                   <p>
-                    Blake approves every quote. Fixed-price offers use the
+                    Standard catalog offers are ready to send. Custom quotes need Blake’s approval. Fixed-price offers use the
                     site’s secure Checkout. Custom work gets a written scope and
                     milestone pricing.
                   </p>
@@ -726,7 +726,7 @@ export function Portal({
                             {d.price === null ? "Custom" : money(d.price)}
                           </strong>
                           <p className="team-fine">
-                            {d.approved ? "Quote approved" : "Approval needed"}
+                            {d.approved ? "Ready to send" : "Approval needed"}
                           </p>
                           {!["Delivered", "Lost"].includes(stage) && (
                             <form

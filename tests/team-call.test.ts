@@ -98,6 +98,8 @@ test("phone and SMS links encode body safely with iPhone and Android delimiters"
     "sms:+13125550123?body=" + encodeURIComponent(body),
   );
   assert.equal(smsLink("bad", body), null);
+  assert.equal(smsLink("", body, true), "sms:&body=" + encodeURIComponent(body));
+  assert.equal(smsLink("", body, false), "sms:?body=" + encodeURIComponent(body));
 });
 test("script uses confirmed problem, name and city; unknown proof makes no sales claim", () => {
   assert.match(callScript(l, "Alex", "Booking link returns 404"), /Chicago/);

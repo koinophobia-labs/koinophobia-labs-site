@@ -3,9 +3,9 @@ import {confirmedLeverage} from './leverage';
 import {impactLine,verifyLink,type Finding as AuditFinding} from '@koinophobia/site-auditor/model';
 import type { Queryable } from "../payments";
 import type { Partner, Deal } from "./types";
-import { scopedLead, scopedDeal, isOptedOut, type TeamLead } from "./store";
-import { Fault, textInput } from "./domain";
-import { quotePaymentLink } from "./payment-links";
+import { scopedLead, scopedDeal, isOptedOut, saveQuote, type TeamLead } from "./store";
+import { Fault, textInput, quoteDraft } from "./domain";
+import { isStandardQuote, quotePaymentLink } from "./payment-links";
 import {
   CALL_OUTCOMES,
   callScript,
@@ -40,22 +40,64 @@ export async function activeLead(q: Queryable, p: Partner, id: string) {
     "insert into team_active_leads(partner_id,lead_id) values($1,$2) on conflict(partner_id) do update set lead_id=excluded.lead_id,updated_at=now()",
     [p.id, id],
   );
+  await prepareCall(q, p, id);
   return { ok: true };
 }
 type ProofFinding = AuditFinding & {detail?:string};
 export function confirmedProof(findings: unknown) {
   return (confirmedLeverage(findings)[0] as ProofFinding|undefined)??null;
 }
-export async function leadProof(q: Queryable, l: TeamLead) {
+async function leadFindings(q: Queryable, l: TeamLead): Promise<ProofFinding[]> {
   // Prefer the latest audit, including a failed recheck: never fall back to stale positive proof.
   const canonical = new URL(l.website); canonical.hash = "";
   const checks = await q.query(
     "select data from team_site_checks where partner_id=$1 and (data->>'url'=any($2::text[]) or data->>'final_url'=any($2::text[])) order by coalesce(data->>'measured_at',to_char(created_at at time zone 'UTC','YYYY-MM-DD\"T\"HH24:MI:SS.MS\"Z\"')) desc,created_at desc limit 1",
     [l.partner_id, [...new Set([l.website, canonical.href])]],
   );
-  if (checks.rows[0]) return confirmedProof(checks.rows[0].data.findings || []);
-  if (l.recheck?.status === "re-check failed") return null;
-  return confirmedProof((l.evidence as ProofFinding[]) || []);
+  if (l.recheck?.status === "re-check failed") return [];
+  if (checks.rows[0]) return checks.rows[0].data.findings || [];
+  return (l.evidence as ProofFinding[]) || [];
+}
+function confirmedFinding(findings: ProofFinding[]) {
+  return confirmedProof(findings) ?? findings.find(f => f.confidence === "confirmed" && (f.measurement || f.detail)) ?? null;
+}
+export async function leadProof(q: Queryable, l: TeamLead) {
+  return confirmedProof(await leadFindings(q, l));
+}
+// Called only inside the team-write transaction, never by the polling GET.
+export async function prepareCall(q: Queryable, p: Partner, id: string) {
+  const l = shaped(await scopedLead(q, p, id) as unknown as Record<string, unknown>);
+  if (l.recheck?.status === "re-check failed" || l.call_outcome === "Not interested" || await isOptedOut(q, l)) return { ok: true };
+  if (!confirmedFinding(await leadFindings(q, l))) return { ok: true };
+  const deals = (await q.query("select * from team_deals where lead_id=$1 and partner_id=$2 order by created_at desc,id", [id, l.partner_id])).rows as Deal[];
+  let deal = deals.find(d => !["Client paid", "Delivered", "Lost"].includes(d.stage));
+  if (!deal) {
+    const offer = l.suggested_offer;
+    if (!offer || !["fix", "tune", "care"].includes(offer.id)) return { ok: true };
+    const draft = quoteDraft([offer.id]);
+    if (!isStandardQuote(draft) || offer.price !== draft.price) return { ok: true };
+    const saved = await saveQuote(q, p, { lead_id: id, services: [offer.id] });
+    deal = await scopedDeal(q, p, saved.id) as Deal;
+  }
+  if (!quotePaymentLink(deal)) return { ok: true };
+  const existing = (await q.query("select code from team_deal_pages where deal_id=$1", [deal.id])).rows[0];
+  if (!existing) await publishDeal(q, p, deal.id, false, true);
+  return { ok: true };
+}
+export async function switchCallOffer(q: Queryable, p: Partner, id: string, value: unknown) {
+  const service = textInput(value, "Offer", true, 20);
+  if (!["fix", "tune", "care"].includes(service)) throw new Fault("Choose a standard catalog offer.");
+  const d = await scopedDeal(q, p, id, true);
+  if (!quotePaymentLink(d)) throw new Fault("Only an open standard quote can switch offers.");
+  const l = shaped(await scopedLead(q, p, d.lead_id) as unknown as Record<string, unknown>);
+  assertRecheck(l);
+  if (await isOptedOut(q, l)) throw new Fault("This contact has opted out.");
+  const page = (await q.query("select checkout_started_at,expires_at from team_deal_pages where deal_id=$1", [id])).rows[0];
+  if (page?.checkout_started_at || (page && new Date(page.expires_at) <= new Date())) throw new Fault("Checkout has started or this link expired. Ask Blake to review a new quote.");
+  const draft = quoteDraft([service]);
+  await q.query("update team_deals set services=$1,price=$2,monthly=$3,scope=$4,approved=true,updated_at=now() where id=$5", [JSON.stringify(draft.services), draft.price, draft.monthly, draft.scope, id]);
+  await prepareCall(q, p, l.id);
+  return { ok: true };
 }
 export async function callState(
   q: Queryable,
@@ -76,6 +118,7 @@ export async function callState(
     deal: null,
     page: null,
     problem: null,
+    proof_available: false,
     script: "Open a lead on your computer, or choose one here.",
     commission: 0,
   };
@@ -91,7 +134,7 @@ export async function callState(
   const page = d
     ? (
         await q.query(
-          "select code,opened_at,checkout_started_at,paid_at,expires_at from team_deal_pages where deal_id=$1",
+          "select code,opened_at,checkout_started_at,paid_at,expires_at,proof_reviewed_by from team_deal_pages where deal_id=$1",
           [d.id],
         )
       ).rows[0]
@@ -102,8 +145,8 @@ export async function callState(
       [l.id],
     )
   ).rows[0] ?? { cell: "", outcome: null, follow_up_at: null };
-  const proof = await leadProof(q, l),
-    problem = l.recheck?.status === "re-check failed" ? null : proof?.measurement || proof?.detail || null;
+  const findings = await leadFindings(q, l), proof = confirmedProof(findings),
+    finding = confirmedFinding(findings), problem = finding?.measurement || finding?.detail || null;
   const earned = d
     ? (
         await q.query(
@@ -134,11 +177,12 @@ export async function callState(
     lead,
     details: details as CallState["details"],
     deal: d ?? null,
-    page: page as CallState["page"],
+    page: (page ?? null) as CallState["page"],
     problem,
     impact:problem&&proof?impactLine(proof):null,
     verify_url:problem&&proof?verifyLink(proof):null,
-    script: callScript(l, p.name, problem),
+    proof_available: Boolean(proof),
+    script: callScript(l, p.name, problem, Boolean(proof)),
     commission: Math.round(earned * 0.4),
   };
 }
@@ -215,13 +259,19 @@ export async function recordOutcome(
     );
   return { ok: true };
 }
+async function snapshotProofMetadata(q: Queryable, leadId: string, code: string, proof: ProofFinding) {
+  // Bind impact and verification to the exact reviewed public screenshot.
+  const metadata={impact:impactLine(proof),verify_url:verifyLink(proof),proof_sha256:createHash('sha256').update(Buffer.from(proof.proof!.image.split(',')[1],'base64')).digest('hex')};
+  await q.query("update team_leads set data=jsonb_set(data,'{deal_proof}',coalesce(data->'deal_proof','{}'::jsonb) || jsonb_build_object($2::text,$3::jsonb),true) where id=$1",[leadId,code,JSON.stringify(metadata)]);
+}
 export async function publishDeal(
   q: Queryable,
   p: Partner,
   id: string,
   proofReviewed = false,
+  automatic = false,
 ) {
-  if (!proofReviewed)
+  if (!proofReviewed && !automatic)
     throw new Fault(
       "Review the screenshot for personal details before sharing.",
     );
@@ -235,7 +285,7 @@ export async function publishDeal(
   );
   if (await isOptedOut(q, l)) throw new Fault("This contact has opted out.");
   assertRecheck(l);
-  const proof = await leadProof(q, l);
+  const proof = automatic ? confirmedFinding(await leadFindings(q, l)) : await leadProof(q, l);
   if (!proof)
     throw new Fault(
       "A confirmed auditor screenshot is required. Run a site check first.",
@@ -253,20 +303,22 @@ export async function publishDeal(
       [id],
     )
   ).rows[0];
-  if (existing && new Date(existing.expires_at) > new Date())
+  if (existing && new Date(existing.expires_at) > new Date()) {
+    if (proofReviewed) {
+      await q.query("update team_deal_pages set proof_image=$1,proof_at=$2,proof_reviewed_by=$3,problem=$4 where deal_id=$5", [proof.proof!.image, proof.proof!.captured_at, p.id, problem, id]);
+      await snapshotProofMetadata(q,l.id,existing.code,proof);
+    }
     return { code: existing.code };
+  }
   // 10 characters ≈49 bits. CSPRNG + unique constraint; collision retries never overwrite another page.
   for (let attempt = 0; attempt < 5; attempt++) {
     const code = newDealCode();
     const r = await q.query(
       `insert into team_deal_pages(code,deal_id,problem,proof_image,proof_at,proof_reviewed_by) values($1,$2,$3,$4,$5,$6) on conflict do nothing returning code`,
-      [code, id, problem, proof.proof!.image, proof.proof!.captured_at, p.id],
+      [code, id, problem, proofReviewed ? proof.proof!.image : "", proofReviewed ? proof.proof!.captured_at : new Date().toISOString(), proofReviewed ? p.id : null],
     );
     if (r.rows[0]) {
-      // Snapshot the matching impact/verify metadata in the existing lead JSON.
-      // Bind it to the stored image so later audits cannot pair a new claim with old proof.
-      const metadata={impact:impactLine(proof),verify_url:verifyLink(proof),proof_sha256:createHash('sha256').update(Buffer.from(proof.proof!.image.split(',')[1],'base64')).digest('hex')};
-      await q.query("update team_leads set data=jsonb_set(data,'{deal_proof}',coalesce(data->'deal_proof','{}'::jsonb) || jsonb_build_object($2::text,$3::jsonb),true) where id=$1",[l.id,code,JSON.stringify(metadata)]);
+      if (proofReviewed) await snapshotProofMetadata(q,l.id,code,proof);
       return { code };
     }
     if (existing)

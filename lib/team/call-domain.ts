@@ -20,6 +20,7 @@ export interface CallState {
   deal: Deal | null;
   page: {
     code: string;
+    proof_reviewed_by?: string | null;
     opened_at: string | null;
     checkout_started_at: string | null;
     paid_at: string | null;
@@ -28,6 +29,7 @@ export interface CallState {
   problem: string | null;
   impact?: string | null;
   verify_url?: string | null;
+  proof_available: boolean;
   script: string;
   commission: number;
 }
@@ -39,9 +41,9 @@ export function phoneNumber(value: string) {
 }
 export function smsLink(cell: string, body: string, ios = true) {
   const phone = phoneNumber(cell);
-  return phone
-    ? `sms:${phone}${ios ? "&" : "?"}body=${encodeURIComponent(body)}`
-    : null;
+  return cell.trim() && !phone
+    ? null
+    : `sms:${phone || ""}${ios ? "&" : "?"}body=${encodeURIComponent(body)}`;
 }
 export function dealText(
   lead: TeamLead,
@@ -56,10 +58,11 @@ export function callScript(
   lead: TeamLead,
   partner: string,
   problem: string | null,
+  hasScreenshot = true,
 ) {
   if (!problem)
     return "Run a site check and confirm the problem before making a specific claim. No confirmed screenshot proof is available yet.";
-  return `Hi — is ${lead.contact || "the owner or whoever runs the website"} around?\n\nHi, my name is ${partner}. I’m a partner with Koinophobia Labs — we work remotely with businesses across the US. I’ll be quick, 20 seconds, promise.\n\nI was on ${lead.business}’s website${lead.city ? ` in ${lead.city}` : ""} and noticed: ${problem}\n\nBlake at Koinophobia Labs fixes exactly this kind of thing. The Fix starts at a flat $299, with a 48–72 hour turnaround once Blake confirms the scope.\n\nI can show you the screenshot and the approved scope on one page. What’s the best cell number to text it to?`;
+  return `Hi — is ${lead.contact || "the owner or whoever runs the website"} around?\n\nHi, my name is ${partner}. I’m a partner with Koinophobia Labs — we work remotely with businesses across the US. I’ll be quick, 20 seconds, promise.\n\nI was on ${lead.business}’s website${lead.city ? ` in ${lead.city}` : ""} and noticed: ${problem}\n\nBlake at Koinophobia Labs fixes exactly this kind of thing. The Fix starts at a flat $299, with a 48–72 hour turnaround once Blake confirms the scope.\n\nI can show you ${hasScreenshot ? "the screenshot" : "the confirmed finding"} and the approved scope on one page. What’s the best cell number to text it to?`;
 }
 export function callableNow(lead: TeamLead, now = new Date()) {
   if (

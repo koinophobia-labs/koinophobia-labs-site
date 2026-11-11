@@ -1,3 +1,4 @@
+import { isStandardQuote } from "./payment-links";
 import { connectEnabled } from "./connect-client";
 import { connectSnapshot, type ConnectSnapshot } from "./connect";
 import { randomUUID } from "node:crypto";
@@ -18,6 +19,7 @@ import {confirmedLeverage,findingSummary,strongestOpener} from './leverage';
 import {verifyLink,type Check} from '@koinophobia/site-auditor/model';
 export interface LeadFinding {check:string;measurement:string;confidence?:string;impact?:string;verify_url?:string;leverage?:number;proof_url?:string}
 export type TeamLead = Lead & {
+  suggested_offer?: { id: string; price: number; name?: string; cadence?: string };
   call_outcome?: string;
   vertical?: string;
   leverage_score?: number;
@@ -240,7 +242,7 @@ export async function saveQuote(
   const draft = quoteDraft(body.services),
     id = randomUUID();
   await q.query(
-    `insert into team_deals(id,partner_id,lead_id,services,price,monthly,scope) values($1,$2,$3,$4,$5,$6,$7)`,
+    `insert into team_deals(id,partner_id,lead_id,services,price,monthly,scope,approved) values($1,$2,$3,$4,$5,$6,$7,$8)`,
     [
       id,
       l.partner_id,
@@ -249,6 +251,7 @@ export async function saveQuote(
       draft.price,
       draft.monthly,
       draft.scope,
+      isStandardQuote(draft),
     ],
   );
   return { id };
