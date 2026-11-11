@@ -2,6 +2,7 @@
 import { AccountPassword } from "./AccountPassword";
 import { ConnectPanel } from "./ConnectPanel";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import {
@@ -173,7 +174,8 @@ export function Portal({
     <div className="team-workspace">
       <aside className="team-sidebar">
         <Link href="/team/leads" className="team-wordmark">
-          KOI<span>PARTNER DESK</span>
+          <Image src="/brand/koi-emblem.svg" width={44} height={44} alt="" />
+          <span>Koinophobia Labs<small>Team</small></span>
         </Link>
         <p className="team-eyebrow">WORKSPACE</p>
         <nav aria-label="Team workspace">
@@ -210,7 +212,7 @@ export function Portal({
       <div className="team-main">
         <header className="team-topbar">
           <span>
-            KOINOPHOBIA LABS <span className="team-slash">/</span> TEAM
+            Koinophobia Labs · Team
           </span>
           <span className="team-status">
             <i />
@@ -672,7 +674,7 @@ export function Portal({
                       <span
                         className={
                           "stage-dot " +
-                          (stage === "Client paid" ? "green" : "")
+                          (stage === "Client paid" ? "green" : stage === "Lost" ? "lost" : "")
                         }
                       />
                       <h2>{stage}</h2>

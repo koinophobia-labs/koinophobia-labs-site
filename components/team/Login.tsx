@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import Image from "next/image";
 import { useRef, useState } from "react";
 import { ArrowUpRight, ArrowRight, ShieldCheck } from "lucide-react";
 export function Login({
@@ -46,10 +47,12 @@ export function Login({
     <main className="team-login">
       <div className="team-login-story">
         <Link className="team-brand" href="/">
-          KOI<span> / </span>KOINOPHOBIA LABS <ArrowUpRight size={15} />
+          <Image src="/brand/koi-emblem.svg" width={40} height={40} alt="" />
+          <span>Koinophobia Labs · Team</span> <ArrowUpRight size={15} />
         </Link>
         <div>
-          <p className="team-eyebrow">THE PARTNER DESK</p>
+          <Image className="team-brand-lockup" src="/brand/koinophobia-lockup.svg" width={240} height={63} alt="Koinophobia Labs koi logo" />
+          <p className="team-eyebrow">THE TEAM WORKSPACE</p>
           <h1>
             Good work.
             <br />

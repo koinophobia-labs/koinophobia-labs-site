@@ -119,7 +119,7 @@ export function ConnectPanel({
                 {owner ? title(p.partner_id) + " · " : ""}
                 {p.source_type === "invoice" ? "Care Plan renewal" : "Checkout"}
               </small>
-              <p className="team-fine">
+              <p className={"team-fine " + (p.owed_back > 0 ? "team-lost" : p.owed > 0 ? "team-owed" : "team-paid")}>
                 {p.owed_back > 0
                   ? "Owed back"
                   : p.owed > 0
@@ -171,7 +171,7 @@ export function ConnectPanel({
               {o.kind === "transfer" ? "Transfer" : "Reversal"} ·{" "}
               {money(Number(o.amount))}
             </strong>
-            <p className="team-fine">
+            <p className={"team-fine " + (o.status === "done" ? "team-paid" : o.status === "insufficient" ? "team-lost" : "team-owed")}>
               {o.status === "insufficient"
                 ? "Balance unavailable — owed back"
                 : o.status === "review"

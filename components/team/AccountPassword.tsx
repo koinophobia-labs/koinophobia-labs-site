@@ -33,7 +33,7 @@ export function AccountPassword({ state, readonly }: {
       setBusy(false);
     }
   }
-  return <section className="team-card">
+  return <section className="team-card team-account-card">
     <h2>{state.prompt ? "Set a password for next time" : state.hasPassword ? "Change your password" : "Set a password"}</h2>
     <p>Use 12–256 characters. Saving signs out your other sessions.</p>
     {state.hasPassword && state.canReset && <p>Your email link verified you. You can reset your password here for 15 minutes without the current password.</p>}
