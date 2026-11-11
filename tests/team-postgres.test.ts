@@ -480,7 +480,7 @@ test("team portal real PostgreSQL acceptance", async (t) => {
         });
         const d = await scopedDeal(db, a, id);
         assert.equal(d.price, 29900);
-        assert.equal(d.approved, false);
+        assert.equal(d.approved, true);
         assert.equal(d.partner_id, a.id);
         await assert.rejects(
           updateDeal(db, a, id, { stage: "Won" }),

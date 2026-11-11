@@ -1,4 +1,4 @@
-import { resolveCallCheckout, callCheckoutStarted } from "@/lib/team/call-checkout";
+import { reserveCallCheckout, callCheckoutStarted } from "@/lib/team/call-checkout";
 import { createHash } from "node:crypto";
 import { NextRequest, NextResponse } from "next/server";
 import { consumeAuditRateLimit } from "@/lib/audits";
@@ -19,7 +19,7 @@ export async function checkoutReadback(id: string) {
     recurring: session.line_items?.data[0]?.price?.recurring ?? null,
   };
 }
-const dependencies = { resolve: resolveCallCheckout, started: callCheckoutStarted, available: auditCheckoutAvailable, create: createOfferCheckout, limit: consumeAuditRateLimit, readback: checkoutReadback };
+const dependencies = { resolve: reserveCallCheckout, started: callCheckoutStarted, available: auditCheckoutAvailable, create: createOfferCheckout, limit: consumeAuditRateLimit, readback: checkoutReadback };
 export function partnerCheckoutHandler(deps: Pick<typeof dependencies, "available" | "create" | "limit" | "readback"> & Partial<Pick<typeof dependencies, "resolve" | "started">> = dependencies) {
   return async (request: NextRequest, context: { params: Promise<{ offer: string }> }) => {
     const headers = { "cache-control": "no-store", "referrer-policy": "no-referrer" };

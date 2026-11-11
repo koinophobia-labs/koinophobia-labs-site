@@ -11,7 +11,7 @@ import {
   type CallState,
 } from "@/lib/team/call-domain";
 import { quotePaymentLink } from "@/lib/team/payment-links";
-import { money } from "@/lib/team/config";
+import { money, SERVICES, servicePrice } from "@/lib/team/config";
 type Live = CallState & {
   followups: {
     deal_id: string;
@@ -40,6 +40,7 @@ export function CallPanel({
   }, [onLeadChange]);
   const generation = useRef(0);
   const lastActive = useRef("");
+  const prepared = useRef(new Set<string>());
   async function refresh(signal?: AbortSignal) {
     const version = generation.current;
     const r = await fetch("/team/api/call-state", {
@@ -50,6 +51,16 @@ export function CallPanel({
     if (!r.ok) throw Error(v.error || "Unable to sync.");
     if (version !== generation.current) return;
     setState(v);
+    if (v.lead && !prepared.current.has(v.lead.id)) {
+      prepared.current.add(v.lead.id);
+      // The mutation is idempotent; GET polling itself stays read-only.
+      const ready = await fetch("/team/api/prepare-call", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: v.lead.id }), signal,
+      });
+      if (!ready.ok) { prepared.current.delete(v.lead.id); throw Error("Could not prepare the call link."); }
+    }
+    if (version !== generation.current) return;
     setStale(false);
     if (v.lead && v.lead.id !== lastActive.current) {lastActive.current = v.lead.id; callback.current?.(v.lead.id);}
   }
@@ -178,7 +189,7 @@ export function CallPanel({
                     : state.page?.opened_at
                       ? "Opened"
                       : state.page
-                        ? "Ready to share"
+                        ? "Ready to send"
                         : "No deal page yet"}
           </div>
           {stale && (
@@ -206,16 +217,28 @@ export function CallPanel({
                   <button disabled>Text link</button>
                 )}
               </div>
+              {deal && quotePaymentLink(deal) && (
+                <div className="call-outcomes" aria-label="Choose standard offer">
+                  {SERVICES.filter(s => ["fix", "tune", "care"].includes(s.id)).map(s => (
+                    <button key={s.id} className="team-button secondary"
+                      aria-pressed={deal.services[0] === s.id}
+                      disabled={disabled || Boolean(state.page?.checkout_started_at) || deal.services[0] === s.id}
+                      onClick={() => void act("call-offer", { id: deal.id, service: s.id })}>
+                      {s.name} · {servicePrice(s)}
+                    </button>
+                  ))}
+                </div>
+              )}
               <CellEditor
-                key={lead.id + cell}
+                key={"cell:" + lead.id + ":" + cell}
                 initial={cell}
                 disabled={disabled}
                 save={(value) => act("call-cell", { id: lead.id, cell: value })}
               />
               {!cell && (
                 <small>
-                  Save the client’s cell to enable Text link. The business phone
-                  may be a landline.
+                  Cell is optional. Text link opens Messages with the text ready;
+                  choose the recipient there.
                 </small>
               )}
               {paid ? (
@@ -253,9 +276,15 @@ export function CallPanel({
                 />
               ) : (
                 <p>
-                  <Link href="/team/quote">Create a quote</Link> and have Blake
-                  approve a catalog offer to share a payment page.
+                  <Link href="/team/quote">Create a quote</Link>. Standard catalog
+                  offers are ready to send; custom work needs Blake’s approval.
                 </p>
+              )}
+              {url && deal && !state.page?.proof_reviewed_by && (
+                <ProofReview key={"proof:" + lead.id} leadId={lead.id}
+                  disabled={disabled || !state.problem}
+                  create={() => act("deal-page", { id: deal.id, proofReviewed: true })}
+                  label="Add reviewed screenshot" />
               )}
               {text && (
                 <details>
@@ -350,7 +379,7 @@ function CellEditor({
       }}
     >
       <label>
-        Client’s cell
+        Client’s cell (optional)
         <input
           aria-label="Client’s cell"
           type="tel"
@@ -369,10 +398,12 @@ function ProofReview({
   leadId,
   disabled,
   create,
+  label = "Create deal page",
 }: {
   leadId: string;
   disabled: boolean;
   create: () => Promise<void>;
+  label?: string;
 }) {
   const [reviewed, setReviewed] = useState(false);
   return (
@@ -400,7 +431,7 @@ function ProofReview({
         visible, with no personal contact details.
       </label>
       <button disabled={disabled || !reviewed} onClick={() => void create()}>
-        Create deal page
+        {label}
       </button>
     </div>
   );

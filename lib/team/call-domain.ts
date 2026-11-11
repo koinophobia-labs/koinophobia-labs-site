@@ -20,6 +20,7 @@ export interface CallState {
   deal: Deal | null;
   page: {
     code: string;
+    proof_reviewed_by?: string | null;
     opened_at: string | null;
     checkout_started_at: string | null;
     paid_at: string | null;
@@ -37,9 +38,9 @@ export function phoneNumber(value: string) {
 }
 export function smsLink(cell: string, body: string, ios = true) {
   const phone = phoneNumber(cell);
-  return phone
-    ? `sms:${phone}${ios ? "&" : "?"}body=${encodeURIComponent(body)}`
-    : null;
+  return cell.trim() && !phone
+    ? null
+    : `sms:${phone || ""}${ios ? "&" : "?"}body=${encodeURIComponent(body)}`;
 }
 export function dealText(
   lead: TeamLead,

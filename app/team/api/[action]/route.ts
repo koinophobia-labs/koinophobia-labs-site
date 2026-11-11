@@ -1,4 +1,4 @@
-import {activeLead,saveCell,recordOutcome,publishDeal} from "@/lib/team/call-store";
+import {activeLead,prepareCall,switchCallOffer,saveCell,recordOutcome,publishDeal} from "@/lib/team/call-store";
 import {
   onboard,
   expressLogin,
@@ -193,6 +193,8 @@ export async function POST(
     }
     const result = await transaction(async (q) => {
       switch (action) {
+        case "prepare-call": return prepareCall(q,p,textInput(body.id,"Lead",true,80));
+        case "call-offer": return switchCallOffer(q,p,textInput(body.id,"Deal",true,80),body.service);
         case "active-lead": return activeLead(q,p,textInput(body.id,"Lead",true,80));
         case "call-cell": return saveCell(q,p,textInput(body.id,"Lead",true,80),body.cell);
         case "call-outcome": return recordOutcome(q,p,textInput(body.id,"Lead",true,80),body.outcome);

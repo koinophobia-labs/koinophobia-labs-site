@@ -5,6 +5,13 @@ const offers = {
   tune: { path: "tune-up", price: 75000, monthly: 0 },
   care: { path: "care", price: 9900, monthly: 9900 },
 } as const;
+export function isStandardQuote(deal: Pick<Deal, "services" | "price" | "monthly">) {
+  if (deal.services.length !== 1) return false;
+  const id = deal.services[0];
+  if (!Object.hasOwn(offers, id)) return false;
+  const offer = offers[id as keyof typeof offers];
+  return deal.price === offer.price && deal.monthly === offer.monthly;
+}
 export function quotePaymentLink(deal: Deal): string | null {
   if (
     !deal.approved ||

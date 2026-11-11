@@ -6,7 +6,7 @@ export async function GET(
 ) {
   if (hostedPreview()) return new Response(null, { status: 404 });
   const page = await publicDeal(teamDatabase(), (await params).code);
-  if (!page) return new Response(null, { status: 404 });
+  if (!page || !page.proof_reviewed_by) return new Response(null, { status: 404 });
   const match =
     /^data:(image\/(?:jpeg|png|webp));base64,([A-Za-z0-9+/=]+)$/.exec(
       page.proof_image,
