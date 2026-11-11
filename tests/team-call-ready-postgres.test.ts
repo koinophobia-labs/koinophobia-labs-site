@@ -120,6 +120,7 @@ test("WO-0276 real PostgreSQL call readiness", async (t) => {
         assert.equal(state.deal?.price,price);
         assert.ok(state.page?.code);
         const page = await publicDeal(db,state.page!.code);
+        assert.ok(page);
         assert.equal(page.proof_image, "");
         assert.equal(page.proof_reviewed_by,null);
         assert.equal(page.impact,null);
@@ -138,7 +139,7 @@ test("WO-0276 real PostgreSQL call readiness", async (t) => {
       assert.equal(state.proof_available,false);
       assert.equal(state.problem,"Confirmed missing booking link.");
       assert.doesNotMatch(state.script,/show you the screenshot/);
-      assert.equal((await publicDeal(db,state.page!.code)).proof_image,"");
+      const page=await publicDeal(db,state.page!.code);assert.ok(page);assert.equal(page.proof_image,"");
       await assert.rejects(tx(q=>publishDeal(q,a,state.deal!.id,true)));
     });
     await t.test("ineligible leads never get auto pages; terminal deals are preserved when opening a new eligible offer", async () => {
@@ -173,6 +174,7 @@ test("WO-0276 real PostgreSQL call readiness", async (t) => {
       await assert.rejects(tx(q=>switchCallOffer(q,b,id,"fix")));
       await tx(q=>publishDeal(q,a,id,true));
       const reviewed = await publicDeal(db,code);
+      assert.ok(reviewed);
       assert.equal(reviewed.proof_image,proof.proof!.image);
       assert.ok(reviewed.impact);
       assert.ok(reviewed.verify_url);
