@@ -1,6 +1,15 @@
+import {plainFinding, slowSeconds, type DisplayFinding} from "./plain-findings";
 import { SERVICES, money } from "./config";
 const fix = money(SERVICES.find((s) => s.id === "fix")!.price!);
+export function slowSiteScript(seconds: number | string = "[measured seconds]", partner = "Jayvon") {
+  return `Hi, is this the owner? Hey, I'm ${partner} with Koinophobia Labs. We help small businesses with their websites. Real quick: I pulled up your website and it's loading really slowly, about ${seconds} seconds for the main content to appear. People on their phone may not wait that long; they may go back and try another site. It's often something we can fix. Can I text you a quick 2-minute video showing what I saw? No charge for that.\n\nIf they ask what's wrong\nUsually it's oversized pictures or extra stuff loading in the background. We'd look at it and tell you exactly what it is before you pay anything.\n\nIf they ask how much\nMost quick fixes are a flat $299. For speed, we confirm what's causing it first, so you'll know the exact price before you decide.`;
+}
+export function renderScript(body: string, finding?: DisplayFinding, partner = "Jayvon") {
+  if (body === slowSiteScript()) return slowSiteScript(finding ? slowSeconds(finding) ?? "[measured seconds]" : "[measured seconds]", partner);
+  return body.replace("I noticed [specific verified problem] on your website.", finding ? `I noticed this on your website: ${plainFinding(finding)}` : "I noticed [plain problem you verified] on your website.");
+}
 export const SCRIPTS = [
+  {id: "Slow site", title: "A slow site, in plain English.", note: "Use the selected lead's measured time. Confirm the cause before quoting speed work.", body: slowSiteScript()},
   {
     id: "Call",
     title: "A useful 30 seconds.",
@@ -41,6 +50,6 @@ export const SCRIPTS = [
     id: "Voicemail",
     title: "Leave one useful detail.",
     note: "Use only a problem you measured.",
-    body: `Hi, this is [your name] with Koinophobia Labs. I noticed [specific verified problem] on your website. We can fix it fast for a flat $299 once Blake confirms scope. I can share a two-minute recording showing what I mean. Reach me at [your business number]. Thanks!`,
+    body: `Hi, this is [your name] with Koinophobia Labs. I noticed [specific verified problem] on your website. We can fix it fast. I'll text you a quick 2-minute video showing what I mean. Reach me at [your business number]. Thanks!`,
   },
 ] as const;

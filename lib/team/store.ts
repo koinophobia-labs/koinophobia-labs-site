@@ -1,3 +1,4 @@
+import { isStandardQuote } from "./payment-links";
 import { connectEnabled } from "./connect-client";
 import { connectSnapshot, type ConnectSnapshot } from "./connect";
 import { randomUUID } from "node:crypto";
@@ -14,17 +15,22 @@ import {
   cents,
 } from "./domain";
 import { validateImport, importLeads } from "./lead-import";
+import {confirmedLeverage,findingSummary,strongestOpener} from './leverage';
+import {verifyLink,type Check} from '@koinophobia/site-auditor/model';
+export interface LeadFinding {plain?:string;key?:string;check:string;measurement:string;confidence?:string;impact?:string;verify_url?:string;leverage?:number;proof_url?:string}
 export type TeamLead = Lead & {
+  suggested_offer?: { id: string; price: number; name?: string; cadence?: string };
   call_outcome?: string;
   vertical?: string;
-  recheck?: {status:'confirmed'|'re-check failed'; checked_at:string; confirmed_count:number;findings?:{check:string;measurement:string;confidence?:string}[]};
+  leverage_score?: number;
+  recheck?: {status:'confirmed'|'re-check failed'; checked_at:string; confirmed_count:number;findings?:LeadFinding[]};
   opted_out?: boolean;
   city?: string;
   state?: string;
   time_zone?: string;
   fit_score?: number;
   opener?: string;
-  evidence?: { check: string; measurement: string; confidence?:string }[];
+  evidence?: LeadFinding[];
 };
 export type TeamSnapshot = Omit<Data, "leads"> & {
   jobStatuses?: {deal_id:string;stage:string}[];
@@ -84,7 +90,9 @@ export async function snapshot(
   for (const l of leads)
     shaped.push({
       ...l.data,
-      evidence: (l.data.evidence??[]).map((e:{check:string;measurement:string;confidence?:string})=>({check:e.check,measurement:e.measurement,confidence:e.confidence})),
+      evidence: (l.data.recheck?.status==='re-check failed'?[]:confirmedLeverage(l.data.evidence)).map((f,i)=>({...findingSummary(f),proof_url:`/team/lead-proof/${l.id}/${i}`})),
+      opener: l.data.recheck?.status==='re-check failed'?undefined:strongestOpener(l.data.evidence),
+      recheck:l.data.recheck?{status:l.data.recheck.status,checked_at:l.data.recheck.checked_at,confirmed_count:l.data.recheck.confirmed_count,findings:(l.data.recheck.status==='re-check failed'?[]:confirmedLeverage(l.data.evidence)).map((f,i)=>({...findingSummary(f),proof_url:`/team/lead-proof/${l.id}/${i}`}))}:undefined,
       id: l.id,
       partner_id: l.partner_id,
       business: l.business,
@@ -124,7 +132,7 @@ export async function snapshot(
       [scope],
     )
   ).rows.map((x) => ({ ...x.data, home:undefined, observations:undefined, id: x.id, partner_id: x.partner_id,
-    findings:(x.data.findings??[]).map((f:import('./types').Finding,i:number)=>({name:f.name,status:f.status,detail:f.detail,confidence:f.confidence,
+    findings:(x.data.findings??[]).map((f:import('./types').Finding,i:number)=>({name:f.name,status:f.status,detail:f.detail,confidence:f.confidence,impact:f.impact,leverage:f.leverage,verify_url:verifyLink({url:f.proof?.url??x.data.url,check:f.name as Check,verify_url:f.verify_url}),
       proof:f.proof?{...f.proof,image:`/team/proof/${x.id}/${i}`} :undefined})),
   }));
   const address =
@@ -238,7 +246,7 @@ export async function saveQuote(
   const draft = quoteDraft(body.services),
     id = randomUUID();
   await q.query(
-    `insert into team_deals(id,partner_id,lead_id,services,price,monthly,scope) values($1,$2,$3,$4,$5,$6,$7)`,
+    `insert into team_deals(id,partner_id,lead_id,services,price,monthly,scope,approved) values($1,$2,$3,$4,$5,$6,$7,$8)`,
     [
       id,
       l.partner_id,
@@ -247,6 +255,7 @@ export async function saveQuote(
       draft.price,
       draft.monthly,
       draft.scope,
+      isStandardQuote(draft),
     ],
   );
   return { id };

@@ -1,4 +1,4 @@
-import {activeLead,saveCell,recordOutcome,publishDeal} from "@/lib/team/call-store";
+import {activeLead,prepareCall,switchCallOffer,saveCell,recordOutcome,publishDeal} from "@/lib/team/call-store";
 import {
   onboard,
   expressLogin,
@@ -37,6 +37,8 @@ import {
   recordPayout,
 } from "@/lib/team/store";
 import { checkSite } from "@/lib/team/checker";
+import {importRecheck} from '@/lib/team/recheck-import';
+import type {Audit} from '@koinophobia/site-auditor/model';
 import { randomUUID } from "node:crypto";
 export const runtime = "nodejs";
 export const maxDuration = 300;
@@ -185,14 +187,18 @@ export async function POST(
       );
       const previous=history.rows.flatMap(r=>r.data.observations??[]);
       const result = await checkSite(target.href,previous);
-      await teamDatabase().query(
+      await transaction(q=>q.query(
         "insert into team_site_checks(id,partner_id,data) values($1,$2,$3)",
         [randomUUID(), p.id, result],
-      );
+      ));
       return ok({ ok: true });
     }
     const result = await transaction(async (q) => {
       switch (action) {
+        case "recheck-import":
+          return importRecheck(q,p,textInput(body.id,"Lead",true,80),body.audit as Audit);
+        case "prepare-call": return prepareCall(q,p,textInput(body.id,"Lead",true,80));
+        case "call-offer": return switchCallOffer(q,p,textInput(body.id,"Deal",true,80),body.service);
         case "active-lead": return activeLead(q,p,textInput(body.id,"Lead",true,80));
         case "call-cell": return saveCell(q,p,textInput(body.id,"Lead",true,80),body.cell);
         case "call-outcome": return recordOutcome(q,p,textInput(body.id,"Lead",true,80),body.outcome);

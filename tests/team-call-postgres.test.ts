@@ -1,5 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import {confirmedEvidence} from './auditor-fixtures';
 import { execFileSync } from "node:child_process";
 import { mkdtempSync, readFileSync } from "node:fs";
 import { tmpdir } from "node:os";
@@ -53,14 +54,7 @@ test("call mode real PostgreSQL integration", async (t) => {
     transaction(fn, db);
   const data = seed(true),
     [owner, a, b] = data.partners;
-  const proof = {
-    confidence: "confirmed",
-    measurement: "FAKE booking button returns a 404 page.",
-    proof: {
-      image: "data:image/png;base64,YQ==",
-      captured_at: new Date().toISOString(),
-    },
-  };
+  const proof = {...confirmedEvidence(),verify_url:'https://fictional.example/'};
   let code = "";
   try {
     for (const f of [

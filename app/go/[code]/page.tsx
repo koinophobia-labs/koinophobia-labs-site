@@ -50,7 +50,10 @@ export default async function DealPage({
         <p>{website.toString()}</p>
         <div className="team-inset">
           <p className="team-eyebrow">THE CONFIRMED PROBLEM</p>
-          <h2>{page.problem}</h2>
+          <h2 className="team-plain-finding">{page.plain_problem}</h2>
+          <details><summary>Technical details</summary><p>{page.problem}</p>{page.impact&&<p>{page.impact}</p>}</details>
+          {page.verify_url&&<p><a href={page.verify_url} target="_blank" rel="noopener noreferrer">Check it yourself ↗</a></p>}
+          {page.proof_reviewed_by && page.proof_image && <>
           <p>
             Screenshot captured{" "}
             {new Date(page.proof_at).toLocaleDateString("en-US", {
@@ -67,6 +70,7 @@ export default async function DealPage({
             src={`/go/${page.code}/proof`}
             alt="Auditor screenshot showing the confirmed website problem"
           />
+          </>}
         </div>
         <h2>
           {service.name} · {money(page.deal.price)}

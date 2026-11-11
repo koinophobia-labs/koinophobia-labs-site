@@ -1,4 +1,5 @@
 "use client";
+import {plainFinding} from "@/lib/team/plain-findings";
 import { CallPanel } from "./CallPanel";
 import { callNow } from "@/lib/team/call-domain";
 import { AccountPassword } from "./AccountPassword";
@@ -31,7 +32,7 @@ import { STAGES, type Deal } from "@/lib/team/types";
 import { commission } from "@/lib/team/domain";
 import { quotePaymentLink } from "@/lib/team/payment-links";
 import { quoteMessage } from "@/lib/team/quotes";
-import { SCRIPTS } from "@/lib/team/scripts";
+import { SCRIPTS, renderScript } from "@/lib/team/scripts";
 const navigation = [
   ["leads", "Leads", Users],
   ["call", "Phone companion", MessageSquare],
@@ -55,7 +56,7 @@ const headings: Record<string, [string, string]> = {
   ],
   quote: [
     "Make the next step clear.",
-    "Build the scope. Get approval. Share the payment link.",
+    "Choose a catalog offer. Share the payment link.",
   ],
   pipeline: [
     "Keep the work moving.",
@@ -173,7 +174,7 @@ export function Portal({
   const selectedLead =
     data.leads.find((l) => l.id === selected) || data.leads[0];
   const activeScript = SCRIPTS.find((s) => s.id === script) || SCRIPTS[0];
-  const scriptBody = activeScript.body.replace(
+  const scriptBody = renderScript(activeScript.body, selectedLead?.recheck?.status === "re-check failed" ? undefined : (selectedLead?.recheck?.findings ?? selectedLead?.evidence)?.find(f => f.confidence === "confirmed"), data.me.name).replace(
     "[MAILING ADDRESS — Blake fills in]",
     data.mailingAddress || "[MAILING ADDRESS — Blake fills in]",
   );
@@ -345,6 +346,22 @@ export function Portal({
                     </div>
                     <h2>{selectedLead.business}</h2>
                     <p>{selectedLead.website}</p>
+                    <div className="team-inset">
+                      <p className="team-eyebrow">THE REASON TO REACH OUT</p>
+                      <p>{selectedLead.recheck?.status==='re-check failed'?'Re-check failed. Don’t call this lead. The original qualifying problem did not reproduce; a confirmed re-check is required.':(selectedLead.recheck?.findings??selectedLead.evidence)?.some(e=>e.confidence==='confirmed') ? null : 'A confirmed browser re-check is required before using a website-problem opener.'}</p>
+                      {(selectedLead.recheck?.status==='re-check failed'?[]:selectedLead.recheck?.findings??selectedLead.evidence)?.filter(e=>e.confidence==='confirmed').map((e, i) => (
+                        <div key={i}>
+                          {i===0&&<p className="team-eyebrow">STRONGEST CONFIRMED FINDING</p>}
+                          <p className="team-plain-finding">{e.plain ?? plainFinding(e)}</p>
+                          <details><summary>Technical details</summary><p><strong>{e.check}:</strong> {e.measurement}</p>{e.impact&&<p>{e.impact}</p>}</details>
+                          {e.verify_url&&<p><a href={e.verify_url} target="_blank" rel="noopener noreferrer">Check it yourself ↗</a></p>}
+                          {e.proof_url&&<figure>
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img src={e.proof_url} alt={`Screenshot evidence: ${e.check}`} style={{maxWidth:'100%',maxHeight:620,objectFit:'contain'}} loading="lazy" />
+                          </figure>}
+                        </div>
+                      ))}
+                    </div>
                     <dl>
                       <dt>Contact</dt>
                       <dd>{selectedLead.contact || "Business team"}</dd>
@@ -357,15 +374,6 @@ export function Portal({
                         {selectedLead.time_zone || "Confirm before calling"}
                       </dd>
                     </dl>
-                    <div className="team-inset">
-                      <p className="team-eyebrow">THE REASON TO REACH OUT</p>
-                      <p>{selectedLead.recheck?.status==='re-check failed'?'Re-check failed. Don’t call this lead. The original qualifying problem did not reproduce; a confirmed re-check is required.':selectedLead.recheck?.status==='confirmed'?selectedLead.recheck.findings?.map(f=>f.measurement).join(' '):selectedLead.evidence?.some(e=>e.confidence==='confirmed')?selectedLead.opener:'A confirmed browser re-check is required before using a website-problem opener.'}</p>
-                      {(selectedLead.recheck?.findings??selectedLead.evidence)?.filter(e=>e.confidence==='confirmed').map((e, i) => (
-                        <p key={i}>
-                          <strong>{e.check}:</strong> {e.measurement}
-                        </p>
-                      ))}
-                    </div>
                     <div className="team-actions">
                       <Link
                         href="/team/check"
@@ -453,8 +461,9 @@ export function Portal({
                           )}
                         </span>
                         <div>
-                          <strong>{finding.name}</strong>
-                          <p>{finding.detail}</p>
+                          <p className="team-plain-finding">{plainFinding(finding)}</p>
+                          <details><summary>Technical details</summary><strong>{finding.name}</strong><p>{finding.detail}</p>{finding.impact&&<p>{finding.impact}</p>}</details>
+                          {finding.verify_url&&<p><a href={finding.verify_url} target="_blank" rel="noopener noreferrer">Check it yourself ↗</a></p>}
                           {finding.proof?.image && <figure>
                             {/* eslint-disable-next-line @next/next/no-img-element */}
                             <img src={finding.proof.image} alt={`Screenshot evidence: ${finding.name}`} style={{maxWidth:'100%',maxHeight:620,objectFit:'contain'}} loading="lazy" />
@@ -474,7 +483,7 @@ export function Portal({
                       onClick={() =>
                         copy(
                           check.findings.filter(f=>f.confidence==='confirmed')
-                            .map((f) => `${f.name}: ${f.detail}`)
+                            .map((f) => plainFinding(f))
                             .join("\n"),
                         )
                       }
@@ -550,7 +559,7 @@ export function Portal({
                         disabled || !data.leads.length || !services.length
                       }
                     >
-                      <Plus size={16} /> Create quote for approval
+                      <Plus size={16} /> Create quote
                     </button>
                   </form>
                 </section>
@@ -562,7 +571,7 @@ export function Portal({
                     No surprises.
                   </h2>
                   <p>
-                    Blake approves every quote. Fixed-price offers use the
+                    Standard catalog offers are ready to send. Custom quotes need Blake’s approval. Fixed-price offers use the
                     site’s secure Checkout. Custom work gets a written scope and
                     milestone pricing.
                   </p>
@@ -720,7 +729,7 @@ export function Portal({
                             {d.price === null ? "Custom" : money(d.price)}
                           </strong>
                           <p className="team-fine">
-                            {d.approved ? "Quote approved" : "Approval needed"}
+                            {d.approved ? "Ready to send" : "Approval needed"}
                           </p>
                           {!["Delivered", "Lost"].includes(stage) && (
                             <form
