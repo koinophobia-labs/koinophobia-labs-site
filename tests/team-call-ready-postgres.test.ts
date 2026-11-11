@@ -145,7 +145,7 @@ test("WO-0276 real PostgreSQL call readiness", async (t) => {
       assert.equal((await publicDeal(db,state.page!.code)).proof_image,"");
       await assert.rejects(tx(q=>publishDeal(q,a,state.deal!.id,true)));
     });
-    await t.test("failed, unconfirmed, custom suggestions, opted-out and closed leads never get auto pages", async () => {
+    await t.test("ineligible leads never get auto pages; terminal deals are preserved when opening a new eligible offer", async () => {
       for (const [id,extra] of Object.entries({failed:{recheck:{status:"re-check failed"}},unconfirmed:{evidence:[]},custom:{suggested_offer:{id:"site",price:250000}},tampered:{suggested_offer:{id:"fix",price:1}},declined:{call_outcome:"Not interested"}})) {
         await makeLead(id,extra);
         await tx(q=>activeLead(q,a,id));
@@ -160,7 +160,10 @@ test("WO-0276 real PostgreSQL call readiness", async (t) => {
       const d = await tx(q=>saveQuote(q,a,{lead_id:"closed",services:["fix"]}));
       await db.query("update team_deals set stage='Lost' where id=$1",[d.id]);
       await tx(q=>activeLead(q,a,"closed"));
-      assert.equal((await callState(db,a,"closed")).page,null);
+      const reopened = await callState(db,a,"closed");
+      assert.ok(reopened.page?.code);
+      assert.notEqual(reopened.deal?.id,d.id);
+      assert.equal((await scopedDeal(db,a,d.id)).stage,"Lost");
       await assert.rejects(tx(q=>prepareCall(q,b,"auto-fix")));
     });
     await t.test("switching uses server prices and stable page; rejects custom, cross-partner and checkout-started edits", async()=>{

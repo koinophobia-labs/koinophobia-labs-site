@@ -86,8 +86,6 @@ export async function prepareCall(q: Queryable, p: Partner, id: string) {
   if (!confirmedFinding(await leadFindings(q, l))) return { ok: true };
   const deals = (await q.query("select * from team_deals where lead_id=$1 and partner_id=$2 order by created_at desc,id", [id, l.partner_id])).rows as Deal[];
   let deal = deals.find(d => !["Client paid", "Delivered", "Lost"].includes(d.stage));
-  // Do not silently reopen a paid or closed sales conversation.
-  if (!deal && deals.length) return { ok: true };
   if (!deal) {
     const offer = l.suggested_offer;
     if (!offer || !["fix", "tune", "care"].includes(offer.id)) return { ok: true };
