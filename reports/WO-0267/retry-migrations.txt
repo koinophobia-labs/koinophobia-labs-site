@@ -1,0 +1,78 @@
+✖ preview Vercel builds cannot execute migrations (1.150375ms)
+✖ ordinary production Vercel builds are application-only (0.146292ms)
+✔ a direct production Neon endpoint succeeds with every required guard (4.289625ms)
+✔ missing or vague approval refuses before connecting or executing SQL (0.363166ms)
+✔ target and runtime mismatches refuse before connecting (0.21975ms)
+✔ the database provider, direct URL, protocol, and TLS are mandatory (0.401667ms)
+✔ a wrong Neon endpoint is refused before connecting (0.164708ms)
+✔ a preview endpoint is refused when production is expected (0.074416ms)
+✔ a pooled Neon hostname is refused before connecting (0.116792ms)
+✔ the expected endpoint ID must be supplied independently (0.10825ms)
+✔ the expected database name and migration role are mandatory (0.071417ms)
+✔ a URL database-name mismatch is refused before connecting (0.081583ms)
+✔ a connected database-name mismatch refuses before migration SQL (0.117792ms)
+✔ a connected role mismatch refuses before migration SQL (0.071292ms)
+✔ read-only and recovery connections refuse before migration SQL (0.165167ms)
+✔ an unexpected application baseline refuses before migration SQL (0.08375ms)
+✔ connection and identity failures expose no connection secrets (0.204ms)
+✔ successful output exposes only the safe target and migration filenames (0.422333ms)
+✔ test and development migrations allow an explicit loopback-only path (0.445292ms)
+✔ the local override refuses remote and production targets (0.067917ms)
+✔ migration failures roll back, identify the file, and stop (0.159417ms)
+✔ the former custom database setting is not required anywhere (892.81125ms)
+✔ migration 008 keeps idempotent guards for all columns and indexes (1.522083ms)
+✔ a real PostgreSQL schema containing migration 008 is accepted unchanged (1022.424709ms)
+ℹ tests 24
+ℹ suites 0
+ℹ pass 22
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2001.168958
+
+✖ failing tests:
+
+test at tests/database-migrations.test.mjs:112:1
+✖ preview Vercel builds cannot execute migrations (1.150375ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'next build && node scripts/verify-auditor-trace.mjs --inventory-only'
+  - 'next build'
+  
+      at TestContext.<anonymous> (file:///Volumes/KoiArchive/WO-0267/site/tests/database-migrations.test.mjs:113:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1306:25)
+      at Test.start (node:internal/test_runner/test:1177:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:385:17) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'next build && node scripts/verify-auditor-trace.mjs --inventory-only',
+    expected: 'next build',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/database-migrations.test.mjs:123:1
+✖ ordinary production Vercel builds are application-only (0.146292ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'next build && node scripts/verify-auditor-trace.mjs --inventory-only'
+  - 'next build'
+  
+      at TestContext.<anonymous> (file:///Volumes/KoiArchive/WO-0267/site/tests/database-migrations.test.mjs:124:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1306:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:897:18)
+      at Test.postRun (node:internal/test_runner/test:1447:19)
+      at Test.run (node:internal/test_runner/test:1372:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'next build && node scripts/verify-auditor-trace.mjs --inventory-only',
+    expected: 'next build',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

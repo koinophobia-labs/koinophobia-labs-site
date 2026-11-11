@@ -310,7 +310,7 @@ export function Portal({
                           <strong>{l.business}</strong>
                           <small>
                             {l.city ? [l.city, l.state].join(", ") : l.channel}{" "}
-                            · {l.recheck?.status==='re-check failed'?'Re-check failed':l.opted_out ? "Do not contact" : "Assigned lead"}
+                            · {l.recheck?.status==='re-check failed'?"Re-check failed · Don't call":l.opted_out ? "Do not contact" : "Assigned lead"}
                           </small>
                         </span>
                         <ArrowUpRight size={16} />
@@ -325,7 +325,9 @@ export function Portal({
                     <div className="team-card-kicker">
                       LEAD BRIEF{" "}
                       <span className="team-tag">
-                        {selectedLead.opted_out
+                        {selectedLead.recheck?.status==='re-check failed'
+                          ? "DON’T CALL — RE-CHECK FAILED"
+                          : selectedLead.opted_out
                           ? "OPTED OUT"
                           : "READY TO REVIEW"}
                       </span>
@@ -346,7 +348,7 @@ export function Portal({
                     </dl>
                     <div className="team-inset">
                       <p className="team-eyebrow">THE REASON TO REACH OUT</p>
-                      <p>{selectedLead.recheck?.status==='re-check failed'?'Re-check failed. The original qualifying problem did not reproduce; do not use the old opener.':selectedLead.recheck?.status==='confirmed'?selectedLead.recheck.findings?.map(f=>f.measurement).join(' '):selectedLead.evidence?.some(e=>e.confidence==='confirmed')?selectedLead.opener:'A confirmed browser re-check is required before using a website-problem opener.'}</p>
+                      <p>{selectedLead.recheck?.status==='re-check failed'?'Re-check failed. Don’t call this lead. The original qualifying problem did not reproduce; a confirmed re-check is required.':selectedLead.recheck?.status==='confirmed'?selectedLead.recheck.findings?.map(f=>f.measurement).join(' '):selectedLead.evidence?.some(e=>e.confidence==='confirmed')?selectedLead.opener:'A confirmed browser re-check is required before using a website-problem opener.'}</p>
                       {(selectedLead.recheck?.findings??selectedLead.evidence)?.filter(e=>e.confidence==='confirmed').map((e, i) => (
                         <p key={i}>
                           <strong>{e.check}:</strong> {e.measurement}

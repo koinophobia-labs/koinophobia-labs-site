@@ -1,0 +1,13 @@
+
+> koinophobia-labs@0.1.0 lint
+> eslint
+
+
+/Volumes/KoiArchive/WO-0267/site/auth.ts
+  4:3  warning  'CRM_GOOGLE_PROVIDER' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Volumes/KoiArchive/WO-0267/site/tests/app-homes.test.ts
+  12:58  warning  'showPrereleaseAppPages' is defined but never used  @typescript-eslint/no-unused-vars
+
+✖ 2 problems (0 errors, 2 warnings)
+
