@@ -49,11 +49,11 @@ try{
   if(result.deploymentId!==receipt.live_deployment)throw Error('Production moved after verification');
  }
  phase='database-credential-read';
- const connection=execFileSync(process.execPath,[join(homedir(),'.npm/_npx/74274893b9fe65d3/node_modules/neonctl/bin/cli.js'),'connection-string','br-still-lake-atr1qw2c','--project-id','crimson-frog-18448293','--role-name','neondb_owner','--database-name','neondb','--ssl','require'],{encoding:'utf8',stdio:['ignore','pipe','pipe'],timeout:30000}).trim();
+ const connection=execFileSync(process.execPath,[join(homedir(),'.npm/_npx/74274893b9fe65d3/node_modules/neonctl/bin/cli.js'),'connection-string','br-still-lake-atr1qw2c','--project-id','crimson-frog-18448293','--role-name','neondb_owner','--database-name','neondb','--ssl','require'],{encoding:'utf8',stdio:['ignore','pipe','pipe'],timeout:90000}).trim();
  const parsed=new URL(connection);if(parsed.hostname.split('.')[0]!=='ep-billowing-haze-atbq2s9a'||parsed.pathname!=='/neondb')throw Error('Database identity');
  phase='database-connect';
  parsed.searchParams.set('sslmode','verify-full');
- db=new Pool({connectionString:parsed.href,max:2,application_name:'WO-0272-reviewed-refresh',connectionTimeoutMillis:10000,statement_timeout:30000});db.on('error',()=>{});
+ db=new Pool({connectionString:parsed.href,max:2,application_name:'WO-0272-reviewed-refresh',connectionTimeoutMillis:60000,statement_timeout:30000});db.on('error',()=>{});
  const identity=(await db.query('select current_database() db,current_user role,pg_is_in_recovery() recovery')).rows[0];if(identity.db!=='neondb'||identity.role!=='neondb_owner'||identity.recovery)throw Error('Database identity');
  phase='cohort-read';
  const live=(await db.query('select id,partner_id,website,data from team_leads where partner_id=$1 order by id',[target])).rows;
