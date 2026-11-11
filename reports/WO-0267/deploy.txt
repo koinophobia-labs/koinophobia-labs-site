@@ -1,0 +1,41 @@
+{
+  "status": "ok",
+  "deployment": {
+    "id": "dpl_H6SQSEc5jYFAFhtL8rTS1tS6w116",
+    "url": "https://koinophobia-labs-4aa205l1g-koinophobia999-8829s-projects.vercel.app",
+    "productionUrl": null,
+    "inspectorUrl": "https://vercel.com/koinophobia999-8829s-projects/koinophobia-labs/H6SQSEc5jYFAFhtL8rTS1tS6w116",
+    "readyState": "INITIALIZING",
+    "target": "production",
+    "environment": "production",
+    "deploymentApiUrl": "https://api.vercel.com/v13/deployments/dpl_H6SQSEc5jYFAFhtL8rTS1tS6w116",
+    "buildMachine": {
+      "cores": 4,
+      "memory": 8192,
+      "machine": "standard",
+      "selectionType": "elastic",
+      "selectionSource": "elastic-algorithm"
+    },
+    "deploymentProtection": []
+  },
+  "message": "Deployment koinophobia-labs-4aa205l1g-koinophobia999-8829s-projects.vercel.app ready.",
+  "next": [
+    {
+      "command": "vercel curl https://koinophobia-labs-4aa205l1g-koinophobia999-8829s-projects.vercel.app",
+      "when": "Verify deployment, including when Deployment Protection is enabled"
+    },
+    {
+      "command": "vercel inspect koinophobia-labs-4aa205l1g-koinophobia999-8829s-projects.vercel.app --scope team_GrnNjNAupVBmY91WucyLJOoV",
+      "when": "Inspect deployment"
+    },
+    {
+      "command": "vercel deploy --prod --scope team_GrnNjNAupVBmY91WucyLJOoV",
+      "when": "Promote to production"
+    }
+  ]
+}
+
+<claude-code-hint v="1" type="plugin" value="vercel@claude-plugins-official" />
+Vercel CLI 65.14.0
+  Inspect         https://vercel.com/koinophobia999-8829s-projects/koinophobia-labs/H6SQSEc5jYFAFhtL8rTS1tS6w116
+▲ Production      https://koinophobia-labs-4aa205l1g-koinophobia999-8829s-projects.vercel.app

@@ -1,4 +1,4 @@
-import { isConfirmed, type Observation, type Proof } from "@koinophobia/site-auditor";
+import { isConfirmed, type Observation, type Proof } from "@koinophobia/site-auditor/model";
 import { randomUUID } from "node:crypto";
 import type { Lead, Partner, Data } from "./types";
 import { SERVICES } from "./config";

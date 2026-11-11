@@ -2,6 +2,10 @@
 
 Work began after WO-0266 committed. Leadgen worktree: `/Volumes/KoiArchive/WO-0267/leadgen`, branch `studio/WO-0267-auditor`. Portal worktree: `/Volumes/KoiArchive/WO-0267/site`, branch `codex/wo-0267-auditor`, from production commit `282a061488eaf72902a91a6e86ffa025e1e2b0f3`, deployment `dpl_EYQfNwivp7XTQQUYgBBFRu9ntTzn`. No HQ ledger was changed.
 
+## Release status — awaiting a second deployment authorization
+
+Leadgen is active with the new checker, and the additive production recheck metadata is saved. The one authorized portal deployment failed live verification and was restored to the prior production deployment. The repaired portal is committed and locally verified, but **the new portal UI is not live**. The owner recheck badges and inline proof therefore await release. No second deployment has been created.
+
 ## Measured accuracy
 
 42 real public sites: 22 small-business controls, ten tricky/platform/SPA controls, eight known-bad endpoints, and two independently sourced Wix salon examples. Franklin Barbecue's rendered source verifies Squarespace coverage; Wix identifies Westfolk and Hiroshi in its [official showcase](https://www.wix.com/blog/hair-salon-websites). Labels and per-case outcomes are in `calibration.json`.
@@ -50,15 +54,19 @@ The historical batch is **64 candidates, not 64 imported rows**. The read-only p
 | All historical candidates | 11 | 53 | 64 |
 | Previously rejected, never imported | 0 | 19 | 19 |
 
-Eleven candidates received corrective link checks; six link findings survived matching fresh proof at least ten minutes apart. Unavailable or contradictory renders stayed unverified. Read-back confirms 11 `confirmed` and 34 `re-check failed` imported records. Original leads, stages, attribution, notes and evidence are retained. Only additive `data.recheck` metadata is updated. Failed original qualifiers remain visible as “re-check failed”; stale openers are hidden and failed rows do not count toward refill inventory. All-stage suppression prevents reinsertion.
+Eleven candidates received corrective link checks; six link findings survived matching fresh proof at least ten minutes apart. Unavailable or contradictory renders stayed unverified. Read-back confirms 11 `confirmed` and 34 `re-check failed` imported records. Original leads, stages, attribution, notes and evidence are retained. Only additive `data.recheck` metadata is updated. In the prepared portal UI, failed original qualifiers remain visible as “re-check failed” and stale openers are hidden. In active leadgen, failed rows do not count toward refill inventory. All-stage suppression prevents reinsertion.
 
 ## Verification and release
 
-- 69 leadgen TypeScript tests, nine Python supervisor tests, and 76 portal team tests pass with release package 2.0.3; release outputs are retained alongside this report.
+- 69 leadgen TypeScript tests, nine Python supervisor tests, and 76 portal team tests pass with repaired package 2.0.4; release outputs are retained alongside this report.
 - Real Chromium fictional fixtures cover responsive/no-meta content, overflow, overlapping siblings, cookie overlays and JS-rendered content.
 - A production-mode local portal with an isolated fictional PostgreSQL database passed proof authorization, inline proof, mobile layout, owner failed count, stale-opener suppression, confirmed-only copy and UI → actual browser checker → stored result.
 - No real login, sends, form submissions, Stripe changes, schema migrations or evidence deletion occurred. Existing payment/Connect tests remained green.
-- Production must still match the pinned deployment and commit immediately before the single authorized deployment. The deployment receipt and post-deploy GET verification are recorded separately.
+- The production identity was rechecked immediately before the single authorized deployment. Deployment `dpl_H6SQSEc5jYFAFhtL8rTS1tS6w116` reached READY, but live `/team` routes returned HTTP 500: the traced runtime omitted `playwright-core/browsers.json`. Local tests had used complete node_modules and missed this packaging failure.
+- Restored the existing prior deployment `dpl_EYQfNwivp7XTQQUYgBBFRu9ntTzn` by promotion, without creating another deployment. Read-back confirms the original production identity. GET verification: `/` and `/team` 200; `/team/check` and `/team/admin` 307 to authentication. Deployment, restoration and HTTP receipts are preserved in the portal report directory.
+- Repair 2.0.4 exports the pure validation model separately, so normal team pages do not load Playwright. The Site Check route explicitly traces Playwright assets and Chromium binaries. A new isolated traced-runtime test failed against the old bundle and passes against the repair: 445 files, about 100 MB, shared checker import, serverless package import and real Chromium rendering. A separate fixture validates the model with no browser package installed. `vercel-build` now fails if required runtime assets are missing or the team landing page traces Playwright.
+- The repaired local production portal again passes all eight browser checks. The final `vercel-build` command, including its trace guard, passes. One intermediate rebuild hit an unrelated Turbopack font-cache error; the 1.5 MB build cache was retained outside `.next/cache`, and the fresh-cache build passed. Both logs are preserved. Restored production was also checked in real desktop/mobile Chromium: HTTP 200 and the sign-in UI rendered; no login or submission occurred. Typecheck/build and lint pass (two pre-existing unrelated lint warnings). The traced runtime test uses macOS Chromium; the Linux serverless executable still requires post-release verification. Check logic is unchanged from the calibrated 2.0.3 package.
+- The single production deployment allowance is consumed. A second release requires Blake's explicit approval; recheck the restored production identity before proceeding. No new release is claimed here.
 
 ## Limits and retained material
 
