@@ -1,0 +1,12 @@
+{
+  "time": "2026-11-11T04:03:02.702Z",
+  "version": "2.1.4",
+  "model_without_browser": true,
+  "shared_import": true,
+  "serverless_import": true,
+  "chromium_render": true,
+  "files": 447,
+  "bytes": 100278282,
+  "fixture": "/Volumes/KoiArchive/WO-0272/tmp/traced-runtime-MrltAv",
+  "model_fixture": "/Volumes/KoiArchive/WO-0272/tmp/model-only-4vjCxx"
+}

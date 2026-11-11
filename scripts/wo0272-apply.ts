@@ -18,9 +18,11 @@ const json=(file:string)=>JSON.parse(readFileSync(file,'utf8'));
 const original=json(join(homedir(),'SalesPrivate/leadgen/WO-0272/portal-recheck/cohort.json')) as {partner_id:string}[];
 const partners=[...new Set(original.map(r=>r.partner_id))];if(partners.length!==1)throw Error('Ambiguous target cohort');
 const target=partners[0];
-const cohort=json(join(dir,'cohort.json')) as {id:string;partner_id:string;website:string}[];
+const plan=json(join(dir,'apply-plan.json')) as {cohort_file:string;cohort_sha256:string;entries:{index:number;file:string;sha256:string}[]};
+if(!/^cohort(?:-[a-z0-9-]+)?\.json$/.test(plan.cohort_file))throw Error('Invalid cohort file');
+const cohortRaw=readFileSync(join(dir,plan.cohort_file),'utf8');if(hash(cohortRaw)!==plan.cohort_sha256)throw Error('Reviewed cohort changed');
+const cohort=JSON.parse(cohortRaw) as {id:string;partner_id:string;website:string}[];
 const targetRows=cohort.filter(r=>r.partner_id===target);
-const plan=json(join(dir,'apply-plan.json')) as {entries:{index:number;file:string;sha256:string}[]};
 if(plan.entries.length!==targetRows.length)throw Error('Incomplete reviewed cohort');
 const prepared=plan.entries.map(entry=>{
  const row=cohort[entry.index],file=resolve(dir,entry.file);
