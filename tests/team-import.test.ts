@@ -47,7 +47,7 @@ test("import retains measured evidence and assigns authenticated attribution", (
   const [lead] = validateImport([fixture()], db.partners[0]);
   assert.equal(lead.partner_id, db.partners[0].id);
   assert.notEqual(lead.id, fixture().id);
-  assert.deepEqual(lead.evidence, fixture().evidence);
+  assert.deepEqual(lead.evidence.map(({verify_url,leverage,...e})=>{assert.equal(verify_url,'https://fictional.example/');assert.equal(leverage,76);return e;}), fixture().evidence);
   assert.equal(importLeads(db, [lead]).imported, 1);
   assert.equal(importLeads(db, [lead]).duplicates, 1);
 });

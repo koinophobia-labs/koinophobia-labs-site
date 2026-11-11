@@ -61,6 +61,9 @@ export interface Payout {
   paid_at: string;
 }
 export interface Finding {
+  impact?: string;
+  verify_url?: string;
+  leverage?: number;
   confidence?: 'confirmed' | "couldn't verify";
   proof?: {image?:string;url:string;captured_at:string;sha256:string;viewport:{width:number;height:number}};
   name: string;

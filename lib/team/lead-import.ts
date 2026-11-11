@@ -1,4 +1,4 @@
-import { isConfirmed, type Observation, type Proof } from "@koinophobia/site-auditor/model";
+import { isConfirmed, leverageScore, verifyLink, type Check, type Observation, type Proof } from "@koinophobia/site-auditor/model";
 import { randomUUID } from "node:crypto";
 import type { Lead, Partner, Data } from "./types";
 import { SERVICES } from "./config";
@@ -105,6 +105,8 @@ export function validateImport(body: unknown, actor: Partner) {
         measurement: textInput(e.measurement, "Measurement", true, 3000),
         severity: e.severity as number,
         impact: textInput(e.impact, "Impact", true, 1000),
+        verify_url: verifyLink({url:String(e.url),check:String(e.check) as Check,verify_url:typeof e.verify_url==='string'?e.verify_url:undefined}),
+        leverage: leverageScore({check:String(e.check) as Check,verify_url:typeof e.verify_url==='string'?e.verify_url:undefined}),
       };
     });
     if (
@@ -115,6 +117,7 @@ export function validateImport(body: unknown, actor: Partner) {
           "Dead contact / booking / order link",
           "Closed Google Form",
           "Slow page",
+          "Unfinished content", "Wrong key link", "Broken image", "Booking widget failure", "Expiring certificate", "Insecure form", "Mobile contact route", "Lighthouse mobile performance",
         ].includes(e.check),
       )
     )

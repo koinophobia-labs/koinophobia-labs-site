@@ -36,6 +36,8 @@ import {
   recordPayout,
 } from "@/lib/team/store";
 import { checkSite } from "@/lib/team/checker";
+import {importRecheck} from '@/lib/team/recheck-import';
+import type {Audit} from '@koinophobia/site-auditor/model';
 import { randomUUID } from "node:crypto";
 export const runtime = "nodejs";
 export const maxDuration = 300;
@@ -192,6 +194,8 @@ export async function POST(
     }
     const result = await transaction(async (q) => {
       switch (action) {
+        case "recheck-import":
+          return importRecheck(q,p,textInput(body.id,"Lead",true,80),body.audit as Audit);
         case "invite":
           return invite(q, p, body);
         case "import":

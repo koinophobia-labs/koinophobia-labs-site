@@ -348,11 +348,18 @@ export function Portal({
                     </dl>
                     <div className="team-inset">
                       <p className="team-eyebrow">THE REASON TO REACH OUT</p>
-                      <p>{selectedLead.recheck?.status==='re-check failed'?'Re-check failed. Don’t call this lead. The original qualifying problem did not reproduce; a confirmed re-check is required.':selectedLead.recheck?.status==='confirmed'?selectedLead.recheck.findings?.map(f=>f.measurement).join(' '):selectedLead.evidence?.some(e=>e.confidence==='confirmed')?selectedLead.opener:'A confirmed browser re-check is required before using a website-problem opener.'}</p>
-                      {(selectedLead.recheck?.findings??selectedLead.evidence)?.filter(e=>e.confidence==='confirmed').map((e, i) => (
-                        <p key={i}>
+                      <p>{selectedLead.recheck?.status==='re-check failed'?'Re-check failed. Don’t call this lead. The original qualifying problem did not reproduce; a confirmed re-check is required.':selectedLead.opener??'A confirmed browser re-check is required before using a website-problem opener.'}</p>
+                      {(selectedLead.recheck?.status==='re-check failed'?[]:selectedLead.recheck?.findings??selectedLead.evidence)?.filter(e=>e.confidence==='confirmed').map((e, i) => (
+                        <div key={i}>
+                          {i===0&&<p className="team-eyebrow">STRONGEST CONFIRMED FINDING</p>}
                           <strong>{e.check}:</strong> {e.measurement}
-                        </p>
+                          {e.impact&&<p>{e.impact}</p>}
+                          {e.verify_url&&<p><a href={e.verify_url} target="_blank" rel="noopener noreferrer">Check it yourself ↗</a></p>}
+                          {e.proof_url&&<figure>
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img src={e.proof_url} alt={`Screenshot evidence: ${e.check}`} style={{maxWidth:'100%',maxHeight:620,objectFit:'contain'}} loading="lazy" />
+                          </figure>}
+                        </div>
                       ))}
                     </div>
                     <div className="team-actions">
@@ -444,6 +451,8 @@ export function Portal({
                         <div>
                           <strong>{finding.name}</strong>
                           <p>{finding.detail}</p>
+                          {finding.impact&&<p>{finding.impact}</p>}
+                          {finding.verify_url&&<p><a href={finding.verify_url} target="_blank" rel="noopener noreferrer">Check it yourself ↗</a></p>}
                           {finding.proof?.image && <figure>
                             {/* eslint-disable-next-line @next/next/no-img-element */}
                             <img src={finding.proof.image} alt={`Screenshot evidence: ${finding.name}`} style={{maxWidth:'100%',maxHeight:620,objectFit:'contain'}} loading="lazy" />
