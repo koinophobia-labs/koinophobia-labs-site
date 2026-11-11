@@ -134,6 +134,17 @@ test("WO-0276 real PostgreSQL call readiness", async (t) => {
         assert.equal((await callState(db,a,lead)).page?.code,state.page!.code);
       }
     });
+    await t.test("confirmed text-only finding creates a ready page without requiring a screenshot", async () => {
+      await makeLead("text-only",{evidence:[{confidence:"confirmed",measurement:"Confirmed missing booking link."}]});
+      await tx(q=>activeLead(q,a,"text-only"));
+      const state=await callState(db,a,"text-only");
+      assert.ok(state.page?.code);
+      assert.equal(state.proof_available,false);
+      assert.equal(state.problem,"Confirmed missing booking link.");
+      assert.doesNotMatch(state.script,/show you the screenshot/);
+      assert.equal((await publicDeal(db,state.page!.code)).proof_image,"");
+      await assert.rejects(tx(q=>publishDeal(q,a,state.deal!.id,true)));
+    });
     await t.test("failed, unconfirmed, custom suggestions, opted-out and closed leads never get auto pages", async () => {
       for (const [id,extra] of Object.entries({failed:{recheck:{status:"re-check failed"}},unconfirmed:{evidence:[]},custom:{suggested_offer:{id:"site",price:250000}},tampered:{suggested_offer:{id:"fix",price:1}},declined:{call_outcome:"Not interested"}})) {
         await makeLead(id,extra);

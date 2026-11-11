@@ -62,23 +62,28 @@ export function confirmedProof(findings: ProofFinding[]) {
     ) ?? null
   );
 }
-export async function leadProof(q: Queryable, l: TeamLead) {
+async function leadFindings(q: Queryable, l: TeamLead): Promise<ProofFinding[]> {
   // Prefer the latest audit, including a failed recheck: never fall back to stale positive proof.
   const canonical = new URL(l.website); canonical.hash = "";
   const checks = await q.query(
     "select data from team_site_checks where partner_id=$1 and (data->>'url'=any($2::text[]) or data->>'final_url'=any($2::text[])) order by created_at desc limit 1",
     [l.partner_id, [...new Set([l.website, canonical.href])]],
   );
-  if (checks.rows[0]) return confirmedProof(checks.rows[0].data.findings || []);
-  if (l.recheck?.status === "re-check failed") return null;
-  return confirmedProof((l.evidence as ProofFinding[]) || []);
+  if (l.recheck?.status === "re-check failed") return [];
+  if (checks.rows[0]) return checks.rows[0].data.findings || [];
+  return (l.evidence as ProofFinding[]) || [];
+}
+function confirmedFinding(findings: ProofFinding[]) {
+  return confirmedProof(findings) ?? findings.find(f => f.confidence === "confirmed" && (f.measurement || f.detail)) ?? null;
+}
+export async function leadProof(q: Queryable, l: TeamLead) {
+  return confirmedProof(await leadFindings(q, l));
 }
 // Called only inside the team-write transaction, never by the polling GET.
 export async function prepareCall(q: Queryable, p: Partner, id: string) {
   const l = shaped(await scopedLead(q, p, id) as unknown as Record<string, unknown>);
   if (l.recheck?.status === "re-check failed" || l.call_outcome === "Not interested" || await isOptedOut(q, l)) return { ok: true };
-  const proof = await leadProof(q, l);
-  if (!proof) return { ok: true };
+  if (!confirmedFinding(await leadFindings(q, l))) return { ok: true };
   const deals = (await q.query("select * from team_deals where lead_id=$1 and partner_id=$2 order by created_at desc,id", [id, l.partner_id])).rows as Deal[];
   let deal = deals.find(d => !["Client paid", "Delivered", "Lost"].includes(d.stage));
   // Do not silently reopen a paid or closed sales conversation.
@@ -130,6 +135,7 @@ export async function callState(
     deal: null,
     page: null,
     problem: null,
+    proof_available: false,
     script: "Open a lead on your computer, or choose one here.",
     commission: 0,
   };
@@ -156,8 +162,8 @@ export async function callState(
       [l.id],
     )
   ).rows[0] ?? { cell: "", outcome: null, follow_up_at: null };
-  const proof = await leadProof(q, l),
-    problem = l.recheck?.status === "re-check failed" ? null : proof?.measurement || proof?.detail || null;
+  const findings = await leadFindings(q, l), proof = confirmedProof(findings),
+    finding = confirmedFinding(findings), problem = finding?.measurement || finding?.detail || null;
   const earned = d
     ? (
         await q.query(
@@ -190,7 +196,8 @@ export async function callState(
     deal: d ?? null,
     page: (page ?? null) as CallState["page"],
     problem,
-    script: callScript(l, p.name, problem),
+    proof_available: Boolean(proof),
+    script: callScript(l, p.name, problem, Boolean(proof)),
     commission: Math.round(earned * 0.4),
   };
 }
@@ -288,7 +295,7 @@ export async function publishDeal(
   );
   if (await isOptedOut(q, l)) throw new Fault("This contact has opted out.");
   assertRecheck(l);
-  const proof = await leadProof(q, l);
+  const proof = automatic ? confirmedFinding(await leadFindings(q, l)) : await leadProof(q, l);
   if (!proof)
     throw new Fault(
       "A confirmed auditor screenshot is required. Run a site check first.",
@@ -315,7 +322,7 @@ export async function publishDeal(
     const code = newDealCode();
     const r = await q.query(
       `insert into team_deal_pages(code,deal_id,problem,proof_image,proof_at,proof_reviewed_by) values($1,$2,$3,$4,$5,$6) on conflict do nothing returning code`,
-      [code, id, problem, proofReviewed ? proof.proof!.image : "", proof.proof!.captured_at, proofReviewed ? p.id : null],
+      [code, id, problem, proofReviewed ? proof.proof!.image : "", proofReviewed ? proof.proof!.captured_at : new Date().toISOString(), proofReviewed ? p.id : null],
     );
     if (r.rows[0]) return { code };
     if (existing)

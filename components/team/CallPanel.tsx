@@ -269,7 +269,7 @@ export function CallPanel({
                 <ProofReview
                   key={lead.id}
                   leadId={lead.id}
-                  disabled={disabled || !state.problem}
+                  disabled={disabled || !state.proof_available}
                   create={() =>
                     act("deal-page", { id: deal.id, proofReviewed: true })
                   }
@@ -280,9 +280,9 @@ export function CallPanel({
                   offers are ready to send; custom work needs Blake’s approval.
                 </p>
               )}
-              {url && deal && !state.page?.proof_reviewed_by && (
+              {url && deal && state.proof_available && !state.page?.proof_reviewed_by && (
                 <ProofReview key={"proof:" + lead.id} leadId={lead.id}
-                  disabled={disabled || !state.problem}
+                  disabled={disabled || !state.proof_available}
                   create={() => act("deal-page", { id: deal.id, proofReviewed: true })}
                   label="Add reviewed screenshot" />
               )}
