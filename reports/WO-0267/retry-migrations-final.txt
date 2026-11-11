@@ -1,0 +1,33 @@
+✔ preview Vercel builds cannot execute migrations (0.964917ms)
+✔ ordinary production Vercel builds are application-only (0.238125ms)
+✔ a direct production Neon endpoint succeeds with every required guard (1.415167ms)
+✔ missing or vague approval refuses before connecting or executing SQL (1.060584ms)
+✔ target and runtime mismatches refuse before connecting (0.692792ms)
+✔ the database provider, direct URL, protocol, and TLS are mandatory (0.417209ms)
+✔ a wrong Neon endpoint is refused before connecting (0.220958ms)
+✔ a preview endpoint is refused when production is expected (0.077667ms)
+✔ a pooled Neon hostname is refused before connecting (0.074458ms)
+✔ the expected endpoint ID must be supplied independently (0.120958ms)
+✔ the expected database name and migration role are mandatory (0.112125ms)
+✔ a URL database-name mismatch is refused before connecting (0.083334ms)
+✔ a connected database-name mismatch refuses before migration SQL (0.0985ms)
+✔ a connected role mismatch refuses before migration SQL (0.070625ms)
+✔ read-only and recovery connections refuse before migration SQL (0.192459ms)
+✔ an unexpected application baseline refuses before migration SQL (0.08925ms)
+✔ connection and identity failures expose no connection secrets (0.210041ms)
+✔ successful output exposes only the safe target and migration filenames (0.983625ms)
+✔ test and development migrations allow an explicit loopback-only path (0.734166ms)
+✔ the local override refuses remote and production targets (0.093ms)
+✔ migration failures roll back, identify the file, and stop (0.198375ms)
+✔ the former custom database setting is not required anywhere (896.329542ms)
+✔ migration 008 keeps idempotent guards for all columns and indexes (1.149125ms)
+Retained migration fixture: /Volumes/KoiArchive/WO-0267/tmp/koinophobia-migration-test-TyAb6O
+✔ a real PostgreSQL schema containing migration 008 is accepted unchanged (1068.701292ms)
+ℹ tests 24
+ℹ suites 0
+ℹ pass 24
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2056.4205

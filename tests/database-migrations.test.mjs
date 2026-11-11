@@ -3,7 +3,6 @@ import { execFileSync, spawnSync } from "node:child_process";
 import {
   mkdtempSync,
   readFileSync,
-  rmSync,
 } from "node:fs";
 import { createServer } from "node:net";
 import { tmpdir } from "node:os";
@@ -598,7 +597,7 @@ test(
           { stdio: "ignore" },
         );
       }
-      rmSync(clusterDirectory, { force: true, recursive: true });
+      console.log(`Retained migration fixture: ${clusterDirectory}`);
     }
   },
 );

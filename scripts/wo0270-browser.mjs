@@ -4,7 +4,7 @@ import { chromium } from "playwright";
 import { Pool } from "pg";
 import fs from "node:fs";
 import assert from "node:assert/strict";
-const root = "/Volumes/KoiArchive/WO-0270/evidence";
+const root = process.env.WO0270_EVIDENCE_DIR || "/Volumes/KoiArchive/WO-0270/evidence";
 const db = new Pool({
   connectionString:
     process.env.WO0270_BROWSER_DATABASE ||
@@ -236,6 +236,14 @@ try {
       .locator(".call-panel")
       .screenshot({ path: root + "/owner-alert.png" });
 
+    await db.query("update team_leads set data=data||$1::jsonb where id='lead-2'",[JSON.stringify({recheck:{status:"re-check failed",checked_at:new Date().toISOString(),confirmed_count:0}})]);
+    await d.reload();
+    await d.locator(".team-lead-row").filter({hasText:"Northstar"}).click();
+    await m.locator(".call-panel [role=alert]").filter({hasText:"Don’t call"}).waitFor();
+    assert.equal(await m.locator('.call-panel a[href^="tel:"]').count(),0);
+    assert.equal(await m.locator('.call-panel a[href^="sms:"]').count(),0);
+    await m.screenshot({path:root+"/phone-do-not-call.png",fullPage:true});
+    await d.locator(".call-panel").screenshot({path:root+"/computer-do-not-call.png"});
     fs.writeFileSync(
       root + "/browser-results.json",
       JSON.stringify(
@@ -246,6 +254,7 @@ try {
             "phone-call.png",
             "client-deal.png",
           ],
+          failedRecheckBlocksCallsBothScreens: true,
           twoDeviceSync: true,
           smsPrefill: true,
           openedStatus: true,

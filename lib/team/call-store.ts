@@ -27,6 +27,10 @@ function shaped(row: Record<string, unknown>): TeamLead {
     data: undefined,
   } as unknown as TeamLead;
 }
+function assertRecheck(row: unknown) {
+  const lead = shaped(row as Record<string, unknown>);
+  if (lead.recheck?.status === "re-check failed") throw new Fault("Don’t call — re-check failed. Ask Blake to review a confirmed re-check.");
+}
 export async function activeLead(q: Queryable, p: Partner, id: string) {
   const l = await scopedLead(q, p, id);
   if (await isOptedOut(q, l)) throw new Fault("This contact has opted out.");
@@ -114,7 +118,7 @@ export async function callState(
     )
   ).rows[0] ?? { cell: "", outcome: null, follow_up_at: null };
   const proof = await leadProof(q, l),
-    problem = proof?.measurement || proof?.detail || null;
+    problem = l.recheck?.status === "re-check failed" ? null : proof?.measurement || proof?.detail || null;
   const earned = d
     ? (
         await q.query(
@@ -139,6 +143,7 @@ export async function callState(
     state: l.state,
     time_zone: l.time_zone,
     opted_out: l.opted_out,
+    recheck: l.recheck ? {status:l.recheck.status,checked_at:l.recheck.checked_at,confirmed_count:l.recheck.confirmed_count} : undefined,
   };
   return {
     lead,
@@ -157,6 +162,7 @@ export async function saveCell(
   value: unknown,
 ) {
   const l = await scopedLead(q, p, id);
+  assertRecheck(l);
   if (await isOptedOut(q, l)) throw new Fault("This contact has opted out.");
   const raw = textInput(value, "Client cell", false, 80),
     cell = raw ? phoneNumber(raw) : "";
@@ -177,6 +183,7 @@ export async function recordOutcome(
   if (!CALL_OUTCOMES.includes(outcome))
     throw new Fault("Choose a call outcome.");
   const l = await scopedLead(q, p, id);
+  assertRecheck(l);
   if (await isOptedOut(q, l)) throw new Fault("This contact has opted out.");
   const deals = (
     await q.query(
@@ -240,6 +247,7 @@ export async function publishDeal(
     (await scopedLead(q, p, d.lead_id)) as unknown as Record<string, unknown>,
   );
   if (await isOptedOut(q, l)) throw new Fault("This contact has opted out.");
+  assertRecheck(l);
   const proof = await leadProof(q, l);
   if (!proof)
     throw new Fault(
@@ -284,7 +292,7 @@ export async function publicDeal(q: Queryable, raw: string) {
       [code],
     )
   ).rows[0];
-  if (!row || !quotePaymentLink(row.deal) || (await isOptedOut(q, row.lead)))
+  if (!row || !quotePaymentLink(row.deal) || row.lead.data?.recheck?.status === "re-check failed" || (await isOptedOut(q, row.lead)))
     return null;
   return row;
 }

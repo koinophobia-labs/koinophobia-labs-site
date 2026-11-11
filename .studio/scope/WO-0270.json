@@ -105,6 +105,10 @@
     "reports/WO-0267/browser-1794361214020/check-mobile.png",
     "reports/WO-0267/browser-1794361214020/owner-failed.png",
     "reports/WO-0267/browser-1794361214020/results.json",
+    "reports/WO-0267/browser-1794361693794/check-desktop.png",
+    "reports/WO-0267/browser-1794361693794/check-mobile.png",
+    "reports/WO-0267/browser-1794361693794/owner-failed.png",
+    "reports/WO-0267/browser-1794361693794/results.json",
     "reports/WO-0267/browser-results.txt",
     "reports/WO-0267/build.txt",
     "reports/WO-0267/deploy.txt",
@@ -124,9 +128,19 @@
     "reports/WO-0267/repair-team-tests.txt",
     "reports/WO-0267/restoration-checks.json",
     "reports/WO-0267/restoration.json",
+    "reports/WO-0267/retry-all-tests.txt",
+    "reports/WO-0267/retry-browser.txt",
+    "reports/WO-0267/retry-build.txt",
+    "reports/WO-0267/retry-lint.txt",
+    "reports/WO-0267/retry-migrations-final.txt",
+    "reports/WO-0267/retry-migrations-fixed.txt",
+    "reports/WO-0267/retry-migrations.txt",
+    "reports/WO-0267/retry-trace.txt",
+    "reports/WO-0267/retry-typecheck.txt",
     "reports/WO-0267/tests.txt",
     "reports/WO-0267/traced-runtime-1794361244941.json",
     "reports/WO-0267/traced-runtime-1794361304293.json",
+    "reports/WO-0267/traced-runtime-1794361706226.json",
     "reports/WO-0267/traced-runtime-before-fix.txt",
     "scripts/audit-team-brand.mjs",
     "scripts/blake-release-qa.mjs",
@@ -174,10 +188,10 @@
     "vendor/koinophobia-site-auditor-2.0.4.tgz"
   ],
   "reconciliation": "Inherited production changes relative to lagging origin/main are included for scope checking. WO-0270 changes are reviewed against the production baseline; later production commits are integrated before release.",
-  "integrated_production": "d01b01d6319ce459c502538ccad7b780ac4cb940",
+  "integrated_production": "1277f3d2d0bfd686af53793215af65dca9b4880a",
   "includes_work_orders": [
     "WO-0267"
   ],
   "integrated_repair": "8681ada064a0c8175454a72a763b1b459c83c7c9",
-  "production_before_release": "282a061488eaf72902a91a6e86ffa025e1e2b0f3"
+  "production_before_release": "1277f3d2d0bfd686af53793215af65dca9b4880a"
 }

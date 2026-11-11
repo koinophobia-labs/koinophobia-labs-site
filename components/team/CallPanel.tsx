@@ -39,6 +39,7 @@ export function CallPanel({
     callback.current = onLeadChange;
   }, [onLeadChange]);
   const generation = useRef(0);
+  const lastActive = useRef("");
   async function refresh(signal?: AbortSignal) {
     const version = generation.current;
     const r = await fetch("/team/api/call-state", {
@@ -50,7 +51,7 @@ export function CallPanel({
     if (version !== generation.current) return;
     setState(v);
     setStale(false);
-    if (v.lead) callback.current?.(v.lead.id);
+    if (v.lead && v.lead.id !== lastActive.current) {lastActive.current = v.lead.id; callback.current?.(v.lead.id);}
   }
   useEffect(() => {
     if (data.readonly) return;
@@ -141,7 +142,7 @@ export function CallPanel({
         >
           <option value="">Choose a lead</option>
           {data.leads
-            .filter((l) => !l.opted_out)
+            .filter((l) => !l.opted_out && l.recheck?.status !== "re-check failed")
             .map((l) => (
               <option key={l.id} value={l.id}>
                 {l.business}
@@ -185,8 +186,8 @@ export function CallPanel({
               Connection lost. Payment status may be out of date. Reconnecting…
             </p>
           )}
-          {lead.opted_out ? (
-            <p role="alert">Do not contact. This lead has opted out.</p>
+          {lead.opted_out || lead.recheck?.status === "re-check failed" ? (
+            <p role="alert">{lead.recheck?.status === "re-check failed" ? "Don’t call — re-check failed. Ask Blake to review a confirmed re-check." : "Do not contact. This lead has opted out."}</p>
           ) : (
             <>
               <div className="call-primary-actions">

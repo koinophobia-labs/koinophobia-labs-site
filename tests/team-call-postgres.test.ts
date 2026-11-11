@@ -168,6 +168,14 @@ test("call mode real PostgreSQL integration", async (t) => {
     await t.test("failed rechecks suppress stale proof; latest canonical URL audit supplies fresh proof",async()=>{
       await db.query("update team_leads set data=data||$1::jsonb where id='lead-0'",[JSON.stringify({recheck:{status:'re-check failed',checked_at:new Date().toISOString(),confirmed_count:0}})]);
       assert.equal((await callState(db,a)).problem,null);
+      await tx(q=>activeLead(q,a,"lead-0"));
+      assert.equal((await callState(db,a)).lead?.recheck?.status,"re-check failed");
+      await assert.rejects(tx(q=>saveCell(q,a,"lead-0","3125550188")));
+      await assert.rejects(tx(q=>recordOutcome(q,a,"lead-0","Interested")));
+      await assert.rejects(tx(q=>publishDeal(q,a,"deal-0",true)));
+      assert.equal(await publicDeal(db,code),null);
+      await assert.rejects(resolveCallCheckout("fix",{partner:a.id,deal:"deal-0"},code,db));
+      await db.query("update team_leads set data=data||$1::jsonb where id='lead-0'",[JSON.stringify({recheck:{status:'confirmed',checked_at:new Date().toISOString(),confirmed_count:1}})]);
       await db.query("update team_leads set website='https://example.test' where id='lead-0'");
       await db.query("insert into team_site_checks(id,partner_id,data) values('fresh-proof','demo-a',$1)",[JSON.stringify({url:'https://example.test/',findings:[]})]);
       assert.equal((await callState(db,a)).problem,null);
