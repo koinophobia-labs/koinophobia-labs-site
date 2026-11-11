@@ -52,13 +52,13 @@ export function CallPanel({
     if (version !== generation.current) return;
     setState(v);
     if (v.lead && !prepared.current.has(v.lead.id)) {
-      prepared.current.add(v.lead.id);
       // The mutation is idempotent; GET polling itself stays read-only.
       const ready = await fetch("/team/api/prepare-call", {
         method: "POST", headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id: v.lead.id }), signal,
       });
-      if (!ready.ok) { prepared.current.delete(v.lead.id); throw Error("Could not prepare the call link."); }
+      if (!ready.ok) throw Error("Could not prepare the call link.");
+      prepared.current.add(v.lead.id);
     }
     if (version !== generation.current) return;
     setStale(false);

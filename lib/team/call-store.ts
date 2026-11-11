@@ -307,7 +307,7 @@ export async function publishDeal(
     )
   ).rows[0];
   if (existing && new Date(existing.expires_at) > new Date()) {
-    if (proofReviewed) await q.query("update team_deal_pages set proof_image=$1,proof_at=$2,proof_reviewed_by=$3 where deal_id=$4", [proof.proof!.image, proof.proof!.captured_at, p.id, id]);
+    if (proofReviewed) await q.query("update team_deal_pages set proof_image=$1,proof_at=$2,proof_reviewed_by=$3,problem=$4 where deal_id=$5", [proof.proof!.image, proof.proof!.captured_at, p.id, problem, id]);
     return { code: existing.code };
   }
   // 10 characters ≈49 bits. CSPRNG + unique constraint; collision retries never overwrite another page.
