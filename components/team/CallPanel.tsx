@@ -266,6 +266,13 @@ export function CallPanel({
                   </small>
                 </details>
               )}
+              {state.problem&&<section className="team-inset" aria-label="Strongest confirmed finding">
+                <p className="team-eyebrow">STRONGEST CONFIRMED FINDING</p>
+                <p>{state.problem}</p>
+                {state.impact&&<p>{state.impact}</p>}
+                {state.verify_url&&<p><a href={state.verify_url} target="_blank" rel="noopener noreferrer">Check it yourself ↗</a></p>}
+                <Image unoptimized width={390} height={844} className="deal-proof" src={'/team/api/call-proof?lead='+encodeURIComponent(lead.id)} alt="Screenshot of the strongest confirmed website finding" />
+              </section>}
               <details open={!compact}>
                 <summary>Call script · confirmed problem</summary>
                 <p className="call-script">{state.script}</p>

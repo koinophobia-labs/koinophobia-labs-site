@@ -14,6 +14,8 @@ export async function importRecheck(q:Queryable,p:Partner,id:string,audit:Audit)
   const lead=rows.rows[0];if(!lead)throw new Fault('Lead not found.',404);
   const canonical=(u:string)=>{const x=new URL(u);x.hash='';return x.href;};
   if(canonical(lead.website)!==canonical(audit.url))throw new Fault('Recheck website does not match this lead.');
+  const newer=await q.query("select data->>'measured_at' measured_at from team_site_checks where partner_id=$1 and (data->>'url'=any($2::text[]) or data->>'final_url'=any($2::text[])) order by created_at desc limit 20",[lead.partner_id,[lead.website,canonical(lead.website)]]);
+  if(newer.rows.some(r=>Date.parse(r.measured_at)>Date.parse(audit.measured_at)))throw new Fault('A newer Site Check is already stored.',409);
   const previous=lead.data.recheck;
   if(previous?.checked_at&&Date.parse(previous.checked_at)>Date.parse(audit.measured_at))throw new Fault('A newer recheck is already stored.',409);
   if(previous?.run_id===audit.run_id)return {updated:0,confirmed:previous.status==='confirmed',replayed:true};

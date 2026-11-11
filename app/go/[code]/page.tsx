@@ -51,6 +51,8 @@ export default async function DealPage({
         <div className="team-inset">
           <p className="team-eyebrow">THE CONFIRMED PROBLEM</p>
           <h2>{page.problem}</h2>
+          {page.impact&&<p>{page.impact}</p>}
+          {page.verify_url&&<p><a href={page.verify_url} target="_blank" rel="noopener noreferrer">Check it yourself ↗</a></p>}
           <p>
             Screenshot captured{" "}
             {new Date(page.proof_at).toLocaleDateString("en-US", {

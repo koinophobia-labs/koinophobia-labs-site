@@ -26,6 +26,7 @@ function fixture(prior:Record<string,unknown>={}){
  const q={query:async(sql:string,values?:unknown[])=>{
   calls.push({sql,values});
   if(sql.startsWith('select id,'))return {rows:[lead]};
+  if(sql.startsWith("select data->>'measured_at'"))return {rows:[]};
   if(sql.startsWith('update team_leads'))return {rows:[{recheck:JSON.parse(String(values?.[1])).recheck}]};
   if(sql.startsWith('insert into team_site_checks'))return {rows:[]};
   throw Error('unexpected SQL');

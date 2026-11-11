@@ -26,6 +26,8 @@ export interface CallState {
     expires_at: string;
   } | null;
   problem: string | null;
+  impact?: string | null;
+  verify_url?: string | null;
   script: string;
   commission: number;
 }
@@ -100,6 +102,7 @@ export function callNow(leads: TeamLead[], deals: Deal[], now = new Date()) {
     )
     .sort(
       (a, b) =>
+        (b.leverage_score ?? 0) - (a.leverage_score ?? 0) ||
         (b.fit_score ?? 0) - (a.fit_score ?? 0) ||
         a.business.localeCompare(b.business) ||
         a.id.localeCompare(b.id),

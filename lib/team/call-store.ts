@@ -1,4 +1,6 @@
-import { randomInt, randomUUID } from "node:crypto";
+import { randomInt, randomUUID, createHash } from "node:crypto";
+import {confirmedLeverage} from './leverage';
+import {impactLine,verifyLink,type Finding as AuditFinding} from '@koinophobia/site-auditor/model';
 import type { Queryable } from "../payments";
 import type { Partner, Deal } from "./types";
 import { scopedLead, scopedDeal, isOptedOut, type TeamLead } from "./store";
@@ -40,32 +42,15 @@ export async function activeLead(q: Queryable, p: Partner, id: string) {
   );
   return { ok: true };
 }
-type ProofFinding = {
-  confidence?: string;
-  measurement?: string;
-  detail?: string;
-  proof?: { image?: string; captured_at?: string };
-};
-export function confirmedProof(findings: ProofFinding[]) {
-  return (
-    findings.find(
-      (f) =>
-        f.confidence === "confirmed" &&
-        (f.measurement || f.detail) &&
-        typeof f.proof?.image === "string" &&
-        /^data:image\/(jpeg|png|webp);base64,[a-zA-Z0-9+/=]+$/.test(
-          f.proof.image,
-        ) &&
-        f.proof.image.length < 2_000_000 &&
-        Number.isFinite(Date.parse(f.proof.captured_at || "")),
-    ) ?? null
-  );
+type ProofFinding = AuditFinding & {detail?:string};
+export function confirmedProof(findings: unknown) {
+  return (confirmedLeverage(findings)[0] as ProofFinding|undefined)??null;
 }
 export async function leadProof(q: Queryable, l: TeamLead) {
   // Prefer the latest audit, including a failed recheck: never fall back to stale positive proof.
   const canonical = new URL(l.website); canonical.hash = "";
   const checks = await q.query(
-    "select data from team_site_checks where partner_id=$1 and (data->>'url'=any($2::text[]) or data->>'final_url'=any($2::text[])) order by created_at desc limit 1",
+    "select data from team_site_checks where partner_id=$1 and (data->>'url'=any($2::text[]) or data->>'final_url'=any($2::text[])) order by coalesce(data->>'measured_at',to_char(created_at at time zone 'UTC','YYYY-MM-DD\"T\"HH24:MI:SS.MS\"Z\"')) desc,created_at desc limit 1",
     [l.partner_id, [...new Set([l.website, canonical.href])]],
   );
   if (checks.rows[0]) return confirmedProof(checks.rows[0].data.findings || []);
@@ -151,6 +136,8 @@ export async function callState(
     deal: d ?? null,
     page: page as CallState["page"],
     problem,
+    impact:problem&&proof?impactLine(proof):null,
+    verify_url:problem&&proof?verifyLink(proof):null,
     script: callScript(l, p.name, problem),
     commission: Math.round(earned * 0.4),
   };
@@ -275,7 +262,13 @@ export async function publishDeal(
       `insert into team_deal_pages(code,deal_id,problem,proof_image,proof_at,proof_reviewed_by) values($1,$2,$3,$4,$5,$6) on conflict do nothing returning code`,
       [code, id, problem, proof.proof!.image, proof.proof!.captured_at, p.id],
     );
-    if (r.rows[0]) return { code };
+    if (r.rows[0]) {
+      // Snapshot the matching impact/verify metadata in the existing lead JSON.
+      // Bind it to the stored image so later audits cannot pair a new claim with old proof.
+      const metadata={impact:impactLine(proof),verify_url:verifyLink(proof),proof_sha256:createHash('sha256').update(Buffer.from(proof.proof!.image.split(',')[1],'base64')).digest('hex')};
+      await q.query("update team_leads set data=jsonb_set(data,'{deal_proof}',coalesce(data->'deal_proof','{}'::jsonb) || jsonb_build_object($2::text,$3::jsonb),true) where id=$1",[l.id,code,JSON.stringify(metadata)]);
+      return { code };
+    }
     if (existing)
       throw new Fault(
         "This deal page expired. Ask Blake to review a new quote.",
@@ -294,6 +287,11 @@ export async function publicDeal(q: Queryable, raw: string) {
   ).rows[0];
   if (!row || !quotePaymentLink(row.deal) || row.lead.data?.recheck?.status === "re-check failed" || (await isOptedOut(q, row.lead)))
     return null;
+  const meta=row.lead.data?.deal_proof?.[row.code];
+  const hash=typeof row.proof_image==='string'?createHash('sha256').update(Buffer.from(row.proof_image.split(',')[1]??'','base64')).digest('hex'):'';
+  const matches=meta&&meta.proof_sha256===hash;
+  row.impact=matches&&typeof meta.impact==='string'?meta.impact:null;
+  row.verify_url=matches?verifyLink({url:row.lead.website,check:'Dead contact / booking / order link',verify_url:meta.verify_url}):null;
   return row;
 }
 export async function markEngagement(

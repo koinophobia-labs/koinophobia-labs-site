@@ -1,5 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import {confirmedEvidence} from './auditor-fixtures';
 import {
   newDealCode,
   normalizeCode,
@@ -39,14 +40,7 @@ test("CSPRNG deal codes: 10 characters, case insensitive, unique, no ambiguous c
     assert.equal(normalizeCode(bad), null);
 });
 test("only explicitly confirmed inline raster screenshot proof can publish", () => {
-  const p = {
-    confidence: "confirmed",
-    measurement: "Booking returns 404",
-    proof: {
-      image: "data:image/png;base64,YQ==",
-      captured_at: new Date().toISOString(),
-    },
-  };
+  const p = confirmedEvidence();
   assert.equal(confirmedProof([p]), p);
   for (const f of [
     { ...p, confidence: "unknown" },

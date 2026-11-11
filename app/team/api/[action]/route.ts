@@ -187,10 +187,10 @@ export async function POST(
       );
       const previous=history.rows.flatMap(r=>r.data.observations??[]);
       const result = await checkSite(target.href,previous);
-      await teamDatabase().query(
+      await transaction(q=>q.query(
         "insert into team_site_checks(id,partner_id,data) values($1,$2,$3)",
         [randomUUID(), p.id, result],
-      );
+      ));
       return ok({ ok: true });
     }
     const result = await transaction(async (q) => {
