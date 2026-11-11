@@ -150,6 +150,7 @@
     "scripts/wo0270-browser.mjs",
     "tests/app-homes.test.ts",
     "tests/auditor-fixtures.ts",
+    "tests/database-migrations.test.mjs",
     "tests/dev-universe.test.ts",
     "tests/fixtures/team-no-network.mjs",
     "tests/partner-payments.test.ts",
