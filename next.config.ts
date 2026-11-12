@@ -61,6 +61,7 @@ const nextConfig: NextConfig = {
   serverExternalPackages: ['@koinophobia/site-auditor','playwright-core','@sparticuz/chromium'],
   // External browser packages load runtime assets through dynamic paths. Trace them explicitly.
   outputFileTracingIncludes: {
+    '/api/appstore/*': ['./lib/appstore/certs/*.cer'],
     '/api/jobs/*': [
       './node_modules/@koinophobia/site-auditor/dist/**/*',
       './node_modules/playwright-core/**/*',

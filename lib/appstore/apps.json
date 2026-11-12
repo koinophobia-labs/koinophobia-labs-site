@@ -1,0 +1,34 @@
+[
+  {
+    "key": "trendi",
+    "bundleId": "app.aic.mobile",
+    "appAppleId": 6776299336,
+    "offerIdentifiers": [
+      "SAIIKHOTIC 10 percent first month"
+    ]
+  },
+  {
+    "key": "preaching-to-the-choir",
+    "bundleId": "com.koinophobialabs.preachingtothechoir",
+    "appAppleId": 6808442357,
+    "offerIdentifiers": [
+      "SAIIKHOTIC 10 percent first month"
+    ]
+  },
+  {
+    "key": "forget-about-it",
+    "bundleId": "com.koinophobialabs.forgetaboutit",
+    "appAppleId": 6804360983,
+    "offerIdentifiers": [
+      "SAIIKHOTIC 10 percent first month"
+    ]
+  },
+  {
+    "key": "teachers-pet",
+    "bundleId": "com.koinophobia.teacherspet",
+    "appAppleId": 6808981717,
+    "offerIdentifiers": [
+      "SAIIKHOTIC 10 percent first month"
+    ]
+  }
+]
