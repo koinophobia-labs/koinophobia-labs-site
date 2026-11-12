@@ -66,7 +66,9 @@ export function callScript(
     return "Run a site check and confirm the problem before making a specific claim. No confirmed screenshot proof is available yet.";
   return `Hi — is ${lead.contact || "the owner or whoever runs the website"} around?\n\nHi, my name is ${partner}. I’m a partner with Koinophobia Labs — we work remotely with businesses across the US. I’ll be quick, 20 seconds, promise.\n\nI was on ${lead.business}’s website${lead.city ? ` in ${lead.city}` : ""} and noticed: ${problem}\n\nBlake at Koinophobia Labs fixes exactly this kind of thing. The Fix starts at a flat $299, with a 48–72 hour turnaround once Blake confirms the scope.\n\nI can show you ${hasScreenshot ? "the screenshot" : "the confirmed finding"} and the approved scope on one page. What’s the best cell number to text it to?`;
 }
-export function callableNow(lead: TeamLead, now = new Date()) {
+// Permanent eligibility is shared by the queue and partner visibility. Calling
+// hours are deliberately separate: an eligible lead remains visible after 5pm.
+export function eligibleToCall(lead: TeamLead) {
   if (
     lead.opted_out ||
     lead.recheck?.status === "re-check failed" ||
@@ -75,6 +77,20 @@ export function callableNow(lead: TeamLead, now = new Date()) {
     !lead.time_zone
   )
     return false;
+  try {
+    new Intl.DateTimeFormat("en-US", { timeZone: lead.time_zone });
+    return true;
+  } catch {
+    return false;
+  }
+}
+export function hasTerminalCallDeal(lead: TeamLead, deals: Deal[]) {
+  return deals.some(
+    (d) => d.lead_id === lead.id && ["Lost", "Client paid", "Delivered"].includes(d.stage),
+  );
+}
+export function callableNow(lead: TeamLead, now = new Date()) {
+  if (!eligibleToCall(lead)) return false;
   try {
     const parts = new Intl.DateTimeFormat("en-US", {
       timeZone: lead.time_zone,
@@ -99,11 +115,7 @@ export function callNow(leads: TeamLead[], deals: Deal[], now = new Date()) {
     .filter(
       (l) =>
         callableNow(l, now) &&
-        !deals.some(
-          (d) =>
-            d.lead_id === l.id &&
-            ["Lost", "Client paid", "Delivered"].includes(d.stage),
-        ),
+        !hasTerminalCallDeal(l, deals),
     )
     .sort(
       (a, b) =>

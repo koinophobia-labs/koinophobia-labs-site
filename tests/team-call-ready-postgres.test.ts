@@ -95,8 +95,9 @@ test("WO-0276 real PostgreSQL call readiness", async (t) => {
           d.scope,
         ],
       );
+    let phoneIndex = 100;
     const makeLead = async (id: string, extra: object = {}) => {
-      await db.query("insert into team_leads(id,partner_id,business,website,data) values($1,$2,$3,$4,$5)", [id, a.id, "FAKE " + id, "https://" + id + ".example.test", {contact:"",notes:"",channel:"Test",evidence:[proof],suggested_offer:{id:"fix",price:29900},...extra}]);
+      await db.query("insert into team_leads(id,partner_id,business,website,phone,data) values($1,$2,$3,$4,$6,$5)", [id, a.id, "FAKE " + id, "https://" + id + ".example.test", {contact:"",notes:"",channel:"Test",time_zone:"America/Chicago",evidence:[proof],suggested_offer:{id:"fix",price:29900},...extra}, `3125550${phoneIndex++}`]);
     };
     await t.test("only exact single catalog quotes auto-approve; partner prices and approval fields are ignored", async () => {
       for (const services of [["fix"],["tune"],["care"],["site"],["app"],["ai"],["fix","care"],["fix","check"]]) {
@@ -149,13 +150,14 @@ test("WO-0276 real PostgreSQL call readiness", async (t) => {
         await makeLead(id,extra);
         await tx(q=>activeLead(q,a,id));
         await tx(q=>prepareCall(q,a,id));
-        assert.equal((await callState(db,a,id)).deal,null);
+        if (["failed","declined"].includes(id)) await assert.rejects(callState(db,a,id), {status:404});
+        else assert.equal((await callState(db,a,id)).deal,null);
       }
       await makeLead("opted-out");
       await tx(q=>optOut(q,a,"opted-out"));
       await assert.rejects(tx(q=>activeLead(q,a,"opted-out")));
       await tx(q=>prepareCall(q,a,"opted-out"));
-      assert.equal((await callState(db,a,"opted-out")).page,null);
+      await assert.rejects(callState(db,a,"opted-out"), {status:404});
       await makeLead("closed");
       const d = await tx(q=>saveQuote(q,a,{lead_id:"closed",services:["fix"]}));
       await db.query("update team_deals set stage='Lost' where id=$1",[d.id]);

@@ -1,13 +1,13 @@
 import { currentPartner } from "@/lib/team/session";
 import { teamDatabase, hostedPreview } from "@/lib/team/db";
-import { scopedLead, type TeamLead } from "@/lib/team/store";
+import { visibleLead, type TeamLead } from "@/lib/team/store";
 import { leadProof } from "@/lib/team/call-store";
 export async function GET(request: Request) {
   const p = await currentPartner();
   if (!p || hostedPreview()) return new Response(null, { status: 401 });
   try {
     const q = teamDatabase();
-    const row = (await scopedLead(
+    const row = (await visibleLead(
       q,
       p,
       new URL(request.url).searchParams.get("lead") || "",

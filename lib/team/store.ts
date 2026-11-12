@@ -1,4 +1,5 @@
 import { isStandardQuote } from "./payment-links";
+import { partnerLeadVisible } from "./lead-visibility";
 import { connectEnabled } from "./connect-client";
 import { connectSnapshot, type ConnectSnapshot } from "./connect";
 import { randomUUID } from "node:crypto";
@@ -144,6 +145,13 @@ export async function snapshot(
     ).rows[0]?.value || "";
   const jobStatuses = (await q.query("select to_regclass('public.team_jobs') present")).rows[0]?.present
     ? (await q.query("select deal_id,stage from team_jobs where deal_id is not null and ($1::text is null or partner_id=$1)",[scope])).rows as {deal_id:string;stage:string}[] : [];
+  // Any payment history keeps its lead visible (including pending/refunded
+  // records). The existing paid-only financial totals are unchanged.
+  const paymentHistory = p.role === "owner" ? [] : (await q.query(
+    "select a.deal_id from team_payment_attributions a join team_deals d on d.id=a.deal_id where d.partner_id=$1", [p.id],
+  )).rows as Pick<Data["payments"][number], "deal_id">[];
+  const visibleLeads = p.role === "owner" ? shaped : shaped.filter(l => partnerLeadVisible(l, deals, paymentHistory));
+  const visibleIds = new Set(visibleLeads.map(l => l.id));
   return {
     jobStatuses,
     ...(connectEnabled() ? {connect: await connectSnapshot(q,p)} : {}),
@@ -151,8 +159,8 @@ export async function snapshot(
     fake: false,
     readonly: false,
     mailingAddress: address,
-    leads: shaped,
-    deals,
+    leads: visibleLeads,
+    deals: p.role === "owner" ? deals : deals.filter(d => visibleIds.has(d.lead_id)),
     payments,
     payouts,
     partners,
@@ -179,6 +187,21 @@ export async function scopedLead(q: Queryable, p: Partner, id: string) {
   );
   if (!r.rows[0]) throw new Fault("Lead not found.", 404);
   return r.rows[0] as Lead;
+}
+// Read boundary for explicit lead URLs and the phone's remembered active lead.
+// Mutation eligibility and the owner scope remain unchanged.
+export async function visibleLead(q: Queryable, p: Partner, id: string) {
+  const row = await scopedLead(q, p, id) as Lead & { data: TeamLead };
+  if (p.role === "owner") return row;
+  const lead = { ...row.data, ...row, opted_out: await isOptedOut(q, row) };
+  const deals = (await q.query(
+    "select * from team_deals where lead_id=$1 and partner_id=$2", [id, p.id],
+  )).rows as Deal[];
+  const payments = (await q.query(
+    "select a.deal_id from team_payment_attributions a join team_deals d on d.id=a.deal_id where d.lead_id=$1 and d.partner_id=$2", [id, p.id],
+  )).rows as Pick<Data["payments"][number], "deal_id">[];
+  if (!partnerLeadVisible(lead, deals, payments)) throw new Fault("Lead not found.", 404);
+  return row;
 }
 export async function importAssigned(
   q: Queryable,

@@ -5,7 +5,7 @@ import {confirmedLeverage} from './leverage';
 import {impactLine,verifyLink,type Finding as AuditFinding} from '@koinophobia/site-auditor/model';
 import type { Queryable } from "../payments";
 import type { Partner, Deal } from "./types";
-import { scopedLead, scopedDeal, isOptedOut, saveQuote, type TeamLead } from "./store";
+import { scopedLead, visibleLead, scopedDeal, isOptedOut, saveQuote, type TeamLead } from "./store";
 import { Fault, textInput, quoteDraft } from "./domain";
 import { isStandardQuote, quotePaymentLink } from "./payment-links";
 import {
@@ -107,7 +107,7 @@ export async function callState(
   id?: string,
 ): Promise<CallState> {
   const row = id
-    ? await scopedLead(q, p, id)
+    ? await visibleLead(q, p, id)
     : (
         await q.query(
           "select l.* from team_active_leads a join team_leads l on l.id=a.lead_id where a.partner_id=$1 and ($2::text is null or l.partner_id=$2)",
@@ -125,6 +125,10 @@ export async function callState(
     commission: 0,
   };
   if (!row) return empty;
+  if (!id) {
+    try { await visibleLead(q, p, row.id); }
+    catch (e) { if (e instanceof Fault && e.status === 404) return empty; throw e; }
+  }
   const l = shaped(row as unknown as Record<string, unknown>);
   l.opted_out = await isOptedOut(q, l);
   const d = (

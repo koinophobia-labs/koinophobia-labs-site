@@ -44,6 +44,7 @@ export function CallPanel({
   }, [onLeadChange]);
   const generation = useRef(0);
   const lastActive = useRef("");
+  const inspectedLead = useRef<string | null>(null);
   const prepared = useRef(new CallPreparation());
   useEffect(() => {
     if (!slowUntil) return;
@@ -52,7 +53,7 @@ export function CallPanel({
   }, [slowUntil]);
   async function refresh(signal?: AbortSignal) {
     const version = generation.current;
-    const r = await fetch("/team/api/call-state", {
+    const r = await fetch("/team/api/call-state" + (inspectedLead.current ? "?lead=" + encodeURIComponent(inspectedLead.current) : ""), {
       cache: "no-store",
       signal,
     });
@@ -62,7 +63,7 @@ export function CallPanel({
     setState(v);
     setStale(false);
     if (v.lead && v.lead.id !== lastActive.current) {lastActive.current = v.lead.id; callback.current?.(v.lead.id);}
-    if (v.lead) {
+    if (v.lead && !inspectedLead.current) {
       const id = v.lead.id;
       // Preparation never holds polling, navigation or action completion open.
       void prepared.current.run(id, async () => {
@@ -137,6 +138,24 @@ export function CallPanel({
       setBusy(false);
     }
   }
+  async function selectLead(id: string) {
+    const selected = data.leads.find(l => l.id === id);
+    // Retained deals can be inspected without selecting an opted-out contact
+    // for calling or preparing a payment page. Their existing warning stays.
+    if (data.me.role !== "owner" && selected &&
+      (selected.opted_out || selected.recheck?.status === "re-check failed")) {
+      generation.current++;
+      inspectedLead.current = id;
+      setBusy(true);
+      setMessage("");
+      try { await refresh(); }
+      catch { setStale(true); }
+      finally { setBusy(false); }
+    } else {
+      inspectedLead.current = null;
+      await act("active-lead", { id });
+    }
+  }
   const lead = state?.lead,
     deal = state?.deal;
   const paid = deal && ["Client paid", "Delivered"].includes(deal.stage);
@@ -182,11 +201,11 @@ export function CallPanel({
           aria-label="Current call lead"
           value={lead?.id || ""}
           disabled={navigationDisabled}
-          onChange={(e) => void act("active-lead", { id: e.target.value })}
+          onChange={(e) => void selectLead(e.target.value)}
         >
           <option value="">Choose a lead</option>
           {data.leads
-            .filter((l) => !l.opted_out && l.recheck?.status !== "re-check failed")
+            .filter((l) => data.me.role !== "owner" || (!l.opted_out && l.recheck?.status !== "re-check failed"))
             .map((l) => (
               <option key={l.id} value={l.id}>
                 {l.business}

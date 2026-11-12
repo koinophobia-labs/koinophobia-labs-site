@@ -5,6 +5,7 @@ import { hostedPreview, teamDatabase } from "./db";
 import { seed } from "./seed";
 import { scoped } from "./domain";
 import { snapshot, type TeamSnapshot } from "./store";
+import { partnerLeadVisible } from "./lead-visibility";
 export async function currentPartner() {
   const value = (await cookies()).get(cookieName)?.value;
   if (hostedPreview())
@@ -53,7 +54,7 @@ export async function currentSnapshot(): Promise<TeamSnapshot | null> {
       fake: true,
       readonly: true,
       mailingAddress: "",
-      leads: scoped(data, me).leads,
+      leads: scoped(data, me).leads.filter(l => me.role === "owner" || partnerLeadVisible(l, data.deals, data.payments)),
     };
   }
   return snapshot(teamDatabase(), me);
