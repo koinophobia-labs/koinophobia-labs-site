@@ -25,7 +25,7 @@ import { dreamcatcherRelease, trendiRelease, forgetRelease, wayInRelease } from 
 // certified free-launch candidate, while You Know Ball's historical Apple
 // acceptance was preserved without guessing at its current distribution state.
 
-export const universeLastUpdated = "November 10, 2026";
+export const universeLastUpdated = "November 12, 2026";
 
 /** Who owns keeping these statuses honest. Rendered nowhere; asserted in tests. */
 export const statusOwner = "Blake Taylor";
@@ -216,8 +216,9 @@ export const products: Product[] = [
     reach: "public",
     stage: "public",
     status: `Way In is available on the App Store for iPhone and iPad, version ${wayInRelease.version}. The legacy Career Forge web destination now also displays Way In`,
-    verifiedAt: "2026-10-12",
+    verifiedAt: "2026-11-12",
     evidence: [
+      { claim: "Way In: Resume & Job Search is publicly listed, version 2.4, current version released 2026-11-10", source: "https://itunes.apple.com/lookup?id=6807942376&country=us — HTTP 200, one matching app ID, currentVersionReleaseDate 2026-11-10T17:25:29Z, checked 2026-11-12. Listing: https://apps.apple.com/us/app/way-in-resume-job-search/id6807942376. Raw response and verification notes: docs/evidence/WO-0288-freshness-2026-11-12.md." },
       { claim: "Public iPhone and iPad release", source: "https://apps.apple.com/us/app/way-in-career-hub/id6807942376 — public US listing and Apple Lookup API, checked 2026-09-10" },
       { claim: "Legacy web destination remains available under the Way In name", source: "https://career-forge-lite.vercel.app — HTTP 200 and Way In branding, checked 2026-09-10" },
     ],
@@ -272,8 +273,10 @@ export const products: Product[] = [
     reach: "public",
     stage: "public",
     status: `Available on the App Store for iPhone: version ${trendiRelease.version}, ${trendiRelease.minimumOS} or later. Free with optional Trendi Pro`,
-    verifiedAt: "2026-10-12",
-    evidence: [{ claim: "Public release, compatibility, Free and Pro allowances", source: "https://apps.apple.com/us/app/trendi-content-coach/id6776299336 — public US listing and Apple Lookup API, checked 2026-09-10" }],
+    verifiedAt: "2026-11-12",
+    evidence: [
+      { claim: "Trendi: Content Coach is publicly listed, version 2.5, current version released 2026-10-29", source: "https://itunes.apple.com/lookup?id=6776299336&country=us — HTTP 200, one matching app ID, currentVersionReleaseDate 2026-10-29T16:44:34Z, checked 2026-11-12. Listing: https://apps.apple.com/us/app/trendi-content-coach/id6776299336. Raw response and verification notes: docs/evidence/WO-0288-freshness-2026-11-12.md." },
+      { claim: "Public release, compatibility, Free and Pro allowances", source: "https://apps.apple.com/us/app/trendi-content-coach/id6776299336 — public US listing and Apple Lookup API, checked 2026-09-10" }],
     problem:
       "Most creators don't run out of ideas. They stall in the ninety seconds between having one and pressing record, because a thought in your head is not the same thing as words you can say on camera. I watched people abandon good ideas at exactly that gap, including me.",
     thesis:
@@ -311,8 +314,10 @@ export const products: Product[] = [
     reach: "public",
     stage: "public",
     status: `Available on the App Store, version ${forgetRelease.version}. Free for iPhone with an Apple Watch companion; works offline`,
-    verifiedAt: "2026-10-12",
-    evidence: [{ claim: "Public release, devices, and journal features", source: "https://apps.apple.com/us/app/forgetaboutit/id6804360983 — public US listing and Apple Lookup API, checked 2026-09-10" }],
+    verifiedAt: "2026-11-12",
+    evidence: [
+      { claim: "ForgetAboutIt is publicly listed, version 2.4.2, current version released 2026-11-04", source: "https://itunes.apple.com/lookup?id=6804360983&country=us — HTTP 200, one matching app ID, currentVersionReleaseDate 2026-11-04T17:42:49Z, checked 2026-11-12. Listing: https://apps.apple.com/us/app/forgetaboutit/id6804360983. Raw response and verification notes: docs/evidence/WO-0288-freshness-2026-11-12.md." },
+      { claim: "Public release, devices, and journal features", source: "https://apps.apple.com/us/app/forgetaboutit/id6804360983 — public US listing and Apple Lookup API, checked 2026-09-10" }],
     problem: "A thought can disappear before you reach somewhere to write it down. The fragments you do save can be just as hard to find again.",
     thesis: "Make capture quick enough for the moment, then let the day become something you can read back.",
     state: ["Capture by text or speech on iPhone, or speak, scribble, or type on Apple Watch.", "Watch captures queue offline and sync when your iPhone reconnects. Your words stay separate from the app's interpretation.", "The app has no account, analytics, or server. The journal stays on your devices and can be exported from Settings."],
@@ -401,10 +406,10 @@ export const products: Product[] = [
     reach: "public",
     stage: "public",
     status:
-      "Available on both sites as the koi front office, with an existing studio inquiry path",
-    verifiedAt: "2026-10-12",
+      "Public studio inquiry page is available; the former interactive concierge behavior is currently unverified",
+    verifiedAt: "2026-11-12",
     evidence: [
-      { claim: "Public concierge and founder front-office entry points are available", source: "https://koinophobialabs.com/concierge and https://koinophobia.dev — HTTP 200 and public entry points checked 2026-10-12. Historical implementation evidence follows." },
+      { claim: "The public studio inquiry page is reachable; interactive concierge behavior is unverified", source: "https://koinophobialabs.com/concierge redirects to https://koinophobialabs.com/work-with-me (HTTP 200); https://koinophobia.dev redirects to the studio homepage (HTTP 200), checked 2026-11-12. See docs/evidence/WO-0288-freshness-2026-11-12.md. Historical implementation evidence follows." },
       {
         claim: "The front office leads the studio's concierge page",
         source:
@@ -426,9 +431,9 @@ export const products: Product[] = [
     thesis:
       "An assistant at the front desk should extract, clarify, and route — never invent. Deterministic understanding first, one question at a time, and nothing leaves the page until the visitor says send.",
     state: [
-      "Runs on both domains as the koi companion's front office: a messy first message becomes clarifying questions, then a structured brief the visitor can edit, then an honest recommendation.",
-      "On the studio site it fills the exact same intake pipeline as the form — no shadow schema, no second lead system. On this site it collects no contact information at all, and hands hire-intent to the studio with the context carried over.",
-      "It refuses honestly. A budget that doesn't fit is told a smaller or outside solution is the better call, and a question the site's own data can't answer gets a clarification instead of a guess.",
+      "July 2026 implementation history: Ran on both domains as the koi companion's front office: a messy first message becomes clarifying questions, then a structured brief the visitor can edit, then an honest recommendation.",
+      "July 2026 implementation history: On the studio site it fills the exact same intake pipeline as the form — no shadow schema, no second lead system. On this site it collects no contact information at all, and hands hire-intent to the studio with the context carried over.",
+      "July 2026 implementation history: It refuses honestly. A budget that doesn't fit is told a smaller or outside solution is the better call, and a question the site's own data can't answer gets a clarification instead of a guess.",
       "Days after shipping it, I audited it like a stranger and scored it 63 out of 100 — the front door was hidden behind an unlabeled fish. Nine fixes later, every existing help CTA opens it directly and the koi wears a label.",
     ],
     decisions: [
@@ -463,9 +468,9 @@ export const products: Product[] = [
     identity: { theme: "cave", register: "Quiet · local-first, unlisted" },
     reach: "internal",
     stage: "local",
-    status: "Private development project. No public download is offered here; the technical build record below is dated July 2026",
-    verifiedAt: "2026-10-12",
-    evidence: [{ claim: "Public site offers a development record, not a download", source: "https://koinophobia.dev/products/koi-cave — now HTTP 308-redirects to https://koinophobialabs.com/log (HTTP 200), which presents a Koi Cave development record and no Koi Cave download (checked 2026-10-12). Technical notes below are preserved as July 26, 2026 history; no newer binary or signing claim is made." }],
+    status: "Private project for supervised local work, as described by its current repository. No public download is offered here; the technical build record below is dated July 2026",
+    verifiedAt: "2026-11-12",
+    evidence: [{ claim: "Public site offers a development record, not a download", source: "https://koinophobia.dev/products/koi-cave — now HTTP 308-redirects to https://koinophobialabs.com/log (HTTP 200), which presents a Koi Cave development record and no Koi Cave download (checked 2026-11-12). README.md at koi-cave commit cace618, inspected 2026-11-12, describes private supervised local work with release/live actions gated; runtime health is unverified. See docs/evidence/WO-0288-freshness-2026-11-12.md. Technical notes below are preserved as July 26, 2026 history; no newer binary or signing claim is made." }],
     problem:
       "Every tool that promises to organize your work wants your work on its servers, on a subscription, forever. I wanted the leverage without renting my own context back from someone else.",
     thesis:
@@ -634,17 +639,18 @@ export const products: Product[] = [
     identity: { theme: "school", register: "macOS" },
     reach: "public",
     stage: "public",
-    status: "Old Dog 1.1.0 is public on the Mac App Store; current version released 2026-10-08",
-    verifiedAt: "2026-10-12",
+    status: "Old Dog is public on the App Store; Apple’s lookup reports version 2.1, current version released 2026-11-05",
+    verifiedAt: "2026-11-12",
     evidence: [
+      { claim: "Old Dog is publicly listed, version 2.1, current version released 2026-11-05", source: "https://itunes.apple.com/lookup?id=6813966822&country=us&entity=macSoftware — HTTP 200, one matching app ID, currentVersionReleaseDate 2026-11-05T07:46:38Z, checked 2026-11-12. Listing: https://apps.apple.com/us/app/old-dog/id6813966822. Raw response and verification notes: docs/evidence/WO-0288-freshness-2026-11-12.md." },
       {
-        claim: "Public macOS release, version 1.1.0, current version released 2026-10-08",
+        claim: "October 2026 history: Public macOS release, version 1.1.0, current version released 2026-10-08",
         source: "https://apps.apple.com/us/app/old-dog/id6813966822 — Apple's public developer-account lookup, verified by Blake 2026-10-12",
       },
     ],
     problem: "",
     thesis: "",
-    state: ["Version 1.1.0 is available for macOS."],
+    state: ["Apple’s public lookup reports version 2.1; a separate current Mac binary version was not verified by this lookup."],
     decisions: [],
     learned: "",
     actions: [
@@ -660,20 +666,21 @@ export const products: Product[] = [
     reach: "public",
     stage: "public",
     status:
-      "Version 1.0 is public on the App Store for iOS and iPadOS, released 2026-09-22",
-    verifiedAt: "2026-10-12",
+      "Version 2.2 is public on the App Store for iOS and iPadOS, current version released 2026-10-31",
+    verifiedAt: "2026-11-12",
     evidence: [
+      { claim: "Preaching to the Choir is publicly listed, version 2.2, current version released 2026-10-31", source: "https://itunes.apple.com/lookup?id=6808442357&country=us — HTTP 200, one matching app ID, currentVersionReleaseDate 2026-10-31T07:24:47Z, checked 2026-11-12. Listing: https://apps.apple.com/us/app/preaching-to-the-choir/id6808442357. Raw response and verification notes: docs/evidence/WO-0288-freshness-2026-11-12.md." },
       {
-        claim: "Public iOS and iPadOS release, version 1.0, released 2026-09-22",
+        claim: "September 2026 history: Public iOS and iPadOS release, version 1.0, released 2026-09-22",
         source: "https://apps.apple.com/us/app/preaching-to-the-choir/id6808442357 — Apple's public developer-account lookup, verified by Blake 2026-10-12",
       },
       {
-        claim: "Build 66 is approved for external testing with a public join link",
+        claim: "September 2026 history: Build 66 is approved for external testing with a public join link",
         source:
           "docs/release/Release-verification.md in preaching-to-the-choir: Apple reports VALID, APPROVED, IN_BETA_TESTING; public link https://testflight.apple.com/join/1eUCSez8, read 2026-09-13",
       },
       {
-        claim: "The preflight suite passes",
+        claim: "September 2026 history: The preflight suite passes",
         source: "docs/release/Release-verification.md: 543 tests, 1 skip, 0 failures; implementation through Slice 38 (98a885c)",
       },
     ],

@@ -247,6 +247,16 @@
     "vendor/koinophobia-site-auditor-2.1.3.tgz",
     "vendor/koinophobia-site-auditor-2.1.4-fulfillment.1.tgz",
     "vendor/koinophobia-site-auditor-2.1.4.tgz",
-    "vercel.json"
-  ]
+    "vercel.json",
+    "docs/evidence/WO-0288-freshness-2026-11-12.md"
+  ],
+  "evidenceRefresh": {
+    "authorization": "Blake, 2026-11-12: reverify seven stale product entries in WO-0288 scope",
+    "paths": [
+      "lib/dev/universe.ts",
+      "lib/releases.ts",
+      "docs/evidence/WO-0288-freshness-2026-11-12.md"
+    ],
+    "freshnessPolicy": "unchanged"
+  }
 }
