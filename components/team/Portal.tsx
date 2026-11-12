@@ -205,6 +205,7 @@ export function Portal({
                 {screen === id && <span className="nav-dot" />}
               </Link>
             ))}
+          {owner && <Link href="/team/affiliates"><Wallet size={18} /><span>App Store affiliates</span></Link>}
         </nav>
         <div className="team-sidebar-bottom">
           <div className="team-avatar">{data.me.name.slice(0, 1)}</div>

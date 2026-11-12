@@ -62,6 +62,7 @@ const nextConfig: NextConfig = {
   // External browser packages load runtime assets through dynamic paths. Trace them explicitly.
   outputFileTracingIncludes: {
     '/api/appstore/*': ['./lib/appstore/certs/*.cer'],
+    '/team/api/apple-payment-received': ['./lib/appstore/certs/*.cer'],
     '/api/jobs/*': [
       './node_modules/@koinophobia/site-auditor/dist/**/*',
       './node_modules/playwright-core/**/*',

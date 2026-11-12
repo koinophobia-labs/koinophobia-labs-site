@@ -52,7 +52,7 @@ export async function applyTrueUp(q:Queryable,t:FinancialTransaction,calculation
   });
 }
 export async function reconcileFinancial(q:Queryable,raw:Buffer,month:string,source:string,fx=exchangeRate) {
-  if(!/^\d{4}-\d{2}$/.test(month))throw Error('FINANCE_MONTH_INVALID');
+  if(!/^\d{4}-(0[1-9]|1[0-2])$/.test(month))throw Error('FINANCE_MONTH_INVALID');
   if((await q.query("select 1 from appstore_payouts where status in ('pending','review') limit 1")).rows.length)throw Error('FINANCE_WAITING_FOR_TRANSFER_CONFIRMATION');
   const reportHash=hash(raw),rows=parseFinancialReport(raw.toString('utf8'));
   const seen=(await q.query('select 1 from appstore_financial_reports where report_hash=$1',[reportHash])).rows.length;
@@ -60,11 +60,15 @@ export async function reconcileFinancial(q:Queryable,raw:Buffer,month:string,sou
   if(seen&&latest?.report_hash!==reportHash)return {status:'superseded_report',matched:0,held:0};
   await q.query('insert into appstore_financial_reports(report_hash,fiscal_month,source,row_count) values($1,$2,$3,$4) on conflict do nothing',[reportHash,month,source,rows.length]);
   const configured=apps();let matched=0,held=0;
+  // Fiscal periods come from Apple, never from Gregorian month boundaries.
+  const start=rows.map(r=>r.start).sort()[0],end=rows.map(r=>r.end).sort().at(-1);
   const transactions=(await q.query("select t.* from appstore_transactions t where affiliate_id='messiah' and environment='Production' and not revoked and price_milliunits>0 and (reason is null or reason in ('proceeds_unverified','proceeds_unavailable','proceeds_mismatch','fx_unavailable','financial_match_ambiguous')) order by purchase_ms,transaction_id")).rows as FinancialTransaction[];
   const known=(await q.query("select t.* from appstore_transactions t where environment='Production' and price_milliunits>0")).rows as FinancialTransaction[];
   const groups=new Map<string,number>();
   for(const t of known){const app=configured.find(a=>a.key===t.app);if(!app)continue;const m=matchFinancial(t,rows,app.appAppleId);if(m)groups.set(m.groupKey,(groups.get(m.groupKey)||0)+1);}
   for(const t of transactions){
+    const day=new Date(Number(t.purchase_ms)).toISOString().slice(0,10);
+    if(!start||!end||day<start||day>end)continue;
     if((await q.query('select 1 from appstore_financial_matches where transaction_id=$1 and report_hash=$2',[t.transaction_id,reportHash])).rows.length)continue;
     // A transaction settled in one fiscal report cannot consume another month.
     if((await q.query('select 1 from appstore_financial_matches where transaction_id=$1 and fiscal_month<>$2',[t.transaction_id,month])).rows.length)continue;
@@ -81,13 +85,19 @@ export async function reconcileFinancial(q:Queryable,raw:Buffer,month:string,sou
   await q.query("update appstore_financial_reports set status=$2 where report_hash=$1",[reportHash,held?'complete_with_holds':'complete']);
   return {status:held?'complete_with_holds':'complete',matched,held};
 }
-export async function monthlyTrueUp(database:Pool) {
+export async function fetchFinancialMonth(month:string) {
+  if(!/^\d{4}-(0[1-9]|1[0-2])$/.test(month))throw Error('FINANCE_MONTH_INVALID');
   const vendor=required('APPSTORE_VENDOR_NUMBER');if(!/^\d{5,20}$/.test(vendor))throw Error('FINANCE_VENDOR_INVALID');
+  const query=new URLSearchParams({'filter[reportType]':'FINANCE_DETAIL','filter[regionCode]':'Z1','filter[reportDate]':month,'filter[vendorNumber]':vendor});
+  const data=await appleRequest('/v1/financeReports?'+query,true);
+  const raw=data[0]===0x1f&&data[1]===0x8b?gunzipSync(data,{maxOutputLength:32_000_000}):data;
+  return {raw,source:'https://api.appstoreconnect.apple.com/v1/financeReports?reportType=FINANCE_DETAIL&regionCode=Z1&reportDate='+month};
+}
+export async function monthlyTrueUp(database:Pool) {
   const now=new Date(),months=[1,2,3].map(n=>new Date(Date.UTC(now.getUTCFullYear(),now.getUTCMonth()-n,1)).toISOString().slice(0,7));
   const result=[];
-  for(const month of months){const query=new URLSearchParams({'filter[reportType]':'FINANCE_DETAIL','filter[regionCode]':'Z1','filter[reportDate]':month,'filter[vendorNumber]':vendor});
-    let data:Buffer;try{data=await appleRequest('/v1/financeReports?'+query,true);}catch(e){if(e instanceof Error&&e.message==='ASC_HTTP_404'){result.push({month,status:'not_available'});continue;}throw e;}
-    const raw=data[0]===0x1f&&data[1]===0x8b?gunzipSync(data,{maxOutputLength:32_000_000}):data;
-    result.push({month,...await locked(database,q=>reconcileFinancial(q,raw,month,'https://api.appstoreconnect.apple.com/v1/financeReports?reportType=FINANCE_DETAIL&regionCode=Z1&reportDate='+month))});
+  for(const month of months){
+    let report;try{report=await fetchFinancialMonth(month);}catch(e){if(e instanceof Error&&e.message==='ASC_HTTP_404'){result.push({month,status:'not_available'});continue;}throw e;}
+    result.push({month,...await locked(database,q=>reconcileFinancial(q,report.raw,month,report.source))});
   }return result;
 }

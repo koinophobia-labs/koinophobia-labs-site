@@ -29,10 +29,10 @@ export async function accrue(q: Queryable, event:VerifiedEvent, fx=exchangeRate,
 export function transfersEnabled() {
   return process.env.APPSTORE_TRANSFERS_ENABLED==='true' && process.env.VERCEL_ENV==='production' && process.env.STRIPE_CONNECT_MODE==='live';
 }
-async function refresh(q: Queryable) {
+export async function refresh(q: Queryable, transactionIds?:string[]) {
   // Recheck held/unpaid charges before any delayed transfer. Never replay stale
   // cached entitlement data after onboarding, missing FX or a balance failure.
-  const rows=(await q.query(`select t.* from appstore_transactions t where t.environment='Production' and t.affiliate_id='messiah' and not t.revoked and t.price_milliunits>0 order by t.verified_at limit 25`)).rows;
+  const rows=(await q.query(`select t.* from appstore_transactions t where t.environment='Production' and t.affiliate_id='messiah' and not t.revoked and t.price_milliunits>0 and ($1::text[] is null or t.transaction_id=any($1::text[])) order by t.verified_at limit $2`,[transactionIds??null,transactionIds?transactionIds.length:25])).rows;
   const configured=apps();
   const verifiedIds=new Set<string>();
   for (const row of rows) {
@@ -53,14 +53,15 @@ export async function receive(signed:string,database:Pool,dependencies:{verify?:
   const event=await (dependencies.verify||verifyEvent)(signed);
   await locked(database,async q=>{
     await accrue(q,event,dependencies.fx||exchangeRate,dependencies.published||publishedProceeds);
-    // This charge has just passed both Apple signature and Server API checks.
-    // Do not place it behind the bounded historical refresh queue.
-    if (transfersEnabled()) { const ids=new Set<string>();if(!eligibility(event))ids.add(event.transaction!.transactionId!);await drain(q,(dependencies.client||connectStripe)(),Date.now(),ids); }
+    // A sale records earned money only. Connecting Stripe never releases it.
+    // Refund maintenance may recover/reverse existing transfers, never create one.
+    if (['REFUND','REVOKE'].includes(event.type) && transfersEnabled())
+      await drain(q,(dependencies.client||connectStripe)());
   });
 }
 export async function reconcile(database:Pool) {
   await locked(database,async q=>{
-    const ids=await refresh(q);
-    if (transfersEnabled()) await drain(q,connectStripe(),Date.now(),ids);
+    await refresh(q);
+    if (transfersEnabled()) await drain(q,connectStripe());
   });
 }
