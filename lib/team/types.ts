@@ -1,4 +1,4 @@
-export type Role = "owner" | "partner";
+export type Role = "owner" | "partner" | "affiliate";
 export interface Partner {
   id: string;
   name: string;

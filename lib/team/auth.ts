@@ -114,7 +114,7 @@ export function actor(
     role: row.role as Partner["role"],
     active: row.active === true,
     parent_partner_id: row.parent_partner_id as string | null,
-    commission_rate: 0.4,
+    commission_rate: row.role === "affiliate" ? 0.25 : 0.4,
     override_rate: Number(row.override_rate),
   };
 }
@@ -139,6 +139,19 @@ export async function invite(
   input: Record<string, unknown>,
 ) {
   owner(p);
+  if (input.role === "affiliate") {
+    const affiliateId = textInput(input.affiliate_id, "Affiliate", true, 80);
+    const affiliate = (await q.query("select id,partner_id,rate_bps,commission_basis from appstore_affiliates where id=$1 for update", [affiliateId])).rows[0];
+    if (!affiliate || affiliate.partner_id || Number(affiliate.rate_bps) !== 2500 || affiliate.commission_basis !== 'apple_proceeds')
+      throw new Fault("Affiliate link needs owner review.", 409);
+    if (input.parent_partner_id) throw new Fault("Affiliates cannot be assigned to a sales partner.");
+    const id = randomUUID(), code = token();
+    await q.query(`insert into team_partners(id,name,email,role,invite_hash,invite_expires_at)
+      values($1,$2,$3,'affiliate',$4,now()+interval '7 days')`,
+      [id,textInput(input.name,"Name",true,120),emailInput(input.email),digest(code)]);
+    await q.query("update appstore_affiliates set partner_id=$1 where id=$2", [id,affiliateId]);
+    return {id,code};
+  }
   const code = token(),
     id = randomUUID();
   const parent =
@@ -224,10 +237,10 @@ export async function requestMagicLink(
   q: Queryable,
   email: string,
   origin: string,
-  send = sendMagicLink,
+  send: (email: string, url: string, role?: string) => Promise<{messageId: string | null} | void> = sendMagicLink,
 ) {
   const row = (
-    await q.query("select id from team_partners where email=$1 and active", [
+    await q.query("select id,role from team_partners where email=$1 and active", [
       email,
     ])
   ).rows[0];
@@ -246,14 +259,14 @@ export async function requestMagicLink(
     [digest(value), row.id],
   );
   try {
-    await send(email, `${origin}/team?token=${encodeURIComponent(value)}`);
+    return await send(email, `${origin}/team?token=${encodeURIComponent(value)}`, row.role);
   } catch {
     // A timeout may follow provider acceptance. Keep the link valid and the
     // cooldown claimed: immediately retrying could deliver a second email.
     throw new Fault("Login email unavailable. Try again later.", 503);
   }
 }
-async function sendMagicLink(email: string, url: string) {
+async function sendMagicLink(email: string, url: string, role?: string) {
   if (process.env.VERCEL_ENV !== "production" || !mailConfigured())
     throw Error("Email is disabled outside production.");
   const response = await fetch("https://api.resend.com/emails", {
@@ -268,11 +281,13 @@ async function sendMagicLink(email: string, url: string) {
       reply_to: loginSender(),
       to: email,
       subject: "Sign in to your Koinophobia Labs team portal",
-      text: `Hello,\n\nYou requested access to your Koinophobia Labs team portal, where you can manage your leads, pipeline and commissions.\n\nUse this personal sign-in link within 15 minutes:\n${url}\n\nThis link works once. Keep it private. If you did not request it, you can ignore this email; no action is needed.\n\nNeed help? Reply to this email.\n\nKoinophobia Labs`,
+      text: `Hello,\n\nYou requested access to your Koinophobia Labs team portal, where you can ${role === "affiliate" ? "view your affiliate sales, earnings and payout progress" : "manage your leads, pipeline and commissions"}.\n\nUse this personal sign-in link within 15 minutes:\n${url}\n\nThis link works once. Keep it private. If you did not request it, you can ignore this email; no action is needed.\n\nNeed help? Reply to this email.\n\nKoinophobia Labs`,
     }),
     signal: AbortSignal.timeout(10000),
   });
   if (!response.ok) throw Error("Email provider rejected login request.");
+  const receipt = await response.json();
+  return { messageId: typeof receipt.id === "string" ? receipt.id : null };
 }
 function loginSender() {
   const configured = process.env.CONTACT_FROM_EMAIL!.trim();

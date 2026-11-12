@@ -5,7 +5,8 @@ import {visibleLead} from '@/lib/team/store';
 import {Fault} from '@/lib/team/domain';
 export const runtime='nodejs';
 export async function GET(_request:Request,{params}:{params:Promise<{id:string;index:string}>}){
-  const p=await currentPartner();if(!p||hostedPreview())return new Response(null,{status:401});
+  const p=await currentPartner();if (p?.role === "affiliate") return new Response(null, {status:404});
+  if(!p||hostedPreview())return new Response(null,{status:401});
   const {id,index}=await params;const i=Number(index);
   if(!Number.isInteger(i)||i<0||i>30)return new Response(null,{status:404});
   let row;

@@ -15,6 +15,7 @@ export async function GET(request: Request) {
         { error: "Please sign in." },
         { status: 401, headers },
       );
+    if (p.role === "affiliate") return Response.json({error:"Not found."}, {status:404, headers});
     if (hostedPreview())
       return Response.json(
         { error: "Read-only preview." },

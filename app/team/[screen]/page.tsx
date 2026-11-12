@@ -1,7 +1,7 @@
 import { JobBoard } from "@/components/team/JobBoard";
 import {CallPanel} from "@/components/team/CallPanel";
 import { notFound, redirect } from "next/navigation";
-import { currentSnapshot } from "@/lib/team/session";
+import { currentPartner, currentSnapshot } from "@/lib/team/session";
 import { Portal } from "@/components/team/Portal";
 import { cookies } from "next/headers";
 import { cookieName, passwordState } from "@/lib/team/auth";
@@ -26,6 +26,8 @@ export default async function Screen({
     ].includes(screen)
   )
     notFound();
+  const partner = await currentPartner();
+  if (partner?.role === "affiliate") notFound();
   const data = await currentSnapshot();
   if (!data) redirect("/team");
   if (screen === "admin" && data.me.role !== "owner") notFound();

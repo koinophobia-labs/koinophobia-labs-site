@@ -93,11 +93,11 @@ async function atomic<T>(q: Queryable, work: () => Promise<T>) {
   }
 }
 async function partnerRow(q: Queryable, actor: Partner) {
-  if (actor.role !== "partner" || !actor.active)
+  if (!["partner", "affiliate"].includes(actor.role) || !actor.active)
     throw new Fault("Only active partners can connect their own Stripe.", 403);
   const p = (
     await q.query(
-      "select id from team_partners where id=$1 and active and role='partner'",
+      "select id from team_partners where id=$1 and active and role in ('partner','affiliate')",
       [actor.id],
     )
   ).rows[0];
@@ -165,7 +165,7 @@ export async function onboard(
       !["localhost", "127.0.0.1"].includes(base.hostname)
     )
       throw Error("CONNECT_ORIGIN_INVALID");
-    const url = base.origin + "/team/commissions";
+    const url = base.origin + (actor.role === "affiliate" ? "/team/affiliate" : "/team/commissions");
     const link = await client.accountLinks.create({
       account: a.stripe_account_id,
       type: "account_onboarding",

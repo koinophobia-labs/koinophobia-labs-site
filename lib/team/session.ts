@@ -19,7 +19,7 @@ export async function currentPartner() {
 }
 export async function currentSnapshot(): Promise<TeamSnapshot | null> {
   const me = await currentPartner();
-  if (!me) return null;
+  if (!me || me.role === "affiliate") return null;
   if (hostedPreview()) {
     const data = seed(true);
     data.site_checks.push({

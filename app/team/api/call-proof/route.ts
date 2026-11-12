@@ -4,6 +4,7 @@ import { visibleLead, type TeamLead } from "@/lib/team/store";
 import { leadProof } from "@/lib/team/call-store";
 export async function GET(request: Request) {
   const p = await currentPartner();
+  if (p?.role === "affiliate") return new Response(null, {status:404});
   if (!p || hostedPreview()) return new Response(null, { status: 401 });
   try {
     const q = teamDatabase();

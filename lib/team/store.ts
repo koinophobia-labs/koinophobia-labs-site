@@ -1,3 +1,4 @@
+import { requireSalesPartner } from "./affiliate-access";
 import { isStandardQuote } from "./payment-links";
 import { partnerLeadVisible } from "./lead-visibility";
 import { connectEnabled } from "./connect-client";
@@ -75,6 +76,7 @@ export async function snapshot(
   q: Queryable,
   p: Partner,
 ): Promise<TeamSnapshot> {
+  requireSalesPartner(p);
   const scope = p.role === "owner" ? null : p.id;
   const leads = (
     await q.query(
@@ -176,6 +178,7 @@ export async function scopedDeal(
   id: string,
   lock = false,
 ) {
+  requireSalesPartner(p);
   const r = await q.query(
     `select * from team_deals where id=$1 and ($2::text is null or partner_id=$2)${lock ? " for update" : ""}`,
     [id, p.role === "owner" ? null : p.id],
@@ -184,6 +187,7 @@ export async function scopedDeal(
   return r.rows[0] as Deal;
 }
 export async function scopedLead(q: Queryable, p: Partner, id: string) {
+  requireSalesPartner(p);
   const r = await q.query(
     "select * from team_leads where id=$1 and ($2::text is null or partner_id=$2)",
     [id, p.role === "owner" ? null : p.id],

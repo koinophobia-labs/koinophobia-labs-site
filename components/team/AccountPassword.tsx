@@ -2,7 +2,8 @@
 import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 
-export function AccountPassword({ state, readonly }: {
+export function AccountPassword({ state, readonly, home = "/team/leads" }: {
+  home?: string;
   state: { hasPassword: boolean; canReset: boolean; prompt: boolean };
   readonly: boolean;
 }) {
@@ -22,7 +23,7 @@ export function AccountPassword({ state, readonly }: {
       const result = await response.json();
       if (!response.ok) throw Error(result.error);
       form?.reset();
-      if (action === "password-prompt-dismiss") router.push("/team/leads");
+      if (action === "password-prompt-dismiss") router.push(home);
       else setMessage("Password saved. Your other sessions have been signed out.");
       router.refresh();
     } catch (error) {

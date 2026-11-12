@@ -25,7 +25,7 @@ export function owner(p: Partner) {
   if (p.role !== "owner") throw new Fault("Only Blake can do that.", 403);
 }
 export function visible(p: Partner, partnerId: string) {
-  return p.role === "owner" || p.id === partnerId;
+  return p.active && (p.role === "owner" || (p.role === "partner" && p.id === partnerId));
 }
 export function getDeal(db: Data, p: Partner, id: string) {
   const d = db.deals.find((d) => d.id === id && visible(p, d.partner_id));

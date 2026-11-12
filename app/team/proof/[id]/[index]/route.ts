@@ -2,7 +2,8 @@ import {currentPartner} from '@/lib/team/session';
 import {teamDatabase,hostedPreview} from '@/lib/team/db';
 export const runtime='nodejs';
 export async function GET(_request:Request,{params}:{params:Promise<{id:string;index:string}>}){
- const p=await currentPartner();if(!p||hostedPreview())return new Response(null,{status:401});
+ const p=await currentPartner();if (p?.role === "affiliate") return new Response(null, {status:404});
+  if(!p||hostedPreview())return new Response(null,{status:401});
  const {id,index}=await params;const i=Number(index);
  if(!Number.isInteger(i)||i<0||i>30)return new Response(null,{status:404});
  const row=(await teamDatabase().query('select data from team_site_checks where id=$1 and ($2::text is null or partner_id=$2)',[id,p.role==='owner'?null:p.id])).rows[0];

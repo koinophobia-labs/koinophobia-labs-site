@@ -1,3 +1,4 @@
+import { partnerHome } from "@/lib/team/affiliate-access";
 import { redirect } from "next/navigation";
 import { currentPartner } from "@/lib/team/session";
 import { hostedPreview } from "@/lib/team/db";
@@ -10,7 +11,8 @@ export default async function Team({
 }) {
   const { token } = await searchParams;
   // A reset link must work even if the browser is already signed in.
-  if (!token && await currentPartner()) redirect("/team/leads");
+  const partner = !token ? await currentPartner() : null;
+  if (partner) redirect(partnerHome(partner));
   return (
     <Login
       preview={hostedPreview()}

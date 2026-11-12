@@ -1,3 +1,4 @@
+import { requireSalesPartner } from './affiliate-access';
 import {plainFinding, sayFinding, slowSeconds, storedProblemFinding} from "./plain-findings";
 import {slowSiteScript} from "./scripts";
 import { randomInt, randomUUID, createHash } from "node:crypto";
@@ -106,6 +107,7 @@ export async function callState(
   p: Partner,
   id?: string,
 ): Promise<CallState> {
+  requireSalesPartner(p);
   const row = id
     ? await visibleLead(q, p, id)
     : (
@@ -400,6 +402,7 @@ export async function paidCallDeal(q: Queryable, dealId: string) {
   );
 }
 export async function callInbox(q: Queryable, p: Partner) {
+  requireSalesPartner(p);
   const scope = p.role === "owner" ? null : p.id;
   const followups = (
     await q.query(

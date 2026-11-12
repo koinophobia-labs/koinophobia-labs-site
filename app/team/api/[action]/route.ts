@@ -1,4 +1,5 @@
 import { savePartnerTimeZone } from "@/lib/team/time-zone-store";
+import { partnerHome, requirePartnerAction } from "@/lib/team/affiliate-access";
 import {activeLead,prepareCall,switchCallOffer,saveCell,recordOutcome,publishDeal} from "@/lib/team/call-store";
 import { actionRateLimit } from "@/lib/team/action-limits";
 import {
@@ -15,6 +16,7 @@ import { cookies } from "next/headers";
 import { hostedPreview, teamDatabase, transaction } from "@/lib/team/db";
 import {
   cookieName,
+  sessionActor,
   cookieOptions,
   rateLimit,
   RateLimitFault,
@@ -119,7 +121,8 @@ export async function POST(
         const session = await transaction((q) => consumeMagicLink(q, value));
         jar.set(cookieName, session, cookieOptions);
         const state = await passwordState(db, session);
-        return ok({ ok: true, next: state.prompt || state.hasPassword ? "/team/account" : "/team/leads" });
+        const signedIn = await sessionActor(db, session);
+        return ok({ ok: true, next: signedIn?.role === "affiliate" ? partnerHome(signedIn) : state.prompt || state.hasPassword ? "/team/account" : "/team/leads" });
       }
       const email = emailInput(body.email);
       await rateLimit(db, "login-email:" + email);
@@ -153,10 +156,12 @@ export async function POST(
         ),
       );
       jar.set(cookieName, session, cookieOptions);
-      return ok({ ok: true });
+      const signedIn = await sessionActor(db, session);
+      return ok({ ok: true, next: signedIn ? partnerHome(signedIn) : "/team" });
     }
     const p = await currentPartner();
     if (!p) throw new Fault("Please sign in.", 401);
+    requirePartnerAction(p, action);
     await actionRateLimit(teamDatabase(), p.id, action);
     if (action === "time-zone") return ok(await transaction(q => savePartnerTimeZone(q, p, body.timeZone)));
     if (action === "password") {
