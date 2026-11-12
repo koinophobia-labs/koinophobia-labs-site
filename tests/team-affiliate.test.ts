@@ -14,12 +14,15 @@ import { invite, requestMagicLink } from '../lib/team/auth';
 import { onboard } from '../lib/team/connect';
 import type { Partner } from '../lib/team/types';
 import type Stripe from 'stripe';
+import {snapshot,scopedLead,scopedDeal} from '../lib/team/store';
+import {callState,callInbox} from '../lib/team/call-store';
+import type {Queryable} from '../lib/payments';
 
 const partner = (id: string, role: Partner['role'] = 'affiliate'): Partner => ({
   id, name: 'Fictional affiliate', role, active: true, parent_partner_id: null, commission_rate: .25, override_rate: 0,
 });
 
-test('affiliate access denies sales capabilities and preserves owner/caller navigation', () => {
+test('affiliate access denies sales capabilities and preserves owner/caller navigation', async () => {
   const p = partner('fake-a');
   assert.equal(partnerHome(p), '/team/affiliate');
   for (const role of ['owner', 'partner'] as const) {
@@ -35,6 +38,9 @@ test('affiliate access denies sales capabilities and preserves owner/caller navi
   assert.deepEqual(Object.values(AFFILIATE_STATUSES), ["Earned (awaiting Apple's payment)", 'Paid', 'Adjusted (monthly true-up)', 'Refunded']);
   assert.equal(affiliateLinks('messiah').length, 7);
   assert.equal(affiliateLinks('unrelated').length, 0);
+  const noReads={query:async()=>{throw Error('Sales query must not run for an affiliate');}} as unknown as Queryable;
+  for(const read of [()=>snapshot(noReads,p),()=>scopedLead(noReads,p,'guessed'),()=>scopedDeal(noReads,p,'guessed'),()=>callState(noReads,p),()=>callInbox(noReads,p)])
+    await assert.rejects(read(),/Not found/);
 });
 
 test('affiliate real PostgreSQL isolation, balances, invite and own Connect onboarding', async t => {
@@ -79,7 +85,7 @@ test('affiliate real PostgreSQL isolation, balances, invite and own Connect onbo
       assert.equal(a.sales[0].status,'adjusted'); assert.equal(a.sales[0].amount,-100);
       await db.query("update appstore_transactions set revoked=true where transaction_id='private-a'; update appstore_commissions set revoked=true where transaction_id='private-a'");
       a=await affiliateSnapshot(db,partner('fake-a'),now); assert.equal(a.earned,0); assert.equal(a.owedBack,1000);
-      assert.ok(a.sales.some(s=>s.status==='refunded'&&s.amount<0));
+      assert.ok(a.sales.some(s=>s.status==='refunded'&&s.amount===-900));
       await db.query("insert into appstore_reversals(transaction_id,payout_key,operation_key,transfer_id,usd_cents,status) values('private-b','fake-b-paid','fake-b-reversal','tr_fake_b',99000,'done')");
       assert.equal((await affiliateSnapshot(db,partner('fake-a'),now)).owedBack,1000);
     });

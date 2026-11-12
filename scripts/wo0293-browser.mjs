@@ -57,6 +57,18 @@ try {
   const own=await desktop.request.get(base+'/team/api/affiliate?affiliate_id=other-fixture&partner_id=affiliate-b');assert.equal(own.status(),200);
   const data=await own.json();assert.equal(data.earned,990);assert.equal(data.owedBack,710);assert.equal(data.links.length,7);
   assert.doesNotMatch(JSON.stringify(data),/original-private|other-secret|transaction_id|affiliate-b|stripe_account_id|email/);
+  // Both real sign-in branches must land on the affiliate page, including the
+  // one-use link that the authorized invitation will use in production.
+  const auth=await browser.newContext();
+  await db.query("update team_partners set password_hash=(select password_hash from team_partners where id='demo-a') where id='affiliate-a'");
+  const passwordLogin=await auth.request.post(base+'/team/api/login',{headers:{origin:base},data:{email:'affiliate-a@example.test',password:'fake-portal-test-password'}});
+  assert.equal(passwordLogin.status(),200);assert.equal((await passwordLogin.json()).next,'/team/affiliate');
+  const magicToken='fictional-wo0293-one-use-link';
+  await db.query("insert into team_login_tokens(token_hash,partner_id,expires_at) values($1,'affiliate-a',now()+interval '15 minutes')",[hash(magicToken)]);
+  const magicLogin=await auth.request.post(base+'/team/api/consume',{headers:{origin:base},data:{token:magicToken}});
+  assert.equal(magicLogin.status(),200);assert.equal((await magicLogin.json()).next,'/team/affiliate');
+  assert.equal((await auth.request.post(base+'/team/api/consume',{headers:{origin:base},data:{token:magicToken}})).status(),401);
+  await auth.close();
   await page.bringToFront();
   await page.getByRole('button',{name:'Copy Trendi: Content Coach redemption link'}).click();
   assert.equal(await page.evaluate(()=>Promise.race([navigator.clipboard.readText(),new Promise((_,reject)=>setTimeout(()=>reject(Error('Clipboard read timed out')),3000))])),data.links[0].url);

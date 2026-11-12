@@ -43,7 +43,7 @@ export async function affiliateSnapshot(q: Queryable, partner: Partner, now = ne
     ), events as (
       select t.app,t.product_id,
         case when t.revoked then coalesce((select max(n.verified_at) from appstore_notifications n where n.transaction_id=t.transaction_id and n.kind in ('REFUND','REVOKE')),t.verified_at) else to_timestamp(t.purchase_ms/1000.0) end date,
-        case when t.revoked then -t.usd_cents else t.usd_cents end amount,
+        case when t.revoked then -(t.usd_cents+coalesce((select sum(a.usd_cents) from appstore_adjustments a where a.transaction_id=t.transaction_id),0)) else t.usd_cents end amount,
         case when t.revoked then 'refunded' when exists(select 1 from appstore_payouts p where p.transaction_id=t.transaction_id and p.status='done' and p.usd_cents>0) then 'paid' else 'earned' end status
       from owned t
       union all
