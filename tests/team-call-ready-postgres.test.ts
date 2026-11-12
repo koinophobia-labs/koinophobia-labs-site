@@ -114,6 +114,7 @@ test("WO-0276 real PostgreSQL call readiness", async (t) => {
         const lead = "auto-"+id;
         await makeLead(lead,{suggested_offer:{id,price}});
         await Promise.all([tx(q=>activeLead(q,a,lead)),tx(q=>activeLead(q,a,lead))]);
+        await Promise.all([tx(q=>prepareCall(q,a,lead)),tx(q=>prepareCall(q,a,lead))]);
         const state = await callState(db,a,lead);
         assert.equal(state.deal?.approved,true);
         assert.deepEqual(state.deal?.services,[id]);
@@ -134,6 +135,7 @@ test("WO-0276 real PostgreSQL call readiness", async (t) => {
     await t.test("confirmed text-only finding creates a ready page without requiring a screenshot", async () => {
       await makeLead("text-only",{evidence:[{confidence:"confirmed",measurement:"Confirmed missing booking link."}]});
       await tx(q=>activeLead(q,a,"text-only"));
+      await tx(q=>prepareCall(q,a,"text-only"));
       const state=await callState(db,a,"text-only");
       assert.ok(state.page?.code);
       assert.equal(state.proof_available,false);
@@ -146,6 +148,7 @@ test("WO-0276 real PostgreSQL call readiness", async (t) => {
       for (const [id,extra] of Object.entries({failed:{recheck:{status:"re-check failed"}},unconfirmed:{evidence:[]},custom:{suggested_offer:{id:"site",price:250000}},tampered:{suggested_offer:{id:"fix",price:1}},declined:{call_outcome:"Not interested"}})) {
         await makeLead(id,extra);
         await tx(q=>activeLead(q,a,id));
+        await tx(q=>prepareCall(q,a,id));
         assert.equal((await callState(db,a,id)).deal,null);
       }
       await makeLead("opted-out");
@@ -157,6 +160,7 @@ test("WO-0276 real PostgreSQL call readiness", async (t) => {
       const d = await tx(q=>saveQuote(q,a,{lead_id:"closed",services:["fix"]}));
       await db.query("update team_deals set stage='Lost' where id=$1",[d.id]);
       await tx(q=>activeLead(q,a,"closed"));
+      await tx(q=>prepareCall(q,a,"closed"));
       const reopened = await callState(db,a,"closed");
       assert.ok(reopened.page?.code);
       assert.notEqual(reopened.deal?.id,d.id);

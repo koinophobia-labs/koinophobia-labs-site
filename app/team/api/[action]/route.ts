@@ -1,4 +1,5 @@
 import {activeLead,prepareCall,switchCallOffer,saveCell,recordOutcome,publishDeal} from "@/lib/team/call-store";
+import { actionRateLimit } from "@/lib/team/action-limits";
 import {
   onboard,
   expressLogin,
@@ -15,6 +16,7 @@ import {
   cookieName,
   cookieOptions,
   rateLimit,
+  RateLimitFault,
   emailInput,
   passwordLogin,
   requestMagicLink,
@@ -154,7 +156,7 @@ export async function POST(
     }
     const p = await currentPartner();
     if (!p) throw new Fault("Please sign in.", 401);
-    await rateLimit(teamDatabase(), "action:" + p.id, 100);
+    await actionRateLimit(teamDatabase(), p.id, action);
     if (action === "password") {
       await rateLimit(teamDatabase(), "password-change:" + p.id);
       return ok(await transaction((q) => setPassword(q, jar.get(cookieName)!.value, body)));
@@ -249,14 +251,18 @@ export async function POST(
   } catch (e) {
     return NextResponse.json(
       {
+        ...(e instanceof RateLimitFault ? { retryAfter: e.retryAfter } : {}),
         error:
-          e instanceof Fault
+          e instanceof RateLimitFault
+            ? `Slow down for a moment. Try again in ${e.retryAfter} seconds.`
+            : e instanceof Fault
             ? e.message
             : "Request could not be completed. Please try again or contact Blake.",
       },
       {
         status: e instanceof Fault ? e.status : 500,
         headers: {
+          ...(e instanceof RateLimitFault ? { "Retry-After": String(e.retryAfter) } : {}),
           "Cache-Control": "no-store",
           "X-Robots-Tag": "noindex, nofollow",
         },

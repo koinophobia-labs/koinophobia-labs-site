@@ -12,6 +12,7 @@ import {
 } from "@/lib/team/call-domain";
 import { quotePaymentLink } from "@/lib/team/payment-links";
 import { money, SERVICES, servicePrice } from "@/lib/team/config";
+import { CallPreparation, preparationReason, retrySeconds } from "@/lib/team/call-preparation";
 type Live = CallState & {
   followups: {
     deal_id: string;
@@ -34,13 +35,21 @@ export function CallPanel({
     [message, setMessage] = useState(""),
     [busy, setBusy] = useState(false),
     [stale, setStale] = useState(false);
+  const [preparationErrors, setPreparationErrors] = useState<Record<string, string>>({});
+  const [slowUntil, setSlowUntil] = useState(0);
+  const [now, setNow] = useState(Date.now);
   const callback = useRef(onLeadChange);
   useEffect(() => {
     callback.current = onLeadChange;
   }, [onLeadChange]);
   const generation = useRef(0);
   const lastActive = useRef("");
-  const prepared = useRef(new Set<string>());
+  const prepared = useRef(new CallPreparation());
+  useEffect(() => {
+    if (!slowUntil) return;
+    const timer = setInterval(() => setNow(Date.now()), 1000);
+    return () => clearInterval(timer);
+  }, [slowUntil]);
   async function refresh(signal?: AbortSignal) {
     const version = generation.current;
     const r = await fetch("/team/api/call-state", {
@@ -51,18 +60,35 @@ export function CallPanel({
     if (!r.ok) throw Error(v.error || "Unable to sync.");
     if (version !== generation.current) return;
     setState(v);
-    if (v.lead && !prepared.current.has(v.lead.id)) {
-      // The mutation is idempotent; GET polling itself stays read-only.
-      const ready = await fetch("/team/api/prepare-call", {
-        method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id: v.lead.id }), signal,
-      });
-      if (!ready.ok) throw Error("Could not prepare the call link.");
-      prepared.current.add(v.lead.id);
-    }
-    if (version !== generation.current) return;
     setStale(false);
     if (v.lead && v.lead.id !== lastActive.current) {lastActive.current = v.lead.id; callback.current?.(v.lead.id);}
+    if (v.lead) {
+      const id = v.lead.id;
+      // Preparation never holds polling, navigation or action completion open.
+      void prepared.current.run(id, async () => {
+        try {
+          const ready = await fetch("/team/api/prepare-call", {
+            method: "POST", headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ id }), signal,
+          });
+          const result = await ready.json();
+          if (!ready.ok) {
+            if (ready.status === 429) {
+              const at = Date.now();
+              setNow(at);
+              setSlowUntil(at + retrySeconds(ready, result) * 1000);
+            }
+            throw Error(preparationReason(result.error));
+          }
+          if (!signal?.aborted) setPreparationErrors(errors => ({ ...errors, [id]: "" }));
+        } catch (e) {
+          if (!signal?.aborted) setPreparationErrors(errors => ({ ...errors, [id]:
+            "Payment link isn't available for this lead" + (preparationReason((e as Error).message) ? ". " + (e as Error).message : "."),
+          }));
+          throw e;
+        }
+      }).catch(() => {});
+    }
   }
   useEffect(() => {
     if (data.readonly) return;
@@ -96,6 +122,12 @@ export function CallPanel({
         body: JSON.stringify(body),
       });
       const v = await r.json();
+      if (r.status === 429) {
+        const at = Date.now();
+        setNow(at);
+        setSlowUntil(at + retrySeconds(r, v) * 1000);
+        return;
+      }
       if (!r.ok) throw Error(v.error);
       await refresh();
       setMessage("Saved.");
@@ -128,7 +160,8 @@ export function CallPanel({
     /iPhone|iPad|iPod/.test(navigator.userAgent);
   const sms = smsLink(cell, text, ios),
     tel = lead ? phoneNumber(lead.phone) : null;
-  const disabled = busy || data.readonly || stale;
+  const navigationDisabled = busy || data.readonly;
+  const disabled = navigationDisabled || stale;
   return (
     <section
       className={"team-card call-panel" + (compact ? " call-companion" : "")}
@@ -148,7 +181,7 @@ export function CallPanel({
         <select
           aria-label="Current call lead"
           value={lead?.id || ""}
-          disabled={disabled}
+          disabled={navigationDisabled}
           onChange={(e) => void act("active-lead", { id: e.target.value })}
         >
           <option value="">Choose a lead</option>
@@ -197,6 +230,7 @@ export function CallPanel({
               Connection lost. Payment status may be out of date. Reconnecting…
             </p>
           )}
+          {!state.page && preparationErrors[lead.id] && <p role="status">{preparationErrors[lead.id]}</p>}
           {lead.opted_out || lead.recheck?.status === "re-check failed" ? (
             <p role="alert">{lead.recheck?.status === "re-check failed" ? "Don’t call — re-check failed. Ask Blake to review a confirmed re-check." : "Do not contact. This lead has opted out."}</p>
           ) : (
@@ -313,7 +347,7 @@ export function CallPanel({
                   <button
                     className="team-button secondary"
                     key={outcome}
-                    disabled={disabled || Boolean(paid)}
+                    disabled={navigationDisabled || Boolean(paid)}
                     onClick={() =>
                       void act("call-outcome", { id: lead.id, outcome })
                     }
@@ -335,6 +369,7 @@ export function CallPanel({
         </>
       )}
       {message && <p role="status">{message}</p>}
+      {slowUntil > now && <p role="status">Slow down for a moment. Try again in {Math.ceil((slowUntil - now) / 1000)} seconds.</p>}
       {!!state?.followups.length && (
         <div className="team-inset">
           <h3>Follow up today</h3>

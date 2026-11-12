@@ -42,7 +42,7 @@ export async function activeLead(q: Queryable, p: Partner, id: string) {
     "insert into team_active_leads(partner_id,lead_id) values($1,$2) on conflict(partner_id) do update set lead_id=excluded.lead_id,updated_at=now()",
     [p.id, id],
   );
-  await prepareCall(q, p, id);
+  // Payment preparation has its own endpoint and must never roll back navigation.
   return { ok: true };
 }
 type ProofFinding = AuditFinding & {detail?:string};

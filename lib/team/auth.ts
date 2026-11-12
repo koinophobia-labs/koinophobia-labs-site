@@ -118,15 +118,20 @@ export function actor(
     override_rate: Number(row.override_rate),
   };
 }
+export class RateLimitFault extends Fault {
+  constructor(public retryAfter: number) {
+    super("Too many attempts. Try again in 15 minutes.", 429);
+  }
+}
 export async function rateLimit(q: Queryable, key: string, limit = 8) {
   const r = await q.query(
     `insert into team_rate_limits(key,attempts,reset_at) values($1,1,now()+interval '15 minutes')
  on conflict(key) do update set attempts=case when team_rate_limits.reset_at<=now() then 1 else team_rate_limits.attempts+1 end,
- reset_at=case when team_rate_limits.reset_at<=now() then now()+interval '15 minutes' else team_rate_limits.reset_at end returning attempts`,
+ reset_at=case when team_rate_limits.reset_at<=now() then now()+interval '15 minutes' else team_rate_limits.reset_at end returning attempts, greatest(1,ceil(extract(epoch from reset_at-now())))::int as retry_after`,
     [digest(key)],
   );
   if (r.rows[0].attempts > limit)
-    throw new Fault("Too many attempts. Try again in 15 minutes.", 429);
+    throw new RateLimitFault(r.rows[0].retry_after ?? 900);
 }
 export async function invite(
   q: Queryable,
