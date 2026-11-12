@@ -54,3 +54,15 @@ test('login, password, token and site-check limits retain production values and 
   assert.deepEqual(calls(after),calls(before));
  }
 });
+
+// Regression for the removed route observed exhausting production callers.
+test('removed earnings-celebration and unknown actions return 404 without querying even an exhausted bucket', async () => {
+ let queries = 0;
+ const q = { query: async () => { queries++; return { rows: [{ attempts: 999, retry_after: 900 }] }; } } as unknown as Queryable;
+ for (const action of ['earnings-celebration', 'unknown-action']) {
+  for (let i = 0; i < 120; i++) {
+   await assert.rejects(actionRateLimit(q, 'fixture-partner', action), error => (error as { status: number }).status === 404);
+  }
+ }
+ assert.equal(queries, 0, 'unsupported routes must return before any rate-limit read or write');
+});

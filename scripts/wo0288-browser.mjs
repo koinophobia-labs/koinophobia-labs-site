@@ -40,10 +40,13 @@ try{
  }
  assert.ok(seconds>=300);assert.equal(statuses.filter(x=>x===429).length,0);assert.deepEqual(errors,[]);
  const before=(await db.query('select count(*)::int n from team_rate_limits where key=$1',[hash('action:'+partner)])).rows[0].n;
- for(let i=0;i<120;i++)assert.equal((await page.request.post(base+'/team/api/removed-action',{headers:{origin:base},data:{}})).status(),404);
+ for(const action of ['removed-action','earnings-celebration'])for(let i=0;i<120;i++)assert.equal((await page.request.post(base+'/team/api/'+action,{headers:{origin:base},data:{}})).status(),404);
  assert.equal((await db.query('select count(*)::int n from team_rate_limits where key=$1',[hash('action:'+partner)])).rows[0].n,before);
  // Exhaust only the unrelated action bucket. Navigation and outcomes remain live.
  await db.query("insert into team_rate_limits(key,attempts,reset_at) values($1,600,now()+interval '37 seconds') on conflict(key) do update set attempts=600,reset_at=excluded.reset_at",[hash('action:'+partner)]);
+ const attemptsBefore=(await db.query('select attempts from team_rate_limits where key=$1',[hash('action:'+partner)])).rows[0].attempts;
+ for(const action of ['removed-action','earnings-celebration'])assert.equal((await page.request.post(base+'/team/api/'+action,{headers:{origin:base},data:{}})).status(),404);
+ assert.equal((await db.query('select attempts from team_rate_limits where key=$1',[hash('action:'+partner)])).rows[0].attempts,attemptsBefore);
  await page.getByLabel('Client’s cell').fill('3125550188');
  const limited=page.waitForResponse(r=>r.url().endsWith('/call-cell'));await page.getByRole('button',{name:'Save cell',exact:true}).click();const r=await limited;assert.equal(r.status(),429);assert.ok(Number(r.headers()['retry-after'])>0);
  await page.getByText(/Slow down for a moment\. Try again in \d+ seconds\./).waitFor();
@@ -53,6 +56,6 @@ try{
  await choose(45);await page.getByText("Payment link isn't available for this lead.",{exact:true}).waitFor();assert.equal(await page.getByText('RECONNECTING',{exact:true}).count(),0);
  const away=page.waitForResponse(r=>r.url().endsWith('/active-lead'));await select.selectOption('fixture-0');assert.equal((await away).status(),200);
  await page.screenshot({path:process.env.WO0288_EVIDENCE+'/call-mode.png',fullPage:true});
- const result={passed:true,quickLeadSelections:44,simulatedSeconds:seconds,failedPreparationLeads:2,attemptsPerFailedLead:2,calling429s:0,stuckReconnecting:0,navigationAfterGeneral429:true,outcomeAfterGeneral429:true,navigationAfterPrepare429:true,consoleErrors:errors.length};
+ const result={passed:true,quickLeadSelections:44,simulatedSeconds:seconds,failedPreparationLeads:2,attemptsPerFailedLead:2,calling429s:0,unsupported404s:242,unsupportedBucketWrites:0,stuckReconnecting:0,navigationAfterGeneral429:true,outcomeAfterGeneral429:true,navigationAfterPrepare429:true,consoleErrors:errors.length};
  writeFileSync(process.env.WO0288_EVIDENCE+'/call-browser.json',JSON.stringify(result,null,2));console.log(JSON.stringify(result));
 }finally{await browser.close();await db.end()}
