@@ -257,6 +257,7 @@
       "lib/releases.ts",
       "docs/evidence/WO-0288-freshness-2026-11-12.md"
     ],
-    "freshnessPolicy": "unchanged"
+    "freshnessPolicy": "unchanged",
+    "versionAssertionCorrection": "tests/dev-universe.test.ts: only the Trendi version literal 2.1 to verified 2.5; freshness test and budgets unchanged"
   }
 }
