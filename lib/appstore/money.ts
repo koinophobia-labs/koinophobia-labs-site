@@ -1,9 +1,10 @@
 import type { VerifiedEvent } from './apple';
 export type Fx = { currency: string; usdPerUnit: string; date: string; source: string };
-export type NetProceeds = { transactionId: string; app: string; productId: string; storefront: string; currency: string; priceMilliunits: number; purchaseDate: number; amount: string; appleBasisPoints: 1500 | 3000; source: string; verifiedAt: string };
-export type Calculation = { cents: number; priceMilliunits: number; currency: string; appleBasisPoints: number; affiliateBasisPoints: 2500; proceedsNumerator: string; proceedsDenominator: string; fx: Fx; rateEvidence: string; formula: string; proceeds: NetProceeds };
+export type Basis='provisional_published_proceeds'|'trued_up_financial_report';
+export type NetProceeds = { transactionId: string; app: string; productId: string; storefront: string; currency: string; customerCurrency?:string; priceMilliunits: number; purchaseDate: number; amount: string; appleBasisPoints: number|null; source: string; verifiedAt: string; basis?:Basis; sources?:unknown[]; programEvidence?:string };
+export type Calculation = { cents: number; priceMilliunits: number; currency: string; appleBasisPoints: number|null; affiliateBasisPoints: 2500; proceedsNumerator: string; proceedsDenominator: string; fx: Fx; rateEvidence: string; formula: string; proceeds: NetProceeds; basis:Basis; sources:unknown[] };
 export function calculate(proceeds: NetProceeds, fx: Fx): Calculation {
-  if (!/^(0|[1-9]\d*)(\.\d{1,12})?$/.test(proceeds.amount) || !proceeds.source || ![1500,3000].includes(proceeds.appleBasisPoints) || fx.currency !== proceeds.currency || !/^\d+(\.\d{1,12})?$/.test(fx.usdPerUnit)) throw Error('MONEY_INVALID');
+  if (!/^(0|[1-9]\d*)(\.\d{1,12})?$/.test(proceeds.amount) || !proceeds.source || (proceeds.appleBasisPoints!==null&&(!Number.isInteger(proceeds.appleBasisPoints)||proceeds.appleBasisPoints<0||proceeds.appleBasisPoints>10000)) || fx.currency !== proceeds.currency || !fx.source || !Number.isFinite(Date.parse(fx.date)) || !/^\d+(\.\d{1,12})?$/.test(fx.usdPerUnit)) throw Error('MONEY_INVALID');
   const [whole,fraction=''] = fx.usdPerUnit.split('.');
   const numerator=BigInt(whole+fraction), denominator=BigInt(10)**BigInt(fraction.length);
   if (numerator <= BigInt(0)) throw Error('FX_INVALID');
@@ -14,7 +15,7 @@ export function calculate(proceeds: NetProceeds, fx: Fx): Calculation {
   const n=net*BigInt(25)*numerator, d=netDenominator*denominator;
   const cents=Number((n+d/BigInt(2))/d);
   if (!Number.isSafeInteger(cents) || cents > 99999999) throw Error('MONEY_OVERFLOW');
-  return {cents,priceMilliunits:proceeds.priceMilliunits,currency:proceeds.currency,appleBasisPoints:proceeds.appleBasisPoints,affiliateBasisPoints:2500,proceedsNumerator:net.toString(),proceedsDenominator:netDenominator.toString(),fx,rateEvidence:proceeds.source,formula:'round(verified net Apple proceeds × 0.25 × USD per proceeds-currency unit × 100)',proceeds};
+  return {cents,priceMilliunits:proceeds.priceMilliunits,currency:proceeds.currency,appleBasisPoints:proceeds.appleBasisPoints,affiliateBasisPoints:2500,proceedsNumerator:net.toString(),proceedsDenominator:netDenominator.toString(),fx,rateEvidence:proceeds.source,formula:'round(Apple net proceeds × 0.25 × daily USD rate × 100)',proceeds,basis:proceeds.basis||'trued_up_financial_report',sources:[...(proceeds.sources||[proceeds.source]),fx]};
 }
 export function eligibility(e: VerifiedEvent): string | null {
   const t=e.transaction;

@@ -26,6 +26,10 @@
   ],
   "crons": [
     {
+      "path": "/api/appstore/financial-true-up",
+      "schedule": "15 8 8 * *"
+    },
+    {
       "path": "/api/jobs/tick",
       "schedule": "*/10 * * * *"
     },

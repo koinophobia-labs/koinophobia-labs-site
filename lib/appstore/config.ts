@@ -1,5 +1,6 @@
 import configuredApps from './apps.json';
-export type AppConfig = { key: string; bundleId: string; appAppleId: number; offerIdentifiers: string[] };
+export type ProductConfig = {id:string; resourceId:string; kind:'subscription'|'one_time'; offerId:string};
+export type AppConfig = { key: string; bundleId: string; appAppleId: number; offerIdentifiers: string[]; products?:ProductConfig[]; oneTimeProductIds?:string[] };
 export function apps(): AppConfig[] {
   const value = JSON.parse(process.env.APPSTORE_APPS_JSON || JSON.stringify(configuredApps)) as AppConfig[];
   if (!Array.isArray(value) || !value.length || value.length > 30) throw Error('APPSTORE_CONFIG_REQUIRED');

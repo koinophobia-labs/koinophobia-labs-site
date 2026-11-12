@@ -2,7 +2,7 @@ import { timingSafeEqual } from 'node:crypto';
 import { reconcile } from '@/lib/appstore/service';
 import { teamDatabase } from '@/lib/team/db';
 export const runtime='nodejs';
-export const maxDuration=60;
+export const maxDuration=300;
 export async function GET(request:Request) {
   const expected=process.env.CRON_SECRET;
   const supplied=Buffer.from(request.headers.get('authorization')||'');

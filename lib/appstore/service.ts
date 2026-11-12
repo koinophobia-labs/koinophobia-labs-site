@@ -4,21 +4,23 @@ import { verifyEvent, services, assertTransaction, type VerifiedEvent } from './
 import { apps } from './config';
 import { calculate, eligibility, exchangeRate, type Fx, type NetProceeds } from './money';
 import { locked, record } from './ledger';
-import { drain } from './payouts';
+import { drain,type MoneyClient } from './payouts';
 import { connectStripe } from '../team/connect-client';
 import type { Queryable } from '../payments';
+import {publishedProceeds} from './published-proceeds';
 
-export async function accrue(q: Queryable, event:VerifiedEvent, fx=exchangeRate) {
+export async function accrue(q: Queryable, event:VerifiedEvent, fx=exchangeRate, published=publishedProceeds) {
   let reason=eligibility(event), calculation;
   if (!reason) {
     const t=event.transaction!;
     const row=(await q.query('select basis from appstore_verified_proceeds where transaction_id=$1',[t.transactionId])).rows[0];
-    const basis=row?.basis as NetProceeds | undefined;
+    let basis=row?.basis as NetProceeds | undefined;
+    if(!basis) {try {basis=await published(event);}catch{reason='proceeds_unavailable';}}
     if (!basis) reason='proceeds_unverified';
-    else if (basis.transactionId!==t.transactionId || basis.app!==event.app.key || basis.productId!==t.productId || basis.storefront!==t.storefront || basis.currency!==t.currency || basis.priceMilliunits!==t.price || basis.purchaseDate!==t.purchaseDate || !basis.source || !Number.isFinite(Date.parse(basis.verifiedAt))) reason='proceeds_mismatch';
+    else if (basis.transactionId!==t.transactionId || basis.app!==event.app.key || basis.productId!==t.productId || basis.storefront!==t.storefront || (basis.customerCurrency||basis.currency)!==t.currency || basis.priceMilliunits!==t.price || basis.purchaseDate!==t.purchaseDate || !basis.source || !Number.isFinite(Date.parse(basis.verifiedAt))) reason='proceeds_mismatch';
     else {
       let conversion:Fx|undefined;
-      try { conversion=await fx(t.currency!,t.purchaseDate!); } catch { reason='fx_unavailable'; }
+      try { conversion=await fx(basis.currency,t.purchaseDate!); } catch { reason='fx_unavailable'; }
       if (conversion) calculation=calculate(basis,conversion);
     }
   }
@@ -30,7 +32,7 @@ export function transfersEnabled() {
 async function refresh(q: Queryable) {
   // Recheck held/unpaid charges before any delayed transfer. Never replay stale
   // cached entitlement data after onboarding, missing FX or a balance failure.
-  const rows=(await q.query(`select t.* from appstore_transactions t left join appstore_payouts p using(transaction_id) where t.environment='Production' and t.affiliate_id='messiah' and not t.revoked and (p.transaction_id is null or p.status='pending') and (t.price_milliunits>0) order by t.verified_at limit 25`)).rows;
+  const rows=(await q.query(`select t.* from appstore_transactions t where t.environment='Production' and t.affiliate_id='messiah' and not t.revoked and t.price_milliunits>0 order by t.verified_at limit 25`)).rows;
   const configured=apps();
   const verifiedIds=new Set<string>();
   for (const row of rows) {
@@ -47,11 +49,13 @@ async function refresh(q: Queryable) {
   }
   return verifiedIds;
 }
-export async function receive(signed:string,database:Pool) {
-  const event=await verifyEvent(signed);
+export async function receive(signed:string,database:Pool,dependencies:{verify?:typeof verifyEvent;client?:()=>MoneyClient;fx?:typeof exchangeRate;published?:typeof publishedProceeds}={}) {
+  const event=await (dependencies.verify||verifyEvent)(signed);
   await locked(database,async q=>{
-    await accrue(q,event);
-    if (transfersEnabled()) { const ids=await refresh(q); await drain(q,connectStripe(),Date.now(),ids); }
+    await accrue(q,event,dependencies.fx||exchangeRate,dependencies.published||publishedProceeds);
+    // This charge has just passed both Apple signature and Server API checks.
+    // Do not place it behind the bounded historical refresh queue.
+    if (transfersEnabled()) { const ids=new Set<string>();if(!eligibility(event))ids.add(event.transaction!.transactionId!);await drain(q,(dependencies.client||connectStripe)(),Date.now(),ids); }
   });
 }
 export async function reconcile(database:Pool) {

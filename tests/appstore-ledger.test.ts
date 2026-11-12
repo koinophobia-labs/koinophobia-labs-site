@@ -8,9 +8,10 @@ import {createServer} from 'node:net';
 import {Pool} from 'pg';
 import {Environment} from '@apple/app-store-server-library';
 import {locked,record,totals} from '../lib/appstore/ledger';
-import {accrue} from '../lib/appstore/service';
+import {accrue,receive} from '../lib/appstore/service';
 import {drain,type MoneyClient} from '../lib/appstore/payouts';
 import {calculate,type NetProceeds} from '../lib/appstore/money';
+import {applyTrueUp,reconcileFinancial} from '../lib/appstore/financial-reports';
 import type {VerifiedEvent} from '../lib/appstore/apple';
 const purchaseDate=1794520000000;
 function event(id:string,type='SUBSCRIBED'):VerifiedEvent{return {uuid:id+'-'+type,type,environment:Environment.PRODUCTION,app:{key:'fixture',bundleId:'test.fixture',appAppleId:123,offerIdentifiers:['affiliate']},hash:id+'-'+type,attribution:{offer:'affiliate',transactionId:id},transaction:{transactionId:id,originalTransactionId:'origin-'+id,bundleId:'test.fixture',environment:Environment.PRODUCTION,productId:'monthly',storefront:'USA',purchaseDate,price:7290,currency:'USD',inAppOwnershipType:'PURCHASED'}};}
@@ -21,7 +22,7 @@ test('real PostgreSQL money ledger: concurrency, crash recovery, refund ordering
  execFileSync('initdb',['-D',dir,'-A','trust','--no-locale','-E','UTF8'],{stdio:'ignore'});execFileSync('pg_ctl',['-D',dir,'-l',join(dir,'postgres.log'),'-o',`-F -p ${port} -h 127.0.0.1 -k ${dir}`,'-w','start'],{stdio:'ignore'});
  const db=new Pool({host:'127.0.0.1',port,database:'postgres'});let creates=0,reversals=0;let mode='ok',receipts:object[]=[];
  const client={accounts:{retrieve:async()=>({id:'acct_fixture',details_submitted:true,payouts_enabled:true,capabilities:{transfers:'active'}})},transfers:{list:async()=>({data:receipts,has_more:false}),create:async(o:{amount:number;destination:string;metadata:object})=>{creates++;if(mode==='insufficient')throw Object.assign(Error('fixture'),{code:'balance_insufficient'});return{id:'tr_fixture_'+creates,amount:o.amount,currency:'usd',destination:o.destination,metadata:o.metadata};},createReversal:async(_id:string,o:{amount:number})=>{reversals++;if(mode==='reversal_insufficient')throw Object.assign(Error('fixture'),{code:'balance_insufficient'});return{id:'trr_fixture_'+reversals,amount:o.amount};}}} as unknown as MoneyClient;
- const reset=async()=>{await db.query('truncate appstore_notifications,appstore_verified_proceeds,appstore_reversals,appstore_payouts,appstore_commissions,appstore_transactions');creates=0;reversals=0;mode='ok';receipts=[];};
+ const reset=async()=>{await db.query('truncate appstore_adjustments,appstore_financial_matches,appstore_financial_reports,appstore_notifications,appstore_verified_proceeds,appstore_reversals,appstore_payouts,appstore_commissions,appstore_transactions');creates=0;reversals=0;mode='ok';receipts=[];};
  const add=async(id:string)=>record(db,event(id),null,calculate(basis(id),fx));
  const pending=async(id:string,error:string|null=null)=>{await db.query("insert into appstore_payouts(transaction_id,operation_key,destination,usd_cents,withheld_cents,status,error_code) values($1,$2,'acct_fixture',155,0,'pending',$3)",[id,'operation-'+id,error]);};
  try{
@@ -35,7 +36,42 @@ test('real PostgreSQL money ledger: concurrency, crash recovery, refund ordering
   await t.test('a definitive unsent insufficient-balance transfer is cancelled after refund',async()=>{await reset();await add('failed');await pending('failed');mode='insufficient';await drain(db,client,Date.now(),new Set(['failed']));assert.equal(creates,1);await record(db,event('failed','REFUND'),'revoked');mode='ok';await drain(db,client,Date.now(),new Set(['failed']));assert.equal(creates,1);assert.equal((await db.query('select status from appstore_payouts')).rows[0].status,'cancelled');});
   await t.test('ambiguous crash cannot create a new transfer after revocation',async()=>{await reset();await add('ambiguous');await pending('ambiguous','attempt_started');await record(db,event('ambiguous','REVOKE'),'revoked');await drain(db,client,Date.now(),new Set(['ambiguous']));assert.equal(creates,0);assert.equal((await db.query('select status from appstore_payouts')).rows[0].status,'review');});
   await t.test('recover a successful transfer after crash by provider read, then reverse the refund',async()=>{await reset();await add('recovered');await pending('recovered','attempt_started');await record(db,event('recovered','REFUND'),'revoked');receipts=[{id:'tr_recovered',amount:155,currency:'usd',destination:'acct_fixture',metadata:{appstore_operation:'operation-recovered'}}];await drain(db,client,Date.now(),new Set(['recovered']));assert.equal(creates,0);assert.equal(reversals,1);assert.equal((await totals(db)).owedBack,0);await drain(db,client,Date.now(),new Set(['recovered']));assert.equal(reversals,1);});
-  await t.test('insufficient reversal is visibly owed back and offsets future commission',async()=>{await reset();await add('paid');await pending('paid');await drain(db,client,Date.now(),new Set(['paid']));await record(db,event('paid','REFUND'),'revoked');mode='reversal_insufficient';await drain(db,client,Date.now(),new Set());assert.equal((await totals(db)).owedBack,155);await add('next');mode='ok';await drain(db,client,Date.now(),new Set(['next']));assert.equal(creates,1);assert.equal((await totals(db)).owed,0);assert.equal((await db.query("select withheld_cents from appstore_payouts where transaction_id='next'")).rows[0].withheld_cents,155);});
+  await t.test('insufficient reversal is visibly owed back and offsets future commission',async()=>{await reset();await add('paid');await pending('paid');await drain(db,client,Date.now(),new Set(['paid']));await record(db,event('paid','REFUND'),'revoked');mode='reversal_insufficient';await drain(db,client,Date.now(),new Set());assert.equal((await totals(db)).owedBack,155);await add('next');mode='ok';await drain(db,client,Date.now(),new Set(['next']));assert.equal(creates,1);assert.equal((await totals(db)).owed,0);assert.equal((await db.query("select count(*)::int n from appstore_payouts where transaction_id='next'")).rows[0].n,0);assert.equal((await totals(db)).owedBack,0);});
   await t.test('new pending transfer needs a fresh Apple verification before sending',async()=>{await reset();await add('stale');await pending('stale');await drain(db,client,Date.now(),new Set());assert.equal(creates,0);});
+  await t.test('published proceeds accrue immediately; missing price is held and Finance resolves it idempotently',async()=>{
+   await reset();await accrue(db,event('provisional'),async()=>fx,async()=>({...basis('provisional'),basis:'provisional_published_proceeds'}));assert.equal((await totals(db)).owed,155);
+   assert.equal((await db.query('select calculation from appstore_commissions')).rows[0].calculation.basis,'provisional_published_proceeds');
+   await reset();await accrue(db,event('financial'));assert.equal((await totals(db)).owed,0);
+   const saved=process.env.APPSTORE_APPS_JSON;process.env.APPSTORE_APPS_JSON=JSON.stringify([event('financial').app]);
+   const header=['Apple Identifier','Vendor Identifier','Country of Sale','Customer Price','Customer Currency','Partner Share','Partner Share Currency','Quantity','Start Date','End Date','Transaction Date','Sale or Return','Order Type'];
+   const report=(net:string)=>Buffer.from(header.join('\t')+'\n'+['123','monthly','US','7.29','USD',net,'USD','1','11/01/2026','11/30/2026','11/12/2026','S',''].join('\t')+'\n');
+   try{
+    assert.equal((await reconcileFinancial(db,report('6.40'),'2026-11','synthetic financial report',async()=>fx)).matched,1);assert.equal((await totals(db)).owed,160);
+    await reconcileFinancial(db,report('6.40'),'2026-11','synthetic financial report',async()=>fx);assert.equal((await totals(db)).owed,160);
+    await reconcileFinancial(db,report('6.00'),'2026-11','synthetic corrected report',async()=>fx);assert.equal((await totals(db)).owed,150);
+    await reconcileFinancial(db,report('6.40'),'2026-11','synthetic old replay',async()=>fx);assert.equal((await totals(db)).owed,150);
+    await reset();await accrue(db,event('ambiguous-a'));await accrue(db,event('ambiguous-b'));
+    const ambiguous=await reconcileFinancial(db,report('6.40'),'2026-11','synthetic quantity ambiguity',async()=>fx);assert.equal(ambiguous.matched,0);assert.equal(ambiguous.held,2);assert.equal((await totals(db)).owed,0);
+   }finally{if(saved===undefined)delete process.env.APPSTORE_APPS_JSON;else process.env.APPSTORE_APPS_JSON=saved;}
+  });
+  await t.test('positive and negative true-ups settle once; refund reverses every paid installment',async()=>{
+   await reset();await db.query("insert into team_partners values('fixture-partner',true,'partner') on conflict do nothing");await db.query("insert into team_connect_accounts values('fixture-partner','acct_fixture') on conflict do nothing");await db.query("update appstore_affiliates set partner_id='fixture-partner' where id='messiah'");
+   await add('adjusted');await drain(db,client,Date.now(),new Set(['adjusted']));assert.equal(creates,1);assert.equal((await totals(db)).paid,155);
+   const tx=(await db.query("select * from appstore_transactions where transaction_id='adjusted'")).rows[0];
+   const adjust=async(hash:string,amount:string)=>{await db.query("insert into appstore_financial_reports(report_hash,fiscal_month,source,row_count) values($1,'2026-11','synthetic finance',1) on conflict do nothing",[hash]);await applyTrueUp(db,tx,calculate({...basis('adjusted'),amount,basis:'trued_up_financial_report'},fx),hash,'2026-11','group');};
+   await adjust('report-positive','8.00');await adjust('report-positive','8.00');assert.equal((await totals(db)).owed,45);assert.equal((await db.query('select count(*)::int n from appstore_adjustments')).rows[0].n,1);
+   await drain(db,client,Date.now(),new Set(['adjusted']));assert.equal(creates,2);assert.equal((await totals(db)).paid,200);await drain(db,client,Date.now(),new Set(['adjusted']));assert.equal(creates,2);
+   await adjust('report-negative','4.00');assert.equal((await totals(db)).owedBack,100);
+   await add('future');await drain(db,client,Date.now(),new Set(['future']));assert.equal((await totals(db)).paid,255);assert.equal((await totals(db)).owedBack,0);assert.equal((await db.query("select withheld_cents from appstore_payouts where transaction_id='future'")).rows[0].withheld_cents,100);
+   await record(db,event('adjusted','REFUND'),'revoked');await drain(db,client,Date.now(),new Set());assert.equal(reversals,2);assert.equal((await totals(db)).paid,55);assert.equal((await totals(db)).owed,100);
+   await drain(db,client,Date.now(),new Set(['future']));assert.equal((await totals(db)).paid,155);
+  });
+  await t.test('a new verified purchase pays instantly despite more than 25 historical charges',async()=>{
+   await reset();for(let i=0;i<30;i++)await add('old-'+i);
+   const prior={enabled:process.env.APPSTORE_TRANSFERS_ENABLED,env:process.env.VERCEL_ENV,mode:process.env.STRIPE_CONNECT_MODE};
+   process.env.APPSTORE_TRANSFERS_ENABLED='true';process.env.VERCEL_ENV='production';process.env.STRIPE_CONNECT_MODE='live';
+   try{await receive('synthetic-only',db,{verify:async()=>event('instant'),client:()=>client,fx:async()=>fx,published:async()=>({...basis('instant'),basis:'provisional_published_proceeds'})});assert.equal(creates,1);assert.equal((await db.query('select transaction_id from appstore_payouts')).rows[0].transaction_id,'instant');}
+   finally{for(const [k,v] of Object.entries({APPSTORE_TRANSFERS_ENABLED:prior.enabled,VERCEL_ENV:prior.env,STRIPE_CONNECT_MODE:prior.mode})){if(v===undefined)delete process.env[k];else process.env[k]=v;}}
+  });
  }finally{await db.end();execFileSync('pg_ctl',['-D',dir,'-m','fast','-w','stop'],{stdio:'ignore'});}
 });

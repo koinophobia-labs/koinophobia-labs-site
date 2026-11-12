@@ -17,7 +17,10 @@ export function assertTransaction(t: Transaction, app: AppConfig, env: Environme
   if (t.bundleId !== app.bundleId || t.environment !== env || !t.transactionId || !t.originalTransactionId || !t.productId || !Number.isSafeInteger(t.purchaseDate) || t.purchaseDate! <= 0) throw new InvalidNotification('TRANSACTION_SCOPE_INVALID');
 }
 export function codeProof(t: Transaction, current: Transaction, app: AppConfig) {
-  return t.offerType === 3 && !!t.offerIdentifier && app.offerIdentifiers.includes(t.offerIdentifier) && t.originalTransactionId === current.originalTransactionId && t.purchaseDate! <= current.purchaseDate! && t.inAppOwnershipType === 'PURCHASED';
+  const product=app.products?.find(p=>p.id===current.productId);
+  if(app.products&&!product)return false;
+  if(product?.kind==='one_time'&&(t.transactionId!==current.transactionId||t.type!=='Non-Consumable'))return false;
+  return t.productId===current.productId && t.offerType === 3 && !!t.offerIdentifier && app.offerIdentifiers.includes(t.offerIdentifier) && t.originalTransactionId === current.originalTransactionId && t.purchaseDate! <= current.purchaseDate! && t.inAppOwnershipType === 'PURCHASED';
 }
 export async function verifyEvent(signed: string, configured = apps(), make = services): Promise<VerifiedEvent> {
   // Untrusted hints select a configured verifier only. They never authorize a sale.
@@ -42,6 +45,8 @@ export async function verifyEvent(signed: string, configured = apps(), make = se
   assertTransaction(t, app, env);
   if (t.transactionId !== embedded.transactionId || t.originalTransactionId !== embedded.originalTransactionId || t.productId !== embedded.productId) throw new InvalidNotification('TRANSACTION_MISMATCH');
   event.transaction = t;
+  const product=app.products?.find(p=>p.id===t.productId);
+  if(product?.kind==='one_time'&&!['ONE_TIME_CHARGE','REFUND','REVOKE'].includes(event.type))return event;
   if (codeProof(t,t,app)) event.attribution = {offer:t.offerIdentifier!,transactionId:t.transactionId!};
   // Out-of-order renewal delivery must work even if the paid redemption webhook
   // never arrived. Only Apple-verified history in this subscription can attribute it.

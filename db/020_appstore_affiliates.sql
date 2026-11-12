@@ -14,7 +14,7 @@ create table if not exists appstore_notifications (
 create table if not exists appstore_transactions (
  transaction_id text primary key, original_id text not null, app text not null,
  environment text not null check(environment in ('Production','Sandbox')), product_id text not null,
- purchase_ms bigint not null, price_milliunits bigint, currency text,
+ purchase_ms bigint not null, price_milliunits bigint, currency text, storefront text, transaction_type text, transaction_offer text,
  affiliate_id text references appstore_affiliates(id), offer_identifier text, attribution_transaction_id text,
  revoked boolean not null default false, reason text,
  verified_at timestamptz not null default now()
@@ -26,8 +26,9 @@ create table if not exists appstore_commissions (
  revoked boolean not null default false, created_at timestamptz not null default now()
 );
 create table if not exists appstore_payouts (
- transaction_id text primary key references appstore_commissions(transaction_id),
- operation_key text not null unique, destination text,
+ transaction_id text not null references appstore_commissions(transaction_id),
+ operation_key text primary key, destination text,
+ basis text not null default 'provisional_published_proceeds', sources jsonb not null default '[]',
  usd_cents integer not null check(usd_cents>=0), withheld_cents integer not null check(withheld_cents>=0),
  status text not null check(status in ('pending','done','review','cancelled')),
  stripe_id text unique, started_at timestamptz not null default now(), completed_at timestamptz,
@@ -35,8 +36,10 @@ create table if not exists appstore_payouts (
  check(usd_cents=0 or destination is not null)
 );
 create table if not exists appstore_reversals (
- transaction_id text primary key references appstore_payouts(transaction_id),
- operation_key text not null unique, transfer_id text not null,
+ transaction_id text not null references appstore_commissions(transaction_id),
+ payout_key text unique references appstore_payouts(operation_key),
+ operation_key text primary key, transfer_id text not null,
+ basis text not null default 'provisional_published_proceeds', sources jsonb not null default '[]',
  usd_cents integer not null check(usd_cents>0),
  status text not null check(status in ('pending','done','owed_back','review')),
  stripe_id text unique, started_at timestamptz not null default now(), completed_at timestamptz,
@@ -50,4 +53,25 @@ create index if not exists appstore_commissions_affiliate on appstore_commission
 create table if not exists appstore_verified_proceeds (
  transaction_id text primary key references appstore_transactions(transaction_id),
  basis jsonb not null, verified_at timestamptz not null default now()
+);
+
+-- Original commissions are immutable. True-ups append signed differences.
+create table if not exists appstore_financial_reports (
+ report_hash text primary key, fiscal_month text not null, source text not null,
+ fetched_at timestamptz not null default now(), row_count integer not null,
+ status text not null default 'processing'
+);
+create table if not exists appstore_adjustments (
+ id bigserial primary key, transaction_id text not null references appstore_commissions(transaction_id),
+ report_hash text not null references appstore_financial_reports(report_hash),
+ fiscal_month text not null, usd_cents integer not null, previous_cents integer not null,
+ final_cents integer not null check(final_cents>=0), calculation jsonb not null,
+ basis text not null check(basis='trued_up_financial_report'), sources jsonb not null,
+ created_at timestamptz not null default now(), unique(transaction_id,report_hash)
+);
+create table if not exists appstore_financial_matches (
+ transaction_id text not null references appstore_transactions(transaction_id),
+ fiscal_month text not null, report_hash text not null references appstore_financial_reports(report_hash),
+ group_key text not null, sources jsonb not null,
+ primary key(transaction_id,fiscal_month)
 );
