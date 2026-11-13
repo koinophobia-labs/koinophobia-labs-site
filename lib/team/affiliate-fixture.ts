@@ -4,6 +4,7 @@ import type { AffiliateDashboardData } from './affiliate-view';
 // Explicit fake preview only. The production page never calls this helper.
 export function affiliateFixture(): AffiliateDashboardData {
   return {
+    earningRules:[{type:'affiliate_commission',percentage:25,active:true,costDeduction:'0'},{type:'revenue_share',percentage:60,active:true,costDeduction:'0'}],
     name: 'Demo Affiliate', earned: 990, thisMonth: 990, owed: 0, owedBack: 710,
     nextFiscalMonth: '2026-11', connection: 'none', fake: true,
     byApp: affiliateApps.map(a => ({ app: a.app, amount: a.key === 'trendi' ? 620 : a.key === 'old-dog' ? 370 : 0 })),

@@ -61,6 +61,8 @@ test('mixed earnings use one real PostgreSQL ledger and one owner-confirmed mont
   execFileSync('initdb',['-D',dir,'-A','trust','--no-locale','-E','UTF8'],{stdio:'ignore'});
   execFileSync('pg_ctl',['-D',dir,'-l',join(dir,'postgres.log'),'-o',`-F -p ${port} -h 127.0.0.1 -k ${dir}`,'-w','start'],{stdio:'ignore'});
   const db=new Pool({host:'127.0.0.1',port,database:'postgres'}),saved=process.env.APPSTORE_APPS_JSON;
+  const connectionEnds:Promise<void>[]=[];
+  db.on('connect',client=>connectionEnds.push(new Promise<void>(resolve=>client.once('end',resolve))));
   let sent:number[]=[],reversed:number[]=[];
   const client={accounts:{retrieve:async()=>({id:'acct_fake',details_submitted:true,payouts_enabled:true,capabilities:{transfers:'active'}})},transfers:{
     create:async(o:{amount:number;destination:string;metadata:object})=>{sent.push(o.amount);return {id:'tr_fake',...o,currency:'usd'};},
@@ -150,5 +152,5 @@ test('mixed earnings use one real PostgreSQL ledger and one owner-confirmed mont
       try{const e=event('receive',true);await receive('fictional',db,{verify:async()=>e,client:()=>client,fx:async()=>fx,published:async()=>basis(e)});assert.equal(sent.length,0);}
       finally{for(const k of ['APPSTORE_TRANSFERS_ENABLED','VERCEL_ENV','STRIPE_CONNECT_MODE'])if(prior[k]===undefined)delete process.env[k];else process.env[k]=prior[k];}
     });
-  } finally {if(saved===undefined)delete process.env.APPSTORE_APPS_JSON;else process.env.APPSTORE_APPS_JSON=saved;await db.end();execFileSync('pg_ctl',['-D',dir,'-m','fast','-w','stop'],{stdio:'ignore'});}
+  } finally {if(saved===undefined)delete process.env.APPSTORE_APPS_JSON;else process.env.APPSTORE_APPS_JSON=saved;await db.end();await Promise.all(connectionEnds);execFileSync('pg_ctl',['-D',dir,'-m','fast','-w','stop'],{stdio:'ignore'});}
 });

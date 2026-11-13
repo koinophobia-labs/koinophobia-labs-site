@@ -13,9 +13,12 @@ export type AffiliateSale = {
   date: string;
   amount: number;
   status: AffiliateStatus;
+  earningType?: 'affiliate_commission' | 'revenue_share';
+  percentage?: number;
 };
 export type AffiliateDashboardData = {
   name: string;
+  earningRules: { type: 'affiliate_commission' | 'revenue_share'; percentage: number; active: boolean; costDeduction: string }[];
   earned: number;
   thisMonth: number;
   owed: number;

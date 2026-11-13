@@ -57,7 +57,7 @@ export async function totals(q: Queryable) {
 export async function ownerSnapshot(q: Queryable, actor: Partner) {
   owner(actor);
   const summary=await totals(q);
-  const sales=(await q.query(`select t.app,t.environment,t.product_id,t.purchase_ms,t.price_milliunits,t.currency,t.revoked,t.reason,
+  const sales=(await q.query(`select t.app,t.environment,t.product_id,t.purchase_ms,t.price_milliunits,t.currency,t.revoked,t.reason,t.earning_rule,
     c.usd_cents,coalesce(a.final_calculation,c.calculation) as calculation,coalesce(a.adjustments,0)+coalesce((select delta_cents from appstore_effective_rounding where transaction_id=t.transaction_id),0) as adjustment_cents,p.transferred_cents,p.withheld_cents,p.payout_status,p.error_code,r.reversal_status,mp.monthly_paid,fm.fiscal_month,mr.status as monthly_status,mr.error_code as monthly_error
     from appstore_transactions t left join appstore_commissions c using(transaction_id)
     left join lateral (select sum(usd_cents) adjustments,(array_agg(calculation order by id desc))[1] final_calculation from appstore_adjustments where transaction_id=t.transaction_id) a on true

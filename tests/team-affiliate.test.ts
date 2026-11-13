@@ -70,7 +70,7 @@ test('affiliate real PostgreSQL isolation, balances, invite and own Connect onbo
   const db = new Pool({host:'127.0.0.1',port,database:'postgres'});
   try {
     await db.query('create table crm_payments(id uuid primary key)');
-    for (const file of ['010_team_portal.sql','011_team_connect.sql','012_team_password.sql','020_appstore_affiliates.sql','021_appstore_monthly.sql','023_affiliate_portal.sql'])
+    for (const file of ['010_team_portal.sql','011_team_connect.sql','012_team_password.sql','020_appstore_affiliates.sql','021_appstore_monthly.sql','023_affiliate_portal.sql','024_appstore_earning_rules.sql'])
       await db.query(readFileSync('db/'+file,'utf8'));
     for (const [id, role] of [['fake-a','affiliate'],['fake-b','affiliate'],['fake-owner','owner']])
       await db.query('insert into team_partners(id,name,email,role) values($1,$2,$3,$4)', [id, 'Fictional '+id, id+'@example.test',role]);
