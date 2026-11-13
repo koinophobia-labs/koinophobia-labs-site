@@ -102,7 +102,7 @@ export async function markApplePaymentReceived(database:Pool,actor:Partner,input
     let destination:string|null=null;
     if(amount>0){
       if(!client)return hold('transfers_unavailable');
-      const account=(await q.query(`select a.stripe_account_id from appstore_affiliates f join team_partners p on p.id=f.partner_id join team_connect_accounts a on a.partner_id=p.id where f.id='messiah' and p.active and p.role='partner'`)).rows[0];
+      const account=(await q.query(`select a.stripe_account_id from appstore_affiliates f join team_partners p on p.id=f.partner_id join team_connect_accounts a on a.partner_id=p.id where f.id='messiah' and p.active and p.role in ('partner','affiliate')`)).rows[0];
       if(!account)return hold('connect_not_ready');
       const a=await client.accounts.retrieve(account.stripe_account_id);
       if('deleted' in a||!a.details_submitted||!a.payouts_enabled||a.capabilities?.transfers!=='active')return hold('connect_not_ready');

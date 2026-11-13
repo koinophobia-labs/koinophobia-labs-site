@@ -19,7 +19,7 @@ export function AffiliateDashboard({ data, account }: { data: AffiliateDashboard
       <section className="team-card"><h2>Earned · total</h2><strong>{affiliateMoney(data.earned)}</strong><p>After refunds and monthly adjustments</p></section>
       <section className="team-card"><h2>Earned · this month</h2><strong>{affiliateMoney(data.thisMonth)}</strong><p>Purchases this calendar month · UTC</p></section>
       <section className="team-card"><h2>Awaiting payout</h2><strong>{affiliateMoney(data.owed)}</strong><p>Paid after Apple pays Koinophobia Labs</p></section>
-      {data.owedBack > 0 && <section className="team-card affiliate-debt"><h2>Owed back</h2><strong>{affiliateMoney(data.owedBack)}</strong><p>Offsets future earnings. No automatic bank debit.</p></section>}
+      {data.owedBack > 0 && <section className="team-card affiliate-debt"><h2>Owed back</h2><strong>{affiliateMoney(data.owedBack)}</strong><p>Future earnings offset this balance after Apple pays. No automatic bank debit.</p></section>}
     </div>
     <section className="team-card affiliate-payout">
       <div><p className="team-eyebrow">NEXT PAYOUT</p><h2>{month ? `after Apple pays for ${month}` : data.owed > 0 ? 'After Apple pays · fiscal month pending' : data.owedBack > 0 ? 'Future earnings offset your balance' : 'No unpaid earnings yet'}</h2>
@@ -37,7 +37,7 @@ export function AffiliateDashboard({ data, account }: { data: AffiliateDashboard
           <div><h3>{sale.app}</h3><p>{sale.product}</p><time dateTime={sale.date}>{affiliateDate(sale.date)}</time></div>
           <div className="affiliate-sale-result"><strong>{affiliateMoney(sale.amount)}</strong><span className={`affiliate-status affiliate-status-${sale.status}`}>{AFFILIATE_STATUSES[sale.status]}</span></div>
         </li>)}</ol>}
-      <p className="team-fine">Only your affiliate activity is shown. Buyer identities are never included. The feed shows the latest 200 entries; totals include all your earnings.</p>
+      <p className="team-fine">Only your affiliate activity is shown. Buyer identities are never included. Paid entries may include earnings used to offset refunds. The feed shows the latest 200 entries; totals include all your earnings.</p>
     </section>
     <section className="affiliate-section"><div className="team-section-title"><h2>Your links</h2><span className="team-tag">SAIIKHOTIC</span></div>
       <p>Share a redemption link. Apple shows the current offer and eligibility before purchase.</p>

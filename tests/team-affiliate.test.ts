@@ -70,7 +70,7 @@ test('affiliate real PostgreSQL isolation, balances, invite and own Connect onbo
   const db = new Pool({host:'127.0.0.1',port,database:'postgres'});
   try {
     await db.query('create table crm_payments(id uuid primary key)');
-    for (const file of ['010_team_portal.sql','011_team_connect.sql','012_team_password.sql','020_appstore_affiliates.sql','023_affiliate_portal.sql'])
+    for (const file of ['010_team_portal.sql','011_team_connect.sql','012_team_password.sql','020_appstore_affiliates.sql','021_appstore_monthly.sql','023_affiliate_portal.sql'])
       await db.query(readFileSync('db/'+file,'utf8'));
     for (const [id, role] of [['fake-a','affiliate'],['fake-b','affiliate'],['fake-owner','owner']])
       await db.query('insert into team_partners(id,name,email,role) values($1,$2,$3,$4)', [id, 'Fictional '+id, id+'@example.test',role]);
@@ -95,9 +95,13 @@ test('affiliate real PostgreSQL isolation, balances, invite and own Connect onbo
       await db.query("update team_partners set active=true where id='fake-b'");
     });
     await t.test('paid, signed monthly adjustments and refunded owed-back stay affiliate-scoped', async () => {
+      await db.query("insert into appstore_financial_reports(report_hash,fiscal_month,source,row_count) values('fake-report','2026-11','fictional',1)");
+      await db.query("insert into appstore_financial_matches(transaction_id,fiscal_month,report_hash,group_key,sources) values('private-a','2026-11','fake-report','fake','[]')");
+      await db.query("insert into appstore_monthly_runs(fiscal_month,received_by,operation_key) values('2026-11','fake-owner','fake-monthly')");
+      await db.query("insert into appstore_monthly_authorizations(fiscal_month,report_hash,transaction_id,authorized_cents,confirmed_by) values('2026-11','fake-report','private-a',1000,'fake-owner')");
       await db.query("insert into appstore_payouts(transaction_id,operation_key,destination,usd_cents,withheld_cents,status) values('private-a','fake-paid','acct_fake_a',1000,0,'done'),('private-b','fake-b-paid','acct_fake_b',99000,0,'done')");
       let a=await affiliateSnapshot(db,partner('fake-a'),now); assert.equal(a.sales[0].status,'paid'); assert.equal(a.owed,0);
-      await db.query("insert into appstore_financial_reports(report_hash,fiscal_month,source,row_count) values('fake-report','2026-11','fictional',1)");
+
       await db.query("insert into appstore_adjustments(transaction_id,report_hash,fiscal_month,usd_cents,previous_cents,final_cents,calculation,basis,sources) values('private-a','fake-report','2026-11',-100,1000,900,'{}','trued_up_financial_report','[]')");
       a=await affiliateSnapshot(db,partner('fake-a'),now); assert.equal(a.earned,900); assert.equal(a.owedBack,100);
       assert.equal(a.sales[0].status,'adjusted'); assert.equal(a.sales[0].amount,-100);
@@ -106,6 +110,29 @@ test('affiliate real PostgreSQL isolation, balances, invite and own Connect onbo
       assert.ok(a.sales.some(s=>s.status==='refunded'&&s.amount===-900));
       await db.query("insert into appstore_reversals(transaction_id,payout_key,operation_key,transfer_id,usd_cents,status) values('private-b','fake-b-paid','fake-b-reversal','tr_fake_b',99000,'done')");
       assert.equal((await affiliateSnapshot(db,partner('fake-a'),now)).owedBack,1000);
+    });
+    await t.test('monthly cash uses only the paid operation, scopes other affiliates, and preserves receipt-capped debt', async () => {
+      const q=await db.connect();
+      try {
+        await q.query('begin');
+        for(const [id,affiliate] of [['monthly-own','messiah'],['monthly-other','unrelated']]) {
+          await q.query("insert into appstore_transactions(transaction_id,original_id,app,environment,product_id,purchase_ms,affiliate_id) values($1,$1,'trendi','Production','monthly',1794484800000,$2)",[id,affiliate]);
+          await q.query("insert into appstore_commissions(transaction_id,affiliate_id,usd_cents,calculation) values($1,$2,2000,'{}')",[id,affiliate]);
+          await q.query("insert into appstore_financial_matches(transaction_id,fiscal_month,report_hash,group_key,sources) values($1,'2026-11','fake-report','fake','[]')",[id]);
+          await q.query("insert into appstore_monthly_authorizations(fiscal_month,report_hash,transaction_id,authorized_cents,confirmed_by) values('2026-11','fake-report',$1,2000,'fake-owner')",[id]);
+        }
+        await q.query("insert into appstore_monthly_attempts(operation_key,fiscal_month,snapshot) values('fake-monthly','2026-11','{}'),('cancelled-old','2026-11','{}')");
+        await q.query("insert into appstore_monthly_allocations(fiscal_month,operation_key,transaction_id,source_month,report_hash,final_cents,usd_cents,withheld_cents) values('2026-11','fake-monthly','monthly-own','2026-11','fake-report',2000,1000,1000),('2026-11','fake-monthly','monthly-other','2026-11','fake-report',2000,2000,0),('2026-11','cancelled-old','monthly-own','2026-11','fake-report',2000,1900,100)");
+        // A prepared or cancelled attempt is never paid cash.
+        let a=await affiliateSnapshot(q,partner('fake-a'),now);assert.equal(a.owed,1000);assert.equal(a.owedBack,0);assert.equal(a.nextFiscalMonth,'2026-11');
+        await q.query("update appstore_monthly_runs set status='paid' where fiscal_month='2026-11'");
+        a=await affiliateSnapshot(q,partner('fake-a'),now);assert.equal(a.owed,0);assert.equal(a.owedBack,0);assert.equal(a.nextFiscalMonth,null);
+        assert.ok(a.sales.some(row=>row.amount===2000&&row.status==='paid'));
+        // Future provisional money cannot hide refund debt or borrow bank-receipt authority.
+        await q.query("update appstore_monthly_authorizations set authorized_cents=100 where transaction_id='monthly-own'");
+        a=await affiliateSnapshot(q,partner('fake-a'),now);assert.equal(a.owedBack,1900);
+        assert.doesNotMatch(JSON.stringify(a),/monthly-own|monthly-other|cancelled-old/);
+      } finally {await q.query('rollback');q.release();}
     });
     await t.test('owner invite links the affiliate atomically; partner cannot create an affiliate', async () => {
       await db.query("insert into appstore_affiliates(id,display_name) values('new-fixture','Fictional new affiliate')");

@@ -88,6 +88,11 @@ test('monthly money ledger uses real PostgreSQL and mocked Stripe only',async t=
       await maintain();assert.equal(creates,1);mode='ok';const settled=await run('2026-09');assert.equal(settled.status,'paid');assert.equal(Number(settled.usd_cents),0);
       assert.equal(Number(settled.withheld_cents),160);assert.equal(creates,1);assert.equal((await totals(db)).owedBack,0);assert.equal((await totals(db)).awaitingApple,155);
     });
+    await t.test('affiliate-role Connect remains accrual-only until owner confirms the receipt',async()=>{
+      await reset();await db.query("update team_partners set role='affiliate' where id='partner-fixture'");
+      try{await add('a');await maintain();assert.equal(creates,0);await run();assert.equal(creates,1);}
+      finally{await db.query("update team_partners set role='partner' where id='partner-fixture'");}
+    });
     await t.test('absence of Connect holds after receipt; connecting or maintenance alone cannot pay; explicit owner retry can',async()=>{
       await reset();await add('a');await db.query('update appstore_affiliates set partner_id=null');
       assert.equal((await run()).error_code,'connect_not_ready');assert.equal(creates,0);

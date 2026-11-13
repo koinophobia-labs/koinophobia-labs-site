@@ -11,7 +11,7 @@ const db=new Pool({connectionString:process.env.DATABASE_URL});
 const hash=s=>createHash('sha256').update(s).digest('hex');
 const browser=await chromium.launch({executablePath:'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'});
 try {
-  for(const f of ['011_team_connect.sql','020_appstore_affiliates.sql','023_affiliate_portal.sql'])await db.query(readFileSync('db/'+f,'utf8'));
+  for(const f of ['011_team_connect.sql','020_appstore_affiliates.sql','021_appstore_monthly.sql','023_affiliate_portal.sql'])await db.query(readFileSync('db/'+f,'utf8'));
   for(const id of ['affiliate-a','affiliate-b']){
     await db.query("insert into team_partners(id,name,email,role) values($1,$2,$3,'affiliate')",[id,id==='affiliate-a'?'Demo Affiliate · fake data':'Other fictional affiliate',id+'@example.test']);
     await db.query("insert into team_sessions(token_hash,partner_id,expires_at) values($1,$2,now()+interval '1 day')",[hash('fictional-'+id),id]);
@@ -30,6 +30,9 @@ try {
   await db.query("insert into appstore_financial_reports(report_hash,fiscal_month,source,row_count) values('fake-month','2026-11','fictional report',1)");
   await db.query("insert into appstore_adjustments(transaction_id,report_hash,fiscal_month,usd_cents,previous_cents,final_cents,calculation,basis,sources,created_at) values('old-dog-paid','fake-month','2026-11',-80,450,370,'{}','trued_up_financial_report','[]','2026-11-12T14:00:00Z')");
   await db.query("insert into appstore_financial_matches(transaction_id,fiscal_month,report_hash,group_key,sources) values('trendi-earned','2026-11','fake-month','fictional','[]')");
+  await db.query("insert into appstore_financial_matches(transaction_id,fiscal_month,report_hash,group_key,sources) values('old-dog-paid','2026-11','fake-month','fictional','[]')");
+  await db.query("insert into appstore_monthly_runs(fiscal_month,received_by,operation_key) values('2026-11','owner','fake-monthly')");
+  await db.query("insert into appstore_monthly_authorizations(fiscal_month,report_hash,transaction_id,authorized_cents,confirmed_by) values('2026-11','fake-month','old-dog-paid',370,'owner')");
   const desktop=await browser.newContext({viewport:{width:1440,height:1050},permissions:['clipboard-read','clipboard-write']});
   const phone=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true});
   for(const c of [desktop,phone]){
@@ -56,11 +59,14 @@ try {
   for(const action of actions)assert.equal((await desktop.request.post(base+'/team/api/'+action,{headers:{origin:base},data:{id:'lead-0',partner_id:'affiliate-b',affiliate_id:'other-fixture'}})).status(),404,action);
   assert.equal((await desktop.request.post(base+'/team/api/jobs',{headers:{origin:base},data:{id:'guessed',action:'deliver'}})).status(),403);
   const own=await desktop.request.get(base+'/team/api/affiliate?affiliate_id=other-fixture&partner_id=affiliate-b');assert.equal(own.status(),200);
-  const data=await own.json();assert.equal(data.earned,990);assert.equal(data.owedBack,710);assert.equal(data.links.length,7);
+  const data=await own.json();assert.equal(data.earned,990);assert.equal(data.owedBack,1330);assert.equal(data.links.length,7);
   assert.doesNotMatch(JSON.stringify(data),/original-private|other-secret|transaction_id|affiliate-b|stripe_account_id|email/);
-  // A recovered part of the fictional refund turns debt into an amount owed.
+  // Recovery plus a fictional bank receipt permits future earnings to offset debt.
   // Verify the requested fiscal-month payout headline as a separate real page state.
   await db.query("insert into appstore_reversals(transaction_id,payout_key,operation_key,transfer_id,usd_cents,status) values('teachers-refunded','fake-paid-teachers-refunded','fake-refund-recovery','tr_fictional_refund',1000,'done')");
+  // Before the receipt, future provisional earnings must not conceal $3.30 debt.
+  const beforeReceipt=await (await desktop.request.get(base+'/team/api/affiliate')).json();assert.equal(beforeReceipt.owedBack,330);
+  await db.query("insert into appstore_monthly_authorizations(fiscal_month,report_hash,transaction_id,authorized_cents,confirmed_by) values('2026-11','fake-month','trendi-earned',620,'owner')");
   for(const p of [page,mobile]){
     await p.reload();await p.getByRole('heading',{name:'after Apple pays for November 2026',exact:true}).waitFor();
     assert.equal(await p.getByRole('heading',{name:'Owed back',exact:true}).count(),0);

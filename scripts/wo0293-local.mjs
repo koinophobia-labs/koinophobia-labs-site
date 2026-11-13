@@ -23,5 +23,6 @@ try{
  const fd=openSync(join(evidence,'server.log'),'a');server=spawn(process.execPath,['node_modules/next/dist/bin/next','start','-p',String(webport)],{env,stdio:['ignore',fd,fd]});
  let ready=false;for(let i=0;i<60;i++){try{if((await fetch(base+'/team')).ok){ready=true;break;}}catch{}await new Promise(r=>setTimeout(r,1000));}if(!ready)throw Error('Local server startup failed');
  await Promise.all([run('affiliate',['--input-type=module','--eval',"await import('./scripts/wo0293-browser.mjs'); process.exit(0);"]),run('call-lockout',['--input-type=module','--eval',"await import('./scripts/wo0288-browser.mjs'); process.exit(0);"])]);
- writeFileSync(join(evidence,'passed.json'),JSON.stringify({at:new Date().toISOString(),passed:['affiliate','call-lockout'],synthetic:true}));
+ await run('release',['scripts/blake-release-qa.mjs'],{QA_BASE_URL:base,CHROMIUM_PATH:'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'});
+ writeFileSync(join(evidence,'passed.json'),JSON.stringify({at:new Date().toISOString(),passed:['affiliate','call-lockout','release'],synthetic:true}));
 }finally{server?.kill('SIGTERM');execFileSync('pg_ctl',['-D',dir,'-m','fast','-w','stop'],{stdio:'ignore'});}
