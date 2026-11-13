@@ -8,7 +8,7 @@ import {chromium} from 'playwright';
 const base=process.env.WO0288_BASE,dir=process.env.WO0288_EVIDENCE;
 assert.equal(new URL(base).hostname,'127.0.0.1');assert.equal(new URL(process.env.DATABASE_URL).hostname,'127.0.0.1');
 const db=new Pool({connectionString:process.env.DATABASE_URL});
-const browser=await chromium.launch({executablePath:'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'});
+const browser=await chromium.launch({executablePath:'/Volumes/KoiArchive/WO-0267/cache/ms-playwright/chromium-1254/chrome-mac-arm64/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing'});
 const hash=s=>createHash('sha256').update(s).digest('hex');
 try{
   for(const file of ['020_appstore_affiliates.sql','021_appstore_monthly.sql','024_appstore_earning_rules.sql'])await db.query(readFileSync('db/'+file,'utf8'));
@@ -51,4 +51,4 @@ try{
   assert.deepEqual(state,{...before,receipts:before.receipts+1});assert.deepEqual(errors,[]);
   writeFileSync(dir+'/monthly-browser.json',JSON.stringify({passed:true,localSynthetic:true,ownerPage:true,bothRuleLabels:true,blakesShare:true,bankReceiptRequired:true,financeHold:true,duplicateReceiptIdempotent:true,partnerRejected:true,anonymousRejected:true,crossOriginRejected:true,noTransfer:true,consoleErrors:0},null,2));
   console.log(JSON.stringify({monthlyOwnerFlow:'passed',noTransfers:true}));
-}finally{await browser.close();await db.end();}
+}finally{console.log('Closing local browser');await browser.close();console.log('Local browser closed');await db.end();console.log('Local database connections closed');}

@@ -9,7 +9,7 @@ assert.equal(new URL(base).hostname,'127.0.0.1');
 assert.equal(new URL(process.env.DATABASE_URL).hostname,'127.0.0.1');
 const db=new Pool({connectionString:process.env.DATABASE_URL});
 const hash=s=>createHash('sha256').update(s).digest('hex');
-const browser=await chromium.launch({executablePath:'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'});
+const browser=await chromium.launch({executablePath:'/Volumes/KoiArchive/WO-0267/cache/ms-playwright/chromium-1254/chrome-mac-arm64/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing'});
 try {
   for(const f of ['011_team_connect.sql','020_appstore_affiliates.sql','021_appstore_monthly.sql','023_affiliate_portal.sql','024_appstore_earning_rules.sql'])await db.query(readFileSync('db/'+f,'utf8'));
   for(const id of ['affiliate-a','affiliate-b']){
@@ -131,4 +131,4 @@ try {
   assert.equal(await page.getByRole('button',{name:'Connect Stripe to get paid'}).isEnabled(),true);
   const result={passed:true,synthetic:true,desktop:true,phone:true,deniedRoutes:deniedRoutes.length,deniedActions:actions.length+1,ownLedgerOnly:true,mixedEarningTypes:true,combinedTotal:1500,owedBackAndPositivePayoutStates:true,fiscalMonthHeadline:true,passwordLogin:true,oneUseSignInLink:true,copyVerified:true,onboardingCalls,liveStripeCalls:0,idleSeconds:Math.round((Date.now()-idleStart)/1000),idleRequests:idleRequests.length,http429:0,consoleErrors:errors.length};
   writeFileSync(evidence+'/affiliate-browser.json',JSON.stringify(result,null,2));console.log(JSON.stringify(result));
-}finally{await browser.close();await db.end();}
+}finally{console.log('Closing local browser');await browser.close();console.log('Local browser closed');await db.end();console.log('Local database connections closed');}
