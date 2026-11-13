@@ -36,14 +36,21 @@
     "bundleId": "com.koinophobialabs.forgetaboutit",
     "appAppleId": 6804360983,
     "offerIdentifiers": [
-      "SAIIKHOTIC 10 percent first month"
+      "SAIIKHOTIC 10 percent first month",
+      "SAIIKHOTIC FAI monthly 3.99 first month"
     ],
     "products": [
       {
         "id": "com.koinophobialabs.forgetaboutit.plus.monthly",
         "resourceId": "6814286474",
         "kind": "subscription",
-        "offerId": "5b249c86-5fdd-4eca-9e02-d62c5af541d4"
+        "offerId": "5b249c86-5fdd-4eca-9e02-d62c5af541d4",
+        "additionalOffers": [
+          {
+            "identifier": "SAIIKHOTIC FAI monthly 3.99 first month",
+            "settingKey": "appstore-offer:forget-about-it:monthly-399"
+          }
+        ]
       }
     ]
   },

@@ -11,12 +11,19 @@ export function matchPublished(e:VerifiedEvent,quotes:PublishedQuote[]):NetProce
   const q=found[0];
   return {transactionId:t.transactionId!,app:e.app.key,productId:t.productId!,storefront:t.storefront!,currency:q.currency,customerCurrency:t.currency!,priceMilliunits:t.price!,purchaseDate:t.purchaseDate!,amount:q.proceeds,appleBasisPoints:null,source:q.source,verifiedAt:q.fetchedAt,basis:'provisional_published_proceeds',sources:found,programEvidence:'Account-specific ASC proceeds includes Apple commission and applicable taxes; no additional fee deducted.'};
 }
-export async function publishedProceeds(e:VerifiedEvent,read=document):Promise<NetProceeds|undefined> {
+export async function publishedProceeds(e:VerifiedEvent,read=document,readSetting: (key:string)=>Promise<string|undefined> = async()=>undefined):Promise<NetProceeds|undefined> {
   const t=e.transaction!,p=e.app.products?.find(p=>p.id===t.productId);if(!p||!t.storefront)return;
   const paths:string[]=[];
   // Offer and regular schedule are both bound to this configured product. Never
   // infer net proceeds from gross price or use an unrelated catalog tier.
-  if(p.offerId&&t.offerType===3&&e.app.offerIdentifiers.includes(t.offerIdentifier||''))paths.push(p.kind==='subscription'?`/v1/subscriptionOfferCodes/${p.offerId}/prices?include=subscriptionPricePoint,territory&limit=200`:`/v1/inAppPurchaseOfferCodes/${p.offerId}/prices?include=pricePoint,territory&limit=200`);
+  if(t.offerType===3&&e.app.offerIdentifiers.includes(t.offerIdentifier||'')) {
+    const additional=p.additionalOffers?.find(offer=>offer.identifier===t.offerIdentifier);
+    // A staged offer has its own slot. Missing configuration holds its proceeds;
+    // it must never fall back to the legacy offer or query a placeholder ID.
+    const offerId=additional ? additional.offerId || (additional.settingKey ? await readSetting(additional.settingKey) : undefined) : p.offerId;
+    if(additional&&offerId&&!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(offerId))throw Error('APPSTORE_OFFER_ID_INVALID');
+    if(offerId)paths.push(p.kind==='subscription'?`/v1/subscriptionOfferCodes/${offerId}/prices?include=subscriptionPricePoint,territory&limit=200`:`/v1/inAppPurchaseOfferCodes/${offerId}/prices?include=pricePoint,territory&limit=200`);
+  }
   if(p.kind==='subscription')paths.push(`/v1/subscriptions/${p.resourceId}/prices?filter[territory]=${t.storefront}&include=subscriptionPricePoint,territory&limit=200`);
   else if(!paths.length) {
     const d=await read(`/v2/inAppPurchases/${p.resourceId}/iapPriceSchedule`);if(Array.isArray(d.data))throw Error('SCHEDULE_INVALID');

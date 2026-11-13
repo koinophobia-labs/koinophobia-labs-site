@@ -18,7 +18,7 @@ export async function accrue(q: Queryable, event:VerifiedEvent, fx=exchangeRate,
     const t=event.transaction!;
     const row=(await q.query('select basis from appstore_verified_proceeds where transaction_id=$1',[t.transactionId])).rows[0];
     let basis=row?.basis as NetProceeds | undefined;
-    if(!basis) {try {basis=await published(event);}catch{reason='proceeds_unavailable';}}
+    if(!basis) {try {basis=await published(event,undefined,async key=>(await q.query('select value from team_settings where key=$1',[key])).rows[0]?.value);}catch{reason='proceeds_unavailable';}}
     if (!basis) reason='proceeds_unverified';
     else if (basis.transactionId!==t.transactionId || basis.app!==event.app.key || basis.productId!==t.productId || basis.storefront!==t.storefront || (basis.customerCurrency||basis.currency)!==t.currency || basis.priceMilliunits!==t.price || basis.purchaseDate!==t.purchaseDate || !basis.source || !Number.isFinite(Date.parse(basis.verifiedAt))) reason='proceeds_mismatch';
     else {
