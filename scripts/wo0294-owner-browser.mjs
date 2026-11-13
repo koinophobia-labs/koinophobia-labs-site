@@ -22,7 +22,10 @@ try{
     const calc=calculate({amount,currency:'USD',transactionId:row.transaction_id,app:'fixture',productId:'monthly',storefront:'USA',priceMilliunits:Number(row.usd_cents)*40,purchaseDate:Date.parse('2026-08-12'),appleBasisPoints:null,source:'Fictional Apple proceeds',verifiedAt:new Date().toISOString()},{currency:'USD',usdPerUnit:'1',date:'2026-08-12',source:'Fictional USD identity'});
     await db.query('update appstore_commissions set calculation=$1 where transaction_id=$2',[JSON.stringify(calc),row.transaction_id]);
   }
-  await db.query("update appstore_adjustments a set calculation=c.calculation from appstore_commissions c where a.transaction_id=c.transaction_id and a.calculation='{}'::jsonb");
+  for(const row of (await db.query("select a.transaction_id,a.final_cents,c.calculation from appstore_adjustments a join appstore_commissions c using(transaction_id) where a.report_hash='fake-month'")).rows){
+    const calc=calculate({...row.calculation.proceeds,amount:(Number(row.final_cents)*4/100).toFixed(2)},row.calculation.fx);
+    await db.query("update appstore_adjustments set calculation=$1 where transaction_id=$2 and report_hash='fake-month'",[JSON.stringify(calc),row.transaction_id]);
+  }
   await db.query("update appstore_transactions t set price_milliunits=coalesce(t.price_milliunits,(c.calculation->'proceeds'->>'priceMilliunits')::bigint),currency=coalesce(t.currency,c.calculation->>'currency') from appstore_commissions c where t.transaction_id=c.transaction_id");
   const receiptExists=Number((await db.query("select count(*)::int n from appstore_monthly_runs where fiscal_month='2026-08'")).rows[0].n)>0;
   const before=(await db.query("select (select count(*)::int from appstore_monthly_runs) receipts,(select count(*)::int from appstore_payouts) legacy_transfers,(select count(*)::int from appstore_monthly_runs where status='paid') monthly_paid")).rows[0];
