@@ -58,6 +58,17 @@ try {
   const own=await desktop.request.get(base+'/team/api/affiliate?affiliate_id=other-fixture&partner_id=affiliate-b');assert.equal(own.status(),200);
   const data=await own.json();assert.equal(data.earned,990);assert.equal(data.owedBack,710);assert.equal(data.links.length,7);
   assert.doesNotMatch(JSON.stringify(data),/original-private|other-secret|transaction_id|affiliate-b|stripe_account_id|email/);
+  // A recovered part of the fictional refund turns debt into an amount owed.
+  // Verify the requested fiscal-month payout headline as a separate real page state.
+  await db.query("insert into appstore_reversals(transaction_id,payout_key,operation_key,transfer_id,usd_cents,status) values('teachers-refunded','fake-paid-teachers-refunded','fake-refund-recovery','tr_fictional_refund',1000,'done')");
+  for(const p of [page,mobile]){
+    await p.reload();await p.getByRole('heading',{name:'after Apple pays for November 2026',exact:true}).waitFor();
+    assert.equal(await p.getByRole('heading',{name:'Owed back',exact:true}).count(),0);
+  }
+  const recovered=await (await desktop.request.get(base+'/team/api/affiliate')).json();
+  assert.equal(recovered.owed,290);assert.equal(recovered.owedBack,0);assert.equal(recovered.nextFiscalMonth,'2026-11');
+  await page.screenshot({path:evidence+'/affiliate-desktop-payout.png',fullPage:true});
+  await mobile.screenshot({path:evidence+'/affiliate-phone-payout.png',fullPage:true});
   // Both real sign-in branches must land on the affiliate page, including the
   // one-use link that the authorized invitation will use in production.
   const auth=await browser.newContext();
@@ -93,6 +104,6 @@ try {
   assert.equal(idleRequests.length,0,'An idle affiliate page must not generate requests');
   assert.equal(idleResponses.filter(s=>s===429).length,0);assert.deepEqual(errors,[]);
   assert.equal(await page.getByRole('button',{name:'Connect Stripe to get paid'}).isEnabled(),true);
-  const result={passed:true,synthetic:true,desktop:true,phone:true,deniedRoutes:deniedRoutes.length,deniedActions:actions.length+1,ownLedgerOnly:true,passwordLogin:true,oneUseSignInLink:true,copyVerified:true,onboardingCalls,liveStripeCalls:0,idleSeconds:Math.round((Date.now()-idleStart)/1000),idleRequests:idleRequests.length,http429:0,consoleErrors:errors.length};
+  const result={passed:true,synthetic:true,desktop:true,phone:true,deniedRoutes:deniedRoutes.length,deniedActions:actions.length+1,ownLedgerOnly:true,owedBackAndPositivePayoutStates:true,fiscalMonthHeadline:true,passwordLogin:true,oneUseSignInLink:true,copyVerified:true,onboardingCalls,liveStripeCalls:0,idleSeconds:Math.round((Date.now()-idleStart)/1000),idleRequests:idleRequests.length,http429:0,consoleErrors:errors.length};
   writeFileSync(evidence+'/affiliate-browser.json',JSON.stringify(result,null,2));console.log(JSON.stringify(result));
 }finally{await browser.close();await db.end();}
