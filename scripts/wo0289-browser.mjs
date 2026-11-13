@@ -52,6 +52,17 @@ try {
   await page.getByLabel('Search leads').fill('visibility-failed');assert.equal(await page.locator('.team-lead-row').count(),0);
   await page.getByLabel('Search leads').fill('visibility-deal');assert.equal(await page.locator('.team-lead-row').count(),7);
   for(const id of hidden)for(const path of ['/team/api/call-state?lead='+id,'/team/api/call-proof?lead='+id,'/team/lead-proof/'+id+'/0'])assert.equal((await context.request.get(base+path)).status(),404);
+  await page.getByLabel('Search leads').fill('');
+  const desktopInspectionPosts=[];
+  const captureInspection=r=>{if(r.method()==='POST' && r.url().includes('/team/api/'))desktopInspectionPosts.push(r.url());};
+  page.on('request',captureInspection);
+  const inspectDesktop=async id=>{await page.locator('.team-lead-row').filter({hasText:'Fictional '+id}).click();await page.locator('.call-panel h2').filter({hasText:'Fictional '+id}).waitFor();};
+  await inspectDesktop('visibility-deal-0');
+  await page.getByLabel('Current call lead').selectOption('visibility-deal-1');
+  await page.locator('.call-panel h2').filter({hasText:'Fictional visibility-deal-1'}).waitFor();
+  await inspectDesktop('visibility-deal-0');
+  assert.deepEqual(desktopInspectionPosts,[],'retained desktop selection stays read-only, including repeated queue selections');
+  page.off('request',captureInspection);
   await page.goto(base+'/team/pipeline');for(const id of hidden)assert.ok(!(await page.content()).includes(id));
   await page.setViewportSize({width:390,height:844});await page.goto(base+'/team/call');
   assert.equal(await page.getByLabel('Current call lead').locator('option').count(),kept.length+1);

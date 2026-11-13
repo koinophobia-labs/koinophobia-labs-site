@@ -1,3 +1,4 @@
+import {scheduleLead, callQueue} from "./call-schedule";
 import type { TeamLead } from "./store";
 import type { Deal } from "./types";
 import { money, SERVICES } from "./config";
@@ -72,7 +73,7 @@ export function eligibleToCall(lead: TeamLead) {
   if (
     lead.opted_out ||
     lead.recheck?.status === "re-check failed" ||
-    lead.call_outcome === "Not interested" ||
+    /^(not interested|don['’]t call|do not call)$/i.test(lead.call_outcome ?? "") ||
     !phoneNumber(lead.phone) ||
     !lead.time_zone
   )
@@ -90,38 +91,8 @@ export function hasTerminalCallDeal(lead: TeamLead, deals: Deal[]) {
   );
 }
 export function callableNow(lead: TeamLead, now = new Date()) {
-  if (!eligibleToCall(lead)) return false;
-  try {
-    const parts = new Intl.DateTimeFormat("en-US", {
-      timeZone: lead.time_zone,
-      hour: "2-digit",
-      minute: "2-digit",
-      hourCycle: "h23",
-    }).formatToParts(now);
-    const minute =
-      Number(parts.find((p) => p.type === "hour")!.value) * 60 +
-      Number(parts.find((p) => p.type === "minute")!.value);
-    return (
-      minute >= 540 &&
-      minute < 1020 &&
-      !(lead.vertical === "restaurant" && minute >= 690 && minute < 810)
-    );
-  } catch {
-    return false;
-  }
+  return eligibleToCall(lead) && ["best", "open"].includes(scheduleLead(lead, now, "America/New_York").group);
 }
 export function callNow(leads: TeamLead[], deals: Deal[], now = new Date()) {
-  return leads
-    .filter(
-      (l) =>
-        callableNow(l, now) &&
-        !hasTerminalCallDeal(l, deals),
-    )
-    .sort(
-      (a, b) =>
-        (b.leverage_score ?? 0) - (a.leverage_score ?? 0) ||
-        (b.fit_score ?? 0) - (a.fit_score ?? 0) ||
-        a.business.localeCompare(b.business) ||
-        a.id.localeCompare(b.id),
-    );
+  return callQueue(leads.filter(eligibleToCall), deals, now, "America/New_York").filter(r => ["best", "open"].includes(r.group)).map(r => r.lead);
 }

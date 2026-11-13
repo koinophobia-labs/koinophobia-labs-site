@@ -188,7 +188,8 @@ test("each subscription option carries renewal text and every original price rem
 test("route-local fonts, shared shell, and motion constraints are explicit", () => {
   for (const app of Object.values(appHomes)) {
     const layout = fs.readFileSync(path.join(root, `app/${app.slug}/layout.tsx`), "utf8");
-    assert.match(layout, /next\/font\/google/);
+    assert.match(layout, /import "\.\/fonts\.css"/);
+    assert.doesNotMatch(layout, /next\/font\/google/);
     assert.doesNotMatch(layout, /\bInter\b/);
     assert.equal((layout.match(/const (body|display) = /g) || []).length, 2);
   }

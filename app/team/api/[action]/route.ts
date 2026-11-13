@@ -1,3 +1,4 @@
+import { savePartnerTimeZone } from "@/lib/team/time-zone-store";
 import {activeLead,prepareCall,switchCallOffer,saveCell,recordOutcome,publishDeal} from "@/lib/team/call-store";
 import { actionRateLimit } from "@/lib/team/action-limits";
 import {
@@ -157,6 +158,7 @@ export async function POST(
     const p = await currentPartner();
     if (!p) throw new Fault("Please sign in.", 401);
     await actionRateLimit(teamDatabase(), p.id, action);
+    if (action === "time-zone") return ok(await transaction(q => savePartnerTimeZone(q, p, body.timeZone)));
     if (action === "password") {
       await rateLimit(teamDatabase(), "password-change:" + p.id);
       return ok(await transaction((q) => setPassword(q, jar.get(cookieName)!.value, body)));

@@ -3,7 +3,7 @@ import { rateLimit } from "./auth";
 import { Fault } from "./domain";
 
 const actions = new Set([
-  "password", "password-prompt-dismiss", "connect-onboard", "connect-dashboard",
+  "time-zone", "password", "password-prompt-dismiss", "connect-onboard", "connect-dashboard",
   "connect-retry", "connect-refresh", "check", "recheck-import", "prepare-call",
   "call-offer", "active-lead", "call-cell", "call-outcome", "deal-page", "invite",
   "import", "optout", "quote", "deal", "payout", "settings", "deactivate",

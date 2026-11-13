@@ -1397,3 +1397,15 @@
 .team-say-it {border-left:3px solid #a3cbb5;padding-left:1rem;margin:1rem 0;}
 .team-inset details {margin:1rem 0;}
 .team-inset summary {cursor:pointer;}
+
+/* WO-0285: the same local-time queue on desktop and phone. */
+.call-now-header{padding:20px;background:var(--t-panel);border:1px solid var(--t-line);border-radius:14px;margin-bottom:12px}
+.call-now-header h2{margin:0 0 8px}.call-now-header p{font-size:1.05rem;line-height:1.55;margin:0 0 10px}
+.call-hours-note{font-size:.8rem;line-height:1.5;color:#66746c;margin:12px 8px 24px}
+.call-group{margin:20px 0}.call-group h3{font-size:.85rem;margin:0;padding:12px 10px;border-bottom:1px solid #dde5df}
+.call-group h3>span{float:right;font-variant-numeric:tabular-nums}.call-group-best h3{color:#64dda5}
+.call-queue-row{width:100%;text-align:left;padding:16px 12px!important}.call-queue-content{display:grid;gap:6px;min-width:0;width:100%}
+.call-queue-content strong{overflow-wrap:anywhere}.call-queue-content small,.call-time small{display:block;white-space:normal;line-height:1.5}
+.call-row-time{font-size:.85rem;display:flex;align-items:center;gap:8px}.call-time{margin:12px 0;line-height:1.7}
+.call-queue .team-tag{white-space:nowrap}.call-group-digital{opacity:.8}.call-companion .call-queue{margin:16px 0 28px}
+.call-companion .call-queue-row{min-height:100px}.call-companion .call-now-header{padding:16px}

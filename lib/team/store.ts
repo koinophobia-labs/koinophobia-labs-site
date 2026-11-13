@@ -20,6 +20,7 @@ import {confirmedLeverage,findingSummary,strongestOpener} from './leverage';
 import {verifyLink,type Check} from '@koinophobia/site-auditor/model';
 export interface LeadFinding {plain?:string;key?:string;check:string;measurement:string;confidence?:string;impact?:string;verify_url?:string;leverage?:number;proof_url?:string}
 export type TeamLead = Lead & {
+  business_hours?: import("./call-schedule").BusinessHours;
   suggested_offer?: { id: string; price: number; name?: string; cadence?: string };
   call_outcome?: string;
   vertical?: string;
@@ -34,6 +35,7 @@ export type TeamLead = Lead & {
   evidence?: LeadFinding[];
 };
 export type TeamSnapshot = Omit<Data, "leads"> & {
+  partnerTimeZone?: string;
   jobStatuses?: {deal_id:string;stage:string}[];
   connect?: ConnectSnapshot;
   me: Partner;
@@ -153,6 +155,7 @@ export async function snapshot(
   const visibleLeads = p.role === "owner" ? shaped : shaped.filter(l => partnerLeadVisible(l, deals, paymentHistory));
   const visibleIds = new Set(visibleLeads.map(l => l.id));
   return {
+    partnerTimeZone: (await q.query("select value from team_settings where key=$1", ["partner-time-zone:"+p.id])).rows[0]?.value || "",
     jobStatuses,
     ...(connectEnabled() ? {connect: await connectSnapshot(q,p)} : {}),
     me: p,

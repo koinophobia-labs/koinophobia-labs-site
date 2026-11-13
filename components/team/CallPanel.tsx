@@ -1,7 +1,8 @@
 "use client";
 import Link from "next/link";
+import { CallQueue, LeadCallTime } from "./CallQueue";
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useEffectEvent, useRef, useState } from "react";
 import type { TeamSnapshot } from "@/lib/team/store";
 import {
   CALL_OUTCOMES,
@@ -26,10 +27,12 @@ export function CallPanel({
   data,
   compact = false,
   onLeadChange,
+  requestedLead,
 }: {
   data: TeamSnapshot;
   compact?: boolean;
   onLeadChange?: (id: string) => void;
+  requestedLead?: { id: string; sequence: number };
 }) {
   const [state, setState] = useState<Live | null>(null),
     [message, setMessage] = useState(""),
@@ -156,6 +159,10 @@ export function CallPanel({
       await act("active-lead", { id });
     }
   }
+  const chooseRequested = useEffectEvent((id: string) => { void selectLead(id); });
+  useEffect(() => {
+    if (requestedLead && !data.readonly) chooseRequested(requestedLead.id);
+  }, [requestedLead, data.readonly]);
   const lead = state?.lead,
     deal = state?.deal;
   const paid = deal && ["Client paid", "Delivered"].includes(deal.stage);
@@ -195,6 +202,7 @@ export function CallPanel({
               : "SYNCED TO YOUR ACCOUNT"}
         </span>
       </div>
+      {compact && data.me.role !== "owner" && <CallQueue compact data={data} selected={lead?.id} onSelect={id=>{if(!data.readonly)void selectLead(id);}}/>}
       <label>
         Current lead
         <select
@@ -222,6 +230,7 @@ export function CallPanel({
       ) : (
         <>
           <h2>{lead.business}</h2>
+          <LeadCallTime lead={data.leads.find(l=>l.id===lead.id) ?? lead} override={data.partnerTimeZone}/>
           <p>
             {[lead.city, lead.state].filter(Boolean).join(", ")}
             {lead.time_zone ? ` · ${lead.time_zone}` : ""}
