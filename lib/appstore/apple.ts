@@ -1,9 +1,10 @@
+import type { EarningRule } from './earning-rules';
 import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { AppStoreServerAPIClient, Environment, SignedDataVerifier, GetTransactionHistoryVersion, Order, type JWSTransactionDecodedPayload as Transaction, type ResponseBodyV2DecodedPayload as Notification } from '@apple/app-store-server-library';
 import { apps, required, type AppConfig } from './config';
 
-export type VerifiedEvent = { uuid: string; type: string; app: AppConfig; environment: Environment; transaction?: Transaction; attribution?: { offer: string; transactionId: string }; hash: string };
+export type VerifiedEvent = { uuid: string; type: string; app: AppConfig; environment: Environment; transaction?: Transaction; attribution?: { offer: string; transactionId: string }; hash: string; earningRule?: EarningRule };
 export type AppleServices = { verifier: Pick<SignedDataVerifier, 'verifyAndDecodeNotification' | 'verifyAndDecodeTransaction'>; client: Pick<AppStoreServerAPIClient, 'getTransactionInfo' | 'getTransactionHistory'> };
 export class InvalidNotification extends Error {}
 const roots = () => ['AppleRootCA-G3.cer','AppleRootCA-G2.cer'].map(f => readFileSync(process.cwd() + '/lib/appstore/certs/' + f));
@@ -50,7 +51,7 @@ export async function verifyEvent(signed: string, configured = apps(), make = se
   if (codeProof(t,t,app)) event.attribution = {offer:t.offerIdentifier!,transactionId:t.transactionId!};
   // Out-of-order renewal delivery must work even if the paid redemption webhook
   // never arrived. Only Apple-verified history in this subscription can attribute it.
-  if (!event.attribution && t.type === 'Auto-Renewable Subscription' && t.inAppOwnershipType === 'PURCHASED') {
+  if (!app.revenueShare && !event.attribution && t.type === 'Auto-Renewable Subscription' && t.inAppOwnershipType === 'PURCHASED') {
     let revision: string | null = null;
     for (let page=0; page<100; page++) {
       const history = await client.getTransactionHistory(t.transactionId!, revision, { sort:Order.ASCENDING }, GetTransactionHistoryVersion.V2);

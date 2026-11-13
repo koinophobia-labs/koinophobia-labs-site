@@ -3,7 +3,7 @@ export type MonthlyBalance={transaction_id:string;revoked:boolean;purchase_ms:st
 export async function payableBalances(q:Queryable, affiliateId = 'messiah') {
   return (await q.query(`select c.transaction_id,c.revoked,t.purchase_ms,t.reason,m.fiscal_month,m.report_hash,
     case when not c.revoked and r.fiscal_month is not null and m.transaction_id is not null
-      then least(c.usd_cents+coalesce(a.delta,0),coalesce(auth.cap,0)) else 0 end as earned,
+      then least(c.usd_cents+coalesce(a.delta,0)+coalesce((select delta_cents from appstore_effective_rounding where transaction_id=c.transaction_id),0),coalesce(auth.cap,0)) else 0 end as earned,
     coalesce(p.paid,0)+coalesce(b.paid,0)-coalesce(v.reversed,0) as paid
     from appstore_commissions c join appstore_transactions t using(transaction_id)
     left join appstore_financial_matches m using(transaction_id)

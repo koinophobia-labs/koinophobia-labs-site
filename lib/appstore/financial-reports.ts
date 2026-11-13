@@ -1,3 +1,5 @@
+import { reconcileMonthlyRounding } from './rounding';
+import type { EarningRule } from './earning-rules';
 import {createHash} from 'node:crypto';
 import {gunzipSync} from 'node:zlib';
 import type {Queryable} from '../payments';
@@ -9,7 +11,7 @@ import {calculate,exchangeRate,type Calculation,type NetProceeds} from './money'
 import {milliunits} from './published-proceeds';
 import territories from './territories.json';
 export type FinanceRow={row:number;appId:string;productId:string;country:string;price:string;customerCurrency:string;currency:string;proceeds:string;quantity:number;start:string;end:string;date:string|null;offer:string;saleOrReturn:string};
-export type FinancialTransaction={transaction_id:string;app:string;product_id:string;storefront:string;price_milliunits:string|number;currency:string;purchase_ms:string|number;transaction_offer:string|null};
+export type FinancialTransaction={transaction_id:string;app:string;product_id:string;storefront:string;price_milliunits:string|number;currency:string;purchase_ms:string|number;transaction_offer:string|null;original_id?:string;earning_rule?:EarningRule};
 const hash=(s:string|Buffer)=>createHash('sha256').update(s).digest('hex');
 function date(s:string):string {const m=/^(\d{2})\/(\d{2})\/(\d{4})$/.exec(s);if(!m)throw Error('FINANCE_DATE_INVALID');const iso=`${m[3]}-${m[1]}-${m[2]}`;if(new Date(iso).toISOString().slice(0,10)!==iso)throw Error('FINANCE_DATE_INVALID');return iso;}
 export function parseFinancialReport(text:string):FinanceRow[] {
@@ -79,9 +81,12 @@ export async function reconcileFinancial(q:Queryable,raw:Buffer,month:string,sou
     if(used>=match.quantity){held++;continue;}
     const provenance={source,reportHash,fiscalMonth:month,rows:match.matches,match:'homogeneous published per-unit proceeds; aggregate report has no transaction ID'};
     const basis:NetProceeds={transactionId:t.transaction_id,app:t.app,productId:t.product_id,storefront:t.storefront,currency:match.currency,customerCurrency:t.currency,priceMilliunits:Number(t.price_milliunits),purchaseDate:Number(t.purchase_ms),amount:match.amount,appleBasisPoints:null,source,verifiedAt:new Date().toISOString(),basis:'trued_up_financial_report',sources:[provenance]};
-    let calculation:Calculation;try{calculation=calculate(basis,await fx(match.currency,Number(t.purchase_ms)));}catch{held++;continue;}
+    const prior=(await q.query('select calculation from appstore_commissions where transaction_id=$1',[t.transaction_id])).rows[0];
+    const rule=(prior ? prior.calculation?.earningRule : t.earning_rule) as EarningRule|undefined;
+    let calculation:Calculation;try{calculation=calculate(basis,await fx(match.currency,Number(t.purchase_ms)),rule);}catch{held++;continue;}
     await applyTrueUp(q,t,calculation,reportHash,month,match.groupKey);matched++;
   }
+  await reconcileMonthlyRounding(q,month,reportHash);
   await q.query("update appstore_financial_reports set status=$2 where report_hash=$1",[reportHash,held?'complete_with_holds':'complete']);
   return {status:held?'complete_with_holds':'complete',matched,held};
 }

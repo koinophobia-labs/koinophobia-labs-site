@@ -58,11 +58,11 @@ test('monthly money ledger uses real PostgreSQL and mocked Stripe only',async t=
   const add=(id:string,month='2026-08')=>locked(db,q=>record(q,event(id,month),null,calculate(basis(id,month),fx)));
   const refund=(id:string,month='2026-08')=>locked(db,q=>record(q,event(id,month,'REFUND'),'revoked'));
   const maintain=()=>locked(db,q=>drain(q,client));
-  const reset=async()=>{await db.query('truncate appstore_monthly_allocations,appstore_monthly_attempts,appstore_monthly_authorizations,appstore_monthly_runs,appstore_reversals,appstore_payouts,appstore_adjustments,appstore_financial_matches,appstore_financial_reports,appstore_verified_proceeds,appstore_notifications,appstore_commissions,appstore_transactions');await db.query("update appstore_affiliates set partner_id='partner-fixture'");creates=0;reversals=0;mode='ok';receipts=[];sent=[];};
+  const reset=async()=>{await db.query('truncate appstore_monthly_rounding,appstore_earning_attributions,appstore_monthly_allocations,appstore_monthly_attempts,appstore_monthly_authorizations,appstore_monthly_runs,appstore_reversals,appstore_payouts,appstore_adjustments,appstore_financial_matches,appstore_financial_reports,appstore_verified_proceeds,appstore_notifications,appstore_commissions,appstore_transactions');await db.query("update appstore_affiliates set partner_id='partner-fixture'");creates=0;reversals=0;mode='ok';receipts=[];sent=[];};
   try{
     process.env.APPSTORE_APPS_JSON=JSON.stringify([app]);
     await db.query('create table team_partners(id text primary key,active boolean,role text);create table team_connect_accounts(partner_id text primary key references team_partners(id),stripe_account_id text)');
-    for(let n=0;n<2;n++)for(const f of ['020_appstore_affiliates.sql','021_appstore_monthly.sql'])await db.query(readFileSync('db/'+f,'utf8'));
+    for(let n=0;n<2;n++)for(const f of ['020_appstore_affiliates.sql','021_appstore_monthly.sql','024_appstore_earning_rules.sql'])await db.query(readFileSync('db/'+f,'utf8'));
     await db.query("insert into team_partners values('owner-fixture',true,'owner'),('partner-fixture',true,'partner');insert into team_connect_accounts values('partner-fixture','acct_fixture')");
     await t.test('all sale/cron maintenance remains accrual-only even with Connect; concurrent owner clicks send one trued-up monthly total',async()=>{
       await reset();await add('a');await add('b');await maintain();assert.equal(creates,0);assert.equal((await totals(db)).awaitingApple,310);

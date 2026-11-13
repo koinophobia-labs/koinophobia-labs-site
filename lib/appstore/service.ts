@@ -1,3 +1,4 @@
+import { resolveEarningRule } from './earning-rules';
 import type { Pool } from 'pg';
 import { Environment } from '@apple/app-store-server-library';
 import { verifyEvent, services, assertTransaction, type VerifiedEvent } from './apple';
@@ -10,7 +11,9 @@ import type { Queryable } from '../payments';
 import {publishedProceeds} from './published-proceeds';
 
 export async function accrue(q: Queryable, event:VerifiedEvent, fx=exchangeRate, published=publishedProceeds) {
+  event={...event,earningRule:await resolveEarningRule(q,event)};
   let reason=eligibility(event), calculation;
+  if(!reason && !event.earningRule)reason='earning_rule_inactive';
   if (!reason) {
     const t=event.transaction!;
     const row=(await q.query('select basis from appstore_verified_proceeds where transaction_id=$1',[t.transactionId])).rows[0];
@@ -21,7 +24,7 @@ export async function accrue(q: Queryable, event:VerifiedEvent, fx=exchangeRate,
     else {
       let conversion:Fx|undefined;
       try { conversion=await fx(basis.currency,t.purchaseDate!); } catch { reason='fx_unavailable'; }
-      if (conversion) calculation=calculate(basis,conversion);
+      if (conversion) calculation=calculate(basis,conversion,event.earningRule);
     }
   }
   await record(q,event,reason,calculation);
@@ -37,15 +40,17 @@ export async function refresh(q: Queryable, transactionIds?:string[]) {
   const verifiedIds=new Set<string>();
   for (const row of rows) {
     const app=configured.find(a=>a.key===row.app);
-    if (!app || !app.offerIdentifiers.includes(row.offer_identifier)) throw Error('ATTRIBUTION_CONFIG_CHANGED');
+    if (!app) throw Error('ATTRIBUTION_CONFIG_CHANGED');
+    const rule=(await q.query('select rule from appstore_earning_attributions where app_id=$1 and environment=$2 and original_id=$3',[app.appAppleId,row.environment,row.original_id])).rows[0]?.rule;
+    if(rule?.earningType!=='revenue_share' && !app.offerIdentifiers.includes(row.offer_identifier))throw Error('ATTRIBUTION_CONFIG_CHANGED');
     const {client,verifier}=services(app,Environment.PRODUCTION);
     const response=await client.getTransactionInfo(row.transaction_id);
     if (!response.signedTransactionInfo) throw Error('APPLE_TRANSACTION_UNAVAILABLE');
     const t=await verifier.verifyAndDecodeTransaction(response.signedTransactionInfo);
     assertTransaction(t,app,Environment.PRODUCTION);
     if (t.transactionId!==row.transaction_id || t.originalTransactionId!==row.original_id || t.productId!==row.product_id || t.price!==Number(row.price_milliunits) || t.currency!==row.currency) throw Error('TRANSACTION_CHANGED_REVIEW');
-    await accrue(q,{uuid:'recheck-'+row.transaction_id+'-'+t.signedDate,type:t.revocationDate!=null?'REFUND':'RECHECK',app,environment:Environment.PRODUCTION,transaction:t,attribution:{offer:row.offer_identifier,transactionId:row.attribution_transaction_id},hash:'api-recheck'});
-    if (!eligibility({uuid:'recheck',type:'RECHECK',app,environment:Environment.PRODUCTION,transaction:t,attribution:{offer:row.offer_identifier,transactionId:row.attribution_transaction_id},hash:'api-recheck'})) verifiedIds.add(row.transaction_id);
+    await accrue(q,{uuid:'recheck-'+row.transaction_id+'-'+t.signedDate,type:t.revocationDate!=null?'REFUND':'RECHECK',app,environment:Environment.PRODUCTION,transaction:t,...(row.offer_identifier?{attribution:{offer:row.offer_identifier,transactionId:row.attribution_transaction_id}}:{}),earningRule:rule,hash:'api-recheck'});
+    if (!eligibility({uuid:'recheck',type:'RECHECK',app,environment:Environment.PRODUCTION,transaction:t,...(row.offer_identifier?{attribution:{offer:row.offer_identifier,transactionId:row.attribution_transaction_id}}:{}),earningRule:rule,hash:'api-recheck'})) verifiedIds.add(row.transaction_id);
   }
   return verifiedIds;
 }

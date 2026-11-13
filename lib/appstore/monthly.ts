@@ -86,10 +86,13 @@ export async function markApplePaymentReceived(database:Pool,actor:Partner,input
     // Bind this explicit bank-receipt confirmation to the exact report amounts.
     // A cron's later positive correction cannot borrow this authority.
     await q.query(`insert into appstore_monthly_authorizations(fiscal_month,report_hash,transaction_id,authorized_cents,confirmed_by)
-      select $1,$2,c.transaction_id,c.usd_cents+coalesce(a.delta,0),$3
+      select $1,$2,c.transaction_id,c.usd_cents+coalesce(a.delta,0)+coalesce((select delta_cents from appstore_effective_rounding where transaction_id=c.transaction_id),0),$3
       from appstore_commissions c join appstore_financial_matches m using(transaction_id)
       left join lateral (select sum(usd_cents) delta from appstore_adjustments where transaction_id=c.transaction_id) a on true
-      where m.fiscal_month=$1 and m.report_hash=$2 and not c.revoked on conflict do nothing`,[month,hash,actor.id]);
+      where m.fiscal_month=$1 and m.report_hash=$2 and not c.revoked
+      on conflict(fiscal_month,report_hash,transaction_id) do update set authorized_cents=excluded.authorized_cents,
+      confirmed_by=excluded.confirmed_by,confirmed_at=now()
+      where appstore_monthly_authorizations.authorized_cents<>excluded.authorized_cents`,[month,hash,actor.id]);
     if(run.status==='paid')return read(); // Confirm corrections, but never pay the same month twice.
     const balances=await payableBalances(q);
     if(balances.some(t=>safe(t.earned)>0&&(!verified.has(t.transaction_id)||t.reason)))return hold('apple_verification_incomplete');

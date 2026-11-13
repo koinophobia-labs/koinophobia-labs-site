@@ -119,5 +119,36 @@
         "offerId": "bed655fa-c8cc-4ea0-8baa-3cfd614649df"
       }
     ]
+  },
+  {
+    "key": "saiikhotic-spades",
+    "bundleId": "com.koinophobialabs.saiikhotic",
+    "appAppleId": 6831629900,
+    "offerIdentifiers": [],
+    "revenueShare": true,
+    "products": [
+      {
+        "id": "com.koinophobialabs.saiikhotic.coins.small",
+        "resourceId": "6831802976",
+        "kind": "consumable"
+      },
+      {
+        "id": "com.koinophobialabs.saiikhotic.coins.medium",
+        "resourceId": "6831803486",
+        "kind": "consumable"
+      },
+      {
+        "id": "com.koinophobialabs.saiikhotic.coins.large",
+        "resourceId": "6831803510",
+        "kind": "consumable"
+      }
+    ]
+  },
+  {
+    "key": "saiikhotic-network",
+    "bundleId": "com.koinophobialabs.saiikhoticcompanion",
+    "appAppleId": 6832131528,
+    "offerIdentifiers": [],
+    "revenueShare": true
   }
 ]

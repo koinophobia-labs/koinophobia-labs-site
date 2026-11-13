@@ -16,7 +16,7 @@ export async function publishedProceeds(e:VerifiedEvent,read=document):Promise<N
   const paths:string[]=[];
   // Offer and regular schedule are both bound to this configured product. Never
   // infer net proceeds from gross price or use an unrelated catalog tier.
-  if(t.offerType===3&&e.app.offerIdentifiers.includes(t.offerIdentifier||''))paths.push(p.kind==='subscription'?`/v1/subscriptionOfferCodes/${p.offerId}/prices?include=subscriptionPricePoint,territory&limit=200`:`/v1/inAppPurchaseOfferCodes/${p.offerId}/prices?include=pricePoint,territory&limit=200`);
+  if(p.offerId&&t.offerType===3&&e.app.offerIdentifiers.includes(t.offerIdentifier||''))paths.push(p.kind==='subscription'?`/v1/subscriptionOfferCodes/${p.offerId}/prices?include=subscriptionPricePoint,territory&limit=200`:`/v1/inAppPurchaseOfferCodes/${p.offerId}/prices?include=pricePoint,territory&limit=200`);
   if(p.kind==='subscription')paths.push(`/v1/subscriptions/${p.resourceId}/prices?filter[territory]=${t.storefront}&include=subscriptionPricePoint,territory&limit=200`);
   else if(!paths.length) {
     const d=await read(`/v2/inAppPurchases/${p.resourceId}/iapPriceSchedule`);if(Array.isArray(d.data))throw Error('SCHEDULE_INVALID');
