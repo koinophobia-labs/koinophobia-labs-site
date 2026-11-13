@@ -43,6 +43,24 @@ test('affiliate access denies sales capabilities and preserves owner/caller navi
     await assert.rejects(read(),/Not found/);
 });
 
+test('affiliate uses the existing sender once and returns its acceptance ID', async () => {
+  const savedEnv={...process.env},savedFetch=globalThis.fetch;
+  let calls=0;
+  const db={query:async()=>({rows:[{id:'fictional-affiliate',role:'affiliate',key:'fictional-claim'}]})} as unknown as Queryable;
+  try {
+    process.env.VERCEL_ENV='production';process.env.RESEND_API_KEY='fictional-key';process.env.CONTACT_FROM_EMAIL='Portal <portal@example.test>';
+    globalThis.fetch=async(url,init)=>{
+      calls++;assert.equal(url,'https://api.resend.com/emails');assert.equal(init?.method,'POST');
+      const body=JSON.parse(String(init?.body));
+      assert.equal(body.to,'affiliate@example.test');assert.equal(body.from,'Koinophobia Labs <portal@example.test>');assert.equal(body.reply_to,'portal@example.test');
+      assert.match(body.text,/affiliate sales, earnings and payout progress/);assert.doesNotMatch(body.text,/manage your leads|pipeline/);
+      assert.match(body.text,/within 15 minutes/);assert.match(new Headers(init?.headers).get('Idempotency-Key')!,/^team-login\/[a-f0-9]{64}$/);
+      return Response.json({id:'fictional-acceptance-id'});
+    };
+    assert.deepEqual(await requestMagicLink(db,'affiliate@example.test','https://example.test'),{messageId:'fictional-acceptance-id'});assert.equal(calls,1);
+  } finally {globalThis.fetch=savedFetch;process.env=savedEnv;}
+});
+
 test('affiliate real PostgreSQL isolation, balances, invite and own Connect onboarding', async t => {
   const dir = mkdtempSync(join(tmpdir(), 'wo0293-affiliate-pg-'));
   const net = createServer(); await new Promise<void>(r => net.listen(0, '127.0.0.1', r));

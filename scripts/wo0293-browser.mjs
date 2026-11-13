@@ -54,6 +54,7 @@ try {
   for(const route of deniedRoutes)assert.equal((await desktop.request.get(base+'/team/'+route)).status(),404,route);
   const actions=['prepare-call','active-lead','call-cell','call-outcome','call-offer','deal-page','check','recheck-import','quote','deal','payout','invite','import','optout','settings','deactivate','connect-retry','connect-refresh','commission'];
   for(const action of actions)assert.equal((await desktop.request.post(base+'/team/api/'+action,{headers:{origin:base},data:{id:'lead-0',partner_id:'affiliate-b',affiliate_id:'other-fixture'}})).status(),404,action);
+  assert.equal((await desktop.request.post(base+'/team/api/jobs',{headers:{origin:base},data:{id:'guessed',action:'deliver'}})).status(),403);
   const own=await desktop.request.get(base+'/team/api/affiliate?affiliate_id=other-fixture&partner_id=affiliate-b');assert.equal(own.status(),200);
   const data=await own.json();assert.equal(data.earned,990);assert.equal(data.owedBack,710);assert.equal(data.links.length,7);
   assert.doesNotMatch(JSON.stringify(data),/original-private|other-secret|transaction_id|affiliate-b|stripe_account_id|email/);
@@ -92,6 +93,6 @@ try {
   assert.equal(idleRequests.length,0,'An idle affiliate page must not generate requests');
   assert.equal(idleResponses.filter(s=>s===429).length,0);assert.deepEqual(errors,[]);
   assert.equal(await page.getByRole('button',{name:'Connect Stripe to get paid'}).isEnabled(),true);
-  const result={passed:true,synthetic:true,desktop:true,phone:true,deniedRoutes:deniedRoutes.length,deniedActions:actions.length,ownLedgerOnly:true,copyVerified:true,onboardingCalls,liveStripeCalls:0,idleSeconds:Math.round((Date.now()-idleStart)/1000),idleRequests:idleRequests.length,http429:0,consoleErrors:errors.length};
+  const result={passed:true,synthetic:true,desktop:true,phone:true,deniedRoutes:deniedRoutes.length,deniedActions:actions.length+1,ownLedgerOnly:true,passwordLogin:true,oneUseSignInLink:true,copyVerified:true,onboardingCalls,liveStripeCalls:0,idleSeconds:Math.round((Date.now()-idleStart)/1000),idleRequests:idleRequests.length,http429:0,consoleErrors:errors.length};
   writeFileSync(evidence+'/affiliate-browser.json',JSON.stringify(result,null,2));console.log(JSON.stringify(result));
 }finally{await browser.close();await db.end();}
