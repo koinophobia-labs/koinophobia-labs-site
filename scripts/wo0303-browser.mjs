@@ -8,7 +8,7 @@ const results=[];
 try{
  for(const [name,device] of [['desktop',{viewport:{width:1440,height:1000}}],['iphone',{viewport:{width:390,height:844},isMobile:true,hasTouch:true,userAgent:'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 Version/18.0 Mobile Safari/604.1'}],['android',{viewport:{width:412,height:915},isMobile:true,hasTouch:true,userAgent:'Mozilla/5.0 (Linux; Android 15) AppleWebKit/537.36 Chrome/130.0.0.0 Mobile Safari/537.36'}]]){
   const context=await browser.newContext(device),page=await context.newPage(),errors=[],requests=[];
-  page.on('pageerror',e=>errors.push(e.message));page.on('request',r=>{if(r.method()==='POST')requests.push(new URL(r.url()).pathname);});
+  page.on('pageerror',e=>errors.push(e.message));page.on('request',r=>{if(r.method()==='POST'){const u=new URL(r.url());requests.push({origin:u.origin,path:u.pathname});}});
   await page.goto(base+'/team');
   const response=await context.request.post(base+'/team/api/demo',{data:{role:'partner'},headers:{origin:base}});assert.equal(response.status(),200);
   await page.goto(base+(name==='desktop'?'/team/leads':'/team/call'));
@@ -39,8 +39,11 @@ try{
   assert.ok(await page.getByRole('button',{name:'Preview · payments disabled'}).isDisabled());
   await page.locator('img.deal-proof').waitFor();assert.ok(await page.locator('img.deal-proof').evaluate(e=>e.complete&&e.naturalWidth>0));
   if(name!=='android')await page.screenshot({path:out+'/'+name+'-deal-page.png',fullPage:true});
-  assert.deepEqual(errors,[]);assert.deepEqual(requests,[]);
-  results.push({device:name,consentGate:true,stopLine:true,delimiter:name==='iphone'?'&':'?',dealPage:true,noSends:true,consoleErrors:errors.length});await context.close();
+  assert.deepEqual(errors,[]);
+  // Vercel's injected preview toolbar validates its own session; permit only that
+  // observed platform request, and fail on every application or other POST.
+  assert.ok(requests.every(r=>r.origin==='https://vercel.live'&&r.path==='/login/validate'),JSON.stringify(requests));
+  results.push({device:name,consentGate:true,stopLine:true,delimiter:name==='iphone'?'&':'?',dealPage:true,noSends:true,consoleErrors:errors.length,platformAuthPosts:requests.length});await context.close();
  }
  writeFileSync(out+'/results.json',JSON.stringify({base,results,physicalDevice:false,at:new Date().toISOString()},null,2));console.log(JSON.stringify({passed:true,results,out}));
 }finally{await browser.close();}
