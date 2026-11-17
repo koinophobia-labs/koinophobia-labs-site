@@ -239,7 +239,7 @@ export function CallPanel({
         <>
           <h2>{lead.business}</h2>
           {state.hook_tier&&<p><span className="team-tag">{tierLabel(state.hook_tier)}</span></p>}
-          <p>Rechecked: {state.checked_at?new Date(state.checked_at).toLocaleString():"Recheck needed"}</p>
+          <p>Rechecked: {state.checked_at?new Date(state.checked_at).toLocaleString("en-US",{timeZone:"UTC"})+" UTC":"Recheck needed"}</p>
           {state.check_it_yourself&&<p><strong>Ask them to check:</strong> {state.check_it_yourself}</p>}
           <LeadCallTime lead={data.leads.find(l=>l.id===lead.id) ?? lead} override={data.partnerTimeZone}/>
           <p>
