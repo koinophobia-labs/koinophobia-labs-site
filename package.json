@@ -36,7 +36,7 @@
     "db:migrate-fulfillment": "node scripts/migrate-team-fulfillment.mjs"
   },
   "dependencies": {
-    "@koinophobia/site-auditor": "file:vendor/koinophobia-site-auditor-2.1.4-fulfillment.1.tgz",
+    "@koinophobia/site-auditor": "file:vendor/koinophobia-site-auditor-2.1.4-fulfillment.2.tgz",
     "@sparticuz/chromium": "153.0.0",
     "@vercel/analytics": "^2.0.1",
     "cheerio": "^1.2.0",

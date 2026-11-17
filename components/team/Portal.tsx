@@ -34,6 +34,8 @@ import { STAGES, type Deal } from "@/lib/team/types";
 import { commission } from "@/lib/team/domain";
 import { quotePaymentLink } from "@/lib/team/payment-links";
 import { quoteMessage } from "@/lib/team/quotes";
+import {leadHookTier,tierLabel} from "@/lib/team/hook-tier";
+import {checkItYourself} from "@/lib/team/plain-findings";
 import { SCRIPTS, renderScript } from "@/lib/team/scripts";
 const navigation = [
   ["leads", "Leads", Users],
@@ -177,7 +179,7 @@ export function Portal({
   const selectedLead =
     availableLeads.find((l) => l.id === selected) || availableLeads[0];
   const activeScript = SCRIPTS.find((s) => s.id === script) || SCRIPTS[0];
-  const scriptBody = renderScript(activeScript.body, selectedLead?.recheck?.status === "re-check failed" ? undefined : (selectedLead?.recheck?.findings ?? selectedLead?.evidence)?.find(f => f.confidence === "confirmed"), data.me.name).replace(
+  const scriptBody = renderScript(activeScript.body, selectedLead?.recheck?.status === "re-check failed" ? undefined : (selectedLead?.recheck?.findings ?? selectedLead?.evidence)?.find(f => f.confidence === "confirmed"), data.me.name,selectedLead?.business).replace(
     "[MAILING ADDRESS — Blake fills in]",
     data.mailingAddress || "[MAILING ADDRESS — Blake fills in]",
   );
@@ -354,6 +356,8 @@ export function Portal({
                       </span>
                     </div>
                     <h2>{selectedLead.business}</h2>
+                    <p><span className="team-tag">{tierLabel(leadHookTier(selectedLead))}</span></p>
+                    <p>Rechecked: {selectedLead.recheck?.checked_at??selectedLead.evidence?.[0]?.measured_at??'Recheck needed'}</p>
                     <p>{selectedLead.website}</p>
                     <div className="team-inset">
                       <p className="team-eyebrow">THE REASON TO REACH OUT</p>
@@ -363,7 +367,8 @@ export function Portal({
                           {i===0&&<p className="team-eyebrow">STRONGEST CONFIRMED FINDING</p>}
                           <p className="team-plain-finding">{e.plain ?? plainFinding(e)}</p>
                           <details><summary>Technical details</summary><p><strong>{e.check}:</strong> {e.measurement}</p>{e.impact&&<p>{e.impact}</p>}</details>
-                          {e.verify_url&&<p><a href={e.verify_url} target="_blank" rel="noopener noreferrer">Check it yourself ↗</a></p>}
+                          {i===0&&["A","B"].includes(leadHookTier(selectedLead))&&<p><strong>Ask them to check:</strong> {checkItYourself(e)}</p>}
+                          {e.verify_url&&!/pagespeed\.web\.dev/.test(e.verify_url)&&<p><a href={e.verify_url} target="_blank" rel="noopener noreferrer">Check it yourself ↗</a></p>}
                           {e.proof_url&&<figure>
                             {/* eslint-disable-next-line @next/next/no-img-element */}
                             <img src={e.proof_url} alt={`Screenshot evidence: ${e.check}`} style={{maxWidth:'100%',maxHeight:620,objectFit:'contain'}} loading="lazy" />
@@ -970,8 +975,8 @@ export function Portal({
                     <li>
                       <strong>Show, then offer.</strong>
                       <p>
-                        A two-minute recording makes the issue clear before they
-                        buy.
+                        Ask them to check the break on their own phone. Text the
+                        screenshot only after a clear verbal yes.
                       </p>
                     </li>
                     <li>

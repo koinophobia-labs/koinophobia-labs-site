@@ -1,3 +1,5 @@
+import {previewDeal,PREVIEW_CODE} from "@/lib/team/break-first-preview";
+import {REFUND} from "@/lib/team/scripts";
 import type { Metadata } from "next";
 import Image from "next/image";
 import { teamDatabase, hostedPreview } from "@/lib/team/db";
@@ -18,7 +20,7 @@ export default async function DealPage({
   params: Promise<{ code: string }>;
 }) {
   const { code } = await params;
-  const page = hostedPreview() ? null : await publicDeal(teamDatabase(), code);
+  const page = hostedPreview() ? (code===PREVIEW_CODE?previewDeal():null) : await publicDeal(teamDatabase(), code);
   if (!page)
     return (
       <main className="team-workspace deal-public">
@@ -54,20 +56,14 @@ export default async function DealPage({
           <details><summary>Technical details</summary><p>{page.problem}</p>{page.impact&&<p>{page.impact}</p>}</details>
           {page.verify_url&&<p><a href={page.verify_url} target="_blank" rel="noopener noreferrer">Check it yourself ↗</a></p>}
           {page.proof_reviewed_by && page.proof_image && <>
-          <p>
-            Screenshot captured{" "}
-            {new Date(page.proof_at).toLocaleDateString("en-US", {
-              timeZone: "UTC",
-            })}
-            .
-          </p>
+          <p>{page.proof_caption}</p>
           {/* Auditor raster is served privately without a public storage URL. */}
           <Image
             unoptimized
             width={1280}
             height={900}
             className="deal-proof"
-            src={`/go/${page.code}/proof`}
+            src={page.is_demo?"/fixtures/wo0303-proof.svg":`/go/${page.code}/proof`}
             alt="Auditor screenshot showing the confirmed website problem"
           />
           </>}
@@ -77,6 +73,8 @@ export default async function DealPage({
           {page.deal.monthly ? "/month" : ""}
         </h2>
         <p>{service.scope}</p>
+        <p><strong>What fixed means:</strong> {page.fixed_means}</p>
+        <p>{REFUND}</p>
         <p>
           <strong>Turnaround:</strong> {service.turnaround}.
         </p>

@@ -6,7 +6,7 @@ export function confirmedLeverage(rows:unknown):AuditFinding[]{
   return rankFindings(rows.filter((f):f is AuditFinding=>!!f&&typeof f==='object'&&isConfirmed(f)));
 }
 export function findingSummary(f:AuditFinding){
-  return {plain:plainFinding(f),key:f.key,check:f.check,measurement:f.measurement,confidence:f.confidence,impact:impactLine(f),verify_url:verifyLink(f),leverage:leverageScore(f),measured_at:f.measured_at};
+  return {label:f.label,page_name:f.page_name,url:f.url,plain:plainFinding(f),key:f.key,check:f.check,measurement:f.measurement,confidence:f.confidence,impact:impactLine(f),verify_url:verifyLink(f),leverage:leverageScore(f),measured_at:f.measured_at};
 }
 export function strongestOpener(rows:unknown):string|undefined {
   const f=confirmedLeverage(rows)[0];

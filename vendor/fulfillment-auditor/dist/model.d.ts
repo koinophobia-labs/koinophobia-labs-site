@@ -1,4 +1,4 @@
-export declare const VERSION = "2.1.4-fulfillment.1";
+export declare const VERSION = "2.1.4-fulfillment.2";
 export declare const LINK_DELAY_MS = 600000;
 export type Check = 'Dead contact / booking / order link' | 'Closed Google Form' | 'HTTPS failure' | 'Mobile layout' | 'Slow page' | 'Unfinished content' | 'Wrong key link' | 'Broken image' | 'Booking widget failure' | 'Expiring certificate' | 'Insecure form' | 'Mobile contact route' | 'Lighthouse mobile performance';
 export interface Proof {
@@ -13,6 +13,8 @@ export interface Proof {
     path?: string;
 }
 export interface Observation {
+    label?: string;
+    page_name?: string;
     run_id: string;
     check: Check;
     key: string;
@@ -54,6 +56,7 @@ export interface Rendered {
     error?: string;
     incomplete?: boolean;
     proof?: Proof;
+    actionLabels?: Record<string, string>;
     signals?: Signal[];
     resolution?: ResolutionEvidence;
 }

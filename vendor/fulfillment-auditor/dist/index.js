@@ -110,7 +110,7 @@ export async function auditSite(raw, options = {}) {
         const home = samples[0];
         if (home.error || blocked(home) || home.incomplete)
             result.notes.push({ name: "Couldn't verify", detail: 'The page was unavailable, challenged, or incomplete. Missing content and timings were not treated as defects.' });
-        const actions = [...new Set([...(options.includeHomeAsAction ? [url] : []), ...(options.actionUrls ?? []), ...(!home.error && !blocked(home) ? home.links : []), ...(!desktop?.error && desktop && !blocked(desktop) ? desktop.links : [])])].slice(0, Math.min(3, options.maxLinks ?? 3));
+        const actions = [...new Set([...(options.includeHomeAsAction ? [url] : []), ...(options.actionUrls ?? []), ...(!home.error && !blocked(home) ? home.links : []), ...(!desktop?.error && desktop && !blocked(desktop) ? desktop.links : [])])].slice(0, Math.max(0, Math.min(8, options.maxLinks ?? 8)));
         for (const target of actions) {
             let p;
             try {
@@ -122,7 +122,7 @@ export async function auditSite(raw, options = {}) {
             }
             const problem = linkProblem(p);
             if (problem) {
-                const observation = observe(p, problem.check, problem.key, problem.measurement, run_id);
+                const observation = { ...observe(p, problem.check, problem.key, problem.measurement, run_id), label: home.actionLabels?.[target] ?? desktop?.actionLabels?.[target], page_name: home.heading || home.title || 'home' };
                 result.observations.push(observation);
                 result.findings.push(...confirm([observation], options.previous ?? []));
             }
@@ -132,7 +132,7 @@ export async function auditSite(raw, options = {}) {
         // Keep only the most recent result for each kind and URL.
         result.findings = result.findings.sort((a, b) => Number(isConfirmed(b)) - Number(isConfirmed(a))).filter((f, i, a) => a.findIndex(x => x.check === f.check && x.url === f.url && x.key === f.key) === i);
         result.findings = rankFindings(result.findings.map(f => ({ ...f, impact: impactLine(f), verify_url: verifyLink(f), leverage: leverageScore({ ...f, verify_url: verifyLink(f) }) })));
-        if (result.findings.some(f => f.confidence !== 'confirmed' && /Dead|Closed|Wrong key/.test(f.check)))
+        if (result.findings.some(f => f.confidence !== 'confirmed' && /Dead|Closed|Wrong key/.test(f.check)) || result.notes.some(n => n.detail === 'An action page could not be verified. No dead-link finding was created.'))
             result.retry_after = new Date(Date.now() + LINK_DELAY_MS).toISOString();
         return result;
     }

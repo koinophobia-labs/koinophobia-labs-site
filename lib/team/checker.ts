@@ -210,7 +210,7 @@ export function inspectHtml(page: PageResponse): {
   $("a").each((_, el) => {
     const href = $(el).attr("href") ?? "";
     const label = $(el).text();
-    if (!/contact|book|appointment|schedule/i.test(`${href} ${label}`)) return;
+    if (!/contact|book|appointment|schedule|order|quote|inquiry/i.test(`${href} ${label}`)) return;
     if (!href || href === "#") {
       findings.push({
         name: "Contact / booking link",
@@ -239,7 +239,7 @@ export async function checkSite(raw: string, previous: import('@koinophobia/site
   const {auditSite}=await import('@koinophobia/site-auditor');
   let executablePath:string|undefined;let args:string[]|undefined;
   if(process.env.VERCEL){const chromium=(await import('@sparticuz/chromium')).default;executablePath=await chromium.executablePath();args=chromium.args;}
-  const result=await auditSite(raw,{previous,executablePath,args,maxLinks:2});
+  const result=await auditSite(raw,{previous,executablePath,args,maxLinks:8});
   return {
     version:result.version,run_id:result.run_id,url:result.url,final_url:result.final_url,
     measured_at:result.measured_at,duration_ms:result.samples[0]?.load??0,

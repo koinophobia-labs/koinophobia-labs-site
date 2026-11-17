@@ -1,5 +1,7 @@
 "use client";
 import Link from "next/link";
+import {previewCallState} from "@/lib/team/break-first-preview";
+import {tierLabel} from "@/lib/team/hook-tier";
 import { CallQueue, LeadCallTime } from "./CallQueue";
 import Image from "next/image";
 import { useEffect, useEffectEvent, useRef, useState } from "react";
@@ -34,11 +36,14 @@ export function CallPanel({
   onLeadChange?: (id: string) => void;
   requestedLead?: { id: string; sequence: number };
 }) {
-  const [state, setState] = useState<Live | null>(null),
+  const [state, setState] = useState<Live | null>(()=>data.readonly?{...previewCallState(data.leads[0]),followups:[],alerts:[]}:null),
     [message, setMessage] = useState(""),
     [busy, setBusy] = useState(false),
     [stale, setStale] = useState(false);
   const [preparationErrors, setPreparationErrors] = useState<Record<string, string>>({});
+  const [origin,setOrigin]=useState("https://koinophobialabs.com");
+  useEffect(()=>{setOrigin(window.location.origin);},[]);
+  const [textConsent,setTextConsent] = useState<string|null>(null);
   const [slowUntil, setSlowUntil] = useState(0);
   const [now, setNow] = useState(Date.now);
   const callback = useRef(onLeadChange);
@@ -63,6 +68,7 @@ export function CallPanel({
     const v = await r.json();
     if (!r.ok) throw Error(v.error || "Unable to sync.");
     if (version !== generation.current) return;
+    if(v.lead?.id!==lastActive.current)setTextConsent(null);
     setState(v);
     setStale(false);
     if (v.lead && v.lead.id !== lastActive.current) {lastActive.current = v.lead.id; callback.current?.(v.lead.id);}
@@ -116,6 +122,8 @@ export function CallPanel({
     };
   }, [data.readonly]);
   async function act(action: string, body: object) {
+    if(["call-outcome","call-offer","call-cell"].includes(action))setTextConsent(null);
+    if(data.readonly){setMessage("Fake preview. No changes are sent.");return;}
     generation.current++;
     setBusy(true);
     setMessage("");
@@ -142,7 +150,9 @@ export function CallPanel({
     }
   }
   async function selectLead(id: string) {
+    setTextConsent(null);
     const selected = data.leads.find(l => l.id === id);
+    if(data.readonly){if(selected)setState({...previewCallState(selected),followups:[],alerts:[]});return;}
     // Retained deals can be inspected without selecting an opted-out contact
     // for calling or preparing a payment page. Their existing warning stays.
     if (data.me.role !== "owner" && selected &&
@@ -161,7 +171,7 @@ export function CallPanel({
   }
   const chooseRequested = useEffectEvent((id: string) => { void selectLead(id); });
   useEffect(() => {
-    if (requestedLead && !data.readonly) chooseRequested(requestedLead.id);
+    if (requestedLead) chooseRequested(requestedLead.id);
   }, [requestedLead, data.readonly]);
   const lead = state?.lead,
     deal = state?.deal;
@@ -174,12 +184,12 @@ export function CallPanel({
       !lead?.opted_out,
   );
   const url = available
-    ? `https://koinophobialabs.com/go/${state!.page!.code}`
+    ? `${origin}/go/${state!.page!.code}`
     : "";
   const cell = state?.details?.cell || "";
   const text =
     lead && deal && url
-      ? dealText(lead, state!.plain_problem || state!.problem || "the agreed website issue", deal, url)
+      ? dealText(lead, state!.finding_label || "agreed website", deal, url)
       : "";
   const ios =
     typeof navigator !== "undefined" &&
@@ -202,13 +212,13 @@ export function CallPanel({
               : "SYNCED TO YOUR ACCOUNT"}
         </span>
       </div>
-      {compact && data.me.role !== "owner" && <CallQueue compact data={data} selected={lead?.id} onSelect={id=>{if(!data.readonly)void selectLead(id);}}/>}
+      {compact && data.me.role !== "owner" && <CallQueue compact data={data} selected={lead?.id} onSelect={id=>{void selectLead(id);}}/>}
       <label>
         Current lead
         <select
           aria-label="Current call lead"
           value={lead?.id || ""}
-          disabled={navigationDisabled}
+          disabled={busy}
           onChange={(e) => void selectLead(e.target.value)}
         >
           <option value="">Choose a lead</option>
@@ -221,15 +231,16 @@ export function CallPanel({
             ))}
         </select>
       </label>
-      {data.readonly ? (
-        <p>Call sync uses your signed-in account. This preview is read-only.</p>
-      ) : !state ? (
+      {!state ? (
         <p role="status">Connecting to your call screen…</p>
       ) : !lead ? (
         <p>Open a lead on your computer, or choose one above.</p>
       ) : (
         <>
           <h2>{lead.business}</h2>
+          {state.hook_tier&&<p><span className="team-tag">{tierLabel(state.hook_tier)}</span></p>}
+          <p>Rechecked: {state.checked_at?new Date(state.checked_at).toLocaleString():"Recheck needed"}</p>
+          {state.check_it_yourself&&<p><strong>Ask them to check:</strong> {state.check_it_yourself}</p>}
           <LeadCallTime lead={data.leads.find(l=>l.id===lead.id) ?? lead} override={data.partnerTimeZone}/>
           <p>
             {[lead.city, lead.state].filter(Boolean).join(", ")}
@@ -250,7 +261,7 @@ export function CallPanel({
                     : state.page?.opened_at
                       ? "Opened"
                       : state.page
-                        ? "Ready to send"
+                        ? textConsent===lead.id?"Ready to text":"Ask for consent to text"
                         : "No deal page yet"}
           </div>
           {stale && (
@@ -269,17 +280,18 @@ export function CallPanel({
                 {state.say_it&&<div className="team-say-it"><strong>Say it like this</strong><p>{state.say_it}</p></div>}
                 <details><summary>Technical details</summary><p>{state.problem}</p>{state.impact&&<p>{state.impact}</p>}</details>
                 {state.verify_url&&<p><a href={state.verify_url} target="_blank" rel="noopener noreferrer">Check it yourself ↗</a></p>}
-                {state.proof_available&&<Image unoptimized width={390} height={844} className="deal-proof" src={'/team/api/call-proof?lead='+encodeURIComponent(lead.id)} alt="Screenshot of the strongest confirmed website finding" />}
+                {state.proof_available&&<Image unoptimized width={390} height={844} className="deal-proof" src={data.readonly?'/fixtures/wo0303-proof.svg':'/team/api/call-proof?lead='+encodeURIComponent(lead.id)} alt="Screenshot of the strongest confirmed website finding" />}
               </section>}
+              <label style={{display:"flex",alignItems:"center",gap:12}}><input style={{width:20,height:20,minHeight:20,flexShrink:0}} type="checkbox" checked={textConsent===lead.id} disabled={busy || stale || !["A","B"].includes(state.hook_tier??"")} onChange={e=>setTextConsent(e.target.checked?lead.id:null)} /> Consent to text: yes — a clear verbal yes on this call</label>
               <div className="call-primary-actions">
-                {tel && !stale ? (
+                {tel && !data.readonly && !stale && (state.hook_tier === "A" || state.hook_tier === "B") ? (
                   <a className="team-button" href={`tel:${tel}`}>
                     Call
                   </a>
                 ) : (
-                  <span>No callable business number</span>
+                  <span>{data.readonly?"Preview · calls disabled":"No callable business number"}</span>
                 )}
-                {sms && url && !stale ? (
+                {sms && text && url && !stale && textConsent === lead.id && Boolean(state.page?.proof_reviewed_by) && (state.hook_tier === "A" || state.hook_tier === "B") ? (
                   <a className="team-button" href={sms}>
                     Text link
                   </a>
@@ -299,6 +311,7 @@ export function CallPanel({
                   ))}
                 </div>
               )}
+              {deal && deal.services[0]!=="fix" && <p>Select The Fix to use this call script and text.</p>}
               <CellEditor
                 key={"cell:" + lead.id + ":" + cell}
                 initial={cell}

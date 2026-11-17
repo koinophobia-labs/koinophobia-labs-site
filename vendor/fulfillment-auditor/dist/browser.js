@@ -98,7 +98,7 @@ export async function openBrowser(options = {}) {
                 error = /ERR_HTTP_RESPONSE_CODE_FAILURE/.test(message) && ([404, 410].includes(status) || status >= 500 && status <= 599) ? undefined : /ERR_CERT_/.test(message) ? 'certificate' : policyError ? 'policy' : gateway.errors.get(u.hostname) ?? (/ERR_NAME_NOT_RESOLVED/.test(message) ? 'dns' : /Timeout/.test(message) ? 'timeout' : 'navigation');
             }
             try {
-                const rendered = await page.evaluate(snapshotDOM).catch(() => ({ url: raw, title: '', heading: '', text: '', html: '', viewportMeta: '', width: 0, screen: 0, scale: 1, overflow: 0, overlaps: 0, lcp: null, load: null, links: [], notes: [], mixedBroken: 0, brokenImages: [] }));
+                const rendered = await page.evaluate(snapshotDOM).catch(() => ({ url: raw, title: '', heading: '', text: '', html: '', viewportMeta: '', width: 0, screen: 0, scale: 1, overflow: 0, overlaps: 0, lcp: null, load: null, actionLabels: {}, links: [], notes: [], mixedBroken: 0, brokenImages: [] }));
                 if (proxyFailure)
                     error = 'proxy_failure';
                 if (error && rendered.title === 'Privacy error' && /your connection is not private|NET::ERR_CERT_/i.test(rendered.text))
@@ -234,17 +234,22 @@ export function snapshotDOM() {
             }
         }
     const links = [];
+    const actionLabels = {};
     for (const el of document.querySelectorAll('a[href],iframe[src]')) {
         if (!visible(el))
             continue;
         const raw = el.getAttribute('href') ?? el.getAttribute('src') ?? '';
-        if (!raw || /^(#|tel:|mailto:|javascript:)/i.test(raw) || !/contact|book|appoint|schedule|reserv|order|forms\.gle|docs\.google\.com\/forms/i.test(`${raw} ${el.textContent}`))
+        if (!raw || /^(#|tel:|mailto:|javascript:)/i.test(raw) || !/contact|book|appoint|schedule|reserv|order|quote|inquiry|enquiry|forms\.gle|docs\.google\.com\/forms/i.test(`${raw} ${el.textContent}`))
             continue;
         try {
             const u = new URL(raw, location.href);
             u.hash = '';
-            if (['http:', 'https:'].includes(u.protocol) && u.href !== location.href)
+            if (['http:', 'https:'].includes(u.protocol) && u.href !== location.href) {
                 links.push(u.href);
+                const label = (el.textContent ?? el.getAttribute('title') ?? '').replace(/\s+/g, ' ').trim();
+                if (label && label.length <= 80)
+                    actionLabels[u.href] = label;
+            }
         }
         catch { }
     }
@@ -260,7 +265,7 @@ export function snapshotDOM() {
     const width = Math.max(document.documentElement.scrollWidth, document.body?.scrollWidth ?? 0);
     const visibleWidth = visualViewport?.width || document.documentElement.clientWidth;
     const overflow = getComputedStyle(document.documentElement).overflowX === 'hidden' || (document.body && getComputedStyle(document.body).overflowX === 'hidden') ? 0 : Math.max(0, width - visibleWidth);
-    return { url: location.href, title: document.title, heading, text: text.slice(0, 25000), html: document.documentElement.outerHTML.slice(0, 2_000_000), viewportMeta: document.querySelector('meta[name="viewport" i]')?.getAttribute('content') ?? '', width, screen: screen.width, scale: visualViewport?.scale ?? 1, overflow, overlaps, lcp: window.__auditLcp, load: nav?.loadEventEnd || null, links: [...new Set(links)], notes, mixedBroken: 0, brokenImages: [...document.images].filter(i => visible(i) && i.complete && i.naturalWidth === 0).map(i => i.src) };
+    return { url: location.href, title: document.title, heading, text: text.slice(0, 25000), html: document.documentElement.outerHTML.slice(0, 2_000_000), viewportMeta: document.querySelector('meta[name="viewport" i]')?.getAttribute('content') ?? '', width, screen: screen.width, scale: visualViewport?.scale ?? 1, overflow, overlaps, lcp: window.__auditLcp, load: nav?.loadEventEnd || null, actionLabels, links: [...new Set(links)], notes, mixedBroken: 0, brokenImages: [...document.images].filter(i => visible(i) && i.complete && i.naturalWidth === 0).map(i => i.src) };
 }
 // Positive, passive measurements for fulfillment. This never creates lead findings.
 export function snapshotResolution() {

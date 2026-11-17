@@ -14,6 +14,7 @@ import { seed } from "../lib/team/seed";
 import { transaction } from "../lib/team/db";
 import {
   activeLead,
+  recordOutcome,
   prepareCall,
   switchCallOffer,
   callState,
@@ -51,7 +52,7 @@ test("WO-0276 real PostgreSQL call readiness", async (t) => {
     transaction(fn, db);
   const data = seed(true),
     [, a, b] = data.partners;
-  const proof = confirmedEvidence();
+  const proof = {...confirmedEvidence(),measured_at:new Date().toISOString()};
   try {
     for (const f of [
       "001_crm_leads.sql",
@@ -133,17 +134,31 @@ test("WO-0276 real PostgreSQL call readiness", async (t) => {
         assert.equal((await callState(db,a,lead)).page?.code,state.page!.code);
       }
     });
-    await t.test("confirmed text-only finding creates a ready page without requiring a screenshot", async () => {
+    await t.test("legacy text-only finding is held without a callable page", async () => {
       await makeLead("text-only",{evidence:[{confidence:"confirmed",measurement:"Confirmed missing booking link."}]});
       await tx(q=>activeLead(q,a,"text-only"));
       await tx(q=>prepareCall(q,a,"text-only"));
       const state=await callState(db,a,"text-only");
-      assert.ok(state.page?.code);
+      assert.equal(state.page,null);
+      assert.equal(state.hook_tier,"hold");
       assert.equal(state.proof_available,false);
       assert.equal(state.problem,"Confirmed missing booking link.");
       assert.doesNotMatch(state.script,/show you the screenshot/);
-      const page=await publicDeal(db,state.page!.code);assert.ok(page);assert.equal(page.proof_image,"");
-      await assert.rejects(tx(q=>publishDeal(q,a,state.deal!.id,true)));
+      assert.doesNotMatch(state.script,/\$299/);
+    });
+    await t.test("new outcomes persist; developer referral schedules only one follow-up and fixed stops calling",async()=>{
+      await makeLead('outcomes');
+      await tx(q=>prepareCall(q,a,'outcomes'));
+      for(const outcome of ['Saw it','Text OK','Referred to current dev']){
+        await tx(q=>recordOutcome(q,a,'outcomes',outcome));
+        assert.equal((await callState(db,a,'outcomes')).details?.outcome,outcome);
+      }
+      assert.ok((await callState(db,a,'outcomes')).details?.follow_up_at);
+      await tx(q=>recordOutcome(q,a,'outcomes','Referred to current dev'));
+      assert.equal((await callState(db,a,'outcomes')).details?.follow_up_at,null);
+      await tx(q=>recordOutcome(q,a,'outcomes','Fixed on recheck'));
+      const state=await callState(db,a,'outcomes');
+      assert.equal(state.hook_tier,'hold');assert.doesNotMatch(state.script,/\$299/);
     });
     await t.test("ineligible leads never get auto pages; terminal deals are preserved when opening a new eligible offer", async () => {
       for (const [id,extra] of Object.entries({failed:{recheck:{status:"re-check failed"}},unconfirmed:{evidence:[]},custom:{suggested_offer:{id:"site",price:250000}},tampered:{suggested_offer:{id:"fix",price:1}},declined:{call_outcome:"Not interested"}})) {

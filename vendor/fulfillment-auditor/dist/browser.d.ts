@@ -23,6 +23,7 @@ export declare function snapshotDOM(): {
     overlaps: number;
     lcp: number | null;
     load: number | null;
+    actionLabels: Record<string, string>;
     links: string[];
     notes: {
         name: string;

@@ -22,6 +22,7 @@ const l: TeamLead = {
   time_zone: "America/Chicago",
   city: "Chicago",
   fit_score: 50,
+  evidence:[{check:"Mobile layout",key:"horizontal-overflow",confidence:"confirmed",measurement:"Fictional overflow",measured_at:"2026-11-10T12:00:00Z"}],
 };
 test("CSPRNG deal codes: 10 characters, case insensitive, unique, no ambiguous characters", () => {
   const codes = Array.from({ length: 10000 }, newDealCode);
@@ -79,7 +80,7 @@ test("call-now filters local 9–5, unknown zones, opt-outs and restaurant lunch
   );
   assert.equal(
     callableNow(
-      { ...l, time_zone: "America/New_York" },
+      { ...l, time_zone: "America/New_York",evidence:l.evidence!.map(f=>({...f,measured_at:"2026-07-01T12:00:00Z"})) },
       new Date("2026-07-01T13:00:00Z"),
     ),
     true,
@@ -101,20 +102,9 @@ test("phone and SMS links encode body safely with iPhone and Android delimiters"
   assert.equal(smsLink("", body, true), "sms:&body=" + encodeURIComponent(body));
   assert.equal(smsLink("", body, false), "sms:?body=" + encodeURIComponent(body));
 });
-test("script uses confirmed problem, name and city; unknown proof makes no sales claim", () => {
-  assert.match(callScript(l, "Alex", "Booking link returns 404"), /Chicago/);
-  assert.match(
-    callScript(l, "Alex", "Booking link returns 404"),
-    /Booking link returns 404/,
-  );
-  assert.doesNotMatch(callScript(l, "Alex", null), /\$299/);
-  assert.match(
-    dealText(
-      l,
-      "Broken booking link",
-      seed(true).deals[0],
-      "https://example.test/go/abcdefghjk",
-    ),
-    /\$299/,
-  );
+test("script requires a recorded visible finding and uses the partner name",()=>{
+ const f={check:'Dead contact / booking / order link',label:'Book Now',key:'http-404',measured_at:new Date().toISOString()};
+ const script=callScript(l,'Alex','Broken booking link',true,f);
+ assert.match(script,/Alex/);assert.match(script,/Book Now/);assert.doesNotMatch(callScript(l,'Alex',null),/\$299/);
+ assert.match(dealText(l,'Book Now',seed(true).deals[0],'https://example.test/go/demo'),/\$299/);
 });
