@@ -1,0 +1,9 @@
+{
+  "mission": "M-0033",
+  "branch": "studio/M-0033-old-dog-privacy",
+  "base": "483191a50674b973a6d21c4133e9246c96045041",
+  "owned": [
+    "app/old-dog/privacy/page.tsx",
+    ".studio/scope/M-0033-old-dog-privacy.json"
+  ]
+}
