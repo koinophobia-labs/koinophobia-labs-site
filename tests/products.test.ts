@@ -47,12 +47,12 @@ test("Dreamcatcher is shipped with its verified free App Store release; Teacher'
   const dreamcatcher = shippedProducts.find(product => product.slug === "dreamcatcher");
   assert.ok(dreamcatcher);
   assert.equal(dreamcatcher.stage, "public");
-  assert.equal(dreamcatcher.verifiedAt, "2026-10-21");
+  assert.equal(dreamcatcher.verifiedAt, "2026-11-18");
   assert.deepEqual(dreamcatcher.appStore, {
     url: "https://apps.apple.com/us/app/dreamcatcher-night-journal/id6821750717",
-    version: "1.0",
-    verifiedAt: "2026-10-21",
-    releasedAt: "2026-10-21",
+    version: "2.3",
+    verifiedAt: "2026-11-18",
+    releasedAt: "2026-11-14",
     priceLine: priceLine("dreamcatcher"),
   });
   assert.equal(dreamcatcher.appStore.url, dreamcatcherRelease.url);
@@ -64,9 +64,9 @@ test("Dreamcatcher is shipped with its verified free App Store release; Teacher'
   assert.equal(teachersPet.stage, "public");
   assert.deepEqual(teachersPet.appStore, {
     url: "https://apps.apple.com/us/app/teachers-pet-personal-school/id6808981717",
-    version: "1.0",
-    verifiedAt: "2026-11-10",
-    releasedAt: "2026-11-06",
+    version: "1.2",
+    verifiedAt: "2026-11-18",
+    releasedAt: "2026-11-18",
     priceLine: priceLine("teachers-pet"),
   });
   assert.ok(teachersPet.evidence.some(item => item.source.includes("6808981717")));

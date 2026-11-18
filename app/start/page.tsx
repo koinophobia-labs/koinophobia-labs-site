@@ -10,7 +10,7 @@ import { STUDIO_URL } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "Start a project",
-  description: `Tell Blake the idea in two paragraphs. Hear back ${replyPromise} with a real answer.`,
+  description: `Tell me the idea in two paragraphs. Hear back ${replyPromise} with a real answer.`,
   alternates: { canonical: `${STUDIO_URL}/start` },
   robots: { index: false, follow: true },
 };
@@ -26,13 +26,13 @@ export default async function StartPage({ searchParams }: { searchParams: Promis
         <section className="two" aria-labelledby="start-title">
           <div className="page-head">
             <p className="k s">
-              <b>{appStore ? "App Store launch packages" : business ? offer === "audit" ? "Revenue Leak Audit · $250" : "Work With Us" : readiness ? "Straight Answer" : "Start a project"}</b>
+              <b>{appStore ? "App Store launch packages" : business ? offer === "audit" ? "Revenue Leak Audit · $250" : "Work with me" : readiness ? "Straight Answer" : "Start a project"}</b>
             </p>
             <h1 id="start-title" className="s" style={{ "--i": 1 } as React.CSSProperties}>
-              {appStore ? "Send me the app. You’ll get a straight answer." : business ? "Tell Blake what’s slipping." : readiness ? "Send the spec. Get a straight answer." : "Tell me the idea."}
+              {appStore ? "Send me the app. You’ll get a straight answer." : business ? "Tell me what’s slipping." : readiness ? "Send the spec. Get a straight answer." : "Tell me the idea."}
             </h1>
             <p className="lede s" style={{ "--i": 2 } as React.CSSProperties}>
-              {appStore ? (<>Tell me what you have and where you’re stuck. I’ll confirm the right package and written scope before any paid work. This inquiry takes no payment. App Store approval is not guaranteed.</>) : business ? (<>Share the problem in one line. Blake will follow up to confirm fit and the next step. An audit request does not book a time or take payment.</>) : readiness ? (
+              {appStore ? (<>Tell me what you have and where you’re stuck. I’ll confirm the right package and written scope before any paid work. This inquiry takes no payment. App Store approval is not guaranteed.</>) : business ? (<>Share the problem in one line. I’ll follow up to confirm fit and the next step. An audit request does not book a time or take payment.</>) : readiness ? (
                 <>You get a short written review: what&apos;s buildable now, what&apos;s missing, the major risks, and what it would take to ship.</>
               ) : (
                 <>Two paragraphs are plenty. You&apos;ll hear back {replyPromise}, and the reply might be a question, or &ldquo;don&apos;t build this yet.&rdquo;</>

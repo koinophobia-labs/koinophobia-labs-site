@@ -4,15 +4,16 @@ import { ArrowRight, ArrowUpRight } from "lucide-react";
 import Masthead from "@/components/site/Masthead";
 import SiteFooter from "@/components/site/SiteFooter";
 import StickyStart from "@/components/site/StickyStart";
+import { liveAppCount } from "@/lib/products";
 import { LINKS } from "@/lib/links";
 import { STUDIO_URL, socialCard } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "Blake Taylor",
   description:
-    "Laid off in July, five apps on the App Store now. The person who designs, builds, tests, and ships everything at Koinophobia Labs.",
+    `I’m Blake Taylor. I design, build, test, and ship my own apps. ${liveAppCount} are on the App Store now.`,
   alternates: { canonical: `${STUDIO_URL}/blake` },
-  openGraph: { type: "profile", url: `${STUDIO_URL}/blake`, title: "Blake Taylor · Koinophobia Labs", images: [socialCard("The fear of an ordinary life, and what I did about it.", "Blake Taylor · founder")] },
+  openGraph: { type: "profile", url: `${STUDIO_URL}/blake`, title: "Blake Taylor · Koinophobia Labs", images: [socialCard("What I built from an ordinary fear.", "Blake Taylor · founder")] },
 };
 
 const method = [
@@ -46,10 +47,10 @@ export default function BlakePage() {
           </div>
           <div className="page-head">
             <p className="k s">
-              <b>Blake Taylor</b> · founder, builder, the only employee
+              <b>Blake Taylor</b> · founder and builder
             </p>
             <h1 id="blake-title" className="s" style={{ "--i": 1 } as React.CSSProperties}>
-              The fear of an ordinary life, and what I did about it.
+              What I built from an ordinary fear.
             </h1>
             <p className="voice s" style={{ "--i": 2 } as React.CSSProperties}>
               &ldquo;Koinophobia is the fear of being ordinary. I named the studio after the thing I
@@ -60,7 +61,7 @@ export default function BlakePage() {
               high-volume systems and the people around them calm while a lot went wrong at once.
               In July 2026 the role ended. I had a list of tools I&apos;d wished existed for years, a
               Mac, and a set of AI coding agents I&apos;d learned to direct like a small crew. Now
-              five of those tools are on the App Store.
+              {liveAppCount} of those tools are on the App Store.
             </p>
             <div className="rail s" style={{ "--i": 4 } as React.CSSProperties}>
               <span>

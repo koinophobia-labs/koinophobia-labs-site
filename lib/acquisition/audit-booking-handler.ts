@@ -9,12 +9,12 @@ export async function handleAuditBooking(request: NextRequest, form: FormData, r
   const submittedSession = form.get("session_id");
   const sessionId = typeof submittedSession === "string" ? submittedSession : request.cookies.get(AUDIT_SESSION_COOKIE)?.value;
   const payment = await deps.verify(sessionId);
-  if (!payment) return respond({ ok: false, message: "We couldn't confirm a payment. Open the confirmation in the browser you used to pay, or contact Blake." }, 422);
+  if (!payment) return respond({ ok: false, message: "I couldn't confirm a payment. Open the confirmation in the browser you used to pay, or contact Blake." }, 422);
   const parsed = auditBookingInput(form, payment);
   if (!parsed.input) return respond({ ok: false, message: "Please check your business and preferred times.", errors: parsed.errors }, 422);
   try {
     const saved = await deps.save(payment, parsed.input);
     const delivery = saved.created ? await deps.email(parsed.input, payment.leadId) : { ok: true };
     return respond({ ok: true, emailSent: delivery.ok, message: "Your preferred times are recorded. Blake will email you to confirm a call time." });
-  } catch { return respond({ ok: false, message: "We could not safely record your preferred times. Please try again." }, 503); }
+  } catch { return respond({ ok: false, message: "I couldn’t save your preferred times. Try again." }, 503); }
 }

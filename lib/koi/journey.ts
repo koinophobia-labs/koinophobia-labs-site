@@ -14,6 +14,8 @@
  * offset and browser back/forward all behave identically.
  */
 
+import { liveAppCount } from "@/lib/products";
+
 export const ARRIVE_END = 0.25;
 export const DEPART_START = 0.7;
 
@@ -222,7 +224,7 @@ export const DESTINATIONS: Destination[] = [
     index: 1,
     label: "Shipped",
     marker: "01",
-    hint: "Five apps on the App Store, built by one person",
+    hint: `${liveAppCount} apps on the App Store, built by me`,
     clip: "duo",
     transitionClip: "separate",
     band: { desktop: 2.75, mobile: 1.3 },

@@ -90,40 +90,20 @@ const site: Record<string, SiteMeta> = {
   trendi: {
     section: "shipped",
     href: "/trendi",
-    blurb:
-      "A content coach for iPhone. Say a messy thought; get one angle, three hooks, a script, a caption, and a shot plan. Then record it with the teleprompter.",
+    blurb: appHomes.trendi.intro,
     platforms: "iPhone",
     chip: priceLine("trendi"),
-    notYetShort: "Not yet: posting, scheduling, or connecting social accounts. No promises about views.",
-    screens: [
-      { src: "/trendi/store/01-say-it-messy.jpg", alt: "Trendi home screen: Say it messy, with the messy-thought field and an example hook" },
-      { src: "/trendi/store/03-pick-your-hook.jpg", alt: "Choosing a hook from a Coach Pack" },
-      { src: "/trendi/store/04-own-the-script.jpg", alt: "Editing the script in your own words" },
-      { src: "/trendi/store/05-press-record.jpg", alt: "Recording with the on-screen teleprompter" },
-    ],
-    appStore: {
-      url: trendiRelease.url,
-      version: trendiRelease.version,
-      verifiedAt: trendiRelease.verifiedAt,
-      priceLine: priceLine("trendi"),
-    },
+    notYetShort: "No automatic posting, scheduling, captions, video timeline editor, or AI avatar. No promises about views.",
+    screens: [], // siteProducts derives the current listing screenshots from appHomes.
+    appStore: { ...trendiRelease, priceLine: priceLine("trendi") },
     page: {
-      kicker: "Trendi · Content coach · iPhone",
-      h1: "Say it messy. Leave with words you can say on camera.",
-      lede:
-        "Most creators don't run out of ideas. They stall in the ninety seconds between having one and pressing record. Trendi is a coach for that gap: a rough thought in, a finishable draft in your own voice out.",
-      insightTitle: "A thought in your head is not the same thing as words you can say.",
-      insightBody:
-        "Blake watched people abandon good ideas at exactly that gap, including himself. Nobody needed another script generator. They needed the specific sentence to open with.",
-      blocks: [
-        { title: "An angle", body: "The one point worth making, pulled out of the ramble." },
-        { title: "Three hooks", body: "Three ways to open. Pick one, or edit one." },
-        { title: "A script", body: "Editable, section by section, in your words." },
-        { title: "A caption and a shot plan", body: "For the post, and for what to film in what order." },
-        { title: "The teleprompter", body: "Record section by section or the whole script. Drafts stay in the on-device Vault." },
-      ],
-      statusBody:
-        "On the App Store since 28 August 2026. Free includes three delivered Coach Packs per weekly period; the editor, Vault, and teleprompter stay available on Free. Trendi does not post, schedule, or connect to social accounts, and it promises nothing about views or growth. Pro renews monthly unless cancelled in your App Store settings.",
+      kicker: "Trendi 2.7 · iPhone",
+      h1: "Your idea. Your words. Your video.",
+      lede: appHomes.trendi.intro,
+      insightTitle: "From your idea to another take.",
+      insightBody: "I built Trendi to bring writing, recording, and feedback into one workflow.",
+      blocks: appHomes.trendi.features,
+      statusBody: `${appHomes.trendi.free} ${priceLine("trendi")}. Eligible subscribers can try Annual free for seven days. Both plans include up to 100 AI scripts each subscription month.`,
     },
   },
   "forget-about-it": {
@@ -285,6 +265,7 @@ export const siteProducts: SiteProduct[] = ordered.map((slug) => {
 });
 
 export const shippedProducts = siteProducts.filter((p) => p.section === "shipped");
+export const liveAppCount = shippedProducts.length;
 export const labProducts = siteProducts.filter((p) => p.section === "lab");
 
 export const getSiteProduct = (slug: string) => siteProducts.find((p) => p.slug === slug);

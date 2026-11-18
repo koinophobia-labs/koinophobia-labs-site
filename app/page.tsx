@@ -15,6 +15,7 @@ import {
   labProducts,
   replyPromise,
   shippedProducts,
+  liveAppCount,
 } from "@/lib/products";
 import { withLiveListings } from "@/lib/app-store";
 import {
@@ -99,23 +100,21 @@ export default async function Home() {
                 <p className="kw__kicker">A one-person software studio · Chicago</p>
                 <h1 id="surface-title">Nothing here stayed an idea.</h1>
                 <p className="kw__lede">
-                  Koinophobia Labs is Blake Taylor, building apps, websites, and AI tools
-                  from first prototype to release. Five of those apps are on the App Store,
-                  including Old Dog, a Mac learning app. In the lab: a language model trained
-                  from scratch. Have a project in mind? Blake
-                  builds for other people too.
+                  I’m Blake Taylor. I build apps, websites, and AI tools
+                  from first prototype to release. {liveAppCount} of my apps are on the App Store.
+                  Have a project in mind? I build for other people too.
                 </p>
                 <div className="kw__actions">
                   <a className="kw__btn kw__btn--primary kw__btn--dive ai" href="#shipped" data-koi-link="shipped">
                     See what shipped <ArrowDown size={16} aria-hidden="true" />
                   </a>
                   <a className="kw__btn kw__btn--ghost ai" href="#work" data-koi-link="work">
-                    Work with Blake <ArrowRight size={16} aria-hidden="true" />
+                    Work with me <ArrowRight size={16} aria-hidden="true" />
                   </a>
                 </div>
                 <dl className="kw__trust-rail" aria-label="Proof">
                   <div>
-                    <dt>{shippedProducts.length} apps</dt>
+                    <dt>{liveAppCount} apps</dt>
                     <dd>on the App Store</dd>
                   </div>
                   <div>
@@ -127,11 +126,11 @@ export default async function Home() {
                     <dd>with the builder</dd>
                   </div>
                 </dl>
-                <aside className="business-band" aria-label="Work With Us">
+                <aside className="business-band" aria-label="Work with me">
                   <p className="kw__kicker">For Chicago owners & operators</p>
                   <h2>Find what’s slowing the business down.</h2>
                   <p>Software, AI systems, and a $250 Revenue Leak Audit with a written plan.</p>
-                  <Link className="kw__text-link" href="/work-with-us?src=home">Work With Us →</Link>
+                  <Link className="kw__text-link" href="/work-with-us?src=home">Work with me →</Link>
                 </aside>
               </div>
             </div>
@@ -210,15 +209,14 @@ export default async function Home() {
                 </div>
                 <div>
                   <p className="kw__kicker">Blake Taylor · founder</p>
-                  <h2 id="blake-title">Laid off in July. Five apps on the App Store now.</h2>
+                  <h2 id="blake-title">{liveAppCount} apps. Built and shipped by me.</h2>
                   <p className="voice">&ldquo;The simulator votes. The device decides.&rdquo;</p>
                   <p>
-                    Blake Taylor spent three years inside sportsbook operations in the sports-betting market, where
-                    the job was staying calm and resolving problems under pressure. When the
-                    role ended in July 2026 he started building the tools he wished he&apos;d had,
-                    and didn&apos;t stop. He designs, writes, builds, tests, and ships everything on
-                    this site, using AI coding agents the way a woodworker uses power tools: for
-                    speed, never for judgment.
+                    I spent three years in sportsbook operations, staying calm and resolving
+                    problems under pressure. When the role ended in July 2026, I started
+                    building the tools I wished I’d had. I design, write, build, test, and
+                    ship my apps, with AI coding agents helping me do the work.
+                    Taste and judgment stay with me.
                   </p>
                   <ul className="kw__founder-facts">
                     <li>Chicago.</li>
@@ -226,7 +224,7 @@ export default async function Home() {
                     <li>Sports betting, sportsbook operations, three years.</li>
                   </ul>
                   <Link className="kw__text-link ai" href="/blake">
-                    More about Blake <ArrowUpRight size={15} aria-hidden="true" />
+                    More about me <ArrowUpRight size={15} aria-hidden="true" />
                   </Link>
                 </div>
               </div>
@@ -242,7 +240,7 @@ export default async function Home() {
                 <b>04</b> Hire the studio
               </p>
               <h2 id="work-title">Have an idea that deserves to exist? Bring it.</h2>
-              <p>Koinophobia Labs takes on outside projects that fit what it has already proven it can do.</p>
+              <p>I take on outside projects that fit what I’ve already built and shipped.</p>
               <div className="shapes">
                 {engagementShapes.map((shape, index) => (
                   <div className="shape glass s" key={shape.slug} style={{ "--i": index } as React.CSSProperties}>
@@ -289,7 +287,7 @@ export default async function Home() {
               <h2 id="start-title">Tell me the idea. I&apos;ll tell you what it takes.</h2>
               <p>
                 Two paragraphs are enough: what you want to exist, what exists today, and when you
-                need it. You&apos;ll hear back from Blake {replyPromise} with a real answer,
+                need it. You&apos;ll hear back from me {replyPromise} with a real answer,
                 including &ldquo;don&apos;t build this yet&rdquo; when that&apos;s the answer.
               </p>
               <div className="kw__actions">
@@ -298,7 +296,7 @@ export default async function Home() {
                 </Link>
               </div>
               <Link className="kw__finale-mail" href="/start" data-analytics="founder_link_click" data-analytics-label="email">
-                Ask Blake a question <ArrowUpRight size={14} aria-hidden="true" />
+                Ask me a question <ArrowUpRight size={14} aria-hidden="true" />
               </Link>
 
               <NowStrip />

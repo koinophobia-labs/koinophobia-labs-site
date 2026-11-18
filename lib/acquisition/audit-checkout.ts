@@ -35,7 +35,7 @@ export function auditBookingInput(form: FormData, payment: VerifiedAuditPayment)
   const session = payment.session;
   const name = session.custom_fields?.find(field => field.key === "buyer_name")?.text?.value || session.customer_details?.name || "";
   const email = session.customer_details?.email || session.customer_email || "";
-  if (!email) return { errors: { payment: "We could not retrieve your contact email from Stripe. Please contact Blake." } };
+  if (!email) return { errors: { payment: "I couldn’t retrieve your contact email from Stripe. Contact me using the contact form." } };
   return { input: redactLeadFreeText({ name, email, businessName, biggestProblem,
     websiteOrSocial: "", industry: "", serviceInterest: AUDIT_OFFER, timeline: times.filter(Boolean).join("\n"), source: payment.source,
     notes: `Offer: audit\nPaid: true (verified with Stripe)\nCheckout Session: ${session.id}\nPreferred call times:\n${times.filter(Boolean).join("\n")}`,

@@ -158,7 +158,11 @@ test("rejected imagery and claims cannot reappear in world output", () => {
   assert.ok(school("img[src*='shot-1-crop']").length);
   assert.ok(school("img[src*='shot-2-crop']").length);
   assert.match(school.text(), /one supervised check—not a mastery grade or proof of learning/);
-  assert.doesNotMatch(render("trendi").text(), /Take Two|viral|auto-post/);
+  const trendi = render("trendi").text();
+  assert.match(trendi, /Take Two/);
+  assert.match(trendi, /seven-day free trial for eligible subscribers/i);
+  assert.match(trendi, /does not post or schedule videos/);
+  assert.doesNotMatch(trendi, /Coach Packs|guaranteed views|go viral/i);
   assert.doesNotMatch(render("preaching-to-the-choir").text(), /unlock|premium|trial|nothing leaves the phone/i);
 });
 test("Dreamcatcher 2.0 copy stays inside CREATIVE.md and D-0217", () => {

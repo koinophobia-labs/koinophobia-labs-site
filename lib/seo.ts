@@ -1,3 +1,4 @@
+import { liveAppCount } from "@/lib/products";
 import { LINKS } from "@/lib/links";
 
 export const STUDIO_URL = "https://koinophobialabs.com";
@@ -5,7 +6,7 @@ export const STUDIO_URL = "https://koinophobialabs.com";
 export const STUDIO_TITLE = "Koinophobia Labs";
 
 export const STUDIO_DESCRIPTION =
-  "A one-person software studio in Chicago. Five apps on the App Store, a curriculum engine, a language model trained from scratch, and a builder you can hire.";
+  `I build apps, websites, and AI tools in Chicago. ${liveAppCount} apps on the App Store. Work directly with me, Blake Taylor.`;
 
 export const STUDIO_SOCIAL_IMAGE = {
   url: "/brand/social-card",
@@ -17,7 +18,7 @@ export const STUDIO_SOCIAL_IMAGE = {
 // Update this only when the studio homepage materially changes. A stable,
 // truthful date is a better recrawl signal than a build-time timestamp that
 // changes on every deployment.
-export const STUDIO_HOME_LAST_MODIFIED = "2026-10-15";
+export const STUDIO_HOME_LAST_MODIFIED = "2026-11-18";
 
 export const PERSON_ID = `${STUDIO_URL}/blake#person`;
 

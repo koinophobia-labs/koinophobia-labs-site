@@ -13,7 +13,7 @@ export default function AuditBookingForm() {
       const result = await response.json();
       if (!response.ok) throw Error(result.errors ? Object.values(result.errors).join(" ") : result.message);
       setDone(true); setMessage("Your preferred times are recorded. Blake will email you to confirm a call time.");
-    } catch (error) { setMessage(error instanceof Error ? error.message : "We could not record your times. Please try again."); }
+    } catch (error) { setMessage(error instanceof Error ? error.message : "I couldn’t record your times. Try again."); }
     finally { setBusy(false); }
   }
   if (done) return <p role="status">{message}</p>;

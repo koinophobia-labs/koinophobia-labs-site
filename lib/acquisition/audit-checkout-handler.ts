@@ -34,7 +34,7 @@ export function auditCheckoutHandler(deps = dependencies, offer: ServiceOffer = 
       return response;
     } catch {
       console.error(JSON.stringify({ scope: "audit-checkout", event: "checkout_unavailable" }));
-      return fail("We could not open checkout. Please try again later or ask Blake a question.", 503);
+      return fail("I couldn’t open checkout. Try again later or ask me a question.", 503);
     }
   };
 }

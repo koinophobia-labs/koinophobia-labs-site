@@ -1,6 +1,6 @@
 /** Five words and one button. Shared by the masthead and the footer. */
 export const NAV = [
-  { href: "/work-with-us", label: "Work With Us" },
+  { href: "/work-with-us", label: "Work with me" },
   { href: "/services", label: "Services" },
   { href: "/shipped", label: "Shipped" },
   { href: "/lab", label: "Lab" },

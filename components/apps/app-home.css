@@ -450,3 +450,11 @@ html:has(.app-home) { scroll-behavior: auto; }
   .path-waypoints { position: absolute; right: 6vw; bottom: 70px; margin: 0; }
   .path-title { max-width: 760px; }
 }
+
+/* WO-0327: supporting product limits stay readable without becoming headlines. */
+.app-home--trendi .teleprompter > .plain-truth {
+  max-width: 65ch;
+  font-family: var(--world-body), sans-serif;
+  font-size: 17px;
+  line-height: 1.65;
+}

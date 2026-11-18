@@ -18,7 +18,7 @@ export default function TrendiSupportPage() {
       </Link>
       <p className="kicker kicker-orange">Trendi</p>
       <h1>Support</h1>
-      <p className="legal-note">Help with sign-in, Coach Packs, recording, and data</p>
+      <p className="legal-note">Help with sign-in, AI scripts, recording, and data</p>
 
       <section>
         <h2>Contact</h2>
@@ -44,9 +44,9 @@ export default function TrendiSupportPage() {
       </section>
 
       <section>
-        <h2>Coach Pack generation</h2>
+        <h2>AI script writing</h2>
         <ul>
-          <li>Coach Packs require an internet connection.</li>
+          <li>AI scripts require an internet connection.</li>
           <li>If generation fails, your local thought or draft should remain available.</li>
           <li>Use Retry after the app shows the final error.</li>
           <li>
@@ -55,9 +55,19 @@ export default function TrendiSupportPage() {
           </li>
         </ul>
         <p>
-          This version does not offer a subscription or other in-app purchase. Free
-          Coach Pack availability resets on the schedule shown in the app.
+          Free includes 3 AI scripts a week. Both Pro plans include up to 100 AI
+          scripts each subscription month. Check the app for your current allowance.
         </p>
+      </section>
+
+      <section>
+        <h2>Pro plans and the Annual trial</h2>
+        <p>In the U.S., Pro Monthly is $7.99/month and Pro Annual is $39.99/year.
+          Eligible subscribers can try Annual free for seven days, then pay the annual price.
+          Apple shows your local price and trial eligibility before purchase.</p>
+        <p>Both plans include the same Pro features. Cancel at least 24 hours before
+          the trial or current period ends to avoid renewal. Manage or cancel in your
+          App Store account settings. Deleting the app does not cancel a subscription.</p>
       </section>
 
       <section>
@@ -105,7 +115,7 @@ export default function TrendiSupportPage() {
         <h2>App requirements</h2>
         <ul>
           <li>iPhone running iOS 17 or later.</li>
-          <li>Internet access for Sign in with Apple and Coach Packs.</li>
+          <li>Internet access for Sign in with Apple and AI scripts.</li>
           <li>Camera and microphone access only when you use recording features.</li>
         </ul>
       </section>
@@ -113,9 +123,9 @@ export default function TrendiSupportPage() {
       <section>
         <h2>About Trendi</h2>
         <p>
-          Trendi helps creators turn a rough typed or spoken thought into one angle,
-          three hook options, an editable script, a caption, a shot plan, and a
-          record-ready workflow. Trendi does not automatically publish content.
+          Trendi 2.7 combines script writing, teleprompter recording, vertical video
+          export, and on-device Take Two feedback. Trendi does not post or schedule
+          videos, add captions, or offer a video timeline editor or AI avatar.
         </p>
       </section>
     </main>

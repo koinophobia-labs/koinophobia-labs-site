@@ -6,22 +6,19 @@ import { Entrance } from "./WorldBehavior";
 
 function Prices({slug}: {slug:AppSlug}) { const a=appHomes[slug]; return <AppPricing slug={slug} free={a.free} prerelease={a.prerelease} />; }
 function Trendi() {
-  const beats = [
-    ["Opening", "One angle. Three hooks.", "Shape This Into a Video gives you one angle and three hooks to choose from."],
-    ["Main idea", "Keep your voice.", "Edit the script, caption and shot plan. The words are yours to change."],
-    ["Example", "Type it. Say it.", "Capture a thought with text or speech."],
-    ["Takeaway", "Press record.", "Use the teleprompter section by section, or read the full script."],
-    ["Ending", "Come back to it.", "Keep drafts in the on-device Vault and add your own performance notes."],
-  ];
+  const app = appHomes.trendi;
   return <>
     <section className="greenroom world-hero" aria-labelledby="app-title">
       <Art slug="trendi" file="trendi-greenroom.png" />
-      <div className="greenroom-identity"><Icon slug="trendi" /><p className="eyebrow">Trendi · A content coach for iPhone</p></div>
-      <div className="greenroom-stage"><h1 id="app-title">SAY IT<br/>MESSY.</h1><div className="viewfinder"><Shot slug="trendi" n={1} hero /></div><div className="greenroom-aside"><p className="your-words">Make it<br/>yours.</p><p className="world-oneliner">{appHomes["trendi"].tagline}</p><StoreAction slug="trendi" /></div></div>
-      <p className="stage-note">You stay in control of the words.</p>
+      <div className="greenroom-identity"><Icon slug="trendi" /><p className="eyebrow">Trendi 2.7 · Write. Record. Take Two.</p></div>
+      <div className="greenroom-stage"><h1 id="app-title">MAKE IT<br/>SOUND<br/>LIKE YOU.</h1><div className="viewfinder"><Shot slug="trendi" n={1} hero /></div><div className="greenroom-aside"><p className="your-words">Your words.<br/>On camera.</p><p className="world-oneliner">Write your script. Record with a teleprompter. Try another take.</p><StoreAction slug="trendi" /></div></div>
+      <p className="stage-note">Your real face and voice. Your choice of what to share.</p>
     </section>
-    <section className="world-section shot-list"><p className="eyebrow">01 / The shot list</p><h2>A thought. An angle.<br/>Your words on camera.</h2><ListingLabel slug="trendi" /><div className="storyboard swipe" tabIndex={0} role="region" aria-label="Trendi shot list">{[1,2,3,4,5].map(n=><Shot key={n} slug="trendi" n={n} label={`SHOT 0${n} · ${appHomes.trendi.screens[n-1]}`} />)}</div></section>
-    <section className="world-section teleprompter"><p className="eyebrow">02 / Your script</p>{beats.map(([label,title,body])=><article className="script-beat" key={label}><p className="eyebrow">{label}</p><h2>{title}</h2><p>{body}</p></article>)}</section>
+    <section className="world-section shot-list"><p className="eyebrow">01 / Inside Trendi</p><h2>Your words, ready for the camera.</h2><ListingLabel slug="trendi" /><div className="storyboard swipe" tabIndex={0} role="region" aria-label="Trendi screenshots">{app.screens.map((screen,i)=><Shot key={screen} slug="trendi" n={i+1} label={screen} />)}</div></section>
+    <section className="world-section teleprompter"><p className="eyebrow">02 / From script to next take</p>{app.features.map(({title,body},i)=><article className="script-beat" key={title}><p className="eyebrow">0{i+1}</p><h2>{title}</h2><p>{body}</p></article>)}
+      <p className="plain-truth">Take Two runs on your iPhone. Optional AI writing sends your text to Trendi’s service and Anthropic after you give permission. AI writing needs an internet connection and is subject to service availability.</p>
+      <p className="plain-truth">Trendi does not post or schedule videos, add captions, or offer a video timeline editor or AI avatar. Feedback does not predict views or audience growth.</p>
+    </section>
     <Prices slug="trendi" />
   </>;
 }

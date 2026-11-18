@@ -1,7 +1,11 @@
 // USA prices: WO-0127 INVENTORY §§1–7, ASC reads 2026-10-15.
 // Keep amounts and billing terms here; UI, cards and structured data derive from these records.
 export const appPrices = {
-  trendi: [{ name: "Trendi Pro", amount: "7.99", term: "monthly", detail: "100 Coach Packs a month." }],
+  // WO-0327: Trendi 2.7 public US listing, verified 2026-11-18.
+  trendi: [
+    { name: "Trendi Pro Annual", amount: "39.99", term: "yearly", detail: "Seven-day free trial for eligible subscribers, then billed yearly. Up to 100 AI scripts each subscription month, deeper Take Two coaching, the full script library and premium backgrounds." },
+    { name: "Trendi Pro Monthly", amount: "7.99", term: "monthly", detail: "The same Pro features and monthly script allowance, billed monthly." },
+  ],
   "way-in": [
     { name: "Resume Toolkit", amount: "9.99", term: "one-time", detail: "One payment." },
     { name: "30-Day Career Pass", amount: "29.99", term: "30 days", detail: "Does not renew." },

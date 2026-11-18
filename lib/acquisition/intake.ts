@@ -235,6 +235,6 @@ export function checkRateLimit(key: string, now = Date.now()) {
 }
 export function resetIntakeRouteStateForTests() { rateLimit.clear(); }
 export function intakeOutcome(saved: boolean, emailSent: boolean) {
-  if (!saved) return { ok: false as const, status: 503, message: "We could not safely record your intake right now. Please wait a moment and retry." };
+  if (!saved) return { ok: false as const, status: 503, message: "I couldn’t save your inquiry right now. Wait a moment and try again." };
   return { ok: true as const, status: 200, emailSent, message: emailSent ? "Intake received and emailed to Blake. He will review fit, scope, and the next practical step." : "Intake received. Blake will review fit, scope, and the next practical step." };
 }

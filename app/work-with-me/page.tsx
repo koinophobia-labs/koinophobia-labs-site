@@ -7,8 +7,7 @@ import Masthead from "@/components/site/Masthead";
 import PageView from "@/components/site/PageView";
 import SiteFooter from "@/components/site/SiteFooter";
 import StickyStart from "@/components/site/StickyStart";
-import { trendiRelease, forgetRelease, wayInRelease, oldDogRelease, preachingRelease, dreamcatcherRelease } from "@/lib/releases";
-import { getSiteProduct } from "@/lib/products";
+import { shippedProducts, liveAppCount } from "@/lib/products";
 import { STUDIO_URL, socialCard } from "@/lib/seo";
 
 const headline = "You have the spec. I'll ship the app.";
@@ -24,15 +23,6 @@ export const metadata: Metadata = {
   twitter: { title: headline, description, images: [socialCard(headline, "PRD → Release")] },
 };
 
-// Original five listings: Evidence/WO-0118/apple-lookup.json. Six live apps confirmed in WO-0160.
-const listings = [
-  { slug: "career-forge", name: "Way In: Resume & Job Search", platforms: "iOS", url: "https://apps.apple.com/us/app/way-in-resume-job-search/id6807942376", version: wayInRelease.version },
-  { slug: "trendi", name: "Trendi: Content Coach", platforms: "iOS", url: "https://apps.apple.com/us/app/trendi-content-coach/id6776299336", version: trendiRelease.version },
-  { slug: "forget-about-it", name: "ForgetAboutIt", platforms: "iOS + watchOS", url: "https://apps.apple.com/us/app/forgetaboutit/id6804360983", version: forgetRelease.version },
-  { slug: "old-dog", name: "Old Dog", platforms: "macOS", url: "https://apps.apple.com/us/app/old-dog/id6813966822", version: oldDogRelease.version },
-  { slug: "preaching-to-the-choir", name: "Preaching to the Choir", platforms: "iOS / iPadOS", url: "https://apps.apple.com/us/app/preaching-to-the-choir/id6808442357", version: preachingRelease.version },
-  { slug: "dreamcatcher", name: "Dreamcatcher: Night Journal", platforms: "iOS", url: dreamcatcherRelease.url, version: dreamcatcherRelease.version },
-];
 
 const steps = [
   { title: "I review what’s ready to build", body: "A written review of what’s buildable, what’s missing, the risks and what it takes to ship." },
@@ -109,13 +99,13 @@ export default function WorkWithMePage() {
               </article>
             ))}
           </div>
-          <p className="s">For a review or rescue, you provide a build or repo, an App Store Connect role invite when needed, and any rejection text. For a build, bring your spec or Figma, developer account, content and decisions. Work windows depend on the agreed scope and timely answers; we confirm availability before starting.</p>
+          <p className="s">For a review or rescue, you provide a build or repo, an App Store Connect role invite when needed, and any rejection text. For a build, bring your spec or Figma, developer account, content and decisions. Work windows depend on the agreed scope and timely answers; I confirm availability before starting.</p>
           <div className="actions s">
             <Link className="btn btn--primary ai" href="/start?offer=app-store&src=work-with-me" data-analytics="inquiry_start" data-analytics-label="app_store_launch">
               Send me the app <ArrowRight size={15} aria-hidden="true" />
             </Link>
           </div>
-          <p className="s">You’ll get a straight answer. Send app details first; access is arranged after we agree on the work.</p>
+          <p className="s">You’ll get a straight answer. Send app details first; access is arranged after you approve the scope.</p>
         </section>
 
         <section className="sec" aria-labelledby="fit-title">
@@ -150,24 +140,13 @@ export default function WorkWithMePage() {
 
         <section className="sec" aria-labelledby="proof-title">
           <p className="k s">I built and shipped these</p>
-          <h2 id="proof-title" className="s">Six apps. Live on the App Store and Mac App Store.</h2>
-          <p className="lede s">100 downloads. Paying subscribers.</p>
+          <h2 id="proof-title" className="s">{liveAppCount} apps. Built and shipped by me.</h2>
+          <p className="lede s">Open the listings. Try the apps.</p>
           <p className="s">These are my own apps. I’ve fixed my own App Review rejections and shipped. I build with Claude and Codex, with independent review.</p>
           <div className="cards studio-proof">
-            {listings.map((listing, index) => {
-              const existing = getSiteProduct(listing.slug);
-              return (
-                <ProductCard key={listing.slug} index={index} placement="work_with_me" listingOnly product={{
-                  ...listing,
-                  href: existing?.href.startsWith("/") ? existing.href : listing.url,
-                  screens: existing?.screens ?? [],
-                  chip: "Live",
-                  blurb: "",
-                  notYetShort: "",
-                  appStore: { url: listing.url, version: listing.version, verifiedAt: existing?.appStore?.verifiedAt ?? wayInRelease.verifiedAt, priceLine: "" },
-                }} />
-              );
-            })}
+            {shippedProducts.map((product, index) => (
+              <ProductCard key={product.slug} index={index} placement="work_with_me" listingOnly product={product} />
+            ))}
           </div>
         </section>
 
@@ -182,7 +161,7 @@ export default function WorkWithMePage() {
 
         <section className="sec" aria-labelledby="launch-faq-title">
           <p className="k s">App Store questions</p>
-          <h2 id="launch-faq-title" className="s">Before we start.</h2>
+          <h2 id="launch-faq-title" className="s">Before I start on your app.</h2>
           <div className="pblocks">
             {launchFaq.map((item) => <div className="pblock s" key={item.question}><h3>{item.question}</h3><p>{item.answer}</p></div>)}
           </div>

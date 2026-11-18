@@ -19,18 +19,19 @@ export type AppHome = {
 };
 export const appHomes: Record<AppSlug, AppHome> = {
   trendi: {
-    slug: "trendi", tagline: "Turn messy ideas into content worth posting.", founderNote: "Every product here started as something I needed the week I needed it.", name: "Trendi", category: "A content coach for iPhone", promise: "Say it messy. Make it yours.",
-    intro: "A thought, an angle, three hooks. Shape what you want to say into words you can say on camera.",
+    slug: "trendi", tagline: "Turn messy ideas into content worth posting.", founderNote: "Every product here started as something I needed the week I needed it.", name: "Trendi", category: "Write, record, and try another take", promise: "Your idea. Your words. Your video.",
+    intro: "Trendi 2.7 brings AI script writing, teleprompter recording, and on-device Take Two feedback into one iPhone workflow.",
     platforms: "iPhone", store: trendiRelease.url,
     colors: { paper: "#151017", ink: "#F7F2EC", accent: "#D95BA2", surface: "#251E29", muted: "#D6C5D9" },
-    featureHeading: "You stay in control of the words.",
+    featureHeading: "From your idea to another take.",
     features: [
-      { title: "Find your opening", body: "Shape This Into a Video gives you one angle and three hooks to choose from." },
-      { title: "Keep your voice", body: "Edit the script, caption and shot plan. The words are yours to change." },
-      { title: "Press record", body: "Use the teleprompter section by section, or read the full script." },
-      { title: "Come back to it", body: "Keep drafts in the on-device Vault and add your own performance notes." },
-    ], screens: ["Say it messy", "Shape it into a video", "Pick your hook", "Own the script", "Press record"],
-    free: "3 Coach Packs per weekly allowance.",
+      { title: "Find the words you want to say", body: "Write your own script, choose a template, or use “Write it for me.” Trend radar offers three starting angles, subject to daily availability." },
+      { title: "Put your own face on camera", body: "Read with the teleprompter, choose a background or blur, and export a vertical video to share yourself." },
+      { title: "Watch it back. Try another take.", body: "Take Two gives on-device feedback on pace, length, and timing. Pro adds filler-word feedback, pacing notes, a suggested fix, and a best-take marker during your session." },
+    ],
+    screens: ["Write your own or use AI", "Record with background blur", "Trendi Pro features"],
+    shots: ["v27-shot-1.jpg", "v27-shot-2.jpg", "v27-shot-3.jpg"],
+    free: "3 AI scripts a week, starter templates, write-your-own scripts, teleprompter recording, basic Take Two feedback, core backgrounds, and vertical video export. Trend radar angles are subject to daily availability.",
     support: "/trendi/support", privacy: "/trendi/privacy",
   },
   "way-in": {

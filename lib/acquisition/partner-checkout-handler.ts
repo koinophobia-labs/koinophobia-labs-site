@@ -48,7 +48,7 @@ export function partnerCheckoutHandler(deps: Pick<typeof dependencies, "availabl
       return new NextResponse(null, { status: 303, headers: { ...headers, location: payment.checkoutUrl } });
     } catch {
       console.error(JSON.stringify({ scope: "partner-checkout", event: "checkout_unavailable" }));
-      return fail("We could not open checkout. Please try again later or contact blake@koinophobialabs.com.", 503);
+      return fail("I couldn’t open checkout. Try again later or contact blake@koinophobialabs.com.", 503);
     }
   };
 }

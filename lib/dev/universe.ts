@@ -273,19 +273,19 @@ export const products: Product[] = [
     reach: "public",
     stage: "public",
     status: `Available on the App Store for iPhone: version ${trendiRelease.version}, ${trendiRelease.minimumOS} or later. Free with optional Trendi Pro`,
-    verifiedAt: "2026-11-12",
+    verifiedAt: "2026-11-18",
     evidence: [
-      { claim: "Trendi: Content Coach is publicly listed, version 2.5, current version released 2026-10-29", source: "https://itunes.apple.com/lookup?id=6776299336&country=us — HTTP 200, one matching app ID, currentVersionReleaseDate 2026-10-29T16:44:34Z, checked 2026-11-12. Listing: https://apps.apple.com/us/app/trendi-content-coach/id6776299336. Raw response and verification notes: docs/evidence/WO-0288-freshness-2026-11-12.md." },
-      { claim: "Public release, compatibility, Free and Pro allowances", source: "https://apps.apple.com/us/app/trendi-content-coach/id6776299336 — public US listing and Apple Lookup API, checked 2026-09-10" }],
-    problem:
-      "Most creators don't run out of ideas. They stall in the ninety seconds between having one and pressing record, because a thought in your head is not the same thing as words you can say on camera. I watched people abandon good ideas at exactly that gap, including me.",
-    thesis:
-      "Nobody needs another script generator. They need the specific sentence to open with. A coach in your pocket, not a script mill.",
+      { claim: "Trendi 2.7 is publicly listed with the current writing, recording, and Take Two workflow", source: "https://itunes.apple.com/lookup?id=6776299336&country=us — checked 2026-11-18; docs/evidence/WO-0327-site-truth.md." },
+      { claim: "Pro Annual is $39.99/year in the US with a seven-day free trial for eligible subscribers; Monthly remains $7.99/month", source: "https://apps.apple.com/us/app/trendi-content-coach/id6776299336 — public 2.7 listing description, checked 2026-11-18." },
+    ],
+    problem: "Getting an idea into a video takes writing, recording, and a chance to try again.",
+    thesis: "Keep your own words, face, and voice at the center of the workflow.",
     state: [
-      "Type or speak a rough thought to get an angle, three hooks, an editable script, a caption, and a simple shot plan.",
-      "Record section by section or as a full script with the teleprompter. Keep ideas and drafts in the on-device Vault.",
-      "Free includes three successful Coach Packs per weekly allowance period. Optional monthly Pro provides 100 Coach Packs each month. The editor, saved work, and teleprompter stay available on Free.",
-      "The July 2026 TestFlight story remains in the dated build log; Trendi reached the public App Store on August 28, 2026.",
+      "Write your own script, choose a template, or use Write it for me. Trend radar offers three starting angles, subject to daily availability.",
+      "Record with the teleprompter, choose a background or blur, then export a vertical video to share yourself.",
+      "Take Two provides on-device feedback on pace, length, and timing. Pro adds filler-word feedback, a suggested fix, pacing notes, and a best-take marker during the recording session.",
+      "Free includes 3 AI scripts a week. Monthly and Annual Pro both include up to 100 AI scripts each subscription month, the full script library, and premium backgrounds.",
+      "Optional AI writing sends text to Trendi’s service and Anthropic after permission. Saved scripts and videos stay in the local workspace; Take Two analyzes the recording on the iPhone.",
     ],
     decisions: [
       {

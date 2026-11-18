@@ -191,7 +191,7 @@ export default function StartForm({ entry = "start", readiness = false, source =
         <div className="field"><label htmlFor="start-phone">Phone (required for a call or text)</label><input id="start-phone" name="phone" type="tel" autoComplete="tel" maxLength={40}/>{errors.phone ? <span className="field__err">{errors.phone}</span> : null}</div>
       </> : null}
       <div className={`field${errors.idea ? " field--error" : ""}`}>
-        <label htmlFor="start-idea">{appStore ? "What does the app do? (one line)" : business ? "The problem in one line" : readiness ? "What are we building?" : "What do you want to exist?"}</label>
+        <label htmlFor="start-idea">{appStore ? "What does the app do? (one line)" : business ? "The problem in one line" : readiness ? "What do you want me to build?" : "What do you want to exist?"}</label>
         <textarea id="start-idea" name="idea" required maxLength={4000} placeholder={appStore ? "An app that helps people…" : business ? "For example: quotes go out, but nobody remembers to follow up." : readiness ? "Summarize the product, the customer and what you need implemented." : "An app for… a tool that… a thing nobody has built because…"} aria-describedby={errors.idea ? "start-idea-err" : undefined} />
         {errors.idea ? (
           <span className="field__err" id="start-idea-err">
