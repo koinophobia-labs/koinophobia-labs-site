@@ -4,7 +4,7 @@ import { saveAuditBooking } from "./audit-checkout";
 import { serviceSessionCookie, type NewServiceOffer } from "./services-config";
 import { redactLeadFreeText } from "./leads";
 import { sendLeadEmail } from "./intake";
-const dependencies = { verify: verifyOfferPayment, save: saveAuditBooking, email: sendLeadEmail };
+const dependencies = { verify: (offer: NewServiceOffer, sessionId?: string) => verifyOfferPayment(offer, sessionId), save: saveAuditBooking, email: sendLeadEmail };
 // Shared intake route has already checked origin, honeypot and rate limit.
 export async function handleServiceOnboarding(request: NextRequest, form: FormData, offer: NewServiceOffer, deps = dependencies) {
   const respond = (message: string, status = 200) => NextResponse.json({ ok: status === 200, message }, { status, headers: { "cache-control": "no-store" } });

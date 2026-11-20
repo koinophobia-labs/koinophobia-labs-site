@@ -1,5 +1,5 @@
 import { wayInPurchaseRequirement, type AppSlug } from "./app-prices";
-import { dreamcatcherRelease, forgetRelease, oldDogRelease, preachingRelease, trendiRelease, wayInRelease } from "./releases";
+import { dreamcatcherRelease, forgetRelease, oldDogRelease, preachingRelease, trendiRelease, teachersPetRelease, wayInRelease } from "./releases";
 
 // Blake controls publication. Never enable prerelease content via deployment environment variables.
 // Blake 2026-10-15 (D-0189 addendum): "Publish Coming-soon pages now" for Teacher's Pet and Dreamcatcher.
@@ -94,18 +94,18 @@ export const appHomes: Record<AppSlug, AppHome> = {
     support: "/old-dog/support", privacy: "/old-dog/privacy",
   },
   "teachers-pet": {
-    slug: "teachers-pet", tagline: "Turn messy learning into a clear path through school.", founderNote: "I built Teacher’s Pet because learning shouldn’t feel like figuring out what you’re supposed to learn next.", name: "Teacher’s Pet", category: "Learning at home, on your Mac", promise: "Your personal school at home.",
-    intro: "Lessons, practice and learner profiles for your family, on one Mac.",
-    platforms: "Mac", coming: "Coming to the Mac App Store", prerelease: true, landscape: true,
+    slug: "teachers-pet", tagline: "Turn messy learning into a clear path through school.", founderNote: "I built Teacher’s Pet because learning shouldn’t feel like figuring out what you’re supposed to learn next.", name: "Teacher’s Pet", category: "Learning at home, on iPhone and Mac", promise: "Your personal school at home.",
+    intro: "Lessons, practice and learner profiles for your family. Version 1.0 is on the App Store, released November 6, 2026.",
+    platforms: "iPhone · Mac", store: teachersPetRelease.url, landscape: true,
     colors: { paper: "#FAF9F4", ink: "#16332F", accent: "#173F39", surface: "#EAF0E8", muted: "#52615C" },
     featureHeading: "A place for each learner.",
     features: [
       { title: "A place for each learner", body: "Learner profiles keep each person’s work together." },
       { title: "An adult’s role", body: "Adult passphrase protection supports supervised learning." },
-      { title: "Lessons on the Mac", body: "Lessons are bundled and saved on the Mac." },
+      { title: "Lessons on your device", body: "Lessons are bundled with the app, and learning records stay on your device unless you export them." },
       { title: "No account needed", body: "No account, ads or tracking." },
     ], screens: ["Subjects", "A course", "Learn", "Get help", "A note for the adult"],
-    free: "Family subscriptions are planned; availability depends on App Store approval.",
+    free: "Free to download. Family subscriptions are available through the App Store; Apple determines introductory-offer eligibility.",
     support: "https://teachers-pet-school-sync.teachers-pet-school-sync.workers.dev/support", privacy: "https://teachers-pet-school-sync.teachers-pet-school-sync.workers.dev/privacy",
   },
   dreamcatcher: {

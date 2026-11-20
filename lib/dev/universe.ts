@@ -25,7 +25,7 @@ import { dreamcatcherRelease, trendiRelease, forgetRelease, wayInRelease } from 
 // certified free-launch candidate, while You Know Ball's historical Apple
 // acceptance was preserved without guessing at its current distribution state.
 
-export const universeLastUpdated = "September 13, 2026";
+export const universeLastUpdated = "November 10, 2026";
 
 /** Who owns keeping these statuses honest. Rendered nowhere; asserted in tests. */
 export const statusOwner = "Blake Taylor";
@@ -327,29 +327,30 @@ export const products: Product[] = [
     tagline: "Sports takes, scored honestly, by something that actually watches.",
     identity: { theme: "arena", register: "Scoreboard · argue and defend" },
     reach: "public",
-    stage: "uploaded",
+    stage: "paused",
     status:
-      "Public web demo. Apple's July 2026 upload responses prove iOS builds 26 and 27 were accepted; current processing, tester assignment and distribution are unverified",
-    verifiedAt: "2026-10-12",
+      "Public web demo responds. Native work is paused awaiting Blake: HQ records beta / needs-blake, 0.1.0 (49); current Apple processing, tester assignment and distribution are unverified",
+    verifiedAt: "2026-11-10",
     evidence: [
-      { claim: "The public web demo responds; native distribution remains unverified", source: "https://you-know-ball-orpin.vercel.app — HTTP 200, checked 2026-10-12. The Apple acceptance records below are explicitly July 2026 history, not current distribution receipts." },
+      { claim: "Native work awaits founder storefront decisions and human testers; build 0.1.0 (49) is recorded as archived/exported", source: "HQ projects/you-know-ball/PROJECT_STATE.md, read 2026-11-10 (last verified 2026-10-24): beta / needs-blake. This ledger does not establish a current Apple review verdict or native distribution." },
+      { claim: "The public web demo responds; native distribution remains unverified", source: "https://you-know-ball-orpin.vercel.app — HTTP 200, checked 2026-11-10. The Apple acceptance records below are explicitly July 2026 history, not current distribution receipts." },
       {
-        claim: "Builds 26 and 27 were accepted by App Store Connect",
+        claim: "July 2026 history: builds 26 and 27 were accepted by App Store Connect",
         source:
           "Apple's own 409 responses: the 2026-07-16 upload log reports previousBundleVersion 26, and the 2026-07-19 log reports 27 — Apple naming builds it had already accepted",
       },
       {
-        claim: "The public web demo is still live",
+        claim: "August 2026 history: the public web demo responded",
         source:
           "HTTP 200 from https://you-know-ball-orpin.vercel.app, checked 2026-08-13",
       },
       {
-        claim: "Current Apple-side distribution state is unverified",
+        claim: "August 2026 history: Apple-side distribution state was unverified",
         source:
           "No authenticated App Store Connect query, current processing receipt, beta-group record or tester record was available during the 2026-08-13 evidence refresh; do not infer zero testers",
       },
       {
-        claim: "Build 27 runs on my own phone with its save intact",
+        claim: "July 2026 history: build 27 ran on my own phone with its save intact",
         source:
           "devicectl reports 0.1.0 (27) installed; the pre-install container backup and post-install diff were byte-identical (2026-07-17 session record)",
       },
@@ -359,10 +360,10 @@ export const products: Product[] = [
     thesis:
       "The fun isn't in being told you're right. It's in being made to defend a position by something that knows ball and doesn't flatter you. No participation trophies.",
     state: [
-      "The web demo is playable right now, in a browser, with no account. Drop a take, the debate engine counters, your argument gets a transparent score.",
-      "The engine is deterministic and mechanically neutral across five sports — no model deciding who wins, and a score a player can reconstruct.",
-      "On iOS, builds 26 and 27 were uploaded and accepted by App Store Connect. Their current processing, tester-assignment and distribution state was not independently re-verified on August 13.",
-      "Build 27 does run on my own phone — through a save-preserving developer install, which is how I caught the engine promising a comeback bonus it never actually paid. That's fixed, along with clutch-time framing for final possessions, on the unmerged branch.",
+      "The public web demo returned HTTP 200 on November 10, 2026. Gameplay and native distribution were not re-tested in this check.",
+      "July 2026 development history: the engine is deterministic and mechanically neutral across five sports — no model deciding who wins, and a score a player can reconstruct.",
+      "July 2026 history: on iOS, builds 26 and 27 were uploaded and accepted by App Store Connect. Their current processing, tester-assignment and distribution state was not independently re-verified on August 13.",
+      "July 2026 history: build 27 ran on my own phone — through a save-preserving developer install, which is how I caught the engine promising a comeback bonus it never actually paid. That record reports fixes, along with clutch-time framing for final possessions, on the unmerged branch.",
       "At the July 26 check, the recent engine work was unmerged to main and its working repository had no remote; the August 13 distribution refresh did not treat local source state as Apple-side evidence.",
     ],
     decisions: [
@@ -386,7 +387,7 @@ export const products: Product[] = [
       { label: "Open the standalone build", href: LINKS.ykbDemo, external: true },
     ],
     notYet: [
-      "Current App Store Connect processing and tester assignment are unverified; no current receipt or beta-group record was available in the August 13 evidence refresh.",
+      "Current App Store Connect processing and tester assignment remain unverified in the November 10 check; the HQ ledger does not supply a current Apple-side receipt.",
       "A current public iOS release has not been verified here.",
       "No current external-tester or install record was available; do not infer either zero testers or successful distribution.",
       "The engine numbers I'd want to quote here — cohort win rates, tournament results — I can't currently point at an artifact for, so I'm not quoting them.",
@@ -508,29 +509,31 @@ export const products: Product[] = [
     name: "Teacher's Pet",
     tagline: "A homeschool for one computer.",
     identity: { theme: "school", register: "Patient · one course at a time" },
-    reach: "internal",
-    stage: "local",
+    reach: "public",
+    stage: "public",
     status:
-      "A macOS build (0.2.0, build 5) runs the first course, Algebra Foundations, on Blake's machine. The K–12 map is complete; the school is not",
-    verifiedAt: "2026-09-13",
+      "Live on the App Store; Apple’s public lookup reports version 1.0, released 2026-11-06. The public listing includes iPhone and Mac compatibility",
+    verifiedAt: "2026-11-10",
     evidence: [
+      { claim: "Teacher’s Pet Personal School is publicly listed, with version 1.0 returned by Apple’s lookup", source: "https://itunes.apple.com/lookup?id=6808981717&entity=macSoftware — HTTP 200, one result, version 1.0, currentVersionReleaseDate 2026-11-06T14:35:24Z, checked 2026-11-10. https://apps.apple.com/us/app/teachers-pet-personal-school/id6808981717 — HTTP 200, Mac compatibility listed, checked 2026-11-10." },
+      { claim: "Release history: HQ records Mac App Store 1.1 (15), released 2026-10-31; today’s public lookup reports 1.0", source: "HQ projects/teachers-pet/PROJECT_STATE.md, read 2026-11-10; ledger last updated 2026-11-01. The version discrepancy is unresolved; the public status uses the lookup value." },
       {
-        claim: "The curriculum map counts 13 grades, 4 subjects, 52 courses, 318 units, 1,273 objectives",
+        claim: "September 2026 history: The curriculum map counts 13 grades, 4 subjects, 52 courses, 318 units, 1,273 objectives",
         source:
           "curriculum/sealed/v3.267.0/K12_CURRICULUM_REGISTRY.json in teachers-pet-personal-school-0.266, counted directly on 2026-09-13; matches curriculum/school/inventory.json",
       },
       {
-        claim: "100 objectives are complete; 864 have had substantive review across 36 courses",
+        claim: "September 2026 history: 100 objectives are complete; 864 have had substantive review across 36 courses",
         source:
           "curriculum/school/inventory.json (COMPLETE 100 · PARTIAL 1173) and README status 'PARTIAL SCHOOL — EXPANSION IN PROGRESS', read 2026-09-13",
       },
       {
-        claim: "Algebra Foundations runs as a macOS app and its golden path passed QA",
+        claim: "September 2026 history: Algebra Foundations runs as a macOS app and its golden path passed QA",
         source:
           "macos/ALGEBRA_RELEASE_QA.md (build 4 golden-path checks all Pass) and macos/TeachersPet.xcodeproj MARKETING_VERSION 0.2.0 / CURRENT_PROJECT_VERSION 5, read 2026-09-13",
       },
       {
-        claim: "No TestFlight upload has been made",
+        claim: "September 2026 history: No TestFlight upload has been made",
         source:
           "macos/ALGEBRA_RELEASE_QA.md: 'No TestFlight upload was performed'; Apple package validation only (macos/release-evidence/build-4/apple-validation.json)",
       },
@@ -538,12 +541,12 @@ export const products: Product[] = [
     problem:
       "A full education for one child, on one Mac, that never asks a parent to be the teacher. The map for that is thirteen grades wide. Building it is a course at a time.",
     thesis:
-      "The size of the promise and the size of the product should sit on the same page until they match. 1,273 is the map. 100 is the school.",
+      "The size of the promise and the size of the product should sit on the same page until they match. The September 2026 record counted 1,273 mapped objectives and 100 complete; those counts are history, not a current inventory.",
     state: [
-      "The sealed curriculum registry maps 13 grades, 4 subjects, 52 courses, 318 units, and 1,273 objectives. The registry labels itself a structurally validated draft map and claims no jurisdictional alignment, no credit, and no learning-improvement outcome.",
-      "Algebra Foundations is the first complete course: four lessons, guided practice, independent checks, cumulative review, explicit unlocks, and device-local save and resume.",
-      "100 objectives are complete and 864 have had substantive review across 36 courses. The rest are mapped, not built.",
-      "Grade 7 synchronisation evidence was recorded on 2026-09-13.",
+      "September 2026 history: The sealed curriculum registry maps 13 grades, 4 subjects, 52 courses, 318 units, and 1,273 objectives. The registry labels itself a structurally validated draft map and claims no jurisdictional alignment, no credit, and no learning-improvement outcome.",
+      "September 2026 history: Algebra Foundations is the first complete course: four lessons, guided practice, independent checks, cumulative review, explicit unlocks, and device-local save and resume.",
+      "September 2026 history: 100 objectives are complete and 864 have had substantive review across 36 courses. The rest are mapped, not built.",
+      "September 2026 history: Grade 7 synchronisation evidence was recorded on 2026-09-13.",
     ],
     decisions: [
       {
@@ -557,11 +560,10 @@ export const products: Product[] = [
     ],
     learned:
       "The map was the easy part and it looked like the hard part. Turning one course into something that survives a child pressing the wrong button is where the time goes.",
-    actions: [],
+    actions: [{ label: "View on the App Store", href: "https://apps.apple.com/us/app/teachers-pet-personal-school/id6808981717", external: true, primary: true }],
     notYet: [
-      "No TestFlight or App Store distribution of any kind; the macOS build runs only on Blake's machine.",
-      "No child has learned from it, and no learning outcome is claimed.",
-      "1,173 of the 1,273 objectives are mapped but not complete.",
+      "Current curriculum completion counts and learning outcomes have not been reverified here.",
+      "The difference between HQ’s 1.1 (15) release record and the public lookup’s version 1.0 has not been reconciled.",
     ],
   },
   {
@@ -570,27 +572,28 @@ export const products: Product[] = [
     tagline: "A language model taught to read from random weights, on a laptop.",
     identity: { theme: "model", register: "Measured · rejections are receipts" },
     reach: "internal",
-    stage: "local",
+    stage: "paused",
     status:
-      "A from-scratch pretraining program running on one Apple M4. The largest documented runs are a few million parameters; the README says it is not useful yet",
-    verifiedAt: "2026-09-13",
+      "Paused internal model research: HQ records alpha / stalled, with koi-0.15 never promoted. The public page is a research record, not a model download",
+    verifiedAt: "2026-11-10",
     evidence: [
+      { claim: "HQ records alpha / stalled; no current public model distribution is established", source: "HQ projects/koi/PROJECT_STATE.md, read 2026-11-10 (last verified 2026-10-30). https://koinophobia.dev/products/koi — HTTP 308 to https://koinophobialabs.com/lab/koi, HTTP 200, checked 2026-11-10. This verifies the public research page, not runtime health or model performance." },
       {
-        claim: "Weights began random, on a corpus the studio owns; no external weights",
+        claim: "September 2026 history: Weights began random, on a corpus the studio owns; no external weights",
         source:
           "koi-model README and run manifests (initialization: random, external_weights_used: false), read 2026-09-13",
       },
       {
-        claim: "koi-0.1 is 869,504 parameters, trained 1,500 steps in 75 s, held-out perplexity 2.11",
+        claim: "September 2026 history: koi-0.1 is 869,504 parameters, trained 1,500 steps in 75 s, held-out perplexity 2.11",
         source: "koi-model README run record for koi-0.1 (4 layers, 4 heads, 128 dims, block 128, vocab 512), read 2026-09-13",
       },
       {
-        claim: "Most versioned experiments end in rejection, and the latest reverted itself",
+        claim: "September 2026 history: Most versioned experiments end in rejection, and the latest reverted itself",
         source:
           "koi-model EXPERIMENTS.md (~25 versioned verdicts, e.g. 'koi-0.10 — REJECTED for promotion, falsifier fired') and the 2026-08-24 commit 'MORPH-1 VERDICT: bar FAILED at diagnose 5/8 — reverted per the rule'",
       },
       {
-        claim: "The receipts exist on disk",
+        claim: "September 2026 history: The receipts exist on disk",
         source:
           "~20 *-receipt.json files at the koi-model root and 76 receipt files in koi-epoch3-receipts; 18 experiment worktrees governed by koi-lanes/LANES.md, listed 2026-09-13",
       },
@@ -600,11 +603,11 @@ export const products: Product[] = [
     thesis:
       "A model this size is not a product. It is an instrument for finding out how learning fails, and a negative result written down is worth more than a demo that flatters.",
     state: [
-      "The tokenizer, the decoder-only transformer, the training loop, and the local inference server on 127.0.0.1:11500 are all the studio's own code.",
-      "koi-0.1: 869,504 parameters, loss 6.24 to 0.743 over 1,500 steps, held-out perplexity 2.11, verdict-rule accuracy 0.85 against a 0.50 baseline.",
-      "Later runs reach roughly 4.9 million parameters; a 30-million-parameter variant is referenced in the experiment log.",
-      "Not learned: long-range agent closure (0.12 against a 0.10 baseline) and free-generation format validity (0.00). Verbatim echo failed and the copy wall is characterised.",
-      "Eighteen experiment lanes run as git worktrees against one certified baseline, one heavy job at a time, because the machine has one GPU.",
+      "September 2026 history: The tokenizer, the decoder-only transformer, the training loop, and the local inference server on 127.0.0.1:11500 are all the studio's own code.",
+      "September 2026 history: koi-0.1: 869,504 parameters, loss 6.24 to 0.743 over 1,500 steps, held-out perplexity 2.11, verdict-rule accuracy 0.85 against a 0.50 baseline.",
+      "September 2026 history: Later runs reach roughly 4.9 million parameters; a 30-million-parameter variant is referenced in the experiment log.",
+      "September 2026 history: Not learned: long-range agent closure (0.12 against a 0.10 baseline) and free-generation format validity (0.00). Verbatim echo failed and the copy wall is characterised.",
+      "September 2026 history: Eighteen experiment lanes run as git worktrees against one certified baseline, one heavy job at a time, because the machine has one GPU.",
     ],
     decisions: [
       {
@@ -620,9 +623,8 @@ export const products: Product[] = [
       "The interesting results were the failures. The model learned to satisfy a verdict rule quickly and could not write a well-formed sentence at all, which says more about what a small model finds easy than any success would have.",
     actions: [],
     notYet: [
-      "It cannot generate useful text. The README says so and this page says so.",
-      "No model has been published, served to anyone but Blake, or compared against an external benchmark.",
-      "The 30-million-parameter variant is referenced in the log but its results are not summarised here.",
+      "Current runtime health and model performance have not been reverified here.",
+      "No public model download or daily-use certification is established by this check; HQ retains the failed September 2026 pressure-test results as history.",
     ],
   },
   {

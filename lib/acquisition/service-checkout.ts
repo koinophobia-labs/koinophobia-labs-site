@@ -1,29 +1,30 @@
+import { isPartnerOffer, type PartnerAttribution } from "./partner-offers";
 import type Stripe from "stripe";
 import { createCheckout, paymentDatabase, stripe, type Queryable } from "@/lib/payments";
-import { offers, type ServiceOffer } from "./services-config";
+import { checkoutOffers, type CheckoutOffer } from "./services-config";
 
-export async function createOfferCheckout(offer: ServiceOffer, input: { source: string; email: string }, origin: string, q: Queryable = paymentDatabase(), client = stripe()) {
-  const config = offers[offer];
+export async function createOfferCheckout(offer: CheckoutOffer, input: { source: string; email: string; attribution?: PartnerAttribution }, origin: string, q: Queryable = paymentDatabase(), client = stripe()) {
+  const config = checkoutOffers[offer];
   const leadId = crypto.randomUUID(), proposalId = crypto.randomUUID();
   // One statement creates both records atomically. Only columns from migrations
   // 001, 002 and 006 are used; no dependency on unapplied migration 009.
   // Empty required text fields mean not supplied, never invented buyer data.
   await q.query(`with lead as (
-    insert into crm_leads (id,dedupe_key,source,name,business_name,email,website_or_social,industry,service_interest,timeline,biggest_problem)
-    values ($1,$2,$3,'','',$4,'','',$5,'','') returning id
+    insert into crm_leads (id,dedupe_key,source,name,business_name,email,website_or_social,industry,service_interest,timeline,biggest_problem,internal_notes)
+    values ($1,$2,$3,'','',$4,'','',$5,'','',$12) returning id
   ) insert into crm_proposals (id,lead_id,status,version,title,executive_summary,recommended_solution,timeline,subtotal,total,payment_terms,revision_policy,next_steps)
     select $6,id,'accepted',1,$7,$7,$7,$8,$9,$9,$10,'',$11 from lead`,
-  [leadId, `${offer === "revenue_leak_audit" ? "audit" : offer}-checkout:${leadId}`, input.source, input.email, offer, proposalId, config.name, config.timeline, config.amount, config.terms, config.next]);
+  [leadId, `${offer === "revenue_leak_audit" ? "audit" : offer}-checkout:${leadId}`, input.source, input.email, offer, proposalId, config.name, config.timeline, config.amount, config.terms, config.next, input.attribution ? `Partner attribution: ${JSON.stringify(input.attribution)}` : ""]);
   return createCheckout(proposalId, { kind: "balance" }, origin, q, client, {
-    productName: config.name, collectName: true, offer, mode: config.mode,
-    successPath: `${config.path}/paid?session_id={CHECKOUT_SESSION_ID}`,
-    cancelPath: `${offer === "revenue_leak_audit" ? "/audit" : "/services"}?${new URLSearchParams({ src: input.source })}`,
+    productName: config.name, collectName: true, offer, mode: config.mode, attribution: input.attribution,
+    successPath: isPartnerOffer(offer) ? `/pay/success?offer=${offer}&session_id={CHECKOUT_SESSION_ID}` : `${config.path}/paid?session_id={CHECKOUT_SESSION_ID}`,
+    cancelPath: isPartnerOffer(offer) ? `/pay/cancel?${new URLSearchParams({ offer, ...input.attribution })}` : `${offer === "revenue_leak_audit" ? "/audit" : "/services"}?${new URLSearchParams({ src: input.source })}`,
   });
 }
 
 export type VerifiedOfferPayment = { session: Stripe.Checkout.Session; leadId: string; source: string };
-export async function verifyOfferPayment(offer: ServiceOffer, sessionId: string | undefined, q?: Queryable, client?: Stripe): Promise<VerifiedOfferPayment | null> {
-  const config = offers[offer];
+export async function verifyOfferPayment(offer: CheckoutOffer, sessionId: string | undefined, q?: Queryable, client?: Stripe): Promise<VerifiedOfferPayment | null> {
+  const config = checkoutOffers[offer];
   if (!sessionId || !/^cs_(test_|live_)?[A-Za-z0-9_]{8,240}$/.test(sessionId)) return null;
   try {
     const session = await (client ?? stripe()).checkout.sessions.retrieve(sessionId);
