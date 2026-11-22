@@ -1,0 +1,110 @@
+
+> koinophobia-labs@0.1.0 vercel-build
+> next build && node scripts/verify-auditor-trace.mjs --inventory-only
+
+▲ Next.js 16.2.12 (Turbopack)
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 6.6s
+  Running TypeScript ...
+  Finished TypeScript in 5.3s ...
+  Collecting page data using 9 workers ...
+⚠ Using edge runtime on a page currently disables static generation for that page
+  Generating static pages using 9 workers (0/56) ...
+  Generating static pages using 9 workers (14/56) 
+  Generating static pages using 9 workers (28/56) 
+  Generating static pages using 9 workers (42/56) 
+✓ Generating static pages using 9 workers (56/56) in 420ms
+  Finalizing page optimization ...
+
+Route (app)                                 Revalidate  Expire
+┌ ○ /                                               1d      1y
+├ ○ /_not-found
+├ ƒ /api/audit/checkout
+├ ƒ /api/auth/[...nextauth]
+├ ƒ /api/crm/audits/[id]
+├ ƒ /api/crm/audits/[id]/pdf
+├ ƒ /api/crm/audits/[id]/proposal
+├ ƒ /api/crm/leads
+├ ƒ /api/crm/leads/[id]
+├ ƒ /api/crm/leads/[id]/audits
+├ ƒ /api/crm/leads/[id]/proposals
+├ ƒ /api/crm/login
+├ ƒ /api/crm/proposals/[id]
+├ ƒ /api/crm/proposals/[id]/payments
+├ ƒ /api/crm/proposals/[id]/pdf
+├ ƒ /api/intake
+├ ƒ /api/services/retainer/checkout
+├ ƒ /api/services/straight-answer/checkout
+├ ƒ /api/stripe/webhook
+├ ƒ /audit
+├ ƒ /audit/paid
+├ ○ /blake
+├ ƒ /brand/apple-icon
+├ ƒ /brand/social-card
+├ ƒ /crm
+├ ƒ /crm/audits/[id]
+├ ƒ /crm/leads/[id]
+├ ƒ /crm/login
+├ ƒ /crm/proposals/[id]
+├ ƒ /crm/quick-add
+├ ○ /dreamcatcher
+├ ○ /dreamcatcher/privacy
+├ ○ /dreamcatcher/support
+├ ○ /forget-about-it
+├ ○ /forget-about-it/privacy
+├ ○ /forget-about-it/support
+├ ○ /lab
+├ ○ /lab/do-you-know-ball
+├ ○ /lab/koi
+├ ○ /lab/teachers-pet
+├ ○ /log
+├ ƒ /log/feed.xml
+├ ○ /manifest.webmanifest
+├ ○ /old-dog
+├ ○ /old-dog/privacy
+├ ○ /old-dog/support
+├ ƒ /pay/[offer]
+├ ƒ /pay/[offer]/checkout
+├ ƒ /pay/cancel
+├ ƒ /pay/success
+├ ○ /payment/cancelled
+├ ○ /payment/success
+├ ○ /preaching-to-the-choir
+├ ○ /preaching-to-the-choir/privacy
+├ ○ /preaching-to-the-choir/support
+├ ○ /privacy
+├ ○ /resume
+├ ○ /robots.txt
+├ ○ /services
+├ ƒ /services/retainer/paid
+├ ƒ /services/straight-answer/paid
+├ ○ /shipped                                        1d      1y
+├ ○ /sitemap.xml
+├ ƒ /start
+├ ○ /teachers-pet
+├ ƒ /team
+├ ƒ /team/[screen]
+├ ƒ /team/api/[action]
+├ ƒ /team/proof/[id]/[index]
+├ ○ /trendi
+├ ○ /trendi/privacy
+├ ○ /trendi/support
+├ ○ /way-in
+├ ○ /way-in/privacy
+├ ○ /way-in/support
+├ ○ /way-in/terms
+├ ○ /work-with-me
+├ ƒ /work-with-us
+├ ○ /you-know-ball/play
+├ ○ /you-know-ball/privacy
+├ ○ /you-know-ball/safety
+└ ○ /you-know-ball/support
+
+
+ƒ Proxy (Middleware)
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+
+{"traced_runtime_assets":true,"team_page_browser_free":true}

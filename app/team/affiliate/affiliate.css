@@ -1,0 +1,36 @@
+.affiliate-shell { max-width: 1180px; margin: auto; padding: 28px clamp(20px, 4vw, 56px) 64px; }
+.affiliate-header { display: flex; align-items: center; justify-content: space-between; gap: 18px; border-bottom: 1px solid var(--t-line); padding-bottom: 24px; }
+.affiliate-intro { display: grid; gap: 12px; padding: 48px 0 30px; }
+.affiliate-metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
+.affiliate-metrics h2 { font-size: 14px; color: var(--t-muted); }
+.affiliate-metrics strong { display: block; font-size: clamp(30px, 4vw, 42px); font-weight: 500; margin: 10px 0; font-variant-numeric: tabular-nums; }
+.affiliate-payout { margin-top: 20px; display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 22px; }
+.affiliate-payout h2 { margin: 6px 0 12px; }
+.affiliate-payout > .team-fine { grid-column: 1 / -1; }
+.affiliate-section { margin-top: 38px; }
+.affiliate-section > h2, .affiliate-section > p { margin-bottom: 16px; }
+.affiliate-apps, .affiliate-links { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.affiliate-apps .team-card { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.affiliate-apps strong { color: var(--t-accent); font-size: 21px; font-weight: 500; font-variant-numeric: tabular-nums; }
+.affiliate-feed { list-style: none; padding: 0; margin: 0 0 14px; display: grid; gap: 10px; }
+.affiliate-sale { display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+.affiliate-sale time { color: var(--t-muted); font-size: 12px; }
+.affiliate-sale-result { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+.affiliate-sale-result strong { font-size: 22px; font-variant-numeric: tabular-nums; }
+.affiliate-status { font-size: 12px; border: 1px solid var(--t-line); padding: 4px 8px; }
+.affiliate-status-paid { color: var(--t-accent); }
+.affiliate-status-refunded, .affiliate-debt strong { color: #f1b6a6; }
+.affiliate-link-controls { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+.affiliate-link-controls a { flex: 0 0 100%; overflow-wrap: anywhere; color: var(--t-muted); font-size: 12px; text-decoration: underline; }
+.affiliate-link-controls span { font-size: 12px; }
+.affiliate-section summary { cursor: pointer; padding: 12px 0; }
+@media (max-width: 650px) {
+  .affiliate-header .team-brand { font-size: 12px; gap: 8px; }
+  .affiliate-intro { padding-top: 30px; }
+  .affiliate-metrics, .affiliate-apps, .affiliate-links, .affiliate-payout { grid-template-columns: minmax(0, 1fr); }
+  .affiliate-sale { align-items: flex-start; flex-direction: column; gap: 14px; }
+  .affiliate-sale-result { align-items: flex-start; width: 100%; }
+  .affiliate-sale-result strong { align-self: flex-end; }
+  .affiliate-status { max-width: 100%; }
+  .affiliate-shell .team-section-title { flex-wrap: wrap; gap: 10px; }
+}

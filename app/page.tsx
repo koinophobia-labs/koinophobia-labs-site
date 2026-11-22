@@ -297,9 +297,9 @@ export default async function Home() {
                   Start a project <ArrowRight size={18} aria-hidden="true" />
                 </Link>
               </div>
-              <a className="kw__finale-mail" href="/start" data-analytics="founder_link_click" data-analytics-label="email">
+              <Link className="kw__finale-mail" href="/start" data-analytics="founder_link_click" data-analytics-label="email">
                 Ask Blake a question <ArrowUpRight size={14} aria-hidden="true" />
-              </a>
+              </Link>
 
               <NowStrip />
 

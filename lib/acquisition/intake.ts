@@ -204,8 +204,9 @@ export async function sendLeadEmail(input: LeadInput, leadId?: string) {
   return sendInternalEmail({ subject: `${subjectPrefix}: ${input.businessName}`, text: formatLeadEmailText(input, leadId), html: formatLeadEmailHtml(input, leadId), reply_to: input.email });
 }
 
-export type PaidAuditNotice = { paymentId: string; leadId: string; bookingSubmitted: boolean; name: string; email: string; offer?: string };
+export type PaidAuditNotice = { paymentId: string; leadId: string; bookingSubmitted: boolean; name: string; email: string; offer?: string; team?: {business:string;ownerEmail:string} };
 export async function sendPaidAuditEmail(notice: PaidAuditNotice) {
+  if (notice.team) return sendInternalEmail({subject:"New client — start the work",text:`New client — start the work\n\n${notice.team.business}\nPaid catalog offer: ${notice.offer}\nOpen the paid deal: https://koinophobialabs.com/team/pipeline`},`paid-team/${notice.paymentId}`,notice.team.ownerEmail);
   const subject = notice.offer === "monthly_support" ? "Paid: Monthly support retainer $500/month" : notice.offer === "straight_answer" ? "Paid: Straight Answer $250" : "Paid: Revenue Leak Audit $250";
   const crmLink = `${(process.env.NEXT_PUBLIC_SITE_URL || "https://koinophobialabs.com").replace(/\/$/, "")}/crm/leads/${encodeURIComponent(notice.leadId)}`;
   const text = `${subject}\n\nCRM: ${crmLink}\nBooking form submitted: ${notice.bookingSubmitted ? "Yes" : "No"}\nName: ${notice.name || "Not provided"}\nEmail: ${notice.email || "Not provided"}`;
@@ -213,9 +214,9 @@ export async function sendPaidAuditEmail(notice: PaidAuditNotice) {
 }
 
 // SITE-01 sender and recipient shared by lead and paid-audit notifications.
-async function sendInternalEmail(message: { subject: string; text: string; html?: string; reply_to?: string }, idempotencyKey?: string) {
+export async function sendInternalEmail(message: { subject: string; text: string; html?: string; reply_to?: string; attachments?: {filename:string;content:string}[] }, idempotencyKey?: string, ownerRecipient?: string) {
   const apiKey = process.env.RESEND_API_KEY;
-  const to = process.env.CONTACT_TO_EMAIL;
+  const to = ownerRecipient || process.env.CONTACT_TO_EMAIL;
   const from = process.env.CONTACT_FROM_EMAIL || "Koinophobia Labs Leads <leads@koinophobialabs.com>";
   if (!apiKey || !to) return { ok: false, reason: "not_configured" as const };
   try {

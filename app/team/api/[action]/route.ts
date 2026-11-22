@@ -1,0 +1,279 @@
+import { savePartnerTimeZone } from "@/lib/team/time-zone-store";
+import { partnerHome, requirePartnerAction } from "@/lib/team/affiliate-access";
+import {activeLead,prepareCall,switchCallOffer,saveCell,recordOutcome,publishDeal} from "@/lib/team/call-store";
+import { actionRateLimit } from "@/lib/team/action-limits";
+import {
+  onboard,
+  expressLogin,
+  retryConnect,
+  updateAccount,
+  drainConnect,
+} from "@/lib/team/connect";
+import { connectStripe } from "@/lib/team/connect-client";
+import { isTrustedMutationRequest } from "@/lib/security/origin";
+import { NextRequest, NextResponse } from "next/server";
+import { cookies } from "next/headers";
+import { hostedPreview, teamDatabase, transaction } from "@/lib/team/db";
+import {
+  cookieName,
+  sessionActor,
+  cookieOptions,
+  rateLimit,
+  RateLimitFault,
+  emailInput,
+  passwordLogin,
+  requestMagicLink,
+  consumeMagicLink,
+  mailConfigured,
+  invite,
+  digest,
+  passwordInput,
+  passwordState,
+  setPassword,
+  dismissPasswordPrompt,
+} from "@/lib/team/auth";
+import { currentPartner } from "@/lib/team/session";
+import { Fault, owner, textInput } from "@/lib/team/domain";
+import {
+  importAssigned,
+  optOut,
+  saveQuote,
+  updateDeal,
+  recordPayout,
+} from "@/lib/team/store";
+import { checkSite } from "@/lib/team/checker";
+import {importRecheck} from '@/lib/team/recheck-import';
+import type {Audit} from '@koinophobia/site-auditor/model';
+import { randomUUID } from "node:crypto";
+export const runtime = "nodejs";
+export const maxDuration = 300;
+async function bodyOf(request: Request) {
+  const reader = request.body?.getReader();
+  if (!reader) throw new Fault("Request body required.");
+  let total = 0;
+  const chunks: Uint8Array[] = [];
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    total += value.length;
+    if (total > 2_000_000) {
+      await reader.cancel();
+      throw new Fault("Upload must be under 2 MB.", 413);
+    }
+    chunks.push(value);
+  }
+  try {
+    const b = JSON.parse(Buffer.concat(chunks).toString());
+    if (!b || Array.isArray(b) || typeof b !== "object") throw Error();
+    return b as Record<string, unknown>;
+  } catch {
+    throw new Fault("Expected a JSON object.");
+  }
+}
+export async function POST(
+  request: NextRequest,
+  { params }: { params: Promise<{ action: string }> },
+) {
+  try {
+    if (!isTrustedMutationRequest(request))
+      throw new Fault("Request origin rejected.", 403);
+    const { action } = await params,
+      body = await bodyOf(request),
+      jar = await cookies();
+    const ok = (value: unknown) =>
+      NextResponse.json(value, {
+        headers: {
+          "Cache-Control": "no-store",
+          "X-Robots-Tag": "noindex, nofollow",
+        },
+      });
+    if (action === "logout") {
+      if (!hostedPreview() && jar.get(cookieName))
+        await teamDatabase().query(
+          "delete from team_sessions where token_hash=$1",
+          [digest(jar.get(cookieName)!.value)],
+        );
+      jar.set(cookieName, "", { ...cookieOptions, maxAge: 0 });
+      return ok({ ok: true });
+    }
+    if (hostedPreview()) {
+      if (
+        action === "demo" &&
+        ["owner", "partner"].includes(String(body.role))
+      ) {
+        jar.set(cookieName, `preview-${body.role}`, cookieOptions);
+        return ok({ ok: true });
+      }
+      throw new Fault(
+        "This hosted preview is read-only and contains fake data. Functional flows are verified against the isolated local database.",
+        409,
+      );
+    }
+    if (["login", "magic", "consume"].includes(action)) {
+      const db = teamDatabase();
+      const ip = process.env.VERCEL
+        ? request.headers.get("x-vercel-forwarded-for") || "unknown"
+        : "local";
+      await rateLimit(db, "login-ip:" + ip, 30);
+      if (action === "consume") {
+        const value = textInput(body.token, "Token", true, 100);
+        await rateLimit(db, "token:" + digest(value));
+        const session = await transaction((q) => consumeMagicLink(q, value));
+        jar.set(cookieName, session, cookieOptions);
+        const state = await passwordState(db, session);
+        const signedIn = await sessionActor(db, session);
+        return ok({ ok: true, next: signedIn?.role === "affiliate" ? partnerHome(signedIn) : state.prompt || state.hasPassword ? "/team/account" : "/team/leads" });
+      }
+      const email = emailInput(body.email);
+      await rateLimit(db, "login-email:" + email);
+      if (action === "magic") {
+        if (!mailConfigured() || process.env.VERCEL_ENV !== "production")
+          throw new Fault(
+            "Email login is unavailable here. Use your invite and password.",
+            409,
+          );
+        // Keep the response identical for unknown, inactive, and active accounts,
+        // including provider errors. The delivered link remains usable on timeout.
+        try {
+          await requestMagicLink(db, email, "https://koinophobialabs.com");
+        } catch (e) {
+          if (!(e instanceof Fault && e.status === 503)) throw e;
+        }
+        return ok({
+          message:
+            "If your email has an active invitation, a login link is on its way.",
+        });
+      }
+      const session = await transaction((q) =>
+        passwordLogin(
+          q,
+          email,
+          passwordInput(body.password),
+          // Preserve production's email verification requirement for invitations.
+          mailConfigured() && process.env.VERCEL_ENV === "production"
+            ? ""
+            : textInput(body.code, "Invite code", false, 100),
+        ),
+      );
+      jar.set(cookieName, session, cookieOptions);
+      const signedIn = await sessionActor(db, session);
+      return ok({ ok: true, next: signedIn ? partnerHome(signedIn) : "/team" });
+    }
+    const p = await currentPartner();
+    if (!p) throw new Fault("Please sign in.", 401);
+    requirePartnerAction(p, action);
+    await actionRateLimit(teamDatabase(), p.id, action);
+    if (action === "time-zone") return ok(await transaction(q => savePartnerTimeZone(q, p, body.timeZone)));
+    if (action === "password") {
+      await rateLimit(teamDatabase(), "password-change:" + p.id);
+      return ok(await transaction((q) => setPassword(q, jar.get(cookieName)!.value, body)));
+    }
+    if (action === "password-prompt-dismiss")
+      return ok(await transaction((q) => dismissPasswordPrompt(q, jar.get(cookieName)!.value)));
+    if (action === "connect-onboard")
+      return ok(await onboard(teamDatabase(), p, request.nextUrl.origin));
+    if (action === "connect-dashboard")
+      return ok(await expressLogin(teamDatabase(), p));
+    if (action === "connect-retry")
+      return ok(await retryConnect(teamDatabase(), p));
+    if (action === "connect-refresh") {
+      const client = connectStripe();
+      const a = (
+        await teamDatabase().query(
+          "select stripe_account_id from team_connect_accounts where partner_id=$1",
+          [p.id],
+        )
+      ).rows[0];
+      if (a) await updateAccount(teamDatabase(), a.stripe_account_id, client);
+      return ok(await drainConnect(teamDatabase(), client, p.id));
+    }
+    if (action === "check") {
+      await rateLimit(teamDatabase(), "site-check:" + p.id, 10);
+      const target = new URL(textInput(body.url, "Website", true, 2000));target.hash='';
+      const history=await teamDatabase().query(
+        "select data from team_site_checks where partner_id=$1 and data->>'url'=$2 and created_at>now()-interval '7 days' order by created_at desc limit 4",
+        [p.id,target.href],
+      );
+      const previous=history.rows.flatMap(r=>r.data.observations??[]);
+      const result = await checkSite(target.href,previous);
+      await transaction(q=>q.query(
+        "insert into team_site_checks(id,partner_id,data) values($1,$2,$3)",
+        [randomUUID(), p.id, result],
+      ));
+      return ok({ ok: true });
+    }
+    const result = await transaction(async (q) => {
+      switch (action) {
+        case "recheck-import":
+          return importRecheck(q,p,textInput(body.id,"Lead",true,80),body.audit as Audit);
+        case "prepare-call": return prepareCall(q,p,textInput(body.id,"Lead",true,80));
+        case "call-offer": return switchCallOffer(q,p,textInput(body.id,"Deal",true,80),body.service);
+        case "active-lead": return activeLead(q,p,textInput(body.id,"Lead",true,80));
+        case "call-cell": return saveCell(q,p,textInput(body.id,"Lead",true,80),body.cell);
+        case "call-outcome": return recordOutcome(q,p,textInput(body.id,"Lead",true,80),body.outcome);
+        case "deal-page": return publishDeal(q,p,textInput(body.id,"Deal",true,80),body.proofReviewed===true);
+        case "invite":
+          return invite(q, p, body);
+        case "import":
+          return importAssigned(
+            q,
+            p,
+            textInput(body.partner_id, "Partner", true, 80),
+            body.leads,
+          );
+        case "optout":
+          return optOut(q, p, textInput(body.id, "Lead", true, 80));
+        case "quote":
+          return saveQuote(q, p, body);
+        case "deal":
+          return updateDeal(q, p, textInput(body.id, "Deal", true, 80), body);
+        case "payout":
+          return recordPayout(
+            q,
+            p,
+            textInput(body.id, "Deal", true, 80),
+            body.amount,
+          );
+        case "settings":
+          owner(p);
+          await q.query(
+            "insert into team_settings(key,value) values('mailing_address',$1) on conflict(key) do update set value=excluded.value",
+            [textInput(body.address, "Mailing address", false, 500)],
+          );
+          return { ok: true };
+        case "deactivate":
+          owner(p);
+          if (body.id === p.id)
+            throw new Fault("You cannot deactivate your own owner account.");
+          await q.query(
+            "update team_partners set active=false where id=$1 and role='partner'",
+            [textInput(body.id, "Partner", true, 80)],
+          );
+          return { ok: true };
+        default:
+          throw new Fault("Not found.", 404);
+      }
+    });
+    return ok(result);
+  } catch (e) {
+    return NextResponse.json(
+      {
+        ...(e instanceof RateLimitFault ? { retryAfter: e.retryAfter } : {}),
+        error:
+          e instanceof RateLimitFault
+            ? `Slow down for a moment. Try again in ${e.retryAfter} seconds.`
+            : e instanceof Fault
+            ? e.message
+            : "Request could not be completed. Please try again or contact Blake.",
+      },
+      {
+        status: e instanceof Fault ? e.status : 500,
+        headers: {
+          ...(e instanceof RateLimitFault ? { "Retry-After": String(e.retryAfter) } : {}),
+          "Cache-Control": "no-store",
+          "X-Robots-Tag": "noindex, nofollow",
+        },
+      },
+    );
+  }
+}

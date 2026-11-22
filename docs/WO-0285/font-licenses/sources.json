@@ -1,0 +1,54 @@
+[
+  {
+    "family": "sora",
+    "url": "https://raw.githubusercontent.com/google/fonts/main/ofl/sora/OFL.txt"
+  },
+  {
+    "family": "jetbrainsmono",
+    "url": "https://raw.githubusercontent.com/google/fonts/main/ofl/jetbrainsmono/OFL.txt"
+  },
+  {
+    "family": "newsreader",
+    "url": "https://raw.githubusercontent.com/google/fonts/main/ofl/newsreader/OFL.txt"
+  },
+  {
+    "family": "atkinsonhyperlegible",
+    "url": "https://raw.githubusercontent.com/google/fonts/main/ofl/atkinsonhyperlegible/OFL.txt"
+  },
+  {
+    "family": "literata",
+    "url": "https://raw.githubusercontent.com/google/fonts/main/ofl/literata/OFL.txt"
+  },
+  {
+    "family": "hankengrotesk",
+    "url": "https://raw.githubusercontent.com/google/fonts/main/ofl/hankengrotesk/OFL.txt"
+  },
+  {
+    "family": "gelasio",
+    "url": "https://raw.githubusercontent.com/google/fonts/main/ofl/gelasio/OFL.txt"
+  },
+  {
+    "family": "instrumentsans",
+    "url": "https://raw.githubusercontent.com/google/fonts/main/ofl/instrumentsans/OFL.txt"
+  },
+  {
+    "family": "sourceserif4",
+    "url": "https://raw.githubusercontent.com/google/fonts/main/ofl/sourceserif4/OFL.txt"
+  },
+  {
+    "family": "spectral",
+    "url": "https://raw.githubusercontent.com/google/fonts/main/ofl/spectral/OFL.txt"
+  },
+  {
+    "family": "instrumentserif",
+    "url": "https://raw.githubusercontent.com/google/fonts/main/ofl/instrumentserif/OFL.txt"
+  },
+  {
+    "family": "ebgaramond",
+    "url": "https://raw.githubusercontent.com/google/fonts/main/ofl/ebgaramond/OFL.txt"
+  },
+  {
+    "family": "lexend",
+    "url": "https://raw.githubusercontent.com/google/fonts/main/ofl/lexend/OFL.txt"
+  }
+]

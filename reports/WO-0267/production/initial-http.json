@@ -1,0 +1,27 @@
+[
+  {
+    "path": "/team",
+    "status": 500,
+    "location": null
+  },
+  {
+    "path": "/team/check",
+    "status": 500,
+    "location": null
+  },
+  {
+    "path": "/team/admin",
+    "status": 500,
+    "location": null
+  },
+  {
+    "path": "/team/proof/fictional/0",
+    "status": 500,
+    "location": null
+  },
+  {
+    "path": "/",
+    "status": 200,
+    "location": null
+  }
+]

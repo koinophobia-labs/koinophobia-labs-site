@@ -1,0 +1,42 @@
+✔ preview Vercel builds cannot execute migrations (0.937292ms)
+✔ ordinary production Vercel builds are application-only (0.186083ms)
+✔ a direct production Neon endpoint succeeds with every required guard (35.596417ms)
+✔ missing or vague approval refuses before connecting or executing SQL (0.307709ms)
+✔ target and runtime mismatches refuse before connecting (0.246083ms)
+✔ the database provider, direct URL, protocol, and TLS are mandatory (0.357459ms)
+✔ a wrong Neon endpoint is refused before connecting (0.205833ms)
+✔ a preview endpoint is refused when production is expected (0.087083ms)
+✔ a pooled Neon hostname is refused before connecting (0.081833ms)
+✔ the expected endpoint ID must be supplied independently (0.248458ms)
+✔ the expected database name and migration role are mandatory (0.322291ms)
+✔ a URL database-name mismatch is refused before connecting (0.125667ms)
+✔ a connected database-name mismatch refuses before migration SQL (0.132166ms)
+✔ a connected role mismatch refuses before migration SQL (0.102ms)
+✔ read-only and recovery connections refuse before migration SQL (0.2495ms)
+✔ an unexpected application baseline refuses before migration SQL (0.099917ms)
+✔ connection and identity failures expose no connection secrets (0.22225ms)
+✔ successful output exposes only the safe target and migration filenames (0.618125ms)
+✔ test and development migrations allow an explicit loopback-only path (0.880917ms)
+✔ the local override refuses remote and production targets (0.090333ms)
+✔ migration failures roll back, identify the file, and stop (0.198292ms)
+✔ the former custom database setting is not required anywhere (1139.442667ms)
+✔ migration 008 keeps idempotent guards for all columns and indexes (1.130667ms)
+✖ a real PostgreSQL schema containing migration 008 is accepted unchanged (2381.482417ms)
+ℹ tests 24
+ℹ suites 0
+ℹ pass 23
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3656.736417
+
+✖ failing tests:
+
+test at tests/database-migrations.test.mjs:502:1
+✖ a real PostgreSQL schema containing migration 008 is accepted unchanged (2381.482417ms)
+  ReferenceError: rmSync is not defined
+      at TestContext.<anonymous> (file:///Volumes/KoiArchive/WO-0267/site/tests/database-migrations.test.mjs:600:7)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1313:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:897:7)
