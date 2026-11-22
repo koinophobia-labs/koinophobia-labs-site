@@ -6,7 +6,7 @@ const contactEmail = "koinophobia999@gmail.com";
 export const metadata: Metadata = {
   title: "Dreamcatcher Privacy Policy",
   description:
-    "How Dreamcatcher handles your journal, voice clips, backups, exports, and support messages.",
+    "How Dreamcatcher for iPhone, Apple Watch, and Android handles your journal, voice clips, sleep data, backups, exports, and support messages.",
   alternates: { canonical: "/dreamcatcher/privacy" },
 };
 
@@ -19,7 +19,11 @@ export default function DreamcatcherPrivacyPage() {
       </Link>
       <p className="kicker kicker-orange">Dreamcatcher</p>
       <h1>Privacy Policy</h1>
-      <p className="legal-note">Effective October 24, 2026 · Dreamcatcher version 2.0</p>
+      <p className="legal-note">Effective November 21, 2026</p>
+      <p>
+        This policy covers Dreamcatcher on iPhone and Apple Watch and on Android. The sections up to Export,
+        import, and deletion describe the Apple app. The Android section describes Dreamcatcher for Android.
+      </p>
 
       <section>
         <h2>Your journal on your devices</h2>
@@ -237,6 +241,82 @@ export default function DreamcatcherPrivacyPage() {
         <p>
           Deleting the iPhone app removes its local app data; copies in exports or backups are separate. For
           pending Watch captures, use Delete all data while the devices can connect before removing the apps.
+        </p>
+      </section>
+
+      <h2>Android</h2>
+
+      <section>
+        <h3>Your journal on Android</h3>
+        <p>
+          Dreamcatcher stores dream text, capture times, marks, dream signs, preferences and Toolkit access in the
+          app’s local storage. Insights are calculated on your device. Dreamcatcher has no account and does not
+          send your journal to Koinophobia Labs.
+        </p>
+      </section>
+
+      <section>
+        <h3>Speech and voice clips</h3>
+        <p>
+          You can type or opt into microphone access. Android’s on-device recognizer transcribes dictation on your
+          device. A voice clip you record is stored in private app storage with the dream. Clips are kept by
+          default, as on iPhone. Turn on Never keep audio to delete saved clips and stop recording new clips.
+          Android backup omits audio. A folder export includes your clips so you can move them to another device.
+        </p>
+      </section>
+
+      <section>
+        <h3>Health Connect sleep data</h3>
+        <p>
+          When you choose to connect Health Connect, Dreamcatcher asks to read sleep sessions and stages. It uses
+          them locally for sleep summaries, a sleep-stage chart with your dreams pinned where you caught them,
+          recall comparisons and REM estimation. After you connect, Dreamcatcher reads sleep only with the access
+          you granted and does not ask again on its own. The home-screen widget can display a local sleep-duration
+          summary. Health Connect records are excluded from journal exports and device backups. You can revoke
+          access in Health Connect.
+        </p>
+      </section>
+
+      <section>
+        <h3>App lock, reminders and alarms</h3>
+        <p>
+          When you enable App lock, Android handles authentication using biometrics or the device’s screen lock.
+          Dreamcatcher receives the authentication result. Android protects the recents preview. Dreamcatcher
+          receives no biometric template or device credential.
+        </p>
+        <p>
+          Local reminders are optional. Android can restore scheduled reminders after a restart, and Android’s
+          WorkManager lets Dreamcatcher schedule the next reality checks while the app is closed. This runs on
+          your device and sends nothing. A dream sign can appear in a reality-check reminder when you enable it
+          for that sign. A wake-back-to-bed night is stored in your journal. If you choose, the wake tool hands the
+          chosen time and a general alarm label to your Clock app.
+        </p>
+      </section>
+
+      <section>
+        <h3>Backups, export and deletion</h3>
+        <p>
+          Device backup is off by default. If you opt in, an Android backup or device transfer can include a copy
+          of your journal JSON when the device and transport support it. Backup excludes audio, Health Connect
+          records and app settings. Android manages copies already transferred. In Settings, you can also export
+          your journal as a folder with journal.json and your voice clips, import a folder or journal.json file,
+          and delete your journal. The provider you choose for export manages that copy.
+        </p>
+      </section>
+
+      <section>
+        <h3>Google Play purchases and services</h3>
+        <p>
+          Google Play Billing supplies the price, processes the one-time Lucid Toolkit payment and checks
+          ownership. Koinophobia Labs does not receive your payment-card details. Google may provide standard
+          order and sales reports. Dreamcatcher stores Toolkit access locally and asks Play to check ownership
+          when you restore with the purchasing Google account. Apple and Google purchases are separate. Deleting
+          a journal does not delete a store purchase record.
+        </p>
+        <p>
+          Privacy and support links open in your browser without journal data. Google Play and Android may
+          separately process store, testing and system diagnostics under their own policies and your device
+          settings.
         </p>
       </section>
 
