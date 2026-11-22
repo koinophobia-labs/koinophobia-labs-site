@@ -1,0 +1,12 @@
+{
+  "passed": [
+    "proof denies anonymous",
+    "confirmed inline proof",
+    "copy includes confirmed only",
+    "390px layout",
+    "owner failed count",
+    "stale opener hidden",
+    "proof scoped to partner",
+    "UI to real browser checker to database"
+  ]
+}

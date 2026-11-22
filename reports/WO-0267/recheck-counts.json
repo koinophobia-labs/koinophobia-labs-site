@@ -1,0 +1,21 @@
+{
+  "receipt": {
+    "cohort": 64,
+    "imported": 45,
+    "not_imported": 19,
+    "confirmed": 11,
+    "failed": 34,
+    "cohort_confirmed": 11,
+    "cohort_failed": 53
+  },
+  "readback": [
+    {
+      "status": "confirmed",
+      "count": 11
+    },
+    {
+      "status": "re-check failed",
+      "count": 34
+    }
+  ]
+}

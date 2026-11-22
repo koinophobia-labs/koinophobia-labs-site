@@ -58,6 +58,24 @@ const RETIRED_STUDIO_ROUTES: Array<[string, string]> = [
 ];
 
 const nextConfig: NextConfig = {
+  serverExternalPackages: ['@koinophobia/site-auditor','playwright-core','@sparticuz/chromium'],
+  // External browser packages load runtime assets through dynamic paths. Trace them explicitly.
+  outputFileTracingIncludes: {
+    '/api/appstore/*': ['./lib/appstore/certs/*.cer'],
+    '/team/api/apple-payment-received': ['./lib/appstore/certs/*.cer'],
+    '/api/jobs/*': [
+      './node_modules/@koinophobia/site-auditor/dist/**/*',
+      './node_modules/playwright-core/**/*',
+      './node_modules/@sparticuz/chromium/bin/**/*',
+    ],
+    '/team/api/*': [
+      './node_modules/@koinophobia/site-auditor/dist/**/*',
+      './node_modules/playwright-core/**/*',
+      './node_modules/@sparticuz/chromium/bin/**/*',
+    ],
+  },
+  async headers() { return ["/team/:path*", "/go/:path*", "/pay/:path*", "/start/:path*", "/payment/:path*"].map(source => ({ source, headers: [{key:"X-Robots-Tag",value:"noindex, nofollow, noarchive"},{key:"Cache-Control",value:"private, no-store"},{key:"Referrer-Policy",value:"no-referrer"}] })); },
+
   images: {
     // App screenshots use responsive next/image optimization.
   },

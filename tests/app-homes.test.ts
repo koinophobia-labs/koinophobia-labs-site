@@ -38,13 +38,17 @@ test("no page or product copy contains the false no-purchases claim", () => {
     }
   }
 });
-test("coming-soon homes are public by Blake's decision, without App Store buttons", () => {
+test("public homes include Teacher's Pet with its verified App Store release", () => {
   assert.equal(APP_PAGES_PRERELEASE, true);
   assert.deepEqual(publicAppHomes().map(app => app.slug).sort(), ["dreamcatcher", "forget-about-it", "old-dog", "preaching-to-the-choir", "teachers-pet", "trendi", "way-in"]);
-  assert.equal(appHomes["teachers-pet"].store, undefined, "Teacher's Pet must not link to the App Store before approval");
-  assert.equal(appHomes["teachers-pet"].prerelease, true);
+  assert.equal(appHomes["teachers-pet"].store, "https://apps.apple.com/us/app/teachers-pet-personal-school/id6808981717");
+  assert.equal(appHomes["teachers-pet"].prerelease, undefined);
   assert.equal(appHomes["old-dog"].platforms, "Mac");
-  assert.equal(appHomes["teachers-pet"].coming, "Coming to the Mac App Store");
+  assert.equal(appHomes["teachers-pet"].coming, undefined);
+  const html = renderToStaticMarkup(createElement(appWorlds["teachers-pet"]));
+  const $ = load(html);
+  assert.equal($("a[aria-label='Download Teacher’s Pet on the App Store']").attr("href"), appHomes["teachers-pet"].store);
+  assert.doesNotMatch($.text(), /coming to|when released|pending review|pending App Review|planned pricing|not available to buy/i);
 });
 test("Dreamcatcher's live page renders its real store button and free download pricing", () => {
   const app = appHomes.dreamcatcher;
@@ -184,7 +188,8 @@ test("each subscription option carries renewal text and every original price rem
 test("route-local fonts, shared shell, and motion constraints are explicit", () => {
   for (const app of Object.values(appHomes)) {
     const layout = fs.readFileSync(path.join(root, `app/${app.slug}/layout.tsx`), "utf8");
-    assert.match(layout, /next\/font\/google/);
+    assert.match(layout, /import "\.\/fonts\.css"/);
+    assert.doesNotMatch(layout, /next\/font\/google/);
     assert.doesNotMatch(layout, /\bInter\b/);
     assert.equal((layout.match(/const (body|display) = /g) || []).length, 2);
   }

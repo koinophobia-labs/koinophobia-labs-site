@@ -1,0 +1,584 @@
+{
+  "at": "2026-11-13T00:18:42.144Z",
+  "sourceDeployment": "dpl_HXFGY8dP6bmwqseVcc5RBa6o46u4",
+  "sourceSha": "77bf99b267f5fd094350bf0d496e0def5c76b77f",
+  "reason": "Next.js extensionless Google font URL resolver failure in the immediately preceding remote deployment",
+  "routes": [
+    {
+      "route": "/",
+      "families": [
+        "Sora",
+        "Sora Fallback",
+        "JetBrains Mono",
+        "JetBrains Mono Fallback",
+        "Newsreader",
+        "Newsreader Fallback"
+      ],
+      "variableClasses": [
+        "sora_b0747a85-module__uEWoma__variable",
+        "jetbrains_mono_d5b9deb1-module__d6n--G__variable",
+        "newsreader_3d7cee65-module__ijG63a__variable"
+      ],
+      "fontFaces": 30,
+      "preloads": [
+        "051742360c26797e-s.p.1bkzbscqrt8rl.woff2",
+        "6bd983bd58a87a3d-s.p.1hey5yyym6mz_.woff2",
+        "8feca5bfbcc904f1-s.p.1xt3x57tcdmbv.woff2"
+      ]
+    },
+    {
+      "route": "old-dog",
+      "families": [
+        "Atkinson Hyperlegible",
+        "Atkinson Hyperlegible Fallback",
+        "Literata",
+        "Literata Fallback"
+      ],
+      "variableClasses": [
+        "atkinson_hyperlegible_c03bb8af-module__eUshaa__variable",
+        "literata_92f97cea-module__oPESIq__variable"
+      ],
+      "fontFaces": 13,
+      "preloads": [
+        "30bdb5bb2b173ee1-s.p.0zb6_9j98fvm-.woff2",
+        "89ea96820aa96980-s.p.0hs6q6udzld4a.woff2",
+        "ed5f1f9bced69653-s.p.2li_3lqay9qjq.woff2"
+      ]
+    },
+    {
+      "route": "trendi",
+      "families": [
+        "Hanken Grotesk",
+        "Hanken Grotesk Fallback",
+        "Gelasio",
+        "Gelasio Fallback"
+      ],
+      "variableClasses": [
+        "hanken_grotesk_9dc7382f-module__k3N8HW__variable",
+        "gelasio_8fd1deaf-module__tIb5ba__variable"
+      ],
+      "fontFaces": 22,
+      "preloads": [
+        "5a999aea4d5573dc-s.p.1c_k2hi1yi2cg.woff2",
+        "614a0f7b5f50b2dc-s.p.31liq74fp3j5t.woff2",
+        "c47649aa31f9e140-s.p.3lxpqujs87tck.woff2"
+      ]
+    },
+    {
+      "route": "way-in",
+      "families": [
+        "Instrument Sans",
+        "Instrument Sans Fallback",
+        "Source Serif 4",
+        "Source Serif 4 Fallback"
+      ],
+      "variableClasses": [
+        "instrument_sans_b2632be1-module__skqw7a__variable",
+        "source_serif_4_4d4514f4-module__0ePVba__variable"
+      ],
+      "fontFaces": 10,
+      "preloads": [
+        "68d403cf9f2c68c5-s.p.012bmydply3go.woff2",
+        "f06bf9da926bae75-s.p.2874ccu1_u7jf.woff2"
+      ]
+    },
+    {
+      "route": "dreamcatcher",
+      "families": [
+        "Spectral",
+        "Spectral Fallback",
+        "Instrument Serif",
+        "Instrument Serif Fallback"
+      ],
+      "variableClasses": [
+        "spectral_1ccdae8e-module__IR561q__variable",
+        "instrument_serif_534a78d1-module__JevIFG__variable"
+      ],
+      "fontFaces": 16,
+      "preloads": [
+        "7ebf22b5a21034f8-s.p.3j3877k49yy0l.woff2",
+        "98f992443ccb276f-s.p.1oxabuqlrz9-_.woff2",
+        "9d71b78498c53c0d-s.p.42kv-xe2onlt1.woff2",
+        "e41d5df559864f9e-s.p.1g73gv09-xcb6.woff2"
+      ]
+    },
+    {
+      "route": "preaching-to-the-choir",
+      "families": [
+        "Instrument Sans",
+        "Instrument Sans Fallback",
+        "EB Garamond",
+        "EB Garamond Fallback"
+      ],
+      "variableClasses": [
+        "instrument_sans_b2632be1-module__skqw7a__variable",
+        "eb_garamond_3c57a91a-module__2ldV5W__variable"
+      ],
+      "fontFaces": 11,
+      "preloads": [
+        "e4505858a30c79c2-s.p.0tlhhw_qyyfys.woff2",
+        "f06bf9da926bae75-s.p.2874ccu1_u7jf.woff2"
+      ]
+    },
+    {
+      "route": "teachers-pet",
+      "families": [
+        "Lexend",
+        "Lexend Fallback",
+        "Gelasio",
+        "Gelasio Fallback"
+      ],
+      "variableClasses": [
+        "lexend_58c85cc7-module__QaaOgW__variable",
+        "gelasio_2a1653a2-module__ISHpYa__variable"
+      ],
+      "fontFaces": 11,
+      "preloads": [
+        "614a0f7b5f50b2dc-s.p.31liq74fp3j5t.woff2",
+        "ca31d6821328a4e9-s.p.2svk7cnw5x6df.woff2"
+      ]
+    },
+    {
+      "route": "forget-about-it",
+      "families": [
+        "Instrument Sans",
+        "Instrument Sans Fallback",
+        "Newsreader",
+        "Newsreader Fallback"
+      ],
+      "variableClasses": [
+        "instrument_sans_b2632be1-module__skqw7a__variable",
+        "newsreader_9977eeeb-module__43tY1q__variable"
+      ],
+      "fontFaces": 13,
+      "preloads": [
+        "5f402bd2d8eef81a-s.p.40bho2kviej2o.woff2",
+        "8feca5bfbcc904f1-s.p.1xt3x57tcdmbv.woff2",
+        "9433d1a810498265-s.p.1hij5ex6k3v9q.woff2",
+        "f06bf9da926bae75-s.p.2874ccu1_u7jf.woff2"
+      ]
+    }
+  ],
+  "files": [
+    {
+      "name": "3dbe685087e51055-s.3go3gb1_xu4rn.woff2",
+      "url": "https://koinophobialabs.com/_next/static/media/3dbe685087e51055-s.3go3gb1_xu4rn.woff2?dpl=dpl_HXFGY8dP6bmwqseVcc5RBa6o46u4",
+      "bytes": 12116,
+      "sha256": "8d9b4a4136bf8cf8b00c65978e7801c372d14ed901fa387cc7352a40b96cd006"
+    },
+    {
+      "name": "6bd983bd58a87a3d-s.p.1hey5yyym6mz_.woff2",
+      "url": "https://koinophobialabs.com/_next/static/media/6bd983bd58a87a3d-s.p.1hey5yyym6mz_.woff2?dpl=dpl_HXFGY8dP6bmwqseVcc5RBa6o46u4",
+      "bytes": 25240,
+      "sha256": "3902474d3ece89c8580d5ef3325cf58753e6e45a86f9957b4dacc4fce2e7fde1"
+    },
+    {
+      "name": "04c5164763c40239-s.1kd-r_s9smv5m.woff2",
+      "url": "https://koinophobialabs.com/_next/static/media/04c5164763c40239-s.1kd-r_s9smv5m.woff2?dpl=dpl_HXFGY8dP6bmwqseVcc5RBa6o46u4",
+      "bytes": 1664,
+      "sha256": "9343de2ca5d9549f792e7962375af8efb0f320c7643bfd36c884b5a30e5c396f"
+    },
+    {
+      "name": "26f284dcc38c84c0-s.3hlisc-pwq13z.woff2",
+      "url": "https://koinophobialabs.com/_next/static/media/26f284dcc38c84c0-s.3hlisc-pwq13z.woff2?dpl=dpl_HXFGY8dP6bmwqseVcc5RBa6o46u4",
+      "bytes": 8892,
+      "sha256": "4995a9a43ac659ec32fcd8b463755cd6a07b31a6e6b3894a6a153b661cf490e2"
+    },
+    {
+      "name": "7e7f32a39836f228-s.0-oo9_1x_xmvg.woff2",
+      "url": "https://koinophobialabs.com/_next/static/media/7e7f32a39836f228-s.0-oo9_1x_xmvg.woff2?dpl=dpl_HXFGY8dP6bmwqseVcc5RBa6o46u4",
+      "bytes": 6800,
+      "sha256": "49c3da6c9a2b279b0f1f860f5cfb1f5dc38d88a5c7be9c9b1837bbc4e3db6111"
+    },
+    {
+      "name": "fa39153a3fc630ba-s.36fqqi66-3tjb.woff2",
+      "url": "https://koinophobialabs.com/_next/static/media/fa39153a3fc630ba-s.36fqqi66-3tjb.woff2?dpl=dpl_HXFGY8dP6bmwqseVcc5RBa6o46u4",
+      "bytes": 5872,
+      "sha256": "d44eb1936043a56038eb02dd70b243f379bef65783f94ec12f277550720411f1"
+    },
+    {
+      "name": "6a5386fd6038edbe-s.3_z45zcoc-xoz.woff2",
+      "url": "https://koinophobialabs.com/_next/static/media/6a5386fd6038edbe-s.3_z45zcoc-xoz.woff2?dpl=dpl_HXFGY8dP6bmwqseVcc5RBa6o46u4",
+      "bytes": 11596,
+      "sha256": "9c38cb2d0d2d93c1ee6e21fa78db76f13ea7e15e15cc64214c7ca89b6aaa35c4"
+    },
+    {
+      "name": "051742360c26797e-s.p.1bkzbscqrt8rl.woff2",
+      "url": "https://koinophobialabs.com/_next/static/media/051742360c26797e-s.p.1bkzbscqrt8rl.woff2?dpl=dpl_HXFGY8dP6bmwqseVcc5RBa6o46u4",
+      "bytes": 31340,
+      "sha256": "2c32b9b3ee358c119e210f6f5195f9bd34894d78a785ff2e95d60e718e400af4"
+    },
+    {
+      "name": "7a4546d8114e54fa-s.18o8ati-4_x9g.woff2",
+      "url": "https://koinophobialabs.com/_next/static/media/7a4546d8114e54fa-s.18o8ati-4_x9g.woff2?dpl=dpl_HXFGY8dP6bmwqseVcc5RBa6o46u4",
+      "bytes": 5544,
+      "sha256": "b7352f1eb41bd7c0b9e2dbc1161e3927755efddca4c12f1ebe86923070d10f5c"
+    },
+    {
+      "name": "b9e7b9c6ff7672ac-s.2jjgzj9abf9cy.woff2",
+      "url": "https://koinophobialabs.com/_next/static/media/b9e7b9c6ff7672ac-s.2jjgzj9abf9cy.woff2?dpl=dpl_HXFGY8dP6bmwqseVcc5RBa6o46u4",
+      "bytes": 15248,
+      "sha256": "3b8eca75ceca3077c49e46e29f9afb1c91c6e474c2b10d42bec998ce593e2a27"
+    },
+    {
+      "name": "8feca5bfbcc904f1-s.p.1xt3x57tcdmbv.woff2",
+      "url": "https://koinophobialabs.com/_next/static/media/8feca5bfbcc904f1-s.p.1xt3x57tcdmbv.woff2?dpl=dpl_HXFGY8dP6bmwqseVcc5RBa6o46u4",
+      "bytes": 24408,
+      "sha256": "56febd06c694ba791028f22c659bc1f8c80954732a77db8d708432296268e163"
+    },
+    {
+      "name": "cc6c75d91fb27f62-s.3j-lqo2q-puhp.woff2",
+      "url": "https://koinophobialabs.com/_next/static/media/cc6c75d91fb27f62-s.3j-lqo2q-puhp.woff2?dpl=dpl_HXFGY8dP6bmwqseVcc5RBa6o46u4",
+      "bytes": 5768,
+      "sha256": "e15e89caea888e8df98f6705fc0a5968aa4f62076da8fe9667c8dd4a197ff4ef"
+    },
+    {
+      "name": "ed5f1f9bced69653-s.p.2li_3lqay9qjq.woff2",
+      "url": "https://koinophobialabs.com/_next/static/media/ed5f1f9bced69653-s.p.2li_3lqay9qjq.woff2?dpl=dpl_HXFGY8dP6bmwqseVcc5RBa6o46u4",
+      "bytes": 11208,
+      "sha256": "a60206dd4793eb886952e48dc3e1c1d59942c004b2ab1e0086e7ccd156a7852d"
+    },
+    {
+      "name": "574e5b2a8fe8e45b-s.061jvc6_x84nn.woff2",
+      "url": "https://koinophobialabs.com/_next/static/media/574e5b2a8fe8e45b-s.061jvc6_x84nn.woff2?dpl=dpl_HXFGY8dP6bmwqseVcc5RBa6o46u4",
+      "bytes": 5800,
+      "sha256": "69b1029853229409286380f46b81a137c566825a0b1cd458f2a3536df8459805"
+    },
+    {
+      "name": "89ea96820aa96980-s.p.0hs6q6udzld4a.woff2",
+      "url": "https://koinophobialabs.com/_next/static/media/89ea96820aa96980-s.p.0hs6q6udzld4a.woff2?dpl=dpl_HXFGY8dP6bmwqseVcc5RBa6o46u4",
+      "bytes": 11364,
+      "sha256": "1cc7c0c5fbf16d1be3cb6d95c89fc0afd0e11f264e239ac97c64a326c5d88fe4"
+    },
+    {
+      "name": "dcc06fc59088004f-s.26afxfjuoa9fw.woff2",
+      "url": "https://koinophobialabs.com/_next/static/media/dcc06fc59088004f-s.26afxfjuoa9fw.woff2?dpl=dpl_HXFGY8dP6bmwqseVcc5RBa6o46u4",
+      "bytes": 9772,
+      "sha256": "b9f66fcc9e1eef39bf4263ef56d0cb8c69e85ae464a5c46223eff7c83d27d09d"
+    },
+    {
+      "name": "14a4f422adc8017e-s.0g2162x3jbg9n.woff2",
+      "url": "https://koinophobialabs.com/_next/static/media/14a4f422adc8017e-s.0g2162x3jbg9n.woff2?dpl=dpl_HXFGY8dP6bmwqseVcc5RBa6o46u4",
+      "bytes": 28080,
+      "sha256": "91eeed38d64375a6b9404fda5df24db28056ac172807962bde2d69dea0f0b5ce"
+    },
+    {
+      "name": "294dd5272e5dc576-s.24z3xhdtefne-.woff2",
+      "url": "https://koinophobialabs.com/_next/static/media/294dd5272e5dc576-s.24z3xhdtefne-.woff2?dpl=dpl_HXFGY8dP6bmwqseVcc5RBa6o46u4",
+      "bytes": 12200,
+      "sha256": "f8bf9a9391b3e3c27de1eea9a4ca206a79febc3aa386188fb6d6d555e4204634"
+    },
+    {
+      "name": "c0f3072741f3158c-s.0ip40b8wahlg_.woff2",
+      "url": "https://koinophobialabs.com/_next/static/media/c0f3072741f3158c-s.0ip40b8wahlg_.woff2?dpl=dpl_HXFGY8dP6bmwqseVcc5RBa6o46u4",
+      "bytes": 19164,
+      "sha256": "657973d6ea8c51255087d8ad3a9ff51c0261ff9231792345a21693584470043f"
+    },
+    {
+      "name": "32ed8f926ffc9cc2-s.0cu0ymttrfic-.woff2",
+      "url": "https://koinophobialabs.com/_next/static/media/32ed8f926ffc9cc2-s.0cu0ymttrfic-.woff2?dpl=dpl_HXFGY8dP6bmwqseVcc5RBa6o46u4",
+      "bytes": 11396,
+      "sha256": "c30d3b37d70ef6f9dfc87a9d79783a2de790c7d64c2d2a4c43b99f6bb9af72de"
+    },
+    {
+      "name": "b6a9aad84d41ea38-s.19z0m3vc7o74g.woff2",
+      "url": "https://koinophobialabs.com/_next/static/media/b6a9aad84d41ea38-s.19z0m3vc7o74g.woff2?dpl=dpl_HXFGY8dP6bmwqseVcc5RBa6o46u4",
+      "bytes": 42556,
+      "sha256": "d4706c0f52355b7cccb12f97d46c4b100cb09e6d347e6ba25942268558cdb996"
+    },
+    {
+      "name": "30bdb5bb2b173ee1-s.p.0zb6_9j98fvm-.woff2",
+      "url": "https://koinophobialabs.com/_next/static/media/30bdb5bb2b173ee1-s.p.0zb6_9j98fvm-.woff2?dpl=dpl_HXFGY8dP6bmwqseVcc5RBa6o46u4",
+      "bytes": 52720,
+      "sha256": "0636e63f70c9a3c644bf6579c445339df38015a2e2b21c6a898813f4c8581e0e"
+    },
+    {
+      "name": "91bd2e40df15814e-s.19s5evoqhirey.woff2",
+      "url": "https://koinophobialabs.com/_next/static/media/91bd2e40df15814e-s.19s5evoqhirey.woff2?dpl=dpl_HXFGY8dP6bmwqseVcc5RBa6o46u4",
+      "bytes": 1644,
+      "sha256": "2f52020a90793104e4178b0ae3ccd30eea28cac27e0fea8fcf4f246151777f74"
+    },
+    {
+      "name": "a63431c4ac64ea8b-s.386o_ri1vb0yv.woff2",
+      "url": "https://koinophobialabs.com/_next/static/media/a63431c4ac64ea8b-s.386o_ri1vb0yv.woff2?dpl=dpl_HXFGY8dP6bmwqseVcc5RBa6o46u4",
+      "bytes": 9364,
+      "sha256": "2f467719b2167cc4778b5780a2fb42fadf5203b29d0fb5f1482bbab32b1b7999"
+    },
+    {
+      "name": "8b4ed0a90d903ab5-s.44dak0sams9f0.woff2",
+      "url": "https://koinophobialabs.com/_next/static/media/8b4ed0a90d903ab5-s.44dak0sams9f0.woff2?dpl=dpl_HXFGY8dP6bmwqseVcc5RBa6o46u4",
+      "bytes": 19572,
+      "sha256": "a1376a563717f1efa2f5286ab23da2b61ae8dec827a77b97adfa01cad4ec4ee2"
+    },
+    {
+      "name": "c47649aa31f9e140-s.p.3lxpqujs87tck.woff2",
+      "url": "https://koinophobialabs.com/_next/static/media/c47649aa31f9e140-s.p.3lxpqujs87tck.woff2?dpl=dpl_HXFGY8dP6bmwqseVcc5RBa6o46u4",
+      "bytes": 34664,
+      "sha256": "1f21c6eaa0000f3329cfcfac966b43d5bebf5aa610303e33294ac31bc6f4bb59"
+    },
+    {
+      "name": "c4a2168b906ed8b3-s.12bh_ohulm7i-.woff2",
+      "url": "https://koinophobialabs.com/_next/static/media/c4a2168b906ed8b3-s.12bh_ohulm7i-.woff2?dpl=dpl_HXFGY8dP6bmwqseVcc5RBa6o46u4",
+      "bytes": 11732,
+      "sha256": "b2463b84cadcddc147262db9dbf65a4261910634fcf66dad20dcb24e1a6c1ced"
+    },
+    {
+      "name": "b864a478a0bff2bf-s.0f7aihi4njn1f.woff2",
+      "url": "https://koinophobialabs.com/_next/static/media/b864a478a0bff2bf-s.0f7aihi4njn1f.woff2?dpl=dpl_HXFGY8dP6bmwqseVcc5RBa6o46u4",
+      "bytes": 45792,
+      "sha256": "a2b9731e0d06991961e014bba3c9d6be1a3a2c1825dacdbfe90aa3340fb834ff"
+    },
+    {
+      "name": "5a999aea4d5573dc-s.p.1c_k2hi1yi2cg.woff2",
+      "url": "https://koinophobialabs.com/_next/static/media/5a999aea4d5573dc-s.p.1c_k2hi1yi2cg.woff2?dpl=dpl_HXFGY8dP6bmwqseVcc5RBa6o46u4",
+      "bytes": 40196,
+      "sha256": "d5d62ec6e7c6c528767d11726e1634f0d1b7b086dbd81362e0f4f67256b5126a"
+    },
+    {
+      "name": "1cf528c4c1c2d767-s.33dkgk7p96if3.woff2",
+      "url": "https://koinophobialabs.com/_next/static/media/1cf528c4c1c2d767-s.33dkgk7p96if3.woff2?dpl=dpl_HXFGY8dP6bmwqseVcc5RBa6o46u4",
+      "bytes": 10600,
+      "sha256": "6bb983d2fe424951462d19ec141937b46ec8c59051a11900258e43977583e973"
+    },
+    {
+      "name": "19e4ff7edb1ecf68-s.1nppxefs-k_mv.woff2",
+      "url": "https://koinophobialabs.com/_next/static/media/19e4ff7edb1ecf68-s.1nppxefs-k_mv.woff2?dpl=dpl_HXFGY8dP6bmwqseVcc5RBa6o46u4",
+      "bytes": 40836,
+      "sha256": "91f2c9a4bb9b6955209ec6835e01104f9f8a5f3b5144c0e5edaaf3bb82a6be86"
+    },
+    {
+      "name": "614a0f7b5f50b2dc-s.p.31liq74fp3j5t.woff2",
+      "url": "https://koinophobialabs.com/_next/static/media/614a0f7b5f50b2dc-s.p.31liq74fp3j5t.woff2?dpl=dpl_HXFGY8dP6bmwqseVcc5RBa6o46u4",
+      "bytes": 34796,
+      "sha256": "f4a2c06ef7364ed4a435e810e8ad03e9ee7bc77462348d303930fba502e5c893"
+    },
+    {
+      "name": "c7f47671e39f7787-s.0klc_mi0-5f4_.woff2",
+      "url": "https://koinophobialabs.com/_next/static/media/c7f47671e39f7787-s.0klc_mi0-5f4_.woff2?dpl=dpl_HXFGY8dP6bmwqseVcc5RBa6o46u4",
+      "bytes": 11092,
+      "sha256": "21fac8da552a915e7a9fb84c5afaeb85d35507b2616346d592e78128c1cfe3e0"
+    },
+    {
+      "name": "f06bf9da926bae75-s.p.2874ccu1_u7jf.woff2",
+      "url": "https://koinophobialabs.com/_next/static/media/f06bf9da926bae75-s.p.2874ccu1_u7jf.woff2?dpl=dpl_HXFGY8dP6bmwqseVcc5RBa6o46u4",
+      "bytes": 29904,
+      "sha256": "6219bc4bfdfc5d9b2201dcdf046218b122a758f932e25ed5f168f929b7ca2311"
+    },
+    {
+      "name": "0fec32c78403d184-s.12ub3b46qtqh1.woff2",
+      "url": "https://koinophobialabs.com/_next/static/media/0fec32c78403d184-s.12ub3b46qtqh1.woff2?dpl=dpl_HXFGY8dP6bmwqseVcc5RBa6o46u4",
+      "bytes": 33932,
+      "sha256": "2db942ef6f5237810b751b686706fbd08969a28d055318a9a8fb4a1ec99bbcce"
+    },
+    {
+      "name": "9d30e1ac529a223a-s.3-2h23dx9ns77.woff2",
+      "url": "https://koinophobialabs.com/_next/static/media/9d30e1ac529a223a-s.3-2h23dx9ns77.woff2?dpl=dpl_HXFGY8dP6bmwqseVcc5RBa6o46u4",
+      "bytes": 25968,
+      "sha256": "171a104fa20c9ccf6c25945151a98b37ed2ae26986c2e01f9afda65ee2fa9f77"
+    },
+    {
+      "name": "9056bf441d45cedc-s.0ljlqtoxynbu1.woff2",
+      "url": "https://koinophobialabs.com/_next/static/media/9056bf441d45cedc-s.0ljlqtoxynbu1.woff2?dpl=dpl_HXFGY8dP6bmwqseVcc5RBa6o46u4",
+      "bytes": 11476,
+      "sha256": "65f7302476afd8d89c200101a987691cd99da017e25fb4bf8f57c385f69e9b6f"
+    },
+    {
+      "name": "e6c3b2b7c3a61f79-s.0y7p5r83eele4.woff2",
+      "url": "https://koinophobialabs.com/_next/static/media/e6c3b2b7c3a61f79-s.0y7p5r83eele4.woff2?dpl=dpl_HXFGY8dP6bmwqseVcc5RBa6o46u4",
+      "bytes": 19868,
+      "sha256": "19e98f32f56c0f648cc511d29305b295f6f63a7cf1f1c72eb8516dd21e69a705"
+    },
+    {
+      "name": "e557826f452dbd06-s.1_ma567-n-526.woff2",
+      "url": "https://koinophobialabs.com/_next/static/media/e557826f452dbd06-s.1_ma567-n-526.woff2?dpl=dpl_HXFGY8dP6bmwqseVcc5RBa6o46u4",
+      "bytes": 10936,
+      "sha256": "d858010614321f668ca37def13edb91c98f9747d5126092a9dcbff264d6eb948"
+    },
+    {
+      "name": "1497d94d4ac5c969-s.32itxo7y-xsdk.woff2",
+      "url": "https://koinophobialabs.com/_next/static/media/1497d94d4ac5c969-s.32itxo7y-xsdk.woff2?dpl=dpl_HXFGY8dP6bmwqseVcc5RBa6o46u4",
+      "bytes": 113756,
+      "sha256": "c2fa6862b03629214873944b171b0df1189420be52aabd82142d45f96fdce588"
+    },
+    {
+      "name": "e4505858a30c79c2-s.p.0tlhhw_qyyfys.woff2",
+      "url": "https://koinophobialabs.com/_next/static/media/e4505858a30c79c2-s.p.0tlhhw_qyyfys.woff2?dpl=dpl_HXFGY8dP6bmwqseVcc5RBa6o46u4",
+      "bytes": 44172,
+      "sha256": "68fd4b247dde89984ee835d99953d235e4927be2b1b732ad81173b519869cee8"
+    },
+    {
+      "name": "79e9e0e3b9220e46-s.3a-pd9010p_dh.woff2",
+      "url": "https://koinophobialabs.com/_next/static/media/79e9e0e3b9220e46-s.3a-pd9010p_dh.woff2?dpl=dpl_HXFGY8dP6bmwqseVcc5RBa6o46u4",
+      "bytes": 12024,
+      "sha256": "ecc0a860ff459daa2983d2778a97feffcb56a766608a9a865454c30ebdae1ac5"
+    },
+    {
+      "name": "e62850744c7f266e-s.0n7ulcr4ivksg.woff2",
+      "url": "https://koinophobialabs.com/_next/static/media/e62850744c7f266e-s.0n7ulcr4ivksg.woff2?dpl=dpl_HXFGY8dP6bmwqseVcc5RBa6o46u4",
+      "bytes": 39708,
+      "sha256": "0a65822f4b1cb1a4500f3940406efda5839c1b34160a87af0a65b4d5b0a36c3b"
+    },
+    {
+      "name": "9433d1a810498265-s.p.1hij5ex6k3v9q.woff2",
+      "url": "https://koinophobialabs.com/_next/static/media/9433d1a810498265-s.p.1hij5ex6k3v9q.woff2?dpl=dpl_HXFGY8dP6bmwqseVcc5RBa6o46u4",
+      "bytes": 64500,
+      "sha256": "19a83cc7ce02aab990c0f5fb8bd8f12f2f8e4f56430d5a3459521cabd852a51c"
+    },
+    {
+      "name": "150f724d70372c02-s.1ljbalzvxyif7.woff2",
+      "url": "https://koinophobialabs.com/_next/static/media/150f724d70372c02-s.1ljbalzvxyif7.woff2?dpl=dpl_HXFGY8dP6bmwqseVcc5RBa6o46u4",
+      "bytes": 11852,
+      "sha256": "a61f9c4ae3b99795bd673ff0204b8f4e9adad39931e1da9470f216099771db34"
+    },
+    {
+      "name": "750c737482d9de2f-s.3ex3j6ahhvjry.woff2",
+      "url": "https://koinophobialabs.com/_next/static/media/750c737482d9de2f-s.3ex3j6ahhvjry.woff2?dpl=dpl_HXFGY8dP6bmwqseVcc5RBa6o46u4",
+      "bytes": 36328,
+      "sha256": "fe52554ab1cd7dd9704db81572f45ef0eb122679c35bbbbc728baf701033b727"
+    },
+    {
+      "name": "5f402bd2d8eef81a-s.p.40bho2kviej2o.woff2",
+      "url": "https://koinophobialabs.com/_next/static/media/5f402bd2d8eef81a-s.p.40bho2kviej2o.woff2?dpl=dpl_HXFGY8dP6bmwqseVcc5RBa6o46u4",
+      "bytes": 58152,
+      "sha256": "2a69ec1c0fb79a464de0e19957cdb3a65b5f626d85fffd164f9de557d3a64878"
+    },
+    {
+      "name": "20aee433927f7d4b-s.22-vwy_zcz7be.woff2",
+      "url": "https://koinophobialabs.com/_next/static/media/20aee433927f7d4b-s.22-vwy_zcz7be.woff2?dpl=dpl_HXFGY8dP6bmwqseVcc5RBa6o46u4",
+      "bytes": 18036,
+      "sha256": "4d72739b0e43d64e6b2a086a66f62df1ef90f34d6f109b279c557a64eae5d23d"
+    },
+    {
+      "name": "256e1f7f180674ba-s.3_q_pmj-3v7pv.woff2",
+      "url": "https://koinophobialabs.com/_next/static/media/256e1f7f180674ba-s.3_q_pmj-3v7pv.woff2?dpl=dpl_HXFGY8dP6bmwqseVcc5RBa6o46u4",
+      "bytes": 36628,
+      "sha256": "7683b72ed39c9fc64c626ae0ed611e7dc0121af71cde73fd060bd7a4a83c0d7c"
+    },
+    {
+      "name": "be3bf58b83159894-s.0kupvvif_223v.woff2",
+      "url": "https://koinophobialabs.com/_next/static/media/be3bf58b83159894-s.0kupvvif_223v.woff2?dpl=dpl_HXFGY8dP6bmwqseVcc5RBa6o46u4",
+      "bytes": 20164,
+      "sha256": "303d60869ffd404c141fa90d87ba574cd26ade348dd4659ea4b9caeadf72c183"
+    },
+    {
+      "name": "753b6407f468151f-s.11jlrhjosin9v.woff2",
+      "url": "https://koinophobialabs.com/_next/static/media/753b6407f468151f-s.11jlrhjosin9v.woff2?dpl=dpl_HXFGY8dP6bmwqseVcc5RBa6o46u4",
+      "bytes": 13400,
+      "sha256": "752875b4c33f07a3dda7c8f0be846fef059cb0f4e85211b855aa93dd85d45a22"
+    },
+    {
+      "name": "292081311a6a8abc-s.3z1vcboutudqk.woff2",
+      "url": "https://koinophobialabs.com/_next/static/media/292081311a6a8abc-s.3z1vcboutudqk.woff2?dpl=dpl_HXFGY8dP6bmwqseVcc5RBa6o46u4",
+      "bytes": 42040,
+      "sha256": "231f594ad829d45f905a8a6cdce704f659615e00f1a9db2699320e6e315c1d1f"
+    },
+    {
+      "name": "68d403cf9f2c68c5-s.p.012bmydply3go.woff2",
+      "url": "https://koinophobialabs.com/_next/static/media/68d403cf9f2c68c5-s.p.012bmydply3go.woff2?dpl=dpl_HXFGY8dP6bmwqseVcc5RBa6o46u4",
+      "bytes": 50952,
+      "sha256": "8e38e3fbd74dea20aabe0831ffef04c9f30bf6fc5b99b7a2649be0dd8c6d859c"
+    },
+    {
+      "name": "2bf40d83aa9c72fb-s.075nzhq-azcwn.woff2",
+      "url": "https://koinophobialabs.com/_next/static/media/2bf40d83aa9c72fb-s.075nzhq-azcwn.woff2?dpl=dpl_HXFGY8dP6bmwqseVcc5RBa6o46u4",
+      "bytes": 3340,
+      "sha256": "9d95c480ed17a573649ca7c3dad392239dfd7bec6daf3fa86ef229d5ba2f696a"
+    },
+    {
+      "name": "3846cd278554cc73-s.32fxum-hv1zci.woff2",
+      "url": "https://koinophobialabs.com/_next/static/media/3846cd278554cc73-s.32fxum-hv1zci.woff2?dpl=dpl_HXFGY8dP6bmwqseVcc5RBa6o46u4",
+      "bytes": 9404,
+      "sha256": "32457570dd484b9ba601e401e87da25ac826fee759885ed7c29469694db87821"
+    },
+    {
+      "name": "9a23b5cef6e04c73-s.043e7-2hd94z4.woff2",
+      "url": "https://koinophobialabs.com/_next/static/media/9a23b5cef6e04c73-s.043e7-2hd94z4.woff2?dpl=dpl_HXFGY8dP6bmwqseVcc5RBa6o46u4",
+      "bytes": 4204,
+      "sha256": "ae7786642b55f76c12636756c694d0ec6d8bc90aca2965a6c1c68e3222307379"
+    },
+    {
+      "name": "c057f24894f01f05-s.3tnad6m4sf0xz.woff2",
+      "url": "https://koinophobialabs.com/_next/static/media/c057f24894f01f05-s.3tnad6m4sf0xz.woff2?dpl=dpl_HXFGY8dP6bmwqseVcc5RBa6o46u4",
+      "bytes": 12660,
+      "sha256": "a62b9bdf669d8fb395c8685321cbf86c2f2bc324e0b28ecf867a036095383d49"
+    },
+    {
+      "name": "98f992443ccb276f-s.p.1oxabuqlrz9-_.woff2",
+      "url": "https://koinophobialabs.com/_next/static/media/98f992443ccb276f-s.p.1oxabuqlrz9-_.woff2?dpl=dpl_HXFGY8dP6bmwqseVcc5RBa6o46u4",
+      "bytes": 14028,
+      "sha256": "bcb83e9c56d40c5111a2bdbc3d8bdabf66bd31337e968f1c223b61879b8d3cad"
+    },
+    {
+      "name": "0120702d9dd2a7b5-s.09bhwyvkoc8ms.woff2",
+      "url": "https://koinophobialabs.com/_next/static/media/0120702d9dd2a7b5-s.09bhwyvkoc8ms.woff2?dpl=dpl_HXFGY8dP6bmwqseVcc5RBa6o46u4",
+      "bytes": 3608,
+      "sha256": "3f8d833b64a1e7e1b8be07cd73513004cc680a466b84d6459fdcd2f1c1fcf0b3"
+    },
+    {
+      "name": "19f1a346b7519d21-s.0lwu3izqcp-2k.woff2",
+      "url": "https://koinophobialabs.com/_next/static/media/19f1a346b7519d21-s.0lwu3izqcp-2k.woff2?dpl=dpl_HXFGY8dP6bmwqseVcc5RBa6o46u4",
+      "bytes": 10744,
+      "sha256": "9a6738241702381e65e80d1ee5f172ce12be2049dfedeb33016a5096444bc03b"
+    },
+    {
+      "name": "bc0c875c697aeb30-s.26uzcjajmah7n.woff2",
+      "url": "https://koinophobialabs.com/_next/static/media/bc0c875c697aeb30-s.26uzcjajmah7n.woff2?dpl=dpl_HXFGY8dP6bmwqseVcc5RBa6o46u4",
+      "bytes": 4244,
+      "sha256": "74dc7e33abf296a6a7129a327d7b9c5bc02b11eb9ffb47447a0887997c863102"
+    },
+    {
+      "name": "cd36df668fb8b666-s.3lo3d5l1mfb52.woff2",
+      "url": "https://koinophobialabs.com/_next/static/media/cd36df668fb8b666-s.3lo3d5l1mfb52.woff2?dpl=dpl_HXFGY8dP6bmwqseVcc5RBa6o46u4",
+      "bytes": 13288,
+      "sha256": "ccb889e04368c402021b9b73196f26fc903d6cb269028138fefb68bd56cc5c19"
+    },
+    {
+      "name": "9d71b78498c53c0d-s.p.42kv-xe2onlt1.woff2",
+      "url": "https://koinophobialabs.com/_next/static/media/9d71b78498c53c0d-s.p.42kv-xe2onlt1.woff2?dpl=dpl_HXFGY8dP6bmwqseVcc5RBa6o46u4",
+      "bytes": 15164,
+      "sha256": "1fb6ca29fc243e8bfdfce12d8d6806f322bcc62d38036986812be28fb1f41f0a"
+    },
+    {
+      "name": "fc0a7394b875fa43-s.2ytmazkdrg7t9.woff2",
+      "url": "https://koinophobialabs.com/_next/static/media/fc0a7394b875fa43-s.2ytmazkdrg7t9.woff2?dpl=dpl_HXFGY8dP6bmwqseVcc5RBa6o46u4",
+      "bytes": 8444,
+      "sha256": "a04fc7ed18a8037149ce0bfda58076709d8e0840e136ed00abbdc196b7992443"
+    },
+    {
+      "name": "7ebf22b5a21034f8-s.p.3j3877k49yy0l.woff2",
+      "url": "https://koinophobialabs.com/_next/static/media/7ebf22b5a21034f8-s.p.3j3877k49yy0l.woff2?dpl=dpl_HXFGY8dP6bmwqseVcc5RBa6o46u4",
+      "bytes": 15684,
+      "sha256": "6ee678c33f388dd7ba59700ebea635deb98821baafd817b09891f7927177f702"
+    },
+    {
+      "name": "ccf27e5a7366fb23-s.1icgra-w5i50b.woff2",
+      "url": "https://koinophobialabs.com/_next/static/media/ccf27e5a7366fb23-s.1icgra-w5i50b.woff2?dpl=dpl_HXFGY8dP6bmwqseVcc5RBa6o46u4",
+      "bytes": 7828,
+      "sha256": "a8c4bd7cd7073180e740d2d83a616b5cb0845579b73207eeafeae8532e70c901"
+    },
+    {
+      "name": "e41d5df559864f9e-s.p.1g73gv09-xcb6.woff2",
+      "url": "https://koinophobialabs.com/_next/static/media/e41d5df559864f9e-s.p.1g73gv09-xcb6.woff2?dpl=dpl_HXFGY8dP6bmwqseVcc5RBa6o46u4",
+      "bytes": 15040,
+      "sha256": "60c06664b5a95c7de6cc3e00d1f9034d78bd1e40b564016b241674449a067d4d"
+    },
+    {
+      "name": "08328e320c8f68d1-s.0k8kxrcfbaq1s.woff2",
+      "url": "https://koinophobialabs.com/_next/static/media/08328e320c8f68d1-s.0k8kxrcfbaq1s.woff2?dpl=dpl_HXFGY8dP6bmwqseVcc5RBa6o46u4",
+      "bytes": 13668,
+      "sha256": "618f4e337fba7164fd9aa298629d2b9aeaf1b9cb71081d504a05ea2a74a7f79f"
+    },
+    {
+      "name": "ce5b45ab00236ec9-s.17thoc14mwfyx.woff2",
+      "url": "https://koinophobialabs.com/_next/static/media/ce5b45ab00236ec9-s.17thoc14mwfyx.woff2?dpl=dpl_HXFGY8dP6bmwqseVcc5RBa6o46u4",
+      "bytes": 34548,
+      "sha256": "368c86e96b024720e4a7910af4bc4447d8b5f011bbb894c357dc02c3ca282d89"
+    },
+    {
+      "name": "ca31d6821328a4e9-s.p.2svk7cnw5x6df.woff2",
+      "url": "https://koinophobialabs.com/_next/static/media/ca31d6821328a4e9-s.p.2svk7cnw5x6df.woff2?dpl=dpl_HXFGY8dP6bmwqseVcc5RBa6o46u4",
+      "bytes": 39692,
+      "sha256": "1ec8f6ee2750554b4bc59ff0b507d316a82a7ba37e0e5bebc41d3bd9b9faad46"
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "name": "@koinophobia/site-auditor",
+  "version": "2.1.4-fulfillment.1",
+  "private": true,
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./model": {
+      "types": "./dist/model.d.ts",
+      "default": "./dist/model.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "playwright-core": "1.65.0",
+    "ipaddr.js": "^2.2.0",
+    "robots-parser": "^3.0.1"
+  }
+}

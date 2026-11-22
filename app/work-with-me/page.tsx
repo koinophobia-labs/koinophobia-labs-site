@@ -87,7 +87,7 @@ export default function WorkWithMePage() {
             <Link className="btn btn--primary ai" href={reviewHref} data-analytics="inquiry_start" data-analytics-label="work_with_me_top">
               {reviewLabel} <ArrowRight size={15} aria-hidden="true" />
             </Link>
-            <a className="btn ai" href="/start?src=work-with-me" data-analytics="founder_link_click" data-analytics-label="email">Ask a question</a>
+            <Link className="btn ai" href="/start?src=work-with-me" data-analytics="founder_link_click" data-analytics-label="email">Ask a question</Link>
             <a className="btn ai" href="#app-store-packages">App Store launch packages <ArrowRight size={15} aria-hidden="true" /></a>
           </div>
         </header>
@@ -194,7 +194,7 @@ export default function WorkWithMePage() {
             <Link className="btn btn--primary ai" href={reviewHref} data-analytics="inquiry_start" data-analytics-label="work_with_me">
               {reviewLabel} <ArrowRight size={16} aria-hidden="true" />
             </Link>
-            <a className="btn ai" href="/start?src=work-with-me" data-analytics="founder_link_click" data-analytics-label="email">Ask a question</a>
+            <Link className="btn ai" href="/start?src=work-with-me" data-analytics="founder_link_click" data-analytics-label="email">Ask a question</Link>
           </div>
         </section>
         <SiteFooter />

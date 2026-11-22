@@ -1,0 +1,154 @@
+[
+  {
+    "key": "trendi",
+    "bundleId": "app.aic.mobile",
+    "appAppleId": 6776299336,
+    "offerIdentifiers": [
+      "SAIIKHOTIC 10 percent first month"
+    ],
+    "products": [
+      {
+        "id": "app.aic.mobile.trendi.pro.monthly",
+        "resourceId": "6807233278",
+        "kind": "subscription",
+        "offerId": "8a61fafc-38cd-4f0a-9ec4-90b630335ea1"
+      }
+    ]
+  },
+  {
+    "key": "preaching-to-the-choir",
+    "bundleId": "com.koinophobialabs.preachingtothechoir",
+    "appAppleId": 6808442357,
+    "offerIdentifiers": [
+      "SAIIKHOTIC 10 percent first month"
+    ],
+    "products": [
+      {
+        "id": "com.koinophobialabs.PreachingToTheChoir.keeper.monthly",
+        "resourceId": "6812832865",
+        "kind": "subscription",
+        "offerId": "d7b6aba0-3277-4bf6-ba16-8a5b94e64659"
+      }
+    ]
+  },
+  {
+    "key": "forget-about-it",
+    "bundleId": "com.koinophobialabs.forgetaboutit",
+    "appAppleId": 6804360983,
+    "offerIdentifiers": [
+      "SAIIKHOTIC 10 percent first month"
+    ],
+    "products": [
+      {
+        "id": "com.koinophobialabs.forgetaboutit.plus.monthly",
+        "resourceId": "6814286474",
+        "kind": "subscription",
+        "offerId": "5b249c86-5fdd-4eca-9e02-d62c5af541d4"
+      }
+    ]
+  },
+  {
+    "key": "teachers-pet",
+    "bundleId": "com.koinophobia.teacherspet",
+    "appAppleId": 6808981717,
+    "offerIdentifiers": [
+      "SAIIKHOTIC 10 percent first month"
+    ],
+    "products": [
+      {
+        "id": "com.koinophobia.teacherspet.family.monthly",
+        "resourceId": "6818310642",
+        "kind": "subscription",
+        "offerId": "e7eccab9-219f-460a-a2d1-574e5bec470a"
+      }
+    ]
+  },
+  {
+    "key": "way-in",
+    "bundleId": "com.koinophobialabs.careerapp",
+    "appAppleId": 6807942376,
+    "offerIdentifiers": [
+      "SAIIKHOTIC 10 percent one-time unlock"
+    ],
+    "oneTimeProductIds": [
+      "com.koinophobialabs.careerapp.resume_toolkit"
+    ],
+    "products": [
+      {
+        "id": "com.koinophobialabs.careerapp.resume_toolkit",
+        "resourceId": "6807945734",
+        "kind": "one_time",
+        "offerId": "4d775531-51a4-42f3-b29c-fa069549719b"
+      }
+    ]
+  },
+  {
+    "key": "old-dog",
+    "bundleId": "com.koinophobia.olddog",
+    "appAppleId": 6813966822,
+    "offerIdentifiers": [
+      "SAIIKHOTIC 10 percent one-time unlock"
+    ],
+    "oneTimeProductIds": [
+      "com.koinophobia.olddog.unlock"
+    ],
+    "products": [
+      {
+        "id": "com.koinophobia.olddog.unlock",
+        "resourceId": "6822279113",
+        "kind": "one_time",
+        "offerId": "6235780c-18e7-46a4-86cc-8cfed27a3cfb"
+      }
+    ]
+  },
+  {
+    "key": "dreamcatcher",
+    "bundleId": "com.koinophobialabs.dreamcatcher",
+    "appAppleId": 6821750717,
+    "offerIdentifiers": [
+      "SAIIKHOTIC 10 percent one-time unlock"
+    ],
+    "oneTimeProductIds": [
+      "com.koinophobialabs.dreamcatcher.toolkit"
+    ],
+    "products": [
+      {
+        "id": "com.koinophobialabs.dreamcatcher.toolkit",
+        "resourceId": "6822924909",
+        "kind": "one_time",
+        "offerId": "bed655fa-c8cc-4ea0-8baa-3cfd614649df"
+      }
+    ]
+  },
+  {
+    "key": "saiikhotic-spades",
+    "bundleId": "com.koinophobialabs.saiikhotic",
+    "appAppleId": 6831629900,
+    "offerIdentifiers": [],
+    "revenueShare": true,
+    "products": [
+      {
+        "id": "com.koinophobialabs.saiikhotic.coins.small",
+        "resourceId": "6831802976",
+        "kind": "consumable"
+      },
+      {
+        "id": "com.koinophobialabs.saiikhotic.coins.medium",
+        "resourceId": "6831803486",
+        "kind": "consumable"
+      },
+      {
+        "id": "com.koinophobialabs.saiikhotic.coins.large",
+        "resourceId": "6831803510",
+        "kind": "consumable"
+      }
+    ]
+  },
+  {
+    "key": "saiikhotic-network",
+    "bundleId": "com.koinophobialabs.saiikhoticcompanion",
+    "appAppleId": 6832131528,
+    "offerIdentifiers": [],
+    "revenueShare": true
+  }
+]

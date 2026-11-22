@@ -1,0 +1,40 @@
+// Fictional local owner/partner sessions. No Apple/Stripe credentials or network payments.
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+import {readFileSync,writeFileSync} from 'node:fs';
+import {Pool} from 'pg';
+import {chromium} from 'playwright';
+const base=process.env.WO0288_BASE,dir=process.env.WO0288_EVIDENCE;
+assert.equal(new URL(base).hostname,'127.0.0.1');assert.equal(new URL(process.env.DATABASE_URL).hostname,'127.0.0.1');
+const db=new Pool({connectionString:process.env.DATABASE_URL});
+const browser=await chromium.launch({executablePath:'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'});
+const hash=s=>createHash('sha256').update(s).digest('hex');
+try{
+  for(const file of ['020_appstore_affiliates.sql','021_appstore_monthly.sql'])await db.query(readFileSync('db/'+file,'utf8'));
+  await db.query("insert into team_partners(id,name,email,role) values('monthly-owner','Fictional owner','monthly-owner@example.test','owner'),('monthly-partner','Fictional partner','monthly-partner@example.test','partner')");
+  for(const role of ['owner','partner'])await db.query("insert into team_sessions(token_hash,partner_id,expires_at) values($1,$2,now()+interval '1 hour')",[hash('monthly-'+role+'-token'),'monthly-'+role]);
+  await db.query("insert into appstore_transactions(transaction_id,original_id,app,environment,product_id,purchase_ms,price_milliunits,currency,affiliate_id,storefront) values('monthly-synthetic-sale','monthly-synthetic-original','fixture','Production','monthly',1786536000000,7290,'USD','messiah','USA')");
+  await db.query("insert into appstore_commissions(transaction_id,affiliate_id,usd_cents,calculation) values('monthly-synthetic-sale','messiah',155,$1)",[JSON.stringify({basis:'provisional_published_proceeds',formula:'Synthetic: round(6.20 × 25% × 100)',proceeds:{amount:'6.20',source:'Synthetic quote'},currency:'USD',fx:{usdPerUnit:'1',date:'2026-08-12'}})]);
+  const owner=await browser.newContext();await owner.addCookies([{name:'team-session',value:'monthly-owner-token',url:base}]);
+  const page=await owner.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));
+  await page.goto(base+'/team/affiliates');await page.getByRole('heading',{name:'Messiah · App Store commissions'}).waitFor();
+  assert.ok(await page.getByText('$1.55',{exact:true}).count()>=2);
+  await page.getByLabel('Apple fiscal month',{exact:true}).fill('2026-08');
+  const button=page.getByRole('button',{name:'Mark Apple payment received for 2026-08'});assert.equal(await button.isEnabled(),false);
+  await page.getByRole('checkbox').check();assert.equal(await button.isEnabled(),true);
+  const result=page.waitForResponse(r=>r.url().endsWith('/team/api/apple-payment-received'));
+  await button.click();assert.equal((await result).status(),200);await page.getByRole('status').filter({hasText:'Awaiting Apple’s final financial report.'}).waitFor();
+  await page.screenshot({path:dir+'/monthly-owner-held.png',fullPage:true});
+  await page.setViewportSize({width:390,height:844});await page.screenshot({path:dir+'/monthly-owner-mobile.png',fullPage:true});assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth));
+  await page.setViewportSize({width:1280,height:900});
+  await button.click();await page.getByRole('status').filter({hasText:'Awaiting Apple’s final financial report.'}).waitFor();
+  const partner=await browser.newContext();await partner.addCookies([{name:'team-session',value:'monthly-partner-token',url:base}]);
+  assert.equal((await partner.request.post(base+'/team/api/apple-payment-received',{headers:{origin:base},data:{month:'2026-08',received:true}})).status(),403);
+  assert.equal((await partner.request.get(base+'/team/affiliates')).status(),404);
+  const anonymous=await browser.newContext();assert.equal((await anonymous.request.post(base+'/team/api/apple-payment-received',{headers:{origin:base},data:{month:'2026-08',received:true}})).status(),401);
+  assert.equal((await owner.request.post(base+'/team/api/apple-payment-received',{headers:{origin:'https://evil.test'},data:{month:'2026-08',received:true}})).status(),403);
+  const state=(await db.query("select (select count(*)::int from appstore_monthly_runs) receipts,(select count(*)::int from appstore_payouts) legacy_transfers,(select count(*)::int from appstore_monthly_runs where status='paid') monthly_paid")).rows[0];
+  assert.deepEqual(state,{receipts:1,legacy_transfers:0,monthly_paid:0});assert.deepEqual(errors,[]);
+  writeFileSync(dir+'/monthly-browser.json',JSON.stringify({passed:true,localSynthetic:true,ownerPage:true,bankReceiptRequired:true,financeHold:true,duplicateReceiptIdempotent:true,partnerRejected:true,anonymousRejected:true,crossOriginRejected:true,noTransfer:true,consoleErrors:0},null,2));
+  console.log(JSON.stringify({monthlyOwnerFlow:'passed',noTransfers:true}));
+}finally{await browser.close();await db.end();}

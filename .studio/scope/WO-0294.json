@@ -1,0 +1,18 @@
+{
+  "wo": "WO-0294",
+  "base": "6a38ff30c128efa5774775337dacd7e499be521f",
+  "owned": [
+    ".studio/scope/WO-0294.json",
+    "lib/appstore/**",
+    "lib/team/affiliate-store.ts",
+    "lib/team/affiliate-view.ts",
+    "lib/team/affiliate-fixture.ts",
+    "components/team/AffiliateDashboard.tsx",
+    "app/team/affiliates/**",
+    "db/024_appstore_earning_rules.sql",
+    "scripts/migrate-appstore.mjs",
+    "scripts/wo0294-*.mjs",
+    "tests/appstore-*.test.ts",
+    "tests/team-affiliate.test.ts"
+  ]
+}

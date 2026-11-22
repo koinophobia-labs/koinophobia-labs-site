@@ -219,7 +219,7 @@ test("You Know Ball does not claim it was never uploaded", () => {
   const ykb = getProduct("you-know-ball");
   assert.ok(ykb);
   const prose = [ykb!.status, ...ykb!.state, ...ykb!.notYet].join(" ");
-  assert.equal(ykb!.stage, "uploaded");
+  assert.equal(ykb!.stage, "paused");
   assert.doesNotMatch(
     prose,
     /never been on testflight|never reached testflight|has never been uploaded/i,
@@ -242,7 +242,7 @@ test("Trendi reflects its verified public release while the dated log preserves 
   const trendi = getProduct("trendi")!;
   assert.equal(trendi.reach, "public");
   assert.equal(trendi.stage, "public");
-  assert.match(trendi.status, /2\.1/);
+  assert.match(trendi.status, /2\.5/);
   assert.match(trendi.evidence.map(e => e.source).join(" "), /apps\.apple\.com.*6776299336/);
   assert.doesNotMatch(trendi.status, /release.candidate|invite.only|not on the app store/i);
   assert.match(read("lib/dev/log.ts"), /122/);

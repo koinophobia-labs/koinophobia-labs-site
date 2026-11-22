@@ -3,7 +3,6 @@ import { execFileSync, spawnSync } from "node:child_process";
 import {
   mkdtempSync,
   readFileSync,
-  rmSync,
 } from "node:fs";
 import { createServer } from "node:net";
 import { tmpdir } from "node:os";
@@ -110,7 +109,7 @@ async function expectPreconnectRefusal(env, pattern) {
 }
 
 test("preview Vercel builds cannot execute migrations", async () => {
-  assert.equal(packageJson.scripts["vercel-build"], "next build");
+  assert.equal(packageJson.scripts["vercel-build"], "next build && node scripts/verify-auditor-trace.mjs --inventory-only && node scripts/verify-fulfillment-trace.mjs");
   await expectPreconnectRefusal(
     {
       ...productionEnvironment,
@@ -121,7 +120,7 @@ test("preview Vercel builds cannot execute migrations", async () => {
 });
 
 test("ordinary production Vercel builds are application-only", () => {
-  assert.equal(packageJson.scripts["vercel-build"], "next build");
+  assert.equal(packageJson.scripts["vercel-build"], "next build && node scripts/verify-auditor-trace.mjs --inventory-only && node scripts/verify-fulfillment-trace.mjs");
   assert.doesNotMatch(packageJson.scripts["vercel-build"], /migrat|database|sql/i);
 });
 
@@ -598,7 +597,7 @@ test(
           { stdio: "ignore" },
         );
       }
-      rmSync(clusterDirectory, { force: true, recursive: true });
+      console.log(`Retained migration fixture: ${clusterDirectory}`);
     }
   },
 );

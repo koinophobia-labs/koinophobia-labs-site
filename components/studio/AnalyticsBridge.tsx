@@ -42,6 +42,7 @@ export const ANALYTICS_EVENTS = [
 export type AnalyticsEvent = (typeof ANALYTICS_EVENTS)[number];
 
 export function trackStudioEvent(event: string, detail: Record<string, string> = {}) {
+  if (window.location.pathname === "/team" || window.location.pathname.startsWith("/team/") || window.location.pathname.startsWith("/go/") || window.location.pathname.startsWith("/pay/") || window.location.pathname.startsWith("/start/") || window.location.pathname.startsWith("/payment/")) return;
   window.dispatchEvent(new CustomEvent("koinophobia:analytics", { detail: { event, ...detail } }));
   track(event, detail);
 }
@@ -50,6 +51,7 @@ export default function AnalyticsBridge() {
   const pathname = usePathname();
 
   useEffect(() => {
+    if (pathname === "/team" || pathname.startsWith("/team/") || pathname.startsWith("/go/") || pathname.startsWith("/pay/") || pathname.startsWith("/start/") || pathname.startsWith("/payment/")) return;
     const seen = new Set<Element>();
     const observer = new IntersectionObserver(
       (entries) => {

@@ -1,0 +1,21 @@
+{
+  "time": "2026-11-11T01:38:15.063Z",
+  "checks": [
+    {
+      "path": "/",
+      "status": 200
+    },
+    {
+      "path": "/team",
+      "status": 200
+    },
+    {
+      "path": "/team/check",
+      "status": 307
+    },
+    {
+      "path": "/team/admin",
+      "status": 307
+    }
+  ]
+}
