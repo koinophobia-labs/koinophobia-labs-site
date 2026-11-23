@@ -354,6 +354,7 @@
     "tests/partner-payments.test.ts",
     "tests/payment-reliability.test.ts",
     "tests/products.test.ts",
+    "tests/recheck-work-order-20261122.test.ts",
     "tests/team-call-lockout.test.ts",
     "tests/team-call-postgres.test.ts",
     "tests/team-call-ready-postgres.test.ts",
