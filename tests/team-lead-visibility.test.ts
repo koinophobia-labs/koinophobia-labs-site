@@ -6,7 +6,7 @@ import { seed } from "../lib/team/seed";
 import { STAGES } from "../lib/team/types";
 import type { TeamLead } from "../lib/team/store";
 
-const lead: TeamLead = {...seed(true).leads[0], phone:"3125550100", time_zone:"America/Chicago"};
+const lead: TeamLead = {...seed(true).leads[0], phone:"3125550100", time_zone:"America/Chicago",evidence:[{check:"Mobile layout",key:"horizontal-overflow",confidence:"confirmed",measurement:"Fictional overflow",measured_at:"2026-11-12T00:00:00Z"}]};
 const failed: TeamLead = {...lead,recheck:{status:"re-check failed",checked_at:"2026-11-12",confirmed_count:0}};
 test("partner visibility excludes permanent ineligibility, never temporary calling windows", () => {
   for (const l of [failed,{...lead,opted_out:true},{...lead,call_outcome:"Not interested"},{...lead,phone:""},{...lead,time_zone:undefined},{...lead,time_zone:"invalid"}]) {

@@ -1,5 +1,5 @@
 import { createHash } from 'node:crypto';
-export const VERSION = '2.1.4-fulfillment.1';
+export const VERSION = '2.1.4-fulfillment.2';
 export const LINK_DELAY_MS = 600_000;
 export const median = (values) => [...values].sort((a, b) => a - b)[Math.floor(values.length / 2)];
 export function blocked(p) {

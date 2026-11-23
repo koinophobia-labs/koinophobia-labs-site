@@ -30,7 +30,7 @@ export const SERVICES = [
     cadence: "once",
     pitch: "One problem. One clear fix.",
     scope:
-      "Fix ONE specific high-impact problem: booking or contact form, mobile layout, page speed, or a dead order link.",
+      "Fix ONE specific high-impact problem: booking or contact form, mobile layout, or a dead order link.",
     turnaround: "48–72 hours, scope confirmed by Blake",
     tag: "FAST FIRST STEP",
   },

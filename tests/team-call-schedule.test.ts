@@ -4,7 +4,7 @@ import {seed} from '../lib/team/seed';
 import type {TeamLead} from '../lib/team/store';
 import {callQueue,callHeader,scheduleLead,partnerTimeZone,localInstant,visibleCallLead,displayCallQueue} from '../lib/team/call-schedule';
 import {savePartnerTimeZone} from '../lib/team/time-zone-store';
-const lead=(id:string,zone='America/New_York',extra:Partial<TeamLead>={}):TeamLead=>({...seed(true).leads[0],id,business:'Fictional '+id,phone:'2025550101',time_zone:zone,...extra});
+const lead=(id:string,zone='America/New_York',extra:Partial<TeamLead>={}):TeamLead=>({...seed(true).leads[0],id,business:'Fictional '+id,phone:'2025550101',time_zone:zone,evidence:[{check:'Mobile layout',key:'horizontal-overflow',confidence:'confirmed',measurement:'Fictional overflow',measured_at:'2026-11-11T00:00:00Z'}],...extra});
 const zones=['America/New_York','America/Chicago','America/Denver','America/Los_Angeles'];
 const rows=zones.map((z,i)=>lead(String(i),z));
 const at=(hour:number)=>new Date(`2026-11-${hour>=24?'12':'11'}T${String(hour%24).padStart(2,'0')}:00:00Z`);

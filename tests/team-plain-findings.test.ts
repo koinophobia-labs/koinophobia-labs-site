@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {plainFinding, sayFinding, slowSeconds, storedProblemFinding, TECHNICAL_WORDS, type DisplayFinding} from '../lib/team/plain-findings';
-import {SCRIPTS, renderScript, slowSiteScript} from '../lib/team/scripts';
+import {SCRIPTS, renderScript} from '../lib/team/scripts';
 import {findingSummary} from '../lib/team/leverage';
 import {confirmedEvidence} from './auditor-fixtures';
 const slow = {check:'Slow page', measurement:'Three fresh Chromium loads: median LCP 5275 ms; median load 9882 ms. Thresholds: LCP >4000 ms or load >8000 ms. Lab measurements, not field Core Web Vitals.'};
@@ -47,12 +47,11 @@ test('legacy stored public measurement and live finding produce the identical li
  const f={...confirmedEvidence(),...slow,check:'Slow page' as const};const summary=findingSummary(f);
  assert.equal(summary.measurement,f.measurement);assert.equal(summary.plain,plainFinding(slow));
 });
-test('scripts render measured speed and spoken problem without unresolved template or scope language in voicemail',()=>{
- const vm=renderScript(SCRIPTS.find(s=>s.id==='Voicemail')!.body,slow);
- assert.match(vm,/I noticed this on your website: Your site's main content takes about 5 seconds/);
- assert.match(vm,/We can fix it fast\. I'll text you a quick 2-minute video/);
- assert.doesNotMatch(vm,/once Blake confirms scope|\[specific verified problem\]|LCP|Chromium/);
- const call=renderScript(SCRIPTS.find(s=>s.id==='Slow site')!.body,slow,'Fictional Partner');
- assert.match(call,/Fictional Partner/);assert.match(call,/about 5 seconds/);assert.match(call,/If they ask what's wrong/);assert.match(call,/If they ask how much/);assert.match(call,/flat \$299/);assert.doesNotMatch(call,/\[measured seconds\]/);
- assert.match(slowSiteScript(),/\[measured seconds\]/);
+test('scripts use visible breaks and never promise a video or a text after voicemail',()=>{
+ const finding={check:'Dead contact / booking / order link',label:'Book Now',key:'http-404',measured_at:new Date().toISOString()};
+ const vm=renderScript(SCRIPTS.find(s=>s.id==='Voicemail')!.body,finding);
+ assert.match(vm,/Book Now/);assert.doesNotMatch(vm,/I'll text|video|recording/);
+ const call=renderScript(SCRIPTS.find(s=>s.id==='Call')!.body,finding,'Fictional Partner');
+ assert.match(call,/Fictional Partner/);assert.match(call,/refunds you/);assert.match(call,/Did it do that for you/);
+ assert.doesNotMatch(SCRIPTS.map(s=>s.body).join(' '),/2-minute|two-minute|recording/i);
 });

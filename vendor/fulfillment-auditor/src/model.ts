@@ -1,9 +1,9 @@
 import {createHash} from 'node:crypto';
-export const VERSION = '2.1.4-fulfillment.1';
+export const VERSION = '2.1.4-fulfillment.2';
 export const LINK_DELAY_MS = 600_000;
 export type Check = 'Dead contact / booking / order link' | 'Closed Google Form' | 'HTTPS failure' | 'Mobile layout' | 'Slow page' | 'Unfinished content' | 'Wrong key link' | 'Broken image' | 'Booking widget failure' | 'Expiring certificate' | 'Insecure form' | 'Mobile contact route' | 'Lighthouse mobile performance';
 export interface Proof { url: string; captured_at: string; viewport: {width:number;height:number}; sha256:string; image:string; path?:string }
-export interface Observation { run_id:string; check:Check; key:string; url:string; measured_at:string; measurement:string; proof?:Proof; impact?:string; verify_url?:string; leverage?:number }
+export interface Observation { label?:string; page_name?:string; run_id:string; check:Check; key:string; url:string; measured_at:string; measurement:string; proof?:Proof; impact?:string; verify_url?:string; leverage?:number }
 export interface Finding extends Observation { confidence:'confirmed'|"couldn't verify"; observations:Observation[]; reason?:string }
 export interface Note { name:string; detail:string }
 export interface Rendered {
@@ -11,6 +11,7 @@ export interface Rendered {
   viewportMeta:string; width:number; screen:number; scale:number; overflow:number; overlaps:number;
   lcp:number|null; load:number|null; links:string[]; notes:Note[]; mixedBroken:number;
   error?:string; incomplete?:boolean; proof?:Proof;
+  actionLabels?:Record<string,string>;
   signals?:Signal[]; resolution?: ResolutionEvidence;
 }
 export interface Signal { check:Check; key:string; measurement:string; impact:string; verify_url?:string; proof?:Proof; elementIndex?:number; asset?:string }

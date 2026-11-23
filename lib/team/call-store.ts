@@ -1,6 +1,7 @@
 import { requireSalesPartner } from './affiliate-access';
-import {plainFinding, sayFinding, slowSeconds, storedProblemFinding} from "./plain-findings";
-import {slowSiteScript} from "./scripts";
+import {plainFinding, checkItYourself, whatFixedMeans, storedProblemFinding} from "./plain-findings";
+import {breakFirstScript,findingHook,checkedDay} from "./scripts";
+import {hookTier} from "./hook-tier";
 import { randomInt, randomUUID, createHash } from "node:crypto";
 import {confirmedLeverage} from './leverage';
 import {impactLine,verifyLink,type Finding as AuditFinding} from '@koinophobia/site-auditor/model';
@@ -11,7 +12,6 @@ import { Fault, textInput, quoteDraft } from "./domain";
 import { isStandardQuote, quotePaymentLink } from "./payment-links";
 import {
   CALL_OUTCOMES,
-  callScript,
   phoneNumber,
   type CallState,
   type CallOutcome,
@@ -70,8 +70,8 @@ export async function leadProof(q: Queryable, l: TeamLead) {
 // Called only inside the team-write transaction, never by the polling GET.
 export async function prepareCall(q: Queryable, p: Partner, id: string) {
   const l = shaped(await scopedLead(q, p, id) as unknown as Record<string, unknown>);
-  if (l.recheck?.status === "re-check failed" || l.call_outcome === "Not interested" || await isOptedOut(q, l)) return { ok: true };
-  if (!confirmedFinding(await leadFindings(q, l))) return { ok: true };
+  if (l.recheck?.status === "re-check failed" || ["Not interested","Fixed on recheck"].includes(l.call_outcome??"") || await isOptedOut(q, l)) return { ok: true };
+  if (!["A","B"].includes(hookTier(confirmedLeverage(await leadFindings(q,l)),new Date(),l.recheck))) return { ok: true };
   const deals = (await q.query("select * from team_deals where lead_id=$1 and partner_id=$2 order by created_at desc,id", [id, l.partner_id])).rows as Deal[];
   let deal = deals.find(d => !["Client paid", "Delivered", "Lost"].includes(d.stage));
   if (!deal) {
@@ -155,6 +155,8 @@ export async function callState(
   ).rows[0] ?? { cell: "", outcome: null, follow_up_at: null };
   const findings = await leadFindings(q, l), proof = confirmedProof(findings),
     finding = confirmedFinding(findings), problem = finding?.measurement || finding?.detail || null;
+  const tier=l.call_outcome==="Fixed on recheck"||l.call_outcome==="Not interested"?"hold":hookTier(confirmedLeverage(findings),new Date(),l.recheck);
+  const canPitch=tier==="A"||tier==="B";
   const earned = d
     ? (
         await q.query(
@@ -187,12 +189,16 @@ export async function callState(
     deal: d ?? null,
     page: (page ?? null) as CallState["page"],
     problem,
+    hook_tier:tier,
+    checked_at:finding?.measured_at??l.recheck?.checked_at??null,
+    check_it_yourself:canPitch&&finding?checkItYourself(finding):null,
+    finding_label:finding?.label??finding?.check??null,
     plain_problem: finding ? plainFinding(finding) : null,
-    say_it: finding ? sayFinding(finding) : null,
+    say_it: canPitch && finding ? findingHook(finding) : null,
     impact:problem&&proof?impactLine(proof):null,
-    verify_url:problem&&proof?verifyLink(proof):null,
+    verify_url:canPitch&&proof?verifyLink(proof):null,
     proof_available: Boolean(proof),
-    script: finding && slowSeconds(finding) !== null ? slowSiteScript(slowSeconds(finding)!, p.name) : callScript(l, p.name, finding ? plainFinding(finding) : problem, Boolean(proof)),
+    script: breakFirstScript(canPitch ? finding??undefined : undefined,p.name).replace("[button]",finding?.label??"link").replace("[expiry]",page?new Date(page.expires_at).toLocaleDateString("en-US",{timeZone:"UTC"}):"[expiry]"),
     commission: Math.round(earned * 0.4),
   };
 }
@@ -234,9 +240,10 @@ export async function recordOutcome(
   ).rows as Deal[];
   if (outcome === "Closed" && (!deals.length || deals.some((d) => !d.approved)))
     throw new Fault("An approved quote is required before marking Closed.");
-  const days = ["No answer", "Voicemail"].includes(outcome)
+  const referredBefore=outcome==="Referred to current dev" && Boolean((await q.query("select 1 from team_call_events where lead_id=$1 and outcome='Referred to current dev' limit 1",[id])).rows[0]);
+  const days = outcome==="Referred to current dev" ? (referredBefore?null:1) : ["No answer", "Voicemail"].includes(outcome)
     ? 1
-    : outcome === "Interested"
+    : ["Interested", "Saw it", "Text OK", "Referred to current dev"].includes(outcome)
       ? 0
       : null;
   await q.query(
@@ -262,7 +269,7 @@ export async function recordOutcome(
     `update team_deals set stage=case when $2 in ('Won','Lost') or stage='Lead' then $2 else stage end,lost_reason=case when $2='Lost' then 'Not interested' else lost_reason end,updated_at=now() where lead_id=$1 and stage not in ('Client paid','Delivered','Lost')`,
     [id, stage],
   );
-  if (outcome === "Not interested")
+  if (["Not interested", "Fixed on recheck"].includes(outcome))
     await q.query(
       "update team_payment_followups set resolved_at=now() where lead_id=$1 and resolved_at is null",
       [id],
@@ -271,7 +278,7 @@ export async function recordOutcome(
 }
 async function snapshotProofMetadata(q: Queryable, leadId: string, code: string, proof: ProofFinding) {
   // Bind impact and verification to the exact reviewed public screenshot.
-  const metadata={impact:impactLine(proof),verify_url:verifyLink(proof),proof_sha256:createHash('sha256').update(Buffer.from(proof.proof!.image.split(',')[1],'base64')).digest('hex')};
+  const metadata={check:proof.check,key:proof.key,label:(proof as ProofFinding & {label?:string}).label,measured_at:proof.measured_at,impact:impactLine(proof),verify_url:verifyLink(proof),proof_sha256:createHash('sha256').update(Buffer.from(proof.proof!.image.split(',')[1],'base64')).digest('hex')};
   await q.query("update team_leads set data=jsonb_set(data,'{deal_proof}',coalesce(data->'deal_proof','{}'::jsonb) || jsonb_build_object($2::text,$3::jsonb),true) where id=$1",[leadId,code,JSON.stringify(metadata)]);
 }
 export async function publishDeal(
@@ -355,7 +362,10 @@ export async function publicDeal(q: Queryable, raw: string) {
   row.impact=matches&&typeof meta.impact==='string'?meta.impact:null;
   row.verify_url=matches?verifyLink({url:row.lead.website,check:'Dead contact / booking / order link',verify_url:meta.verify_url}):null;
   const exact = confirmedLeverage(row.lead.data?.evidence).find(f => f.measurement === row.problem);
-  row.plain_problem = plainFinding(exact ?? storedProblemFinding(row.problem));
+  const finding: import("./plain-findings").DisplayFinding=matches&&typeof meta.check==='string'?{check:meta.check,key:meta.key,label:meta.label,measurement:row.problem,measured_at:meta.measured_at}:exact??storedProblemFinding(row.problem);
+  row.plain_problem = plainFinding(finding);
+  row.fixed_means = whatFixedMeans(finding);
+  row.proof_caption = finding.label ? `What a visitor saw when tapping '${finding.label}' on ${checkedDay({...finding,measured_at:row.proof_at})}.` : `What a visitor saw on the checked page on ${checkedDay({...finding,measured_at:row.proof_at})}.`;
   return row;
 }
 export async function markEngagement(

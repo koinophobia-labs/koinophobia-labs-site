@@ -1,9 +1,10 @@
+import {leadHookTier} from './hook-tier';
 import type { TeamLead } from './store';
 import type { Deal } from './types';
 
 export type BusinessHours = { source_url: string; checked_at: string; weekly: { day: number; open: number; close: number }[] };
-export type CallGroup = 'best' | 'open' | 'soon' | 'closed' | 'unknown' | 'digital' | 'retained';
-export const GROUP_LABELS: Record<CallGroup, string> = {best:'Call now · best window',open:'Open now',soon:'Opens soon',closed:'Closed',unknown:'Confirm time zone',digital:'Email & form only · email on hold',retained:'In progress & payment history'};
+export type CallGroup = 'best' | 'open' | 'soon' | 'closed' | 'unknown' | 'digital' | 'retained' | 'hold' | 'recheck';
+export const GROUP_LABELS: Record<CallGroup, string> = {hold:'Speed only, not a call',recheck:'Recheck before calling',best:'Call now',open:'Open now',soon:'Opens soon',closed:'Closed',unknown:'Confirm time zone',digital:'Email & form only · email on hold',retained:'In progress & payment history'};
 export function validTimeZone(zone: unknown): zone is string {
   if (typeof zone !== 'string' || !zone || zone.length > 100) return false;
   try { new Intl.DateTimeFormat('en-US', {timeZone:zone}).format(); return true; } catch { return false; }
@@ -14,7 +15,7 @@ export function partnerTimeZone(override: unknown, detected: unknown) {
 export function hasPhone(lead: Pick<TeamLead,'phone'>) { return /^1?\d{10}$/.test(lead.phone.replace(/\D/g,'')); }
 export function visibleCallLead(lead: TeamLead, deals: Deal[] = []) {
   return !lead.opted_out && lead.recheck?.status !== 're-check failed' &&
-    !/^(not interested|don['’]t call|do not call)$/i.test(lead.call_outcome ?? '') &&
+    !/^(not interested|fixed on recheck|don['’]t call|do not call)$/i.test(lead.call_outcome ?? '') &&
     !deals.some(d => d.lead_id === lead.id && ['Lost','Client paid','Delivered'].includes(d.stage));
 }
 const formatters = new Map<string,Intl.DateTimeFormat>();
@@ -75,8 +76,13 @@ export function scheduleLead(lead: TeamLead, now: Date, partnerZone: string): Sc
     status:group==='digital'?'Email is on hold. Review the contact form separately.':active?`${inBest?'Best window':'Open'} · until ${timeAt(active.end,zone)} there`:soon?`Opens in ${Math.ceil((+next!-+now)/60_000)} min (${timeAt(next!,partnerZone)} your time)`: `Call ${nextLabel}`};
 }
 export function callQueue(leads:TeamLead[], deals:Deal[], now:Date, partnerZone:string) {
-  const order:CallGroup[]=['best','open','soon','closed','unknown','digital'];
-  return leads.filter(l=>visibleCallLead(l,deals)).map(l=>scheduleLead(l,now,partnerZone)).sort((a,b)=>order.indexOf(a.group)-order.indexOf(b.group)||((a.group==='soon'||a.group==='closed')?(+(a.next??Infinity))-(+(b.next??Infinity)):0)||(b.lead.leverage_score??0)-(a.lead.leverage_score??0)||(b.lead.fit_score??0)-(a.lead.fit_score??0)||a.lead.business.localeCompare(b.lead.business)||a.lead.id.localeCompare(b.lead.id));
+  const order:CallGroup[]=['best','open','soon','closed','unknown','digital','recheck','hold'];
+  const tierOrder={A:0,B:1,recheck:2,hold:3};
+  const callable=(r:ScheduledLead)=>Number(!['best','open'].includes(r.group));
+  return leads.filter(l=>visibleCallLead(l,deals)).map(l=>{
+    const row=scheduleLead(l,now,partnerZone),tier=leadHookTier(l,now);
+    return tier==='hold'||tier==='recheck'?{...row,group:tier,status:tier==='recheck'?'Recheck before calling: evidence must be from the last 48 hours.':'Speed only, not a call. No confirmed visible break.',bestWindow:''}:row;
+  }).sort((a,b)=>callable(a)-callable(b)||tierOrder[leadHookTier(a.lead,now)]-tierOrder[leadHookTier(b.lead,now)]||order.indexOf(a.group)-order.indexOf(b.group)||(b.lead.leverage_score??0)-(a.lead.leverage_score??0)||(b.lead.fit_score??0)-(a.lead.fit_score??0)||a.lead.id.localeCompare(b.lead.id));
 }
 export function callHeader(rows:ScheduledLead[], now:Date, zone:string) {
   const prefix=`${timeAt(now,zone)} your time: `,open=rows.filter(r=>['best','open'].includes(r.group));

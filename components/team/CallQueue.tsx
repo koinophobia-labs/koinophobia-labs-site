@@ -1,6 +1,7 @@
 "use client";
 import {useEffect,useState} from 'react';
 import Link from 'next/link';
+import {leadHookTier,tierLabel} from '@/lib/team/hook-tier';
 import {useRouter} from 'next/navigation';
 import type {TeamSnapshot,TeamLead} from '@/lib/team/store';
 import {displayCallQueue,callHeader,GROUP_LABELS,partnerTimeZone,scheduleLead} from '@/lib/team/call-schedule';
@@ -22,11 +23,12 @@ export function CallQueue({data,selected,onSelect,search='',compact=false}:{data
     <div className="call-now-header"><h2>Call now</h2><p role="status">{callHeader(all,clock.now,clock.zone)}</p><small>Your time zone: {clock.zone.replaceAll('_',' ')} · <Link href="/team/account">Change</Link></small></div>
     <p className="call-hours-note">Hours default to 9 AM–5 PM, Monday–Friday, unless published hours are recorded. Confirm before dialing. Restaurants skip 11:30 AM–1:30 PM local.</p>
     {!rows.length&&<p>No available leads match this view.</p>}
-    {(Object.keys(GROUP_LABELS) as (keyof typeof GROUP_LABELS)[]).map(group=>{
-      const items=rows.filter(r=>r.group===group);if(!items.length)return null;
+    {(['best','open','soon','closed','unknown','digital','recheck','hold','retained'] as (keyof typeof GROUP_LABELS)[]).map(group=>{
+      if(group==='open')return null;
+      const items=rows.filter(r=>group==='best'?['best','open'].includes(r.group):r.group===group);if(!items.length)return null;
       return <section className={'call-group call-group-'+group} key={group} aria-label={GROUP_LABELS[group]}><h3>{GROUP_LABELS[group]} <span>{items.length}</span></h3>
         {items.map(r=><button type="button" className={'team-lead-row call-queue-row '+(selected===r.lead.id?'selected':'')} key={r.lead.id} onClick={()=>onSelect(r.lead.id)}>
-          <span className="call-queue-content"><strong>{r.lead.business}</strong><span className="call-row-time"><span className="team-tag">{r.chip}</span> {r.localTime}</span><small>{r.status}</small>{r.bestWindow&&<small>{r.bestWindow}</small>}<small>{r.assumedHours?'Default hours · verify with business':'Published business hours'}{group==='digital'||group==='retained'?'':' · Phone'}</small></span>
+          <span className="call-queue-content"><strong>{r.lead.business}</strong><span className="team-tag">{tierLabel(leadHookTier(r.lead,clock.now))}</span><span className="call-row-time"><span className="team-tag">{r.chip}</span> {r.localTime}</span><small>{r.status}</small>{r.bestWindow&&<small>{r.bestWindow}</small>}<small>{r.assumedHours?'Default hours · verify with business':'Published business hours'}{group==='digital'||group==='retained'?'':' · Phone'}</small></span>
         </button>)}
       </section>;
     })}

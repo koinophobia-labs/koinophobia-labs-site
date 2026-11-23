@@ -1,11 +1,18 @@
 import {scheduleLead, callQueue} from "./call-schedule";
 import type { TeamLead } from "./store";
 import type { Deal } from "./types";
-import { money, SERVICES } from "./config";
+import { money } from "./config";
+import { breakFirstScript } from "./scripts";
+import {leadHookTier, type HookTier} from "./hook-tier";
+import type {DisplayFinding} from "./plain-findings";
 export const CALL_OUTCOMES = [
   "No answer",
   "Voicemail",
   "Interested",
+  "Saw it",
+  "Text OK",
+  "Fixed on recheck",
+  "Referred to current dev",
   "Closed",
   "Not interested",
 ] as const;
@@ -27,6 +34,10 @@ export interface CallState {
     paid_at: string | null;
     expires_at: string;
   } | null;
+  hook_tier?: HookTier;
+  checked_at?: string | null;
+  check_it_yourself?: string | null;
+  finding_label?: string | null;
   problem: string | null;
   plain_problem?: string | null;
   say_it?: string | null;
@@ -54,18 +65,12 @@ export function dealText(
   deal: Deal,
   url: string,
 ) {
-  const service = SERVICES.find((s) => s.id === deal.services[0]);
-  return `Hi ${lead.contact || "there"}, here's the page for ${lead.business}: ${problem}. ${money(deal.price ?? 0)}${deal.monthly ? "/month" : ""}. ${service?.turnaround || "Blake confirms the timeline"}: ${url}`;
+  if(deal.services.length!==1||deal.services[0]!=="fix"||deal.price!==29900||deal.monthly)return "";
+  return `Hi ${lead.contact || "there"}, it's Jayvon with Koinophobia Labs, as we just talked about. The ${problem} fix for ${lead.business}: ${money(deal.price ?? 0)}${deal.monthly ? "/month" : " flat"}, 48-72h once Blake confirms scope. Screenshot and pay page: ${url}. Reply STOP and we won't text again.`;
 }
-export function callScript(
-  lead: TeamLead,
-  partner: string,
-  problem: string | null,
-  hasScreenshot = true,
-) {
-  if (!problem)
-    return "Run a site check and confirm the problem before making a specific claim. No confirmed screenshot proof is available yet.";
-  return `Hi — is ${lead.contact || "the owner or whoever runs the website"} around?\n\nHi, my name is ${partner}. I’m a partner with Koinophobia Labs — we work remotely with businesses across the US. I’ll be quick, 20 seconds, promise.\n\nI was on ${lead.business}’s website${lead.city ? ` in ${lead.city}` : ""} and noticed: ${problem}\n\nBlake at Koinophobia Labs fixes exactly this kind of thing. The Fix starts at a flat $299, with a 48–72 hour turnaround once Blake confirms the scope.\n\nI can show you ${hasScreenshot ? "the screenshot" : "the confirmed finding"} and the approved scope on one page. What’s the best cell number to text it to?`;
+export function callScript(lead:TeamLead,partner:string,problem:string|null,_hasScreenshot=true,finding?:DisplayFinding) {
+  void _hasScreenshot;
+  return breakFirstScript(problem?finding:undefined,partner);
 }
 // Permanent eligibility is shared by the queue and partner visibility. Calling
 // hours are deliberately separate: an eligible lead remains visible after 5pm.
@@ -73,7 +78,7 @@ export function eligibleToCall(lead: TeamLead) {
   if (
     lead.opted_out ||
     lead.recheck?.status === "re-check failed" ||
-    /^(not interested|don['’]t call|do not call)$/i.test(lead.call_outcome ?? "") ||
+    /^(not interested|fixed on recheck|don['’]t call|do not call)$/i.test(lead.call_outcome ?? "") ||
     !phoneNumber(lead.phone) ||
     !lead.time_zone
   )
@@ -91,7 +96,7 @@ export function hasTerminalCallDeal(lead: TeamLead, deals: Deal[]) {
   );
 }
 export function callableNow(lead: TeamLead, now = new Date()) {
-  return eligibleToCall(lead) && ["best", "open"].includes(scheduleLead(lead, now, "America/New_York").group);
+  return eligibleToCall(lead) && ['A','B'].includes(leadHookTier(lead,now)) && ["best", "open"].includes(scheduleLead(lead, now, "America/New_York").group);
 }
 export function callNow(leads: TeamLead[], deals: Deal[], now = new Date()) {
   return callQueue(leads.filter(eligibleToCall), deals, now, "America/New_York").filter(r => ["best", "open"].includes(r.group)).map(r => r.lead);

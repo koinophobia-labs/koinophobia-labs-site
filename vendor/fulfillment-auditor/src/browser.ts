@@ -57,7 +57,7 @@ export async function openBrowser(options:BrowserOptions={}) {
         error=/ERR_HTTP_RESPONSE_CODE_FAILURE/.test(message)&&([404,410].includes(status)||status>=500&&status<=599)?undefined:/ERR_CERT_/.test(message)?'certificate':policyError?'policy':gateway.errors.get(u.hostname)??(/ERR_NAME_NOT_RESOLVED/.test(message)?'dns':/Timeout/.test(message)?'timeout':'navigation');
       }
       try {
-        const rendered=await page.evaluate(snapshotDOM).catch(() => ({url:raw,title:'',heading:'',text:'',html:'',viewportMeta:'',width:0,screen:0,scale:1,overflow:0,overlaps:0,lcp:null,load:null,links:[] as string[],notes:[] as Note[],mixedBroken:0,brokenImages:[] as string[]}));
+        const rendered=await page.evaluate(snapshotDOM).catch(() => ({url:raw,title:'',heading:'',text:'',html:'',viewportMeta:'',width:0,screen:0,scale:1,overflow:0,overlaps:0,lcp:null,load:null,actionLabels:{} as Record<string,string>,links:[] as string[],notes:[] as Note[],mixedBroken:0,brokenImages:[] as string[]}));
         if(proxyFailure)error='proxy_failure';
         if(error&&rendered.title==='Privacy error'&&/your connection is not private|NET::ERR_CERT_/i.test(rendered.text))error='certificate';
         if(!error && status===200 && rendered.text.trim().length<80)incomplete=true;
@@ -150,11 +150,11 @@ export function snapshotDOM(){
               if(top&&(a.contains(top)||b.contains(top)))overlaps++;
             }
           }
-          const links:string[]=[];
+          const links:string[]=[];const actionLabels:Record<string,string>={};
           for(const el of document.querySelectorAll('a[href],iframe[src]')){
             if(!visible(el))continue;const raw=el.getAttribute('href')??el.getAttribute('src')??'';
-            if(!raw||/^(#|tel:|mailto:|javascript:)/i.test(raw)||!/contact|book|appoint|schedule|reserv|order|forms\.gle|docs\.google\.com\/forms/i.test(`${raw} ${el.textContent}`))continue;
-            try{const u=new URL(raw,location.href);u.hash='';if(['http:','https:'].includes(u.protocol)&&u.href!==location.href)links.push(u.href);}catch{}
+            if(!raw||/^(#|tel:|mailto:|javascript:)/i.test(raw)||!/contact|book|appoint|schedule|reserv|order|quote|inquiry|enquiry|forms\.gle|docs\.google\.com\/forms/i.test(`${raw} ${el.textContent}`))continue;
+            try{const u=new URL(raw,location.href);u.hash='';if(['http:','https:'].includes(u.protocol)&&u.href!==location.href){links.push(u.href);const label=(el.textContent??el.getAttribute('title')??'').replace(/\s+/g,' ').trim();if(label&&label.length<=80)actionLabels[u.href]=label;}}catch{}
           }
           const text=document.body?.innerText??'';const notes:{name:string;detail:string}[]=[];
           if(!document.querySelector('meta[name="description" i]')?.getAttribute('content')?.trim())notes.push({name:'Meta description',detail:'No description detected. Note only; this does not establish a broken site.'});
@@ -165,7 +165,7 @@ export function snapshotDOM(){
           const width=Math.max(document.documentElement.scrollWidth,document.body?.scrollWidth??0);
           const visibleWidth=visualViewport?.width||document.documentElement.clientWidth;
           const overflow=getComputedStyle(document.documentElement).overflowX==='hidden'||(document.body&&getComputedStyle(document.body).overflowX==='hidden')?0:Math.max(0,width-visibleWidth);
-          return {url:location.href,title:document.title,heading,text:text.slice(0,25000),html:document.documentElement.outerHTML.slice(0,2_000_000),viewportMeta:document.querySelector('meta[name="viewport" i]')?.getAttribute('content')??'',width,screen:screen.width,scale:visualViewport?.scale??1,overflow,overlaps,lcp:(window as unknown as {__auditLcp:number|null}).__auditLcp,load:nav?.loadEventEnd||null,links:[...new Set(links)],notes,mixedBroken:0,brokenImages:[...document.images].filter(i=>visible(i)&&i.complete&&i.naturalWidth===0).map(i=>i.src)};
+          return {url:location.href,title:document.title,heading,text:text.slice(0,25000),html:document.documentElement.outerHTML.slice(0,2_000_000),viewportMeta:document.querySelector('meta[name="viewport" i]')?.getAttribute('content')??'',width,screen:screen.width,scale:visualViewport?.scale??1,overflow,overlaps,lcp:(window as unknown as {__auditLcp:number|null}).__auditLcp,load:nav?.loadEventEnd||null,actionLabels,links:[...new Set(links)],notes,mixedBroken:0,brokenImages:[...document.images].filter(i=>visible(i)&&i.complete&&i.naturalWidth===0).map(i=>i.src)};
 
 }
 

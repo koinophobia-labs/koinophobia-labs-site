@@ -26,7 +26,7 @@ export async function importRecheck(q:Queryable,p:Partner,id:string,audit:Audit)
   const evidence=findings.map(f=>({...f,severity:Math.min(40,Math.round(leverageScore(f)*0.4))}));
   const primary=findings[0];
   const opener=primary?`${primary.measurement} ${impactLine(primary)} Check it yourself: ${verifyLink(primary)}`:'';
-  const recheck={status:findings.length?'confirmed':'re-check failed',checked_at:audit.measured_at,confirmed_count:findings.length,findings:findings.map(f=>({check:f.check,measurement:f.measurement,impact:f.impact,verify_url:f.verify_url,leverage:f.leverage,confidence:f.confidence,proof_sha256:f.proof?.sha256})),work_order:'WO-0272',run_id:audit.run_id};
+  const recheck={status:findings.length?'confirmed':'re-check failed',checked_at:audit.measured_at,confirmed_count:findings.length,findings:findings.map(f=>({key:f.key,measured_at:f.measured_at,label:f.label,page_name:f.page_name,url:f.url,check:f.check,measurement:f.measurement,impact:f.impact,verify_url:f.verify_url,leverage:f.leverage,confidence:f.confidence,proof_sha256:f.proof?.sha256})),work_order:'WO-0272',run_id:audit.run_id};
   // jsonb concatenation preserves contact, notes, stage, attribution and all other
   // current fields. The caller holds team-write, and the row is locked above.
   const patch={recheck,...(findings.length?{evidence,opener,leverage_score:leverageScore(primary)}:{})};
