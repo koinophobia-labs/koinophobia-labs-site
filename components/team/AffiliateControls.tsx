@@ -33,6 +33,19 @@ export function AffiliateControls({ connection, readonly }: {
   </div>;
 }
 
+/** Copy any text (the code itself, or every link at once). */
+export function CopyText({ value, label, button = 'Copy' }: { value: string; label: string; button?: string }) {
+  const [message, setMessage] = useState('');
+  async function copy() {
+    try { await navigator.clipboard.writeText(value); setMessage('Copied'); }
+    catch { setMessage('Press and hold to select, then copy.'); }
+  }
+  return <span className="affiliate-copy-text">
+    <button className="secondary" onClick={copy} aria-label={label}>{button}</button>
+    <span role="status">{message}</span>
+  </span>;
+}
+
 export function AffiliateCopy({ app, url }: { app: string; url: string }) {
   const [message, setMessage] = useState('');
   async function copy() {

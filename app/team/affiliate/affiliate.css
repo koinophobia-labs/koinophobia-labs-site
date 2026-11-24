@@ -65,3 +65,10 @@
   .affiliate-chart small { font-size: 9px; }
   .affiliate-filters label { min-width: 0; flex: 1 1 140px; }
 }
+.affiliate-code-card { margin: 20px 0; }
+.affiliate-code-row { display: flex; align-items: center; flex-wrap: wrap; gap: 14px; margin: 8px 0 10px; }
+.affiliate-code { font-size: clamp(28px, 5vw, 40px); letter-spacing: 0.08em; font-weight: 700; color: var(--t-accent); }
+.affiliate-code-card p { color: var(--t-muted); font-size: 13px; }
+.affiliate-code-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 14px; margin-top: 12px; }
+.affiliate-copy-text { display: inline-flex; align-items: center; gap: 10px; }
+.affiliate-copy-text span { font-size: 12px; color: var(--t-muted); }

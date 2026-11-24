@@ -6,7 +6,10 @@ import {
   fiscalMonthLabel, monthLabel, monthlyEarnings, statusTotals,
   type AffiliateDashboardData, type AffiliateFilter, type AffiliateSale,
 } from '@/lib/team/affiliate-view';
-import { AffiliateControls, AffiliateCopy, AffiliateLogout } from './AffiliateControls';
+import { AffiliateControls, AffiliateCopy, AffiliateLogout, CopyText } from './AffiliateControls';
+
+// Messiah's own Saiikhotic apps: not released yet (App Store Connect, 2026-11-24).
+const OWNED_APPS_PENDING = ['Saiikhotic', 'Saiikhotic Network'];
 
 import { AFFILIATE_SCREENS, type AffiliateScreen } from '@/lib/team/affiliate-view';
 export { AFFILIATE_SCREENS, type AffiliateScreen };
@@ -127,6 +130,7 @@ function Overview({ data, now }: { data: AffiliateDashboardData; now: Date }) {
             <span>{s.app}<small>{affiliateDate(s.date)}</small></span><strong>{affiliateMoney(s.amount)}</strong></li>)}</ul>}
       </section>
     </div>
+    <CodeCard data={data} compact />
     <NextPayout data={data} />
   </>;
 }
@@ -184,12 +188,40 @@ function Apps({ data }: { data: AffiliateDashboardData }) {
   </>;
 }
 
+/** The shared offer code, read from the user's own redemption links. */
+function offerCode(data: AffiliateDashboardData) {
+  try { return data.links[0] ? new URL(data.links[0].url).searchParams.get('code') : null; } catch { return null; }
+}
+
+function CodeCard({ data, compact = false }: { data: AffiliateDashboardData; compact?: boolean }) {
+  const code = offerCode(data);
+  if (!code) return null;
+  const all = data.links.map((l) => `${l.app}: ${l.url}`).join('\n');
+  return <section className="team-card affiliate-code-card">
+    <p className="team-eyebrow">YOUR CODE</p>
+    <div className="affiliate-code-row"><strong className="affiliate-code">{code}</strong><CopyText value={code} label="Copy your code" button="Copy code" /></div>
+    <p>Works on {data.links.length} apps. Buyers can tap a link below, or type {code} on Apple&apos;s offer-code page.</p>
+    <div className="affiliate-code-actions">
+      <CopyText value={all} label="Copy all your links" button={`Copy all ${data.links.length} links`} />
+      {compact && <Link className="text-button" href={href('links')}>See every link</Link>}
+    </div>
+  </section>;
+}
+
 function Links({ data }: { data: AffiliateDashboardData }) {
+  const ownsApps = data.earningRules.some((r) => r.type === 'revenue_share' && r.active);
   return <>
+    <CodeCard data={data} />
     <section className="affiliate-section">
       {data.links.length === 0 ? <div className="team-card"><h3>No links yet.</h3><p>Ask Blake to add your redemption links.</p></div> :
         <div className="affiliate-links">{data.links.map((link) => <section className="team-card" key={link.app}><h3>{link.app}</h3><AffiliateCopy {...link} /></section>)}</div>}
     </section>
+    {ownsApps && <section className="affiliate-section">
+      <div className="team-section-title"><h2>Your own apps</h2><span className="team-tag">COMING SOON</span></div>
+      <div className="affiliate-links">{OWNED_APPS_PENDING.map((app) => <section className="team-card" key={app}>
+        <h3>{app}</h3><p>Not on the App Store yet. Its link appears here the day it goes live. You earn on every sale of your own apps, no code needed.</p>
+      </section>)}</div>
+    </section>}
     <section className="team-card affiliate-tips">
       <h2>Posting tips</h2>
       <ul>
