@@ -216,6 +216,11 @@ function Links({ data }: { data: AffiliateDashboardData }) {
       {data.links.length === 0 ? <div className="team-card"><h3>No links yet.</h3><p>Ask Blake to add your redemption links.</p></div> :
         <div className="affiliate-links">{data.links.map((link) => <section className="team-card" key={link.app}><h3>{link.app}</h3><AffiliateCopy {...link} /></section>)}</div>}
     </section>
+    {(data.campaignLinks?.length ?? 0) > 0 && <section className="affiliate-section">
+      <div className="team-section-title"><h2>App Store links</h2><span className="team-tag">NO CODE NEEDED</span></div>
+      <p>Plain App Store links tagged to you. Sales through these are credited from Apple&apos;s campaign reports and settle monthly. Your code links above track every sale exactly, so use those when you can.</p>
+      <div className="affiliate-links">{data.campaignLinks!.map((link) => <section className="team-card" key={link.app}><h3>{link.app}</h3><AffiliateCopy {...link} /></section>)}</div>
+    </section>}
     {ownsApps && <section className="affiliate-section">
       <div className="team-section-title"><h2>Your own apps</h2><span className="team-tag">COMING SOON</span></div>
       <div className="affiliate-links">{OWNED_APPS_PENDING.map((app) => <section className="team-card" key={app}>

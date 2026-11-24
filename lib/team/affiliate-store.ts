@@ -3,7 +3,7 @@ import { payableBalances } from '../appstore/monthly-balances';
 import type { Queryable } from '../payments';
 import type { Partner } from './types';
 import { Fault } from './domain';
-import { affiliateApps, affiliateLinks } from './affiliate-links';
+import { affiliateApps, affiliateLinks, campaignLinks } from './affiliate-links';
 import type { AffiliateDashboardData, AffiliateSale } from './affiliate-view';
 
 const amount = (value: unknown) => {
@@ -75,6 +75,6 @@ export async function affiliateSnapshot(q: Queryable, partner: Partner, now = ne
     owed: Math.max(0, earned - paid), owedBack: Math.max(0, paid - receiptAuthorized),
     nextFiscalMonth: earned > paid ? next.rows[0]?.fiscal_month ?? null : null, byApp,
     sales: events.rows.map(r => ({ app: appName(r.app), product: productName(r.app, r.product_id), date: new Date(r.date).toISOString(), amount: amount(r.amount), status: r.status as AffiliateSale['status'], earningType:r.earning_type as AffiliateSale['earningType'],percentage:Number(r.rate_bps)/100 })),
-    links: affiliateLinks(scope), connection: account.ready ? 'ready' : account.connected ? 'incomplete' : 'none', fake: false,
+    links: affiliateLinks(scope), campaignLinks: campaignLinks(scope), connection: account.ready ? 'ready' : account.connected ? 'incomplete' : 'none', fake: false,
   };
 }

@@ -45,3 +45,12 @@ test('app summaries rank by earnings and include every linked app', () => {
 test('portal has the six agreed screens', () => {
   assert.deepEqual([...AFFILIATE_SCREENS], ['overview', 'sales', 'apps', 'links', 'payouts', 'account']);
 });
+
+test('campaign links use Apple\'s exact format with the provider token, Messiah only', async () => {
+  const { campaignLinks, affiliateApps } = await import('../lib/team/affiliate-links');
+  const links = campaignLinks('messiah');
+  assert.equal(links.length, affiliateApps.length);
+  assert.equal(links[0].url, 'https://apps.apple.com/app/apple-store/id6776299336?pt=128904934&ct=saiikhotic&mt=8');
+  assert.deepEqual(campaignLinks('someone-else'), []);
+  assert.deepEqual(campaignLinks('messiah', 'not-a-token'), []);
+});

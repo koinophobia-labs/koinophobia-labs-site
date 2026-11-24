@@ -27,6 +27,7 @@ export type AffiliateDashboardData = {
   byApp: { app: string; amount: number }[];
   sales: AffiliateSale[];
   links: { app: string; url: string }[];
+  campaignLinks?: { app: string; url: string }[];
   connection: 'none' | 'incomplete' | 'ready';
   fake: boolean;
 };
