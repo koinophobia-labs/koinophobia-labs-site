@@ -34,3 +34,34 @@
   .affiliate-status { max-width: 100%; }
   .affiliate-shell .team-section-title { flex-wrap: wrap; gap: 10px; }
 }
+
+/* Affiliate portal (sidebar workspace) */
+.affiliate-workspace .affiliate-metrics + .affiliate-metrics { margin-top: 16px; }
+.affiliate-chart-card { margin-top: 20px; }
+.affiliate-chart { list-style: none; margin: 18px 0 10px; padding: 0; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 8px; height: 180px; align-items: end; }
+.affiliate-chart li { height: 100%; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; gap: 6px; }
+.affiliate-bar { width: 100%; max-width: 34px; min-height: 2px; background: var(--t-accent); border-radius: 3px 3px 0 0; opacity: .9; }
+.affiliate-chart small { font-size: 11px; color: var(--t-muted); }
+.affiliate-split { margin-top: 20px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.affiliate-list { list-style: none; margin: 12px 0 0; padding: 0; display: grid; gap: 10px; }
+.affiliate-list li { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; border-bottom: 1px solid var(--t-line); padding-bottom: 8px; }
+.affiliate-list small { display: block; color: var(--t-muted); font-size: 11px; }
+.affiliate-list strong { font-variant-numeric: tabular-nums; }
+.team-root form.affiliate-filters { flex-direction: row; flex-wrap: wrap; align-items: flex-end; justify-content: flex-start; gap: 12px; margin-bottom: 14px; }
+.team-root .affiliate-filters label { flex: 1 1 170px; max-width: 240px; align-items: stretch; text-align: left; color: var(--t-muted); }
+.team-root .affiliate-filters select { width: 100%; }
+.team-root .affiliate-filters button, .team-root .affiliate-filters .text-button { flex: 0 0 auto; }
+.affiliate-workspace .team-sidebar-bottom button { white-space: nowrap; padding: 6px 10px; font-size: 12px; min-height: 0; }
+.affiliate-filter-summary { color: var(--t-muted); font-size: 13px; margin-bottom: 12px; }
+.affiliate-app-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; }
+.affiliate-app strong { display: block; color: var(--t-accent); font-size: 26px; font-weight: 500; margin: 8px 0; font-variant-numeric: tabular-nums; }
+.affiliate-app p { color: var(--t-muted); font-size: 12px; }
+.affiliate-app-actions { display: flex; gap: 14px; margin-top: 12px; }
+.affiliate-tips { margin-top: 20px; }
+.affiliate-tips ul { margin: 12px 0 0; padding-left: 18px; display: grid; gap: 8px; color: var(--t-muted); font-size: 13px; }
+@media (max-width: 650px) {
+  .affiliate-split { grid-template-columns: minmax(0, 1fr); }
+  .affiliate-chart { gap: 4px; height: 140px; }
+  .affiliate-chart small { font-size: 9px; }
+  .affiliate-filters label { min-width: 0; flex: 1 1 140px; }
+}

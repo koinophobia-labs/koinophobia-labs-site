@@ -890,6 +890,20 @@
   font-size: 13px;
   margin: 15px 0 28px;
 }
+.team-login-hint {
+  font-size: 13px;
+  line-height: 1.45;
+  margin: 14px 0 10px;
+  padding: 12px 14px;
+  border-left: 3px solid var(--gold);
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--t-muted);
+}
+.team-login-hint strong {
+  color: inherit;
+  filter: brightness(1.35);
+}
 .team-login-panel > button {
   width: 100%;
   margin-bottom: 13px;

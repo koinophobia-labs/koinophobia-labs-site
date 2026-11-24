@@ -154,6 +154,11 @@ export function Login({
             </button>
             {magic && (
               <>
+                <p className="team-login-hint" role="note">
+                  <strong>First time, or no password yet?</strong> Leave Password
+                  empty and tap “Email me a login link.” You can set a password
+                  from your dashboard after you sign in.
+                </p>
                 <button type="submit" value="magic" formNoValidate disabled={busy} className="secondary">
                   Email me a login link
                 </button>
