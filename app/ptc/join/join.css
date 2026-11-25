@@ -1,0 +1,24 @@
+/* Prayer-group invite landing. Palette and type match the Preaching to the Choir app home. */
+.ptc-join {
+  --ptc-paper: #F4F0E7; --ptc-ink: #171B25; --ptc-accent: #6B131B; --ptc-surface: #FBF9F2; --ptc-muted: #5B595B;
+  min-height: 100vh; min-height: 100dvh; display: grid; place-items: center; padding: 32px 16px;
+  background: var(--ptc-paper); color: var(--ptc-ink); font-family: var(--world-body), sans-serif; color-scheme: light;
+}
+.ptc-join__card {
+  width: 100%; max-width: 480px; background: var(--ptc-surface); border: 1px solid color-mix(in srgb, var(--ptc-ink) 12%, transparent);
+  border-radius: 8px; padding: 40px 28px; text-align: center;
+}
+.ptc-join__eyebrow { margin: 0 0 16px; font-variant-caps: small-caps; letter-spacing: 0.06em; color: var(--ptc-accent); font-weight: 600; }
+.ptc-join__title { margin: 0 0 16px; font-family: var(--world-display), serif; font-weight: 400; font-size: clamp(2rem, 7vw, 2.6rem); line-height: 1.1; text-wrap: balance; }
+.ptc-join__lede { margin: 0 0 28px; color: var(--ptc-muted); line-height: 1.55; }
+.ptc-join__note { margin: 0 0 20px; padding: 12px 14px; border: 1px solid var(--ptc-accent); border-radius: 4px; color: var(--ptc-accent); line-height: 1.45; }
+.ptc-join__hint { margin: 24px 0 12px; color: var(--ptc-muted); font-size: 0.95rem; }
+.ptc-join__stores { display: grid; gap: 10px; }
+.ptc-join__button {
+  display: block; padding: 14px 18px; border-radius: 4px; border: 1px solid var(--ptc-ink);
+  color: var(--ptc-ink); background: transparent; font-weight: 600; text-decoration: none;
+  outline-color: var(--ptc-accent);
+}
+.ptc-join__button:hover { background: color-mix(in srgb, var(--ptc-ink) 6%, transparent); }
+.ptc-join__button--primary { background: var(--ptc-accent); border-color: var(--ptc-accent); color: var(--ptc-paper); }
+.ptc-join__button--primary:hover { background: color-mix(in srgb, var(--ptc-accent) 88%, black); }

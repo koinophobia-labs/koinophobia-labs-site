@@ -57,6 +57,17 @@ const RETIRED_STUDIO_ROUTES: Array<[string, string]> = [
   ["/dev/:path*", "/"],
 ];
 
+/**
+ * Preaching to the Choir invite links (/ptc/join#<secret>). The app-link
+ * association files are extensionless or JSON and must be served as
+ * application/json with no redirect; the invite page stays out of search.
+ */
+const PTC_INVITE_HEADERS = [
+  { source: "/.well-known/apple-app-site-association", headers: [{ key: "Content-Type", value: "application/json" }] },
+  { source: "/.well-known/assetlinks.json", headers: [{ key: "Content-Type", value: "application/json" }] },
+  { source: "/ptc/:path*", headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }, { key: "Referrer-Policy", value: "no-referrer" }] },
+];
+
 const nextConfig: NextConfig = {
   serverExternalPackages: ['@koinophobia/site-auditor','playwright-core','@sparticuz/chromium'],
   // External browser packages load runtime assets through dynamic paths. Trace them explicitly.
@@ -74,7 +85,7 @@ const nextConfig: NextConfig = {
       './node_modules/@sparticuz/chromium/bin/**/*',
     ],
   },
-  async headers() { return ["/team/:path*", "/go/:path*", "/pay/:path*", "/start/:path*", "/payment/:path*"].map(source => ({ source, headers: [{key:"X-Robots-Tag",value:"noindex, nofollow, noarchive"},{key:"Cache-Control",value:"private, no-store"},{key:"Referrer-Policy",value:"no-referrer"}] })); },
+  async headers() { return [...["/team/:path*", "/go/:path*", "/pay/:path*", "/start/:path*", "/payment/:path*"].map(source => ({ source, headers: [{key:"X-Robots-Tag",value:"noindex, nofollow, noarchive"},{key:"Cache-Control",value:"private, no-store"},{key:"Referrer-Policy",value:"no-referrer"}] })), ...PTC_INVITE_HEADERS]; },
 
   images: {
     // App screenshots use responsive next/image optimization.

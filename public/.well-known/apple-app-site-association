@@ -1,0 +1,15 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appIDs": ["3TY4W55YC5.com.koinophobialabs.preachingtothechoir"],
+        "components": [
+          { "/": "/ptc/join*", "comment": "Preaching to the Choir prayer-group invites; the secret is in the fragment" }
+        ],
+        "appID": "3TY4W55YC5.com.koinophobialabs.preachingtothechoir",
+        "paths": ["/ptc/join*"]
+      }
+    ]
+  }
+}
