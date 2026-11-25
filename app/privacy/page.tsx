@@ -48,6 +48,9 @@ export default function PrivacyPage() {
             <li>
               <Link href="#saiikhotic">Saiikhotic privacy policy</Link>
             </li>
+            <li>
+              <Link href="#saiikhotic-network">Saiikhotic Network privacy policy</Link>
+            </li>
           </ul>
         </section>
         <section className="sec" id="saiikhotic">
@@ -94,6 +97,48 @@ export default function PrivacyPage() {
           <h3>Contact</h3>
           <p>
             For Saiikhotic privacy questions or requests, contact Koinophobia Labs at{" "}
+            <a href="mailto:blake@koinophobialabs.com">blake@koinophobialabs.com</a>.
+          </p>
+        </section>
+        <section className="sec" id="saiikhotic-network">
+          <h2>Saiikhotic Network privacy policy</h2>
+          <p>Updated November 24, 2026 · Version 1</p>
+          <p>
+            Saiikhotic Network (com.koinophobialabs.saiikhoticcompanion) is the companion app for
+            Saiikhotic&apos;s live game-show nights, made in partnership with Koinophobia Labs.
+          </p>
+          <h3>Your account</h3>
+          <p>
+            Your account is a display name and a PIN, or Sign in with Apple. The app sends them to
+            the Saiikhotic queue server to hold your place in line, show your name on the line and
+            leaderboards, and keep your Skip Bank.
+          </p>
+          <h3>Mod team</h3>
+          <p>
+            For members of the mod team, check-ins, task picks, team chat and private messages
+            between mods and the host are stored on the Saiikhotic server so the team can run the
+            show.
+          </p>
+          <h3>Skips</h3>
+          <p>
+            Skips are bought on the Saiikhotic website, not in the app. Payment is handled by the
+            website&apos;s payment provider; the app does not collect or store payment information.
+          </p>
+          <h3>Reminders</h3>
+          <p>Reminders are optional and local to your device.</p>
+          <h3>Analytics, advertising and tracking</h3>
+          <p>
+            The Saiikhotic Network app has no analytics, no ads and no tracking SDKs. Your data is
+            never sold or used for cross-app tracking.
+          </p>
+          <h3>Deleting your account</h3>
+          <p>
+            You can delete your account from Profile at any time. Deleting it removes your account
+            from the Saiikhotic server.
+          </p>
+          <h3>Contact</h3>
+          <p>
+            For Saiikhotic Network privacy questions or requests, contact Koinophobia Labs at{" "}
             <a href="mailto:blake@koinophobialabs.com">blake@koinophobialabs.com</a>.
           </p>
         </section>
