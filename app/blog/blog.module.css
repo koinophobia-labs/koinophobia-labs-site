@@ -1,0 +1,40 @@
+/* Keep the studio typography and palette, with a comfortable reading measure. */
+.prose {
+  max-width: 70ch;
+  min-width: 0;
+  overflow-wrap: break-word;
+}
+
+.prose h1 {
+  font-size: clamp(2rem, 4.5vw, 3.5rem);
+  line-height: 1.12;
+}
+
+.prose h2 {
+  margin: var(--s-7) 0 var(--s-4);
+  font-size: clamp(1.4rem, 2.6vw, 1.9rem);
+  line-height: 1.25;
+}
+
+.prose header {
+  margin-bottom: var(--s-6);
+}
+
+.prose a {
+  text-decoration: underline;
+  text-decoration-color: var(--live);
+  text-underline-offset: 0.2em;
+}
+
+.prose a:hover {
+  color: var(--live);
+}
+
+.prose ul {
+  margin: var(--s-4) 0;
+  list-style: disc;
+}
+
+.prose li + li {
+  margin-top: var(--s-3);
+}

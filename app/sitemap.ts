@@ -12,6 +12,9 @@ const newestLogDate = [...logEntries].sort((a, b) => (a.date < b.date ? 1 : -1))
  */
 export default function sitemap(): MetadataRoute.Sitemap {
   const fixed = [
+    { path: "/blog", lastModified: "2026-11-05", priority: 0.7, changeFrequency: "monthly" as const },
+    { path: "/blog/how-to-remember-your-dreams", lastModified: "2026-11-05", priority: 0.7, changeFrequency: "monthly" as const },
+    { path: "/blog/resume-for-service-retail-gig-work", lastModified: "2026-11-05", priority: 0.7, changeFrequency: "monthly" as const },
     { path: "/services", lastModified: "2026-10-15", priority: 0.9, changeFrequency: "monthly" as const },
     { path: "/work-with-us", lastModified: "2026-10-15", priority: 0.9, changeFrequency: "monthly" as const },
     { path: "/audit", lastModified: "2026-10-15", priority: 0.9, changeFrequency: "monthly" as const },

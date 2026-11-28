@@ -11,6 +11,7 @@ export default function SiteFooter() {
             {item.label}
           </Link>
         ))}
+        <Link href="/blog">Blog</Link>
         <Link href="/privacy">Privacy</Link>
       </nav>
       <nav aria-label="Social">
